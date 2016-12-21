@@ -1,0 +1,112 @@
+﻿@model LambAndLentil.Models.Recipe
+
+@{
+    ViewBag.Title = "Recipe Details";
+}
+
+<h2>Recipe Details</h2>
+
+<div> 
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Servings)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Servings)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FoodGroup)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FoodGroup)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Calories)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Calories)
+        </dd>
+
+    </dl>
+</div>
+<div>
+    <h4>Ingredients in Recipe</h4>
+
+    <table class="table">
+        <tr>
+                     <th>
+     @*   @Html.DisplayNameFor(model => model.ShortDescription))
+       </th>
+    <th>
+         @Html.DisplayNameFor(model => model.ServingSize)
+     </th>
+     <th>
+         @Html.DisplayNameFor(model => model.ServingSizeUnit)
+     </th>
+     <th>
+         @Html.DisplayNameFor(model => model.Calories)
+     </th>
+     <th>
+         @Html.DisplayNameFor(model => model.CalFromFat)
+     </th>*@
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model.Ingredients)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ShortDescription)
+                </td>
+                @*<td>
+                    @Html.DisplayFor(modelItem => item.ServingSize)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ServingSizeUnit)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Calories)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CalFromFat)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.IngredientID }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.IngredientID }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.IngredientID })
+                </td>*@
+            </tr>
+        }
+
+    </table>
+    @foreach (var ingredient in Model.Ingredients)
+    {
+
+    }
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.RecipeId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
