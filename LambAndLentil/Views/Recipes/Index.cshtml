@@ -1,4 +1,4 @@
-﻿@model IEnumerable<LambAndLentil.Models.Recipe>
+﻿@model IEnumerable<LambAndLentil.Domain.Entities.Recipe>
 
 @{
     ViewBag.Title = "Index";
@@ -21,7 +21,7 @@
             @Html.DisplayNameFor(model => model.Servings)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.FoodGroup)
+            @Html.DisplayNameFor(model => model.MealType)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Calories)
@@ -29,27 +29,27 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
+@foreach (var recipe in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.Name)
+            @Html.DisplayFor(modelItem => recipe.Name)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Description)
+            @Html.DisplayFor(modelItem => recipe.Description)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Servings)
+            @Html.DisplayFor(modelItem => recipe.Servings)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.FoodGroup)
+            @Html.DisplayFor(modelItem => recipe.MealType)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Calories)
+            @Html.DisplayFor(modelItem => recipe.Calories)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.RecipeId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.RecipeId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.RecipeId })
+            @Html.ActionLink("Edit", "Edit", new { id=recipe.RecipeID }) |
+            @Html.ActionLink("Details", "Details", new { id=recipe.RecipeID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=recipe.RecipeID })
         </td>
     </tr>
 }

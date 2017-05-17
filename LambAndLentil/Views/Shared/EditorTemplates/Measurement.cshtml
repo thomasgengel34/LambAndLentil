@@ -1,0 +1,25 @@
+﻿@using LambAndLentil.Models
+ @model LambAndLentil.Models.Ingredient
+@{
+    //List<string> list = new List<string>();
+    //foreach (var value in Enum.GetValues(typeof(Measurement)))
+    //{
+    //    list.Add(value.ToString());
+    //}
+    //SelectList measurements = new SelectList(list);
+
+
+
+    var options = Enum.GetValues(typeof(Measurement))
+.Cast<Measurement>()
+.Select(t => new SelectListItem
+{
+    Text = t.ToString(),
+    Value = t.ToString(),
+    Selected = t == Model
+})
+.ToArray();
+
+}
+
+@Html.DropDownList("", options, new { @class = "form-control" })

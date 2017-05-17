@@ -1,0 +1,33 @@
+﻿@model IEnumerable<string>
+
+@{
+    string actionMethod = ViewBag.actionMethod;
+}
+
+
+<div class="dropdown">
+    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+        Maker
+        <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu">
+        <li>@Html.ActionLink("All", actionMethod, "Ingredients")</li>
+        @foreach (var link in Model)
+        {
+            <li>
+                        @Html.RouteLink(link, new
+                   {
+                       controller = "Ingredients",
+                       action = actionMethod,
+                       maker = link,
+                       page = 1
+                   },
+             new
+             {
+                 @class = link == ViewBag.SelectedMaker ? "selected" : null, 
+             }) 
+                        
+            </li>
+        }
+        </ul>
+    </div> 

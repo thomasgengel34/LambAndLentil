@@ -1,0 +1,65 @@
+﻿@model /*LambAndLentil.Models.Recipe*/
+    @/*using LambAndLentil.Models*/ 
+
+@{
+//SelectList ingredientShortDescriptions = (SelectList)ViewBag.ingredientShortDescriptions;
+
+//Dictionary<string, Ingredient> ingreds =  (Dictionary < string, Ingredient > )ViewBag.ingreds ;
+
+
+    }
+
+@//if (Model.Ingredients != null)
+//    {
+    <h4>Ingredients in Recipe</h4>
+
+    <table class="table">
+        <tr>
+            <th>
+                @/*Html.DisplayNameFor(m => m.Ingredients.First().ShortDescription)*/
+            </th>
+            <th>
+                @/*Html.DisplayNameFor(m => m.Ingredients.First().ServingSizeUnit)*/
+            </th>
+            <th>
+                @/*Html.DisplayNameFor(m => m.Ingredients.First().Calories)*/
+            </th>
+            <th>
+                @/*Html.DisplayNameFor(m => m.Ingredients.First().CalFromFat)*/
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model.Ingredients)
+            //{
+            <tr>
+                <td>
+                    @/*Html.DisplayFor(modelItem => item.ShortDescription)*/
+                </td>
+                <td>
+                    @/*Html.DisplayFor(modelItem => item.ServingSize)*/
+                </td>
+                <td>
+                    @/*Html.DisplayFor(modelItem => item.ServingSizeUnit)*/
+                </td>
+                <td>
+                    @/*Html.DisplayFor(modelItem => item.Calories)*/
+                </td>
+                <td>
+                    @/*Html.DisplayFor(modelItem => item.CalFromFat)*/
+                </td>
+                <td>
+                    @*@Html.ActionLink("Edit", "Edit", new { id = item.IngredientID }) |
+                        @Html.ActionLink("Details", "Details", new { id = item.IngredientID }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.IngredientID })*@
+                </td>
+            </tr>
+    //}
+@//using (Html.BeginForm("AddIngredientToRecipe", "Recipe", FormMethod.Get))
+    //{
+       <p>Select an ingredient: @/*Html.DropDownList("selectIngredient", ingredientShortDescriptions,"choose")*/  @/*Html.ActionLink("Add", "AddIngredient", new { RecipeID =   })*/ </p>------------------
+        <p>After you add an ingredient, you can put in the quantity or even delete the ingredient below:</p>
+    @*@Html.ActionLink("Add Ingredient", "AddIngredientToRecipe", new { id = item.IngredientID })*@
+   
+    </table>
+    //}

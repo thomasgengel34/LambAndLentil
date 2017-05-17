@@ -1,15 +1,20 @@
-﻿@model LambAndLentil.Models.Ingredient
-
+﻿@model LambAndLentil.Models.IngredientVM
 @{
     ViewBag.Title = "Details";
 }
-
-<h2>Details</h2>
-
+ 
+<h2>Ingredient Details </h2>
 <div>
-    <h4>Ingredient</h4>
+   
     <hr />
     <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
         <dt>
             @Html.DisplayNameFor(model => model.ShortDescription)
         </dt>
@@ -17,7 +22,25 @@
         <dd>
             @Html.DisplayFor(model => model.ShortDescription)
         </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Ingredients.First().Maker)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Maker)
+        </dd>
 
+        <dt>
+            @Html.DisplayNameFor(model => model.Ingredients.First().Brand)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Brand)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Ingredients.First().FoodGroup)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.FoodGroup)
+        </dd>
         <dt>
             @Html.DisplayNameFor(model => model.ServingSize)
         </dt>
@@ -35,6 +58,30 @@
         </dd>
 
         <dt>
+            @Html.DisplayNameFor(model => model .ServingsPerContainer)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ServingsPerContainer)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ContainerSize)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ContainerSize)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ContainerSizeUnit)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ContainerSizeUnit)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ContainerSizeInGrams)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ContainerSizeInGrams)
+        </dd>
+        <dt>
             @Html.DisplayNameFor(model => model.Calories)
         </dt>
 
@@ -48,6 +95,15 @@
 
         <dd>
             @Html.DisplayFor(model => model.CalFromFat)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Kosher)
+        </dt>
+
+        <dd>
+
+            @Html.DisplayTextFor(model=> model.Kosher)
         </dd>
 
     </dl>

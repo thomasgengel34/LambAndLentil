@@ -1,0 +1,74 @@
+﻿@model LambAndLentil.UI.Models.PersonVM
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>PersonVM</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.FirstName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FirstName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LastName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LastName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Weight)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Weight)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MinCalories)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MinCalories)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MaxCalories)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MaxCalories)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NoGarlic)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NoGarlic)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MustHaveGarlic)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MustHaveGarlic)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

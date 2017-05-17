@@ -1,0 +1,253 @@
+﻿body {
+    padding-top: 50px;
+    padding-bottom: 0;
+    margin-bottom: 0;
+    background: /*linear-gradient( rgba(250,207,78,0) 12%, transparent 0, transparent 99%, #dca 0),*/ linear-gradient(90deg,rgba(250,207,78,0) 12%, transparent 0, transparent 99%, #dca 0);
+    background-size: 100px 100px;
+    font-family: 'Lucida Handwriting';
+    color: green;
+}
+.container .body-content{
+    margin-bottom:0;
+    padding-bottom:0;
+    min-height: 80vh; 
+}
+
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+ 
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+
+.nav, .menu, .navbar-header, .navbar-collapse, .collapse, .navbar, .navbar-inverse, .navbar-fixed-top, .li  {
+    background-color: green;
+    color: white;
+}
+
+#navA a, #navB a, #navC a {
+    color: white;
+}
+
+    #navA a:hover, #navB a:hover, #navC a:hover, .col-md-4 {
+        background-color: white;
+        color: green; 
+    }
+ 
+.navbar {
+    margin-left: -400px;
+}
+
+
+h1, h2, h3,h4,h5,h6, table,   a {
+    font-family: 'Lucida Handwriting';
+    background-color: rgba(250,207,78,0);
+    color: green;
+}
+
+  a {
+    text-decoration:underline;
+}
+
+.alert-container {
+    position: fixed;
+    left: 0;
+    right: 0;
+    padding-left: 3em;
+    padding-right: 3em;
+}
+ 
+
+footer {
+    background-color: white;
+    border: solid green 1px; 
+    padding-left: 10%;  
+    padding-top:7px;
+    margin-bottom:0;
+    position:absolute; 
+    left:0;
+    right:0;
+}
+
+footer p span {
+    margin-left:10%;padding-left:10%;
+     
+}
+
+.login {
+    margin-left: 0;
+    padding-right: 0;
+}
+
+.categories { 
+    width: 8em;
+    padding: .3em; 
+    background-color:white;
+}
+ 
+.categories:hover {
+    background-color:lightgreen;
+}
+
+.listofIngredients {
+    float: left;
+    width: 80%;
+    padding: 1em;
+    border: solid green 1px;
+    background-color: #fff;
+}
+
+li {
+    list-style-image: url('../Images/favicon.gif');
+}
+
+.selected {
+    background-color: rgba(0,255,0,0.7) ; 
+}
+ 
+.container.body-content {
+    padding-left: 100px;
+    background-color: lightgoldenrodyellow;
+    background-image: linear-gradient(90deg, transparent 79px, pink 79px, pink 80px, transparent 81px), linear-gradient(#eee .1em, transparent .4em);
+    background-size: 100% 2.4em;
+    min-height:90vh;
+}
+
+h1 {
+    padding-top: 19px;
+}
+
+h2 {
+    padding-top: 20px;
+}
+
+p {
+    line-height: 2.4em;
+    margin-top: -10px;
+}
+
+.container.body-content li {
+    line-height: 2.4em;
+}
+
+    .container.body-content li:first-child {
+        margin-top: -8px;
+    }
+
+.pager {
+    margin: 2em;
+    position: absolute;
+    right: 20em;
+    top: 3.5em;
+    line-height: 2em;
+    min-width: 14em;
+    padding: .3em;
+    font-size:75%; 
+}
+
+.pager a {
+    padding: 0.35em;
+    margin: 0.35em;
+}
+
+#tableOfIngredients th, #tableOfIngredients tr{
+    height:10em;
+    margin:0;
+    padding:0;
+}
+.tableOfIngredients{
+     width:1000px;
+     overflow-x:scroll;
+ }
+table {
+    background-color:white; 
+}
+tr { 
+     line-height:2.25em; 
+}
+    tr:hover, th:hover  {
+        color: darkgreen;
+        background-color: yellow;
+    }
+    tr:first-child:hover {
+        background-color: white;
+        color:green;
+    }
+
+
+th, td {
+    width:200px;
+}
+
+.col-md-4   {
+   background-color:inherit;
+}
+
+.dropdown-menu li   {
+    list-style-image:none; 
+    color:green;
+}
+
+ .dropdown-menu li a {
+    color:green;
+} 
+
+ .verticalHeader{ 
+     transform:rotate(270deg); 
+     width:10px;
+     background-color:red;
+ }
+ td:hover{
+     background-color:white;
+     border:1px solid green ;
+ }
+
+span.ellipsis { 
+    display:block;
+   white-space: nowrap; 
+     max-width:120px;  
+    overflow:hidden; 
+    text-overflow: ellipsis;  
+   
+}
+    span.ellipsis:hover {
+        z-index: 10; 
+        overflow: visible;
+        white-space: normal;
+        background-color: white;
+        width:200px;
+    }
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary.active,
+.open .dropdown-toggle.btn-primary,
+button.btn, .btn-primary, .dropdown-toggle, .btn-primary:active 
+  {
+    background-color: green;
+}
+
+.alert-container{
+    position:fixed;
+    left:0;
+    right:0;
+    padding-left:3em;
+    padding-right:3em;
+}

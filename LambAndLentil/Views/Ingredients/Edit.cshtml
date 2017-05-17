@@ -1,27 +1,69 @@
-﻿@model LambAndLentil.Models.Ingredient
+﻿@model LambAndLentil.Models.IngredientVM
 
 @{
-    ViewBag.Title = "Edit";
+
+    string actionMethod = ViewBag.ActionMethod==null?"Edit":ViewBag.ActionMethod;
+    ViewBag.Title = actionMethod + " Ingredient"; 
 }
 
-<h2>Edit</h2>
+<h2>@actionMethod Ingredient  &nbsp;:&nbsp; @Model.ShortDescription</h2>
+ 
 
-
-@using (Html.BeginForm())
+@using (Html.BeginForm("Edit","Ingredients"))
 {
     @Html.AntiForgeryToken()
     
-    <div class="form-horizontal">
-        <h4>Ingredient</h4>
+    <div class="form-horizontal"> 
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.IngredientID)
+        @Html.HiddenFor(model => model.CreationDate)
+        @Html.HiddenFor(model => model.ModifiedDate)
 
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
         <div class="form-group">
             @Html.LabelFor(model => model.ShortDescription, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.ShortDescription, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.ShortDescription, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Maker, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Maker, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Maker, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Brand, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Brand, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Brand, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.FoodGroup, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.FoodGroup, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.FoodGroup, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.LongDescription, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.LongDescription, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.LongDescription, "", new { @class = "text-danger" })
             </div>
         </div>
 
@@ -36,8 +78,42 @@
         <div class="form-group">
             @Html.LabelFor(model => model.ServingSizeUnit, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.ServingSizeUnit, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EnumDropDownListFor(m => m.ServingSizeUnit, new { htmlAttributes = new { @class = "form -control" } })
+                
                 @Html.ValidationMessageFor(model => model.ServingSizeUnit, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ContainerSize, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(m => m.ContainerSize, "choose", new { htmlAttributes = new { @class = "form -control" } })
+                @Html.ValidationMessageFor(model => model.ContainerSize, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ContainerSizeInGrams, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(m => m.ContainerSizeInGrams, "choose", new { htmlAttributes = new { @class = "form -control" } })
+                @Html.ValidationMessageFor(model => model.ContainerSizeInGrams, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ContainerSizeUnit, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EnumDropDownListFor(m => m.ContainerSizeUnit, "choose", new { htmlAttributes = new { @class = "form -control" } })
+
+                @Html.ValidationMessageFor(model => model.ContainerSizeUnit, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ServingsPerContainer, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(m => m.ServingsPerContainer, "choose", new { htmlAttributes = new { @class = "form -control" } })
+                @Html.ValidationMessageFor(model => model.ServingsPerContainer, "", new { @class = "text-danger" })
             </div>
         </div>
 
@@ -58,6 +134,14 @@
         </div>
 
         <div class="form-group">
+            @Html.LabelFor(model => model.Kosher, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Kosher, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Kosher, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Save" class="btn btn-default" />
             </div>
@@ -66,7 +150,8 @@
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Back to List", "ListAscend")  &nbsp;
+    @Html.ActionLink("Back to Table", "Index")
 </div>
 
 @section Scripts {

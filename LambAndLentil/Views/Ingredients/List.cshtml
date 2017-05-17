@@ -1,0 +1,33 @@
+﻿ @model LambAndLentil.Models.IngredientsListVM
+ 
+@{
+    ViewBag.Title = "Ingredients List";
+}
+
+<h2>List of Ingredients</h2>
+<p>
+    @Html.ActionLink("Add Ingredient", "Create", "Ingredients", new {  actionMethod = "Create" }, null)  )&nbsp;
+    @Html.ActionLink("View as Table", "Index","Ingredients")
+</p> 
+    <div class="row">
+        <div class="col-md-6 categories">
+            @{ Html.RenderAction("MakerMenu", "Nav", new { actionMethod = "ListAscend" });}
+        </div>
+        <div class="col-md-6 categories" > 
+            @{ Html.RenderAction("BrandMenu", "Nav", new { actionMethod = "ListAscend" });}
+        </div> 
+    </div>
+
+<div class="listofIngredients">
+    @Html.ActionLink("Asc", "ListAscend", "Ingredients", new { @class = "btn btn-info" })
+    @Html.ActionLink("Desc", "ListDesc", "Ingredients", new { @class = "btn btn-info" })
+
+    @foreach (var p in Model.Ingredients)
+    {
+        Html.RenderPartial("_IngredientList", p);
+    }
+</div>
+    <div class="pager">
+        <h4>Lamb & Lentil</h4>
+        @Html.PageLinks(Model.PagingInfo, x => Url.Action("ListAscend", new { page = x, maker = Model.Maker }))
+    </div>

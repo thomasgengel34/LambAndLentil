@@ -1,0 +1,58 @@
+﻿@using LambAndLentil.UI.HtmlHelpers
+@model LambAndLentil.UI.Models.ListVM 
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Recipes</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Recipes.First().Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Recipes.First().Description )
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Recipes.First().Servings)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Recipes.First().MealType)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Recipes.First().Calories)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var recipe in Model.Recipes) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => recipe.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => recipe.Description)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => recipe.Servings)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => recipe.MealType)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => recipe.Calories)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=recipe.ID }) |
+            @Html.ActionLink("Details", "Details", new { id=recipe.ID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=recipe.ID })
+        </td>
+    </tr>
+}
+
+</table>

@@ -1,0 +1,16 @@
+﻿@using LambAndLentil.Domain.Entities
+@model LambAndLentil.Domain.Entities.Measurement
+@{
+    var options = Enum.GetValues(typeof(Measurement))
+    .Cast<Measurement>()
+    .Select(t => new SelectListItem
+    {
+        Text = t.ToString(),
+        Value = t.ToString(),
+        Selected = t == Model
+    })
+    .ToArray();
+
+}
+
+@Html.DropDownList("", options, new { @class = "form-control" })

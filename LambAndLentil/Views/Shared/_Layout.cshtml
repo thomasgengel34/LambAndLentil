@@ -1,9 +1,10 @@
 ﻿<!DOCTYPE html>
-<html>
+<html> 
 <head>
+    <link rel="icon" href="~/Images/favicon.ico" type="image/x-icon" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - Bare Metal Lamb and Lentil</title>
+    <title>@ViewBag.Title - Lamb and Lentil</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 
@@ -11,36 +12,42 @@
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <div class="navbar-header">
+            <div id="navA" class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Bare Metal Lamb and Lentil", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Lamb & Lentil", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
+                <ul id="navB" class="nav navbar-nav">
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
                     <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                     
                     <li>@Html.ActionLink("Ingredients","Index", "Ingredients")</li>
                     <li>@Html.ActionLink("Recipes", "Index", "Recipes")</li>
                     <li>@Html.ActionLink("Menus", "Index", "Menus")</li>
-                    <li>@Html.ActionLink("MealPlanners", "Index", "MealPlanners")</li>
+                    <li>@Html.ActionLink("Plans", "Index", "Plans")</li>
+                    <li>@Html.ActionLink("Shopping", "Index", "ShoppingList")</li>
+                    <li>@Html.ActionLink("Profile", "Index", "Persons")</li>
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
         </div>
     </div>
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - Bare Metal Lamb and Lentil</p>
-        </footer>
+    <div class="container body-content"> 
+        @if(TempData["message"] != null)
+        {
+            <div class="Message">@TempData["message"] </div>
+        }
+            @RenderBody() 
     </div>
-
+    <footer> 
+        <p>
+          &copy; @DateTime.Now.Year - Lamb & Lentil 
+        <span><strong>Support:</strong>   <a href="mailto:Support@lamb&lentil.com">Support@lamb&lentil.com</a></span> </p>
+    </footer>
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)

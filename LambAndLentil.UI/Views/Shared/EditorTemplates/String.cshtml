@@ -1,0 +1,7 @@
+﻿ 
+@model string
+   
+    (editor template revised)
+      @Html.TextBox("", ViewData.TemplateInfo.FormattedModelValue,
+     new { @class = "form-control" })
+@Html.ValidationMessageFor( model=>model,"", new {@class= "text-danger"})

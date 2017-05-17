@@ -1,0 +1,169 @@
+﻿@using LambAndLentil.UI.Helpers
+
+@model LambAndLentil.UI.Models.IngredientVM
+
+@{
+    string actionMethod = ViewBag.ActionMethod  == null ? LambAndLentil.UI.UIViewType.Edit.ToString() : ViewBag.ActionMethod.ToString();
+    ViewBag.Title = actionMethod + " Ingredient";
+
+    string modelLabel = Model.Name ==null?" ":Model.Name=="newly created" ? " " : Model.Name;
+}
+
+<h2>@actionMethod Ingredient  &nbsp;:&nbsp;@modelLabel </h2>
+
+@using (Html.BeginForm(UIViewType.PostEdit.ToString(), UIControllerType.Ingredients.ToString(),  FormMethod.Post))
+{
+     
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.ID)
+        @Html.HiddenFor(model => model.CreationDate)
+        @Html.HiddenFor(model => model.ModifiedDate)
+
+        <div class="form-group">
+            @Html.BootstrapLabelFor(model => model.Name)
+            <div class="col-md-10">
+                 @Html.EditorFor(model => model.Name) 
+                @*@Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })*@
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.BootstrapLabelFor(model => model.Maker)
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Maker, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Maker, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.BootstrapLabelFor(model => model.Brand)
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Brand, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Brand, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.BootstrapLabelFor(model => model.FoodGroup)
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.FoodGroup, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.FoodGroup, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.BootstrapLabelFor(model => model.Description)
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.BootstrapLabelFor(model => model.ServingSize)
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ServingSize, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ServingSize, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.BootstrapLabelFor(model => model.ServingSizeUnit)
+            <div class="col-md-10">
+                @Html.EnumDropDownListFor(m => m.ServingSizeUnit, new { htmlAttributes = new { @class = "form -control" } })
+
+                @Html.ValidationMessageFor(model => model.ServingSizeUnit, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.BootstrapLabelFor(model => model.ContainerSize)
+            <div class="col-md-10">
+                @Html.EditorFor(m => m.ContainerSize, "choose", new { htmlAttributes = new { @class = "form -control" } })
+                @Html.ValidationMessageFor(model => model.ContainerSize, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.BootstrapLabelFor(model => model.ContainerSizeInGrams)
+            <div class="col-md-10">
+                @Html.EditorFor(m => m.ContainerSizeInGrams, "choose", new { htmlAttributes = new { @class = "form -control" } })
+                @Html.ValidationMessageFor(model => model.ContainerSizeInGrams, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.BootstrapLabelFor(model => model.ContainerSizeUnit)
+            <div class="col-md-10">
+                @Html.EnumDropDownListFor(m => m.ContainerSizeUnit, "choose", new { htmlAttributes = new { @class = "form -control" } })
+
+                @Html.ValidationMessageFor(model => model.ContainerSizeUnit, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.BootstrapLabelFor(model => model.ServingsPerContainer)
+            <div class="col-md-10">
+                @Html.EditorFor(m => m.ServingsPerContainer, "choose", new { htmlAttributes = new { @class = "form -control" } })
+                @Html.ValidationMessageFor(model => model.ServingsPerContainer, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.BootstrapLabelFor(model => model.Calories)
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Calories, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Calories, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.BootstrapLabelFor(model => model.CalFromFat)
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.CalFromFat, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.CalFromFat, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.BootstrapLabelFor(model => model.Kosher)
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Kosher, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Kosher, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.BootstrapLabelFor(model => model.DataSource)
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.DataSource, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.DataSource, "", new { @class = "text-danger" })
+            </div>
+        </div> 
+        
+
+
+      
+        <div class="form-group">
+            <div>
+                <input type="submit" value="Save Changes" class="btn btn-default col-md-offset-2 col-md-10" 
+                       />
+            </div>
+        </div>
+        } 
+    </div> 
+ }
+
+<div>
+
+    @Html.ActionLink("Back to Table", LambAndLentil.UI.UIViewType.Index.ToString())
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

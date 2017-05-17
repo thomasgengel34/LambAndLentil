@@ -1,0 +1,87 @@
+﻿@model LambAndLentil.Domain.Entities.Ingredient
+
+<div class="item">
+    <h3>@Model.ShortDescription</h3>
+   <div class="row">
+     <div class="col-md-4">
+    <ul>
+
+     <li>@Html.DisplayNameFor(model => model.ServingSize): <br /> @Model.ServingSize.ToString() &nbsp; @Model.ServingSizeUnit.ToString() </li>
+    <li>
+        @Html.DisplayNameFor(model => model.FoodGroup):@Html.DisplayFor(modelItem => Model.FoodGroup)  
+    </li>
+        <li>
+    @Html.DisplayNameFor(model => model.ContainerSize):@Html.DisplayFor(modelItem => Model.ContainerSize) &nbsp;@Html.DisplayFor(modelItem => Model.ContainerSizeUnit)
+    (@Html.DisplayFor(modelItem => Model.ContainerSizeInGrams) g)
+</li>
+    <li>@Html.DisplayNameFor(model => model.ServingsPerContainer)&nbsp;:&nbsp;@Html.DisplayFor(modelItem => Model.ServingsPerContainer)</li> 
+    </ul>
+    </div>
+    <div class="col-md-4">
+       <ul>
+            <li>@Html.DisplayNameFor(model => model.Calories)&nbsp;:&nbsp;@Model.Calories.ToString()  </li>
+
+            <li>@Html.DisplayNameFor(model => model.CalFromFat)&nbsp;:&nbsp;@Html.DisplayFor(modelItem => Model.CalFromFat)</li>
+        </ul> 
+
+    </div>
+    <div class="col-md-4">
+        <ul>
+            <li>@Html.DisplayNameFor(model => model.Maker)&nbsp;:&nbsp;@Html.DisplayFor(modelItem => Model.Maker)</li>
+            <li>@Html.DisplayNameFor(model => model.Brand)&nbsp;:&nbsp;@Html.DisplayFor(modelItem => Model.Brand)</li>
+            <li> @Html.DisplayNameFor(model => model.Kosher)&nbsp;:&nbsp;@Html.DisplayFor(modelItem => Model.Kosher) </li>
+
+        </ul> 
+    </div>
+    </div>
+</div>
+<table>
+    <tr>
+
+        @Html.HiddenFor(modelItem => Model.IngredientID)
+
+        <td>
+            @Html.ActionLink("Edit", "Edit", "Ingredients", new { id = Model.IngredientID, sourceActionMethod = "IngredientsList", actionMethod = "Edit" }, null)  |
+            @Html.ActionLink("Details", "Details", new { id = Model.IngredientID }) |
+            @Html.ActionLink("Delete", "Delete", new { id = Model.IngredientID })
+        </td>
+    </tr>
+</table>
+<hr />
+
+  TransFat
+            PolyUnSaturatedFat
+            MonounSaturatedFat
+            Cholesterol
+            Sodium
+            TotalCarbohydrates
+            Protein
+            Potassium
+            DietaryFiber
+            Sugars
+            VitaminA
+            VitaminC
+            Calcium
+            Iron
+            FolicAcid
+            Egg
+            Nuts
+            Milk
+            Wheat
+            Soy
+            Category
+            Corn
+            Onion
+            Garlic
+            SodiumNitrite
+            UPC
+            Caffeine
+            FoodGroup
+            StorageType
+            IngredientsList
+            CreationDate
+            ModifiedDate
+            AddedByUser
+            IsGMO
+            CountryOfOrigin
+            Kosher 

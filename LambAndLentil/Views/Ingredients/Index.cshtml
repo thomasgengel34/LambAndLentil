@@ -1,57 +1,182 @@
-﻿@model IEnumerable<LambAndLentil.Models.Ingredient>
-
+﻿@model LambAndLentil.Models.IngredientsListVM
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Ingredients Table";
 }
 
-<h2>Index</h2>
+<h2>Table of Ingredients</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Add Ingredient", "Create", "Ingredients", new { actionMethod="Create" },null) &nbsp;
+    @Html.ActionLink("List View", "ListAscend", "Ingredients") 
 </p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.ShortDescription)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ServingSize)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ServingSizeUnit)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Calories)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CalFromFat)
-        </th>
-        <th></th>
-    </tr>
+ 
+<div class="tableOfIngredients"> 
+    <table>
+        <tr> 
+            <th>
+                @Html.DisplayNameFor(model=> model.Ingredients.First().Name)
+            </th>
+            <th class="categories">
+                @Html.DisplayNameFor(model => model.Ingredients.First().ShortDescription) <br/> 
+                @Html.ActionLink("Up","Index","Ingredients",new { @class = "btn btn-info  glyphicon glyphicon-circle-arrow-up" }) 
+                    @Html.ActionLink("Dn", "IndexDesc", "Ingredients", new { @class = "btn btn-info glyphicon glyphicon-circle-arrow-down" }) 
+            </th>
+            <th  class="categories">  
+                @{ Html.RenderAction("MakerMenu", "Nav", new { actionMethod = "Index" });}
+            </th>
+            <th  class="categories">
+                @{ Html.RenderAction("BrandMenu", "Nav", new { actionMethod = "Index" });}
+            </th>
+            <th class="categories">
+                @{ Html.RenderAction("FoodGroupMenu", "Nav", new { actionMethod = "Index" });}
+            </th>
+            <th class="categories">
+                @{ Html.RenderAction("CategoryMenu", "Nav", new { actionMethod = "Index" });}
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ingredients.First().LongDescription)
+            </th> 
+            <th>
+                @Html.DisplayNameFor(model => model.Ingredients.First().ServingSize)
+            </th> 
+            <th>
+                @Html.DisplayNameFor(model => model.Ingredients.First().ServingsPerContainer)
+            </th> 
+            <th>
+                @Html.DisplayNameFor(model => model.Ingredients.First().ContainerSize)
+            </th> 
+            <th>
+                @Html.DisplayNameFor(model => model.Ingredients.First().ContainerSizeInGrams)
+            </th> 
+            <th>
+                @Html.DisplayNameFor(model => model.Ingredients.First().Calories)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ingredients.First().CalFromFat)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ingredients.First().SaturatedFat)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ingredients.First().TransFat)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ingredients.First().PolyUnSaturatedFat)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ingredients.First().MonoUnSaturatedFat)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ingredients.First().Cholesterol)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ingredients.First().Sodium)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ingredients.First().TotalCarbohydrates)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ingredients.First().Protein)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ingredients.First().Potassium)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ingredients.First().DietaryFiber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ingredients.First().Sugars)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ingredients.First().VitaminA)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ingredients.First().VitaminC)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ingredients.First().Calcium)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ingredients.First().Iron)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ingredients.First().FolicAcid)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ingredients.First().Egg)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ingredients.First().Nuts)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ingredients.First().Milk)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ingredients.First().Wheat)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ingredients.First().Soy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ingredients.First().Category)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ingredients.First().Corn)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ingredients.First().Onion)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ingredients.First().Garlic)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ingredients.First().SodiumNitrite)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ingredients.First().UPC)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ingredients.First().Caffeine)
+            </th> 
+            <th>
+                @Html.DisplayNameFor(model => model.Ingredients.First().StorageType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ingredients.First().IngredientsList)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ingredients.First().CreationDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ingredients.First().ModifiedDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ingredients.First().AddedByUser)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ingredients.First().IsGMO)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ingredients.First().CountryOfOrigin)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ingredients.First().Kosher)
+            </th>
+            
+<th></th>
+        </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.ShortDescription)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ServingSize)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ServingSizeUnit)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Calories)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CalFromFat)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.IngredientID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.IngredientID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.IngredientID })
-        </td>
-    </tr>
-}
+        @foreach (var m in  Model.Ingredients)
+        {
+            Html.RenderPartial("_IngredientTable", m);
+        }
+        </table>
+</div>
+<div class="pager">
+    <h4>Lamb & Lentil</h4>
+    @Html.PageLinks(Model.PagingInfo, x => Url.Action("Index", new { page = x, maker = Model.Maker }))
+</div>
 
-</table>
+
+
+  

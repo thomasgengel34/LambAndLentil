@@ -1,0 +1,172 @@
+﻿@model LambAndLentil.Domain.Entities.Ingredient
+ @{ 
+     int modelId = Model.ID;
+     string sourceActionMethod = "IngredientsIndex";
+
+     ViewDataDictionary foo = new ViewDataDictionary();
+     foo.Model = Model;
+     foo.Add("modelId", modelId);
+     foo.Add("sourceActionMethod", sourceActionMethod);
+
+
+ }
+ <tr> 
+
+    @Html.HiddenFor(modelItem => Model.ID)
+     
+    <td>
+        @Html.DisplayFor(modelItem => Model.Name)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => Model.Maker)
+    </td>
+     <td>
+         @Html.DisplayFor(modelItem => Model.Brand)
+     </td>
+     <td>
+         @Html.DisplayFor(modelItem => Model.FoodGroup)
+     </td>
+     <td>
+         @Html.DisplayFor(modelItem => Model.Category)
+     </td> 
+     @*<td>
+         <span class="ellipsis">@Html.DisplayFor(modelItem => Model.Description) </span>
+     </td>*@ 
+    <td>
+        @Html.DisplayFor(modelItem => Model.ServingSize)&nbsp;@Html.DisplayFor(modelItem => Model.ServingSizeUnit)
+    </td> 
+     <td>
+         @Html.DisplayFor(modelItem => Model.ServingsPerContainer)
+     </td>
+     <td>
+         @Html.DisplayFor(modelItem => Model.ContainerSize)
+     </td>
+     <td>
+         @Html.DisplayFor(modelItem => Model.ContainerSizeInGrams)
+     </td>
+    <td>
+        @Html.DisplayFor(modelItem => Model.Calories)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => Model.CalFromFat)
+    </td> 
+     <td>
+         @Html.DisplayFor(modelItem => Model.SaturatedFat)
+     </td> 
+     <td>
+         @Html.DisplayFor(modelItem => Model.TransFat)
+     </td>
+     <td>
+         @Html.DisplayFor(modelItem => Model.PolyUnSaturatedFat)
+     </td>
+     <td>
+         @Html.DisplayFor(modelItem => Model.MonoUnSaturatedFat)
+     </td>
+     <td>
+         @Html.DisplayFor(modelItem => Model.Cholesterol)
+     </td>
+     <td>
+         @Html.DisplayFor(modelItem => Model.Sodium)
+     </td>
+     <td>
+         @Html.DisplayFor(modelItem => Model.TotalCarbohydrates)
+     </td>
+     <td>
+         @Html.DisplayFor(modelItem => Model.Protein)
+     </td>
+     <td>
+         @Html.DisplayFor(modelItem => Model.Potassium)
+     </td>
+     <td>
+         @Html.DisplayFor(modelItem => Model.DietaryFiber)
+     </td>
+     <td>
+         @Html.DisplayFor(modelItem => Model.Sugars)
+     </td>
+     <td>
+         @Html.DisplayFor(modelItem => Model.VitaminA)
+     </td>
+     <td>
+         @Html.DisplayFor(modelItem => Model.VitaminC)
+     </td> 
+     <td>
+         @Html.DisplayFor(modelItem => Model.Calcium)
+     </td>  
+     <td>
+         @Html.DisplayFor(modelItem => Model.Iron)
+     </td>
+     <td>
+         @Html.DisplayFor(modelItem => Model.FolicAcid)
+     </td>
+     <td>
+         @Html.DisplayFor(modelItem => Model.Egg)
+     </td>   
+     <td>
+         @Html.DisplayFor(modelItem => Model.Nuts)
+     </td> 
+     <td>
+         @Html.DisplayFor(modelItem => Model.Milk)
+     </td> 
+     <td>
+         @Html.DisplayFor(modelItem => Model.Wheat)
+     </td> 
+     <td>
+         @Html.DisplayFor(modelItem => Model.Soy)
+     </td> 
+     
+     <td>
+         @Html.DisplayFor(modelItem => Model.Corn)
+     </td> 
+     <td>
+         @Html.DisplayFor(modelItem => Model.Onion)
+     </td>
+     <td>
+         @Html.DisplayFor(modelItem => Model.Garlic)
+     </td>
+     <td>
+         @Html.DisplayFor(modelItem => Model.SodiumNitrite)
+     </td>
+     <td>
+         @Html.DisplayFor(modelItem => Model.UPC)
+     </td>
+     <td>
+         @Html.DisplayFor(modelItem => Model.Caffeine)
+     </td> 
+     <td>
+         @Html.DisplayFor(modelItem => Model.StorageType)
+     </td>
+     <td>
+         @Html.DisplayFor(modelItem => Model.IngredientsList)
+     </td>
+     <td>
+         @Html.DisplayFor(modelItem => Model.CreationDate)
+     </td>
+     <td>
+         @Html.DisplayFor(modelItem => Model.ModifiedDate)
+     </td>
+     <td>
+         @Html.DisplayFor(modelItem => Model.AddedByUser)
+     </td>
+     <td>
+         @Html.DisplayFor(modelItem => Model.IsGMO)
+     </td>
+     <td>
+         @Html.DisplayFor(modelItem => Model.CountryOfOrigin)
+     </td>
+     <td>
+         @Html.DisplayFor(modelItem => Model.Kosher)
+     </td> 
+     <td>
+         @Html.DisplayFor(modelItem => Model.DataSource)
+     </td> 
+     @*@Html.Partial("_EditDetailsDeleteButtons", foo)*@
+    <td>
+           @Html.ActionLink(" ", UIViewType.Edit.ToString(), "Ingredients", new { id = modelId, sourceActionMethod  , actionMethod= UIViewType.Edit }, new { @class = "btn btn-default btn-sm  glyphicon glyphicon-edit", @title="Edit" })</td>
+        <td>
+            @Html.ActionLink(" ", UIViewType.Details.ToString(), new { id = modelId }, new { @class = "btn btn-default btn-sm  glyphicon glyphicon-list", @title = "Details" })
+        </td>
+        <td>
+            @Html.ActionLink(" ", UIViewType.Details.ToString(), new { id = modelId,
+           actionMethod =  UIViewType.Delete }, new { @class= "btn btn-default btn-sm  glyphicon glyphicon-trash", @title="Delete" })
+        </td>
+</tr> 
