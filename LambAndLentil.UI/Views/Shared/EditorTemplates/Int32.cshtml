@@ -1,0 +1,27 @@
+﻿@model Int32?
+   
+@{ 
+    string actionM = Request.AppRelativeCurrentExecutionFilePath.Split('/').Skip(2).Take(1).Single();
+    Int32 valueM = 0;
+    if (ViewData["valueM"] != null)
+    {
+        valueM = (Int32)ViewData["valueM"];
+    }
+    string colon = " : "; 
+}
+
+@if (actionM == UIViewType.Edit.ToString() || actionM == UIViewType.Create.ToString())
+{ 
+
+    @Html.LabelFor(m => m)
+
+    @Html.TextBox("", ViewData.TemplateInfo.FormattedModelValue,
+     new { @class = "form-control" })
+    @Html.ValidationMessageFor(model => model, "", new { @class = "text-danger" })
+
+
+}
+else
+{
+    @Html.DisplayNameFor(model => model) @colon    <strong>@valueM.ToString()</strong>
+}  

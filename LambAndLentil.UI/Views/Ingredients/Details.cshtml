@@ -1,117 +1,182 @@
 ﻿@model LambAndLentil.UI.Models.IngredientVM
 @using LambAndLentil.Domain.Entities
 @{
+    //  string requestActionMethod = Request.AppRelativeCurrentExecutionFilePath.Split('/').Reverse().Skip(1).Take(1).FirstOrDefault();
     string requestActionMethod = Request.AppRelativeCurrentExecutionFilePath.Split('/').Last();
     string actionMethod = ViewBag.ActionMethod == null ? requestActionMethod : ViewBag.ActionMethod.ToString();
     ViewBag.Title = actionMethod + " Ingredient";
+    string colon = " : ";
+    if (actionMethod == UIViewType.Edit.ToString())
+    {
+        actionMethod = UIViewType.PostEdit.ToString();
+    }
+    if (actionMethod == UIViewType.Create.ToString())
+    {
+        actionMethod = UIViewType.PostEdit.ToString();
+    }
 }
-@if (actionMethod == "Delete")
+
+
+@if (actionMethod == UIViewType.Delete.ToString())
 {
-    <h2>@actionMethod Ingredient  &nbsp;:&nbsp; @Model.Name</h2>
+    <h2>@actionMethod Ingredient  &nbsp;:&nbsp; @Model.Name   ?</h2>
+}
+else if (actionMethod == UIViewType.Details.ToString())
+{
+    <h2>Ingredient Details for @Model.Name</h2>
+}
+else if (actionMethod == UIViewType.PostEdit.ToString())
+{
+    if (Model.Name == "newly created")
+    {
+        <h2> Create New Ingredient</h2>
+    }
+    else
+    {
+        <h2>Edit Details for @Model.Name</h2>
+    }
 }
 else
 {
-    <h3>Ingredient Details for @Model.Name</h3>
+    string modelLabel = Model.Name == null ? " " : Model.Name == "newly created" ? " " : Model.Name;
+    <h2>@actionMethod Ingredient  &nbsp;:&nbsp;@modelLabel </h2>
 }
 
 <hr />
-<div class="item">
-    <div class="row">
-        <div class="col-md-4">
-            <ul>
-                <li>@Html.DisplayNameFor(model => model.ServingSize) &nbsp;:&nbsp;@Model.ServingSize.ToString() &nbsp; @Model.ServingSizeUnit.ToString() </li>
-                <li>@Html.DisplayNameFor(model => model.ServingsPerContainer)&nbsp;:&nbsp;@Html.DisplayFor(modelItem => Model.ServingsPerContainer)</li>
-                <li>@Html.DisplayNameFor(model => model.Calories)&nbsp;:&nbsp;@Model.Calories.ToString()  </li>
-                <li>@Html.DisplayNameFor(model => model.CalFromFat)&nbsp;:&nbsp;@Html.DisplayFor(modelItem => Model.CalFromFat)</li>
-                <li>@Html.DisplayNameFor(model => model.TotalFat)&nbsp;:&nbsp;@Html.DisplayFor(modelItem => Model.TotalFat)</li>
-                <li>@Html.DisplayNameFor(model => model.SaturatedFat)&nbsp;:&nbsp;@Html.DisplayFor(modelItem => Model.SaturatedFat)</li>
-                <li>@Html.DisplayNameFor(model => model.TransFat)&nbsp;:&nbsp;@Html.DisplayFor(modelItem => Model.TransFat) g</li>
-                <li>@Html.DisplayNameFor(model => model.PolyUnSaturatedFat)&nbsp;:&nbsp;@Html.DisplayFor(modelItem => Model.PolyUnSaturatedFat) g</li>
-                <li>@Html.DisplayNameFor(model => model.MonoUnSaturatedFat)&nbsp;:&nbsp;@Html.DisplayFor(modelItem => Model.MonoUnSaturatedFat) g</li>
-                <li>@Html.DisplayNameFor(model => model.Cholesterol)&nbsp;:&nbsp;@Html.DisplayFor(modelItem => Model.Cholesterol)</li>
-                <li>@Html.DisplayNameFor(model => model.Sodium)&nbsp;:&nbsp;@Html.DisplayFor(modelItem => Model.Sodium)</li>
-                <li>@Html.DisplayNameFor(model => model.Potassium)&nbsp;:&nbsp;@Html.DisplayFor(modelItem => Model.Potassium)</li>
-                <li>
-                    @Html.DisplayNameFor(model => model.TotalCarbohydrates)&nbsp;:&nbsp;@Html.DisplayFor(modelItem => modelItem.TotalCarbohydrates) g
-                </li>
-                <li>@Html.DisplayNameFor(model => model.DietaryFiber)&nbsp;:&nbsp;@Html.DisplayFor(modelItem => Model.DietaryFiber) g</li>
-                <li>@Html.DisplayNameFor(model => model.Sugars)&nbsp;:&nbsp;@Html.DisplayFor(modelItem => Model.Sugars) g</li>
-                <li>@Html.DisplayNameFor(model => model.Protein)&nbsp;:&nbsp;@Html.DisplayFor(modelItem => Model.Protein)</li>
-            </ul>
-        </div>
-        <div class="col-md-4">
-            <ul>
-                <li>@Html.DisplayNameFor(model => model.Calcium)&nbsp;:&nbsp;@Html.DisplayFor(modelItem => Model.Calcium)</li>
-                <li>@Html.DisplayNameFor(model => model.Iron)&nbsp;:&nbsp;@Html.DisplayFor(modelItem => Model.Iron)</li>
-                <li>@Html.DisplayNameFor(model => model.VitaminA)&nbsp;:&nbsp;@Html.DisplayFor(modelItem => Model.VitaminA)</li>
-                <li>@Html.DisplayNameFor(model => model.VitaminC)&nbsp;:&nbsp;@Html.DisplayFor(modelItem => Model.VitaminC)</li>
-                <li>@Html.DisplayNameFor(model => model.DietaryFiber)&nbsp;:&nbsp;@Html.DisplayFor(modelItem => Model.DietaryFiber)</li>
-                <li>@Html.DisplayNameFor(model => model.Sugars)&nbsp;:&nbsp;@Html.DisplayFor(modelItem => Model.Sugars)</li>
-                <li>@Html.DisplayNameFor(model => model.VitaminA)&nbsp;:&nbsp;@Html.DisplayFor(modelItem => Model.VitaminA)</li>
-                <li>@Html.DisplayNameFor(model => model.VitaminC)&nbsp;:&nbsp;@Html.DisplayFor(modelItem => Model.VitaminC)</li>
-                <li>@Html.DisplayNameFor(model => model.FolicAcid)&nbsp;:&nbsp;@Html.DisplayFor(modelItem => Model.FolicAcid)</li>
-                <li>@Html.DisplayNameFor(model => model.Egg)&nbsp;:&nbsp;@Html.DisplayFor(modelItem => Model.Egg)</li>
-                <li>@Html.DisplayNameFor(model => model.Nuts)&nbsp;:&nbsp;@Html.DisplayFor(modelItem => Model.Nuts)</li>
-                <li>@Html.DisplayNameFor(model => model.Milk)&nbsp;:&nbsp;@Html.DisplayFor(modelItem => Model.Milk)</li>
-                <li>@Html.DisplayNameFor(model => model.Wheat)&nbsp;:&nbsp;@Html.DisplayFor(modelItem => Model.Wheat)</li>
-                <li>@Html.DisplayNameFor(model => model.Soy)&nbsp;:&nbsp;@Html.DisplayFor(modelItem => Model.Soy)</li>
-                <li>@Html.DisplayNameFor(model => model.Corn)&nbsp;:&nbsp;@Html.DisplayFor(modelItem => Model.Corn)</li>
-                <li>@Html.DisplayNameFor(model => model.Onion)&nbsp;:&nbsp;@Html.DisplayFor(modelItem => Model.Onion)</li>
-                <li>@Html.DisplayNameFor(model => model.Garlic)&nbsp;:&nbsp;@Html.DisplayFor(modelItem => Model.Garlic)</li>
-                <li>@Html.DisplayNameFor(model => model.SodiumNitrite)&nbsp;:&nbsp;@Html.DisplayFor(modelItem => Model.SodiumNitrite)</li>
-                <li>@Html.DisplayNameFor(model => model.Caffeine)&nbsp;:&nbsp;@Html.DisplayFor(modelItem => Model.Caffeine)</li>
-            </ul>
+@using (Html.BeginForm(actionMethod, UIControllerType.Ingredients.ToString(), FormMethod.Post, new { id = Model.ID, ingredientVM = Model }))
+{
 
-        </div>
-        <div class="col-md-4">
-            <ul>
-                <li>
-                    @Html.DisplayNameFor(model => model.ContainerSize):@Html.DisplayFor(modelItem => Model.ContainerSize) &nbsp; @Html.DisplayFor(modelItem => Model.ContainerSizeUnit)
-                    (@Html.DisplayFor(modelItem => Model.ContainerSizeInGrams) g)
-                </li>
-                <li>@Html.DisplayNameFor(model => model.FoodGroup) &nbsp;:&nbsp;@Html.DisplayFor(modelItem => Model.FoodGroup)</li>
-                <li>@Html.DisplayNameFor(model => model.Category) &nbsp;:&nbsp;@Html.DisplayFor(modelItem => Model.Category)</li>
-                <li>@Html.DisplayNameFor(model => model.Maker)&nbsp;:&nbsp;@Html.DisplayFor(modelItem => Model.Maker)</li>
-                <li>@Html.DisplayNameFor(model => model.Brand)&nbsp;:&nbsp;@Html.DisplayFor(modelItem => Model.Brand)</li>
-                <li> @Html.DisplayNameFor(model => model.Kosher)&nbsp;:&nbsp;@Html.DisplayFor(modelItem => Model.Kosher) </li>
-                <li>@Html.DisplayNameFor(model => model.UPC)&nbsp;:&nbsp;@Html.DisplayFor(modelItem => Model.UPC)</li>
-                <li>@Html.DisplayNameFor(model => model.StorageType)&nbsp;:&nbsp;@Html.DisplayFor(modelItem => Model.StorageType)</li>
-                <li>@Html.DisplayNameFor(model => model.IsGMO)&nbsp;:&nbsp;@Html.DisplayFor(modelItem => Model.IsGMO)</li>
-                <li>@Html.DisplayNameFor(model => model.CountryOfOrigin)&nbsp;:&nbsp;@Html.DisplayFor(modelItem => Model.CountryOfOrigin)</li>
-                <li>@Html.DisplayNameFor(model => model.AddedByUser)&nbsp;:<br />@Html.DisplayFor(modelItem => Model.AddedByUser)</li>
-                <li>@Html.DisplayNameFor(model => model.CreationDate)&nbsp;:<br />@Html.DisplayFor(modelItem => Model.CreationDate)</li>
-                <li>@Html.DisplayNameFor(model => model.ModifiedByUser)&nbsp;:<br />;@Html.DisplayFor(modelItem => Model.ModifiedByUser)</li>
-                <li>@Html.DisplayNameFor(model => model.ModifiedDate)&nbsp;:<br />@Html.DisplayFor(modelItem => Model.ModifiedDate)</>
-                <li>@Html.DisplayNameFor(model => model.DataSource)&nbsp;:<br />@Html.DisplayFor(modelItem => Model.DataSource)</>
-            </ul>
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.ID)
+    <div class="item">
+        <div class="row">
+            <div class="col-md-4">
+                <ul>
+                    <li>@Html.EditorFor(model => model.Name, new { valueM = Model.Name })</li>
+                    <li>@Html.EditorFor(model => model.Description, new { valueM = Model.Description })</li>
+                    <li>@Html.EditorFor(model => model.ServingSize, new { valueM = Model.ServingSize })    @Html.EditorFor(model => model.ServingSizeUnit, new { valueM = Model.ServingSizeUnit })</li>
+                    <li>@Html.EditorFor(model => model.ServingsPerContainer, new { valueM = Model.ServingsPerContainer ?? 0.0m })  </li>
+                    <li>@Html.EditorFor(model => model.Calories, new { valueM = Model.Calories }) g </li>
+                    <li>@Html.EditorFor(model => model.CalFromFat, new { valueM = Model.CalFromFat }) g</li>
+                    <li>@Html.EditorFor(model => model.TotalFat, new { valueM = Model.TotalFat }) g</li>
+                    <li>@Html.EditorFor(model => model.SaturatedFat, new { valueM = Model.SaturatedFat }) g</li>
+                    <li>@Html.EditorFor(model => model.TransFat, new { valueM = Model.TransFat })  g</li>
+                    <li>@Html.EditorFor(model => model.PolyUnSaturatedFat, new { valueM = Model.PolyUnSaturatedFat }) g</li>
+                    <li>@Html.EditorFor(model => model.MonoUnSaturatedFat, new { valueM = Model.MonoUnSaturatedFat }) g</li>
+                    <li>@Html.EditorFor(model => model.Cholesterol, new { valueM = Model.Cholesterol })</li>
+                    <li>@Html.EditorFor(model => model.Sodium, new { valueM = Model.Sodium })</li>
+                    <li>@Html.EditorFor(model => model.Potassium, new { valueM = Model.Potassium })</li>
+                    <li>@Html.EditorFor(model => model.TotalCarbohydrates, new { valueM = Model.TotalCarbohydrates }) g </li>
+                    <li>@Html.EditorFor(model => model.DietaryFiber, new { valueM = Model.DietaryFiber }) g</li>
+                    <li>@Html.EditorFor(model => model.Sugars, new { valueM = Model.Sugars }) g</li>
+                    <li>@Html.EditorFor(model => model.Protein, new { valueM = Model.Protein })</li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <ul>
+                    <li>@Html.EditorFor(model => model.Calcium, new { valueM = Model.Calcium }) g
+                    <li>@Html.EditorFor(model => model.Iron, new { valueM = Model.Iron }) g
+                    <li>@Html.EditorFor(model => model.VitaminA, new { valueM = Model.VitaminA })</li>
+                    <li>@Html.EditorFor(model => model.VitaminC, new { valueM = Model.VitaminC })</li>
+                    <li>@Html.EditorFor(model => model.FolicAcid, new { valueM = Model.FolicAcid }) </li>
+                    <li>@Html.EditorFor(model => model.Egg, new { valueM = Model.Egg }) </li>
+                    <li>@Html.EditorFor(model => model.Nuts, new { valueM = Model.Nuts }) </li>
+                    <li>@Html.EditorFor(model => model.Milk, new { valueM = Model.Milk }) </li>
+                    <li>@Html.EditorFor(model => model.Wheat, new { valueM = Model.Wheat }) </li>
+                    <li>@Html.EditorFor(model => model.Soy, new { valueM = Model.Soy }) </li>
+                    <li>@Html.EditorFor(model => model.Corn, new { valueM = Model.Corn }) </li>
+                    <li>@Html.EditorFor(model => model.Onion, new { valueM = Model.Onion }) </li>
+                    <li>@Html.EditorFor(model => model.Garlic, new { valueM = Model.Garlic }) </li>
+                    <li>@Html.EditorFor(model => model.SodiumNitrite, new { valueM = Model.SodiumNitrite }) </li>
+                    <li>@Html.EditorFor(model => model.Caffeine, new { valueM = Model.Caffeine }) </li>
+                </ul>
+
+            </div>
+            <div class="col-md-4">
+                <ul>
+                    <li>
+                        @Html.EditorFor(model => model.ContainerSize, new { valueM = Model.ContainerSize })  &nbsp; @Html.EditorFor(modelItem => Model.ContainerSizeUnit, new { valueM = Model.ContainerSizeUnit })
+                        (@Html.EditorFor(modelItem => Model.ContainerSizeInGrams, new { valueM = Model.ContainerSizeInGrams }) g)
+                    </li>
+                    <li>@Html.EditorFor(model => model.FoodGroup, new { valueM = Model.FoodGroup })  </li>
+                    <li>@Html.EditorFor(model => model.Category, new { valueM = Model.Category })  </li>
+                    <li> @Html.EditorFor(model => model.Maker, new { valueM = Model.Maker })  </li>
+                    <li>@Html.EditorFor(model => model.Brand, new { valueM = Model.Brand }) </li>
+                    <li> @Html.EditorFor(model => model.Kosher, new { valueM = Model.Kosher }) </li>
+                    <li> @Html.EditorFor(model => model.Fish, new { valueM = Model.Fish }) </li>
+                    <li>@Html.EditorFor(model => model.UPC, new { valueM = Model.UPC }) </li>
+                    <li>@Html.EditorFor(model => model.StorageType, new { valueM = Model.StorageType }) </li>
+                    <li>@Html.EditorFor(model => model.IsGMO, new { valueM = Model.IsGMO }) </li>
+                    <li>@Html.EditorFor(model => model.CountryOfOrigin, new { valueM = Model.CountryOfOrigin }) </li>
+                    <li>@Html.EditorFor(model => model.AddedByUser, new { valueM = Model.AddedByUser, readOnly = true }) </li>
+                    <li>@Html.EditorFor(model => model.CreationDate, new { valueM = Model.CreationDate, readOnly = true }) </li>
+                    <li>@Html.EditorFor(model => model.ModifiedByUser, new { valueM = Model.ModifiedByUser, readOnly = true }) </li>
+                    <li>@Html.EditorFor(model => model.ModifiedDate, new { valueM = Model.ModifiedDate, readOnly = true })</li>
+                    <li>@Html.EditorFor(model => model.DataSource, new { valueM = Model.DataSource })</li>
+                </ul>
+            </div>
+
         </div>
     </div>
-</div>
-<div> @Html.DisplayNameFor(model => model.IngredientsList)&nbsp;:&nbsp;@Html.DisplayFor(modelItem => Model.IngredientsList)</div>
+    <div class="width100"> @Html.EditorFor(model => model.IngredientsList, new { valueM = Model.IngredientsList })   </div>
 
-@if (actionMethod == "Delete")
+
+    if (actionMethod == UIViewType.PostEdit.ToString() || actionMethod == UIViewType.Create.ToString())
+    {
+        <div class="form-group">
+            <div>
+                <input type="submit" value="Save Changes" class="btn btn-default col-md-offset-2 col-md-10" />
+            </div>
+        </div>
+
+
+    }
+
+}
+
+@if (actionMethod == UIViewType.Create.ToString())
+{
+    <div>
+        @Html.ActionLink("Back to List", UIViewType.Index.ToString(), null, new { T = typeof(Ingredient), @class = "btn btn-default" })
+    </div>
+
+}
+
+@if (actionMethod == UIViewType.PostEdit.ToString())
+{
+    <div>
+        @Html.ActionLink("Back to List", UIViewType.Index.ToString(), null, new { T = typeof(Ingredient), @class = "btn btn-default" })
+        @if(Model.ID!=0)
+        { 
+        @Html.ActionLink("Delete", UIViewType.Delete.ToString(), null, new { id = Model.ID }, new { @class = "btn btn-default" })
+        }
+    </div>
+
+}
+
+
+@if (actionMethod == UIViewType.Delete.ToString())
 {
     <h3>Are you sure you want to delete this ingredient: (@Model.Name) ?</h3>
 
     @Html.ActionLink("No - Back to List", UIViewType.Index.ToString(), null, new { @class = "btn btn-default" })
-    using (Html.BeginForm(UIViewType.DeleteConfirmed.ToString(),UIControllerType.Ingredients.ToString(), new { id = Model.ID }, FormMethod.Post  ))
+    using (Html.BeginForm(UIViewType.DeleteConfirmed.ToString(), UIControllerType.Ingredients.ToString(), new { id = Model.ID }, FormMethod.Post))
     {
-        @Html.AntiForgeryToken() 
+        @Html.AntiForgeryToken()
         <div class="form-group">
             <div>
                 <input type="submit" value="Yes - Delete" class="btn btn-default" />
             </div>
         </div>
     }
-
 }
-else
+@if (actionMethod == UIViewType.Details.ToString())
 {
-    <p>
-        @Html.ActionLink("Edit", UIViewType.Edit.ToString(), new { id = Model.ID }, new { @class = "btn btn-default" }) &nbsp;
-        @Html.ActionLink("Back to List", UIViewType.Index.ToString(), null, new { T = typeof(Ingredient), @class = "btn btn-default" })&nbsp; 
-        @Html.ActionLink("Delete", UIViewType.Delete.ToString(), null, new { id = Model.ID },new { @class = "btn btn-default" })&nbsp; 
-}
-    </p>         
- 
+    <div>
+        @Html.ActionLink("Back to List", UIViewType.Index.ToString(), null, new { T = typeof(Ingredient), @class = "btn btn-default" })
+        @Html.ActionLink("Edit", UIViewType.Edit.ToString(), null, new { id = Model.ID, actionMethod = UIViewType.Edit.ToString() }, new { @class = "btn btn-default" }) 
+        @Html.ActionLink("Delete", UIViewType.Delete.ToString(), null, new { id = Model.ID }, new { @class = "btn btn-default" })
+
+    </div>
+
 }

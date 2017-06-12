@@ -1,12 +1,9 @@
-﻿using AutoMapper;
-using LambAndLentil.Domain.Abstract;
+﻿using LambAndLentil.Domain.Abstract;
 using LambAndLentil.Domain.Entities;
 using LambAndLentil.UI.Models;
-using System.Data;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using Microsoft.Web.Mvc;
-using System.Collections.Generic;
 
 namespace LambAndLentil.UI.Controllers
 {
@@ -31,9 +28,17 @@ namespace LambAndLentil.UI.Controllers
       
 
         // GET: Recipes/Details/5
-        public   ActionResult  Details(int id = 1)
+        public   ActionResult  Details(int id = 1, UIViewType actionMethod = UIViewType.Details)
         {
-           // return BaseDetails(id);
+            ViewBag.Title = actionMethod.ToString();
+            if (actionMethod == UIViewType.Delete)
+            {
+                return BaseDelete<Recipe, RecipesController, RecipeVM>(UIControllerType.Recipes, id);
+            }
+            else if (actionMethod == UIViewType.DeleteConfirmed)
+            {
+                return BaseDeleteConfirmed<Recipe, RecipesController>(UIControllerType.Recipes, id);
+            }
             return BaseDetails<Recipe, RecipesController, RecipeVM>(UIControllerType.Recipes, id);
         }
 
@@ -57,19 +62,20 @@ namespace LambAndLentil.UI.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,Name,Description,Servings,MealType,Calories,CalsFromFat")] RecipeVM recipeVM)
+        public ActionResult PostEdit([Bind(Include = "ID,Name,Description,Servings,MealType,Calories,CalsFromFat,CreationDate, ModifiedDate,AddedByUser, ModifiedByUser ")] RecipeVM recipeVM)
         { 
         return BasePostEdit<Recipe,RecipesController, RecipeVM>(recipeVM);
     }
 
         // GET: Recipes/Delete/5
-        public ActionResult Delete(int id = 1)
+        [ActionName("Delete")]
+        public ActionResult Delete(int id = 1, UIViewType actionMethod = UIViewType.Delete)
         {
             return BaseDelete<Recipe,RecipesController, RecipeVM>(UIControllerType.Recipes, id);
         }
 
         // POST: Recipes/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost, ActionName("DeleteConfirmed")]
         [ValidateAntiForgeryToken] 
         public ActionResult DeleteConfirmed(int id)
         {

@@ -10,6 +10,16 @@ namespace LambAndLentil.Domain.Entities
     [Table("MENU.Menu")]
     public class Menu : BaseEntity
     {
+        
+        public Menu():base() 
+        { 
+        }
+
+        public Menu(DateTime creationDate) : this()
+        {
+            CreationDate = creationDate;
+        }
+
         public MealType MealType { get; set; }
         public DayOfWeek DayOfWeek { get; set; }
 

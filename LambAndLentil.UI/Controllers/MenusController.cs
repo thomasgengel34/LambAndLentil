@@ -1,13 +1,9 @@
 ﻿using LambAndLentil.Domain.Abstract;
 using LambAndLentil.Domain.Entities;
 using LambAndLentil.UI.Models;
-using System.Data;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using System;
-using AutoMapper;
-using Microsoft.Web.Mvc;
-using System.Collections.Generic;
 
 namespace LambAndLentil.UI.Controllers
 {
@@ -30,9 +26,18 @@ namespace LambAndLentil.UI.Controllers
         }
 
         // GET: Menus/Details/5 
-        public ActionResult Details(int id = 1)
+        public ActionResult Details(int id = 1, UIViewType actionMethod = UIViewType.Details)
         {
-            return BaseDetails<Menu,MenusController,MenuVM>(UIControllerType.Menus, id);
+            ViewBag.Title = actionMethod.ToString();
+            if (actionMethod == UIViewType.Delete)
+            {
+                return BaseDelete<Menu, MenusController, MenuVM>(UIControllerType.Menus, id);
+            }
+            else if (actionMethod == UIViewType.DeleteConfirmed)
+            {
+                return BaseDeleteConfirmed<Menu, MenusController>(UIControllerType.Menus, id);
+            }
+            return BaseDetails<Menu, MenusController, MenuVM>(UIControllerType.Menus, id);
         }
 
 
@@ -55,21 +60,23 @@ namespace LambAndLentil.UI.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,Name, MealType,Diners")] MenuVM menuVM)
+        public ActionResult PostEdit([Bind(Include = "ID,Name, DayOfWeek, Description,CreationDate, ModifiedDate,  AddedByUser, ModifiedByUser, MealType,Diners")] MenuVM menuVM)
         {
         return BasePostEdit<Menu, MenusController, MenuVM>(menuVM);
     }
 
         // GET: Menus/Delete/5
-        public ActionResult Delete(int  id=1)
+        [ActionName("Delete")]
+        public ActionResult Delete(int  id=1, UIViewType actionMethod = UIViewType.Delete)
         {
+            ViewBag.ActionMethod = UIViewType.Delete;
             return BaseDelete<Menu, MenusController, MenuVM>(UIControllerType.Menus, id);
         }
 
         
 
-        // POST: Ingredients/Delete/5
-        [HttpPost, ActionName("Delete")]
+        // POST: Ingredients/Delete/5 
+        [HttpPost, ActionName("DeleteConfirmed")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {

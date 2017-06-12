@@ -1,0 +1,27 @@
+﻿@model decimal?
+
+@{
+    string actionM = Request.AppRelativeCurrentExecutionFilePath.Split('/').Last();
+    decimal valueM = 0;
+    if (ViewData["valueM"] != null)
+    {
+        valueM = (decimal)ViewData["valueM"];
+    }
+    string colon = " : ";
+}
+
+@if (actionM == UIViewType.Edit.ToString() || actionM == UIViewType.Create.ToString())
+{ 
+
+    @Html.LabelFor(m => m)
+
+    @Html.TextBox("", ViewData.TemplateInfo.FormattedModelValue,
+     new { @class = "form-control" })
+    @Html.ValidationMessageFor(model => model, "", new { @class = "text-danger" })
+
+
+}
+else
+{
+    @Html.DisplayNameFor(model => model) @colon <strong>@valueM.ToString()   </strong>   
+}

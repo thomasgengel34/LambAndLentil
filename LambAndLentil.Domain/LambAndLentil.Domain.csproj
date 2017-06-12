@@ -61,6 +61,7 @@
     <Compile Include="Entities\IBaseEntity.cs" />
     <Compile Include="Entities\Ingredient.cs" />
     <Compile Include="Entities\Ingredients.cs" />
+    <Compile Include="Entities\Kosher.cs" />
     <Compile Include="Entities\Plans.cs" />
     <Compile Include="Entities\MealType.cs" />
     <Compile Include="Entities\Measurement.cs" />
@@ -90,6 +91,30 @@
     <Compile Include="Migrations\201704251426458_foo.Designer.cs">
       <DependentUpon>201704251426458_foo.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201705182230298_ingredient-kosher-notnullable.cs" />
+    <Compile Include="Migrations\201705182230298_ingredient-kosher-notnullable.Designer.cs">
+      <DependentUpon>201705182230298_ingredient-kosher-notnullable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705261456101_KosherEnum.cs" />
+    <Compile Include="Migrations\201705261456101_KosherEnum.Designer.cs">
+      <DependentUpon>201705261456101_KosherEnum.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705261619488_Ingredient.Fish.cs" />
+    <Compile Include="Migrations\201705261619488_Ingredient.Fish.Designer.cs">
+      <DependentUpon>201705261619488_Ingredient.Fish.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705272109081_Ingredients.NullableChanges.cs" />
+    <Compile Include="Migrations\201705272109081_Ingredients.NullableChanges.Designer.cs">
+      <DependentUpon>201705272109081_Ingredients.NullableChanges.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201706011444338_DescriptionToBaseEntity.cs" />
+    <Compile Include="Migrations\201706011444338_DescriptionToBaseEntity.Designer.cs">
+      <DependentUpon>201706011444338_DescriptionToBaseEntity.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201706071431204_removePersonMustHaveGarlic.cs" />
+    <Compile Include="Migrations\201706071431204_removePersonMustHaveGarlic.Designer.cs">
+      <DependentUpon>201706071431204_removePersonMustHaveGarlic.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -111,6 +136,24 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201704251426458_foo.resx">
       <DependentUpon>201704251426458_foo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705182230298_ingredient-kosher-notnullable.resx">
+      <DependentUpon>201705182230298_ingredient-kosher-notnullable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705261456101_KosherEnum.resx">
+      <DependentUpon>201705261456101_KosherEnum.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705261619488_Ingredient.Fish.resx">
+      <DependentUpon>201705261619488_Ingredient.Fish.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705272109081_Ingredients.NullableChanges.resx">
+      <DependentUpon>201705272109081_Ingredients.NullableChanges.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201706011444338_DescriptionToBaseEntity.resx">
+      <DependentUpon>201706011444338_DescriptionToBaseEntity.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201706071431204_removePersonMustHaveGarlic.resx">
+      <DependentUpon>201706071431204_removePersonMustHaveGarlic.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

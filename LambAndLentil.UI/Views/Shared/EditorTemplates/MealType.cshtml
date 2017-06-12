@@ -1,0 +1,29 @@
+﻿@using LambAndLentil.Domain.Entities
+@model LambAndLentil.Domain.Entities.MealType
+   @{
+       string actionM = Request.AppRelativeCurrentExecutionFilePath.Split('/').Last();
+       MealType valueM = MealType.Breakfast;
+       var guardedValueM= ViewData["valueM"]??valueM;
+
+       valueM = (MealType)guardedValueM;
+
+  string colon = " : ";
+   }  
+ 
+
+
+@if (actionM == UIViewType.Edit.ToString() || actionM == UIViewType.Create.ToString())
+{
+
+    @Html.LabelFor(m => m)
+     
+    @Html.EnumDropDownListFor( m =>m, new { @class = "form-control" }  )
+
+    @Html.ValidationMessageFor(model => model, "", new { @class = "text-danger" })
+
+
+}
+else
+{
+    @Html.DisplayNameFor(model => model) @colon <strong>@valueM.ToString()</strong>   
+}

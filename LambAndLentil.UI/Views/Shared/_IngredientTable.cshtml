@@ -1,12 +1,12 @@
 ﻿@model LambAndLentil.Domain.Entities.Ingredient
  @{ 
-     int modelId = Model.ID;
+  //   int modelId = Model.ID;
      string sourceActionMethod = "IngredientsIndex";
-
-     ViewDataDictionary foo = new ViewDataDictionary();
-     foo.Model = Model;
-     foo.Add("modelId", modelId);
-     foo.Add("sourceActionMethod", sourceActionMethod);
+     // needed??
+     //ViewDataDictionary foo = new ViewDataDictionary();
+     //foo.Model = Model;
+     //foo.Add("modelId", modelId);
+     //foo.Add("sourceActionMethod", sourceActionMethod);
 
 
  }
@@ -161,12 +161,12 @@
      </td> 
      @*@Html.Partial("_EditDetailsDeleteButtons", foo)*@
     <td>
-           @Html.ActionLink(" ", UIViewType.Edit.ToString(), "Ingredients", new { id = modelId, sourceActionMethod  , actionMethod= UIViewType.Edit }, new { @class = "btn btn-default btn-sm  glyphicon glyphicon-edit", @title="Edit" })</td>
+           @Html.ActionLink(" ", UIViewType.Edit.ToString(), "Ingredients", new { id = Model.ID, sourceActionMethod  , actionMethod= UIViewType.Edit }, new { @class = "btn btn-default btn-sm  glyphicon glyphicon-edit", @title="Edit" })</td>
         <td>
-            @Html.ActionLink(" ", UIViewType.Details.ToString(), new { id = modelId }, new { @class = "btn btn-default btn-sm  glyphicon glyphicon-list", @title = "Details" })
+            @Html.ActionLink(" ", UIViewType.Details.ToString(), new { id = Model.ID }, new { @class = "btn btn-default btn-sm  glyphicon glyphicon-list", @title = "Details" })
         </td>
         <td>
-            @Html.ActionLink(" ", UIViewType.Details.ToString(), new { id = modelId,
+            @Html.ActionLink(" ", UIViewType.Details.ToString(), new { id = Model.ID,
            actionMethod =  UIViewType.Delete }, new { @class= "btn btn-default btn-sm  glyphicon glyphicon-trash", @title="Delete" })
         </td>
 </tr> 

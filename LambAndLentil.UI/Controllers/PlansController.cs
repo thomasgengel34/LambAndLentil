@@ -11,12 +11,10 @@ using System.Collections.Generic;
 namespace LambAndLentil.UI.Controllers
 {
     public class PlansController : BaseController
-    {
-         
+    { 
         public PlansController(IRepository repo) : base(repo)
         {  List<Plan> plans = repository.Plans.ToList<Plan>();
-            Plans = new Plans(plans);
-             
+            Plans = new Plans(plans); 
         }
 
 
@@ -28,9 +26,18 @@ namespace LambAndLentil.UI.Controllers
         }
 
         // GET: Plans/Details/5 
-        public ActionResult Details(int id = 1)
+        public ActionResult Details(int id = 1, UIViewType actionMethod = UIViewType.Details)
         {
-            return BaseDetails<Plan,PlansController,PlanVM>(UIControllerType.Plans, id);
+            ViewBag.Title = actionMethod.ToString();
+            if (actionMethod == UIViewType.Delete)
+            {
+                return BaseDelete<Plan, PlansController, PlanVM>(UIControllerType.Plans, id);
+            }
+            else if (actionMethod == UIViewType.DeleteConfirmed)
+            {
+                return BaseDeleteConfirmed<Plan, PlansController>(UIControllerType.Plans, id);
+            }
+            return BaseDetails<Plan, PlansController, PlanVM>(UIControllerType.Plans, id);
         }
 
         // GET: Plans/Create 
@@ -54,20 +61,22 @@ namespace LambAndLentil.UI.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,Name,Description,Servings,MealType,Calories,CalsFromFat")] PlanVM planVM)
+        public ActionResult PostEdit([Bind(Include = "ID,Name,Description, CreationDate, ModifiedDate,  AddedByUser, ModifiedByUser")] PlanVM planVM)
         {
             return BasePostEdit<Plan, PlansController, PlanVM>(planVM);
         }
-         
-        
+
+
         // GET: Plans/Delete/5
-        public ActionResult Delete(int id = 1)
+        [ActionName("Delete")]
+        public ActionResult Delete(int id = 1, UIViewType actionMethod = UIViewType.Delete)
         {
+            ViewBag.ActionMethod = UIViewType.Delete;
             return BaseDelete<Plan, PlansController, PlanVM>(UIControllerType.Plans, id);
         }
 
         // POST: Plans/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost, ActionName("DeleteConfirmed")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {

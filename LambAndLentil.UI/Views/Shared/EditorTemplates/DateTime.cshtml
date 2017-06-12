@@ -1,0 +1,40 @@
+﻿@model DateTime
+
+@{
+    string actionM = Request.AppRelativeCurrentExecutionFilePath.Split('/').Skip(2).Take(1).Single();
+    DateTime valueM = DateTime.MinValue;
+    if (ViewData["valueM"] != null)
+    {
+        valueM = (DateTime)ViewData["valueM"];
+    }
+    string colon = " : ";
+    bool readOnly = false;
+    var maybeReadOnly = ViewData["readOnly"];
+    if (maybeReadOnly != null)
+    {
+        readOnly = (bool)ViewData["readOnly"];
+    }
+}
+ 
+
+@if (readOnly == false && (actionM == UIViewType.Edit.ToString() || actionM == UIViewType.Create.ToString()))
+{
+
+    @Html.LabelFor(m => m)
+
+    @Html.TextBoxFor(m => m, new { @class = "form-control  text-box single-line", data_datepicker = "true" })
+
+    @Html.ValidationMessageFor(model => model, "", new { @class = "text-danger" })
+
+}
+else
+{
+    @Html.DisplayNameFor(model => model) @colon    @Html.Label(valueM.ToString())
+} 
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/bootstrap")
+<script type="text/javascript">
+    $(function () {
+        $(":input[data-datepicker=true]").datepicker();
+    });
+</script>

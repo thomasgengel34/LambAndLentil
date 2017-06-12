@@ -7,7 +7,11 @@ using System.Web;
 namespace LambAndLentil.Domain.Entities
 {
     public class RecipeIngredient:BaseEntity
-    { 
+    {
+        public RecipeIngredient() : base(new DateTime(2010, 1, 1))
+        {
+
+        }
         public decimal Quantity { get; set; }
 
         public Measurement Measurement { get; set; }

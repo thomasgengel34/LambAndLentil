@@ -1,13 +1,10 @@
 ﻿using LambAndLentil.Domain.Abstract;
 using LambAndLentil.Domain.Entities;
 using LambAndLentil.UI.Models;
-using System.Data;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using System;
-using AutoMapper;
-using Microsoft.Web.Mvc;
-using System.Collections.Generic;
 
 namespace LambAndLentil.UI.Controllers
 {
@@ -28,9 +25,18 @@ namespace LambAndLentil.UI.Controllers
         }
 
         // GET: Persons/Details/5
-        public ActionResult Details(int id = 1)
+        public ActionResult Details(int id = 1, UIViewType actionMethod = UIViewType.Details)
         {
-            return BaseDetails<Person,PersonsController,PersonVM>(UIControllerType.Persons, id);
+            ViewBag.Title = actionMethod.ToString();
+            if (actionMethod == UIViewType.Delete)
+            {
+                return BaseDelete<Person, PersonsController, PersonVM>(UIControllerType.Persons, id);
+            }
+            else if (actionMethod == UIViewType.DeleteConfirmed)
+            {
+                return BaseDeleteConfirmed<Person, PersonsController>(UIControllerType.Persons, id);
+            }
+            return BaseDetails<Person, PersonsController, PersonVM>(UIControllerType.Persons, id);
         }
          
 
@@ -54,20 +60,24 @@ namespace LambAndLentil.UI.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "PersonsID,Name,Ingredients")] PersonVM personVM)
-        {
+        public ActionResult PostEdit([Bind(Include = "ID,FirstName,LastName, Name, Description, Weight,  MinCalories, MaxCalories, NoGarlic, CreationDate, ModifiedDate,  AddedByUser, ModifiedByUser")] PersonVM personVM)
+        { 
+            personVM.Name = String.Concat(personVM.FirstName, " ", personVM.LastName);
+            
             return BasePostEdit<Person, PersonsController, PersonVM>(personVM);
+            
         }
 
 
         // GET: Persons/Delete/5
+        [ActionName("Delete")]
         public ActionResult Delete(int id = 1)
         {
             return BaseDelete<Person, PersonsController, PersonVM>(UIControllerType.Persons, id);
         }
 
         // POST: Persons/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost, ActionName("DeleteConfirmed")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {

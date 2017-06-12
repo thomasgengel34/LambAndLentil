@@ -251,3 +251,9 @@ button.btn, .btn-primary, .dropdown-toggle, .btn-primary:active
     padding-left:3em;
     padding-right:3em;
 }
+
+ 
+
+  #IngredientsList  { 
+        max-width:none;
+    }

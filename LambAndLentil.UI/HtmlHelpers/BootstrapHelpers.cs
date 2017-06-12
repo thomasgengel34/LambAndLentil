@@ -24,7 +24,7 @@ namespace LambAndLentil.UI.Helpers
 		{
 			return helper.Label(propertyName, new
 			{
-				@class = "col-md-2 control-label"
+				//@class = "col-md-2 control-label"
 			});
 		}
 	}

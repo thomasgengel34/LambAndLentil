@@ -15,13 +15,15 @@ namespace LambAndLentil.Domain.Test.Entities
             // Act
             // nothing to see here, just move along
             // Assert
-            Assert.AreEqual(ingredient.Maker, "Not Provided");
-            Assert.AreEqual(ingredient.Brand, "Not Provided");
-            Assert.AreEqual(ingredient.FoodGroup, "Default");
-            Assert.AreEqual(ingredient.Category, "Default");
+            Assert.AreEqual("Not Provided",ingredient.Maker  );
+            Assert.AreEqual("Not Provided",ingredient.Brand );
+            Assert.AreEqual("Default", ingredient.FoodGroup );
+            Assert.AreEqual("Default", ingredient.Category );
             Assert.IsNotNull(ingredient.CreationDate);
-            Assert.IsNotNull(ingredient.ModifiedDate);
-            Assert.AreEqual(ingredient.CreationDate.Day, ingredient.ModifiedDate.Day);
+            Assert.IsNotNull(ingredient.ModifiedDate); 
+            Assert.IsNotNull(ingredient.AddedByUser); 
+            Assert.IsNotNull(ingredient.ModifiedByUser);
+            Assert.AreEqual(ingredient.AddedByUser, ingredient.ModifiedByUser);
         }
 
         [TestMethod]

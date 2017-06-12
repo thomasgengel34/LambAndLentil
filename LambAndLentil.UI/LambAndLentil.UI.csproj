@@ -255,6 +255,10 @@
     <Compile Include="Migrations\201705112257174_initial.Designer.cs">
       <DependentUpon>201705112257174_initial.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201705182144187_ingredient-kosher-notnullable.cs" />
+    <Compile Include="Migrations\201705182144187_ingredient-kosher-notnullable.Designer.cs">
+      <DependentUpon>201705182144187_ingredient-kosher-notnullable.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\BaseVM.cs" />
@@ -286,6 +290,47 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\HomeIndex.css" />
     <Content Include="Content\qunit.css" />
+    <Content Include="Content\themes\base\accordion.css" />
+    <Content Include="Content\themes\base\all.css" />
+    <Content Include="Content\themes\base\autocomplete.css" />
+    <Content Include="Content\themes\base\base.css" />
+    <Content Include="Content\themes\base\button.css" />
+    <Content Include="Content\themes\base\core.css" />
+    <Content Include="Content\themes\base\datepicker.css" />
+    <Content Include="Content\themes\base\dialog.css" />
+    <Content Include="Content\themes\base\draggable.css" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content\themes\base\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_444444_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_555555_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_777620_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_777777_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_888888_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_cc0000_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_ffffff_256x240.png" />
+    <Content Include="Content\themes\base\jquery-ui.css" />
+    <Content Include="Content\themes\base\jquery-ui.min.css" />
+    <Content Include="Content\themes\base\menu.css" />
+    <Content Include="Content\themes\base\progressbar.css" />
+    <Content Include="Content\themes\base\resizable.css" />
+    <Content Include="Content\themes\base\selectable.css" />
+    <Content Include="Content\themes\base\selectmenu.css" />
+    <Content Include="Content\themes\base\slider.css" />
+    <Content Include="Content\themes\base\sortable.css" />
+    <Content Include="Content\themes\base\spinner.css" />
+    <Content Include="Content\themes\base\tabs.css" />
+    <Content Include="Content\themes\base\theme.css" />
+    <Content Include="Content\themes\base\tooltip.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -311,6 +356,8 @@
     <Content Include="Scripts\jquery-3.1.1.slim.js" />
     <Content Include="Scripts\jquery-3.1.1.slim.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery-ui-1.12.1.js" />
+    <Content Include="Scripts\jquery-ui-1.12.1.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
@@ -1115,37 +1162,18 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Ingredients\yyyyyEdit.cshtml" />
     <Content Include="Views\Ingredients\Details.cshtml" />
-    <Content Include="Views\Ingredients\Edit.cshtml" />
     <Content Include="Views\Ingredients\Index.cshtml" />
-    <Content Include="Views\ShoppingList\Delete.cshtml" />
-    <Content Include="Views\ShoppingList\Details.cshtml" />
-    <Content Include="Views\ShoppingList\Edit.cshtml" />
-    <Content Include="Views\ShoppingList\Index.cshtml" />
-    <Content Include="Views\Menus\Delete.cshtml" />
-    <Content Include="Views\Menus\Details.cshtml" />
-    <Content Include="Views\Menus\Edit.cshtml" />
+    <Content Include="Views\ShoppingLists\xxxEdit.cshtml" />
     <Content Include="Views\Menus\Index.cshtml" />
     <Content Include="Views\Nav\BrandMenu.cshtml" />
     <Content Include="Views\Nav\CategoryMenu.cshtml" />
     <Content Include="Views\Nav\FoodGroupMenu.cshtml" />
     <Content Include="Views\Nav\MakerMenu.cshtml" />
-    <Content Include="Views\Persons\Delete.cshtml" />
-    <Content Include="Views\Persons\Details.cshtml" />
-    <Content Include="Views\Persons\Edit.cshtml" />
-    <Content Include="Views\Persons\Index.cshtml" />
-    <Content Include="Views\Plans\Delete.cshtml" />
-    <Content Include="Views\Plans\Details.cshtml" />
-    <Content Include="Views\Plans\Edit.cshtml" />
-    <Content Include="Views\Plans\Index.cshtml" />
-    <Content Include="Views\Recipes\Delete.cshtml" />
-    <Content Include="Views\Recipes\Details.cshtml" />
-    <Content Include="Views\Recipes\Edit.cshtml" />
     <Content Include="Views\Recipes\Index.cshtml" />
-    <Content Include="Views\Shared\_IngredientList.cshtml" />
+    <Content Include="Views\Shared\_xxxxx_IngredientList.cshtml" />
     <Content Include="Views\Shared\_IngredientTable.cshtml" />
-    <Content Include="Views\Shared\EditorTemplates\Bool.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Boolean.cshtml" />
     <Content Include="Views\Shared\_EditDetailsDeleteButtons.cshtml" />
     <Content Include="Views\Shared\_Alerts.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\String.cshtml" />
@@ -1168,6 +1196,22 @@
     <Content Include="Scripts\angular-aria.min.js.map" />
     <Content Include="Scripts\angular-animate.min.js.map" />
     <Content Include="Scripts\underscore.min.map" />
+    <Content Include="Views\Shared\EditorTemplates\decimal.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\ContainerSizeUnit.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Int32.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\DateTime.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Kosher.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\ServvigSizeUnit.cshtml" />
+    <Content Include="Views\Recipes\Details.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\MealType.cshtml" />
+    <Content Include="Views\Menus\Details.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\DayOfWeek.cshtml" />
+    <Content Include="Views\Plans\Details.cshtml" />
+    <Content Include="Views\Plans\Index.cshtml" />
+    <Content Include="Views\ShoppingLists\Details.cshtml" />
+    <Content Include="Views\ShoppingLists\Index.cshtml" />
+    <Content Include="Views\Persons\Index.cshtml" />
+    <Content Include="Views\Persons\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Scripts\app\controllers\" />
@@ -1190,6 +1234,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201705112257174_initial.resx">
       <DependentUpon>201705112257174_initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705182144187_ingredient-kosher-notnullable.resx">
+      <DependentUpon>201705182144187_ingredient-kosher-notnullable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

@@ -19,19 +19,19 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Lamb & Lentil", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Lamb & Lentil", UIViewType.Index.ToString(), UIControllerType.Home.ToString(), new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul id="navB" class="nav navbar-nav">  
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
+                    <li>@Html.ActionLink("Home", UIViewType.Index.ToString(), UIControllerType.Home.ToString())</li>
+                    <li>@Html.ActionLink("About", UIViewType.About.ToString(), UIControllerType.Home.ToString())</li>
                      
-                    <li>@Html.ActionLink("Ingredients","Index", "Ingredients")</li>
-                    <li>@Html.ActionLink("Recipes", "Index", "Recipes")</li>
-                    <li>@Html.ActionLink("Menus", "Index", "Menus")</li>
-                    <li>@Html.ActionLink("Plans", "Index", "Plans")</li>
-                    <li>@Html.ActionLink("Shopping", "Index", "ShoppingList")</li>
-                    <li>@Html.ActionLink("Profile", "Index", "Persons")</li>
+                    <li>@Html.ActionLink("Ingredients", UIViewType.Index.ToString(), UIControllerType.Ingredients.ToString())</li>
+                    <li>@Html.ActionLink("Recipes", UIViewType.Index.ToString(), UIControllerType.Recipes.ToString())</li>
+                    <li>@Html.ActionLink("Menus", UIViewType.Index.ToString(), UIControllerType.Menus.ToString())</li>
+                    <li>@Html.ActionLink("Plans", UIViewType.Index.ToString(), UIControllerType.Plans.ToString())</li>
+                    <li>@Html.ActionLink("Shopping", UIViewType.Index.ToString(), UIControllerType.ShoppingLists.ToString())</li>
+                    <li>@Html.ActionLink("People", UIViewType.Index.ToString(), UIControllerType.Persons.ToString())</li>
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>

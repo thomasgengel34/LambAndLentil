@@ -1,16 +1,29 @@
 ﻿@using LambAndLentil.Domain.Entities
 @model LambAndLentil.Domain.Entities.Measurement
-@{
-    var options = Enum.GetValues(typeof(Measurement))
-    .Cast<Measurement>()
-    .Select(t => new SelectListItem
-    {
-        Text = t.ToString(),
-        Value = t.ToString(),
-        Selected = t == Model
-    })
-    .ToArray();
+   @{
+       string actionM = Request.AppRelativeCurrentExecutionFilePath.Split('/').Last();
+       Measurement valueM = Measurement.Each;
+       if (ViewData["valueM"] != null)
+       {
+           valueM = (Measurement)ViewData["valueM"];
+       }
+       string colon = " : ";
+   }
+ 
+
+
+@if (actionM == UIViewType.Edit.ToString() || actionM == UIViewType.Create.ToString())
+{
+
+    @Html.LabelFor(m => m)
+     
+    @Html.EnumDropDownListFor( m =>m, new { @class = "form-control" }  )
+
+    @Html.ValidationMessageFor(model => model, "", new { @class = "text-danger" })
+
 
 }
-
-@Html.DropDownList("", options, new { @class = "form-control" })
+else
+{
+    @Html.DisplayNameFor(model => model) @colon @Html.Label(valueM.ToString());
+}

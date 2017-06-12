@@ -2,13 +2,15 @@
 @model LambAndLentil.UI.Models.ListVM 
 
 @{
-    ViewBag.Title = "Index";
-}
+    ViewBag.Title = "Index"; 
+    string sourceActionMethod = "RecipesIndex"; 
+    }
 
 <h2>Recipes</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Add Recipe", LambAndLentil.UI.UIViewType.Create.ToString(), UIControllerType.Recipes.ToString(), new { actionMethod = UIViewType.Create.ToString() }, null)
+    
 </p>
 <table class="table">
     <tr>
@@ -48,11 +50,23 @@
             @Html.DisplayFor(modelItem => recipe.Calories)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=recipe.ID }) |
-            @Html.ActionLink("Details", "Details", new { id=recipe.ID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=recipe.ID })
+            @Html.ActionLink(" ", UIViewType.Edit.ToString(), "Recipes", new { id = recipe.ID, sourceActionMethod, actionMethod = UIViewType.Edit }, new { @class = "btn btn-default btn-sm  glyphicon glyphicon-edit", @title = "Edit" })
+        </td>
+        <td>
+            @Html.ActionLink(" ", UIViewType.Details.ToString(), new { id = recipe.ID }, new { @class = "btn btn-default btn-sm  glyphicon glyphicon-list", @title = "Details" })
+        </td>
+        <td>
+            @Html.ActionLink(" ", UIViewType.Details.ToString(), new
+       {
+           id = recipe.ID,
+           actionMethod = UIViewType.Delete
+       }, new { @class = "btn btn-default btn-sm  glyphicon glyphicon-trash", @title = "Delete" })
         </td>
     </tr>
 }
 
 </table>
+<div class="pager">
+    <h4>Lamb & Lentil</h4>
+    @Html.PageLinks(Model.PagingInfo, x => Url.Action(UIViewType.Index.ToString(), new { page = x }))
+</div>

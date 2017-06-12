@@ -11,21 +11,20 @@ namespace LambAndLentil.Domain.Entities
     [Table("PERSON.Person")]
     public class Person:BaseEntity 
     {
-        public Person()
+        public Person():base( new DateTime(2010, 1, 1))  
         {
             Name = FirstName + " " + LastName;
         }
         
         public string FirstName { get; set; }
-        public string LastName { get; set; }
-        
+        public string LastName { get; set; } 
+
         public decimal Weight { get; set; }
 
 
         public int MinCalories { get; set; }
         public int MaxCalories { get; set; }
-        public bool NoGarlic { get; set; }
-        public bool MustHaveGarlic { get; set; }
+        public bool NoGarlic { get; set; } 
         //TODO: add all ingredients after I figure out how to economically
     }
 }

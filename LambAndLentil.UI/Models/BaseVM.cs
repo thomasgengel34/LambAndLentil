@@ -9,9 +9,9 @@ namespace LambAndLentil.UI.Models
 {
     public class BaseVM : BaseEntity, IBaseVM
     {
-       internal BaseVM() : base()
+        internal BaseVM() : base()
         {
-        }
+        } 
 
         internal static ListVM GetIndexedModel(string t, IRepository repository, int PageSize,int page=1)
         {
@@ -64,7 +64,7 @@ namespace LambAndLentil.UI.Models
 
        internal static BaseEntity GetBaseEntity(string entity, IRepository repository, int id)
         {
-            BaseEntity item = new BaseEntity();
+            BaseEntity item = new BaseEntity(new DateTime(2010, 1, 1));
             switch (entity.ToLower())
             {
                 case "ingredient":

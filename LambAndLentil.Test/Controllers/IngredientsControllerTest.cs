@@ -81,7 +81,7 @@ namespace LambAndLentil.Tests.Controllers
             AutoMapperConfig.AssertConfigurationIsValid();
 
         }
-        
+
 
         [TestMethod]
         [TestCategory("Edit")]
@@ -210,8 +210,56 @@ namespace LambAndLentil.Tests.Controllers
 
 
             // Assert     
-             Assert.AreEqual("First edited", p1.Name);
-           
+            Assert.AreEqual("First edited", p1.Name);
+
+        }
+
+        [TestMethod]
+        [TestCategory("Trial")]
+        public void the_ingredient_repository_should_be_called_once_per_customer()
+        {
+            //Arrange
+            mock = new Mock<IRepository>();
+            mock.Setup(m => m.Ingredients).Returns(new Ingredient[] {
+                new Ingredient {ID = 1, Name = "P1", Maker="Maker1",Brand="BrandAA",AddedByUser="John Doe", ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue, Caffeine="yes", DataSource="Container", ModifiedDate=DateTime.MaxValue.AddYears(-10)},
+                new Ingredient {ID = 2, Name = "P2", Maker="Maker2",Brand="BrandB",AddedByUser="Sally Doe", ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(20), ModifiedDate=DateTime.MaxValue.AddYears(-20)},
+                new Ingredient {ID = 3, Name = "P3", Maker="Maker1",Brand="BrandAA",AddedByUser="Sue Doe", ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(30), ModifiedDate=DateTime.MaxValue.AddYears(-30)},
+                new Ingredient {ID = 4, Name = "P4", Maker="Maker2",Brand="BrandB",AddedByUser="Kyle Doe", ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(40), ModifiedDate=DateTime.MaxValue.AddYears(-10)},
+                new Ingredient {ID = 5, Name = "P5", Maker="Maker3",Brand="BrandC",AddedByUser="John Doe", ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(50), ModifiedDate=DateTime.MaxValue.AddYears(-100)}
+            }.AsQueryable());
+            //var listOfCustomerDtos = new List<Ingredient>
+            //        {
+            //            new  Ingredient
+            //                {
+            //                    Name = "Sam" 
+            //                },
+            //            new Ingredient
+            //                {
+            //                     Name = "Bob" 
+            //                },
+            //            new Ingredient
+            //                {
+            //                    Name = "Doug" 
+            //                }
+            //        };
+            IngredientVM ingredientVM = new IngredientVM() { Name = "Lembas" };
+
+            // var mockRepository = new Mock<IRepository>();
+
+
+
+            var controller = new IngredientsController(mock.Object);
+
+            //mockCustomerRepository.Setup(x => x.Save(It.IsAny<Customer>()));
+
+            //Act
+            controller.PostEdit(ingredientVM);
+            ingredientVM.Name = "cram";
+            controller.PostEdit(ingredientVM);
+
+            //Assert
+            mock.Verify(x => x.Save<Ingredient>(It.IsAny<Ingredient>()));
+
         }
 
         [TestMethod]
@@ -237,7 +285,7 @@ namespace LambAndLentil.Tests.Controllers
 
 
             // Assert   
-            Assert.AreEqual("First edited", p1.Maker); 
+            Assert.AreEqual("First edited", p1.Maker);
         }
 
         [TestMethod]
@@ -344,109 +392,7 @@ namespace LambAndLentil.Tests.Controllers
             Assert.AreEqual("Maker1", p3.Maker);
         }
 
-        [TestMethod]
-        [TestCategory("Edit")]
-        public void IngredientsCtr_CanSaveEditedIngredientVerifySaveRan()
-        {
-            // Arrange
-            IngredientsController controller = SetUpController();
-
-            Ingredient ingredient = mock.Object.Ingredients.First();
-            mock.Setup(x => x.Save(It.IsAny<Ingredient>()));
-
-            // leave this failing until I can figure out how to get Moq to work. 
-
-            // Act 
-            AutoMapperConfigForTests.InitializeMap();
-            IngredientVM ingredientVM = Mapper.Map<Ingredient, IngredientVM>(ingredient);
-            ingredientVM.Name = "First edited";
-            var view1 = controller.PostEdit(ingredientVM);
-
-            //  IngredientVM p1 = (IngredientVM)view1.Model;
-
-            // Assert
-
-            //      mock.Verify(x => x.foo(It.IsAny<Ingredient>()) , Times.Once);
-            //   mock.Verify(x => x.DeleteIngredient(1) , Times.Once);
-         //   mock.Verify(x => x.Save(It.IsAny<Ingredient>()), Times.Once);   //it is called when you run it normally. False negative.  Go around this by checking whether the actual value changed. 
-            string name = mock.Object.Ingredients.First().Name;
-
-            Assert.IsNotNull(view1);
-            Assert.AreEqual("First edited", name);
-        }
-
-        [TestMethod]
-        [TestCategory("Edit")]
-        public void IngredientsCtr_CanSaveEditedIngredientVerifyViewIsNotNull()
-        {
-            // Arrange
-            IngredientsController controller = SetUpController();
-
-            Ingredient ingredient = mock.Object.Ingredients.First();
-            mock.Setup(x => x.Save(It.IsAny<Ingredient>()));
-
-            // leave this failing until I can figure out how to get Moq to work. 
-
-            // Act 
-            AutoMapperConfigForTests.InitializeMap();
-            IngredientVM ingredientVM = Mapper.Map<Ingredient, IngredientVM>(ingredient);
-            ingredientVM.Name = "First edited again";
-            var view1 = controller.PostEdit(ingredientVM);
-
-            //  IngredientVM p1 = (IngredientVM)view1.Model;
-
-            // Assert
-
-            //      mock.Verify(x => x.foo(It.IsAny<Ingredient>()) , Times.Once);
-            //   mock.Verify(x => x.DeleteIngredient(1) , Times.Once);
-            mock.Verify(x => x.Save(It.IsAny<Ingredient>()), Times.Once);   //it is called when you run it normally. False negative.  Go around this by checking whether the actual value changed. 
-            string name = mock.Object.Ingredients.First().Name;
-
-            Assert.IsNotNull(view1);
-            Assert.AreEqual("First edited again", name);
-        }
-
-
-        [TestMethod]
-        [TestCategory("Edit")]
-        public void IngredientsCtr_CanSaveEditedIngredientVerifyFieldIsEdited()
-        {
-            // Arrange
-            IngredientsController controller = SetUpController();
-
-            Ingredient ingredient = mock.Object.Ingredients.First();
-            mock.Setup(c => c.Save(ingredient)).Returns(0);
-            
-
-            // leave this failing until I can figure out how to get Moq to work. 
-
-            // Act 
-            AutoMapperConfigForTests.InitializeMap();
-            IngredientVM ingredientVM = Mapper.Map<Ingredient, IngredientVM>(ingredient);
-            ingredientVM.Name = "First edited again 2";
-            var view1 = controller.PostEdit(ingredientVM);
-
-            //  IngredientVM p1 = (IngredientVM)view1.Model;
-
-            // Assert 
-       //     mock.Verify(foo => foo.Save(ingredient));
- 
-            string name = mock.Object.Ingredients.First().Name;
-            Assert.AreEqual("First edited again 2", name);
-           // Assert.AreEqual(1, testSuccess);
-        }
-
-        [TestMethod]
-        [TestCategory("Edit")]
-        public void IngredientsCtr_CannotEditNonexistentIngredient()
-        {
-            // Arrange
-            IngredientsController controller = SetUpController();
-            // Act
-            Ingredient result = (Ingredient)controller.Edit(8).ViewData.Model;
-            // Assert
-            Assert.IsNull(result);
-        }
+      
 
 
 
@@ -800,9 +746,9 @@ namespace LambAndLentil.Tests.Controllers
 
 
             // Assert 
-            Assert.AreEqual("Edit", view.ViewName);
-        } 
-        
+            Assert.AreEqual("Details", view.ViewName);
+        }
+
 
         private IngredientsController SetUpController()
         {
@@ -829,6 +775,6 @@ namespace LambAndLentil.Tests.Controllers
         }
 
 
-        
+
     }
 }

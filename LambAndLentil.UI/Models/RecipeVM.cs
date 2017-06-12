@@ -1,10 +1,6 @@
 ﻿using LambAndLentil.Domain.Entities;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Web;
+using System;
 
 namespace LambAndLentil.UI.Models
 {
@@ -12,11 +8,16 @@ namespace LambAndLentil.UI.Models
 
     public class RecipeVM : BaseVM
     {
-        public RecipeVM()
+        public RecipeVM():base()
         {
-            //  RecipeIngredients = new List<RecipeIngredient>();
-
+             
         }
+
+        public RecipeVM(DateTime dateTime) : this()
+        {
+            CreationDate = dateTime;
+        }
+
         // need to test this, just written, never used. Not sure it will work. 
         public RecipeVM(RecipeVM recipeVM)
         {

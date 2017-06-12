@@ -11,16 +11,25 @@ namespace LambAndLentil.UI.Models
     
     public class PersonVM:BaseVM
     {
+        public PersonVM()
+        {
+            FirstName = "First Name";
+            LastName = "Last Name";
+            Name = String.Concat(FirstName ," ", LastName);
+        }
+
+        public PersonVM(DateTime creationDate):this()
+        {
+            CreationDate = creationDate;
+        }
+
         [Key] 
         public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public decimal Weight { get; set; }
-
-
+        public string LastName { get; set; } 
+        public decimal Weight { get; set; } 
         public int MinCalories { get; set; }
         public int MaxCalories { get; set; }
-        public bool NoGarlic { get; set; }
-        public bool MustHaveGarlic { get; set; }
+        public bool NoGarlic { get; set; } 
         //TODO: add all ingredients after I figure out how to economically
     }
 }

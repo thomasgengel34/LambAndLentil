@@ -1,3 +1,33 @@
-﻿@model string
+﻿@model string 
+@{
+    string actionM = Request.AppRelativeCurrentExecutionFilePath.Split('/').Last();
+    string valueM = (string)ViewData["valueM"] ?? "not set";
+    valueM = valueM == "" ? "not set" : valueM;
+    string colon = " : ";
+}
+@*<div class="form-group">
+    @Html.BootstrapLabelFor(model => model)
+    <div class="col-md-10">
+        @Html.TextArea("", ViewData.TemplateInfo.FormattedModelValue.ToString(),
+    new { @class = "form-control", rows = 7 })
+        @Html.ValidationMessageFor(model => model, "", new { @class = "text-danger" })
+    </div>
+</div>*@
+
+
+
+@if (actionM == UIViewType.Edit.ToString() || actionM == UIViewType.Create.ToString())
+{
+     
+    @Html.LabelFor(m => m)
+
 @Html.TextArea("", ViewData.TemplateInfo.FormattedModelValue.ToString(),
-    new { @class = "form-control", rows=7 })
+    new { @class = "form-control", rows = 7, cols=100  })
+    @Html.ValidationMessageFor(model => model, "", new { @class = "text-danger" })
+   
+
+}
+else
+{
+    @Html.DisplayNameFor(model => model) @colon  <strong>@valueM</strong>
+}

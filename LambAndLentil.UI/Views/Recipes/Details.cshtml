@@ -1,118 +1,138 @@
 ﻿@model LambAndLentil.UI.Models.RecipeVM
-
+@using LambAndLentil.Domain.Entities
 @{
-    ViewBag.Title = "Details";
+
+    string requestActionMethod = Request.AppRelativeCurrentExecutionFilePath.Split('/').Last();
+    string actionMethod = ViewBag.ActionMethod == null ? requestActionMethod : ViewBag.ActionMethod.ToString();
+    ViewBag.Title = actionMethod + " Recipe";
+    string colon = " : ";
+    if (actionMethod == UIViewType.Edit.ToString())
+    {
+        actionMethod = UIViewType.PostEdit.ToString();
+    }
+    if (actionMethod == UIViewType.Create.ToString())
+    {
+        actionMethod = UIViewType.PostEdit.ToString();
+    }
 }
 
-<h2>Recipe Details</h2>
-
-<div>
-    <h4>Recipe</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Servings)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Servings)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.MealType)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.MealType)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Calories)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Calories)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.CalsFromFat)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.CalsFromFat)
-        </dd>
-
-    </dl>
-</div>
-<div>
-    <h4>Ingredients in Recipe</h4>
-
-    <table class="table">
-        <tr>
-            <th>
-                @Html.DisplayNameFor(m => m.RecipeIngredients.First().Ingredient.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(m => m.RecipeIngredients.First().Ingredient.ServingSizeUnit)
-            </th>
-            <th>
-                @Html.DisplayNameFor(m => m.RecipeIngredients.First().Ingredient.Calories)
-            </th>
-            <th>
-                @Html.DisplayNameFor(m => m.RecipeIngredients.First().Ingredient.CalFromFat)
-            </th>
-            <th></th>
-        </tr>
-
-        @foreach (var item in Model.RecipeIngredients)
+ 
+    @if (actionMethod == UIViewType.Delete.ToString())
+    {
+        <h2>@actionMethod Recipe  @colon @Model.Name   ?</h2>
+    }
+    else if (actionMethod == UIViewType.Details.ToString())
+    {
+        <h2>Recipe Details for @Model.Name</h2>
+    }
+    else if (actionMethod == UIViewType.PostEdit.ToString())
+    {
+        if (Model.Name == "newly created")
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Ingredient.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Ingredient.ServingSize)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Ingredient.ServingSizeUnit)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Ingredient.Calories)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Ingredient.CalFromFat)
-                </td>
-            </tr>
+            <h2> Create New Recipe</h2>
+        }
+        else
+        {
+            <h2>Edit Details for @Model.Name Recipe</h2>
+        }
+    }
+    else
+    {
+        string modelLabel = Model.Name == null ? " " : Model.Name == "newly created" ? " " : Model.Name;
+        <h2>@actionMethod Recipe  @colon @modelLabel </h2>
+    }
+
+    <hr />
+    @using (Html.BeginForm(actionMethod, UIControllerType.Recipes.ToString(), FormMethod.Post, new { id = Model.ID, recipeVM = Model }))
+    {
+
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.ID)
+        <div class="item">
+            <div class="row">
+                <div class="col-md-4">
+                    <ul>
+                        <li>@Html.EditorFor(model => model.Name, new { valueM = Model.Name })</li>
+                        <li>@Html.EditorFor(model => model.Description, new { valueM = Model.Description })</li>
+                        <li>@Html.EditorFor(model => model.Servings, new { valueM = Model.Servings }) </li>
+                        <li>@Html.EditorFor(model => model.MealType, new { valueM = Model.MealType })</li>
+                        <li>@Html.EditorFor(model => model.Calories, new { valueM = Model.Calories })  </li>
+                        <li>@Html.EditorFor(model => model.CalsFromFat, new { valueM = Model.CalsFromFat }) g</li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <ul>
+                        <li>@Html.EditorFor(model => model.AddedByUser, new { valueM = Model.AddedByUser, readOnly = true }) </li>
+                        <li>@Html.EditorFor(model => model.CreationDate, new { valueM = Model.CreationDate, readOnly = true }) </li>
+                        <li>@Html.EditorFor(model => model.ModifiedByUser, new { valueM = Model.ModifiedByUser, readOnly = true }) </li>
+                        <li>@Html.EditorFor(model => model.ModifiedDate, new { valueM = Model.ModifiedDate, readOnly = true })</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+
+        if (actionMethod == UIViewType.PostEdit.ToString() || actionMethod == UIViewType.Create.ToString())
+        {
+            <div class="form-group">
+                <div>
+                    <input type="submit" value="Save Changes" class="btn btn-default col-md-offset-2 col-md-10" />
+                </div>
+            </div>
+
+
         }
 
-    </table>
+    }
 
-    <dt>
-        @Html.DisplayNameFor(model => model.Calories)
-    </dt>
+    @if (actionMethod == UIViewType.Create.ToString())
+    {
+        <div>
+            @Html.ActionLink("Back to List", UIViewType.Index.ToString(), null, new { T = typeof(Recipe), @class = "btn btn-default" })
+        </div>
 
-    <dd>
-        @Html.DisplayFor(model => model.Calories)
-    </dd>
+    }
 
-</div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
-    @Html.ActionLink("Back to List", "Index","Recipes")
-</p>
+    @if (actionMethod == UIViewType.PostEdit.ToString())
+    {
+        <div>
+            @Html.ActionLink("Back to List", UIViewType.Index.ToString(), null, new { T = typeof(Recipe), @class = "btn btn-default" })
+            @if (Model.ID != 0)
+            {
+                @Html.ActionLink("Delete", UIViewType.Delete.ToString(), null, new { id = Model.ID }, new { @class = "btn btn-default" })
+            }
+        </div>
+
+    }
+
+
+    @if (actionMethod == UIViewType.Delete.ToString())
+    {
+        <h3>Are you sure you want to delete this ingredient: (@Model.Name) ?</h3>
+
+        @Html.ActionLink("No - Back to List", UIViewType.Index.ToString(), null, new { @class = "btn btn-default" })
+        using (Html.BeginForm(UIViewType.DeleteConfirmed.ToString(), UIControllerType.Recipes.ToString(), new { id = Model.ID }, FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-group">
+                <div>
+                    <input type="submit" value="Yes - Delete" class="btn btn-default" />
+                </div>
+            </div>
+        }
+    }
+    @if (actionMethod == UIViewType.Details.ToString())
+    {
+        <div>
+            @Html.ActionLink("Back to List", UIViewType.Index.ToString(), null, new { T = typeof(Recipe), @class = "btn btn-default" })
+            @Html.ActionLink("Edit", UIViewType.Edit.ToString(), null, new { id = Model.ID, actionMethod=UIViewType.Edit.ToString() }, new { @class = "btn btn-default" })
+            @Html.ActionLink("Delete", UIViewType.Delete.ToString(), null, new { id = Model.ID }, new { @class = "btn btn-default" })
+   
+
+        </div>
+
+    } 
+
+
+ 
+

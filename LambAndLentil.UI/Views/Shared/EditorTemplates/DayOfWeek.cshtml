@@ -1,0 +1,28 @@
+﻿ 
+   @{
+       string actionM = Request.AppRelativeCurrentExecutionFilePath.Split('/').Last();
+       DayOfWeek valueM = DayOfWeek.Sunday;
+       if (ViewData["valueM"] != null)
+       {
+           valueM = (DayOfWeek)ViewData["valueM"];
+       }
+       string colon = " : ";
+   }
+ 
+
+
+@if (actionM == UIViewType.Edit.ToString() || actionM == UIViewType.Create.ToString())
+{
+
+    @Html.LabelFor(m => m)
+     
+    @Html.EnumDropDownListFor( m =>m, new { @class = "form-control" }  )
+
+    @Html.ValidationMessageFor(model => model, "", new { @class = "text-danger" })
+
+
+}
+else
+{
+    @Html.DisplayNameFor(model => model) @colon @Html.Label(valueM.ToString());
+}

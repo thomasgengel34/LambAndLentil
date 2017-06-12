@@ -1,7 +1,31 @@
-﻿ 
+﻿
 @model string
-   
-    (editor template revised)
-      @Html.TextBox("", ViewData.TemplateInfo.FormattedModelValue,
+@{
+    string actionM = Request.AppRelativeCurrentExecutionFilePath.Split('/').Last();
+    string valueM = (string)ViewData["valueM"] ?? "not set";
+    valueM = valueM == "" ? "not set" : valueM;
+    string colon = " : ";
+    bool readOnly = false;
+    var maybeReadOnly= ViewData["readOnly"];
+    if (maybeReadOnly!=null)
+    {
+        readOnly = (bool)ViewData["readOnly"];
+    }
+
+}
+
+@if (readOnly == false && (actionM == UIViewType.Edit.ToString() || actionM == UIViewType.Create.ToString()))
+{
+
+    @Html.LabelFor(m => m)
+
+    @Html.TextBox("", ViewData.TemplateInfo.FormattedModelValue,
      new { @class = "form-control" })
-@Html.ValidationMessageFor( model=>model,"", new {@class= "text-danger"})
+    @Html.ValidationMessageFor(model => model, "", new { @class = "text-danger" })
+
+
+}
+else
+{
+    @Html.DisplayNameFor(model => model) @colon  <strong>@valueM</strong>
+}

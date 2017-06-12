@@ -1,0 +1,25 @@
+﻿@model bool  
+   
+@{
+    string actionM = Request.AppRelativeCurrentExecutionFilePath.Split('/').Skip(2).Take(1).Single();
+    bool valueM =false;
+    if (ViewData["valueM"] != null)
+    {
+        valueM = (bool)ViewData["valueM"];
+    }
+    string colon = " : ";
+}  
+  
+
+@if (actionM == UIViewType.Edit.ToString() || actionM == UIViewType.Create.ToString())
+{
+    @Html.LabelFor(m => m)
+
+    @Html.CheckBox("", Model )
+    @Html.ValidationMessageFor(model => model, "", new { @class = "text-danger" })
+
+     }
+else
+{
+    @Html.DisplayNameFor(model => model) @colon  @valueM ;
+}  

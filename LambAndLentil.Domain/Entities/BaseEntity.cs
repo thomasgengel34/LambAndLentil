@@ -14,19 +14,36 @@ namespace LambAndLentil.Domain.Entities
         public BaseEntity()
         {
             Name = "Newly Created";
+            Description = "not yet described";
             CreationDate = DateTime.Now;
             ModifiedDate = DateTime.Now;
             AddedByUser = WindowsIdentity.GetCurrent().Name;
             ModifiedByUser = WindowsIdentity.GetCurrent().Name;
         }
+
+        public BaseEntity(DateTime creationDate) : this()
+        {
+            if (creationDate < DateTime.Today.AddYears(-40))
+            {
+                CreationDate = DateTime.Today.AddYears(-40);
+            }
+            else
+            {
+                CreationDate = creationDate;
+            }
+
+        }
+
         [Key]
-        [HiddenInput(DisplayValue = false)] 
+        [HiddenInput(DisplayValue = false)]
         public int ID { get; set; }
 
         [StringLength(50)]
         [Required]
         public string Name { get; set; }
 
+        [DataType(DataType.MultilineText)]
+        public string Description { get; set; }
         public DateTime CreationDate { get; set; }
         public DateTime ModifiedDate { get; set; }
         public string AddedByUser { get; set; }

@@ -7,6 +7,7 @@ namespace LambAndLentil.UI
 {
     public enum UIViewType
     {
+        About,
         BaseIndex,
         BasePostEdit,
         Create,

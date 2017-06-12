@@ -28,10 +28,18 @@ namespace LambAndLentil.UI.Controllers
         }
 
         // GET: ShoppingList/Details/5
-         
-        public ActionResult Details(int id = 1)
+        public ActionResult Details(int id = 1, UIViewType actionMethod = UIViewType.Details)
         {
-            return BaseDetails<ShoppingList, ShoppingListsController, ShoppingListVM>(UIControllerType.ShoppingLists,id);
+            ViewBag.Title = actionMethod.ToString();
+            if (actionMethod == UIViewType.Delete)
+            {
+                return BaseDelete<ShoppingList, ShoppingListsController, ShoppingListVM>(UIControllerType.ShoppingLists, id);
+            }
+            else if (actionMethod == UIViewType.DeleteConfirmed)
+            {
+                return BaseDeleteConfirmed<ShoppingList, ShoppingListsController>(UIControllerType.ShoppingLists, id);
+            }
+            return BaseDetails<ShoppingList, ShoppingListsController, ShoppingListVM>(UIControllerType.ShoppingLists, id);
         }
 
         // GET: ShoppingList/Create 
@@ -55,19 +63,20 @@ namespace LambAndLentil.UI.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,Name,Ingredients")] ShoppingListVM shoppingListVM)
+        public ActionResult PostEdit([Bind(Include = "ID,Name,Description, Author, CreationDate, ModifiedDate,  AddedByUser, ModifiedByUser")] ShoppingListVM shoppingListVM)
         {
             return BasePostEdit<ShoppingList, ShoppingListsController, ShoppingListVM>(shoppingListVM);
         }
 
         // GET: ShoppingList/Delete/5
-        public ActionResult Delete(int  id=1)
+        [ActionName("Delete")]
+        public ActionResult Delete(int  id=1, UIViewType actionMethod = UIViewType.Delete)
         {
             return BaseDelete<ShoppingList, ShoppingListsController, ShoppingListVM>(UIControllerType.ShoppingLists,id);
         }
 
         // POST: ShoppingList/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost, ActionName("DeleteConfirmed")]
         [ValidateAntiForgeryToken]
         public  ActionResult DeleteConfirmed(int id)
         {

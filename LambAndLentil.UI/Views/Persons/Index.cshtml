@@ -1,13 +1,14 @@
-﻿@model LambAndLentil.UI.Models.ListVM
-
+﻿ @model LambAndLentil.UI.Models.ListVM
 @{
-    ViewBag.Title = "People Index";
+    ViewBag.Title = "Person Index";
+    string sourceActionMethod = "PersonsIndex";
 }
 
-<h2>Personal Profiles</h2>
+<h2>Persons</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Add Person", LambAndLentil.UI.UIViewType.Create.ToString(), UIControllerType.Persons.ToString(), new { actionMethod = UIViewType.Create.ToString() }, null)
+
 </p>
 <table class="table">
     <tr>
@@ -15,7 +16,7 @@
             @Html.DisplayNameFor(model => model.Persons.First().Name)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Persons.First().LastName)
+            @Html.DisplayNameFor(model => model.Persons.First().Description)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Persons.First().Weight)
@@ -28,20 +29,18 @@
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Persons.First().NoGarlic)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Persons.First().MustHaveGarlic)
-        </th>
-        <th></th>
+        </th> 
+        <th></th> 
+
     </tr>
 
 @foreach (var item in Model.Persons) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.FirstName)
-        </td>
+            @Html.DisplayFor(modelItem => item. Name)
+        </td> 
         <td>
-            @Html.DisplayFor(modelItem => item.LastName)
+            @Html.DisplayFor(modelItem => item.Description)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Weight)
@@ -54,14 +53,19 @@
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.NoGarlic)
+        </td> 
+        <td>
+            @Html.ActionLink(" ", UIViewType.Edit.ToString(), "Persons", new { id = item.ID, sourceActionMethod, actionMethod = UIViewType.Edit }, new { @class = "btn btn-default btn-sm  glyphicon glyphicon-edit", @title = "Edit" })
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.MustHaveGarlic)
+            @Html.ActionLink(" ", UIViewType.Details.ToString(), new { id = item.ID }, new { @class = "btn btn-default btn-sm  glyphicon glyphicon-list", @title = "Details" })
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
+            @Html.ActionLink(" ", UIViewType.Details.ToString(), new
+       {
+           id = item.ID,
+           actionMethod = UIViewType.Delete
+       }, new { @class = "btn btn-default btn-sm  glyphicon glyphicon-trash", @title = "Delete" })
         </td>
     </tr>
 }

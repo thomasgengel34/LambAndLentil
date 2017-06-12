@@ -46,7 +46,7 @@ namespace LambAndLentil.UI.Controllers
 
         }
 
-        public ActionResult BaseDetails<T, TController, TVM>(UIControllerType uIController, int id = 1)
+        public ActionResult xxxBaseDetails<T, TController, TVM>(UIControllerType uIController, int id = 1)
             where T : BaseEntity
             where TController : BaseController
             where TVM : BaseVM
@@ -64,13 +64,44 @@ namespace LambAndLentil.UI.Controllers
             }
             return result;
         }
+         // try
+        public ActionResult BaseDetails<T, TController, TVM>(UIControllerType uIController, int id = 1,UIViewType actionMethod=UIViewType.Details)
+           where T : BaseEntity
+           where TController : BaseController
+           where TVM : BaseVM
+        {
+            ViewBag.Title = actionMethod.ToString();
+            if (actionMethod == UIViewType.Delete)
+            {
+                return BaseDelete<Ingredient, IngredientsController, IngredientVM>(UIControllerType.Ingredients, id);
+            }
+            else if (actionMethod == UIViewType.DeleteConfirmed)
+            {
+                return BaseDeleteConfirmed<Ingredient, IngredientsController>(UIControllerType.Ingredients, id);
+            }
+            else
+            { 
+                ActionResult result = GuardId<T, TController>(uIController, id);
+                MvcApplication.InitializeMap();  // needed for testing.  This is being run in Application_Start normally. 
+                string entity = typeof(T).ToString().Split('.').Last();
+                BaseEntity item = BaseVM.GetBaseEntity(entity, repository, id);
+
+                TVM itemVM = Mapper.Map<T, TVM>((T)item);
+                if (result is EmptyResult)
+                {
+                    return View(UIViewType.Details.ToString(), itemVM);
+                }
+                return result;
+            }
+        }
 
 
         public ViewResult BaseCreate<TVM>(UIViewType actionMethod) where TVM : BaseVM, new()
         {
             ViewBag.ActionMethod = UIViewType.Create;
             TVM vm = new TVM();
-            return View(UIViewType.Edit.ToString(), vm);
+            vm.CreationDate = DateTime.Now;
+            return View(UIViewType.Details.ToString(), vm);
         }
 
         public ViewResult BaseEdit<T, TController, TVM>(UIControllerType uIControllerType, int id = 1, UIViewType actionMethod = UIViewType.Edit)
@@ -78,12 +109,14 @@ namespace LambAndLentil.UI.Controllers
         where TController : BaseController
         where TVM : BaseVM
         {
+
+          
             MvcApplication.InitializeMap();  // needed for testing.  This is being run in Application_Start normally.  
-            ActionResult result = new EmptyResult();  
+            ActionResult result = new EmptyResult();
             if (actionMethod == UIViewType.Delete)
             {
-                 result=BaseDelete<T, TController, TVM>(UIControllerType.Ingredients, id = 1, UIViewType.Delete);
-                 
+                result = BaseDelete<T, TController, TVM>(UIControllerType.Ingredients, id = 1, UIViewType.Details);
+
             }
             else
             {
@@ -97,11 +130,11 @@ namespace LambAndLentil.UI.Controllers
 
                 TVM itemVM = Mapper.Map<T, TVM>((T)item);
                 if (result is EmptyResult)
-                {
-                    return View(UIViewType.Edit.ToString(), itemVM);
+                { 
+                    return View(UIViewType.Details.ToString(), itemVM);
                 }
-               }
-            return result as ViewResult; 
+            }
+            return result as ViewResult;
         }
 
         public ActionResult BasePostEdit<T, TController, TVM>(IBaseVM vm)
@@ -123,14 +156,15 @@ namespace LambAndLentil.UI.Controllers
 
             if (ModelState.IsValid)
             {
-                string entity = typeof(T).ToString().Split('.').Last();
-                //   int testSuccess= BaseVM.Save(entity, repository, item);
+                string entity = typeof(T).ToString().Split('.').Last(); 
                 repository.Save<T>(item);
-                return RedirectToAction<IngredientsController>(c => c.Index(1)).WithSuccess(string.Format("{0} has been saved", vm.Name));
+                UIControllerType controllerType = GetControllerType(entity);
+                vm.Name = vm.Name;   
+                return RedirectToAction<TController>(c => c.BaseIndex(controllerType, 1)).WithSuccess(string.Format("{0} has been saved", vm.Name));
             }
             else
             {
-                return View(UIViewType.Edit.ToString(),vm).WithWarning("Something is wrong with the data!");
+                return View(UIViewType.Details.ToString(), vm).WithWarning("Something is wrong with the data!");
             }
         }
 
@@ -156,18 +190,18 @@ namespace LambAndLentil.UI.Controllers
             return result;
         }
 
-        public ActionResult BaseDeleteConfirmed<T, TController>(UIControllerType uiControllerType, int id)
+        public ActionResult BaseDeleteConfirmed<T, TController>(UIControllerType controllerType, int id)
            where T : BaseEntity
             where TController : BaseController
         {
-            ActionResult result = GuardId<T, TController>(uiControllerType, id);
+            ActionResult result = GuardId<T, TController>(controllerType, id);
             string entity = typeof(T).ToString().Split('.').Last();
             BaseEntity item = BaseVM.GetBaseEntity(entity, repository, id);
             repository.Delete<T>(id);
             ViewBag.ActionMethod = "delete";
             if (result is EmptyResult)
             {
-                return RedirectToAction<IngredientsController>(c => c.Index(1)).WithSuccess(string.Format("{0} has been deleted", item.Name));
+                return RedirectToAction<TController>(c=> c.BaseIndex(controllerType, 1))  .WithSuccess(string.Format("{0} has been deleted", item.Name));
             }
             return result;
         }
@@ -198,6 +232,37 @@ namespace LambAndLentil.UI.Controllers
                 }
             }
             return new EmptyResult();
+        }
+        
+                //// gross violation of open/closed principle following
+        private UIControllerType GetControllerType(string entity)
+        {
+            UIControllerType controllerType = UIControllerType.Ingredients;
+            //// gross violation of open/closed principle following
+            switch (entity)
+            {
+                case "Ingredient":
+                    controllerType = UIControllerType.Ingredients;
+                    break;
+                case "Recipe":
+                    controllerType = UIControllerType.Recipes;
+                    break;
+                case "Menu":
+                    controllerType = UIControllerType.Menus;
+                    break;
+                case "Plan":
+                    controllerType = UIControllerType.Plans;
+                    break;
+                case "Person":
+                    controllerType = UIControllerType.Persons;
+                    break;
+                case "ShoppingList":
+                    controllerType = UIControllerType.ShoppingLists;
+                    break;
+                default:
+                    break;
+            }
+            return controllerType;
         }
 
         protected override void Dispose(bool disposing)

@@ -1,12 +1,14 @@
 ﻿ @model LambAndLentil.UI.Models.ListVM
 @{
     ViewBag.Title = "Menu Index";
+    string sourceActionMethod = "MenusIndex";
 }
 
 <h2>Menus</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Add Menu", LambAndLentil.UI.UIViewType.Create.ToString(), UIControllerType.Menus.ToString(), new { actionMethod = UIViewType.Create.ToString() }, null)
+
 </p>
 <table class="table">
     <tr>
@@ -15,6 +17,9 @@
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Menus.First().MealType)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Menus.First().DayOfWeek)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Menus.First().Diners)
@@ -31,12 +36,23 @@
             @Html.DisplayFor(modelItem => item.MealType)
         </td>
         <td>
+            @Html.DisplayFor(modelItem => item.DayOfWeek)
+        </td>
+        <td>
             @Html.DisplayFor(modelItem => item.Diners)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
+            @Html.ActionLink(" ", UIViewType.Edit.ToString(), "Menus", new { id = item.ID, sourceActionMethod, actionMethod = UIViewType.Edit }, new { @class = "btn btn-default btn-sm  glyphicon glyphicon-edit", @title = "Edit" })
+        </td>
+        <td>
+            @Html.ActionLink(" ", UIViewType.Details.ToString(), new { id = item.ID }, new { @class = "btn btn-default btn-sm  glyphicon glyphicon-list", @title = "Details" })
+        </td>
+        <td>
+            @Html.ActionLink(" ", UIViewType.Details.ToString(), new
+       {
+           id = item.ID,
+           actionMethod = UIViewType.Delete
+       }, new { @class = "btn btn-default btn-sm  glyphicon glyphicon-trash", @title = "Delete" })
         </td>
     </tr>
 }

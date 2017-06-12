@@ -1,26 +1,129 @@
 ﻿@model LambAndLentil.UI.Models.PlanVM
-
-@{
-    ViewBag.Title = "Details";
+@using LambAndLentil.Domain.Entities
+@{ 
+    string requestActionMethod = Request.AppRelativeCurrentExecutionFilePath.Split('/').Last();
+    string actionMethod = ViewBag.ActionMethod == null ? requestActionMethod : ViewBag.ActionMethod.ToString();
+    ViewBag.Title = actionMethod + " Plan";
+    string colon = " : ";
+    if (actionMethod == UIViewType.Edit.ToString())
+    {
+        actionMethod = UIViewType.PostEdit.ToString();
+    }
+    if (actionMethod == UIViewType.Create.ToString())
+    {
+        actionMethod = UIViewType.PostEdit.ToString();
+    }
 }
 
-<h2>Details</h2>
 
-<div>
-    <h4>PlanVM</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
+@if (actionMethod == UIViewType.Delete.ToString())
+{
+    <h2>@actionMethod Plan  &nbsp;:&nbsp; @Model.Name   ?</h2>
+}
+else if (actionMethod == UIViewType.Details.ToString())
+{
+    <h2>Plan Details for @Model.Name</h2>
+}
+else if (actionMethod == UIViewType.PostEdit.ToString())
+{
+    if (Model.Name == "newly created")
+    {
+        <h2> Create New Plan</h2>
+    }
+    else
+    {
+        <h2>Edit Details for @Model.Name Plan</h2>
+    }
+}
+else
+{
+    string modelLabel = Model.Name == null ? " " : Model.Name == "newly created" ? " " : Model.Name;   
+    <h2>@actionMethod Plan  &nbsp;:&nbsp;@modelLabel </h2>
+}
 
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
+<hr />
+@using (Html.BeginForm(actionMethod, UIControllerType.Plans.ToString(), FormMethod.Post, new { id = Model.ID, ingredientVM = Model }))
+{
 
-    </dl>
-</div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.ID)
+    <div class="item">
+        <div class="row">
+            <div class="col-md-6">
+                <ul>
+                    <li>@Html.EditorFor(model => model.Name, new { valueM = Model.Name })</li>
+                    <li>@Html.EditorFor(model => model.Description, new { valueM = Model.Description })</li> 
+                </ul>
+            </div>
+             
+            <div class="col-md-6">
+                <ul> 
+                    <li>@Html.EditorFor(model => model.AddedByUser, new { valueM = Model.AddedByUser, readOnly = true }) </li>
+                    <li>@Html.EditorFor(model => model.CreationDate, new { valueM = Model.CreationDate, readOnly = true }) </li>
+                    <li>@Html.EditorFor(model => model.ModifiedByUser, new { valueM = Model.ModifiedByUser, readOnly = true }) </li>
+                    <li>@Html.EditorFor(model => model.ModifiedDate, new { valueM = Model.ModifiedDate, readOnly = true })</li> 
+                </ul>
+            </div> 
+        </div>
+    </div>
+   
+
+    if (actionMethod == UIViewType.PostEdit.ToString() || actionMethod == UIViewType.Create.ToString())
+    {
+        <div class="form-group">
+            <div>
+                <input type="submit" value="Save Changes" class="btn btn-default col-md-offset-2 col-md-10" />
+            </div>
+        </div>
+
+
+    }
+
+}
+
+@if (actionMethod == UIViewType.Create.ToString())
+{
+    <div>
+        @Html.ActionLink("Back to List", UIViewType.Index.ToString(), null, new { T = typeof(Plan), @class = "btn btn-default" })
+    </div>
+
+}
+
+@if (actionMethod == UIViewType.PostEdit.ToString())
+{
+    <div>
+        @Html.ActionLink("Back to List", UIViewType.Index.ToString(), null, new { T = typeof(Plan), @class = "btn btn-default" })
+        @if(Model.ID!=0)
+        { 
+        @Html.ActionLink("Delete", UIViewType.Delete.ToString(), null, new { id = Model.ID }, new { @class = "btn btn-default" })
+        }
+    </div>
+
+}
+
+
+@if (actionMethod == UIViewType.Delete.ToString())
+{
+    <h3>Are you sure you want to delete this ingredient: (@Model.Name) ?</h3>
+
+    @Html.ActionLink("No - Back to List", UIViewType.Index.ToString(), null, new { @class = "btn btn-default" })
+    using (Html.BeginForm(UIViewType.DeleteConfirmed.ToString(), UIControllerType.Plans.ToString(), new { id = Model.ID }, FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-group">
+            <div>
+                <input type="submit" value="Yes - Delete" class="btn btn-default" />
+            </div>
+        </div>
+    }
+}
+@if (actionMethod == UIViewType.Details.ToString())
+{
+    <div>
+        @Html.ActionLink("Back to List", UIViewType.Index.ToString(), null, new { T = typeof(Plan), @class = "btn btn-default" })
+        @Html.ActionLink("Edit", UIViewType.Edit.ToString(), null, new { id = Model.ID, actionMethod = UIViewType.Edit.ToString() }, new { @class = "btn btn-default" }) 
+        @Html.ActionLink("Delete", UIViewType.Delete.ToString(), null, new { id = Model.ID }, new { @class = "btn btn-default" })
+
+    </div>
+
+}
