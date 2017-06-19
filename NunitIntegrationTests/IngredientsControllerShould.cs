@@ -1,27 +1,24 @@
-﻿using LambAndLentil.Domain.Concrete;
+using LambAndLentil.Domain.Concrete;
 using LambAndLentil.Domain.Entities;
 using LambAndLentil.UI;
 using LambAndLentil.UI.Controllers;
 using LambAndLentil.UI.Infrastructure.Alerts;
 using LambAndLentil.UI.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
-using Ignore = Microsoft.VisualStudio.TestTools.UnitTesting.IgnoreAttribute;
+using AutoMapper;
 
-namespace NunitIntegrationTests
-{
-
-    [TestFixture]
+namespace MsTestIntegrationTests
+{ 
+    [TestClass]
     [TestCategory("Integration")]
-    [TestCategory("Ingredients")]
+    [TestCategory("IngredientsController")]
     public class IngredientsControllerShould
     {
-        [Test]
+        [TestMethod]
         [TestCategory("Create")]
         public void CreateAnIngredient()
         {
@@ -36,7 +33,7 @@ namespace NunitIntegrationTests
             Assert.AreEqual(modelName, "Newly Created");
         }
 
-        [Test]
+        [TestMethod]
         [TestCategory("Save")]
         public void SaveAValidIngredient()
         {
@@ -53,22 +50,31 @@ namespace NunitIntegrationTests
 
 
             // Assert 
-            Assert.AreEqual("alert-success", adr.AlertClass);
-            Assert.AreEqual(4, routeValues.Count);
-            Assert.AreEqual(UIControllerType.Ingredients.ToString(), routeValues.ElementAt(0).ToString());
-            Assert.AreEqual(UIViewType.BaseIndex.ToString(), routeValues.ElementAt(1).ToString());
-            Assert.AreEqual("Ingredients", routeValues.ElementAt(2).ToString());
-            Assert.AreEqual(1.ToString(), routeValues.ElementAt(3).ToString());
+            try
+            {
+                Assert.AreEqual("alert-success", adr.AlertClass);
+                Assert.AreEqual(4, routeValues.Count);
+                Assert.AreEqual(UIControllerType.Ingredients.ToString(), routeValues.ElementAt(0).ToString());
+                Assert.AreEqual(UIViewType.BaseIndex.ToString(), routeValues.ElementAt(1).ToString());
+                Assert.AreEqual("Ingredients", routeValues.ElementAt(2).ToString());
+                Assert.AreEqual(1.ToString(), routeValues.ElementAt(3).ToString());
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                // Clean Up - should run a  delete test to make sure this works 
+                List<Ingredient> items = repo.Ingredients.ToList<Ingredient>();
+                Ingredient item = items.Where(m => m.Name == "test").FirstOrDefault();
 
-            // Clean Up - should run a  delete test to make sure this works 
-            List<Ingredient> items = repo.Ingredients.ToList<Ingredient>();
-            Ingredient item = items.Where(m => m.Name == "test").FirstOrDefault();
-
-            // Delete it
-            controller.DeleteConfirmed(item.ID);
+                // Delete it
+                controller.DeleteConfirmed(item.ID);
+            }
         }
 
-        [Test]
+        [TestMethod]
         [TestCategory("Edit")]
         public void SaveEditedIngredient()
         {
@@ -107,16 +113,23 @@ namespace NunitIntegrationTests
 
             ingredient = result2.FirstOrDefault();
 
-
-            // Assert
-            Assert.AreEqual("0000 test Edited", ingredient.Name);
-
-            // clean up
-            // TO DO: write a test to make sure this happens.
-            controller5.DeleteConfirmed(vm.ID);
+            try
+            {
+                // Assert
+                Assert.AreEqual("0000 test Edited", ingredient.Name);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                // clean up 
+                controller5.DeleteConfirmed(vm.ID);
+            }
         }
 
-        [Test]
+        [TestMethod]
         [TestCategory("DeleteConfirmed")]
         public void ActuallyDeleteAnIngredientFromTheDatabase()
         {
@@ -145,20 +158,7 @@ namespace NunitIntegrationTests
             Assert.AreEqual(0, deletedItem.Count());
         }
 
-        [Test]
-        [TestCategory("Edit")]
-        public void  SaveTheCreationDateOnIngredientCreationWithNoParameterCtor()
-        {
-            // Arrange
-            DateTime CreationDate = DateTime.Now;
-
-            // Act
-            Ingredient ingredient = new Ingredient();
-
-            // Assert
-            Assert.AreEqual(CreationDate.Date, ingredient.CreationDate.Date);
-        }
-        [Test]
+        [TestMethod]
         [TestCategory("Edit")]
         public void ShouldSaveTheCreationDateOnIngredientCreationWithDateTimeParameter()
         {
@@ -172,9 +172,9 @@ namespace NunitIntegrationTests
             Assert.AreEqual(CreationDate, ingredient.CreationDate);
         }
 
-        [Test]
+        [TestMethod]
         [TestCategory("Edit")]
-        public void  SaveTheCreationDateOnIngredientVMCreationWithNoParameterCtor()
+        public void SaveTheCreationDateOnIngredientVMCreationWithNoParameterCtor()
         {
             // Arrange
             DateTime CreationDate = DateTime.Now;
@@ -185,9 +185,10 @@ namespace NunitIntegrationTests
             // Assert
             Assert.AreEqual(CreationDate.Date, ingredientVM.CreationDate.Date);
         }
-        [Test]
+
+        [TestMethod]
         [TestCategory("Edit")]
-        public void  SaveTheCreationDateOnIngredientVMCreationWithDateTimeParameter()
+        public void SaveTheCreationDateOnIngredientVMCreationWithDateTimeParameter()
         {
             // Arrange
             DateTime CreationDate = new DateTime(2010, 1, 1);
@@ -198,8 +199,8 @@ namespace NunitIntegrationTests
             // Assert
             Assert.AreEqual(CreationDate, ingredientVM.CreationDate);
         }
-         
-        [Test]
+
+        [TestMethod]
         [TestCategory("Edit")]
         public void SaveTheCreationDateBetweenPostedEdits()
         {
@@ -219,56 +220,87 @@ namespace NunitIntegrationTests
             ListVM listVM = (ListVM)view.Model;
             var result = (from m in listVM.Ingredients
                           where m.Name == "001 Test "
-                          select m ).AsQueryable();
+                          select m).AsQueryable();
 
             Ingredient ingredient = result.FirstOrDefault();
 
             DateTime shouldBeSameDate = ingredient.CreationDate;
-
-            // Assert
-              Assert.AreEqual(CreationDate, shouldBeSameDate);
-
-            // Cleanup
-            controllerDelete.DeleteConfirmed(ingredient.ID);
+            try
+            {
+                // Assert
+                Assert.AreEqual(CreationDate, shouldBeSameDate);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                // Cleanup
+                controllerDelete.DeleteConfirmed(ingredient.ID);
+            }
         }
 
-      
-        [Test]
+
+        [TestMethod]
         [TestCategory("Edit")]
         public void UpdateTheModificationDateBetweenPostedEdits()
         {
             // Arrange
             EFRepository repo = new EFRepository();
             IngredientsController controllerPost = new IngredientsController(repo);
+            IngredientsController controllerPost1 = new IngredientsController(repo);
             IngredientsController controllerView = new IngredientsController(repo);
+            IngredientsController controllerView1 = new IngredientsController(repo);
             IngredientsController controllerDelete = new IngredientsController(repo);
 
-            IngredientVM ingredientVM = new IngredientVM();
-            ingredientVM.Name = "002 Test Mod";
-            DateTime CreationDate = ingredientVM.CreationDate;
-            DateTime mod = ingredientVM.ModifiedDate;
+            IngredientVM vm = new IngredientVM();
+            vm.Name = "002 Test Mod";
+            DateTime CreationDate = vm.CreationDate;
+            DateTime mod = vm.ModifiedDate;
 
             // Act
-            controllerPost.PostEdit(ingredientVM);
+            controllerPost.PostEdit(vm);
+
             ViewResult view = controllerView.Index();
             ListVM listVM = (ListVM)view.Model;
             var result = (from m in listVM.Ingredients
                           where m.Name == "002 Test Mod"
                           select m).AsQueryable();
-
             Ingredient ingredient = result.FirstOrDefault();
+            vm = Mapper.Map<Ingredient, IngredientVM>(ingredient);
+
+            vm.Description = "I've been edited to delay a bit";
+
+            controllerPost1.PostEdit(vm);
+
+
+            ViewResult view1 = controllerView.Index();
+            listVM = (ListVM)view1.Model;
+            var result1 = (from m in listVM.Ingredients
+                           where m.Name == "002 Test Mod"
+                           select m).AsQueryable();
+
+            ingredient = result1.FirstOrDefault();
 
             DateTime shouldBeSameDate = ingredient.CreationDate;
             DateTime shouldBeLaterDate = ingredient.ModifiedDate;
 
-            // Assert
-            Assert.AreEqual(CreationDate, shouldBeSameDate);
-            Assert.AreNotEqual(mod, shouldBeLaterDate);
-
-            // Cleanup
-            controllerDelete.DeleteConfirmed(ingredient.ID);
-
-            
+            try
+            {
+                // Assert
+                Assert.AreEqual(CreationDate, shouldBeSameDate);
+                Assert.AreNotEqual(mod, shouldBeLaterDate);
+            }
+            catch (Exception)
+            { 
+                throw;
+            }
+            finally
+            {
+                // Cleanup
+                controllerDelete.DeleteConfirmed(ingredient.ID);
+            }
         }
 
         // will need to test that we are not creating a second ingredient. Who is we??

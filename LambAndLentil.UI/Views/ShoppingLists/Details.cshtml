@@ -27,7 +27,7 @@ else if (actionMethod == UIViewType.Details.ToString())
 }
 else if (actionMethod == UIViewType.PostEdit.ToString())
 {
-    if (Model.Name == "newly created")
+    if (Model.ID ==0)
     {
         <h2> Create New ShoppingList</h2>
     }
@@ -38,7 +38,7 @@ else if (actionMethod == UIViewType.PostEdit.ToString())
 }
 else
 {
-    string modelLabel = Model.Name == null ? " " : Model.Name == "newly created" ? " " : Model.Name;   
+    string modelLabel = Model.Name == null ? " " : Model.Name == "Newly Created" ? " " : Model.Name;   
     <h2>@actionMethod ShoppingList  &nbsp;:&nbsp;@modelLabel </h2>
 }
 
@@ -62,9 +62,9 @@ else
             <div class="col-md-6">
                 <ul> 
                     <li>@Html.EditorFor(model => model.AddedByUser, new { valueM = Model.AddedByUser, readOnly = true }) </li>
-                    <li>@Html.EditorFor(model => model.CreationDate, new { valueM = Model.CreationDate, readOnly = true }) </li>
+                    <li>@Html.EditorFor(model => model.CreationDate, new { valueM = Model.CreationDate, readOnly = true }) @Html.HiddenFor(model => model.CreationDate)</li>
                     <li>@Html.EditorFor(model => model.ModifiedByUser, new { valueM = Model.ModifiedByUser, readOnly = true }) </li>
-                    <li>@Html.EditorFor(model => model.ModifiedDate, new { valueM = Model.ModifiedDate, readOnly = true })</li> 
+                    <li>@Html.EditorFor(model => model.ModifiedDate, new { valueM = Model.ModifiedDate, readOnly = true }) @Html.HiddenFor(model => model.ModifiedDate)</li> 
                 </ul>
             </div> 
         </div>
@@ -107,7 +107,7 @@ else
 
 @if (actionMethod == UIViewType.Delete.ToString())
 {
-    <h3>Are you sure you want to delete this ingredient: (@Model.Name) ?</h3>
+    <h3>Are you sure you want to delete this shopping list: (@Model.Name) ?</h3>
 
     @Html.ActionLink("No - Back to List", UIViewType.Index.ToString(), null, new { @class = "btn btn-default" })
     using (Html.BeginForm(UIViewType.DeleteConfirmed.ToString(), UIControllerType.ShoppingLists.ToString(), new { id = Model.ID }, FormMethod.Post))

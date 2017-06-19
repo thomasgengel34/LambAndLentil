@@ -13,7 +13,6 @@ namespace LambAndLentil.Domain.Entities
     {
         public Recipe() : base()
         {
-            //RecipeIngredients = new List<RecipeIngredient>();
             
         }
 
@@ -21,46 +20,54 @@ namespace LambAndLentil.Domain.Entities
         {
             CreationDate = creationDate;
         }
-
-        // need to test this, just written, never used. Not sure it will work. 
-        //public Recipe(Recipe recipe)
-        //{
-        // //   RecipeIngredients = new List<RecipeIngredient>();
-        //   // Calories = GetCalories(recipe);
-        //}
+         
 
         public decimal Servings { get; set; }  
         public MealType MealType { get; set; } 
         public int? Calories { get; set; }  
         public short? CalsFromFat { get; set; }
 
-      //  public virtual ICollection<RecipeIngredient> RecipeIngredients { get; set; }
+        private List<CartLine>lineCollection = new List<CartLine>();
 
+        public void AddItem(Ingredient ingredient, decimal quantity=0m)
+        {
+            CartLine line = lineCollection
+                                     .Where(p => p.Ingredient.ID == ingredient.ID)
+                                     .FirstOrDefault();
+            if (line==null)
+            {
+                lineCollection.Add(new CartLine { Ingredient = ingredient, Quantity = quantity });
+            }
+            else
+            {
+                line.Quantity += quantity;
+            }
+        }
 
-        //public static short GetCalories(Recipe recipe)
-        //{
-        //    short? calories = 0;
+        public void RemoveLine(Ingredient ingredient)
+        {
+            lineCollection.RemoveAll(l => l.Ingredient.ID == ingredient.ID);
+        }
 
-        //    if (recipe.RecipeIngredients == null || recipe.RecipeIngredients.Count == 0)
-        //    {
-        //        return 0;
-        //    }
-        //    else
-        //    {
-        //        foreach (RecipeIngredient item in recipe.RecipeIngredients)
-        //        {
-        //            if (item.Ingredient != null)
-        //            {
-        //                calories += item.Ingredient.Calories;  // this really needs to be adjusted by quantity and unit of measure
-        //            } 
-        //        }
+        public void Clear()
+        {
+            lineCollection.Clear();
+        }
 
-        //        if (calories == null)
-        //        {
-        //            calories = 0;
-        //        }
-        //        return (short)calories;
-        //    }
-        //}
+        public IEnumerable<CartLine> Lines
+        {
+            get { return lineCollection; }
+        }
+    }
+
+    public class CartLine
+    {
+        public Ingredient Ingredient { get; set; }
+        public decimal Quantity { get; set; }
+
+        public CartLine()
+        {
+            Quantity = 0;
+        }
     }
 }

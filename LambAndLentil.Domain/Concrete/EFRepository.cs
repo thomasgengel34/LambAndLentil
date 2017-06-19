@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using LambAndLentil.Domain.Entities;
 using System.Reflection;
+using System.Linq.Expressions;
 
 namespace LambAndLentil.Domain.Concrete
 {
@@ -30,61 +31,14 @@ namespace LambAndLentil.Domain.Concrete
             {
                 dbEntry = context.Ingredients.Find(ingredient.ID);
             }
-            dbEntry.AddedByUser = ingredient.AddedByUser;
-            dbEntry.Brand = ingredient.Brand;
-            dbEntry.Caffeine = ingredient.Caffeine;
-            dbEntry.Calcium = ingredient.Calcium;
-            dbEntry.CalFromFat = ingredient.CalFromFat;
-            dbEntry.Calories = ingredient.Calories;
-            dbEntry.ContainerSize = ingredient.ContainerSize;
-            dbEntry.ContainerSizeInGrams = ingredient.ContainerSizeInGrams;
-            dbEntry.ContainerSizeUnit = ingredient.ContainerSizeUnit;
-            dbEntry.Category = ingredient.Category;
-            dbEntry.Cholesterol = ingredient.Cholesterol;
-            dbEntry.Corn = ingredient.Corn;
-            dbEntry.CountryOfOrigin = ingredient.CountryOfOrigin;
-            dbEntry.CreationDate = ingredient.CreationDate;
-            dbEntry.DataSource = ingredient.DataSource;
-            dbEntry.Description = ingredient.Description;
-            dbEntry.DietaryFiber = ingredient.DietaryFiber;
-            dbEntry.Egg = ingredient.Egg;
-            dbEntry.Fish = ingredient.Fish;
-            dbEntry.FolicAcid = ingredient.FolicAcid;
-            dbEntry.FoodGroup = ingredient.FoodGroup;
-            dbEntry.Garlic = ingredient.Garlic;
+            dbEntry.AddedByUser = ingredient.AddedByUser; 
+            dbEntry.CreationDate = ingredient.CreationDate; 
+            dbEntry.Description = ingredient.Description; 
             dbEntry.ID = ingredient.ID;
-            dbEntry.IngredientsList = ingredient.IngredientsList;
-            dbEntry.Iron = ingredient.Iron;
-            dbEntry.IsGMO = ingredient.IsGMO;
-            dbEntry.Kosher = ingredient.Kosher;
-            dbEntry.Maker = ingredient.Maker;
-            dbEntry.Milk = ingredient.Milk;
+            dbEntry.IngredientsList = ingredient.IngredientsList; 
             dbEntry.ModifiedDate = DateTime.Now;
-            dbEntry.ModifiedByUser = ingredient.ModifiedByUser;
-            dbEntry.MonoUnSaturatedFat = ingredient.MonoUnSaturatedFat;
-            dbEntry.Name = ingredient.Name;
-            dbEntry.Nuts = ingredient.Nuts;
-            dbEntry.Onion = ingredient.Onion;
-            dbEntry.PolyUnSaturatedFat = ingredient.PolyUnSaturatedFat;
-            dbEntry.Potassium = ingredient.Potassium;
-            dbEntry.Protein = ingredient.Protein;
-            dbEntry.Recipes = ingredient.Recipes;
-            dbEntry.SaturatedFat = ingredient.SaturatedFat;
-            dbEntry.ServingSize = ingredient.ServingSize;
-            dbEntry.ServingSizeUnit = ingredient.ServingSizeUnit;
-            dbEntry.ServingsPerContainer = ingredient.ServingsPerContainer;
-            dbEntry.Sodium = ingredient.Sodium;
-            dbEntry.SodiumNitrite = ingredient.SodiumNitrite;
-            dbEntry.Soy = ingredient.Soy;
-            dbEntry.StorageType = ingredient.StorageType;
-            dbEntry.Sugars = ingredient.Sugars;
-            dbEntry.TotalCarbohydrates = ingredient.TotalCarbohydrates;
-            dbEntry.TotalFat = ingredient.TotalFat;
-            dbEntry.TransFat = ingredient.TransFat;
-            dbEntry.UPC = ingredient.UPC;
-            dbEntry.VitaminA = ingredient.VitaminA;
-            dbEntry.VitaminC = ingredient.VitaminC;
-            dbEntry.Wheat = ingredient.Wheat;
+            dbEntry.ModifiedByUser = ingredient.ModifiedByUser; 
+            dbEntry.Name = ingredient.Name; 
 
             int numberOfReturns = context.SaveChanges();
             return numberOfReturns;
@@ -280,7 +234,7 @@ namespace LambAndLentil.Domain.Concrete
             dbEntry.ID = plan.ID;
             dbEntry.Description = plan.Description;
             dbEntry.CreationDate = plan.CreationDate;
-            plan.ModifiedDate = DateTime.Now;
+            dbEntry.ModifiedDate = DateTime.Now;
             dbEntry.ModifiedByUser = plan.ModifiedByUser;
             return context.SaveChanges();
         }
@@ -351,8 +305,6 @@ namespace LambAndLentil.Domain.Concrete
             if (person.ID == 0)
             {
                 dbEntry = context.Persons.Add(person);
-                dbEntry.ModifiedDate = DateTime.Now;
-
                 context.Persons.Add(person);
             }
             else
@@ -371,7 +323,7 @@ namespace LambAndLentil.Domain.Concrete
             dbEntry.Name = String.Concat(person.FirstName, " ", person.LastName);
             dbEntry.NoGarlic = person.NoGarlic;
             dbEntry.Weight = person.Weight;
-            dbEntry.ID = person.ID; 
+            dbEntry.ID = person.ID;
             return context.SaveChanges();
         }
 
@@ -384,6 +336,7 @@ namespace LambAndLentil.Domain.Concrete
                 context.Persons.Remove(dbEntry);
                 context.SaveChanges();
             }
+           
         }
 
 
@@ -392,26 +345,43 @@ namespace LambAndLentil.Domain.Concrete
         #endregion
     }
 
-    //public class EFRepository<T> : IRepository<T>
-    //{
-    //    private EFDbContext context = new EFDbContext();
+    public class EFRepository<T> :  IRepository<T> where T : BaseEntity
+    {
+        private EFDbContext<T> context = new EFDbContext<T>();
 
-    //    //    public IQueryable<T> item => throw new NotImplementedException();
+        public void Add(T entity)
+        { 
+ throw new NotImplementedException();
+        }
 
-    //    public IQueryable<T> items => throw new NotImplementedException();
+        public IEnumerable<T> GetAll()
+        {
+            throw new NotImplementedException();
+        }
 
-    //    IQueryable IRepository<T>.item => throw new NotImplementedException();
+        public T GetById(int id)
+        {
+            throw new NotImplementedException();
+        }
 
+        public IEnumerable<T> Query(Expression<Func<T, bool>> filter)
+        {
+            throw new NotImplementedException();
+        }
 
+        public void Remove(T entity)
+        {
+             throw new NotImplementedException();
+        }
 
-    //    public void Delete(int ID)
-    //    {
-    //        throw new NotImplementedException();
-    //    }
+        public void Save()
+        {
+            throw new NotImplementedException();
+        }
 
-    //  public string Save(T t)
-    //    {
-    //        throw new NotImplementedException();
-    //    }
-    //}
+        public void Update(T entity)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

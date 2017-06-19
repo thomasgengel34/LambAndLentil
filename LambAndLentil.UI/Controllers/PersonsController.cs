@@ -27,16 +27,7 @@ namespace LambAndLentil.UI.Controllers
         // GET: Persons/Details/5
         public ActionResult Details(int id = 1, UIViewType actionMethod = UIViewType.Details)
         {
-            ViewBag.Title = actionMethod.ToString();
-            if (actionMethod == UIViewType.Delete)
-            {
-                return BaseDelete<Person, PersonsController, PersonVM>(UIControllerType.Persons, id);
-            }
-            else if (actionMethod == UIViewType.DeleteConfirmed)
-            {
-                return BaseDeleteConfirmed<Person, PersonsController>(UIControllerType.Persons, id);
-            }
-            return BaseDetails<Person, PersonsController, PersonVM>(UIControllerType.Persons, id);
+            return BaseDetails<Person , PersonsController, PersonVM>(UIControllerType.Persons, id, actionMethod);
         }
          
 

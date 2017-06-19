@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LambAndLentil.Domain.Entities
 {
@@ -12,7 +9,14 @@ namespace LambAndLentil.Domain.Entities
     {
         
         public Menu():base() 
-        { 
+        {
+            ID = base.ID;
+            Name = base.Name;
+            Description = base.Description;
+            CreationDate = base.CreationDate; 
+            ModifiedDate = base.ModifiedDate;
+            AddedByUser = base.AddedByUser; ;
+            ModifiedByUser = base.ModifiedByUser;
         }
 
         public Menu(DateTime creationDate) : this()

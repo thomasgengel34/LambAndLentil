@@ -4,13 +4,10 @@ using LambAndLentil.Domain.Entities;
 using LambAndLentil.Tests.Infrastructure;
 using LambAndLentil.UI;
 using LambAndLentil.UI.Controllers;
-using LambAndLentil.UI.HtmlHelpers;
 using LambAndLentil.UI.Infrastructure.Alerts;
-using LambAndLentil.UI.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -18,17 +15,17 @@ namespace LambAndLentil.Tests.Controllers
 {
     [TestClass]
     [TestCategory("IngredientsController")]
-    public class IngredientsControllerTest
+    public class IngredientsControllerShould
     {
         static Mock<IRepository> mock;
         public static MapperConfiguration AutoMapperConfig { get; set; }
-        public IngredientsControllerTest()
+        public IngredientsControllerShould()
         {
             AutoMapperConfigForTests.InitializeMap();
         }
 
         [TestMethod]
-        public void IngredientsCtr_InheritsFromBaseControllerCorrectlyPageSizeRight()
+        public void  InheritFromBaseControllerCorrectlyPageSizeRight()
         {
 
             // Arrange
@@ -44,7 +41,7 @@ namespace LambAndLentil.Tests.Controllers
         }
 
         [TestMethod]
-        public void IngredientsCtr_InheritsFromBaseControllerCorrectlyDisposeExists()
+        public void  InheritFromBaseControllerCorrectlyDisposeExists()
         {
 
             // Arrange
@@ -60,7 +57,7 @@ namespace LambAndLentil.Tests.Controllers
         }
 
         [TestMethod]
-        public void IngredientsCtr_IsPublic()
+        public void BePublic()
         {
             // Arrange
             IngredientsController controller = SetUpController();
@@ -78,329 +75,14 @@ namespace LambAndLentil.Tests.Controllers
         {
             AutoMapperConfigForTests.InitializeMap();
             MapperConfiguration AutoMapperConfig = AutoMapperConfigForTests.AMConfigForTests();
-            AutoMapperConfig.AssertConfigurationIsValid();
-
+            AutoMapperConfig.AssertConfigurationIsValid(); 
         }
-
-
-        [TestMethod]
-        [TestCategory("Edit")]
-        public void IngredientsCtr_CanEditIngredientViewIsNotNull()
-        {
-            // Arrange
-            IngredientsController controller = SetUpController();
-
-
-            Ingredient ingredient = mock.Object.Ingredients.First();
-            mock.Setup(c => c.Save(ingredient)).Verifiable();
-            ingredient.Name = "First edited";
-
-            // Act 
-
-            ViewResult view1 = controller.Edit(1);
-            IngredientVM p1 = (IngredientVM)view1.Model;
-            ViewResult view2 = controller.Edit(2);
-            IngredientVM p2 = (IngredientVM)view2.Model;
-            ViewResult view3 = controller.Edit(3);
-            IngredientVM p3 = (IngredientVM)view3.Model;
-
-
-            // Assert 
-            Assert.IsNotNull(view1);
-        }
-
-        [TestMethod]
-        [TestCategory("Edit")]
-        public void IngredientsCtr_CanEditIngredientp1IDis1()
-        {
-            // Arrange
-            IngredientsController controller = SetUpController();
-
-
-            Ingredient ingredient = mock.Object.Ingredients.First();
-            mock.Setup(c => c.Save(ingredient)).Verifiable();
-            ingredient.Name = "First edited";
-
-            // Act 
-
-            ViewResult view1 = controller.Edit(1);
-            IngredientVM p1 = (IngredientVM)view1.Model;
-            ViewResult view2 = controller.Edit(2);
-            IngredientVM p2 = (IngredientVM)view2.Model;
-            ViewResult view3 = controller.Edit(3);
-            IngredientVM p3 = (IngredientVM)view3.Model;
-
-
-            // Assert  
-            Assert.AreEqual(1, p1.ID);
-        }
-
-        [TestMethod]
-        [TestCategory("Edit")]
-        public void IngredientsCtr_CanEditIngredientp2IDis2()
-        {
-            // Arrange
-            IngredientsController controller = SetUpController();
-
-
-            Ingredient ingredient = mock.Object.Ingredients.First();
-            mock.Setup(c => c.Save(ingredient)).Verifiable();
-            ingredient.Name = "First edited";
-
-            // Act 
-
-            ViewResult view1 = controller.Edit(1);
-            IngredientVM p1 = (IngredientVM)view1.Model;
-            ViewResult view2 = controller.Edit(2);
-            IngredientVM p2 = (IngredientVM)view2.Model;
-            ViewResult view3 = controller.Edit(3);
-            IngredientVM p3 = (IngredientVM)view3.Model;
-
-
-            // Assert   
-            Assert.AreEqual(2, p2.ID);
-        }
-
-        [TestMethod]
-        [TestCategory("Edit")]
-        public void IngredientsCtr_CanEditIngredientp3IDis3()
-        {
-            // Arrange
-            IngredientsController controller = SetUpController();
-
-
-            Ingredient ingredient = mock.Object.Ingredients.First();
-            mock.Setup(c => c.Save(ingredient)).Verifiable();
-            ingredient.Name = "First edited";
-
-            // Act 
-
-            ViewResult view1 = controller.Edit(1);
-            IngredientVM p1 = (IngredientVM)view1.Model;
-            ViewResult view2 = controller.Edit(2);
-            IngredientVM p2 = (IngredientVM)view2.Model;
-            ViewResult view3 = controller.Edit(3);
-            IngredientVM p3 = (IngredientVM)view3.Model;
-
-
-            // Assert    
-            Assert.AreEqual(3, p3.ID);
-        }
-
-        [TestMethod]
-        [TestCategory("Edit")]
-        public void IngredientsCtr_CanEditIngredient_FirstNameIsEdited()
-        {
-            // Arrange
-            IngredientsController controller = SetUpController();
-
-
-            Ingredient ingredient = mock.Object.Ingredients.First();
-            mock.Setup(c => c.Save(ingredient)).Verifiable();
-            ingredient.Name = "First edited";
-
-            // Act 
-
-            ViewResult view1 = controller.Edit(1);
-            IngredientVM p1 = (IngredientVM)view1.Model;
-            ViewResult view2 = controller.Edit(2);
-            IngredientVM p2 = (IngredientVM)view2.Model;
-            ViewResult view3 = controller.Edit(3);
-            IngredientVM p3 = (IngredientVM)view3.Model;
-
-
-            // Assert     
-            Assert.AreEqual("First edited", p1.Name);
-
-        }
-
-        [TestMethod]
-        [TestCategory("Trial")]
-        public void the_ingredient_repository_should_be_called_once_per_customer()
-        {
-            //Arrange
-            mock = new Mock<IRepository>();
-            mock.Setup(m => m.Ingredients).Returns(new Ingredient[] {
-                new Ingredient {ID = 1, Name = "P1", Maker="Maker1",Brand="BrandAA",AddedByUser="John Doe", ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue, Caffeine="yes", DataSource="Container", ModifiedDate=DateTime.MaxValue.AddYears(-10)},
-                new Ingredient {ID = 2, Name = "P2", Maker="Maker2",Brand="BrandB",AddedByUser="Sally Doe", ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(20), ModifiedDate=DateTime.MaxValue.AddYears(-20)},
-                new Ingredient {ID = 3, Name = "P3", Maker="Maker1",Brand="BrandAA",AddedByUser="Sue Doe", ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(30), ModifiedDate=DateTime.MaxValue.AddYears(-30)},
-                new Ingredient {ID = 4, Name = "P4", Maker="Maker2",Brand="BrandB",AddedByUser="Kyle Doe", ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(40), ModifiedDate=DateTime.MaxValue.AddYears(-10)},
-                new Ingredient {ID = 5, Name = "P5", Maker="Maker3",Brand="BrandC",AddedByUser="John Doe", ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(50), ModifiedDate=DateTime.MaxValue.AddYears(-100)}
-            }.AsQueryable());
-            //var listOfCustomerDtos = new List<Ingredient>
-            //        {
-            //            new  Ingredient
-            //                {
-            //                    Name = "Sam" 
-            //                },
-            //            new Ingredient
-            //                {
-            //                     Name = "Bob" 
-            //                },
-            //            new Ingredient
-            //                {
-            //                    Name = "Doug" 
-            //                }
-            //        };
-            IngredientVM ingredientVM = new IngredientVM() { Name = "Lembas" };
-
-            // var mockRepository = new Mock<IRepository>();
-
-
-
-            var controller = new IngredientsController(mock.Object);
-
-            //mockCustomerRepository.Setup(x => x.Save(It.IsAny<Customer>()));
-
-            //Act
-            controller.PostEdit(ingredientVM);
-            ingredientVM.Name = "cram";
-            controller.PostEdit(ingredientVM);
-
-            //Assert
-            mock.Verify(x => x.Save<Ingredient>(It.IsAny<Ingredient>()));
-
-        }
-
-        [TestMethod]
-        [TestCategory("Edit")]
-        public void IngredientsCtr_CanEditIngredient_FirstMakerIsEdited()
-        {
-            // Arrange
-            IngredientsController controller = SetUpController();
-
-
-            Ingredient ingredient = mock.Object.Ingredients.First();
-            mock.Setup(c => c.Save(ingredient)).Verifiable();
-            ingredient.Maker = "First edited";
-
-            // Act 
-
-            ViewResult view1 = controller.Edit(1);
-            IngredientVM p1 = (IngredientVM)view1.Model;
-            ViewResult view2 = controller.Edit(2);
-            IngredientVM p2 = (IngredientVM)view2.Model;
-            ViewResult view3 = controller.Edit(3);
-            IngredientVM p3 = (IngredientVM)view3.Model;
-
-
-            // Assert   
-            Assert.AreEqual("First edited", p1.Maker);
-        }
-
-        [TestMethod]
-        [TestCategory("Edit")]
-        public void IngredientsCtr_CanEditIngredientp2NameIsUnchanged()
-        {
-            // Arrange
-            IngredientsController controller = SetUpController();
-
-
-            Ingredient ingredient = mock.Object.Ingredients.First();
-            mock.Setup(c => c.Save(ingredient)).Verifiable();
-            ingredient.Name = "First edited";
-
-            // Act 
-
-            ViewResult view1 = controller.Edit(1);
-            IngredientVM p1 = (IngredientVM)view1.Model;
-            ViewResult view2 = controller.Edit(2);
-            IngredientVM p2 = (IngredientVM)view2.Model;
-            ViewResult view3 = controller.Edit(3);
-            IngredientVM p3 = (IngredientVM)view3.Model;
-
-
-            // Assert   
-            Assert.AreEqual("P2", p2.Name);
-        }
-
-        [TestMethod]
-        [TestCategory("Edit")]
-        public void IngredientsCtr_CanEditIngredientp1MakerIsUnchanged()
-        {
-            // Arrange
-            IngredientsController controller = SetUpController();
-
-
-            Ingredient ingredient = mock.Object.Ingredients.First();
-            mock.Setup(c => c.Save(ingredient)).Verifiable();
-            ingredient.Name = "First edited";
-
-            // Act 
-
-            ViewResult view1 = controller.Edit(1);
-            IngredientVM p1 = (IngredientVM)view1.Model;
-            ViewResult view2 = controller.Edit(2);
-            IngredientVM p2 = (IngredientVM)view2.Model;
-            ViewResult view3 = controller.Edit(3);
-            IngredientVM p3 = (IngredientVM)view3.Model;
-
-
-            // Assert    
-            Assert.AreEqual("Maker1", p1.Maker);
-        }
-
-        [TestMethod]
-        [TestCategory("Edit")]
-        public void IngredientsCtr_CanEditIngredient_SecondMakerIsUnchanged()
-        {
-            // Arrange
-            IngredientsController controller = SetUpController();
-
-
-            Ingredient ingredient = mock.Object.Ingredients.First();
-            mock.Setup(c => c.Save(ingredient)).Verifiable();
-            ingredient.Name = "First edited";
-
-            // Act 
-
-            ViewResult view1 = controller.Edit(1);
-            IngredientVM p1 = (IngredientVM)view1.Model;
-            ViewResult view2 = controller.Edit(2);
-            IngredientVM p2 = (IngredientVM)view2.Model;
-            ViewResult view3 = controller.Edit(3);
-            IngredientVM p3 = (IngredientVM)view3.Model;
-
-
-            // Assert    
-            Assert.AreEqual("Maker2", p2.Maker);
-        }
-
-        [TestMethod]
-        [TestCategory("Edit")]
-        public void IngredientsCtr_CanEditIngredientFirstMakerThirdIsUnchanged()
-        {
-            // Arrange
-            IngredientsController controller = SetUpController();
-
-
-            Ingredient ingredient = mock.Object.Ingredients.First();
-            mock.Setup(c => c.Save(ingredient)).Verifiable();
-            ingredient.Name = "First edited";
-
-            // Act 
-
-            ViewResult view1 = controller.Edit(1);
-            IngredientVM p1 = (IngredientVM)view1.Model;
-            ViewResult view2 = controller.Edit(2);
-            IngredientVM p2 = (IngredientVM)view2.Model;
-            ViewResult view3 = controller.Edit(3);
-            IngredientVM p3 = (IngredientVM)view3.Model;
-
-
-            // Assert    
-            Assert.AreEqual("Maker1", p3.Maker);
-        }
-
-      
-
-
-
-
-
+         
+ 
+  
         [TestMethod]
         [TestCategory("Details")]
-        public void IngredientsCtr_DetailsWorksWithValidIngredientID()
+        public void  DetailsWorksWithValidIngredientID()
         {
             // Arrange
             IngredientsController controller = SetUpController();
@@ -418,7 +100,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Details")]
-        public void IngredientsCtr_DetailsIngredientIDTooHighViewNotNull()
+        public void  DetailsIngredientIDTooHighViewNotNull()
         {
             // Arrange
             IngredientsController controller = SetUpController();
@@ -431,7 +113,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Details")]
-        public void IngredientsCtr_DetailsIngredientIDTooHighMessageRight()
+        public void  DetailsIngredientIDTooHighMessageRight()
         {
             // Arrange
             IngredientsController controller = SetUpController();
@@ -444,7 +126,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Details")]
-        public void IngredientsCtr_DetailsIngredientIDTooHighAlertClassCorrect()
+        public void  DetailsIngredientIDTooHighAlertClassCorrect()
         {
             // Arrange
             IngredientsController controller = SetUpController();
@@ -457,7 +139,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Details")]
-        public void IngredientsCtr_DetailsIngredientIDTooHighCorrectModel()
+        public void DetailsIngredientIDTooHighCorrectModel()
         {
             // Arrange
             IngredientsController controller = SetUpController();
@@ -470,7 +152,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Details")]
-        public void IngredientsCtr_DetailsIngredientIDTooHighCorrectController()
+        public void  DetailsIngredientIDTooHighCorrectController()
         {
             // Arrange
             IngredientsController controller = SetUpController();
@@ -483,7 +165,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Details")]
-        public void IngredientsCtr_DetailsIngredientIDTooHighCorrectRouteValue()
+        public void  DetailsIngredientIDTooHighCorrectRouteValue()
         {
             // Arrange
             IngredientsController controller = SetUpController();
@@ -496,7 +178,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Details")]
-        public void IngredientsCtr_DetailsIngredientIDPastIntLimit()
+        public void  DetailsIngredientIDPastIntLimit()
         {
             // Arrange
             IngredientsController controller = SetUpController();
@@ -511,7 +193,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Details")]
-        public void IngredientsCtr_DetailsIngredientIDIsZeroViewIsNotNull()
+        public void  DetailsIngredientIDIsZeroViewIsNotNull()
         {
             // Arrange
             IngredientsController controller = SetUpController();
@@ -528,7 +210,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Details")]
-        public void IngredientsCtr_DetailsIngredientIDIsZeroMessageIsCorrect()
+        public void  DetailsIngredientIDIsZeroMessageIsCorrect()
         {
             // Arrange
             IngredientsController controller = SetUpController();
@@ -545,7 +227,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Details")]
-        public void IngredientsCtr_DetailsIngredientIDIsZeroAlertClassIsCorrect()
+        public void  DetailsIngredientIDIsZeroAlertClassIsCorrect()
         {
             // Arrange
             IngredientsController controller = SetUpController();
@@ -562,7 +244,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Details")]
-        public void IngredientsCtr_DetailsIngredientIDIsZeroReturnModelIsCorrect()
+        public void  DetailsIngredientIDIsZeroReturnModelIsCorrect()
         {
             // Arrange
             IngredientsController controller = SetUpController();
@@ -579,7 +261,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Details")]
-        public void IngredientsCtr_DetailsIngredientIDIsZeroReturnControllerIsCorrect()
+        public void  DetailsIngredientIDIsZeroReturnControllerIsCorrect()
         {
             // Arrange
             IngredientsController controller = SetUpController();
@@ -596,7 +278,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Details")]
-        public void IngredientsCtr_DetailsIngredientIDIsZeroReturnRouteValueIsCorrect()
+        public void  DetailsIngredientIDIsZeroReturnRouteValueIsCorrect()
         {
             // Arrange
             IngredientsController controller = SetUpController();
@@ -613,7 +295,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Details")]
-        public void IngredientsCtr_Details_IngredientIDIsNegative_ResultNotNull()
+        public void  Details_IngredientIDIsNegative_ResultNotNull()
         {
             // Arrange
             IngredientsController controller = SetUpController();
@@ -630,7 +312,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Details")]
-        public void IngredientsCtr_Details_IngredientIDIsNegative_MessageCorrect()
+        public void  Details_IngredientIDIsNegative_MessageCorrect()
         {
             // Arrange
             IngredientsController controller = SetUpController();
@@ -648,7 +330,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Details")]
-        public void IngredientsCtr_Details_IngredientIDIsNegative_AlertClassCorrect()
+        public void  Details_IngredientIDIsNegative_AlertClassCorrect()
         {
             // Arrange
             IngredientsController controller = SetUpController();
@@ -665,7 +347,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Details")]
-        public void IngredientsCtr_Details_IngredientIDIsNegative_RouteClassCorrect()
+        public void  Details_IngredientIDIsNegative_RouteClassCorrect()
         {
             // Arrange
             IngredientsController controller = SetUpController();
@@ -683,7 +365,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Details")]
-        public void IngredientsCtr_Details_IngredientIDIsNegative_ControllerIsCorrect()
+        public void  Details_IngredientIDIsNegative_ControllerIsCorrect()
         {
             // Arrange
             IngredientsController controller = SetUpController();
@@ -700,7 +382,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Details")]
-        public void IngredientsCtr_Details_IngredientIDIsNegative_RouteValuesCorrect()
+        public void  Details_IngredientIDIsNegative_RouteValuesCorrect()
         {
             // Arrange
             IngredientsController controller = SetUpController();
@@ -720,45 +402,17 @@ namespace LambAndLentil.Tests.Controllers
 
         //[TestMethod]
         //public void IngredientsCtr_DetailsIngredientIDIsNotAInteger() { } 
-
-
-
-        [TestMethod]
-        [TestCategory("Create")]
-        public void IngredientsCtr_Create_ViewNotNull()
-        {
-            // Arrange
-            IngredientsController controller = SetUpController();
-            ViewResult view = controller.Create(UIViewType.Edit);
-
-
-            // Assert
-            Assert.IsNotNull(view);
-        }
-
-        [TestMethod]
-        [TestCategory("Create")]
-        public void IngredientsCtr_Create_ViewNameIsCorrect()
-        {
-            // Arrange
-            IngredientsController controller = SetUpController();
-            ViewResult view = controller.Create(UIViewType.Edit);
-
-
-            // Assert 
-            Assert.AreEqual("Details", view.ViewName);
-        }
-
+ 
 
         private IngredientsController SetUpController()
         {
             mock = new Mock<IRepository>();
             mock.Setup(m => m.Ingredients).Returns(new Ingredient[] {
-                new Ingredient {ID = 1, Name = "P1", Maker="Maker1",Brand="BrandAA",AddedByUser="John Doe", ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue, Caffeine="yes", DataSource="Container", ModifiedDate=DateTime.MaxValue.AddYears(-10)},
-                new Ingredient {ID = 2, Name = "P2", Maker="Maker2",Brand="BrandB",AddedByUser="Sally Doe", ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(20), ModifiedDate=DateTime.MaxValue.AddYears(-20)},
-                new Ingredient {ID = 3, Name = "P3", Maker="Maker1",Brand="BrandAA",AddedByUser="Sue Doe", ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(30), ModifiedDate=DateTime.MaxValue.AddYears(-30)},
-                new Ingredient {ID = 4, Name = "P4", Maker="Maker2",Brand="BrandB",AddedByUser="Kyle Doe", ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(40), ModifiedDate=DateTime.MaxValue.AddYears(-10)},
-                new Ingredient {ID = 5, Name = "P5", Maker="Maker3",Brand="BrandC",AddedByUser="John Doe", ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(50), ModifiedDate=DateTime.MaxValue.AddYears(-100)}
+                new Ingredient {ID = 1, Name = "P1",  ModifiedDate=DateTime.MaxValue.AddYears(-10)},
+                new Ingredient {ID = 2, Name = "P2" , ModifiedDate=DateTime.MaxValue.AddYears(-20)},
+                new Ingredient {ID = 3, Name = "P3" },
+                new Ingredient {ID = 4, Name = "P4" },
+                new Ingredient {ID = 5, Name = "P5" }
             }.AsQueryable());
 
             IngredientsController controller = new IngredientsController(mock.Object);
@@ -774,7 +428,7 @@ namespace LambAndLentil.Tests.Controllers
             return controller;
         }
 
-
+       
 
     }
 }

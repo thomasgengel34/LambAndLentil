@@ -28,16 +28,7 @@ namespace LambAndLentil.UI.Controllers
         // GET: Plans/Details/5 
         public ActionResult Details(int id = 1, UIViewType actionMethod = UIViewType.Details)
         {
-            ViewBag.Title = actionMethod.ToString();
-            if (actionMethod == UIViewType.Delete)
-            {
-                return BaseDelete<Plan, PlansController, PlanVM>(UIControllerType.Plans, id);
-            }
-            else if (actionMethod == UIViewType.DeleteConfirmed)
-            {
-                return BaseDeleteConfirmed<Plan, PlansController>(UIControllerType.Plans, id);
-            }
-            return BaseDetails<Plan, PlansController, PlanVM>(UIControllerType.Plans, id);
+            return BaseDetails<Plan, PlansController, PlanVM>(UIControllerType.Plans, id, actionMethod);
         }
 
         // GET: Plans/Create 

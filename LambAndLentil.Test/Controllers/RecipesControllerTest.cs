@@ -23,13 +23,18 @@ namespace LambAndLentil.Tests.Controllers
         public static MapperConfiguration AutoMapperConfig { get; set; }
 
         public RecipesControllerTest()
-        {
-            //    AutoMapperConfig = AutoMapperConfigForTests.AMConfigForTests();
-            AutoMapperConfigForTests.InitializeMap();
-
+        { 
+            AutoMapperConfigForTests.InitializeMap();   
         }
 
 
+        [TestMethod]
+        public void AutoMapperIsConfigured()
+        {
+            AutoMapperConfigForTests.InitializeMap();
+            MapperConfiguration AutoMapperConfig = AutoMapperConfigForTests.AMConfigForTests();
+            AutoMapperConfig.AssertConfigurationIsValid();
+        }
 
         [TestMethod]
         public void RecipesCtr_InheritsFromBaseController()

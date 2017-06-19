@@ -71,3 +71,9 @@
 }
 
 </table>
+
+<div class="pager">
+    <h4>Lamb & Lentil</h4>
+    @Html.PageLinks(Model.PagingInfo, x => Url.Action(UIViewType.Index.ToString(), new { page = x }))
+</div>
+

@@ -4,11 +4,12 @@ using LambAndLentil.UI.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using System.Web;
 
 namespace LambAndLentil.UI.Controllers
 {
     public class RecipesController : BaseController
-    { 
+    {
         public RecipesController(IRepository repo) : base(repo)
         {
             List<Recipe> recipes = repository.Recipes.ToList<Recipe>();
@@ -16,43 +17,34 @@ namespace LambAndLentil.UI.Controllers
             repository = repo;
         }
 
-       
+
 
         // GET: Recipes
-        public   ViewResult Index(int page = 1)
-        { 
-             ViewResult view = BaseIndex(UIControllerType.Recipes,page);
+        public ViewResult Index(int page = 1)
+        {
+            ViewResult view = BaseIndex(UIControllerType.Recipes, page);
             return View(view.ViewName, view.Model);
         }
 
-      
+
 
         // GET: Recipes/Details/5
-        public   ActionResult  Details(int id = 1, UIViewType actionMethod = UIViewType.Details)
+        public ActionResult Details(int id = 1, UIViewType actionMethod = UIViewType.Details)
         {
-            ViewBag.Title = actionMethod.ToString();
-            if (actionMethod == UIViewType.Delete)
-            {
-                return BaseDelete<Recipe, RecipesController, RecipeVM>(UIControllerType.Recipes, id);
-            }
-            else if (actionMethod == UIViewType.DeleteConfirmed)
-            {
-                return BaseDeleteConfirmed<Recipe, RecipesController>(UIControllerType.Recipes, id);
-            }
-            return BaseDetails<Recipe, RecipesController, RecipeVM>(UIControllerType.Recipes, id);
+            return BaseDetails<Recipe, RecipesController, RecipeVM>(UIControllerType.Recipes, id, actionMethod);
         }
 
-         // GET: Ingredients/Create 
+        // GET: Ingredients/Create 
         public ViewResult Create(UIViewType actionMethod)
         {
-            return BaseCreate< RecipeVM>(actionMethod);
+            return BaseCreate<RecipeVM>(actionMethod);
         }
 
 
         // GET: Recipes/Edit/5
         public ViewResult Edit(int id = 1)
         {
-            return BaseEdit<Recipe,RecipesController, RecipeVM>(UIControllerType.Recipes, id);
+            return BaseEdit<Recipe, RecipesController, RecipeVM>(UIControllerType.Recipes, id);
         }
 
 
@@ -63,23 +55,56 @@ namespace LambAndLentil.UI.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult PostEdit([Bind(Include = "ID,Name,Description,Servings,MealType,Calories,CalsFromFat,CreationDate, ModifiedDate,AddedByUser, ModifiedByUser ")] RecipeVM recipeVM)
-        { 
-        return BasePostEdit<Recipe,RecipesController, RecipeVM>(recipeVM);
-    }
+        {
+            return BasePostEdit<Recipe, RecipesController, RecipeVM>(recipeVM);
+        }
 
         // GET: Recipes/Delete/5
         [ActionName("Delete")]
         public ActionResult Delete(int id = 1, UIViewType actionMethod = UIViewType.Delete)
         {
-            return BaseDelete<Recipe,RecipesController, RecipeVM>(UIControllerType.Recipes, id);
+            return BaseDelete<Recipe, RecipesController, RecipeVM>(UIControllerType.Recipes, id);
         }
 
         // POST: Recipes/Delete/5
         [HttpPost, ActionName("DeleteConfirmed")]
-        [ValidateAntiForgeryToken] 
+        [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            return BaseDeleteConfirmed<Recipe,RecipesController>(UIControllerType.Recipes,id);
+            return BaseDeleteConfirmed<Recipe, RecipesController>(UIControllerType.Recipes, id);
+        }
+
+        public RedirectToRouteResult AddIngredient(int iD, string returnUrl)
+        {
+            Ingredient ingredient = repository.Ingredients.FirstOrDefault(p => p.ID == iD);
+
+            if (ingredient != null)
+            {
+                GetRecipe().AddItem(ingredient, 1);
+            }
+            return RedirectToAction(UIViewType.Index.ToString(), new { returnUrl });
+        }
+
+        public ViewResult Index(string returnUrl)
+        {
+            Recipe recipe = GetRecipe();
+            return View("Foo", new RecipeIndexViewModel()
+            {
+                Recipe=recipe,
+                ID=recipe.ID,                
+                ReturnUrl = returnUrl
+            });
+        }
+
+        private Recipe GetRecipe()
+        {
+            Recipe recipe = (Recipe)Session["Recipe"];
+            if (recipe == null)
+            {
+                recipe = new Recipe();
+                Session["Recipe"] = recipe;
+            }
+            return recipe;
         }
     }
 }

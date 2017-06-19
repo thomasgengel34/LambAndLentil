@@ -8,6 +8,7 @@ using System.Linq;
 namespace LambAndLentil.Test.Infrastructure
 {
     [TestClass]
+    [TestCategory("MetaData Bindings")]
     public class MetaDataBindingsTest
     {
         [TestMethod]

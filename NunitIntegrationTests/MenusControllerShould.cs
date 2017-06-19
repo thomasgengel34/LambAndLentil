@@ -1,26 +1,25 @@
-﻿using LambAndLentil.Domain.Concrete;
+﻿using AutoMapper;
+using LambAndLentil.Domain.Concrete;
 using LambAndLentil.Domain.Entities;
 using LambAndLentil.UI;
 using LambAndLentil.UI.Controllers;
 using LambAndLentil.UI.Infrastructure.Alerts;
 using LambAndLentil.UI.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
-using Ignore = Microsoft.VisualStudio.TestTools.UnitTesting.IgnoreAttribute;
 
-namespace NunitIntegrationTests
+namespace MsTestIntegrationTests
 {
 
-    [TestFixture]
+    [TestClass]
     [TestCategory("Integration")]
+    [TestCategory("MenusController")]
     public class MenusControllerShould
     {
-        [Test]
+        [TestMethod]
         public void CreateAnMenu()
         {
             // Arrange
@@ -37,7 +36,7 @@ namespace NunitIntegrationTests
             Assert.AreEqual(DayOfWeek.Sunday, vm.DayOfWeek);
         }
 
-        [Test]
+        [TestMethod]
         public void SaveAValidMenu()
         {
             // Arrange
@@ -51,24 +50,32 @@ namespace NunitIntegrationTests
 
             var routeValues = rtrr.RouteValues.Values;
 
+            try
+            {
+                // Assert 
+                Assert.AreEqual("alert-success", adr.AlertClass);
+                Assert.AreEqual(4, routeValues.Count);
+                Assert.AreEqual(UIControllerType.Menus.ToString(), routeValues.ElementAt(0).ToString());
+                Assert.AreEqual(UIViewType.BaseIndex.ToString(), routeValues.ElementAt(1).ToString());
+                Assert.AreEqual("Menus", routeValues.ElementAt(2).ToString());
+                Assert.AreEqual(1.ToString(), routeValues.ElementAt(3).ToString());
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                // Clean Up - should run a  delete test to make sure this works 
+                List<Menu> menus = repo.Menus.ToList<Menu>();
+                Menu menu = menus.Where(m => m.Name == "test").FirstOrDefault();
 
-            // Assert 
-            Assert.AreEqual("alert-success", adr.AlertClass);
-            Assert.AreEqual(4, routeValues.Count);
-            Assert.AreEqual(UIControllerType.Menus.ToString(), routeValues.ElementAt(0).ToString());
-            Assert.AreEqual(UIViewType.BaseIndex.ToString(), routeValues.ElementAt(1).ToString());
-            Assert.AreEqual("Menus", routeValues.ElementAt(2).ToString());
-            Assert.AreEqual(1.ToString(), routeValues.ElementAt(3).ToString());
-
-            // Clean Up - should run a  delete test to make sure this works 
-            List<Menu> menus = repo.Menus.ToList<Menu>();
-            Menu menu = menus.Where(m => m.Name == "test").FirstOrDefault();
-
-            // Delete it
-            controller.DeleteConfirmed(menu.ID);
+                // Delete it
+                controller.DeleteConfirmed(menu.ID);
+            }
         }
 
-        [Test]
+        [TestMethod]
         [TestCategory("Edit")]
         public void SaveEditedMenuWithNameChange()
         {
@@ -91,10 +98,15 @@ namespace NunitIntegrationTests
                           select m).AsQueryable();
 
             Menu menu = result.FirstOrDefault();
-
-            // verify initial value:
-            Assert.AreEqual("0000 test", menu.Name);
-
+            try
+            {
+                // verify initial value:
+                Assert.AreEqual("0000 test", menu.Name);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
             // now edit it
             vm.Name = "0000 test Edited";
             vm.ID = menu.ID;
@@ -107,18 +119,26 @@ namespace NunitIntegrationTests
 
             menu = result2.FirstOrDefault();
 
+            try
+            {
+                // Assert
+                Assert.AreEqual("0000 test Edited", menu.Name);
+            }
+            catch (Exception)
+            {
 
-            // Assert
-            Assert.AreEqual("0000 test Edited", menu.Name);
-
-            // clean up
-            // TO DO: write a test to make sure this happens.
-            controller5.DeleteConfirmed(vm.ID);
+                throw;
+            }
+            finally
+            {
+                // clean up 
+                controller5.DeleteConfirmed(vm.ID);
+            }
         }
 
 
 
-        [Test]
+        [TestMethod]
         [TestCategory("Edit")]
         public void SaveEditedMenuWithNameAndDayOfWeekChange()
         {
@@ -142,9 +162,17 @@ namespace NunitIntegrationTests
                           select m).AsQueryable();
 
             Menu menu = result.FirstOrDefault();
+            try
+            {
+                // verify initial value:
+                Assert.AreEqual("0000 test", menu.Name);
+            }
+            catch (Exception)
+            {
+                controller3.DeleteConfirmed(menu.ID);
+                throw;
+            }
 
-            // verify initial value:
-            Assert.AreEqual("0000 test", menu.Name);
 
             // now edit it
             vm.ID = menu.ID;
@@ -160,17 +188,25 @@ namespace NunitIntegrationTests
 
             menu = result2.FirstOrDefault();
 
+            try
+            {
+                // Assert
+                Assert.AreEqual("0000 test Edited", menu.Name);
+                Assert.AreEqual(DayOfWeek.Friday, menu.DayOfWeek);
+            }
+            catch (Exception)
+            {
 
-            // Assert
-            Assert.AreEqual("0000 test Edited", menu.Name);
-            Assert.AreEqual(DayOfWeek.Friday, menu.DayOfWeek);
-
-            // clean up
-            // TO DO: write a test to make sure this happens.
-            controller5.DeleteConfirmed(vm.ID);
+                throw;
+            }
+            finally
+            {
+                // clean up 
+                controller5.DeleteConfirmed(vm.ID);
+            }
         }
 
-        [Test]
+        [TestMethod]
         [TestCategory("DeleteConfirmed")]
         public void ActuallyDeleteAMenuFromTheDatabase()
         {
@@ -196,10 +232,10 @@ namespace NunitIntegrationTests
                                select m).AsQueryable();
 
             //Assert
-            Assert.AreEqual(0,deletedItem.Count());
+            Assert.AreEqual(0, deletedItem.Count());
         }
 
-        [Test]
+        [TestMethod]
         [TestCategory("Edit")]
         public void SaveEditedMenuWithDescriptionChange()
         {
@@ -224,9 +260,16 @@ namespace NunitIntegrationTests
                           select m).AsQueryable();
 
             Menu menu = result.FirstOrDefault();
-
-            // verify initial value:
-            Assert.AreEqual("SaveEditedMenuWithDescriptionChange Pre-test", menu.Description);
+            try
+            {
+                // verify initial value:
+                Assert.AreEqual("SaveEditedMenuWithDescriptionChange Pre-test", menu.Description);
+            }
+            catch (Exception)
+            {
+                controller4.DeleteConfirmed(menu.ID);
+                throw;
+            }
 
             // now edit it
             vm.ID = menu.ID;
@@ -242,16 +285,24 @@ namespace NunitIntegrationTests
 
             menu = result2.FirstOrDefault();
 
-
-            // Assert
-            Assert.AreEqual("0000 test Edited", menu.Name);
-            Assert.AreEqual("SaveEditedMenuWithDescriptionChange Post-test", menu.Description);
-
-            // clean up 
-            controller5.DeleteConfirmed(vm.ID);
+            try
+            {
+                // Assert
+                Assert.AreEqual("0000 test Edited", menu.Name);
+                Assert.AreEqual("SaveEditedMenuWithDescriptionChange Post-test", menu.Description);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                // clean up 
+                controller5.DeleteConfirmed(vm.ID);
+            }
         }
 
-        [Test]
+        [TestMethod]
         [TestCategory("Edit")]
         public void SaveTheCreationDateOnMenuCreationWithNoParameterCtor()
         {
@@ -264,7 +315,8 @@ namespace NunitIntegrationTests
             // Assert
             Assert.AreEqual(CreationDate.Date, menu.CreationDate.Date);
         }
-        [Test]
+
+        [TestMethod]
         [TestCategory("Edit")]
         public void ShouldSaveTheCreationDateOnMenuCreationWithDateTimeParameter()
         {
@@ -278,7 +330,7 @@ namespace NunitIntegrationTests
             Assert.AreEqual(CreationDate, menu.CreationDate);
         }
 
-        [Test]
+        [TestMethod]
         [TestCategory("Edit")]
         public void SaveTheCreationDateOnMenuVMCreationWithNoParameterCtor()
         {
@@ -286,12 +338,13 @@ namespace NunitIntegrationTests
             DateTime CreationDate = DateTime.Now;
 
             // Act
-            MenuVM menuVM = new MenuVM();
+            MenuVM vm = new MenuVM();
 
             // Assert
-            Assert.AreEqual(CreationDate.Date, menuVM.CreationDate.Date);
+            Assert.AreEqual(CreationDate.Date, vm.CreationDate.Date);
         }
-        [Test]
+          
+        [TestMethod]
         [TestCategory("Edit")]
         public void SaveTheCreationDateOnMenuVMCreationWithDateTimeParameter()
         {
@@ -299,28 +352,28 @@ namespace NunitIntegrationTests
             DateTime CreationDate = new DateTime(2010, 1, 1);
 
             // Act
-            MenuVM menuVM = new MenuVM(CreationDate);
+            MenuVM vm = new MenuVM(CreationDate);
 
             // Assert
-            Assert.AreEqual(CreationDate, menuVM.CreationDate);
+            Assert.AreEqual(CreationDate, vm.CreationDate);
         }
 
-        [Test]
+        [TestMethod]
         [TestCategory("Edit")]
         public void SaveTheCreationDateBetweenPostedEdits()
         {
             // Arrange
             DateTime CreationDate = new DateTime(2010, 1, 1);
-            MenuVM menuVM = new MenuVM(CreationDate);
-            menuVM.Name = "001 Test ";
+            MenuVM vm = new MenuVM(CreationDate);
+            vm.Name = "001 Test ";
 
-            EFRepository repo = new EFRepository(); 
+            EFRepository repo = new EFRepository();
             MenusController controllerEdit = new MenusController(repo);
             MenusController controllerView = new MenusController(repo);
             MenusController controllerDelete = new MenusController(repo);
 
             // Act
-            controllerEdit.PostEdit(menuVM);
+            controllerEdit.PostEdit(vm);
             ViewResult view = controllerView.Index();
             ListVM listVM = (ListVM)view.Model;
             var result = (from m in listVM.Menus
@@ -338,30 +391,41 @@ namespace NunitIntegrationTests
             controllerDelete.DeleteConfirmed(menu.ID);
         }
 
-        [Test]
+        [TestMethod]
         [TestCategory("Edit")]
         public void UpdateTheModificationDateBetweenPostedEdits()
         {
             // Arrange
             EFRepository repo = new EFRepository();
             MenusController controllerPost = new MenusController(repo);
+            MenusController controllerPost1 = new MenusController(repo);
             MenusController controllerView = new MenusController(repo);
             MenusController controllerDelete = new MenusController(repo);
 
-            MenuVM menuVM = new MenuVM();
-            menuVM.Name = "002 Test Mod";
-            DateTime CreationDate = menuVM.CreationDate;
-            DateTime mod = menuVM.ModifiedDate;
+            MenuVM vm = new MenuVM();
+            vm.Name = "002 Test Mod";
+            DateTime CreationDate = vm.CreationDate;
+            DateTime mod = vm.ModifiedDate;
 
             // Act
-            controllerPost.PostEdit(menuVM);
+            controllerPost.PostEdit(vm);
             ViewResult view = controllerView.Index();
             ListVM listVM = (ListVM)view.Model;
             var result = (from m in listVM.Menus
                           where m.Name == "002 Test Mod"
                           select m).AsQueryable();
+            Menu menu = (Menu)result.FirstOrDefault();
+            vm = Mapper.Map<Menu, MenuVM>(menu);
+            vm.Description = "I've been edited to delay a bit";
+            controllerPost1.PostEdit(vm);
 
-            Menu menu = result.FirstOrDefault();
+            ViewResult view1 = controllerView.Index();
+            listVM = (ListVM)view1.Model;
+            var result1 = (from m in listVM.Menus
+                           where m.Name == "002 Test Mod"
+                           select m).AsQueryable();
+
+            menu = result1.FirstOrDefault();
 
             DateTime shouldBeSameDate = menu.CreationDate;
             DateTime shouldBeLaterDate = menu.ModifiedDate;

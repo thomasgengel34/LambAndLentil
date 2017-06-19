@@ -1,28 +1,25 @@
-﻿using LambAndLentil.Domain.Concrete;
+﻿using AutoMapper;
+using LambAndLentil.Domain.Concrete;
+using LambAndLentil.Domain.Entities;
 using LambAndLentil.UI;
 using LambAndLentil.UI.Controllers;
+using LambAndLentil.UI.Infrastructure.Alerts;
 using LambAndLentil.UI.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NUnit.Framework;
-using System.Web.Mvc;
 using System;
-using System.Linq;
-
-using LambAndLentil.Domain.Abstract;
-using LambAndLentil.Domain.Entities;
 using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
 
-using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
-using LambAndLentil.UI.Infrastructure.Alerts;
-
-namespace NunitIntegrationTests
+namespace MsTestIntegrationTests
 {
 
-    [TestFixture]
+    [TestClass]
     [TestCategory("Integration")]
+    [TestCategory("ShoppingListController")]
     public class ShoppingListsControllerShould
     {
-        [Test]
+        [TestMethod]
         public void CreateAnShoppingList()
         {
             // Arrange
@@ -38,7 +35,7 @@ namespace NunitIntegrationTests
             Assert.AreEqual(modelName, "Newly Created"); 
         }
 
-        [Test]
+        [TestMethod]
         public void SaveAValidShoppingList()
         {
             // Arrange
@@ -69,7 +66,7 @@ namespace NunitIntegrationTests
             controller.DeleteConfirmed(shoppingList.ID);
         }
 
-        [Test]
+        [TestMethod]
         [TestCategory("Edit")]
         public void SaveEditedShoppingListWithNameChange()
         {
@@ -120,7 +117,7 @@ namespace NunitIntegrationTests
 
          
 
-        [Test]
+        [TestMethod]
         [TestCategory("Edit")]
         public void SaveEditedShoppingListWithDescriptionChange()
         {
@@ -172,7 +169,7 @@ namespace NunitIntegrationTests
             controller5.DeleteConfirmed(vm.ID);
         }
 
-        [Test]
+        [TestMethod]
         [TestCategory("DeleteConfirmed")]
         public void ActuallyDeleteAShoppingListFromTheDatabase()
         {
@@ -201,7 +198,7 @@ namespace NunitIntegrationTests
             Assert.AreEqual(0, deletedItem.Count());
         }
 
-        [Test]
+        [TestMethod]
         [TestCategory("Edit")]
         public void SaveTheCreationDateBetweenPostedEdits()
         {
@@ -232,6 +229,59 @@ namespace NunitIntegrationTests
 
             // Cleanup
             controllerDelete.DeleteConfirmed(shoppingList.ID);
+        }
+
+
+         [TestMethod]
+        [TestCategory("Edit")]
+        public void UpdateTheModificationDateBetweenPostedEdits()
+        {
+            // Arrange
+            EFRepository repo = new EFRepository();
+            ShoppingListsController controllerPost = new ShoppingListsController(repo);
+            ShoppingListsController controllerPost1 = new ShoppingListsController(repo);
+            ShoppingListsController controllerView = new ShoppingListsController(repo);
+            ShoppingListsController controllerView1 = new ShoppingListsController(repo);
+            ShoppingListsController controllerDelete = new ShoppingListsController(repo);
+
+            ShoppingListVM vm = new ShoppingListVM();
+            vm.Name = "002 Test Mod";
+            DateTime CreationDate = vm.CreationDate;
+            DateTime mod = vm.ModifiedDate;
+
+            // Act
+            controllerPost.PostEdit(vm);
+
+            ViewResult view = controllerView.Index();
+            ListVM listVM = (ListVM)view.Model;
+            var result = (from m in listVM.ShoppingLists
+                          where m.Name == "002 Test Mod"
+                          select m).AsQueryable();
+            ShoppingList ingredient =  result.FirstOrDefault();
+            vm = Mapper.Map<ShoppingList, ShoppingListVM>(ingredient);
+
+            vm.Description = "I've been edited to delay a bit";
+
+            controllerPost1.PostEdit(vm);
+
+
+            ViewResult view1 = controllerView.Index();
+            listVM = (ListVM)view1.Model;
+            var result1 = (from m in listVM.ShoppingLists
+                           where m.Name == "002 Test Mod"
+                           select m).AsQueryable();
+
+            ingredient = result1.FirstOrDefault();
+
+            DateTime shouldBeSameDate = ingredient.CreationDate;
+            DateTime shouldBeLaterDate = ingredient.ModifiedDate;
+
+            // Assert
+            Assert.AreEqual(CreationDate, shouldBeSameDate);
+            Assert.AreNotEqual(mod, shouldBeLaterDate);
+
+            // Cleanup
+            controllerDelete.DeleteConfirmed(ingredient.ID);
         }
     }
 }

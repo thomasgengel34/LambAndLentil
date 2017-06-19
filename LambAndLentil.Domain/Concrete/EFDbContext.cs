@@ -27,17 +27,22 @@ namespace LambAndLentil.Domain.Concrete
         public DbSet<Plan> Plans { get; set; }
         public DbSet<ShoppingList> ShoppingLists { get; set; }
 
-       
-
-        public DbEntityEntry  Entry(Ingredient existingIngredient)
-        {
-            return Entry(existingIngredient);
-        }
-
-        public DbEntityEntry  Entry(Recipe existingRecipe)
-        {
-            return Entry(existingRecipe);
-        }  
+      
     } 
+
+    public class EFDbContext<T>:DbContext where T : BaseEntity
+    {
+        public EFDbContext() : base("name=EFDbContext")
+        {
+
+        }
+        //public DbSet<Ingredient> Ingredients { get; set; }
+        //public DbSet<Recipe> Recipes { get; set; }
+        //public DbSet<Menu> Menus { get; set; }
+        //public DbSet<RecipeIngredient> RecipeIngredients { get; set; }
+        //public DbSet<Person> Persons { get; set; }
+        //public DbSet<Plan> Plans { get; set; }
+        //public DbSet<ShoppingList> ShoppingLists { get; set; }
+    }
 }
 

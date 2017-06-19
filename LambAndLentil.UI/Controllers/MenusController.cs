@@ -28,16 +28,7 @@ namespace LambAndLentil.UI.Controllers
         // GET: Menus/Details/5 
         public ActionResult Details(int id = 1, UIViewType actionMethod = UIViewType.Details)
         {
-            ViewBag.Title = actionMethod.ToString();
-            if (actionMethod == UIViewType.Delete)
-            {
-                return BaseDelete<Menu, MenusController, MenuVM>(UIControllerType.Menus, id);
-            }
-            else if (actionMethod == UIViewType.DeleteConfirmed)
-            {
-                return BaseDeleteConfirmed<Menu, MenusController>(UIControllerType.Menus, id);
-            }
-            return BaseDetails<Menu, MenusController, MenuVM>(UIControllerType.Menus, id);
+            return BaseDetails<Menu, MenusController, MenuVM>(UIControllerType.Menus, id, actionMethod);
         }
 
 

@@ -62,9 +62,9 @@ else
             <div class="col-md-6">
                 <ul>
                     <li>@Html.EditorFor(model => model.AddedByUser, new { valueM = Model.AddedByUser, readOnly = true }) </li>
-                    <li>@Html.EditorFor(model => model.CreationDate, new { valueM = Model.CreationDate, readOnly = true }) </li>
+                    <li>@Html.EditorFor(model => model.CreationDate, new { valueM = Model.CreationDate, readOnly = true }) @Html.HiddenFor(model => model.CreationDate)</li>
                     <li>@Html.EditorFor(model => model.ModifiedByUser, new { valueM = Model.ModifiedByUser, readOnly = true }) </li>
-                    <li>@Html.EditorFor(model => model.ModifiedDate, new { valueM = Model.ModifiedDate, readOnly = true })</li>
+                    <li>@Html.EditorFor(model => model.ModifiedDate, new { valueM = Model.ModifiedDate, readOnly = true }) @Html.HiddenFor(model => model.ModifiedDate)</li>
                 </ul>
             </div>
         </div> 

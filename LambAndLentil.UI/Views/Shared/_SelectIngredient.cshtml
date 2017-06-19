@@ -1,0 +1,8 @@
+﻿@model LambAndLentil.Domain.Entities.Ingredient
+
+@using (Html.BeginForm("AddIngredient", UIControllerType.Recipes.ToString()))
+{
+    @Html.HiddenFor(x => x.ID)
+    @Html.Hidden("returnUrl", Request.Url.PathAndQuery)
+    <input type="submit" value="+ Add to cart" />
+}

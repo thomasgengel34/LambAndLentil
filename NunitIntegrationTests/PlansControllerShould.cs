@@ -1,35 +1,31 @@
 ﻿using LambAndLentil.Domain.Concrete;
+using LambAndLentil.Domain.Entities;
 using LambAndLentil.UI;
 using LambAndLentil.UI.Controllers;
+using LambAndLentil.UI.Infrastructure.Alerts;
 using LambAndLentil.UI.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NUnit.Framework;
-using System.Web.Mvc;
 using System;
-using System.Linq;
-
-using LambAndLentil.Domain.Abstract;
-using LambAndLentil.Domain.Entities;
 using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
 
-using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
-using LambAndLentil.UI.Infrastructure.Alerts;
-
-namespace NunitIntegrationTests
+namespace MsTestIntegrationTests
 {
 
-    [TestFixture]
+    [TestClass]
     [TestCategory("Integration")]
+    [TestCategory("PlansController")]
     public class PlansControllerShould
     {
-        [Test]
+       [TestMethod]
         public void CreateAnPlan()
         {
             // Arrange
             EFRepository repo = new EFRepository(); ;
             PlansController controller = new PlansController(repo);
             // Act
-            ViewResult vr = controller.Create(LambAndLentil.UI.UIViewType.Create);
+            ViewResult vr = controller.Create(UIViewType.Create);
             PlanVM vm = (PlanVM)vr.Model;
             string modelName = vm.Name;
 
@@ -38,7 +34,7 @@ namespace NunitIntegrationTests
             Assert.AreEqual(modelName, "Newly Created"); 
         }
 
-        [Test]
+       [TestMethod]
         public void SaveAValidPlan()
         {
             // Arrange
@@ -69,7 +65,7 @@ namespace NunitIntegrationTests
             controller.DeleteConfirmed(plan.ID);
         }
 
-        [Test]
+       [TestMethod]
         [TestCategory("Edit")]
         public void SaveEditedPlanWithNameChange()
         {
@@ -120,7 +116,7 @@ namespace NunitIntegrationTests
 
          
 
-        [Test]
+       [TestMethod]
         [TestCategory("Edit")]
         public void SaveEditedPlanWithDescriptionChange()
         {
@@ -173,7 +169,7 @@ namespace NunitIntegrationTests
         }
 
 
-        [Test]
+       [TestMethod]
         [TestCategory("DeleteConfirmed")]
         public void ActuallyDeleteAPlanFromTheDatabase()
         {
@@ -201,7 +197,7 @@ namespace NunitIntegrationTests
             //Assert
             Assert.AreEqual(0, deletedItem.Count());
         }
-        [Test]
+       [TestMethod]
         [TestCategory("Edit")]
         public void SaveTheCreationDateBetweenPostedEdits()
         {
@@ -232,6 +228,42 @@ namespace NunitIntegrationTests
 
             // Cleanup
             controllerDelete.DeleteConfirmed(plan.ID);
+        }
+
+       [TestMethod]
+        [TestCategory("Edit")]
+        public void UpdateTheModificationDateBetweenPostedEdits()
+        {
+            // Arrange
+            EFRepository repo = new EFRepository();
+            PlansController controllerPost = new PlansController(repo);
+            PlansController controllerView = new PlansController(repo);
+            PlansController controllerDelete = new PlansController(repo);
+
+            PlanVM planVM = new PlanVM();
+            planVM.Name = "002 Test Mod";
+            DateTime CreationDate = planVM.CreationDate;
+            DateTime mod = planVM.ModifiedDate;
+
+            // Act
+            controllerPost.PostEdit(planVM);
+            ViewResult view = controllerView.Index();
+            ListVM listVM = (ListVM)view.Model;
+            var result = (from m in listVM.Plans
+                          where m.Name == "002 Test Mod"
+                          select m).AsQueryable();
+
+            Plan plan = result.FirstOrDefault();
+
+            DateTime shouldBeSameDate = plan.CreationDate;
+            DateTime shouldBeLaterDate = plan.ModifiedDate;
+
+            // Assert
+            Assert.AreEqual(CreationDate, shouldBeSameDate);
+            Assert.AreNotEqual(mod, shouldBeLaterDate);
+
+            // Cleanup
+            controllerDelete.DeleteConfirmed(plan.ID); 
         }
     }
 } 

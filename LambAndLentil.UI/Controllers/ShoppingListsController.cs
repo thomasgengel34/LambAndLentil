@@ -30,16 +30,7 @@ namespace LambAndLentil.UI.Controllers
         // GET: ShoppingList/Details/5
         public ActionResult Details(int id = 1, UIViewType actionMethod = UIViewType.Details)
         {
-            ViewBag.Title = actionMethod.ToString();
-            if (actionMethod == UIViewType.Delete)
-            {
-                return BaseDelete<ShoppingList, ShoppingListsController, ShoppingListVM>(UIControllerType.ShoppingLists, id);
-            }
-            else if (actionMethod == UIViewType.DeleteConfirmed)
-            {
-                return BaseDeleteConfirmed<ShoppingList, ShoppingListsController>(UIControllerType.ShoppingLists, id);
-            }
-            return BaseDetails<ShoppingList, ShoppingListsController, ShoppingListVM>(UIControllerType.ShoppingLists, id);
+            return BaseDetails<ShoppingList, ShoppingListsController, ShoppingListVM>(UIControllerType.ShoppingLists, id, actionMethod);
         }
 
         // GET: ShoppingList/Create 

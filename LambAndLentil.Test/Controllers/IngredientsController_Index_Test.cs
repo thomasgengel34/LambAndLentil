@@ -285,22 +285,7 @@ namespace LambAndLentil.Tests.Controllers
             Assert.AreEqual("Index", view1.ViewName);
         }
 
-        [TestMethod]
-        [TestCategory("Index")]
-        public void IngredientsCtr_Index_FirstItemMakerIsCorrect()
-        {
-            // Arrange
-            IngredientsController controller = SetUpController();
-            ListVM ilvm = new ListVM();
-            ilvm.Ingredients = (IEnumerable<Ingredient>)mock.Object.Ingredients;
-            controller.PageSize = 8;
-
-            // Act
-            ViewResult view1 = controller.Index(1); 
-
-            // Assert   
-            Assert.AreEqual("Maker1", ((ListVM)(view1.Model)).Ingredients.FirstOrDefault().Maker); 
-        }
+     
 
         [TestMethod]
         [TestCategory("Index")]
@@ -321,22 +306,7 @@ namespace LambAndLentil.Tests.Controllers
             Assert.AreEqual("P1", ((ListVM)(view1.Model)).Ingredients.FirstOrDefault().Name);
         }
 
-        [TestMethod]
-        [TestCategory("Index")]
-        public void IngredientsCtr_Index_FirstBrandIsCorrect()
-        {
-            // Arrange
-            IngredientsController controller = SetUpController();
-            ListVM ilvm = new ListVM();
-            ilvm.Ingredients = (IEnumerable<Ingredient>)mock.Object.Ingredients;
-            controller.PageSize = 8;
-
-            // Act
-            ViewResult view1 = controller.Index(1); 
-
-            // Assert   
-            Assert.AreEqual("BrandAA", ((ListVM)(view1.Model)).Ingredients.FirstOrDefault().Brand);
-        }
+     
 
         [TestMethod]
         [TestCategory("Index")]
@@ -406,22 +376,7 @@ namespace LambAndLentil.Tests.Controllers
             Assert.AreEqual(DateTime.MaxValue.AddYears(-10), ((ListVM)(view1.Model)).Ingredients.FirstOrDefault().ModifiedDate);
         }
 
-        [TestMethod]
-        [TestCategory("Index")]
-        public void IngredientsCtr_Index_FirstDataSourceIsCorrect()
-        {
-            // Arrange
-            IngredientsController controller = SetUpController();
-            ListVM ilvm = new ListVM();
-            ilvm.Ingredients = (IEnumerable<Ingredient>)mock.Object.Ingredients;
-            controller.PageSize = 8;
-
-            // Act
-            ViewResult view1 = controller.Index(1);
-
-            // Assert   
-            Assert.AreEqual("Container", ((ListVM)(view1.Model)).Ingredients.FirstOrDefault().DataSource);
-        }
+      
 
         [TestMethod]
         [TestCategory("Index")]
@@ -441,23 +396,7 @@ namespace LambAndLentil.Tests.Controllers
             // Assert   
             Assert.AreEqual("P2", ((ListVM)(view1.Model)).Ingredients.Skip(1).FirstOrDefault().Name);
         }
-
-        [TestMethod]
-        [TestCategory("Index")]
-        public void IngredientsCtr_Index_SecondDataSourceIsCorrect()
-        {
-            // Arrange
-            IngredientsController controller = SetUpController();
-            ListVM ilvm = new ListVM();
-            ilvm.Ingredients = (IEnumerable<Ingredient>)mock.Object.Ingredients;
-            controller.PageSize = 8;
-
-            // Act
-            ViewResult view1 = controller.Index(1);
-
-            // Assert   
-            Assert.AreEqual("Container", ((ListVM)(view1.Model)).Ingredients.Skip(1).FirstOrDefault().DataSource);
-        }
+         
 
         [TestMethod]
         [TestCategory("Index")]
@@ -478,22 +417,7 @@ namespace LambAndLentil.Tests.Controllers
             Assert.AreEqual("P2", ((ListVM)(view1.Model)).Ingredients.Skip(1).FirstOrDefault().Name);
         }
 
-        [TestMethod]
-        [TestCategory("Index")]
-        public void IngredientsCtr_Index_LastDataSourceIsCorrect()
-        {
-            // Arrange
-            IngredientsController controller = SetUpController();
-            ListVM ilvm = new ListVM();
-            ilvm.Ingredients = (IEnumerable<Ingredient>)mock.Object.Ingredients;
-            controller.PageSize = 8;
-
-            // Act
-            ViewResult view1 = controller.Index(1);
-
-            // Assert   
-            Assert.AreEqual("Container", ((ListVM)(view1.Model)).Ingredients.Last().DataSource);
-        }
+      
 
         [TestMethod]
         [TestCategory("Index")]
@@ -617,11 +541,11 @@ namespace LambAndLentil.Tests.Controllers
         {
             mock = new Mock<IRepository>();
             mock.Setup(m => m.Ingredients).Returns(new Ingredient[] {
-                new Ingredient {ID = 1, Name = "P1", Maker="Maker1",Brand="BrandAA",AddedByUser="John Doe", DataSource="Container",ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue, ModifiedDate=DateTime.MaxValue.AddYears(-10)},
-                new Ingredient {ID = 2, Name = "P2", Maker="Maker2",Brand="BrandB",AddedByUser="Sally Doe", DataSource="Container",ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(20), ModifiedDate=DateTime.MaxValue.AddYears(-20)},
-                new Ingredient {ID = 3, Name = "P3", Maker="Maker1",Brand="BrandAA",AddedByUser="Sue Doe", DataSource="Container",ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(30), ModifiedDate=DateTime.MaxValue.AddYears(-30)},
-                new Ingredient {ID = 4, Name = "P4", Maker="Maker2",Brand="BrandB",AddedByUser="Kyle Doe", DataSource="Container",ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(40), ModifiedDate=DateTime.MaxValue.AddYears(-10)},
-                new Ingredient {ID = 5, Name = "P5", Maker="Maker3",Brand="BrandC",AddedByUser="John Doe", DataSource="Container",ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(50), ModifiedDate=DateTime.MaxValue.AddYears(-100)}
+                new Ingredient {ID = 1, Name = "P1" ,AddedByUser="John Doe" ,ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue, ModifiedDate=DateTime.MaxValue.AddYears(-10)},
+                new Ingredient {ID = 2, Name = "P2",  AddedByUser="Sally Doe",  ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(20), ModifiedDate=DateTime.MaxValue.AddYears(-20)},
+                new Ingredient {ID = 3, Name = "P3",  AddedByUser="Sue Doe", ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(30), ModifiedDate=DateTime.MaxValue.AddYears(-30)},
+                new Ingredient {ID = 4, Name = "P4",  AddedByUser="Kyle Doe" ,ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(40), ModifiedDate=DateTime.MaxValue.AddYears(-10)},
+                new Ingredient {ID = 5, Name = "P5",  AddedByUser="John Doe",  ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(50), ModifiedDate=DateTime.MaxValue.AddYears(-100)}
             }.AsQueryable());
 
             IngredientsController controller = new IngredientsController(mock.Object);

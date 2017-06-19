@@ -1,25 +1,25 @@
-﻿using LambAndLentil.Domain.Concrete;
+﻿using AutoMapper;
+using LambAndLentil.Domain.Concrete;
 using LambAndLentil.Domain.Entities;
 using LambAndLentil.UI;
 using LambAndLentil.UI.Controllers;
 using LambAndLentil.UI.Infrastructure.Alerts;
 using LambAndLentil.UI.Models;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting; 
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
-
-namespace NunitIntegrationTests
+ 
+namespace MsTestIntegrationTests
 {
 
-    [TestFixture]
+    [TestClass]
     [TestCategory("Integration")]
+    [TestCategory("PersonController")]
     public class PersonsControllerShould
     {
-        [Test]
+        [TestMethod]
         public void CreateAnPerson()
         {
             // Arrange
@@ -28,6 +28,7 @@ namespace NunitIntegrationTests
             // Act
             ViewResult vr = controller.Create(LambAndLentil.UI.UIViewType.Create);
             PersonVM vm = (PersonVM)vr.Model;
+            vm.Description = "Test.CreateAPerson";
             string modelName = vm.Name;
 
             // Assert 
@@ -38,7 +39,7 @@ namespace NunitIntegrationTests
         
         }
 
-        [Test]
+        [TestMethod]
         public void SaveAValidPerson()
         {
             // Arrange
@@ -46,6 +47,7 @@ namespace NunitIntegrationTests
             PersonsController controller = new PersonsController(repo);
             PersonVM vm = new PersonVM();
             vm.Name = "test";
+            vm.Description = "Test.SaveAValidPerson";
             // Act
             AlertDecoratorResult adr = (AlertDecoratorResult)controller.PostEdit(vm);
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
@@ -69,7 +71,7 @@ namespace NunitIntegrationTests
             controller.DeleteConfirmed(person.ID);
         }
 
-        [Test]
+        [TestMethod]
         [TestCategory("Edit")]
         public void SaveEditedPersonWithNameChange()
         {
@@ -83,6 +85,7 @@ namespace NunitIntegrationTests
             PersonVM vm = new PersonVM();
             vm.FirstName = "0000";
             vm.LastName = "test";
+            vm.Description = "Test.SaveEditedPersonWithNameChange";
 
             // Act 
             ActionResult ar1 = controller1.PostEdit(vm);
@@ -92,14 +95,14 @@ namespace NunitIntegrationTests
                           where m.Name == "0000 test"
                           select m).AsQueryable();
 
-            Person ingredient = result.FirstOrDefault();
+            Person person = result.FirstOrDefault();
 
             // verify initial value:
-            Assert.AreEqual("0000 test", ingredient.Name);
+            Assert.AreEqual("0000 test", person.Name);
 
             // now edit it
             vm.LastName = "test Edited";
-            vm.ID = ingredient.ID;
+            vm.ID = person.ID;
             ActionResult ar2 = controller3.PostEdit(vm);
             ViewResult view2 = controller4.Index();
             ListVM listVM2 = (ListVM)view2.Model;
@@ -107,11 +110,11 @@ namespace NunitIntegrationTests
                            where m.Name == "0000 test Edited"
                            select m).AsQueryable();
 
-            ingredient = result2.FirstOrDefault();
+            person = result2.FirstOrDefault();
 
 
             // Assert
-            Assert.AreEqual("0000 test Edited", ingredient.Name);
+            Assert.AreEqual("0000 test Edited", person.Name);
 
             // clean up 
             controller5.DeleteConfirmed(vm.ID);
@@ -120,7 +123,7 @@ namespace NunitIntegrationTests
 
          
 
-        [Test]
+        [TestMethod]
         [TestCategory("Edit")]
         public void SaveEditedPersonWithDescriptionChange()
         {
@@ -149,7 +152,7 @@ namespace NunitIntegrationTests
             Assert.AreEqual("SaveEditedPersonWithDescriptionChange Pre-test", person.Description);
 
             // now edit it
-            vm.ID = person.ID; ;
+            vm.ID = person.ID;  
             vm.Description = "SaveEditedPersonWithDescriptionChange Post-test";
 
             ActionResult ar2 = controller3.PostEdit(vm);
@@ -171,7 +174,7 @@ namespace NunitIntegrationTests
         }
 
 
-        [Test]
+        [TestMethod]
         [TestCategory("DeleteConfirmed")]
         public void ActuallyDeleteAPersonFromTheDatabase()
         {
@@ -180,26 +183,30 @@ namespace NunitIntegrationTests
             PersonsController editController = new PersonsController(repo);
             PersonsController indexController = new PersonsController(repo);
             PersonsController deleteController = new PersonsController(repo);
-            PersonVM vm = new PersonVM(); 
+            PersonVM vm = new PersonVM();
+            vm.Description = "Test.ActuallyDeleteAPersonfromDB";
             ActionResult ar = editController.PostEdit(vm);
             ViewResult view = indexController.Index();
             ListVM listVM = (ListVM)view.Model;
             var result = (from m in listVM.Persons
-                          where m.Name == vm.Name
-                          select m).AsQueryable();
+                          where m.Description == vm.Description 
+            select m).AsQueryable();
             Person item = result.FirstOrDefault();
 
             //Act
             deleteController.DeleteConfirmed(item.ID);
             var deletedItem = (from m in repo.Persons
-                               where m.Name == vm.Name
+                               where m.Description == vm.Description
                                select m).AsQueryable();
 
             //Assert
             Assert.AreEqual(0, deletedItem.Count());
+
+            // Clean up not needed
+
         }
 
-        [Test]
+        [TestMethod]
         [TestCategory("Edit")]
         public void SaveTheCreationDateBetweenPostedEdits()
         {
@@ -230,6 +237,61 @@ namespace NunitIntegrationTests
 
             // Cleanup
             controllerDelete.DeleteConfirmed(person.ID);
+        }
+
+        [TestMethod]
+        [TestCategory("Edit")]
+        public void UpdateTheModificationDateBetweenPostedEdits()
+        {
+            // Arrange
+            EFRepository repo = new EFRepository();
+            PersonsController controllerPost = new PersonsController(repo);
+            PersonsController controllerPost1 = new PersonsController(repo);
+            PersonsController controllerView = new PersonsController(repo);
+            PersonsController controllerView1 = new PersonsController(repo);
+            PersonsController controllerDelete = new PersonsController(repo);
+
+            PersonVM vm = new PersonVM();
+            vm.Name = "002 Test Mod";
+            vm.Description = "Test.UpdateModDate";
+            DateTime CreationDate = vm.CreationDate;
+            DateTime mod = vm.ModifiedDate;
+
+            // Act
+            controllerPost.PostEdit(vm);
+            ViewResult view = controllerView.Index();
+            ListVM listVM = (ListVM)view.Model;
+            var result = (from m in listVM.Persons
+                          where m.Description == "Test.UpdateModDate"
+                          select m).AsQueryable(); 
+
+            Person person = result.FirstOrDefault();
+            vm = Mapper.Map<Person, PersonVM>(person);
+
+            vm.Description = "I've been edited to delay a bit";
+
+            controllerPost1.PostEdit(vm);
+
+
+            ViewResult view1 = controllerView.Index();
+            listVM = (ListVM)view1.Model;
+            var result1 = (from m in listVM.Persons
+                           where m.Description == "I've been edited to delay a bit"
+                           select m).AsQueryable();
+
+           person= result1.FirstOrDefault();
+
+            DateTime shouldBeSameDate = person.CreationDate;
+            DateTime shouldBeLaterDate = person.ModifiedDate;
+
+            // Assert
+            Assert.AreEqual(CreationDate, shouldBeSameDate);
+            Assert.AreNotEqual(mod, shouldBeLaterDate);
+
+            // Cleanup
+            controllerDelete.DeleteConfirmed(person.ID);
+
+
         }
     }
 }

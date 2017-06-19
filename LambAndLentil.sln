@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.6
+VisualStudioVersion = 15.0.26430.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LambAndLentil.Domain", "LambAndLentil.Domain\LambAndLentil.Domain.csproj", "{011B34BE-4A36-4772-B2AF-DC1600948477}"
 EndProject
@@ -13,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LambAndLentil.Domain.Test",
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Integration Tests", "Integration Tests", "{A5957792-2BA3-493B-A0CA-63A2435EF48D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NunitIntegrationTests", "NunitIntegrationTests\NunitIntegrationTests.csproj", "{CBB1E76F-75B4-462C-86E9-2E400878835C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationTests", "NunitIntegrationTests\IntegrationTests.csproj", "{CBB1E76F-75B4-462C-86E9-2E400878835C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

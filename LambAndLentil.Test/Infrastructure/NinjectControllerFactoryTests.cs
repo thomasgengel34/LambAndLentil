@@ -6,6 +6,7 @@ using Ninject;
 namespace LambAndLentil.Test.Infrastructure
 {
     [TestClass]
+    [TestCategory("Ninject")]
     public class NinjectControllerFactoryTests
     {
         

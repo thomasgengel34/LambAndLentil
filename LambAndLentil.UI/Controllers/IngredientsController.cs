@@ -23,26 +23,13 @@ namespace LambAndLentil.UI.Controllers
             ViewResult view = BaseIndex(UIControllerType.Ingredients, page);
             return View(view.ViewName, view.Model);
         }
-        //try
+    
         public ActionResult Details(int id = 1, UIViewType actionMethod = UIViewType.Details)
         {
             return BaseDetails<Ingredient, IngredientsController, IngredientVM>(UIControllerType.Ingredients, id,actionMethod);
         }
 
-        // GET: Ingredients/Details/5
-        public ActionResult Detailsxxxxx(int id = 1, UIViewType actionMethod = UIViewType.Details)
-        {
-            ViewBag.Title =actionMethod.ToString();
-            if (actionMethod == UIViewType.Delete)
-            { 
-                return BaseDelete<Ingredient, IngredientsController, IngredientVM>(UIControllerType.Ingredients, id);
-            }
-            else if (actionMethod== UIViewType.DeleteConfirmed)
-            {
-                return BaseDeleteConfirmed<Ingredient, IngredientsController>(UIControllerType.Ingredients, id);
-            }
-            return BaseDetails<Ingredient, IngredientsController, IngredientVM>(UIControllerType.Ingredients, id);
-        }
+        
 
         // GET: Ingredients/Create
 
@@ -65,7 +52,7 @@ namespace LambAndLentil.UI.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult PostEdit([Bind(Include = "ID, Name,  CreationDate, ModifiedDate,  AddedByUser, ModifiedByUser,  Maker, Brand,   Description, ServingSize,  ServingSizeUnit,  ServingsPerContainer,  ContainerSize,  ContainerSizeUnit,   ContainerSizeInGrams,  Calories, CalFromFat,   TotalFat,  SaturatedFat, TransFat, PolyUnSaturatedFat,  MonoUnSaturatedFat, Cholesterol, Sodium, TotalCarbohydrates, Protein, Potassium, DietaryFiber, Sugars, VitaminA, VitaminC, Calcium, Iron, FolicAcid, Egg, Nuts , Milk , Wheat, Soy,  Category, Corn, Onion, Garlic , SodiumNitrite , UPC , Caffeine,  FoodGroup, StorageType, IngredientsList,  IsGMO, CountryOfOrigin,  Kosher, DataSource, Fish")]  IngredientVM ingredientVM)
+        public ActionResult PostEdit([Bind(Include = "ID, Name, Description, CreationDate, ModifiedDate,  IngredientsList")]  IngredientVM ingredientVM)
         {
             return BasePostEdit<Ingredient, IngredientsController, IngredientVM>(ingredientVM);
         }

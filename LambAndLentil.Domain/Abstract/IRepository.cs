@@ -36,13 +36,7 @@ namespace LambAndLentil.Domain.Abstract
          
     }
 
-    //public interface IRepository<T>
-    //{
-    //    IQueryable  item { get; } 
-    //    void Save(T t);  
-    //    void Delete(int ID);  
-    //    IQueryable<T> items { get; }  
-    //}
+  
 }
 
 public interface IRepository<T> where T:class

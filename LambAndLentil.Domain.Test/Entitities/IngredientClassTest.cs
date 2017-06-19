@@ -5,6 +5,7 @@ using LambAndLentil.Domain.Entities;
 namespace LambAndLentil.Domain.Test.Entities
 {
     [TestClass]
+    [TestCategory("Ingredient Class")]
     public class IngredientClass
     {
         [TestMethod]
@@ -12,13 +13,11 @@ namespace LambAndLentil.Domain.Test.Entities
         {
             // Arrange
             Ingredient ingredient = new Ingredient();
+
             // Act
             // nothing to see here, just move along
-            // Assert
-            Assert.AreEqual("Not Provided",ingredient.Maker  );
-            Assert.AreEqual("Not Provided",ingredient.Brand );
-            Assert.AreEqual("Default", ingredient.FoodGroup );
-            Assert.AreEqual("Default", ingredient.Category );
+
+            // Assert 
             Assert.IsNotNull(ingredient.CreationDate);
             Assert.IsNotNull(ingredient.ModifiedDate); 
             Assert.IsNotNull(ingredient.AddedByUser); 

@@ -9,6 +9,7 @@ using LambAndLentil.UI;
 namespace LambAndLentil.Tests.Routes
 {
     [TestClass]
+    [TestCategory("Route")]
     public class RouteTests
     {
         private HttpContextBase CreateHttpContext(string targetUrl = null, string httpMethod = "GET")

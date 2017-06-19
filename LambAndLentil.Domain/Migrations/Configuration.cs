@@ -17,17 +17,17 @@ namespace LambAndLentil.Domain.Migrations
         { 
             context.Ingredients.AddOrUpdate(
               p => p.Name,
-             new Ingredient(DateTime.Now){ Name = "Romulan Ale", Maker = "Romulan Ales, Ltd.", Brand = "Baggins Enterprises", ServingSizeUnit = Measurement.FluidOz, ServingSize = 8, Calories = 64, Kosher = Kosher.Unknown,ContainerSizeUnit=ContainerSizeUnit.Cup } ,
-             new Ingredient(DateTime.Now) { Name = "Klingon Fire Water", Maker = "Spock, Ltd.", ServingSizeUnit = Measurement.FluidOz, ServingSize = 8, Calories = 64, Kosher = Kosher.OK, ContainerSizeUnit = ContainerSizeUnit.unknown, } ,
-              new Ingredient(DateTime.Now) { Name = "Vulcan Veal", Maker = "Volcano, Ltd.", ServingSizeUnit = Measurement.Pound, ServingSize = 0.25m, Calories = 640, Kosher = Kosher.KofK, ContainerSizeUnit = ContainerSizeUnit.unknown },
-              new Ingredient(DateTime.Now) { Name = "Apple Pie", Maker = "Newton Apples, Ltd.", ServingSizeUnit = Measurement.Each, ServingSize = 1, Calories = 100, Kosher = Kosher.Unknown, ContainerSizeUnit = ContainerSizeUnit.unknown },
-              new Ingredient(DateTime.Now) { Name = "Ground Beef", Maker = "Blue Ox Corp.", ServingSizeUnit = Measurement.Pound, ServingSize = 1, Calories = 64, Kosher = Kosher.Unknown, ContainerSizeUnit = ContainerSizeUnit.unknown },
-              new Ingredient(DateTime.Now) { Name = "Sea Salt", Maker = "Popeye LLC", ServingSizeUnit = Measurement.Tablespoon, ServingSize = 1, Calories = 64, Kosher = Kosher.Not, ContainerSizeUnit = ContainerSizeUnit.unknown },
-              new Ingredient(DateTime.Now) { Name = "Cheddar cheese", Maker = "Cheese Heads, Ltd.", ServingSizeUnit = Measurement.Slice, ServingSize = 2, Calories = 64, Kosher = Kosher.Not, ContainerSizeUnit = ContainerSizeUnit.unknown },
-              new Ingredient(DateTime.Now) { Name = "Red Cabbage", Maker = "Rot & Kraut", ServingSizeUnit = Measurement.Cup, ServingSize = 1, Calories = 64, Kosher = Kosher.Not, ContainerSizeUnit = ContainerSizeUnit.unknown },
-                new Ingredient(DateTime.Now) { Name = "Chilton cheese", Maker = "Cheese Heads, Ltd.", ServingSizeUnit = Measurement.Slice, ServingSize = 1, Calories = 640, Kosher = Kosher.Not, ContainerSizeUnit = ContainerSizeUnit.unknown },
-              new Ingredient(DateTime.Now) { Name = "Blue Cabbage", Maker = "Rot & Kraut", ServingSizeUnit = Measurement.Cup, ServingSize = 1, Calories = 128, Kosher = Kosher.Not, ContainerSizeUnit = ContainerSizeUnit.unknown },
-              new Ingredient(DateTime.Now) { Name = "Great Value Chopped Green Chili Peppers - FRPC", Description = "Great Value Chopped Green Chili Peppers - FRPC", ServingSize = 2, ServingSizeUnit = Measurement.Tablespoon, ContainerSize = 4, ContainerSizeUnit = ContainerSizeUnit.OZ, ContainerSizeInGrams = 113, Calories = 5, CalFromFat = 5, TotalFat = 0, Maker = "Wal Mart Stores, Inc.", UPC = "078742433943", IngredientsList = "Green chile pappers, water, contains less than 2% of calcium chloride, citric acid, salt. Allergy warning: may contain traces of wheat and soy.", Brand = "Great Value", Kosher = Kosher.Not }
+             new Ingredient(DateTime.Now){ Name = "Romulan Ale" , Description="Illegal in the Federation",IngredientsList="Earth, air, fire, water"} ,
+             new Ingredient(DateTime.Now) { Name = "Klingon Fire Water", Description = "Do not use near open flame", IngredientsList = "gak,gasoline, coffee"  } ,
+              new Ingredient(DateTime.Now) { Name = "Vulcan Veal", Description = "Volcano, Ltd.", IngredientsList = "sheep, potassium sorbate, salt" },
+              new Ingredient(DateTime.Now) { Name = "Apple Pie", Description = "Newton Apples, Ltd.", IngredientsList = "enriched wheat flour, baking soda, apples, sugar" },
+              new Ingredient(DateTime.Now) { Name = "Ground Beef", Description = "Blue Ox Corp.",IngredientsList ="ground beef" },
+              new Ingredient(DateTime.Now) { Name = "Sea Salt", Description = "Popeye LLC", IngredientsList = "sea salt"},
+              new Ingredient(DateTime.Now) { Name = "Cheddar cheese", Description = "Cheese Heads, Ltd."  },
+              new Ingredient(DateTime.Now) { Name = "Red Cabbage", Description = "Rot & Kraut",IngredientsList = "milk, enzymes" },
+                new Ingredient(DateTime.Now) { Name = "Chilton cheese", Description = "Cheese Heads, Ltd.", IngredientsList="milk, enzymes" },
+              new Ingredient(DateTime.Now) { Name = "Blue Cabbage", Description = "Rot & Kraut",IngredientsList ="red cabbage"  },
+              new Ingredient(DateTime.Now) { Name = "Great Value Chopped Green Chili Peppers - FRPC", Description = "Great Value Chopped Green Chili Peppers - FRPC",IngredientsList ="chili peppers"  }
             );
 
             //context.Recipes.AddOrUpdate(
