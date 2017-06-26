@@ -5,12 +5,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace LambAndLentil.Domain.Entities
 {
     [Table("MENU.Menu")]
-    public class Menu : BaseEntity
+    public class Menu : BaseEntity,IEntity
     {
-        
+        public int ID { get; set; }
+
         public Menu():base() 
         {
-            ID = base.ID;
+             
             Name = base.Name;
             Description = base.Description;
             CreationDate = base.CreationDate; 

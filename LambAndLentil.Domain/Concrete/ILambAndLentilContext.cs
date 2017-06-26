@@ -12,7 +12,7 @@ namespace LambAndLentil.Domain.Concrete
     {
         DbSet<Ingredient> Ingredients { get; set; }
         DbSet<Recipe> Recipes { get; set; }
-        DbSet<RecipeIngredient> RecipeIngredients { get; set; }
+    //    DbSet<RecipeIngredient> RecipeIngredients { get; set; }
 
         DbEntityEntry  Entry(Ingredient existingIngredient);
 

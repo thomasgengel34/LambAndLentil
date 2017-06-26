@@ -16,7 +16,7 @@ namespace LambAndLentil.UI.Models
             CreationDate = creationDate;
         }
 
-
+        public int ID { get; set; }
         public MealType MealType { get; set; }
         public DayOfWeek DayOfWeek { get; set; }
         public  int Diners { get; set; } 

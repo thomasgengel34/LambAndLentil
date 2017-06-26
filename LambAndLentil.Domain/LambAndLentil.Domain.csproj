@@ -58,7 +58,7 @@
     <Compile Include="Entities\ContainerSizeUnit.cs" />
     <Compile Include="Entities\FoodGroup.cs" />
     <Compile Include="Concrete\ILambAndLentilContext.cs" />
-    <Compile Include="Entities\IBaseEntity.cs" />
+    <Compile Include="Entities\IEntity.cs" />
     <Compile Include="Entities\Ingredient.cs" />
     <Compile Include="Entities\Ingredients.cs" />
     <Compile Include="Entities\Kosher.cs" />
@@ -71,53 +71,28 @@
     <Compile Include="Entities\Persons.cs" />
     <Compile Include="Entities\Plan.cs" />
     <Compile Include="Entities\Recipe.cs" />
-    <Compile Include="Entities\RecipeIngredient.cs" />
     <Compile Include="Entities\Recipes.cs" />
     <Compile Include="Entities\ShoppingList.cs" />
     <Compile Include="Entities\ShoppingLists.cs" />
-    <Compile Include="Migrations\201704121526383_initial.cs" />
-    <Compile Include="Migrations\201704121526383_initial.Designer.cs">
-      <DependentUpon>201704121526383_initial.cs</DependentUpon>
+    <Compile Include="Migrations\201706211706551_initial.cs" />
+    <Compile Include="Migrations\201706211706551_initial.Designer.cs">
+      <DependentUpon>201706211706551_initial.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201704140220181_modifyRecipe.cs" />
-    <Compile Include="Migrations\201704140220181_modifyRecipe.Designer.cs">
-      <DependentUpon>201704140220181_modifyRecipe.cs</DependentUpon>
+    <Compile Include="Migrations\201706211724059_tryAgain.cs" />
+    <Compile Include="Migrations\201706211724059_tryAgain.Designer.cs">
+      <DependentUpon>201706211724059_tryAgain.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201704201628346_IngredientDataSource.cs" />
-    <Compile Include="Migrations\201704201628346_IngredientDataSource.Designer.cs">
-      <DependentUpon>201704201628346_IngredientDataSource.cs</DependentUpon>
+    <Compile Include="Migrations\201706212126405_tryAgainAndAgain.cs" />
+    <Compile Include="Migrations\201706212126405_tryAgainAndAgain.Designer.cs">
+      <DependentUpon>201706212126405_tryAgainAndAgain.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201704251426458_foo.cs" />
-    <Compile Include="Migrations\201704251426458_foo.Designer.cs">
-      <DependentUpon>201704251426458_foo.cs</DependentUpon>
+    <Compile Include="Migrations\201706232302236_x.cs" />
+    <Compile Include="Migrations\201706232302236_x.Designer.cs">
+      <DependentUpon>201706232302236_x.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201705182230298_ingredient-kosher-notnullable.cs" />
-    <Compile Include="Migrations\201705182230298_ingredient-kosher-notnullable.Designer.cs">
-      <DependentUpon>201705182230298_ingredient-kosher-notnullable.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201705261456101_KosherEnum.cs" />
-    <Compile Include="Migrations\201705261456101_KosherEnum.Designer.cs">
-      <DependentUpon>201705261456101_KosherEnum.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201705261619488_Ingredient.Fish.cs" />
-    <Compile Include="Migrations\201705261619488_Ingredient.Fish.Designer.cs">
-      <DependentUpon>201705261619488_Ingredient.Fish.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201705272109081_Ingredients.NullableChanges.cs" />
-    <Compile Include="Migrations\201705272109081_Ingredients.NullableChanges.Designer.cs">
-      <DependentUpon>201705272109081_Ingredients.NullableChanges.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201706011444338_DescriptionToBaseEntity.cs" />
-    <Compile Include="Migrations\201706011444338_DescriptionToBaseEntity.Designer.cs">
-      <DependentUpon>201706011444338_DescriptionToBaseEntity.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201706071431204_removePersonMustHaveGarlic.cs" />
-    <Compile Include="Migrations\201706071431204_removePersonMustHaveGarlic.Designer.cs">
-      <DependentUpon>201706071431204_removePersonMustHaveGarlic.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201706151610466_ReduceIngredient.cs" />
-    <Compile Include="Migrations\201706151610466_ReduceIngredient.Designer.cs">
-      <DependentUpon>201706151610466_ReduceIngredient.cs</DependentUpon>
+    <Compile Include="Migrations\201706240236402_x1.cs" />
+    <Compile Include="Migrations\201706240236402_x1.Designer.cs">
+      <DependentUpon>201706240236402_x1.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -129,38 +104,20 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201704121526383_initial.resx">
-      <DependentUpon>201704121526383_initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201706211706551_initial.resx">
+      <DependentUpon>201706211706551_initial.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201704140220181_modifyRecipe.resx">
-      <DependentUpon>201704140220181_modifyRecipe.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201706211724059_tryAgain.resx">
+      <DependentUpon>201706211724059_tryAgain.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201704201628346_IngredientDataSource.resx">
-      <DependentUpon>201704201628346_IngredientDataSource.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201706212126405_tryAgainAndAgain.resx">
+      <DependentUpon>201706212126405_tryAgainAndAgain.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201704251426458_foo.resx">
-      <DependentUpon>201704251426458_foo.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201706232302236_x.resx">
+      <DependentUpon>201706232302236_x.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201705182230298_ingredient-kosher-notnullable.resx">
-      <DependentUpon>201705182230298_ingredient-kosher-notnullable.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201705261456101_KosherEnum.resx">
-      <DependentUpon>201705261456101_KosherEnum.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201705261619488_Ingredient.Fish.resx">
-      <DependentUpon>201705261619488_Ingredient.Fish.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201705272109081_Ingredients.NullableChanges.resx">
-      <DependentUpon>201705272109081_Ingredients.NullableChanges.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201706011444338_DescriptionToBaseEntity.resx">
-      <DependentUpon>201706011444338_DescriptionToBaseEntity.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201706071431204_removePersonMustHaveGarlic.resx">
-      <DependentUpon>201706071431204_removePersonMustHaveGarlic.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201706151610466_ReduceIngredient.resx">
-      <DependentUpon>201706151610466_ReduceIngredient.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201706240236402_x1.resx">
+      <DependentUpon>201706240236402_x1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

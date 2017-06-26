@@ -382,8 +382,48 @@ namespace MsTestIntegrationTests
                 // Cleanup
                 controllerDelete.DeleteConfirmed(ingredient.ID);
             }
+        }
+        [TestMethod]
+        public void SaveAllPropertiesInBaseEntity()
+        {
+            // Arrange
+            EFRepository repo = new EFRepository();
+            RecipesController controllerPost = new RecipesController(repo); 
+            RecipesController controllerView = new RecipesController(repo);
+            RecipesController controllerDelete = new RecipesController(repo);
+            RecipeVM vm = new RecipeVM(); 
+            vm.Name = "___test387";
+            vm.Description = "test387 description";
 
+            // Act
+            controllerPost.PostEdit(vm);
+            ViewResult view1 = controllerView.Index();
+            ListVM listVM = (ListVM)view1.Model;
+            var result1 = (from m in listVM.Recipes
+                           where m.Name == "___test387"
+                           select m).AsQueryable();
 
+           Recipe recipe = result1.FirstOrDefault();
+
+            try
+            { 
+                Assert.AreEqual(vm.Name, recipe.Name);
+                Assert.AreEqual(vm.Description, recipe.Description);
+                Assert.AreEqual(vm.CreationDate.Day, recipe.CreationDate.Day);
+                Assert.AreEqual(vm.ModifiedDate.Day, recipe.ModifiedDate.Day);
+                Assert.AreEqual(vm.AddedByUser, recipe.AddedByUser);
+                Assert.AreEqual(vm.ModifiedByUser, recipe.ModifiedByUser);
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                controllerDelete.DeleteConfirmed(recipe.ID);
+            }
         }
     }
 }

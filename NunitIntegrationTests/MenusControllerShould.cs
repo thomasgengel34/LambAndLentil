@@ -343,7 +343,7 @@ namespace MsTestIntegrationTests
             // Assert
             Assert.AreEqual(CreationDate.Date, vm.CreationDate.Date);
         }
-          
+
         [TestMethod]
         [TestCategory("Edit")]
         public void SaveTheCreationDateOnMenuVMCreationWithDateTimeParameter()
@@ -383,12 +383,20 @@ namespace MsTestIntegrationTests
             Menu menu = result.FirstOrDefault();
 
             DateTime shouldBeSameDate = menu.CreationDate;
-
-            // Assert
-            Assert.AreEqual(CreationDate, shouldBeSameDate);
-
-            // Cleanup
-            controllerDelete.DeleteConfirmed(menu.ID);
+            try
+            {
+                // Assert
+                Assert.AreEqual(CreationDate, shouldBeSameDate);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                // Cleanup
+                controllerDelete.DeleteConfirmed(menu.ID);
+            }
         }
 
         [TestMethod]
@@ -429,15 +437,21 @@ namespace MsTestIntegrationTests
 
             DateTime shouldBeSameDate = menu.CreationDate;
             DateTime shouldBeLaterDate = menu.ModifiedDate;
-
-            // Assert
-            Assert.AreEqual(CreationDate, shouldBeSameDate);
-            Assert.AreNotEqual(mod, shouldBeLaterDate);
-
-            // Cleanup
-            controllerDelete.DeleteConfirmed(menu.ID);
-
-
+            try
+            {
+                // Assert
+                Assert.AreEqual(CreationDate, shouldBeSameDate);
+                Assert.AreNotEqual(mod, shouldBeLaterDate);
+            }
+            catch (Exception)
+            { 
+                throw;
+            }
+            finally
+            {
+                // Cleanup
+                controllerDelete.DeleteConfirmed(menu.ID);
+            }
         }
     }
 }

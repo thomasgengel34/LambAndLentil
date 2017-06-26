@@ -9,7 +9,7 @@ using System.Web.Mvc;
 
 namespace LambAndLentil.Domain.Entities
 {
-    public class BaseEntity : IBaseEntity
+    public class BaseEntity  
     {
         public BaseEntity()
         {
@@ -34,10 +34,7 @@ namespace LambAndLentil.Domain.Entities
 
         }
 
-        [Key]
-        [HiddenInput(DisplayValue = false)]
-        public int ID { get; set; }
-
+       
         [StringLength(50)]
         [Required]
         public string Name { get; set; }

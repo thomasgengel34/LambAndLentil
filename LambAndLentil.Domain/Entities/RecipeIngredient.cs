@@ -8,15 +8,15 @@ namespace LambAndLentil.Domain.Entities
 {
     public class RecipeIngredient:BaseEntity
     {
-        public RecipeIngredient() : base(new DateTime(2010, 1, 1))
-        {
+        //public RecipeIngredient() : base(new DateTime(2010, 1, 1))
+        //{
 
-        }
-        public decimal Quantity { get; set; }
+        //}
+        //public decimal Quantity { get; set; }
 
-        public Measurement Measurement { get; set; }
+        //public Measurement Measurement { get; set; }
 
-        public Ingredient Ingredient { get; set; }
+        //public Ingredient Ingredient { get; set; }
 
         /// <summary>
         /// should return the correct quantity of whatever item is in an ingredient in the units and quantity of the recipe ingredient

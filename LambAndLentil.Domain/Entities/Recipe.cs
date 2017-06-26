@@ -9,32 +9,33 @@ namespace LambAndLentil.Domain.Entities
 {
 
     [Table("RECIPE.Recipe")]
-    public class Recipe:BaseEntity
+    public class Recipe:BaseEntity,IEntity
     {
         public Recipe() : base()
-        {
-            
+        { 
         }
 
         public Recipe(DateTime creationDate) : this()
         {
             CreationDate = creationDate;
         }
-         
 
+        public int ID { get; set; }
         public decimal Servings { get; set; }  
         public MealType MealType { get; set; } 
         public int? Calories { get; set; }  
         public short? CalsFromFat { get; set; }
 
-        private List<CartLine>lineCollection = new List<CartLine>();
+       public virtual ICollection<Ingredient> Ingredients { get; set; }
 
-        public void AddItem(Ingredient ingredient, decimal quantity=0m)
+        private List<CartLine> lineCollection = new List<CartLine>();
+
+        public void AddItem(Ingredient ingredient, decimal quantity = 0m)
         {
             CartLine line = lineCollection
                                      .Where(p => p.Ingredient.ID == ingredient.ID)
                                      .FirstOrDefault();
-            if (line==null)
+            if (line == null)
             {
                 lineCollection.Add(new CartLine { Ingredient = ingredient, Quantity = quantity });
             }

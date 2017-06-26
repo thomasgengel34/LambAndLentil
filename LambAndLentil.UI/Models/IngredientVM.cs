@@ -16,8 +16,8 @@ namespace LambAndLentil.UI.Models
         {
             CreationDate = creationDate;
         }
- 
 
+        public int ID { get; set; }
         [DataType(DataType.MultilineText)]
         public string IngredientsList { get; set; }
        

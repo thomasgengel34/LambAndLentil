@@ -1,8 +1,27 @@
-﻿@model LambAndLentil.Domain.Entities.Ingredient
+﻿@*//@model LambAndLentil.Domain.Entities.Ingredient*@
+@model LambAndLentil.UI.Models.RecipeVM
 
 @using (Html.BeginForm("AddIngredient", UIControllerType.Recipes.ToString()))
 {
+    <h3>Ingredients in this Recipe</h3>
     @Html.HiddenFor(x => x.ID)
-    @Html.Hidden("returnUrl", Request.Url.PathAndQuery)
-    <input type="submit" value="+ Add to cart" />
-}
+        @Html.Hidden("returnUrl", Request.Url.PathAndQuery)
+        <input type="submit" value="+ Add to Recipe" /> 
+
+
+    <table class="table">
+        <tr>
+            <th> 
+                        Description
+            </th>
+                        <th>
+            IngredientsList
+                        </th>
+                </tr>
+        <tr>
+            <td>name</td>
+            <td>description</td>
+            <td><input type="submit" value="- Delete From Recipe" /> </td>
+        </tr>
+        </table>
+                }

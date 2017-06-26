@@ -7,13 +7,13 @@ namespace LambAndLentil.Domain.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class ReduceIngredient : IMigrationMetadata
+    public sealed partial class x1 : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(ReduceIngredient));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(x1));
         
         string IMigrationMetadata.Id
         {
-            get { return "201706151610466_ReduceIngredient"; }
+            get { return "201706240236402_x1"; }
         }
         
         string IMigrationMetadata.Source

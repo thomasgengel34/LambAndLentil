@@ -30,15 +30,15 @@ namespace LambAndLentil.Domain.Migrations
               new Ingredient(DateTime.Now) { Name = "Great Value Chopped Green Chili Peppers - FRPC", Description = "Great Value Chopped Green Chili Peppers - FRPC",IngredientsList ="chili peppers"  }
             );
 
-            //context.Recipes.AddOrUpdate(
-            //    r => r.Name,
-            //    new Recipe { Name = "Vulcan Cutlets", Description = "Delicious and delicate dish from the Southern hemisphere, traditionally served boiled", Calories = 100 },
-            //    new Recipe { Name = "Flaming Romulan Punch", Description = "just what it says.", Calories = 100 },
-            //    new Recipe { Name = "Cheese fondue", Description = "Requires fondue heater.", Calories = 100 },
-            //    new Recipe { Name = "Rotkraut", Description = "Traditional German dish", Calories = 100 },
-            //    new Recipe { Name = "Stuffed Rabbit", Description = "Delicious and delicate dish from the South", Calories = 100 },
-            //    new Recipe { Name = "Macaroni and Cheese", Description = "Easy meal", Calories = 100 }
-            //    );
+            context.Recipes.AddOrUpdate(
+                r => r.Name,
+                new Recipe { Name = "Vulcan Cutlets", Description = "Delicious and delicate dish from the Southern hemisphere, traditionally served boiled", Calories = 100 },
+                new Recipe { Name = "Flaming Romulan Punch", Description = "just what it says.", Calories = 100 },
+                new Recipe { Name = "Cheese fondue", Description = "Requires fondue heater.", Calories = 100 },
+                new Recipe { Name = "Rotkraut", Description = "Traditional German dish", Calories = 100 },
+                new Recipe { Name = "Stuffed Rabbit", Description = "Delicious and delicate dish from the South", Calories = 100 },
+                new Recipe { Name = "Macaroni and Cheese", Description = "Easy meal", Calories = 100 }
+                );
 
             //context.Menus.AddOrUpdate(
             //    m => m.Name,

@@ -32,7 +32,7 @@ namespace MsTestIntegrationTests
 
             // Assert 
             Assert.AreEqual(vr.ViewName, UIViewType.Details.ToString());
-            Assert.AreEqual(modelName, "Newly Created"); 
+            Assert.AreEqual(modelName, "Newly Created");
         }
 
         [TestMethod]
@@ -49,21 +49,29 @@ namespace MsTestIntegrationTests
 
             var routeValues = rtrr.RouteValues.Values;
 
+            try
+            {
+                // Assert 
+                Assert.AreEqual("alert-success", adr.AlertClass);
+                Assert.AreEqual(4, routeValues.Count);
+                Assert.AreEqual(UIControllerType.ShoppingLists.ToString(), routeValues.ElementAt(0).ToString());
+                Assert.AreEqual(UIViewType.BaseIndex.ToString(), routeValues.ElementAt(1).ToString());
+                Assert.AreEqual("ShoppingLists", routeValues.ElementAt(2).ToString());
+                Assert.AreEqual(1.ToString(), routeValues.ElementAt(3).ToString());
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                // Clean Up - should run a  delete test to make sure this works 
+                List<ShoppingList> shoppingLists = repo.ShoppingLists.ToList<ShoppingList>();
+                ShoppingList shoppingList = shoppingLists.Where(m => m.Name == "test").FirstOrDefault();
 
-            // Assert 
-            Assert.AreEqual("alert-success", adr.AlertClass);
-            Assert.AreEqual(4, routeValues.Count);
-            Assert.AreEqual(UIControllerType.ShoppingLists.ToString(), routeValues.ElementAt(0).ToString());
-            Assert.AreEqual(UIViewType.BaseIndex.ToString(), routeValues.ElementAt(1).ToString());
-            Assert.AreEqual("ShoppingLists", routeValues.ElementAt(2).ToString());
-            Assert.AreEqual(1.ToString(), routeValues.ElementAt(3).ToString());
-
-            // Clean Up - should run a  delete test to make sure this works 
-            List<ShoppingList> shoppingLists = repo.ShoppingLists.ToList<ShoppingList>();
-            ShoppingList shoppingList = shoppingLists.Where(m => m.Name == "test").FirstOrDefault();
-
-            // Delete it
-            controller.DeleteConfirmed(shoppingList.ID);
+                // Delete it
+                controller.DeleteConfirmed(shoppingList.ID);
+            }
         }
 
         [TestMethod]
@@ -89,9 +97,17 @@ namespace MsTestIntegrationTests
                           select m).AsQueryable();
 
             ShoppingList ingredient = result.FirstOrDefault();
+            try
+            {
+                // verify initial value:
+                Assert.AreEqual("0000 test", ingredient.Name);
+            }
+            catch (Exception)
+            {
+                controller5.DeleteConfirmed(vm.ID);
+                throw;
+            }
 
-            // verify initial value:
-            Assert.AreEqual("0000 test", ingredient.Name);
 
             // now edit it
             vm.Name = "0000 test Edited";
@@ -105,17 +121,26 @@ namespace MsTestIntegrationTests
 
             ingredient = result2.FirstOrDefault();
 
+            try
+            {
+                // Assert
+                Assert.AreEqual("0000 test Edited", ingredient.Name);
+            }
+            catch (Exception)
+            {
 
-            // Assert
-            Assert.AreEqual("0000 test Edited", ingredient.Name);
-
-            // clean up
-            // TO DO: write a test to make sure this happens.
-            controller5.DeleteConfirmed(vm.ID);
+                throw;
+            }
+            finally
+            {
+                // clean up
+                // TO DO: write a test to make sure this happens.
+                controller5.DeleteConfirmed(vm.ID);
+            }
         }
 
 
-         
+
 
         [TestMethod]
         [TestCategory("Edit")]
@@ -143,8 +168,17 @@ namespace MsTestIntegrationTests
 
             ShoppingList shoppingList = result.FirstOrDefault();
 
-            // verify initial value:
-            Assert.AreEqual("SaveEditedShoppingListWithDescriptionChange Pre-test", shoppingList.Description);
+            try
+            {
+                // verify initial value:
+                Assert.AreEqual("SaveEditedShoppingListWithDescriptionChange Pre-test", shoppingList.Description);
+            }
+            catch (Exception)
+            {
+                controller5.DeleteConfirmed(vm.ID);
+                throw;
+            }
+
 
             // now edit it
             vm.ID = shoppingList.ID;
@@ -160,13 +194,22 @@ namespace MsTestIntegrationTests
 
             shoppingList = result2.FirstOrDefault();
 
+            try
+            {
+                // Assert
+                Assert.AreEqual("0000 test Edited", shoppingList.Name);
+                Assert.AreEqual("SaveEditedShoppingListWithDescriptionChange Post-test", shoppingList.Description);
 
-            // Assert
-            Assert.AreEqual("0000 test Edited", shoppingList.Name);
-            Assert.AreEqual("SaveEditedShoppingListWithDescriptionChange Post-test", shoppingList.Description);
-
-            // clean up 
-            controller5.DeleteConfirmed(vm.ID);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                // clean up 
+                controller5.DeleteConfirmed(vm.ID);
+            }
         }
 
         [TestMethod]
@@ -223,16 +266,25 @@ namespace MsTestIntegrationTests
             ShoppingList shoppingList = result.FirstOrDefault();
 
             DateTime shouldBeSameDate = shoppingList.CreationDate;
+            try
+            {
+                // Assert
+                Assert.AreEqual(CreationDate, shouldBeSameDate);
+            }
+            catch (Exception)
+            {
 
-            // Assert
-            Assert.AreEqual(CreationDate, shouldBeSameDate);
-
-            // Cleanup
-            controllerDelete.DeleteConfirmed(shoppingList.ID);
+                throw;
+            }
+            finally
+            {
+                // Cleanup
+                controllerDelete.DeleteConfirmed(shoppingList.ID);
+            }
         }
 
 
-         [TestMethod]
+        [TestMethod]
         [TestCategory("Edit")]
         public void UpdateTheModificationDateBetweenPostedEdits()
         {
@@ -257,7 +309,7 @@ namespace MsTestIntegrationTests
             var result = (from m in listVM.ShoppingLists
                           where m.Name == "002 Test Mod"
                           select m).AsQueryable();
-            ShoppingList ingredient =  result.FirstOrDefault();
+            ShoppingList ingredient = result.FirstOrDefault();
             vm = Mapper.Map<ShoppingList, ShoppingListVM>(ingredient);
 
             vm.Description = "I've been edited to delay a bit";
@@ -276,12 +328,21 @@ namespace MsTestIntegrationTests
             DateTime shouldBeSameDate = ingredient.CreationDate;
             DateTime shouldBeLaterDate = ingredient.ModifiedDate;
 
-            // Assert
-            Assert.AreEqual(CreationDate, shouldBeSameDate);
-            Assert.AreNotEqual(mod, shouldBeLaterDate);
-
-            // Cleanup
-            controllerDelete.DeleteConfirmed(ingredient.ID);
+            try
+            {
+                // Assert
+                Assert.AreEqual(CreationDate, shouldBeSameDate);
+                Assert.AreNotEqual(mod, shouldBeLaterDate);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                // Cleanup
+                controllerDelete.DeleteConfirmed(ingredient.ID);
+            }
         }
     }
 }

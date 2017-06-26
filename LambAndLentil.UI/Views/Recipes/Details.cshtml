@@ -109,7 +109,9 @@
                 @Html.ActionLink("Delete", UIViewType.Delete.ToString(), null, new { id = Model.ID }, new { @class = "btn btn-default" })
             }
         </div>
-
+        <td>
+            @Html.Partial("_SelectIngredient")
+        </td>
     }
 
 
@@ -135,9 +137,35 @@
             @Html.ActionLink("Edit", UIViewType.Edit.ToString(), null, new { id = Model.ID, actionMethod=UIViewType.Edit.ToString() }, new { @class = "btn btn-default" })
             @Html.ActionLink("Delete", UIViewType.Delete.ToString(), null, new { id = Model.ID }, new { @class = "btn btn-default" })
    
-
+            <td>
+                @Html.Partial("_SelectIngredient" )
+            </td>
         </div>
+     
+           <dt>
+                @Html.DisplayNameFor(model => model.Ingredients)
+            </dt>
+            <dd>
+                <table class="table">
+                    <tr>
+                        <th>Course Title</th>
+                        <th>Grade</th>
+                    </tr>
+                    @foreach (var item in Model.Ingredients)
+                {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.IngredientsList)
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </dd> 
 
+        
     } 
 
 

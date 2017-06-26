@@ -11,8 +11,8 @@ namespace LambAndLentil.UI.Models
     {
         internal BaseVM() : base()
         {
-        } 
-
+        }
+        public int ID { get; set; }
         internal static ListVM GetIndexedModel(string t, IRepository repository, int PageSize,int page=1)
         {
             ListVM model = new ListVM();

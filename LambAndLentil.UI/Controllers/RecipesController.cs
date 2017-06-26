@@ -26,6 +26,18 @@ namespace LambAndLentil.UI.Controllers
             return View(view.ViewName, view.Model);
         }
 
+        [ChildActionOnly]
+        public ViewResult RecipeIndexViewModel(string returnUrl)
+        {
+            Recipe recipe = GetRecipe();
+            return View("Foo", new RecipeIndexViewModel()
+            {
+                Recipe = recipe,
+                ID = recipe.ID,
+                ReturnUrl = returnUrl
+            });
+        }
+
 
 
         // GET: Recipes/Details/5
@@ -85,16 +97,7 @@ namespace LambAndLentil.UI.Controllers
             return RedirectToAction(UIViewType.Index.ToString(), new { returnUrl });
         }
 
-        public ViewResult Index(string returnUrl)
-        {
-            Recipe recipe = GetRecipe();
-            return View("Foo", new RecipeIndexViewModel()
-            {
-                Recipe=recipe,
-                ID=recipe.ID,                
-                ReturnUrl = returnUrl
-            });
-        }
+       
 
         private Recipe GetRecipe()
         {

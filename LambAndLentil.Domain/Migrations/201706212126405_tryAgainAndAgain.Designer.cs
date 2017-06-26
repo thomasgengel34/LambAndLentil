@@ -7,13 +7,13 @@ namespace LambAndLentil.Domain.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class KosherEnum : IMigrationMetadata
+    public sealed partial class tryAgainAndAgain : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(KosherEnum));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(tryAgainAndAgain));
         
         string IMigrationMetadata.Id
         {
-            get { return "201705261456101_KosherEnum"; }
+            get { return "201706212126405_tryAgainAndAgain"; }
         }
         
         string IMigrationMetadata.Source

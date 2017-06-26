@@ -22,7 +22,7 @@ namespace LambAndLentil.Domain.Concrete
         public DbSet<Ingredient> Ingredients { get; set; }
         public DbSet<Recipe> Recipes { get; set; }
         public DbSet<Menu> Menus { get; set; }
-        public DbSet<RecipeIngredient> RecipeIngredients { get; set; }
+     //   public DbSet<RecipeIngredient> RecipeIngredients { get; set; }
         public DbSet<Person> Persons { get; set; }
         public DbSet<Plan> Plans { get; set; }
         public DbSet<ShoppingList> ShoppingLists { get; set; }

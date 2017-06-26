@@ -18,7 +18,7 @@ namespace MsTestIntegrationTests
     [TestCategory("PlansController")]
     public class PlansControllerShould
     {
-       [TestMethod]
+        [TestMethod]
         public void CreateAnPlan()
         {
             // Arrange
@@ -31,10 +31,10 @@ namespace MsTestIntegrationTests
 
             // Assert 
             Assert.AreEqual(vr.ViewName, UIViewType.Details.ToString());
-            Assert.AreEqual(modelName, "Newly Created"); 
+            Assert.AreEqual(modelName, "Newly Created");
         }
 
-       [TestMethod]
+        [TestMethod]
         public void SaveAValidPlan()
         {
             // Arrange
@@ -48,24 +48,33 @@ namespace MsTestIntegrationTests
 
             var routeValues = rtrr.RouteValues.Values;
 
+            try
+            {
+                // Assert 
+                Assert.AreEqual("alert-success", adr.AlertClass);
+                Assert.AreEqual(4, routeValues.Count);
+                Assert.AreEqual(UIControllerType.Plans.ToString(), routeValues.ElementAt(0).ToString());
+                Assert.AreEqual(UIViewType.BaseIndex.ToString(), routeValues.ElementAt(1).ToString());
+                Assert.AreEqual("Plans", routeValues.ElementAt(2).ToString());
+                Assert.AreEqual(1.ToString(), routeValues.ElementAt(3).ToString());
+            }
+            catch (Exception)
+            {
 
-            // Assert 
-            Assert.AreEqual("alert-success", adr.AlertClass);
-            Assert.AreEqual(4, routeValues.Count);
-            Assert.AreEqual(UIControllerType.Plans.ToString(), routeValues.ElementAt(0).ToString());
-            Assert.AreEqual(UIViewType.BaseIndex.ToString(), routeValues.ElementAt(1).ToString());
-            Assert.AreEqual("Plans", routeValues.ElementAt(2).ToString());
-            Assert.AreEqual(1.ToString(), routeValues.ElementAt(3).ToString());
+                throw;
+            }
+            finally
+            {
+                // Clean Up - should run a  delete test to make sure this works 
+                List<Plan> plans = repo.Plans.ToList<Plan>();
+                Plan plan = plans.Where(m => m.Name == "test").FirstOrDefault();
 
-            // Clean Up - should run a  delete test to make sure this works 
-            List<Plan> plans = repo.Plans.ToList<Plan>();
-            Plan plan = plans.Where(m => m.Name == "test").FirstOrDefault();
-
-            // Delete it
-            controller.DeleteConfirmed(plan.ID);
+                // Delete it
+                controller.DeleteConfirmed(plan.ID);
+            }
         }
 
-       [TestMethod]
+        [TestMethod]
         [TestCategory("Edit")]
         public void SaveEditedPlanWithNameChange()
         {
@@ -88,10 +97,16 @@ namespace MsTestIntegrationTests
                           select m).AsQueryable();
 
             Plan ingredient = result.FirstOrDefault();
-
-            // verify initial value:
-            Assert.AreEqual("0000 test", ingredient.Name);
-
+            try
+            {
+                // verify initial value:
+                Assert.AreEqual("0000 test", ingredient.Name);
+            }
+            catch (Exception)
+            {
+                controller5.DeleteConfirmed(vm.ID);
+                throw;
+            }
             // now edit it
             vm.Name = "0000 test Edited";
             vm.ID = ingredient.ID;
@@ -103,20 +118,27 @@ namespace MsTestIntegrationTests
                            select m).AsQueryable();
 
             ingredient = result2.FirstOrDefault();
+            try
+            {
+                // Assert
+                Assert.AreEqual("0000 test Edited", ingredient.Name);
+            }
+            catch (Exception)
+            {
 
-
-            // Assert
-            Assert.AreEqual("0000 test Edited", ingredient.Name);
-
-            // clean up
-            // TO DO: write a test to make sure this happens.
-            controller5.DeleteConfirmed(vm.ID);
+                throw;
+            }
+            finally
+            {
+                // clean up 
+                controller5.DeleteConfirmed(vm.ID);
+            }
         }
 
 
-         
 
-       [TestMethod]
+
+        [TestMethod]
         [TestCategory("Edit")]
         public void SaveEditedPlanWithDescriptionChange()
         {
@@ -141,9 +163,18 @@ namespace MsTestIntegrationTests
                           select m).AsQueryable();
 
             Plan plan = result.FirstOrDefault();
+            try
+            {
+                // verify initial value:
+                Assert.AreEqual("SaveEditedPlanWithDescriptionChange Pre-test", plan.Description);
+            }
+            catch (Exception)
+            {
+                // clean up 
+                controller5.DeleteConfirmed(vm.ID);
+                throw;
+            }
 
-            // verify initial value:
-            Assert.AreEqual("SaveEditedPlanWithDescriptionChange Pre-test", plan.Description);
 
             // now edit it
             vm.ID = plan.ID;
@@ -159,17 +190,25 @@ namespace MsTestIntegrationTests
 
             plan = result2.FirstOrDefault();
 
-
-            // Assert
-            Assert.AreEqual("0000 test Edited", plan.Name);
-            Assert.AreEqual("SaveEditedPlanWithDescriptionChange Post-test", plan.Description);
-
-            // clean up 
-            controller5.DeleteConfirmed(vm.ID);
+            try
+            {
+                // Assert
+                Assert.AreEqual("0000 test Edited", plan.Name);
+                Assert.AreEqual("SaveEditedPlanWithDescriptionChange Post-test", plan.Description);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                // clean up 
+                controller5.DeleteConfirmed(vm.ID);
+            }
         }
 
 
-       [TestMethod]
+        [TestMethod]
         [TestCategory("DeleteConfirmed")]
         public void ActuallyDeleteAPlanFromTheDatabase()
         {
@@ -197,7 +236,7 @@ namespace MsTestIntegrationTests
             //Assert
             Assert.AreEqual(0, deletedItem.Count());
         }
-       [TestMethod]
+        [TestMethod]
         [TestCategory("Edit")]
         public void SaveTheCreationDateBetweenPostedEdits()
         {
@@ -222,15 +261,23 @@ namespace MsTestIntegrationTests
             Plan plan = result.FirstOrDefault();
 
             DateTime shouldBeSameDate = plan.CreationDate;
-
-            // Assert
-            Assert.AreEqual(CreationDate, shouldBeSameDate);
-
-            // Cleanup
-            controllerDelete.DeleteConfirmed(plan.ID);
+            try
+            {
+                // Assert
+                Assert.AreEqual(CreationDate, shouldBeSameDate);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                // Cleanup
+                controllerDelete.DeleteConfirmed(plan.ID);
+            }
         }
 
-       [TestMethod]
+        [TestMethod]
         [TestCategory("Edit")]
         public void UpdateTheModificationDateBetweenPostedEdits()
         {
@@ -257,13 +304,21 @@ namespace MsTestIntegrationTests
 
             DateTime shouldBeSameDate = plan.CreationDate;
             DateTime shouldBeLaterDate = plan.ModifiedDate;
-
-            // Assert
-            Assert.AreEqual(CreationDate, shouldBeSameDate);
-            Assert.AreNotEqual(mod, shouldBeLaterDate);
-
-            // Cleanup
-            controllerDelete.DeleteConfirmed(plan.ID); 
+            try
+            {
+                // Assert
+                Assert.AreEqual(CreationDate, shouldBeSameDate);
+                Assert.AreNotEqual(mod, shouldBeLaterDate);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                // Cleanup
+                controllerDelete.DeleteConfirmed(plan.ID);
+            }
         }
     }
-} 
+}

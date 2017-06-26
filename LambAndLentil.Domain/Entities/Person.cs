@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 namespace LambAndLentil.Domain.Entities
 {
     [Table("PERSON.Person")]
-    public class Person:BaseEntity 
+    public class Person:BaseEntity,IEntity
     {
         public Person():base( new DateTime(2010, 1, 1))  
         {
             Name = FirstName + " " + LastName;
         }
-        
+        public int ID { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; } 
 

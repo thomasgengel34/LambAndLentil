@@ -5,12 +5,12 @@ using LambAndLentil.UI;
 using LambAndLentil.UI.Controllers;
 using LambAndLentil.UI.Infrastructure.Alerts;
 using LambAndLentil.UI.Models;
-using Microsoft.VisualStudio.TestTools.UnitTesting; 
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
- 
+
 namespace MsTestIntegrationTests
 {
 
@@ -36,7 +36,7 @@ namespace MsTestIntegrationTests
             Assert.AreEqual("First Name Last Name", modelName);
 
             // Cleanup not needed
-        
+
         }
 
         [TestMethod]
@@ -54,21 +54,30 @@ namespace MsTestIntegrationTests
 
             var routeValues = rtrr.RouteValues.Values;
 
+            try
+            {
+                // Assert 
+                Assert.AreEqual("alert-success", adr.AlertClass);
+                Assert.AreEqual(4, routeValues.Count);
+                Assert.AreEqual(UIControllerType.Persons.ToString(), routeValues.ElementAt(0).ToString());
+                Assert.AreEqual(UIViewType.BaseIndex.ToString(), routeValues.ElementAt(1).ToString());
+                Assert.AreEqual("Persons", routeValues.ElementAt(2).ToString());
+                Assert.AreEqual(1.ToString(), routeValues.ElementAt(3).ToString());
+            }
+            catch (Exception)
+            {
 
-            // Assert 
-            Assert.AreEqual("alert-success", adr.AlertClass);
-            Assert.AreEqual(4, routeValues.Count);
-            Assert.AreEqual(UIControllerType.Persons.ToString(), routeValues.ElementAt(0).ToString());
-            Assert.AreEqual(UIViewType.BaseIndex.ToString(), routeValues.ElementAt(1).ToString());
-            Assert.AreEqual("Persons", routeValues.ElementAt(2).ToString());
-            Assert.AreEqual(1.ToString(), routeValues.ElementAt(3).ToString());
+                throw;
+            }
+            finally
+            {
+                // Clean Up - should run a  delete test to make sure this works after this
+                List<Person> persons = repo.Persons.ToList<Person>();
+                Person person = persons.Where(m => m.Name == "First Name Last Name").FirstOrDefault();
 
-            // Clean Up - should run a  delete test to make sure this works after this
-            List<Person> persons = repo.Persons.ToList<Person>();
-            Person person = persons.Where(m => m.Name == "First Name Last Name").FirstOrDefault();
-
-            // Delete it
-            controller.DeleteConfirmed(person.ID);
+                // Delete it
+                controller.DeleteConfirmed(person.ID);
+            }
         }
 
         [TestMethod]
@@ -97,8 +106,17 @@ namespace MsTestIntegrationTests
 
             Person person = result.FirstOrDefault();
 
-            // verify initial value:
-            Assert.AreEqual("0000 test", person.Name);
+            try
+            {
+                // verify initial value:
+                Assert.AreEqual("0000 test", person.Name);
+            }
+            catch (Exception)
+            {
+                controller5.DeleteConfirmed(vm.ID);
+                throw;
+            }
+
 
             // now edit it
             vm.LastName = "test Edited";
@@ -112,16 +130,21 @@ namespace MsTestIntegrationTests
 
             person = result2.FirstOrDefault();
 
-
-            // Assert
-            Assert.AreEqual("0000 test Edited", person.Name);
-
-            // clean up 
-            controller5.DeleteConfirmed(vm.ID);
+            try
+            {
+                // Assert
+                Assert.AreEqual("0000 test Edited", person.Name);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                // clean up 
+                controller5.DeleteConfirmed(vm.ID);
+            }
         }
-
-
-         
 
         [TestMethod]
         [TestCategory("Edit")]
@@ -134,7 +157,7 @@ namespace MsTestIntegrationTests
             PersonsController controller3 = new PersonsController(repo);
             PersonsController controller4 = new PersonsController(repo);
             PersonsController controller5 = new PersonsController(repo);
-            PersonVM vm = new PersonVM(); 
+            PersonVM vm = new PersonVM();
             vm.Description = "SaveEditedPersonWithDescriptionChange Pre-test";
 
 
@@ -147,12 +170,20 @@ namespace MsTestIntegrationTests
                           select m).AsQueryable();
 
             Person person = result.FirstOrDefault();
+            try
+            {
+                // verify initial value:
+                Assert.AreEqual("SaveEditedPersonWithDescriptionChange Pre-test", person.Description);
+            }
+            catch (Exception)
+            {
+                controller5.DeleteConfirmed(vm.ID);
+                throw;
+            }
 
-            // verify initial value:
-            Assert.AreEqual("SaveEditedPersonWithDescriptionChange Pre-test", person.Description);
 
             // now edit it
-            vm.ID = person.ID;  
+            vm.ID = person.ID;
             vm.Description = "SaveEditedPersonWithDescriptionChange Post-test";
 
             ActionResult ar2 = controller3.PostEdit(vm);
@@ -164,13 +195,21 @@ namespace MsTestIntegrationTests
 
             person = result2.FirstOrDefault();
 
-
-            // Assert
-            //Assert.AreEqual("0000 test Edited", person.Name);
-            Assert.AreEqual("SaveEditedPersonWithDescriptionChange Post-test", person.Description);
-
-            // clean up 
-            controller5.DeleteConfirmed(vm.ID);
+            try
+            {
+                // Assert
+                //Assert.AreEqual("0000 test Edited", person.Name);
+                Assert.AreEqual("SaveEditedPersonWithDescriptionChange Post-test", person.Description);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                // clean up 
+                controller5.DeleteConfirmed(vm.ID);
+            }
         }
 
 
@@ -189,8 +228,8 @@ namespace MsTestIntegrationTests
             ViewResult view = indexController.Index();
             ListVM listVM = (ListVM)view.Model;
             var result = (from m in listVM.Persons
-                          where m.Description == vm.Description 
-            select m).AsQueryable();
+                          where m.Description == vm.Description
+                          select m).AsQueryable();
             Person item = result.FirstOrDefault();
 
             //Act
@@ -231,12 +270,20 @@ namespace MsTestIntegrationTests
             Person person = result.FirstOrDefault();
 
             DateTime shouldBeSameDate = person.CreationDate;
-
-            // Assert
-            Assert.AreEqual(CreationDate, shouldBeSameDate);
-
-            // Cleanup
-            controllerDelete.DeleteConfirmed(person.ID);
+            try
+            {
+                // Assert
+                Assert.AreEqual(CreationDate, shouldBeSameDate);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                // Cleanup
+                controllerDelete.DeleteConfirmed(person.ID);
+            }
         }
 
         [TestMethod]
@@ -263,7 +310,7 @@ namespace MsTestIntegrationTests
             ListVM listVM = (ListVM)view.Model;
             var result = (from m in listVM.Persons
                           where m.Description == "Test.UpdateModDate"
-                          select m).AsQueryable(); 
+                          select m).AsQueryable();
 
             Person person = result.FirstOrDefault();
             vm = Mapper.Map<Person, PersonVM>(person);
@@ -279,19 +326,26 @@ namespace MsTestIntegrationTests
                            where m.Description == "I've been edited to delay a bit"
                            select m).AsQueryable();
 
-           person= result1.FirstOrDefault();
+            person = result1.FirstOrDefault();
 
             DateTime shouldBeSameDate = person.CreationDate;
             DateTime shouldBeLaterDate = person.ModifiedDate;
+            try
+            {
+                // Assert
+                Assert.AreEqual(CreationDate, shouldBeSameDate);
+                Assert.AreNotEqual(mod, shouldBeLaterDate);
+            }
+            catch (Exception)
+            {
 
-            // Assert
-            Assert.AreEqual(CreationDate, shouldBeSameDate);
-            Assert.AreNotEqual(mod, shouldBeLaterDate);
-
-            // Cleanup
-            controllerDelete.DeleteConfirmed(person.ID);
-
-
+                throw;
+            }
+            finally
+            {
+                // Cleanup
+                controllerDelete.DeleteConfirmed(person.ID);
+            }
         }
     }
 }

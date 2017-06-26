@@ -2,7 +2,7 @@
 
 namespace LambAndLentil.Domain.Entities
 {
-    public interface IBaseEntity
+    public interface IEntity
     {
         string AddedByUser { get; set; }
         DateTime CreationDate { get; set; }
@@ -10,5 +10,6 @@ namespace LambAndLentil.Domain.Entities
         string ModifiedByUser { get; set; }
         DateTime ModifiedDate { get; set; }
         string Name { get; set; }
+        string Description { get; set; }
     }
 }

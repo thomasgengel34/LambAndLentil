@@ -259,6 +259,14 @@
     <Compile Include="Migrations\201705182144187_ingredient-kosher-notnullable.Designer.cs">
       <DependentUpon>201705182144187_ingredient-kosher-notnullable.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201706221353062_RecipeICollection.cs" />
+    <Compile Include="Migrations\201706221353062_RecipeICollection.Designer.cs">
+      <DependentUpon>201706221353062_RecipeICollection.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201706221355467_RecipeFKIngredient.cs" />
+    <Compile Include="Migrations\201706221355467_RecipeFKIngredient.Designer.cs">
+      <DependentUpon>201706221355467_RecipeFKIngredient.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\BaseVM.cs" />
@@ -280,10 +288,6 @@
     <Compile Include="UIViewType.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\LambAndLentil.mdf" />
-    <Content Include="App_Data\LambAndLentil_log.ldf">
-      <DependentUpon>LambAndLentil.mdf</DependentUpon>
-    </Content>
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -1213,6 +1217,7 @@
     <Content Include="Views\Shared\_SelectIngredient.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="App_Data\" />
     <Folder Include="Scripts\app\controllers\" />
   </ItemGroup>
   <ItemGroup>
@@ -1236,6 +1241,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201705182144187_ingredient-kosher-notnullable.resx">
       <DependentUpon>201705182144187_ingredient-kosher-notnullable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201706221353062_RecipeICollection.resx">
+      <DependentUpon>201706221353062_RecipeICollection.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201706221355467_RecipeFKIngredient.resx">
+      <DependentUpon>201706221355467_RecipeFKIngredient.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

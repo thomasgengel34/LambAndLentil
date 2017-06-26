@@ -1,6 +1,7 @@
 ﻿using LambAndLentil.Domain.Entities;
 using System.ComponentModel.DataAnnotations;
 using System;
+using System.Collections.Generic;
 
 namespace LambAndLentil.UI.Models
 {
@@ -24,7 +25,8 @@ namespace LambAndLentil.UI.Models
             //  RecipeIngredients = new List<RecipeIngredient>();
             Calories = GetCalories(recipeVM);
         }
-        public string Description { get; set; }
+
+        public int ID { get; set; }
         public decimal Servings { get; set; }
 
         [Display(Name = "Meal Type")]
@@ -33,7 +35,7 @@ namespace LambAndLentil.UI.Models
         [Display(Name = "Calories From Fat")]
         public short? CalsFromFat { get; set; }
 
-        //public virtual ICollection<RecipeIngredient> RecipeIngredients { get; set; }
+       public virtual ICollection<Ingredient>  Ingredients { get; set; }
 
 
         public static short GetCalories(RecipeVM recipeVM)

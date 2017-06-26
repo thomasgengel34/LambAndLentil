@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 namespace LambAndLentil.Domain.Entities
 {
     [Table("PLAN.Plan")]
-    public class Plan:BaseEntity
+    public class Plan:BaseEntity,IEntity
     {
         public Plan() : base(new DateTime(2010, 1, 1))
         {
         }
-
+        public int ID { get; set; }
         public ICollection<Menu> Menus   { get; set; }
     } 
 }
