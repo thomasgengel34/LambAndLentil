@@ -43,7 +43,9 @@ namespace LambAndLentil.UI.Controllers
         // GET: Recipes/Details/5
         public ActionResult Details(int id = 1, UIViewType actionMethod = UIViewType.Details)
         {
+            ViewBag.listOfIngredients = GetListOfIngredients();
             return BaseDetails<Recipe, RecipesController, RecipeVM>(UIControllerType.Recipes, id, actionMethod);
+
         }
 
         // GET: Ingredients/Create 
@@ -75,6 +77,7 @@ namespace LambAndLentil.UI.Controllers
         [ActionName("Delete")]
         public ActionResult Delete(int id = 1, UIViewType actionMethod = UIViewType.Delete)
         {
+            ViewBag.listOfIngredients = GetListOfIngredients();
             return BaseDelete<Recipe, RecipesController, RecipeVM>(UIControllerType.Recipes, id);
         }
 
@@ -83,21 +86,41 @@ namespace LambAndLentil.UI.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
+            ViewBag.listOfIngredients = GetListOfIngredients();
             return BaseDeleteConfirmed<Recipe, RecipesController>(UIControllerType.Recipes, id);
         }
 
-        public RedirectToRouteResult AddIngredient(int iD, string returnUrl)
-        {
-            Ingredient ingredient = repository.Ingredients.FirstOrDefault(p => p.ID == iD);
+        //public RedirectToRouteResult AddIngredient(int iD, string returnUrl)
+        //{
+        //    Ingredient ingredient = repository.Ingredients.FirstOrDefault(p => p.ID == iD);
 
-            if (ingredient != null)
-            {
-                GetRecipe().AddItem(ingredient, 1);
-            }
-            return RedirectToAction(UIViewType.Index.ToString(), new { returnUrl });
+        //    if (ingredient != null)
+        //    {
+        //        GetRecipe().AddItem(ingredient, 1);
+        //    }
+        //    return RedirectToAction(UIViewType.Index.ToString(), new { returnUrl });
+        //}
+
+
+        public RedirectToRouteResult AddIngredient(int recipeID, int ingredientID  )
+        {
+            Recipe recipe = repository.Recipes.Where(m => m.ID == recipeID).Single(); 
+            Ingredient ingredient = repository.Ingredients.Where(m => m.ID == ingredientID).Single();
+            recipe.Ingredients.Add(ingredient);
+            repository.Save<Recipe>(recipe);
+            ViewBag.listOfIngredients = GetListOfIngredients();
+            return RedirectToAction(UIViewType.Details.ToString(), new { id = recipeID, actionMethod = UIViewType.Details });
         }
 
-       
+        public RedirectToRouteResult RemoveIngredient(int recipeID, int ingredientID)
+        {
+            ViewBag.listOfIngredients = GetListOfIngredients();
+            Recipe recipe = repository.Recipes.Where(m => m.ID == recipeID).Single();
+            Ingredient ingredient = repository.Ingredients.Where(i => i.ID == ingredientID).Single();
+            recipe.Ingredients.Remove(ingredient);
+            repository.Save<Recipe>(recipe);
+            return RedirectToAction(UIViewType.Details.ToString(), new { id = recipeID, actionMethod = UIViewType.Details });
+        }
 
         private Recipe GetRecipe()
         {
@@ -108,6 +131,29 @@ namespace LambAndLentil.UI.Controllers
                 Session["Recipe"] = recipe;
             }
             return recipe;
+        }
+
+        private SelectList GetListOfIngredients()
+        {
+            var result = from m in repository.Ingredients
+                         orderby m.Name
+                         select new SelectListItem
+                         {
+                             Text =m.Name,
+                             Value =  m.ID.ToString()
+                         };
+            SelectList list = null;
+            if (result.Count() == 0)
+            {
+                List<string> item = new List<string>();
+                item.Add("Nothing was found");
+                list = new SelectList(item);
+            }
+            else
+            {
+                list = new SelectList(result,  "Value","Text", result.First());
+            }
+            return list;
         }
     }
 }

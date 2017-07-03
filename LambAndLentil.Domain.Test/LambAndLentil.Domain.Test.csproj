@@ -55,8 +55,12 @@
     <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entitities\ShoppingListClassShould.cs" />
+    <Compile Include="Entitities\PersonClassShould.cs" />
+    <Compile Include="Entitities\PlanClassShould.cs" />
+    <Compile Include="Entitities\MenuClassShould.cs" />
     <Compile Include="Entitities\RecipeClassShould.cs" />
-    <Compile Include="Entitities\IngredientClassTest.cs" />
+    <Compile Include="Entitities\IngredientClassShould.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

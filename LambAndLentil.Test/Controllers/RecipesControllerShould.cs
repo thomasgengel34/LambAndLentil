@@ -17,19 +17,19 @@ namespace LambAndLentil.Tests.Controllers
 {
     [TestClass]
     [TestCategory("RecipesController")]
-    public class RecipesControllerTest
+    public class RecipesControllerShould
     {
         static Mock<IRepository> mock;
         public static MapperConfiguration AutoMapperConfig { get; set; }
 
-        public RecipesControllerTest()
+        public RecipesControllerShould()
         { 
             AutoMapperConfigForTests.InitializeMap();   
         }
 
 
         [TestMethod]
-        public void AutoMapperIsConfigured()
+        public void ConfigureAutoMapper()
         {
             AutoMapperConfigForTests.InitializeMap();
             MapperConfiguration AutoMapperConfig = AutoMapperConfigForTests.AMConfigForTests();
@@ -37,7 +37,7 @@ namespace LambAndLentil.Tests.Controllers
         }
 
         [TestMethod]
-        public void RecipesCtr_InheritsFromBaseController()
+        public void  InheritFromBaseController()
         {
             // Arrange
             RecipesController testController = SetUpController();
@@ -53,7 +53,7 @@ namespace LambAndLentil.Tests.Controllers
 
 
         [TestMethod]
-        public void RecipesCtr_IsPublic()
+        public void BePublic()
         {
             // Arrange
             RecipesController testController = SetUpController();
@@ -67,7 +67,7 @@ namespace LambAndLentil.Tests.Controllers
         }
 
         [TestMethod]
-        public void RecipesCtr_Index()
+        public void ReturnNonNullIndex()
         {
             // Arrange
             RecipesController controller = SetUpController();
@@ -82,7 +82,8 @@ namespace LambAndLentil.Tests.Controllers
         }
 
         [TestMethod]
-        public void RecipesCtr_Index_ContainsAllRecipes()
+        [TestCategory("Index")]
+        public void  ShowAllRecipesonIndex()
         {
             // Arrange
             RecipesController controller = SetUpController();
@@ -110,7 +111,7 @@ namespace LambAndLentil.Tests.Controllers
         }
 
         [TestMethod]
-        public void RecipesCtr_Index_CanSendPaginationViewModel()
+        public void  CanSendPaginationViewModelonIndex()
         {
 
             // Arrange
@@ -132,7 +133,7 @@ namespace LambAndLentil.Tests.Controllers
 
 
         [TestMethod]
-        public void RecipesCtr_Index_FirstPageIsCorrect()
+        public void  Index_FirstPageIsCorrect()
         {
             // Arrange
             RecipesController controller = SetUpController();
@@ -162,7 +163,7 @@ namespace LambAndLentil.Tests.Controllers
         }
 
         [TestMethod]
-        public void RecipesCtr_Index_PagingInfoIsCorrect()
+        public void  Index_PagingInfoIsCorrect()
         {
             // Arrange
             RecipesController controller = SetUpController();
@@ -185,7 +186,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         // currently we only have one page here
-        public void RecipesCtr_Index_SecondPageIsCorrect()
+        public void  Index_SecondPageIsCorrect()
         {
             //// Arrange
             //RecipesController controller = SetUpController();
@@ -209,7 +210,7 @@ namespace LambAndLentil.Tests.Controllers
         }
 
         [TestMethod]
-        public void RecipesCtr_IndexCanPaginate()
+        public void  IndexCanPaginate()
         {
             // Arrange
             RecipesController controller = SetUpController();
@@ -228,7 +229,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Details")]
-        public void RecipesCtr_DetailsRecipeIDIsNegative()
+        public void  DetailsRecipeIDIsNegative()
         {
             // Arrange
             RecipesController controller = SetUpController();
@@ -250,7 +251,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Details")]
-        public void RecipesCtr_DetailsWorksWithValidRecipeID()
+        public void  DetailsWorksWithValidRecipeID()
         {
             // Arrange
             RecipesController controller = SetUpController();
@@ -268,7 +269,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Details")]
-        public void RecipesCtr_DetailsRecipeIDTooHigh()
+        public void DetailsRecipeIDTooHigh()
         {
             // Arrange
             RecipesController controller = SetUpController();
@@ -286,7 +287,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Details")]
-        public void RecipesCtr_DetailsRecipeIDPastIntLimit()
+        public void  DetailsRecipeIDPastIntLimit()
         {
             // Arrange
             RecipesController controller = SetUpController();
@@ -302,7 +303,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Details")]
-        public void RecipesCtr_DetailsRecipeIDIsZero()
+        public void  DetailsRecipeIDIsZero()
         {
             // Arrange
             RecipesController controller = SetUpController();
@@ -324,7 +325,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Create")]
-        public void RecipesCtr_Create()
+        public void  Create()
         {
             // Arrange
             RecipesController controller = SetUpController();
@@ -338,7 +339,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Delete")]
-        public void RecipesCtr_DeleteAFoundRecipe()
+        public void  DeleteAFoundRecipe()
         {
             // Arrange
             RecipesController controller = SetUpController();
@@ -353,7 +354,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Delete")]
-        public void RecipesCtr_DeleteAnInvalidRecipe()
+        public void  DeleteAnInvalidRecipe()
         {
             // Arrange
             RecipesController controller = SetUpController();
@@ -372,7 +373,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Delete")]
-        public void RecipesCtr_DeleteConfirmed()
+        public void  DeleteConfirmed()
         {
             // Arrange
             RecipesController controller = SetUpController();
@@ -386,7 +387,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Delete")]
-        public void Recipes_Ctr_CanDeleteValidRecipe()
+        public void  DeleteValidRecipe()
         {
             // Arrange - create an recipe
             Recipe recipe = new Recipe { ID = 2, Name = "Test2" };
@@ -416,19 +417,11 @@ namespace LambAndLentil.Tests.Controllers
 
             Assert.AreEqual("Test2 has been deleted", adr.Message);
         }
-
-        [TestMethod]
-        [TestCategory("Index")]
-        // currently we only have one page here
-        public void IngredientsCtr_Index_SecondPageIsCorrect()
-        {
-            //TODO: add enough test ingredients to test the second page
-        }
-
+         
 
         [TestMethod]
         [TestCategory("Edit")]
-        public void RecipesCtr_CanEditRecipe()
+        public void  CanEditRecipe()
         {
             // Arrange
             RecipesController controller = SetUpController();
@@ -459,7 +452,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Edit")]
-        public void RecipesCtr_CannotEditNonexistentRecipe()
+        public void NotEditNonexistentRecipe()
         {
             //    // Arrange
             //    RecipesController controller = SetUpController();

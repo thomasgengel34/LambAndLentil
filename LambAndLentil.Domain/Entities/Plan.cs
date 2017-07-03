@@ -10,9 +10,17 @@ namespace LambAndLentil.Domain.Entities
     [Table("PLAN.Plan")]
     public class Plan:BaseEntity,IEntity
     {
-        public Plan() : base(new DateTime(2010, 1, 1))
+        public Plan():base()
         {
+
         }
+
+
+        public Plan(DateTime creationDate) : base(creationDate)
+        {
+            CreationDate = creationDate;
+        }
+
         public int ID { get; set; }
         public ICollection<Menu> Menus   { get; set; }
     } 

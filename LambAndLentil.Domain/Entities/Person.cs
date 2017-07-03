@@ -11,10 +11,15 @@ namespace LambAndLentil.Domain.Entities
     [Table("PERSON.Person")]
     public class Person:BaseEntity,IEntity
     {
-        public Person():base( new DateTime(2010, 1, 1))  
+        public Person():base()
         {
-            Name = FirstName + " " + LastName;
+
         }
+        public Person(DateTime creationDate) : base(creationDate)
+        {
+            CreationDate = creationDate;
+        }
+
         public int ID { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; } 

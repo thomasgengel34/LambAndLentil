@@ -143,7 +143,7 @@ namespace LambAndLentil.Domain.Concrete
             dbEntry.ModifiedDate = DateTime.Now;
             dbEntry.Name = recipe.Name;
             dbEntry.ID = recipe.ID;
-            //   dbEntry.RecipeIngredients = recipe.RecipeIngredients;
+            dbEntry.Ingredients = recipe.Ingredients;
             dbEntry.Servings = recipe.Servings;
 
             int x = context.SaveChanges();

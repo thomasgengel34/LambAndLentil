@@ -75,7 +75,7 @@
     <Compile Include="Controllers\MenusControllerTest.cs" />
     <Compile Include="Controllers\NavControllerTest.cs" />
     <Compile Include="Controllers\PersonsControllerTest .cs" />
-    <Compile Include="Controllers\RecipesControllerTest.cs" />
+    <Compile Include="Controllers\RecipesControllerShould.cs" />
     <Compile Include="Controllers\PlansControllerTest.cs" />
     <Compile Include="Controllers\ShoppingListsControllerTest.cs" />
     <Compile Include="GlobalSuppressions.cs" />

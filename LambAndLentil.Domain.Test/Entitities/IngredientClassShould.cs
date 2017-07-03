@@ -6,10 +6,10 @@ namespace LambAndLentil.Domain.Test.Entities
 {
     [TestClass]
     [TestCategory("Ingredient Class")]
-    public class IngredientClass
+    public class IngredientClassShould
     {
         [TestMethod]
-        public void IngredientClass_HasCorrectDefaultsInConstructor()
+        public void HaveCorrectDefaultsInConstructor()
         {
             // Arrange
             Ingredient ingredient = new Ingredient();
@@ -26,7 +26,7 @@ namespace LambAndLentil.Domain.Test.Entities
         }
 
         [TestMethod]
-        public void IngredientClass_InheritsFromBaseEntity()
+        public void  InheritFromBaseEntity()
         {
             // Arrange
             Ingredient ingredient = new Ingredient();
@@ -38,5 +38,32 @@ namespace LambAndLentil.Domain.Test.Entities
             // Assert  
             Assert.AreEqual(true, isBase);
         }
+
+        [TestMethod]
+        public void HaveBaseEntityPropertiesOnCreation()
+        {
+            // Arrange
+            Ingredient ingredient = new Ingredient(new DateTime(2017, 06, 26));
+
+            // Act - nothing
+
+            // Assert
+            Assert.AreEqual("Newly Created", ingredient.Name);
+            Assert.AreEqual("not yet described", ingredient.Description);
+            Assert.AreEqual("6/26/2017", ingredient.CreationDate.ToShortDateString());
+        }
+
+        [TestMethod]
+        public void HaveOlderThanFortyYearCreationDateOKOnCreation()
+        {
+            // Arrange
+            Ingredient ingredient = new Ingredient(new DateTime(1977, 06, 26));
+
+            // Act - nothing
+
+            // Assert 
+            Assert.AreEqual("6/26/1977", ingredient.CreationDate.ToShortDateString());
+        }
+
     }
 }

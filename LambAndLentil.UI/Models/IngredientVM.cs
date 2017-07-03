@@ -20,6 +20,7 @@ namespace LambAndLentil.UI.Models
         public int ID { get; set; }
         [DataType(DataType.MultilineText)]
         public string IngredientsList { get; set; }
-       
+
+        public virtual Recipe Recipe { get; set; }
     }
 }

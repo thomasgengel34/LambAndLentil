@@ -15,13 +15,19 @@
                         Description
             </th>
                         <th>
-            IngredientsList
+            Ingredients List
                         </th>
                 </tr>
         <tr>
             <td>name</td>
             <td>description</td>
-            <td><input type="submit" value="- Delete From Recipe" /> </td>
+            <td>
+                @*@Html.ActionLink(" ", UIViewType.Details.ToString(), new
+          {
+              recipeID =Model.ID,ingredientID=
+              actionMethod = "RemoveIngredient"
+          }, new { @class = "btn btn-default btn-sm  glyphicon glyphicon-trash", @title = "Delete" })*@
+           
         </tr>
         </table>
                 }

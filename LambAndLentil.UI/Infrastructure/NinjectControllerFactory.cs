@@ -1,16 +1,10 @@
-﻿ using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using LambAndLentil.Domain.Abstract;
+using LambAndLentil.Domain.Concrete;
+using LambAndLentil.UI.Infrastructure.ModelMetaData;
+using Ninject;
+using System;
 using System.Web.Mvc;
 using System.Web.Routing;
-using Ninject;
-using LambAndLentil.Domain.Entities;
-using LambAndLentil.Domain.Abstract;
-using LambAndLentil.Domain.Concrete;
-using Moq;
-using LambAndLentil.UI.Infrastructure.ModelMetaData;
-using System.Collections.Generic;
 
 namespace LambAndLentil.UI.Infrastructure
 {

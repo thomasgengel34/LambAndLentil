@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace LambAndLentil.UI.Models
 {
     
-    public class PersonVM:BaseVM
+    public class PersonVM:BaseVM,IBaseVM
     {
         public PersonVM()
         {
@@ -23,7 +23,8 @@ namespace LambAndLentil.UI.Models
             CreationDate = creationDate;
         }
 
-        [Key] 
+        [Key]
+        public int ID { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; } 
         public decimal Weight { get; set; } 

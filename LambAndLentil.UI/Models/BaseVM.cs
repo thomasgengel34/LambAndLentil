@@ -7,12 +7,12 @@ using System.Web;
 
 namespace LambAndLentil.UI.Models
 {
-    public class BaseVM : BaseEntity, IBaseVM
+    public class BaseVM : BaseEntity 
     {
         internal BaseVM() : base()
         {
         }
-        public int ID { get; set; }
+       
         internal static ListVM GetIndexedModel(string t, IRepository repository, int PageSize,int page=1)
         {
             ListVM model = new ListVM();

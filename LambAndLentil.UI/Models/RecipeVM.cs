@@ -7,7 +7,7 @@ namespace LambAndLentil.UI.Models
 {
 
 
-    public class RecipeVM : BaseVM
+    public class RecipeVM : BaseVM,IBaseVM
     {
         public RecipeVM():base()
         {

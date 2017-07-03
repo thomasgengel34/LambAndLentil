@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace LambAndLentil.UI.Models
 {
-    public class ShoppingListVM:BaseVM
+    public class ShoppingListVM:BaseVM,IBaseVM
     {
 
 
@@ -15,6 +15,7 @@ namespace LambAndLentil.UI.Models
         public DateTime Date { get; set; }
 
         public List<Ingredient> Ingredients { get; set; }
+        public int ID { get; set ; }
 
         public ShoppingListVM()
         {

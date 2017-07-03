@@ -8,17 +8,19 @@ using System.ComponentModel.DataAnnotations;
 
 namespace LambAndLentil.UI.Models
 {
-    public class PlanVM:BaseVM
+    public class PlanVM : BaseVM, IBaseVM
     {
         public PlanVM()
         {
         }
 
-        public PlanVM(DateTime creationDate):this()
+        public PlanVM(DateTime creationDate) : this()
         {
             CreationDate = creationDate;
         }
 
+        public int ID { get; set; }
         public ICollection<Menu> Menus { get; set; }
-    } 
+
+    }
 }
