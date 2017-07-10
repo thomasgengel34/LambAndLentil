@@ -15,8 +15,16 @@
         actionMethod = UIViewType.PostEdit.ToString();
     }
 
-    SelectList IngredientsList = ViewBag.listOfIngredients; 
-    string value = IngredientsList.First().Value;  
+    string value = "empty";
+    SelectList IngredientsList = ViewBag.listOfIngredients;
+    if (IngredientsList == null)
+    {
+        IngredientsList = new SelectList(new List<string>());
+    }
+    else
+    {
+        value = IngredientsList.First().Value;
+    }
 }
 
 
@@ -105,6 +113,44 @@ else
 
 @if (actionMethod == UIViewType.PostEdit.ToString())
 {
+    if (Model.Ingredients == null)
+    {
+        Model.Ingredients = new List<Ingredient>();
+    }
+
+    if (Model.ID != 0)
+    {
+        using (Html.BeginForm("AttachIngredient", "Recipes", new { recipeID = Model.ID }))
+        {
+            @Html.HiddenFor(x => x.ID);
+            @Html.DropDownList("ingredientID", IngredientsList, "Choose an Ingredient");
+            <button type="submit" class="btn btn-default btn-sm  glyphicon glyphicon-plus" title="Add">Add Ingredient</button>        }
+
+        <dd>
+            <table class="table">
+                <tr>
+                    <th>Name</th>
+                    <th>Ingredients List</th>
+                    <th></th>
+                </tr>
+                @foreach (var item in Model.Ingredients)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.IngredientsList)
+                        </td>
+                        <td>
+                         
+
+                            @Html.ActionLink(" ", "RemoveIngredient", new { recipeID = Model.ID, ingredientID = item.ID }, new { @class = "btn btn-default btn-sm  glyphicon glyphicon-trash", @title = "Delete" })
+
+                    </tr>
+                }
+            </table>
+        </dd>   }
     <div>
         @Html.ActionLink("Back to List", UIViewType.Index.ToString(), null, new { T = typeof(Recipe), @class = "btn btn-default" })
         @if (Model.ID != 0)
@@ -112,9 +158,7 @@ else
             @Html.ActionLink("Delete", UIViewType.Delete.ToString(), null, new { id = Model.ID }, new { @class = "btn btn-default" })
         }
     </div>
-    <td>
-        @Html.Partial("_SelectIngredient")
-    </td>
+   
 }
 
 
@@ -140,29 +184,13 @@ else
         @Html.ActionLink("Edit", UIViewType.Edit.ToString(), null, new { id = Model.ID, actionMethod = UIViewType.Edit.ToString() }, new { @class = "btn btn-default" })
         @Html.ActionLink("Delete", UIViewType.Delete.ToString(), null, new { id = Model.ID }, new { @class = "btn btn-default" })
 
-        @*<td>
-                @Html.Partial("_SelectIngredient" )
-            </td>*@
+       
     </div>
 
     <dt>
         @Html.DisplayNameFor(model => model.Ingredients)
     </dt>
-        @*<dt>
-            @Html.Hidden("returnUrl", Request.Url.PathAndQuery)
-            <input type="submit" value="+ Add to Recipe" /> </dt>*@
- 
-using (Html.BeginForm("AddIngredient","Recipes",new { recipeID = Model.ID  },   FormMethod.Post))
-{
-    @Html.HiddenFor(x => x.ID);
-    @Html.DropDownList("selectedIngredientLI", IngredientsList, "Choose an Ingredient"); 
-
-
-
-  <button type="submit"  class="btn btn-default btn-sm  glyphicon glyphicon-plus" title = "Add">Add Ingredient</button> 
-    //Html.ActionLink("Add Ingredient", "AddIngredient", new { recipeID = Model.ID, ingredientID = 14 }, new { @class = "btn btn-default btn-sm  glyphicon glyphicon-plus", @title = "Add" });
-    @*@Html.ActionLink("Add Ingredient", "AddIngredient", new { recipeID = Model.ID, ingredientID = IngredientsList.Where(o => o.Selected).Single() }, new { @class = "btn btn-default btn-sm  glyphicon glyphicon-plus", @title = "Add" })*@
-}
+     
     <dd>
         <table class="table">
             <tr>
@@ -179,16 +207,12 @@ using (Html.BeginForm("AddIngredient","Recipes",new { recipeID = Model.ID  },   
                     <td>
                         @Html.DisplayFor(modelItem => item.IngredientsList)
                     </td>
-                    <td>
-                        @*<input type="submit" value="- Remove from Recipe" />*@
-
-                        @Html.ActionLink(" ", "RemoveIngredient", new { recipeID = Model.ID, ingredientID = item.ID }, new { @class = "btn btn-default btn-sm  glyphicon glyphicon-trash", @title = "Delete" })
-
+                    <td> 
                 </tr>
             }
         </table>
-    </dd> 
+    </dd>
 }
- 
+
 
 

@@ -94,6 +94,14 @@
     <Compile Include="Migrations\201706240236402_x1.Designer.cs">
       <DependentUpon>201706240236402_x1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201707051615581_MenuPublicICollection.cs" />
+    <Compile Include="Migrations\201707051615581_MenuPublicICollection.Designer.cs">
+      <DependentUpon>201707051615581_MenuPublicICollection.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201707061843319_AddICollectionIngredientsToMenu.cs" />
+    <Compile Include="Migrations\201707061843319_AddICollectionIngredientsToMenu.Designer.cs">
+      <DependentUpon>201707061843319_AddICollectionIngredientsToMenu.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -118,6 +126,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201706240236402_x1.resx">
       <DependentUpon>201706240236402_x1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201707051615581_MenuPublicICollection.resx">
+      <DependentUpon>201707051615581_MenuPublicICollection.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201707061843319_AddICollectionIngredientsToMenu.resx">
+      <DependentUpon>201707061843319_AddICollectionIngredientsToMenu.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

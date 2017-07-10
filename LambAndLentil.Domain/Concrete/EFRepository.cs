@@ -156,6 +156,8 @@ namespace LambAndLentil.Domain.Concrete
             Recipe dbEntry = context.Recipes.Find(ID);
             if (dbEntry != null)
             {
+                
+                dbEntry.Ingredients.Clear();
                 context.Recipes.Remove(dbEntry);
                 context.SaveChanges();
             }
@@ -202,6 +204,7 @@ namespace LambAndLentil.Domain.Concrete
             Menu dbEntry = context.Menus.Find(ID);
             if (dbEntry != null)
             {
+                dbEntry.Recipes.Clear();
                 context.Menus.Remove(dbEntry);
                 context.SaveChanges();
             }

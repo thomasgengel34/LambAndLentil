@@ -5,32 +5,25 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace LambAndLentil.Domain.Entities
 {
     [Table("MENU.Menu")]
-    public class Menu : BaseEntity,IEntity
+    public class Menu : BaseEntity, IEntity
     {
-        public int ID { get; set; }
 
-        public Menu():base() 
+        public Menu() : base()
         {
-             
-            Name = base.Name;
-            Description = base.Description;
-            CreationDate = base.CreationDate; 
-            ModifiedDate = base.ModifiedDate;
-            AddedByUser = base.AddedByUser; ;
-            ModifiedByUser = base.ModifiedByUser;
         }
 
-        public Menu(DateTime creationDate) : this()
+        public Menu(DateTime creationDate) : base(creationDate)
         {
             CreationDate = creationDate;
         }
 
+        public int ID { get; set; }
         public MealType MealType { get; set; }
-        public DayOfWeek DayOfWeek { get; set; }
-
+        public DayOfWeek DayOfWeek { get; set; } 
         public int Diners { get; set; }
 
-        ICollection<Recipe> Recipes { get; set; }
+        public virtual ICollection<Recipe> Recipes { get; set; }
+        public virtual ICollection<Ingredient> Ingredients { get; set; }
 
     }
 }

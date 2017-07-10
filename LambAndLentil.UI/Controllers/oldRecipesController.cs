@@ -165,7 +165,7 @@
 //            return RedirectToAction("Index");
 //        }
 
-//        public ActionResult AddIngredient(int? ID, string IngredientName, decimal? Quantity, Measurement? measurement)
+//        public ActionResult AttachIngredient(int? ID, string IngredientName, decimal? Quantity, Measurement? measurement)
 //        {
 //            if (ID == null || ID < 1)
 //            {

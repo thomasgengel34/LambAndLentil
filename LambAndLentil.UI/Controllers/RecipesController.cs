@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using System.Web;
+using LambAndLentil.UI.Infrastructure.Alerts;
 
 namespace LambAndLentil.UI.Controllers
 {
@@ -26,6 +27,7 @@ namespace LambAndLentil.UI.Controllers
             return View(view.ViewName, view.Model);
         }
 
+        // is this needed??
         [ChildActionOnly]
         public ViewResult RecipeIndexViewModel(string returnUrl)
         {
@@ -51,6 +53,7 @@ namespace LambAndLentil.UI.Controllers
         // GET: Ingredients/Create 
         public ViewResult Create(UIViewType actionMethod)
         {
+            ViewBag.listOfIngredients = GetListOfIngredients();
             return BaseCreate<RecipeVM>(actionMethod);
         }
 
@@ -58,6 +61,7 @@ namespace LambAndLentil.UI.Controllers
         // GET: Recipes/Edit/5
         public ViewResult Edit(int id = 1)
         {
+            ViewBag.listOfIngredients = GetListOfIngredients();
             return BaseEdit<Recipe, RecipesController, RecipeVM>(UIControllerType.Recipes, id);
         }
 
@@ -70,6 +74,7 @@ namespace LambAndLentil.UI.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult PostEdit([Bind(Include = "ID,Name,Description,Servings,MealType,Calories,CalsFromFat,CreationDate, ModifiedDate,AddedByUser, ModifiedByUser ")] RecipeVM recipeVM)
         {
+            ViewBag.listOfIngredients = GetListOfIngredients();
             return BasePostEdit<Recipe, RecipesController, RecipeVM>(recipeVM);
         }
 
@@ -90,37 +95,46 @@ namespace LambAndLentil.UI.Controllers
             return BaseDeleteConfirmed<Recipe, RecipesController>(UIControllerType.Recipes, id);
         }
 
-        //public RedirectToRouteResult AddIngredient(int iD, string returnUrl)
-        //{
-        //    Ingredient ingredient = repository.Ingredients.FirstOrDefault(p => p.ID == iD);
-
-        //    if (ingredient != null)
-        //    {
-        //        GetRecipe().AddItem(ingredient, 1);
-        //    }
-        //    return RedirectToAction(UIViewType.Index.ToString(), new { returnUrl });
-        //}
-
-
-        public RedirectToRouteResult AddIngredient(int recipeID, int ingredientID  )
+        public ActionResult AttachIngredient(int? recipeID, int? ingredientID)
         {
-            Recipe recipe = repository.Recipes.Where(m => m.ID == recipeID).Single(); 
-            Ingredient ingredient = repository.Ingredients.Where(m => m.ID == ingredientID).Single();
-            recipe.Ingredients.Add(ingredient);
-            repository.Save<Recipe>(recipe);
-            ViewBag.listOfIngredients = GetListOfIngredients();
-            return RedirectToAction(UIViewType.Details.ToString(), new { id = recipeID, actionMethod = UIViewType.Details });
+            return BaseAttach<Recipe,Ingredient>(recipeID, ingredientID);
         }
 
-        public RedirectToRouteResult RemoveIngredient(int recipeID, int ingredientID)
-        {
+        public ActionResult RemoveIngredient(int? recipeID, int? ingredientID)
+        {   // conditions guard against people trying thngs out manually  
             ViewBag.listOfIngredients = GetListOfIngredients();
-            Recipe recipe = repository.Recipes.Where(m => m.ID == recipeID).Single();
-            Ingredient ingredient = repository.Ingredients.Where(i => i.ID == ingredientID).Single();
-            recipe.Ingredients.Remove(ingredient);
-            repository.Save<Recipe>(recipe);
-            return RedirectToAction(UIViewType.Details.ToString(), new { id = recipeID, actionMethod = UIViewType.Details });
-        }
+            if (recipeID == null)
+            {
+                return RedirectToAction(UIViewType.Index.ToString()).WithWarning("Recipe was not found");
+            }
+            else
+            {
+                Recipe recipe = repository.Recipes.Where(m => m.ID == recipeID).SingleOrDefault();
+                if (recipe == null)
+                {
+                    // todo: log error - this could be a developer problem
+                    return RedirectToAction(UIViewType.Index.ToString()).WithWarning("Recipe was not found");
+                }
+                if (ingredientID == null)
+                {     
+                    return RedirectToAction(UIViewType.Details.ToString(), new { id = recipeID, actionMethod = UIViewType.Details }).WithWarning("Ingredient was not found"); ;
+                }
+                else
+                {
+                    Ingredient ingredient = repository.Ingredients.Where(m => m.ID == ingredientID).SingleOrDefault();
+                    if (ingredient == null)
+                    {
+                        return RedirectToAction(UIViewType.Edit.ToString(), new { id = recipeID, actionMethod = UIViewType.Details }).WithWarning("Please choose an ingredient");
+                    }
+                    else
+                    { 
+                        recipe.Ingredients.Remove(ingredient);
+                        repository.Save<Recipe>(recipe);
+                        return RedirectToAction(UIViewType.Details.ToString(), new { id = recipeID, actionMethod = UIViewType.Edit }).WithSuccess("Ingredient was Successfully Removed");
+                    }
+                }
+            }
+        }  
 
         private Recipe GetRecipe()
         {
@@ -131,29 +145,6 @@ namespace LambAndLentil.UI.Controllers
                 Session["Recipe"] = recipe;
             }
             return recipe;
-        }
-
-        private SelectList GetListOfIngredients()
-        {
-            var result = from m in repository.Ingredients
-                         orderby m.Name
-                         select new SelectListItem
-                         {
-                             Text =m.Name,
-                             Value =  m.ID.ToString()
-                         };
-            SelectList list = null;
-            if (result.Count() == 0)
-            {
-                List<string> item = new List<string>();
-                item.Add("Nothing was found");
-                list = new SelectList(item);
-            }
-            else
-            {
-                list = new SelectList(result,  "Value","Text", result.First());
-            }
-            return list;
-        }
+        } 
     }
 }

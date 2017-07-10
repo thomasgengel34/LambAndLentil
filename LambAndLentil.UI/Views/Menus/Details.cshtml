@@ -14,12 +14,34 @@
     {
         actionMethod = UIViewType.PostEdit.ToString();
     }
+
+    string ingredientsValue = "empty";
+    SelectList IngredientsList = ViewBag.listOfIngredients;
+    if (IngredientsList == null)
+    {
+        IngredientsList = new SelectList(new List<string>());
+    }
+    else
+    {
+        ingredientsValue = IngredientsList.First().Value;
+    }
+
+    string value = "empty";
+    SelectList RecipesList = ViewBag.listOfRecipes;
+    if (RecipesList == null)
+    {
+        RecipesList = new SelectList(new List<string>());
+    }
+    else
+    {
+        value = RecipesList.First().Value;
+    }
 }
 
 
 @if (actionMethod == UIViewType.Delete.ToString())
 {
-    <h2>@actionMethod Menu  &nbsp;:&nbsp; @Model.Name   ?</h2>
+    <h2>@actionMethod Menu @colon @Model.Name   ?</h2>
 }
 else if (actionMethod == UIViewType.Details.ToString())
 {
@@ -27,7 +49,7 @@ else if (actionMethod == UIViewType.Details.ToString())
 }
 else if (actionMethod == UIViewType.PostEdit.ToString())
 {
-    if (Model.ID ==0)
+    if (Model.ID == 0)
     {
         <h2> Create New Menu</h2>
     }
@@ -38,12 +60,12 @@ else if (actionMethod == UIViewType.PostEdit.ToString())
 }
 else
 {
-    string modelLabel = Model.Name == null ? " " : Model.Name == "Newly Created" ? " " : Model.Name;   
-    <h2>@actionMethod Menu  &nbsp;:&nbsp;@modelLabel </h2>
+    string modelLabel = Model.Name == null ? " " : Model.Name == "Newly Created" ? " " : Model.Name;
+    <h2>@actionMethod Menu  @colon @modelLabel </h2>
 }
 
 <hr />
-@using (Html.BeginForm(actionMethod, UIControllerType.Menus.ToString(), FormMethod.Post, new { id = Model.ID, ingredientVM = Model }))
+@using (Html.BeginForm(actionMethod, UIControllerType.Menus.ToString(), FormMethod.Post, new { id = Model.ID, menuVM = Model }))
 {
 
     @Html.AntiForgeryToken()
@@ -54,23 +76,23 @@ else
                 <ul>
                     <li>@Html.EditorFor(model => model.Name, new { valueM = Model.Name })</li>
                     <li>@Html.EditorFor(model => model.Description, new { valueM = Model.Description })</li>
-                    <li>@Html.EditorFor(model=>model.MealType, new {valueM=Model.MealType})</li>
+                    <li>@Html.EditorFor(model => model.MealType, new { valueM = Model.MealType })</li>
                     <li>@Html.EditorFor(model => model.DayOfWeek, new { valueM = Model.DayOfWeek })  </li>
-                    <li>@Html.EditorFor(model => model.Diners, new { valueM = Model.Diners })</li> 
+                    <li>@Html.EditorFor(model => model.Diners, new { valueM = Model.Diners })</li>
                 </ul>
             </div>
-             
+
             <div class="col-md-6">
-                <ul> 
+                <ul>
                     <li>@Html.EditorFor(model => model.AddedByUser, new { valueM = Model.AddedByUser, readOnly = true }) </li>
                     <li>@Html.EditorFor(model => model.CreationDate, new { valueM = Model.CreationDate, readOnly = true }) @Html.HiddenFor(model => model.CreationDate)</li>
                     <li>@Html.EditorFor(model => model.ModifiedByUser, new { valueM = Model.ModifiedByUser, readOnly = true }) </li>
-                    <li>@Html.EditorFor(model => model.ModifiedDate, new { valueM = Model.ModifiedDate, readOnly = true })   @Html.HiddenFor(model => model.ModifiedDate)</li>  
+                    <li>@Html.EditorFor(model => model.ModifiedDate, new { valueM = Model.ModifiedDate, readOnly = true })   @Html.HiddenFor(model => model.ModifiedDate)</li>
                 </ul>
-            </div> 
+            </div>
         </div>
     </div>
-   
+
 
     if (actionMethod == UIViewType.PostEdit.ToString() || actionMethod == UIViewType.Create.ToString())
     {
@@ -95,15 +117,78 @@ else
 
 @if (actionMethod == UIViewType.PostEdit.ToString())
 {
-    <div>
-        @Html.ActionLink("Back to List", UIViewType.Index.ToString(), null, new { T = typeof(Menu), @class = "btn btn-default" })
-        @if(Model.ID!=0)
-        { 
-        @Html.ActionLink("Delete", UIViewType.Delete.ToString(), null, new { id = Model.ID }, new { @class = "btn btn-default" })
-        }
-    </div>
+    if (Model.Recipes == null)
+    {
+        Model.Recipes = new List<Recipe>();
+    }
 
-}
+    if (Model.ID != 0)
+    {
+        using (Html.BeginForm("AddRecipe", "Menus", new { menuID = Model.ID }))
+        {
+            @Html.HiddenFor(x => x.ID);
+            @Html.DropDownList("recipeID", RecipesList, "Choose a Recipe");
+            <button type="submit" class="btn btn-default btn-sm  glyphicon glyphicon-plus" title="Add">Add Recipe</button>        }
+
+        <dd>
+            <table class="table">
+                <tr>
+                    <th>Recipe</th>
+                    <th>Ingredients List</th>
+                </tr>
+                @foreach (var item in Model.Recipes)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @foreach (Ingredient ingredient in item.Ingredients)
+                            {
+                                @ingredient.Name;   <br />
+                            }
+                        </td>
+                        <td>
+                            @Html.ActionLink(" ", "RemoveRecipe", new { menuID = Model.ID, recipeID = item.ID }, new { @class = "btn btn-default btn-sm  glyphicon glyphicon-trash", @title = "Delete" })
+                        </td>
+                    </tr>
+                }
+            </table>
+        </dd>   }
+
+    using (Html.BeginForm("AttachIngredient", "Menus", new { menuID = Model.ID }))
+    {
+        @Html.HiddenFor(x => x.ID);
+        @Html.DropDownList("ingredientID", IngredientsList, "Choose a Ingredient");
+        <button type="submit" class="btn btn-default btn-sm  glyphicon glyphicon-plus" title="Add">Add Ingredient</button>        }
+
+    <dd>
+        <table class="table">
+            <tr>
+                <th>Separate Ingredient</th>
+            </tr>
+            @foreach (var item in Model.Ingredients)
+                {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.ActionLink(" ", "RemoveIngredient", new { menuID = Model.ID, ingredientID = item.ID }, new { @class = "btn btn-default btn-sm  glyphicon glyphicon-trash", @title = "Delete" })
+                    </td>
+                </tr>
+            }
+        </table>
+    </dd>   }
+<div>
+    @Html.ActionLink("Back to List", UIViewType.Index.ToString(), null, new { T = typeof(Menu), @class = "btn btn-default" })
+    @if (Model.ID != 0)
+    {
+        @Html.ActionLink("Delete", UIViewType.Delete.ToString(), null, new { id = Model.ID }, new { @class = "btn btn-default" })
+    }
+</div>
+
+ } 
 
 
 @if (actionMethod == UIViewType.Delete.ToString())
@@ -125,9 +210,45 @@ else
 {
     <div>
         @Html.ActionLink("Back to List", UIViewType.Index.ToString(), null, new { T = typeof(Menu), @class = "btn btn-default" })
-        @Html.ActionLink("Edit", UIViewType.Edit.ToString(), null, new { id = Model.ID, actionMethod = UIViewType.Edit.ToString() }, new { @class = "btn btn-default" }) 
+        @Html.ActionLink("Edit", UIViewType.Edit.ToString(), null, new { id = Model.ID, actionMethod = UIViewType.Edit.ToString() }, new { @class = "btn btn-default" })
         @Html.ActionLink("Delete", UIViewType.Delete.ToString(), null, new { id = Model.ID }, new { @class = "btn btn-default" })
 
     </div>
+    <dt>
+        @Html.DisplayNameFor(model => model.Recipes)
+    </dt>
 
+    <dd>
+        <table class="table">
+            <tr>
+                <th>Name</th>
+                <th>Ingredients List</th>
+            </tr>
+            @foreach (var item in Model.Recipes)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @foreach (Ingredient ingredient in item.Ingredients)
+                        {
+                            @ingredient.Name;   <br />
+                        }
+                    </td>
+                </tr>
+            }
+            <tr>
+                <th>Separate Ingredient</th> 
+            </tr>
+            @foreach (var ingredient in Model.Ingredients)
+            {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => ingredient.Name)
+                </td>
+            </tr>
+            }
+        </table>
+    </dd>
 }

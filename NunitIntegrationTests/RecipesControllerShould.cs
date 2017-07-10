@@ -388,10 +388,10 @@ namespace MsTestIntegrationTests
         {
             // Arrange
             EFRepository repo = new EFRepository();
-            RecipesController controllerPost = new RecipesController(repo); 
+            RecipesController controllerPost = new RecipesController(repo);
             RecipesController controllerView = new RecipesController(repo);
             RecipesController controllerDelete = new RecipesController(repo);
-            RecipeVM vm = new RecipeVM(); 
+            RecipeVM vm = new RecipeVM();
             vm.Name = "___test387";
             vm.Description = "test387 description";
 
@@ -403,10 +403,10 @@ namespace MsTestIntegrationTests
                            where m.Name == "___test387"
                            select m).AsQueryable();
 
-           Recipe recipe = result1.FirstOrDefault();
+            Recipe recipe = result1.FirstOrDefault();
 
             try
-            { 
+            {
                 Assert.AreEqual(vm.Name, recipe.Name);
                 Assert.AreEqual(vm.Description, recipe.Description);
                 Assert.AreEqual(vm.CreationDate.Day, recipe.CreationDate.Day);
@@ -424,6 +424,320 @@ namespace MsTestIntegrationTests
             {
                 controllerDelete.DeleteConfirmed(recipe.ID);
             }
+        }
+
+        [TestMethod]
+        [TestCategory("Attach-Detach")]
+        public void AddAnExistingIngredientToAnExistingRecipe()
+        {
+            // Arrange
+
+            EFRepository repo = new EFRepository();
+            RecipesController controllerAdd = new RecipesController(repo);
+            IngredientsController controllerAddI = new IngredientsController(repo);
+            RecipesController controllerCleanup = new RecipesController(repo);
+            RecipeVM recipeVM = new RecipeVM();
+            recipeVM.Description = "test AddAnExistingIngredientToAnExistingRecipe";
+            IngredientVM ingredientVM = new IngredientVM();
+            ingredientVM.Description = "test AddAnExistingIngredientToAnExistingRecipe";
+            controllerAdd.PostEdit(recipeVM);
+            controllerAddI.PostEdit(ingredientVM);
+
+            var result1 = (from m in repo.Recipes
+                           where m.Description == "test AddAnExistingIngredientToAnExistingRecipe"
+                           select m).AsQueryable();
+
+            Recipe recipe1 = result1.FirstOrDefault();
+
+            var result2 = (from m in repo.Ingredients
+                           where m.Description == "test AddAnExistingIngredientToAnExistingRecipe"
+                           select m).AsQueryable();
+
+            Ingredient ingredient2 = result2.FirstOrDefault();
+
+            // Act
+            controllerAdd.AttachIngredient(recipe1.ID, ingredient2.ID);
+
+            // Assert 
+            Assert.AreEqual(1, recipe1.Ingredients.Count());
+            // how do I know the correct ingredient was added?
+            Assert.AreEqual(ingredient2.ID, recipe1.Ingredients.First().ID);
+
+            // Cleanup
+            IngredientsController icontroller = new IngredientsController(repo);
+
+            RecipeVM recipe1VM = Mapper.Map<Recipe, RecipeVM>(recipe1);
+            IngredientVM ingredient2VM = Mapper.Map<Ingredient, IngredientVM>(ingredient2);
+            controllerCleanup.DeleteConfirmed(recipe1VM.ID);
+            icontroller.DeleteConfirmed(ingredient2VM.ID);
+        }
+
+        [TestMethod]
+        [TestCategory("Attach-Detach")]
+        public void NotDeleteAnIngredientAfterIngredientIsDetached()
+        {
+            // Arrange
+            EFRepository repo = new EFRepository();
+            RecipesController controllerAdd = new RecipesController(repo);
+            RecipesController controllerSubtract = new RecipesController(repo);
+            IngredientsController controllerAddI = new IngredientsController(repo);
+            RecipeVM recipeVM = new RecipeVM();
+            recipeVM.Description = "test NotDeleteAnIngredientAfterIngredientIsDetached";
+            IngredientVM ingredientVM = new IngredientVM();
+            ingredientVM.Description = "test NotDeleteAnIngredientAfterIngredientIsDetached";
+            controllerAdd.PostEdit(recipeVM);
+            controllerAddI.PostEdit(ingredientVM);
+
+            var result1 = (from m in repo.Recipes
+                           where m.Description == "test NotDeleteAnIngredientAfterIngredientIsDetached"
+                           select m).AsQueryable();
+
+            Recipe recipe1 = result1.FirstOrDefault();
+
+            var result2 = (from m in repo.Ingredients
+                           where m.Description == "test NotDeleteAnIngredientAfterIngredientIsDetached"
+                           select m).AsQueryable();
+
+            Ingredient ingredient2 = result2.FirstOrDefault();
+            controllerAdd.AttachIngredient(recipe1.ID, ingredient2.ID);
+            // Act
+            controllerSubtract.RemoveIngredient(recipe1.ID, ingredient2.ID);
+
+
+            // Assert
+            Assert.IsNotNull(ingredient2);
+
+            // Cleanup
+            RecipesController controllerCleanupRecipe = new RecipesController(repo);
+            IngredientsController controllerCleanupIngredient = new IngredientsController(repo);
+            controllerCleanupRecipe.DeleteConfirmed(recipe1.ID);
+            controllerCleanupIngredient.DeleteConfirmed(ingredient2.ID);
+        }
+
+        [TestMethod]
+        [TestCategory("Attach-Detach")]
+        public void ReturnIndexViewWithWarningWhenAttachingExistIngredientToNonExistingRecipe()
+        {
+            // Arrange
+            EFRepository repo = new EFRepository();
+            RecipesController controllerAdd = new RecipesController(repo);
+            RecipesController controllerSubtract = new RecipesController(repo);
+            IngredientsController controllerAddI = new IngredientsController(repo);
+            IngredientVM ingredientVM = new IngredientVM();
+            ingredientVM.Description = "test ReturnIndexViewWhenAttachingExistIngredientToNonExistingRecipe";
+            controllerAddI.PostEdit(ingredientVM);
+
+            var result2 = (from m in repo.Ingredients
+                           where m.Description == "test ReturnIndexViewWhenAttachingExistIngredientToNonExistingRecipe"
+                           select m).AsQueryable();
+
+            Ingredient ingredient2 = result2.FirstOrDefault();
+
+            // Act
+            AlertDecoratorResult adr = (AlertDecoratorResult)controllerAdd.AttachIngredient(-1, ingredient2.ID);
+            RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
+            var routeValues = rtrr.RouteValues.Values;
+
+            // Assert
+            try
+            {
+                Assert.AreEqual("alert-warning", adr.AlertClass);
+                Assert.AreEqual("Recipe was not found", adr.Message);
+                Assert.AreEqual(1, routeValues.Count);
+                Assert.AreEqual(UIViewType.Index.ToString(), routeValues.ElementAt(0).ToString());
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                // Cleanup 
+                IngredientsController controllerCleanupIngredient = new IngredientsController(repo);
+                controllerCleanupIngredient.DeleteConfirmed(ingredient2.ID);
+            }
+        }
+
+        [TestMethod]
+        [TestCategory("Attach-Detach")]
+        public void ReturnRecipeEditViewWithWarningMessageWhenAddingNonExistingIngredientToExistingRrecipe()
+        {
+            // Arrange
+            EFRepository repo = new EFRepository();
+            RecipesController controllerAddRecipe = new RecipesController(repo);
+            RecipeVM rvm = new RecipeVM();
+            rvm.Description = "test ReturnRecipeEditViewWithErrorMessageWhenAddingNonExistingIngredientToExistingRrecipe";
+            controllerAddRecipe.PostEdit(rvm);
+            RecipesController controllerAttachIngredient = new RecipesController(repo);
+            var result1 = (from m in repo.Recipes
+                           where m.Description == "test ReturnRecipeEditViewWithErrorMessageWhenAddingNonExistingIngredientToExistingRrecipe"
+                           select m).AsQueryable();
+
+            Recipe recipe1 = result1.FirstOrDefault();
+
+            // Act  
+            AlertDecoratorResult adr = (AlertDecoratorResult)controllerAttachIngredient.AttachIngredient(recipe1.ID, -1);
+            RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
+            var routeValues = rtrr.RouteValues.Values;
+
+            // Assert
+            try
+            {
+                Assert.AreEqual("alert-warning", adr.AlertClass);
+                Assert.AreEqual("Please choose an ingredient", adr.Message);
+                 Assert.AreEqual(3, routeValues.Count);
+                 Assert.AreEqual(UIViewType.Details.ToString(), routeValues.ElementAt(1).ToString());
+                 Assert.AreEqual(UIViewType.Edit.ToString(), routeValues.ElementAt(2).ToString());
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                // Cleanup 
+                RecipesController controllerCleanupIngredient = new RecipesController(repo);
+                controllerCleanupIngredient.DeleteConfirmed(recipe1.ID);
+            }
+        }
+
+        [TestMethod]
+        [TestCategory("Attach-Detach")]
+        public void ReturnIndexViewWithWarningWhenAttachingNonExistIngredientToNonExistingRecipe()
+        {
+            // Arrange
+            EFRepository repo = new EFRepository();
+            RecipesController controller  = new RecipesController(repo);
+
+            // Act 
+            AlertDecoratorResult adr = (AlertDecoratorResult)controller.AttachIngredient(-1, -1);
+            RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
+            var routeValues = rtrr.RouteValues.Values;
+
+            // Assert
+            Assert.AreEqual("alert-warning", adr.AlertClass);
+            Assert.AreEqual("Recipe was not found", adr.Message);
+            Assert.AreEqual(1, routeValues.Count);
+            Assert.AreEqual(UIViewType.Index.ToString(), routeValues.ElementAt(0).ToString()); 
+
+            // Clean up not needed
+
+        }
+
+        [TestMethod]
+        [TestCategory("Attach-Detach")]
+        public void ReturnRecipeEditViewWithSuccessMessageWhenRemovingExistingIngredientFromExistingRecipe()
+        {
+            // Arrange
+            EFRepository repo = new EFRepository();
+            RecipesController controllerAddRecipe = new RecipesController(repo);
+            RecipesController controllerAttachIngredient = new RecipesController(repo);
+            RecipesController controllerRemoveIngredient = new RecipesController(repo);
+            IngredientsController controllerIngredient = new IngredientsController(repo);
+
+            RecipeVM rvm = new RecipeVM();
+            rvm.Description = "test ReturnRecipeEditViewWithSuccessMessageWhenRemovingExistingIngredientFromExistingRecipe";
+            controllerAddRecipe.PostEdit(rvm);
+          
+            var result1 = (from m in repo.Recipes
+                           where m.Description == "test ReturnRecipeEditViewWithSuccessMessageWhenRemovingExistingIngredientFromExistingRecipe"
+                           select m).AsQueryable();
+
+            Recipe recipe1 = result1.FirstOrDefault();
+
+            IngredientVM ivm = new IngredientVM();
+           ivm.Description = "test ReturnRecipeEditViewWithSuccessMessageWhenRemovingExistingIngredientFromExistingRecipe";
+            controllerIngredient.PostEdit(ivm);
+
+            var result2 = (from m in repo.Ingredients
+                           where m.Description == "test ReturnRecipeEditViewWithSuccessMessageWhenRemovingExistingIngredientFromExistingRecipe"
+                           select m).AsQueryable();
+
+            Ingredient ingredient2 = result2.FirstOrDefault();
+            controllerAttachIngredient.AttachIngredient(recipe1.ID, ingredient2.ID);
+
+            // Act          
+            AlertDecoratorResult adr = (AlertDecoratorResult)   controllerRemoveIngredient.RemoveIngredient(recipe1.ID, ingredient2.ID); 
+            RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
+            var routeValues = rtrr.RouteValues.Values;
+
+            // Assert
+            try
+            {
+                Assert.AreEqual("alert-success", adr.AlertClass);
+                Assert.AreEqual("Ingredient was Successfully Removed", adr.Message);
+                Assert.AreEqual(3, routeValues.Count);
+                Assert.AreEqual(UIViewType.Edit.ToString(), routeValues.ElementAt(1).ToString());
+                Assert.AreEqual(UIViewType.Details.ToString(), routeValues.ElementAt(2).ToString());
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                // Cleanup 
+                RecipesController controllerCleanupRecipe = new RecipesController(repo);
+                controllerCleanupRecipe.DeleteConfirmed(recipe1.ID);
+                IngredientsController controllerCleanupIngredient = new IngredientsController(repo);
+                controllerCleanupIngredient.DeleteConfirmed(ingredient2.ID);
+            }
+        }
+
+        [TestMethod]
+        [TestCategory("Attach-Detach")]
+        public void ReturnIndexViewWithWarningWhenDetachingExistingIngredientAttachedToNoExistingRecipe()
+        {
+            // Arrange
+            EFRepository repo = new EFRepository();
+            IngredientsController controllerIngredient = new IngredientsController(repo);
+            RecipesController controllerRemoveIngredient = new RecipesController(repo);
+
+            IngredientVM ivm = new IngredientVM();
+            ivm.Description = "test ReturnIndexViewWithWarningWhenDetachingExistingIngredientAttachedToNoExistingRecipe";
+            controllerIngredient.PostEdit(ivm);
+
+            Ingredient ingredient = ((from m in repo.Ingredients
+                                      where m.Description == "test ReturnRecipeEditViewWithSuccessMessageWhenRemovingExistingIngredientFromExistingRecipe"
+                                      select m).AsQueryable()).FirstOrDefault();
+            // Act  
+            AlertDecoratorResult adr = (AlertDecoratorResult)controllerRemoveIngredient.RemoveIngredient(-1, ingredient.ID);
+            RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
+            var routeValues = rtrr.RouteValues.Values;
+
+            // Assert
+            try
+            {
+                Assert.AreEqual("alert-warning", adr.AlertClass);
+                Assert.AreEqual("Recipe was not found", adr.Message);
+                Assert.AreEqual(1, routeValues.Count);
+                Assert.AreEqual(UIViewType.Index.ToString(), routeValues.ElementAt(0).ToString()); 
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                // Cleanup 
+          
+                IngredientsController controllerCleanupIngredient = new IngredientsController(repo);
+                controllerCleanupIngredient.DeleteConfirmed(ingredient.ID);
+            }
+        }
+
+        [TestMethod]
+        [TestCategory("Attach-Detach")]
+        public void ReturnRecipeEditViewWithWarningWhenRemovingExistingingredientNotAttachedToAnExistingRrecipe()
+        {
+            // Arrange
+
+            // Act 
+
+            // Assert
+            Assert.Fail();
+
+            // Clean up
         }
     }
 }

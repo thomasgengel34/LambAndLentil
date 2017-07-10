@@ -1,7 +1,7 @@
 ﻿@*//@model LambAndLentil.Domain.Entities.Ingredient*@
 @model LambAndLentil.UI.Models.RecipeVM
 
-@using (Html.BeginForm("AddIngredient", UIControllerType.Recipes.ToString()))
+@using (Html.BeginForm("AttachIngredient", UIControllerType.Recipes.ToString()))
 {
     <h3>Ingredients in this Recipe</h3>
     @Html.HiddenFor(x => x.ID)

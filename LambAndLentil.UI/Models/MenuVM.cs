@@ -21,6 +21,7 @@ namespace LambAndLentil.UI.Models
         public DayOfWeek DayOfWeek { get; set; }
         public  int Diners { get; set; } 
 
-        ICollection<Recipe> Recipes { get; set; }
+       public virtual ICollection<Recipe> Recipes { get; set; }
+       public virtual ICollection<Ingredient> Ingredients { get; set; }
     }
 }

@@ -5,6 +5,7 @@ using LambAndLentil.UI.Infrastructure.Alerts;
 using LambAndLentil.UI.Models;
 using Microsoft.Web.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Web.Mvc;
@@ -41,8 +42,8 @@ namespace LambAndLentil.UI.Controllers
 
         }
 
-       
-        public ActionResult BaseDetails<T, TController, TVM>(UIControllerType uIController, int id = 1,UIViewType actionMethod=UIViewType.Details)
+
+        public ActionResult BaseDetails<T, TController, TVM>(UIControllerType uIController, int id = 1, UIViewType actionMethod = UIViewType.Details)
            where T : BaseEntity
            where TController : BaseController
            where TVM : BaseVM
@@ -57,7 +58,7 @@ namespace LambAndLentil.UI.Controllers
                 return BaseDeleteConfirmed<T, TController>(uIController, id);
             }
             else
-            { 
+            {
                 ActionResult result = GuardId<T, TController>(uIController, id);
                 MvcApplication.InitializeMap();  // needed for testing.  This is being run in Application_Start normally. 
                 string entity = typeof(T).ToString().Split('.').Last();
@@ -87,7 +88,7 @@ namespace LambAndLentil.UI.Controllers
         where TVM : BaseVM
         {
 
-          
+
             MvcApplication.InitializeMap();  // needed for testing.  This is being run in Application_Start normally.  
             ActionResult result = new EmptyResult();
             if (actionMethod == UIViewType.Delete)
@@ -107,7 +108,7 @@ namespace LambAndLentil.UI.Controllers
 
                 TVM itemVM = Mapper.Map<T, TVM>((T)item);
                 if (result is EmptyResult)
-                { 
+                {
                     return View(UIViewType.Details.ToString(), itemVM);
                 }
             }
@@ -127,17 +128,17 @@ namespace LambAndLentil.UI.Controllers
             if (vm.ID == 0 && ModelState.IsValid)
             {
                 item = new T();
-                
+
             }
 
             item = Mapper.Map<TVM, T>((TVM)vm);
 
             if (ModelState.IsValid)
             {
-                string entity = typeof(T).ToString().Split('.').Last(); 
+                string entity = typeof(T).ToString().Split('.').Last();
                 repository.Save<T>(item);
                 UIControllerType controllerType = GetControllerType(entity);
-               // vm.Name = vm.Name;   
+                // vm.Name = vm.Name;   
                 return RedirectToAction<TController>(c => c.BaseIndex(controllerType, 1)).WithSuccess(string.Format("{0} has been saved", vm.Name));
             }
             else
@@ -179,9 +180,50 @@ namespace LambAndLentil.UI.Controllers
             ViewBag.ActionMethod = UIViewType.Delete.ToString();
             if (result is EmptyResult)
             {
-                return RedirectToAction<TController>(c=> c.BaseIndex(controllerType, 1))  .WithSuccess(string.Format("{0} has been deleted", item.Name));
+                return RedirectToAction<TController>(c => c.BaseIndex(controllerType, 1)).WithSuccess(string.Format("{0} has been deleted", item.Name));
             }
             return result;
+        }
+
+        public ActionResult BaseAttach<TParent, TChild>(int? parentID, int? childID) where TParent : Recipe 
+            where TChild : Ingredient
+        {  // conditions guard against people trying thngs out manually  
+            ViewBag.listOfIngredients = GetListOfIngredients();
+            if (parentID == null)
+            {
+                return RedirectToAction(UIViewType.Index.ToString()).WithWarning("Recipe was not found");
+            }
+            else
+            {
+                string entity = typeof(TParent).ToString().Split('.').Last();
+              
+                   TParent parent = (TParent)repository.Recipes.Where(m => m.ID == parentID).SingleOrDefault();
+                    if (parent == null)
+                    {
+                        // todo: log error - this could be a developer problem
+                        return RedirectToAction(UIViewType.Index.ToString()).WithWarning("Recipe was not found");
+                    }
+                
+                if (childID == null)
+                {    // this should have a warning that the child is not in the db
+                    return RedirectToAction(UIViewType.Details.ToString(), new { id = parentID, actionMethod = UIViewType.Details }).WithWarning("Ingredient was not found"); ;
+                }
+                else
+                {
+                    TChild child = (TChild)repository.Ingredients.Where(m => m.ID == childID).SingleOrDefault();
+                    if (child == null)
+                    {
+                        return RedirectToAction(UIViewType.Edit.ToString(), new { id = parentID, actionMethod = UIViewType.Details }).WithWarning("Please choose an ingredient");
+                    }
+                    else
+                    {
+                        parent.Ingredients.Add(child);
+                        repository.Save<TParent>(parent);
+
+                        return RedirectToAction(UIViewType.Details.ToString(), new { id = parentID, actionMethod = UIViewType.Details }).WithSuccess("Successfully added!");
+                    }
+                }
+            }
         }
 
 
@@ -211,8 +253,8 @@ namespace LambAndLentil.UI.Controllers
             }
             return new EmptyResult();
         }
-        
-                //// gross violation of open/closed principle following
+
+        //// gross violation of open/closed principle following
         private UIControllerType GetControllerType(string entity)
         {
             UIControllerType controllerType = UIControllerType.Ingredients;
@@ -241,6 +283,53 @@ namespace LambAndLentil.UI.Controllers
                     break;
             }
             return controllerType;
+        }
+
+
+        protected SelectList GetListOfRecipes()
+        {
+            var result = from m in repository.Recipes
+                         orderby m.Name
+                         select new SelectListItem
+                         {
+                             Text = m.Name,
+                             Value = m.ID.ToString()
+                         };
+            SelectList list = null;
+            if (result.Count() == 0)
+            {
+                List<string> item = new List<string>();
+                item.Add("Nothing was found");
+                list = new SelectList(item);
+            }
+            else
+            {
+                list = new SelectList(result, "Value", "Text", result.First());
+            }
+            return list;
+        }
+
+        protected SelectList GetListOfIngredients()
+        {
+            var result = from m in repository.Ingredients
+                         orderby m.Name
+                         select new SelectListItem
+                         {
+                             Text = m.Name,
+                             Value = m.ID.ToString()
+                         };
+            SelectList list = null;
+            if (result.Count() == 0)
+            {
+                List<string> item = new List<string>();
+                item.Add("Nothing was found");
+                list = new SelectList(item);
+            }
+            else
+            {
+                list = new SelectList(result, "Value", "Text", result.First());
+            }
+            return list;
         }
 
         protected override void Dispose(bool disposing)
