@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.12
+VisualStudioVersion = 15.0.26430.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LambAndLentil.Domain", "LambAndLentil.Domain\LambAndLentil.Domain.csproj", "{011B34BE-4A36-4772-B2AF-DC1600948477}"
 EndProject
@@ -14,6 +14,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Integration Tests", "Integration Tests", "{A5957792-2BA3-493B-A0CA-63A2435EF48D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationTests", "NunitIntegrationTests\IntegrationTests.csproj", "{CBB1E76F-75B4-462C-86E9-2E400878835C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Unit Tests", "Unit Tests", "{8F7C3E6A-1D96-4B13-8830-C3F253DB537B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -46,6 +48,8 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{A3348C9C-2CF1-438F-A378-0629FB23521A} = {8F7C3E6A-1D96-4B13-8830-C3F253DB537B}
+		{5141997D-D504-4EE2-972D-3AAF02292AB7} = {8F7C3E6A-1D96-4B13-8830-C3F253DB537B}
 		{CBB1E76F-75B4-462C-86E9-2E400878835C} = {A5957792-2BA3-493B-A0CA-63A2435EF48D}
 	EndGlobalSection
 EndGlobal

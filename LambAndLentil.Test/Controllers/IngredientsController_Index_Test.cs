@@ -20,11 +20,13 @@ namespace LambAndLentil.Tests.Controllers
     [TestCategory("IngredientsController")]
     public class IngredientsController_Index_Test
     {
-        static Mock<IRepository> mock;
+        static Mock<IRepository<Ingredient, IngredientVM>> mock;
         public static MapperConfiguration AutoMapperConfig { get; set; }
+
         public IngredientsController_Index_Test()
         {
             AutoMapperConfigForTests.InitializeMap();
+            mock = new Mock<IRepository<Ingredient, IngredientVM>>();
         }
 
      
@@ -65,18 +67,19 @@ namespace LambAndLentil.Tests.Controllers
         public void IngredientsCtr_Index_ContainsAllIngredientsView1NotNull()
         {
             // Arrange
+            
             IngredientsController controller = SetUpController();
-            ListVM ilvm = new ListVM();
-            ilvm.Ingredients = (IEnumerable<Ingredient>)mock.Object.Ingredients;
+          ListVM<Ingredient,IngredientVM> ilvm = new ListVM<Ingredient,IngredientVM>();
+            ilvm.Entities = (IEnumerable<Ingredient>)mock.Object.Ingredient;
 
             // Act
             ViewResult view1 = controller.Index(1);
 
-            int count1 = ((ListVM)(view1.Model)).Ingredients.Count();
+            int count1 = ((ListVM<Ingredient,IngredientVM>)(view1.Model)).Entities.Count();
 
             ViewResult view2 = controller.Index(2);
 
-            int count2 = ((ListVM)(view2.Model)).Ingredients.Count();
+            int count2 = ((ListVM<Ingredient,IngredientVM>)(view2.Model)).Entities.Count();
 
             int count = count1 + count2;
 
@@ -89,18 +92,19 @@ namespace LambAndLentil.Tests.Controllers
         public void IngredientsCtr_Index_ContainsAllIngredientsView2NotNull()
         {
             // Arrange
+           
             IngredientsController controller = SetUpController();
-            ListVM ilvm = new ListVM();
-            ilvm.Ingredients = (IEnumerable<Ingredient>)mock.Object.Ingredients;
+            ListVM<Ingredient,IngredientVM> ilvm = new ListVM<Ingredient,IngredientVM>();
+            ilvm.Entities = (IEnumerable<Ingredient>)mock.Object.Ingredient;
 
             // Act
             ViewResult view1 = controller.Index(1);
 
-            int count1 = ((ListVM)(view1.Model)).Ingredients.Count();
+            int count1 = ((ListVM<Ingredient,IngredientVM>)(view1.Model)).Entities.Count();
 
             ViewResult view2 = controller.Index(2);
 
-            int count2 = ((ListVM)(view2.Model)).Ingredients.Count();
+            int count2 = ((ListVM<Ingredient,IngredientVM>)(view2.Model)).Entities.Count();
 
             int count = count1 + count2;
 
@@ -113,18 +117,19 @@ namespace LambAndLentil.Tests.Controllers
         public void IngredientsCtr_Index_ContainsAllIngredientsView1Count5()
         {
             // Arrange
+            
             IngredientsController controller = SetUpController();
-            ListVM ilvm = new ListVM();
-            ilvm.Ingredients = (IEnumerable<Ingredient>)mock.Object.Ingredients;
+          ListVM<Ingredient,IngredientVM> ilvm = new ListVM<Ingredient,IngredientVM>();
+            ilvm.Entities = (IEnumerable<Ingredient>)mock.Object.Ingredient;
 
             // Act
             ViewResult view1 = controller.Index(1);
 
-            int count1 = ((ListVM)(view1.Model)).Ingredients.Count();
+            int count1 = ((ListVM<Ingredient,IngredientVM>)(view1.Model)).Entities.Count();
 
             ViewResult view2 = controller.Index(2);
 
-            int count2 = ((ListVM)(view2.Model)).Ingredients.Count();
+            int count2 = ((ListVM<Ingredient,IngredientVM>)(view2.Model)).Entities.Count();
 
             int count = count1 + count2;
 
@@ -137,18 +142,19 @@ namespace LambAndLentil.Tests.Controllers
         public void IngredientsCtr_Index_ContainsAllIngredientsView2Count0()
         {
             // Arrange
+             
             IngredientsController controller = SetUpController();
-            ListVM ilvm = new ListVM();
-            ilvm.Ingredients = (IEnumerable<Ingredient>)mock.Object.Ingredients;
+          ListVM<Ingredient,IngredientVM> ilvm = new ListVM<Ingredient,IngredientVM>();
+            ilvm.Entities = (IEnumerable<Ingredient>)mock.Object.Ingredient;
 
             // Act
             ViewResult view1 = controller.Index(1);
 
-            int count1 = ((ListVM)(view1.Model)).Ingredients.Count();
+            int count1 = ((ListVM<Ingredient,IngredientVM>)(view1.Model)).Entities.Count();
 
             ViewResult view2 = controller.Index(2);
 
-            int count2 = ((ListVM)(view2.Model)).Ingredients.Count();
+            int count2 = ((ListVM<Ingredient,IngredientVM>)(view2.Model)).Entities.Count();
 
             int count = count1 + count2;
 
@@ -161,18 +167,19 @@ namespace LambAndLentil.Tests.Controllers
         public void IngredientsCtr_Index_ContainsAllIngredientsTotalCount5()
         {
             // Arrange
+           
             IngredientsController controller = SetUpController();
-            ListVM ilvm = new ListVM();
-            ilvm.Ingredients = (IEnumerable<Ingredient>)mock.Object.Ingredients;
+          ListVM<Ingredient,IngredientVM> ilvm = new ListVM<Ingredient,IngredientVM>();
+            ilvm.Entities = (IEnumerable<Ingredient>)mock.Object.Ingredient;
 
             // Act
             ViewResult view1 = controller.Index(1);
 
-            int count1 = ((ListVM)(view1.Model)).Ingredients.Count();
+            int count1 = ((ListVM<Ingredient,IngredientVM>)(view1.Model)).Entities.Count();
 
             ViewResult view2 = controller.Index(2);
 
-            int count2 = ((ListVM)(view2.Model)).Ingredients.Count();
+            int count2 = ((ListVM<Ingredient,IngredientVM>)(view2.Model)).Entities.Count();
 
             int count = count1 + count2;
 
@@ -185,18 +192,19 @@ namespace LambAndLentil.Tests.Controllers
         public void IngredientsCtr_Index_ContainsAllIngredientsView1NameIsIndex()
         {
             // Arrange
+           
             IngredientsController controller = SetUpController();
-            ListVM ilvm = new ListVM();
-            ilvm.Ingredients = (IEnumerable<Ingredient>)mock.Object.Ingredients;
+          ListVM<Ingredient,IngredientVM> ilvm = new ListVM<Ingredient,IngredientVM>();
+            ilvm.Entities = (IEnumerable<Ingredient>)mock.Object.Ingredient;
 
             // Act
             ViewResult view1 = controller.Index(1);
 
-            int count1 = ((ListVM)(view1.Model)).Ingredients.Count();
+            int count1 = ((ListVM<Ingredient,IngredientVM>)(view1.Model)).Entities.Count();
 
             ViewResult view2 = controller.Index(2);
 
-            int count2 = ((ListVM)(view2.Model)).Ingredients.Count();
+            int count2 = ((ListVM<Ingredient,IngredientVM>)(view2.Model)).Entities.Count();
 
             int count = count1 + count2;
 
@@ -209,18 +217,19 @@ namespace LambAndLentil.Tests.Controllers
         public void IngredientsCtr_Index_ContainsAllIngredientsView2NameIsIndex()
         {
             // Arrange
+            
             IngredientsController controller = SetUpController();
-            ListVM ilvm = new ListVM();
-            ilvm.Ingredients = (IEnumerable<Ingredient>)mock.Object.Ingredients;
+          ListVM<Ingredient,IngredientVM> ilvm = new ListVM<Ingredient,IngredientVM>();
+            ilvm.Entities = (IEnumerable<Ingredient>)mock.Object.Ingredient;
 
             // Act
             ViewResult view1 = controller.Index(1);
 
-            int count1 = ((ListVM)(view1.Model)).Ingredients.Count();
+            int count1 = ((ListVM<Ingredient,IngredientVM>)(view1.Model)).Entities.Count();
 
             ViewResult view2 = controller.Index(2);
 
-            int count2 = ((ListVM)(view2.Model)).Ingredients.Count();
+            int count2 = ((ListVM<Ingredient,IngredientVM>)(view2.Model)).Entities.Count();
 
             int count = count1 + count2;
 
@@ -234,14 +243,14 @@ namespace LambAndLentil.Tests.Controllers
         {
             // Arrange
             IngredientsController controller = SetUpController();
-            ListVM ilvm = new ListVM();
-            ilvm.Ingredients = (IEnumerable<Ingredient>)mock.Object.Ingredients;
+          ListVM<Ingredient,IngredientVM> ilvm = new ListVM<Ingredient,IngredientVM>();
+            ilvm.Entities = (IEnumerable<Ingredient>)mock.Object.Ingredient;
             controller.PageSize = 8;
 
             // Act
             ViewResult view1 = controller.Index(1);
 
-            int count1 = ((ListVM)(view1.Model)).Ingredients.Count();
+            int count1 = ((ListVM<Ingredient,IngredientVM>)(view1.Model)).Entities.Count();
 
             // Assert
             Assert.IsNotNull(view1);
@@ -254,13 +263,13 @@ namespace LambAndLentil.Tests.Controllers
         {
             // Arrange
             IngredientsController controller = SetUpController();
-            ListVM ilvm = new ListVM();
-            ilvm.Ingredients = (IEnumerable<Ingredient>)mock.Object.Ingredients;
+          ListVM<Ingredient,IngredientVM> ilvm = new ListVM<Ingredient,IngredientVM>();
+            ilvm.Entities = (IEnumerable<Ingredient>)mock.Object.Ingredient;
             controller.PageSize = 8;
 
             // Act
             ViewResult view1 = controller.Index(1);
-            int count1 = ((ListVM)(view1.Model)).Ingredients.Count();
+            int count1 = ((ListVM<Ingredient,IngredientVM>)(view1.Model)).Entities.Count();
 
             // Assert 
             Assert.AreEqual(5, count1);
@@ -272,14 +281,14 @@ namespace LambAndLentil.Tests.Controllers
         {
             // Arrange
             IngredientsController controller = SetUpController();
-            ListVM ilvm = new ListVM();
-            ilvm.Ingredients = (IEnumerable<Ingredient>)mock.Object.Ingredients;
+          ListVM<Ingredient,IngredientVM> ilvm = new ListVM<Ingredient,IngredientVM>();
+            ilvm.Entities = (IEnumerable<Ingredient>)mock.Object.Ingredient;
             controller.PageSize = 8;
 
             // Act
             ViewResult view1 = controller.Index(1);
 
-            int count1 = ((ListVM)(view1.Model)).Ingredients.Count(); 
+            int count1 = ((ListVM<Ingredient,IngredientVM>)(view1.Model)).Entities.Count(); 
 
             // Assert  
             Assert.AreEqual("Index", view1.ViewName);
@@ -293,17 +302,17 @@ namespace LambAndLentil.Tests.Controllers
         {
             // Arrange
             IngredientsController controller = SetUpController();
-            ListVM ilvm = new ListVM();
-            ilvm.Ingredients = (IEnumerable<Ingredient>)mock.Object.Ingredients;
+          ListVM<Ingredient,IngredientVM> ilvm = new ListVM<Ingredient,IngredientVM>();
+            ilvm.Entities = (IEnumerable<Ingredient>)mock.Object.Ingredient;
             controller.PageSize = 8;
 
             // Act
             ViewResult view1 = controller.Index(1);
 
-            int count1 = ((ListVM)(view1.Model)).Ingredients.Count();
+            int count1 = ((ListVM<Ingredient,IngredientVM>)(view1.Model)).Entities.Count();
 
             // Assert   
-            Assert.AreEqual("P1", ((ListVM)(view1.Model)).Ingredients.FirstOrDefault().Name);
+            Assert.AreEqual("P1", ((ListVM<Ingredient,IngredientVM>)(view1.Model)).Entities.FirstOrDefault().Name);
         }
 
      
@@ -314,15 +323,15 @@ namespace LambAndLentil.Tests.Controllers
         {
             // Arrange
             IngredientsController controller = SetUpController();
-            ListVM ilvm = new ListVM();
-            ilvm.Ingredients = (IEnumerable<Ingredient>)mock.Object.Ingredients;
+          ListVM<Ingredient,IngredientVM> ilvm = new ListVM<Ingredient,IngredientVM>();
+            ilvm.Entities = (IEnumerable<Ingredient>)mock.Object.Ingredient;
             controller.PageSize = 8;
 
             // Act
             ViewResult view1 = controller.Index(1); 
 
             // Assert   
-            Assert.AreEqual("John Doe", ((ListVM)(view1.Model)).Ingredients.FirstOrDefault().AddedByUser);
+            Assert.AreEqual("John Doe", ((ListVM<Ingredient,IngredientVM>)(view1.Model)).Entities.FirstOrDefault().AddedByUser);
         }
 
         [TestMethod]
@@ -331,15 +340,15 @@ namespace LambAndLentil.Tests.Controllers
         {
             // Arrange
             IngredientsController controller = SetUpController();
-            ListVM ilvm = new ListVM();
-            ilvm.Ingredients = (IEnumerable<Ingredient>)mock.Object.Ingredients;
+          ListVM<Ingredient,IngredientVM> ilvm = new ListVM<Ingredient,IngredientVM>();
+            ilvm.Entities = (IEnumerable<Ingredient>)mock.Object.Ingredient;
             controller.PageSize = 8;
 
             // Act
             ViewResult view1 = controller.Index(1);
 
             // Assert   
-            Assert.AreEqual("Richard Roe", ((ListVM)(view1.Model)).Ingredients.FirstOrDefault().ModifiedByUser);
+            Assert.AreEqual("Richard Roe", ((ListVM<Ingredient,IngredientVM>)(view1.Model)).Entities.FirstOrDefault().ModifiedByUser);
         }
 
         [TestMethod]
@@ -348,15 +357,15 @@ namespace LambAndLentil.Tests.Controllers
         {
             // Arrange
             IngredientsController controller = SetUpController();
-            ListVM ilvm = new ListVM();
-            ilvm.Ingredients = (IEnumerable<Ingredient>)mock.Object.Ingredients;
+          ListVM<Ingredient,IngredientVM> ilvm = new ListVM<Ingredient,IngredientVM>();
+            ilvm.Entities = (IEnumerable<Ingredient>)mock.Object.Ingredient;
             controller.PageSize = 8;
 
             // Act
             ViewResult view1 = controller.Index(1);
 
             // Assert   
-            Assert.AreEqual(DateTime.MinValue, ((ListVM)(view1.Model)).Ingredients.FirstOrDefault().CreationDate);
+            Assert.AreEqual(DateTime.MinValue, ((ListVM<Ingredient,IngredientVM>)(view1.Model)).Entities.FirstOrDefault().CreationDate);
         }
 
         [TestMethod]
@@ -365,15 +374,15 @@ namespace LambAndLentil.Tests.Controllers
         {
             // Arrange
             IngredientsController controller = SetUpController();
-            ListVM ilvm = new ListVM();
-            ilvm.Ingredients = (IEnumerable<Ingredient>)mock.Object.Ingredients;
+          ListVM<Ingredient,IngredientVM> ilvm = new ListVM<Ingredient,IngredientVM>();
+            ilvm.Entities = (IEnumerable<Ingredient>)mock.Object.Ingredient;
             controller.PageSize = 8;
 
             // Act
             ViewResult view1 = controller.Index(1);
 
             // Assert   
-            Assert.AreEqual(DateTime.MaxValue.AddYears(-10), ((ListVM)(view1.Model)).Ingredients.FirstOrDefault().ModifiedDate);
+            Assert.AreEqual(DateTime.MaxValue.AddYears(-10), ((ListVM<Ingredient,IngredientVM>)(view1.Model)).Entities.FirstOrDefault().ModifiedDate);
         }
 
       
@@ -384,17 +393,17 @@ namespace LambAndLentil.Tests.Controllers
         {
             // Arrange
             IngredientsController controller = SetUpController();
-            ListVM ilvm = new ListVM();
-            ilvm.Ingredients = (IEnumerable<Ingredient>)mock.Object.Ingredients;
+          ListVM<Ingredient,IngredientVM> ilvm = new ListVM<Ingredient,IngredientVM>();
+            ilvm.Entities = (IEnumerable<Ingredient>)mock.Object.Ingredient;
             controller.PageSize = 8;
 
             // Act
             ViewResult view1 = controller.Index(1);
 
-            int count1 = ((ListVM)(view1.Model)).Ingredients.Count();
+            int count1 = ((ListVM<Ingredient,IngredientVM>)(view1.Model)).Entities.Count();
 
             // Assert   
-            Assert.AreEqual("P2", ((ListVM)(view1.Model)).Ingredients.Skip(1).FirstOrDefault().Name);
+            Assert.AreEqual("P2", ((ListVM<Ingredient,IngredientVM>)(view1.Model)).Entities.Skip(1).FirstOrDefault().Name);
         }
          
 
@@ -404,17 +413,17 @@ namespace LambAndLentil.Tests.Controllers
         {
             // Arrange
             IngredientsController controller = SetUpController();
-            ListVM ilvm = new ListVM();
-            ilvm.Ingredients = (IEnumerable<Ingredient>)mock.Object.Ingredients;
+          ListVM<Ingredient,IngredientVM> ilvm = new ListVM<Ingredient,IngredientVM>();
+            ilvm.Entities = (IEnumerable<Ingredient>)mock.Object.Ingredient;
             controller.PageSize = 8;
 
             // Act
             ViewResult view1 = controller.Index(1);
 
-            int count1 = ((ListVM)(view1.Model)).Ingredients.Count();
+            int count1 = ((ListVM<Ingredient,IngredientVM>)(view1.Model)).Entities.Count();
 
             // Assert   
-            Assert.AreEqual("P2", ((ListVM)(view1.Model)).Ingredients.Skip(1).FirstOrDefault().Name);
+            Assert.AreEqual("P2", ((ListVM<Ingredient,IngredientVM>)(view1.Model)).Entities.Skip(1).FirstOrDefault().Name);
         }
 
       
@@ -437,8 +446,8 @@ namespace LambAndLentil.Tests.Controllers
             IngredientsController controller = SetUpController();
 
             // Act
-            var result = (ListVM)(controller.Index(1)).Model;
-            Ingredient[] ingrArray1 = result.Ingredients.ToArray();
+            var result = (ListVM<Ingredient,IngredientVM>)(controller.Index(1)).Model;
+            Ingredient[] ingrArray1 = result.Entities.ToArray();
 
             // Assert 
             Assert.IsTrue(ingrArray1.Length == 5);
@@ -452,8 +461,8 @@ namespace LambAndLentil.Tests.Controllers
             IngredientsController controller = SetUpController();
 
             // Act
-            var result = (ListVM)(controller.Index(1)).Model;
-            Ingredient[] ingrArray1 = result.Ingredients.ToArray();
+            var result = (ListVM<Ingredient,IngredientVM>)(controller.Index(1)).Model;
+            Ingredient[] ingrArray1 = result.Entities.ToArray();
 
             // Assert  
             Assert.AreEqual(ingrArray1[0].Name, "P1");
@@ -467,8 +476,8 @@ namespace LambAndLentil.Tests.Controllers
             IngredientsController controller = SetUpController();
 
             // Act
-            var result = (ListVM)(controller.Index(1)).Model;
-            Ingredient[] ingrArray1 = result.Ingredients.ToArray();
+            var result = (ListVM<Ingredient,IngredientVM>)(controller.Index(1)).Model;
+            Ingredient[] ingrArray1 = result.Entities.ToArray();
 
             // Assert  
             Assert.AreEqual(ingrArray1[3].Name, "P4");
@@ -483,7 +492,7 @@ namespace LambAndLentil.Tests.Controllers
             IngredientsController controller = SetUpController();
 
             // Act 
-            ListVM resultT = (ListVM)((ViewResult)controller.Index(2)).Model;
+          ListVM<Ingredient,IngredientVM> resultT = (ListVM<Ingredient,IngredientVM>)((ViewResult)controller.Index(2)).Model;
             PagingInfo pageInfoT = resultT.PagingInfo;
 
             // Assert  
@@ -498,7 +507,7 @@ namespace LambAndLentil.Tests.Controllers
             IngredientsController controller = SetUpController();
 
             // Act 
-            ListVM resultT = (ListVM)((ViewResult)controller.Index(2)).Model;
+          ListVM<Ingredient,IngredientVM> resultT = (ListVM<Ingredient,IngredientVM>)((ViewResult)controller.Index(2)).Model;
             PagingInfo pageInfoT = resultT.PagingInfo;
 
             // Assert   
@@ -513,7 +522,7 @@ namespace LambAndLentil.Tests.Controllers
             IngredientsController controller = SetUpController();
 
             // Act 
-            ListVM resultT = (ListVM)((ViewResult)controller.Index(2)).Model;
+          ListVM<Ingredient,IngredientVM> resultT = (ListVM<Ingredient,IngredientVM>)((ViewResult)controller.Index(2)).Model;
             PagingInfo pageInfoT = resultT.PagingInfo;
 
             // Assert 
@@ -529,7 +538,7 @@ namespace LambAndLentil.Tests.Controllers
             IngredientsController controller = SetUpController();
 
             // Act 
-            ListVM resultT = (ListVM)((ViewResult)controller.Index(2)).Model;
+          ListVM<Ingredient,IngredientVM> resultT = (ListVM<Ingredient,IngredientVM>)((ViewResult)controller.Index(2)).Model;
             PagingInfo pageInfoT = resultT.PagingInfo;
 
             // Assert 
@@ -539,8 +548,8 @@ namespace LambAndLentil.Tests.Controllers
 
         private IngredientsController SetUpController()
         {
-            mock = new Mock<IRepository>();
-            mock.Setup(m => m.Ingredients).Returns(new Ingredient[] {
+            mock = new Mock<IRepository<Ingredient, IngredientVM>>();
+            mock.Setup(m => m.Ingredient).Returns(new Ingredient[] {
                 new Ingredient {ID = 1, Name = "P1" ,AddedByUser="John Doe" ,ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue, ModifiedDate=DateTime.MaxValue.AddYears(-10)},
                 new Ingredient {ID = 2, Name = "P2",  AddedByUser="Sally Doe",  ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(20), ModifiedDate=DateTime.MaxValue.AddYears(-20)},
                 new Ingredient {ID = 3, Name = "P3",  AddedByUser="Sue Doe", ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(30), ModifiedDate=DateTime.MaxValue.AddYears(-30)},
@@ -548,7 +557,7 @@ namespace LambAndLentil.Tests.Controllers
                 new Ingredient {ID = 5, Name = "P5",  AddedByUser="John Doe",  ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(50), ModifiedDate=DateTime.MaxValue.AddYears(-100)}
             }.AsQueryable());
 
-            IngredientsController controller = new IngredientsController(mock.Object);
+            IngredientsController controller = new IngredientsController();
             controller.PageSize = 3;
 
             return controller;
@@ -557,7 +566,7 @@ namespace LambAndLentil.Tests.Controllers
         private IngredientsController SetUpSimpleController()
         {
             Mock<IRepository> mock = new Mock<IRepository>();
-            IngredientsController controller = new IngredientsController(mock.Object);
+            IngredientsController controller = new IngredientsController();
             return controller;
         }
     }

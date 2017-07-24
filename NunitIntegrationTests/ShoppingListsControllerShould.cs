@@ -23,11 +23,11 @@ namespace MsTestIntegrationTests
         public void CreateAnShoppingList()
         {
             // Arrange
-            EFRepository repo = new EFRepository(); ;
-            ShoppingListsController controller = new ShoppingListsController(repo);
+            EFRepository<ShoppingList, ShoppingListVM> repo = new EFRepository<ShoppingList, ShoppingListVM>(); ;
+            ShoppingListsController controller = new ShoppingListsController();
             // Act
             ViewResult vr = controller.Create(LambAndLentil.UI.UIViewType.Create);
-            ShoppingListVM vm = (ShoppingListVM)vr.Model;
+            ListVM<ShoppingList, ShoppingListVM> vm = (ListVM<ShoppingList, ShoppingListVM>)vr.Model;
             string modelName = vm.Name;
 
             // Assert 
@@ -39,8 +39,8 @@ namespace MsTestIntegrationTests
         public void SaveAValidShoppingList()
         {
             // Arrange
-            EFRepository repo = new EFRepository(); ;
-            ShoppingListsController controller = new ShoppingListsController(repo);
+            EFRepository<ShoppingList, ShoppingListVM> repo = new EFRepository<ShoppingList, ShoppingListVM>(); ;
+            ShoppingListsController controller = new ShoppingListsController();
             ShoppingListVM vm = new ShoppingListVM();
             vm.Name = "test";
             // Act
@@ -65,11 +65,8 @@ namespace MsTestIntegrationTests
             }
             finally
             {
-                // Clean Up - should run a  delete test to make sure this works 
-                List<ShoppingList> shoppingLists = repo.ShoppingLists.ToList<ShoppingList>();
-                ShoppingList shoppingList = shoppingLists.Where(m => m.Name == "test").FirstOrDefault();
-
-                // Delete it
+                // Clean Up - should run a  delete test to make sure this works  
+                ShoppingList shoppingList = repo.GetAll().Where(m => m.Name == "test").FirstOrDefault();
                 controller.DeleteConfirmed(shoppingList.ID);
             }
         }
@@ -79,28 +76,28 @@ namespace MsTestIntegrationTests
         public void SaveEditedShoppingListWithNameChange()
         {
             // Arrange
-            EFRepository repo = new EFRepository(); ;
-            ShoppingListsController controller1 = new ShoppingListsController(repo);
-            ShoppingListsController controller2 = new ShoppingListsController(repo);
-            ShoppingListsController controller3 = new ShoppingListsController(repo);
-            ShoppingListsController controller4 = new ShoppingListsController(repo);
-            ShoppingListsController controller5 = new ShoppingListsController(repo);
+            EFRepository<ShoppingList, ShoppingListVM> repo = new EFRepository<ShoppingList, ShoppingListVM>(); ;
+            ShoppingListsController controller1 = new ShoppingListsController();
+            ShoppingListsController controller2 = new ShoppingListsController();
+            ShoppingListsController controller3 = new ShoppingListsController();
+            ShoppingListsController controller4 = new ShoppingListsController();
+            ShoppingListsController controller5 = new ShoppingListsController();
             ShoppingListVM vm = new ShoppingListVM();
             vm.Name = "0000 test";
 
             // Act 
             ActionResult ar1 = controller1.PostEdit(vm);
             ViewResult view1 = controller2.Index();
-            ListVM listVM = (ListVM)view1.Model;
-            var result = (from m in listVM.ShoppingLists
+            IEnumerable<ShoppingListVM> listVM = (IEnumerable<ShoppingListVM>)view1.Model;
+            var result = (from m in listVM
                           where m.Name == "0000 test"
                           select m).AsQueryable();
 
-            ShoppingList ingredient = result.FirstOrDefault();
+            ShoppingListVM item = result.FirstOrDefault();
             try
             {
                 // verify initial value:
-                Assert.AreEqual("0000 test", ingredient.Name);
+                Assert.AreEqual("0000 test", item.Name);
             }
             catch (Exception)
             {
@@ -111,20 +108,21 @@ namespace MsTestIntegrationTests
 
             // now edit it
             vm.Name = "0000 test Edited";
-            vm.ID = ingredient.ID;
+            vm.ID = item.ID;
             ActionResult ar2 = controller3.PostEdit(vm);
             ViewResult view2 = controller4.Index();
-            ListVM listVM2 = (ListVM)view2.Model;
-            var result2 = (from m in listVM2.ShoppingLists
+            ListVM<ShoppingList, ShoppingListVM> listVM2 = (ListVM<ShoppingList, ShoppingListVM>)view2.Model;
+            var result2 = (from m in listVM2.Entities
                            where m.Name == "0000 test Edited"
                            select m).AsQueryable();
 
-            ingredient = result2.FirstOrDefault();
+            ShoppingList sl = result2.FirstOrDefault();
+            item = Mapper.Map<ShoppingList, ShoppingListVM>(sl);
 
             try
             {
                 // Assert
-                Assert.AreEqual("0000 test Edited", ingredient.Name);
+                Assert.AreEqual("0000 test Edited", item.Name);
             }
             catch (Exception)
             {
@@ -147,12 +145,12 @@ namespace MsTestIntegrationTests
         public void SaveEditedShoppingListWithDescriptionChange()
         {
             // Arrange
-            EFRepository repo = new EFRepository(); ;
-            ShoppingListsController controller1 = new ShoppingListsController(repo);
-            ShoppingListsController controller2 = new ShoppingListsController(repo);
-            ShoppingListsController controller3 = new ShoppingListsController(repo);
-            ShoppingListsController controller4 = new ShoppingListsController(repo);
-            ShoppingListsController controller5 = new ShoppingListsController(repo);
+            EFRepository<ShoppingList, ShoppingListVM> repo = new EFRepository<ShoppingList, ShoppingListVM>(); ;
+            ShoppingListsController controller1 = new ShoppingListsController();
+            ShoppingListsController controller2 = new ShoppingListsController();
+            ShoppingListsController controller3 = new ShoppingListsController();
+            ShoppingListsController controller4 = new ShoppingListsController();
+            ShoppingListsController controller5 = new ShoppingListsController();
             ShoppingListVM vm = new ShoppingListVM();
             vm.Name = "0000 test";
             vm.Description = "SaveEditedShoppingListWithDescriptionChange Pre-test";
@@ -161,8 +159,8 @@ namespace MsTestIntegrationTests
             // Act 
             ActionResult ar1 = controller1.PostEdit(vm);
             ViewResult view1 = controller2.Index();
-            ListVM listVM = (ListVM)view1.Model;
-            var result = (from m in listVM.ShoppingLists
+            ListVM<ShoppingList, ShoppingListVM> listVM = (ListVM<ShoppingList, ShoppingListVM>)view1.Model;
+            var result = (from m in listVM.Entities
                           where m.Name == "0000 test"
                           select m).AsQueryable();
 
@@ -187,8 +185,8 @@ namespace MsTestIntegrationTests
 
             ActionResult ar2 = controller3.PostEdit(vm);
             ViewResult view2 = controller4.Index();
-            ListVM listVM2 = (ListVM)view2.Model;
-            var result2 = (from m in listVM2.ShoppingLists
+            ListVM<ShoppingList, ShoppingListVM> listVM2 = (ListVM<ShoppingList, ShoppingListVM>)view2.Model;
+            var result2 = (from m in listVM2.Entities
                            where m.Name == "0000 test Edited"
                            select m).AsQueryable();
 
@@ -217,23 +215,26 @@ namespace MsTestIntegrationTests
         public void ActuallyDeleteAShoppingListFromTheDatabase()
         {
             // Arrange
-            EFRepository repo = new EFRepository(); ;
-            ShoppingListsController editController = new ShoppingListsController(repo);
-            ShoppingListsController indexController = new ShoppingListsController(repo);
-            ShoppingListsController deleteController = new ShoppingListsController(repo);
+            EFRepository<ShoppingList, ShoppingListVM> repo = new EFRepository<ShoppingList, ShoppingListVM>(); ;
+            ShoppingListsController editController = new ShoppingListsController();
+            ShoppingListsController indexController = new ShoppingListsController();
+            ShoppingListsController deleteController = new ShoppingListsController();
             ShoppingListVM vm = new ShoppingListVM();
             vm.Name = "0000" + new Guid().ToString();
             ActionResult ar = editController.PostEdit(vm);
             ViewResult view = indexController.Index();
-            ListVM listVM = (ListVM)view.Model;
-            var result = (from m in listVM.ShoppingLists
+            ListVM<ShoppingList, ShoppingListVM> listVM = (ListVM<ShoppingList, ShoppingListVM>)view.Model;
+            var result = (from m in listVM.Entities
                           where m.Name == vm.Name
                           select m).AsQueryable();
-            ShoppingList item = result.FirstOrDefault();
+
+
+            ShoppingList sl = result.FirstOrDefault();
+            ShoppingListVM item = Mapper.Map<ShoppingList, ShoppingListVM>(sl);
 
             //Act
             deleteController.DeleteConfirmed(item.ID);
-            var deletedItem = (from m in repo.ShoppingLists
+            var deletedItem = (from m in repo.GetAll()
                                where m.Name == vm.Name
                                select m).AsQueryable();
 
@@ -250,15 +251,15 @@ namespace MsTestIntegrationTests
             ShoppingListVM shoppingListVM = new ShoppingListVM(CreationDate);
             shoppingListVM.Name = "001 Test ";
 
-            EFRepository repo = new EFRepository(); ;
-            ShoppingListsController controllerEdit = new ShoppingListsController(repo);
-            ShoppingListsController controllerView = new ShoppingListsController(repo);
-            ShoppingListsController controllerDelete = new ShoppingListsController(repo);
+            EFRepository<ShoppingList, ShoppingListVM> repo = new EFRepository<ShoppingList, ShoppingListVM>(); ;
+            ShoppingListsController controllerEdit = new ShoppingListsController();
+            ShoppingListsController controllerView = new ShoppingListsController();
+            ShoppingListsController controllerDelete = new ShoppingListsController();
 
             // Act
             controllerEdit.PostEdit(shoppingListVM);
             ViewResult view = controllerView.Index();
-            ListVM listVM = (ListVM)view.Model;
+            ShoppingListVM listVM = (ShoppingListVM)view.Model;
             var result = (from m in listVM.ShoppingLists
                           where m.Name == "001 Test "
                           select m).AsQueryable();
@@ -289,12 +290,12 @@ namespace MsTestIntegrationTests
         public void UpdateTheModificationDateBetweenPostedEdits()
         {
             // Arrange
-            EFRepository repo = new EFRepository();
-            ShoppingListsController controllerPost = new ShoppingListsController(repo);
-            ShoppingListsController controllerPost1 = new ShoppingListsController(repo);
-            ShoppingListsController controllerView = new ShoppingListsController(repo);
-            ShoppingListsController controllerView1 = new ShoppingListsController(repo);
-            ShoppingListsController controllerDelete = new ShoppingListsController(repo);
+            EFRepository<ShoppingList, ShoppingListVM> repo = new EFRepository<ShoppingList, ShoppingListVM>();
+            ShoppingListsController controllerPost = new ShoppingListsController();
+            ShoppingListsController controllerPost1 = new ShoppingListsController();
+            ShoppingListsController controllerView = new ShoppingListsController();
+            ShoppingListsController controllerView1 = new ShoppingListsController();
+            ShoppingListsController controllerDelete = new ShoppingListsController();
 
             ShoppingListVM vm = new ShoppingListVM();
             vm.Name = "002 Test Mod";
@@ -305,28 +306,26 @@ namespace MsTestIntegrationTests
             controllerPost.PostEdit(vm);
 
             ViewResult view = controllerView.Index();
-            ListVM listVM = (ListVM)view.Model;
-            var result = (from m in listVM.ShoppingLists
+            ShoppingListVM vm2 = (ShoppingListVM)view.Model;
+            var result = (from m in vm2.ShoppingLists
                           where m.Name == "002 Test Mod"
                           select m).AsQueryable();
-            ShoppingList ingredient = result.FirstOrDefault();
-            vm = Mapper.Map<ShoppingList, ShoppingListVM>(ingredient);
 
-            vm.Description = "I've been edited to delay a bit";
+            vm2.Description = "I've been edited to delay a bit";
 
-            controllerPost1.PostEdit(vm);
+            controllerPost1.PostEdit(vm2);
 
 
             ViewResult view1 = controllerView.Index();
-            listVM = (ListVM)view1.Model;
+            ShoppingList listVM = (ShoppingList)view1.Model;
             var result1 = (from m in listVM.ShoppingLists
                            where m.Name == "002 Test Mod"
                            select m).AsQueryable();
 
-            ingredient = result1.FirstOrDefault();
+            ShoppingList item = result1.FirstOrDefault();
 
-            DateTime shouldBeSameDate = ingredient.CreationDate;
-            DateTime shouldBeLaterDate = ingredient.ModifiedDate;
+            DateTime shouldBeSameDate = item.CreationDate;
+            DateTime shouldBeLaterDate = item.ModifiedDate;
 
             try
             {
@@ -341,7 +340,7 @@ namespace MsTestIntegrationTests
             finally
             {
                 // Cleanup
-                controllerDelete.DeleteConfirmed(ingredient.ID);
+                controllerDelete.DeleteConfirmed(item.ID);
             }
         }
     }

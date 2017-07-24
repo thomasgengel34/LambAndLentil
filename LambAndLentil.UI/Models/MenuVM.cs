@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace LambAndLentil.UI.Models
 {
-    public class MenuVM:BaseVM,IBaseVM
+    public class MenuVM:BaseVM,IBaseVM,IEntity
     {
         public MenuVM():base()
         {
@@ -16,12 +16,11 @@ namespace LambAndLentil.UI.Models
             CreationDate = creationDate;
         }
 
-        public int ID { get; set; }
+      
         public MealType MealType { get; set; }
         public DayOfWeek DayOfWeek { get; set; }
         public  int Diners { get; set; } 
 
-       public virtual ICollection<Recipe> Recipes { get; set; }
-       public virtual ICollection<Ingredient> Ingredients { get; set; }
+      
     }
 }

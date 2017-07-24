@@ -12,14 +12,14 @@ using AutoMapper;
 using LambAndLentil.Tests.Infrastructure;
 using LambAndLentil.UI;
 using LambAndLentil.UI.HtmlHelpers;
-using LambAndLentil.UI.Infrastructure.Alerts;
+using LambAndLentil.UI.Infrastructure.Alerts; 
 namespace LambAndLentil.Tests.Controllers
 {
     [TestClass]
     [TestCategory("MenusController")]
     public class MenusControllerTest
     {
-        static Mock<IRepository> mock;
+        static Mock<IRepository<Menu,MenuVM>> mock;
         public static MapperConfiguration AutoMapperConfig { get; set; }
 
         public MenusControllerTest()
@@ -71,17 +71,17 @@ namespace LambAndLentil.Tests.Controllers
         {
             // Arrange
             MenusController controller = SetUpController();
-            ListVM ilvm = new ListVM();
-            ilvm.Menus = (IEnumerable<Menu>)mock.Object.Menus;
+            ListVM<Menu,MenuVM> ilvm = new ListVM<Menu,MenuVM>();
+            ilvm.Entities = (IEnumerable<Menu>)mock.Object.Menu;
 
             // Act
             ViewResult view1 = controller.Index(1);
 
-            int count1 = ((ListVM)(view1.Model)).Menus.Count();
+            int count1 = ((ListVM<Menu,MenuVM>)(view1.Model)).Entities.Count();
 
             ViewResult view2 = controller.Index(2);
 
-            int count2 = ((ListVM)(view2.Model)).Menus.Count();
+            int count2 = ((ListVM<Menu,MenuVM>)(view2.Model)).Entities.Count();
 
             int count = count1 + count2;
 
@@ -94,10 +94,10 @@ namespace LambAndLentil.Tests.Controllers
             Assert.AreEqual("Index", view1.ViewName);
             Assert.AreEqual("Index", view2.ViewName);
 
-            //Assert.AreEqual("P1", ((ListVM)(view1.Model)).Menus.FirstOrDefault().Name);
-            //Assert.AreEqual("P2", ((ListVM)(view1.Model)).Menus.Skip(1).FirstOrDefault().Name);
-            //Assert.AreEqual("P3", ((ListVM)(view1.Model)).Menus.Skip(2).FirstOrDefault().Name);
-            //Assert.AreEqual("P5", ((ListVM)(view2.Model)).Menus.FirstOrDefault().Name);
+            //Assert.AreEqual("P1", ((ListVM<Menu,MenuVM>)(view1.Model)).Menus.FirstOrDefault().Name);
+            //Assert.AreEqual("P2", ((ListVM<Menu,MenuVM>)(view1.Model)).Menus.Skip(1).FirstOrDefault().Name);
+            //Assert.AreEqual("P3", ((ListVM<Menu,MenuVM>)(view1.Model)).Menus.Skip(2).FirstOrDefault().Name);
+            //Assert.AreEqual("P5", ((ListVM<Menu,MenuVM>)(view2.Model)).Menus.FirstOrDefault().Name);
 
         }
 
@@ -108,14 +108,14 @@ namespace LambAndLentil.Tests.Controllers
         {
             // Arrange
             MenusController controller = SetUpController();
-            ListVM ilvm = new ListVM();
-            ilvm.Menus = (IEnumerable<Menu>)mock.Object.Menus;
+            ListVM<Menu,MenuVM> ilvm = new ListVM<Menu,MenuVM>();
+            ilvm.Entities = (IEnumerable<Menu>)mock.Object.Menu;
             controller.PageSize = 8;
 
             // Act
             ViewResult view1 = controller.Index(1);
 
-            int count1 = ((ListVM)(view1.Model)).Menus.Count();
+            int count1 = ((ListVM<Menu,MenuVM>)(view1.Model)).Entities.Count();
 
 
 
@@ -124,9 +124,9 @@ namespace LambAndLentil.Tests.Controllers
             Assert.AreEqual(5, count1);
             Assert.AreEqual("Index", view1.ViewName);
 
-            Assert.AreEqual("Old Name 1", ((ListVM)(view1.Model)).Menus.FirstOrDefault().Name);
-            Assert.AreEqual("Old Name 2", ((ListVM)(view1.Model)).Menus.Skip(1).FirstOrDefault().Name);
-            Assert.AreEqual("Old Name 3", ((ListVM)(view1.Model)).Menus.Skip(2).FirstOrDefault().Name);
+            Assert.AreEqual("Old Name 1", ((ListVM<Menu,MenuVM>)(view1.Model)).Entities.FirstOrDefault().Name);
+            Assert.AreEqual("Old Name 2", ((ListVM<Menu,MenuVM>)(view1.Model)).Entities.Skip(1).FirstOrDefault().Name);
+            Assert.AreEqual("Old Name 3", ((ListVM<Menu,MenuVM>)(view1.Model)).Entities.Skip(2).FirstOrDefault().Name);
 
 
         }
@@ -139,22 +139,22 @@ namespace LambAndLentil.Tests.Controllers
         {
             //// Arrange
             //MenusController controller = SetUpController();
-            //ListVM ilvm = new ListVM();
-            //ilvm.Menus = (IEnumerable<Menu>)mock.Object.Menus;
+            //ListVM<Menu,MenuVM> ilvm = new ListVM<Menu,MenuVM>();
+            //ilvm.Menus = (IEnumerable<Menu,MenuVM>)mock.Object.Menus;
 
             //// Act
             //ViewResult view  = controller.Index(null, null, null, 2);
 
-            //int count  = ((ListVM)(view.Model)).Menus.Count(); 
+            //int count  = ((ListVM<Menu,MenuVM>)(view.Model)).Menus.Count(); 
 
             //// Assert
             //Assert.IsNotNull(view);
             //Assert.AreEqual(0, count );
             //Assert.AreEqual("Index", view.ViewName); 
-            // Assert.AreEqual("P5", ((ListVM)(view.Model)).Menus.FirstOrDefault().Name);
-            // Assert.AreEqual( 5, ((ListVM)(view.Model)).Menus.FirstOrDefault().ID);
-            // Assert.AreEqual("C", ((ListVM)(view.Model)).Menus.FirstOrDefault().Maker);
-            // Assert.AreEqual("CC", ((ListVM)(view.Model)).Menus.FirstOrDefault().Brand);
+            // Assert.AreEqual("P5", ((ListVM<Menu,MenuVM>)(view.Model)).Menus.FirstOrDefault().Name);
+            // Assert.AreEqual( 5, ((ListVM<Menu,MenuVM>)(view.Model)).Menus.FirstOrDefault().ID);
+            // Assert.AreEqual("C", ((ListVM<Menu,MenuVM>)(view.Model)).Menus.FirstOrDefault().Maker);
+            // Assert.AreEqual("CC", ((ListVM<Menu,MenuVM>)(view.Model)).Menus.FirstOrDefault().Brand);
 
         }
 
@@ -168,7 +168,7 @@ namespace LambAndLentil.Tests.Controllers
 
             // Act
 
-            ListVM resultT = (ListVM)((ViewResult)controller.Index(2)).Model;
+            ListVM<Menu,MenuVM> resultT = (ListVM<Menu,MenuVM>)((ViewResult)controller.Index(2)).Model;
 
 
             // Assert
@@ -190,10 +190,10 @@ namespace LambAndLentil.Tests.Controllers
 
 
             // Action
-            int totalItems = ((ListVM)((ViewResult)controller.Index()).Model).PagingInfo.TotalItems;
-            int currentPage = ((ListVM)((ViewResult)controller.Index()).Model).PagingInfo.CurrentPage;
-            int itemsPerPage = ((ListVM)((ViewResult)controller.Index()).Model).PagingInfo.ItemsPerPage;
-            int totalPages = ((ListVM)((ViewResult)controller.Index()).Model).PagingInfo.TotalPages;
+            int totalItems = ((ListVM<Menu,MenuVM>)((ViewResult)controller.Index()).Model).PagingInfo.TotalItems;
+            int currentPage = ((ListVM<Menu,MenuVM>)((ViewResult)controller.Index()).Model).PagingInfo.CurrentPage;
+            int itemsPerPage = ((ListVM<Menu,MenuVM>)((ViewResult)controller.Index()).Model).PagingInfo.ItemsPerPage;
+            int totalPages = ((ListVM<Menu,MenuVM>)((ViewResult)controller.Index()).Model).PagingInfo.TotalPages;
 
 
 
@@ -212,12 +212,12 @@ namespace LambAndLentil.Tests.Controllers
             MenusController controller = SetUpController();
 
             // Act
-            var result = (ListVM)(controller.Index(1)).Model;
+            var result = (ListVM<Menu,MenuVM>)(controller.Index(1)).Model;
 
 
 
             // Assert
-            Menu[] ingrArray1 = result.Menus.ToArray();
+            Menu[] ingrArray1 = result.Entities.ToArray();
             Assert.IsTrue(ingrArray1.Length == 5);
             Assert.AreEqual("Old Name 1", ingrArray1[0].Name);
             Assert.AreEqual("Old Name 4", ingrArray1[3].Name);
@@ -387,22 +387,23 @@ namespace LambAndLentil.Tests.Controllers
         [TestCategory("Delete")]
         public void Menus_Ctr_CanDeleteValidMenu()
         {
-            // Arrange - create an menu
-            Menu menu = new Menu { ID = 2, Name = "Test2" };
+            // Arrange - create an menuVM
+          
+            MenuVM menu = new MenuVM { ID = 2, Name = "Test2" };
 
             // Arrange - create the mock repository
-            Mock<IRepository> mock = new Mock<IRepository>();
-            mock.Setup(m => m.Menus).Returns(new Menu[]
+          Mock<IRepository<Menu,MenuVM>> mock = new Mock<IRepository<Menu,MenuVM>>();
+            mock.Setup(m => m.Menu ).Returns(new MenuVM[]
             {
-                new Menu {ID=1,Name="Test1"},
+                new MenuVM {ID=1,Name="Test1"},
 
                 menu,
 
-                new Menu {ID=3,Name="Test3"},
+                new MenuVM {ID=3,Name="Test3"},
             }.AsQueryable());
-            mock.Setup(m => m.Delete<Menu>(It.IsAny<int>())).Verifiable();
+            mock.Setup(m => m.Remove(It.IsAny<MenuVM>())).Verifiable();
             // Arrange - create the controller
-            MenusController controller = new MenusController(mock.Object);
+            MenusController controller = new MenusController();
 
             // Act - delete the menu
             ActionResult result = controller.DeleteConfirmed(menu.ID);
@@ -410,7 +411,7 @@ namespace LambAndLentil.Tests.Controllers
             AlertDecoratorResult adr = (AlertDecoratorResult)result;
 
             // Assert - ensure that the repository delete method was called with a correct Menu
-            mock.Verify(m => m.Delete<Menu>(menu.ID));
+            mock.Verify(m => m.Remove (menu));
 
 
             Assert.AreEqual("Test2 has been deleted", adr.Message);
@@ -423,9 +424,9 @@ namespace LambAndLentil.Tests.Controllers
             // Arrange
             MenusController controller = SetUpController();
 
-            Menu menu = mock.Object.Menus.First();
-            mock.Setup(c => c.Save(menu)).Verifiable();
-            menu.Name = "First edited";
+            MenuVM menuVM = (MenuVM)mock.Object.Menu ;
+            mock.Setup(c => c.Save(menuVM)).Verifiable();
+            menuVM.Name = "First edited";
 
             // Act 
 
@@ -478,8 +479,8 @@ namespace LambAndLentil.Tests.Controllers
         private MenusController SetUpController()
         {
             // - create the mock repository
-            mock = new Mock<IRepository>();
-            mock.Setup(m => m.Menus).Returns(new Menu[] {
+            mock = new Mock<IRepository<Menu,MenuVM>>();
+            mock.Setup(m => m.Menu).Returns(new Menu[] {
                 new Menu {ID = 1, Name = "Old Name 1" },
                 new Menu {ID = 2, Name = "Old Name 2" },
                 new Menu {ID = 3, Name = "Old Name 3" },
@@ -488,7 +489,7 @@ namespace LambAndLentil.Tests.Controllers
             }.AsQueryable());
 
             // Arrange - create a controller
-            MenusController controller = new MenusController(mock.Object);
+            MenusController controller = new MenusController();
             controller.PageSize = 3;
 
             return controller;
@@ -503,7 +504,7 @@ namespace LambAndLentil.Tests.Controllers
 
 
             // Arrange - create a controller
-            MenusController controller = new MenusController(mock.Object);
+            MenusController controller = new MenusController();
             // controller.PageSize = 3;
 
             return controller;

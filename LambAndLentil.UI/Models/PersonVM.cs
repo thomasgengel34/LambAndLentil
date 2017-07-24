@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LambAndLentil.Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 namespace LambAndLentil.UI.Models
 {
     
-    public class PersonVM:BaseVM,IBaseVM
+    public class PersonVM:BaseVM,IBaseVM,IEntity
     {
         public PersonVM()
         {
@@ -23,8 +24,7 @@ namespace LambAndLentil.UI.Models
             CreationDate = creationDate;
         }
 
-        [Key]
-        public int ID { get; set; }
+         
         public string FirstName { get; set; }
         public string LastName { get; set; } 
         public decimal Weight { get; set; } 

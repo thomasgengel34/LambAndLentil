@@ -25,6 +25,6 @@ namespace LambAndLentil.Domain.Entities
         public DateTime Date { get; set; } 
         public string Author { get; set; }
 
-        public List<Ingredient> Ingredients { get; set; }
+        //public List<Ingredient> Ingredients { get; set; }
     }
 }

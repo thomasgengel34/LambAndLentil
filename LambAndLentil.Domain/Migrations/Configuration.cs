@@ -16,7 +16,7 @@ namespace LambAndLentil.Domain.Migrations
 
         protected override void Seed(LambAndLentil.Domain.Concrete.EFDbContext context)
         { 
-            context.Ingredients.AddOrUpdate(
+            context.Ingredient.AddOrUpdate(
               p => p.Name,
              new Ingredient(DateTime.Now){ Name = "Romulan Ale" , Description="Illegal in the Federation",IngredientsList="Earth, air, fire, water"} ,
              new Ingredient(DateTime.Now) { Name = "Klingon Fire Water", Description = "Do not use near open flame", IngredientsList = "gak,gasoline, coffee"  } ,
@@ -31,14 +31,14 @@ namespace LambAndLentil.Domain.Migrations
               new Ingredient(DateTime.Now) { Name = "Great Value Chopped Green Chili Peppers - FRPC", Description = "Great Value Chopped Green Chili Peppers - FRPC",IngredientsList ="chili peppers"  }
             );
 
-            context.Recipes.AddOrUpdate(
+            context.Recipe.AddOrUpdate(
                 r => r.Name,
                 new Recipe { Name = "Vulcan Cutlets", Description = "Delicious and delicate dish from the Southern hemisphere, traditionally served boiled", Calories = 100,
                     Ingredients = new List<Ingredient>() {
-                        context.Ingredients.Where(m=>m.Name=="Ground Beef").Single(),
-                        context.Ingredients.Where(m=>m.Name=="Sea Salt").Single(),
-                        context.Ingredients.Where(m=>m.Name=="Chilton Cheese").Single(),
-                        context.Ingredients.Where(m=>m.Name=="Romulan Ale").Single(),
+                        context.Ingredient.Where(m=>m.Name=="Ground Beef").Single(),
+                        context.Ingredient.Where(m=>m.Name=="Sea Salt").Single(),
+                        context.Ingredient.Where(m=>m.Name=="Chilton Cheese").Single(),
+                        context.Ingredient.Where(m=>m.Name=="Romulan Ale").Single(),
                     }
                 },
                 new Recipe { Name = "Flaming Romulan Punch", Description = "just what it says.", Calories = 100 },
@@ -48,7 +48,7 @@ namespace LambAndLentil.Domain.Migrations
                 new Recipe { Name = "Macaroni and Cheese", Description = "Easy meal", Calories = 100 }
                 );
 
-            context.Menus.AddOrUpdate(
+            context.Menu.AddOrUpdate(
                 m => m.Name,
                 new Menu { Name = "Big Breakfast", Diners = 1, MealType = MealType.Breakfast },
                 new Menu { Name = "Big Lunch", Diners = 3, MealType = MealType.Lunch },
@@ -58,7 +58,7 @@ namespace LambAndLentil.Domain.Migrations
                 new Menu { Name = "Midmorning Snack", Diners = 1, MealType = MealType.Snack }
                 );
 
-            context.Plans.AddOrUpdate(
+            context.Plan.AddOrUpdate(
                 new Plan { Name = "First Try", Description = "Failure is Not an Option" },
                 new Plan { Name = "March 6", Description = "Well, maybe it is" },
                 new Plan { Name = "March 13", Description = "Not for the faint of heart" },
@@ -67,7 +67,7 @@ namespace LambAndLentil.Domain.Migrations
                 new Plan { Name = "Vacation", Description = "Maybe" }
                 );
 
-            context.Persons.AddOrUpdate(
+            context.Person.AddOrUpdate(
              p => p.LastName,
              new Person
              {
@@ -84,7 +84,7 @@ namespace LambAndLentil.Domain.Migrations
              new Person { Name = "James Kirk", FirstName = "James", LastName = "Kirk" }
              );
 
-            context.ShoppingLists.AddOrUpdate(
+            context.ShoppingList.AddOrUpdate(
                 s => s.Name,
                 new ShoppingList { Name = "3/4/17", Date=DateTime.Now },
                 new ShoppingList { Name = "3/11/17", Date = DateTime.Now },

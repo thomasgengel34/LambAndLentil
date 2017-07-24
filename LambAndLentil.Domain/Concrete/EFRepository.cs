@@ -1,390 +1,317 @@
-﻿using LambAndLentil.Domain.Abstract;
+﻿using AutoMapper;
+using LambAndLentil.Domain.Abstract;
+using LambAndLentil.Domain.Entities;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using LambAndLentil.Domain.Entities;
-using System.Reflection;
 using System.Linq.Expressions;
+using System.Reflection;
+
 
 namespace LambAndLentil.Domain.Concrete
 {
-    public class EFRepository : IRepository
+    public class EFRepository<T,TVM> : IRepository<T,TVM>
+        where T :class
+        where TVM : class, IEntity
+        
     {
-        private EFDbContext context = new EFDbContext();
+        EFDbContext context;
 
-        #region ingredient
-
-        public IQueryable Ingredient => context.Ingredients;
-        public IQueryable<Ingredient> Ingredients => context.Ingredients;
-
-        public int Save(Ingredient ingredient)
+        public EFRepository()
         {
-            Ingredient dbEntry;
-            if (ingredient.ID == 0)
-            {
-                dbEntry = context.Ingredients.Create();
-                context.Ingredients.Add(dbEntry);
-            }
-            else
-            {
-                dbEntry = context.Ingredients.Find(ingredient.ID);
-            }
-            dbEntry.AddedByUser = ingredient.AddedByUser; 
-            dbEntry.CreationDate = ingredient.CreationDate; 
-            dbEntry.Description = ingredient.Description; 
-            dbEntry.ID = ingredient.ID;
-            dbEntry.IngredientsList = ingredient.IngredientsList; 
-            dbEntry.ModifiedDate = DateTime.Now;
-            dbEntry.ModifiedByUser = ingredient.ModifiedByUser; 
-            dbEntry.Name = ingredient.Name; 
-
-            int numberOfReturns = context.SaveChanges();
-            return numberOfReturns;
+            context = new EFDbContext(); 
         }
 
-
-
-        public void Save<T>(BaseEntity item)
+        private dynamic ConvertVMtoClass()
         {
-            string entity = typeof(T).ToString().Split('.').Last();
-            switch (entity)
-            {
-                case "Ingredient":
-                    Save((Ingredient)item);
-                    break;
-                case "Recipe":
-                    Save((Recipe)item);
-                    break;
-                case "Menu":
-                    Save((Menu)item);
-                    break;
-                case "Plan":
-                    Save((Plan)item);
-                    break;
-                case "Person":
-                    Save((Person)item);
-                    break;
-                case "ShoppingList":
-                    Save((ShoppingList)item);
-                    break;
-                default:
-                    break;
-            }
+            string className = GetPlainClassName();
+            dynamic type = Type.GetType(className, true); 
+            return type;
         }
 
-        public void Delete<T>(int ID)
+        public string GetPlainClassName()
         {
-            string entity = typeof(T).ToString().Split('.').Last();
-            switch (entity)
-            {
-                case "Ingredient":
-                    DeleteIngredient(ID);
-                    break;
-                case "Recipe":
-                    DeleteRecipe(ID);
-                    break;
-                case "Menu":
-                    DeleteMenu(ID);
-                    break;
-                case "Plan":
-                    DeletePlan(ID);
-                    break;
-                case "Person":
-                    DeletePerson(ID);
-                    break;
-                case "ShoppingList":
-                    DeleteShoppingList(ID);
-                    break;
-                default:
-                    break;
-            }
+            char[] charsToTrim = { 'V', 'M' };
+            string className = typeof(TVM).ToString().TrimEnd(charsToTrim);
+            char[] splitterArray = { '.' };
+            string[] classNameArray = className.Split(splitterArray);
+            className = String.Concat("LambAndLentil.Domain.Entities.",classNameArray.Last());
+            return className;
         }
 
-        private void DeleteIngredient(int ID)
+        public string GetClassName()
         {
-            Ingredient dbEntry = context.Ingredients.Find(ID);
-            if (dbEntry != null)
-            {
-                context.Ingredients.Remove(dbEntry);
-                context.SaveChanges();
-            }
+            string className = GetPlainClassName();
+            return (className == "ShoppingList") ? "Shopping List" : className;
         }
 
-        #endregion
-        ///////////////////////////////
-        #region Recipe
+        //EFDbContext IRepository<T>.context { get; set; } 
+
+        public IQueryable Ingredient => context.Ingredient;
+        public IQueryable Recipe => context.Recipe;
+        public IQueryable Menu => context.Menu;
+        public IQueryable Plan => context.Plan;
+        public IQueryable Person => context.Person;
+        public IQueryable ShoppingList => context.ShoppingList;
+
+        EFDbContext IRepository<T,TVM>.context { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
 
-        public IQueryable<Recipe> Recipes => context.Recipes;
-
-
-        public IQueryable Recipe => context.Recipes;
-
-
-        public int Save(Recipe recipe)
+        public void Add(TVM entity)
         {
-            Recipe dbEntry;
-            if (recipe.ID == 0)
-            {
-                dbEntry = context.Recipes.Create();
-                context.Recipes.Add(dbEntry);
-            }
-            else
-            {
-                dbEntry = context.Recipes.Find(recipe.ID);
-            }
-            dbEntry.Calories = recipe.Calories == null ? null : recipe.Calories;
-            dbEntry.CalsFromFat = recipe.CalsFromFat == null ? null : recipe.CalsFromFat;
-            dbEntry.CreationDate = recipe.CreationDate;
-            dbEntry.Description = recipe.Description;
-            dbEntry.MealType = recipe.MealType;
-            dbEntry.ModifiedDate = DateTime.Now;
-            dbEntry.Name = recipe.Name;
-            dbEntry.ID = recipe.ID;
-            dbEntry.Ingredients = recipe.Ingredients;
-            dbEntry.Servings = recipe.Servings;
-
-            int x = context.SaveChanges();
-            return x;
+            dynamic T = ConvertVMtoClass();
+            // object T = new Ingredient();
+            AddHelper((dynamic)T, entity);
         }
 
-
-        private void DeleteRecipe(int ID)
+        public void AddHelper<T>(T obj, TVM entity)
+            where T : BaseEntity, IEntity
         {
-            Recipe dbEntry = context.Recipes.Find(ID);
-            if (dbEntry != null)
+            AddWithT<T>(entity);
+        }
+
+        private void AddWithT<T>(TVM entity)
+            where T : BaseEntity, IEntity
+        {
+
+            T item = Mapper.Map<TVM, T>(entity);
+            context.Set<T>().Add(item);
+            context.SaveChanges();
+        }
+
+        public void AttachAnIndependentChild<TParent, TChild>(int parentID, int childID)
+            where TParent : BaseEntity, IEntity
+            where TChild : BaseEntity, IEntity
+        {
+            using (var context = new EFDbContext())
             {
-                
-                dbEntry.Ingredients.Clear();
-                context.Recipes.Remove(dbEntry);
-                context.SaveChanges();
+                TParent parent = context.Set<TParent>().Find(parentID);
+                TChild child = context.Set<TChild>().Find(childID);
+
+                if (parent != null && child != null)
+                {
+                    if (typeof(TChild) == typeof(Ingredient))
+                    {
+                        parent.Ingredients.Add(child as Ingredient);
+                    }
+                    if (typeof(TChild) == typeof(Recipe))
+                    {
+                        parent.Recipes.Add(child as Recipe);
+                    }
+                    if (typeof(TChild) == typeof(Menu))
+                    {
+                        parent.Menus.Add(child as Menu);
+                    }
+                    if (typeof(TChild) == typeof(Plan))
+                    {
+                        parent.Plans.Add(child as Plan);
+                    }
+                    if (typeof(TChild) == typeof(Person))
+                    {
+                        parent.Persons.Add(child as Person);
+                    }
+                    if (typeof(TChild) == typeof(ShoppingList))
+                    {
+                        parent.ShoppingLists.Add(child as ShoppingList);
+                    }
+                    context.SaveChanges();
+                }
             }
         }
 
-        #endregion
-        /////////////////////////////
-        #region Menu 
-
-
-        public IQueryable<Menu> Menus => context.Menus;
-
-        public IQueryable Menu => context.Menus;
-
-
-        public int Save(Menu menu)
+        public void DetachAnIndependentChild<TParent, TChild>(int parentID, int childID)
+            where TParent : BaseEntity, IEntity
+            where TChild : BaseEntity, IEntity
         {
-            Menu dbEntry;
-            if (menu.ID == 0)
+            using (var context = new EFDbContext())
             {
-                dbEntry = context.Menus.Create();
-                context.Menus.Add(menu);
+                TParent parent = context.Set<TParent>().Find(parentID);
+                TChild child = context.Set<TChild>().Find(childID);
+
+                if (parent != null && child != null)
+                {
+                    if (typeof(TChild) == typeof(Ingredient))
+                    {
+                        parent.Ingredients.Remove(child as Ingredient);
+                    }
+                    if (typeof(TChild) == typeof(Recipe))
+                    {
+                        parent.Recipes.Remove(child as Recipe);
+                    }
+                    if (typeof(TChild) == typeof(Menu))
+                    {
+                        parent.Menus.Remove(child as Menu);
+                    }
+                    if (typeof(TChild) == typeof(Plan))
+                    {
+                        parent.Plans.Remove(child as Plan);
+                    }
+                    if (typeof(TChild) == typeof(Person))
+                    {
+                        parent.Persons.Remove(child as Person);
+                    }
+                    if (typeof(TChild) == typeof(ShoppingList))
+                    {
+                        parent.ShoppingLists.Remove(child as ShoppingList);
+                    }
+                    context.SaveChanges();
+                }
             }
-            else
-            {
-                dbEntry = context.Menus.Find(menu.ID);
-            }
-            dbEntry.AddedByUser = menu.AddedByUser;
-            dbEntry.CreationDate = menu.CreationDate;
-            dbEntry.Description = menu.Description;
-            dbEntry.Diners = menu.Diners;
-            dbEntry.DayOfWeek = menu.DayOfWeek;
-            dbEntry.ID = menu.ID;
-            dbEntry.MealType = menu.MealType;
-            dbEntry.ModifiedDate = DateTime.Now;
-            dbEntry.ModifiedByUser = menu.ModifiedByUser;
-            dbEntry.Name = menu.Name;
-            return context.SaveChanges();
-        }
-
-
-        private void DeleteMenu(int ID)
-        {
-            Menu dbEntry = context.Menus.Find(ID);
-            if (dbEntry != null)
-            {
-                dbEntry.Recipes.Clear();
-                context.Menus.Remove(dbEntry);
-                context.SaveChanges();
-            }
-        }
-        #endregion
-        /////////////////////////////
-        #region Plan
-
-
-        public IQueryable<Plan> Plans => context.Plans;
-
-        public IQueryable Plan => context.Plans;
-
-
-        public int Save(Plan plan)
-        {
-            Plan dbEntry;
-            if (plan.ID == 0)
-            {
-                dbEntry = context.Plans.Create();
-                dbEntry = context.Plans.Add(plan);
-            }
-            else
-            {
-                dbEntry = context.Plans.Find(plan.ID);
-            }
-            dbEntry.CreationDate = plan.CreationDate;
-            dbEntry.Menus = plan.Menus;
-            dbEntry.Name = plan.Name;
-            dbEntry.ID = plan.ID;
-            dbEntry.Description = plan.Description;
-            dbEntry.CreationDate = plan.CreationDate;
-            dbEntry.ModifiedDate = DateTime.Now;
-            dbEntry.ModifiedByUser = plan.ModifiedByUser;
-            return context.SaveChanges();
-        }
-
-
-        private void DeletePlan(int ID)
-        {
-            Plan dbEntry = context.Plans.Find(ID);
-            if (dbEntry != null)
-            {
-                context.Plans.Remove(dbEntry);
-                context.SaveChanges();
-            }
-        }
-
-        #endregion
-        /////////////////////////////
-        #region ShoppingLists
-        public IQueryable<ShoppingList> ShoppingLists => context.ShoppingLists;
-
-        public IQueryable ShoppingList => context.ShoppingLists;
-
-        public int Save(ShoppingList shoppingList)
-        {
-            ShoppingList dbEntry;
-            if (shoppingList.ID == 0)
-            {
-                dbEntry = context.ShoppingLists.Add(shoppingList);
-                dbEntry = context.ShoppingLists.Add(shoppingList);
-            }
-            else
-            {
-                dbEntry = context.ShoppingLists.Find(shoppingList.ID);
-            }
-            dbEntry.ID = shoppingList.ID;
-            dbEntry.Name = shoppingList.Name;
-            dbEntry.Description = shoppingList.Description;
-            dbEntry.CreationDate = shoppingList.CreationDate;
-            dbEntry.ModifiedByUser = shoppingList.ModifiedByUser;
-            dbEntry.ModifiedDate = DateTime.Now;
-            dbEntry.Date = shoppingList.Date;
-            dbEntry.Author = shoppingList.Author;
-            return context.SaveChanges();
-        }
-
-
-        private void DeleteShoppingList(int ID)
-        {
-            ShoppingList dbEntry = context.ShoppingLists.Find(ID);
-            if (dbEntry != null)
-            {
-                context.ShoppingLists.Remove(dbEntry);
-                context.SaveChanges();
-            }
-
-        }
-
-
-        #endregion
-        /////////////////////////////
-        #region Person
-        public IQueryable<Person> Persons => context.Persons;
-        public IQueryable Person => context.Persons;
-
-        public int Save(Person person)
-        {
-            Person dbEntry;
-            if (person.ID == 0)
-            {
-                dbEntry = context.Persons.Add(person);
-                context.Persons.Add(person);
-            }
-            else
-            {
-                dbEntry = context.Persons.Find(person.ID);
-            }
-            dbEntry.ID = person.ID;
-            dbEntry.Description = person.Description;
-            dbEntry.CreationDate = person.CreationDate;
-            dbEntry.ModifiedByUser = person.ModifiedByUser;
-            dbEntry.ModifiedDate = DateTime.Now;
-            dbEntry.FirstName = person.FirstName;
-            dbEntry.LastName = person.LastName;
-            dbEntry.MaxCalories = person.MaxCalories;
-            dbEntry.MinCalories = person.MinCalories;
-            dbEntry.Name = String.Concat(person.FirstName, " ", person.LastName);
-            dbEntry.NoGarlic = person.NoGarlic;
-            dbEntry.Weight = person.Weight;
-            dbEntry.ID = person.ID;
-            return context.SaveChanges();
-        }
-
-
-        private void DeletePerson(int ID)
-        {
-            Person dbEntry = context.Persons.Find(ID);
-            if (dbEntry != null)
-            {
-                context.Persons.Remove(dbEntry);
-                context.SaveChanges();
-            }
-           
-        }
-
-
-
-
-        #endregion
-    }
-
-    public class EFRepository<T> :  IRepository<T> where T : BaseEntity
-    {
-        private EFDbContext<T> context = new EFDbContext<T>();
-
-        public void Add(T entity)
-        { 
- throw new NotImplementedException();
         }
 
         public IEnumerable<T> GetAll()
         {
-            throw new NotImplementedException();
+            //string T = GetPlainClassName();
+            return (IEnumerable<T>)context.Set<T>().ToList();
+            // return GetAllHelper(T);
         }
 
-        public T GetById(int id)
+        //private IEnumerable<T> GetAllHelper<T>(T obj)
+        //       where T : class
+        //{
+
+        //    return GetAllWithT<T>();
+        //}
+
+        //private IEnumerable<T> GetAllWithT<T>()
+        //    where T : class
+        //{
+        //    return (IEnumerable<T>)context.Set<T>().ToList(); 
+        //}
+
+
+        public TVM GetById(int id)
+        { 
+          T item = context.Set<T>().Find(id); 
+            return Mapper.Map<T, TVM>(item);
+        }
+       
+        public IEnumerable<T> Query(Expression<Func<TVM, bool>> filter)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<T> Query(Expression<Func<T, bool>> filter)
+        public void Remove(TVM entity)
         {
-            throw new NotImplementedException();
+            Type T = ConvertVMtoClass();
+            RemoveHelper((dynamic)T, entity);
         }
 
-        public void Remove(T entity)
+        private void RemoveHelper<T>(T obj, TVM entity)
+            where T : class
         {
-             throw new NotImplementedException();
+            RemoveWithT<T>(entity);
         }
 
-        public void Save()
+        private void RemoveWithT<T>(TVM entity)
+             where T : class
         {
-            throw new NotImplementedException();
+            T item = Mapper.Map<TVM, T>(entity);
+            context.Set<T>().Remove(item);
+            context.SaveChanges();
         }
 
-        public void Update(T entity)
+        private void Remove<T>(TVM entity) where T : class
         {
-            throw new NotImplementedException();
+            T item = Mapper.Map<TVM, T>(entity);
+            context.Set<T>().Remove(item);
+            context.SaveChanges();
+        }
+
+        public void Save(TVM entity)
+        {
+            Type T = ConvertVMtoClass();
+            SaveHelper((dynamic)T, entity);
+        }
+
+        private void SaveHelper<T>(T ob, TVM entity)
+   where T : class, IEntity
+        {
+            SaveWithT<T>(entity);
+        }
+
+        private void SaveWithT<T>(TVM entity)
+         where T : class, IEntity
+        {
+            T item = Mapper.Map<TVM, T>(entity);
+
+            if (item == null)
+                return;
+
+            T existing = context.Set<T>().Find(item.ID);
+            if (existing != null)
+            {
+                context.Entry(existing).CurrentValues.SetValues(item);
+                context.SaveChanges();
+            }
+            else
+            {
+                Add(entity);
+            }
+        }
+
+
+
+        public void Update(TVM entity, int key)
+        {
+            dynamic T = ConvertVMtoClass();
+            UpdateHelper( T, entity, key);
+        }
+
+        private void UpdateHelper<T>(T ob, TVM entity, int key)
+        where T : BaseEntity
+        {
+            UpdateWithT<T>(entity, key);
+        }
+
+        private void UpdateWithT<T>(TVM entity, int key)
+        where T : BaseEntity
+        {
+            T updated = Mapper.Map<TVM, T>(entity);
+            T existing = context.Set<T>().Find(key);
+            if (existing != null)
+            {
+                context.Entry(existing).CurrentValues.SetValues(entity);
+
+                // later search for collections on entity using reflection
+                // todo: add for all
+                foreach (Ingredient ingredient in existing.Ingredients)
+                {
+                    var ingredientEntry = context.Entry(existing.Ingredients.Where(s => s.ID == ingredient.ID).FirstOrDefault());
+                    ingredientEntry.State = EntityState.Deleted;
+                }
+                context.SaveChanges();
+                {
+                    // TODO: add other types that might be children
+                    // later search for collections on entity using reflection
+                    foreach (Ingredient ingredient in entity.Ingredients)
+                    {
+                        var ingredientEntry = context.Entry(entity.Ingredients.Where(s => s.ID == ingredient.ID).FirstOrDefault());
+                        ingredientEntry.State = EntityState.Added;
+                    }
+                    context.SaveChanges();
+                }
+            }
+        }
+
+        public int Count()
+        {
+            Type T = ConvertVMtoClass();
+            return CountHelper((dynamic)T);
+        }
+
+        private int CountHelper<T>(T ob)
+        where T : BaseEntity, IEntity
+        {
+            return CountWithT<T>();
+        }
+
+
+        private int CountWithT<T>()
+                where T : BaseEntity, IEntity
+        {
+            return context.Set<T>().ToList().Count;
         }
     }
 }

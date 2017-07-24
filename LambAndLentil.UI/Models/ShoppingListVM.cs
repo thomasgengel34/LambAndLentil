@@ -7,15 +7,15 @@ using System.ComponentModel.DataAnnotations;
 
 namespace LambAndLentil.UI.Models
 {
-    public class ShoppingListVM:BaseVM,IBaseVM
+    public class ShoppingListVM:BaseVM,IBaseVM,IEntity
     {
 
 
         public string Author { get; set; }
         public DateTime Date { get; set; }
 
-        public List<Ingredient> Ingredients { get; set; }
-        public int ID { get; set ; }
+        //public List<Ingredient> Ingredients { get; set; }
+        
 
         public ShoppingListVM()
         {

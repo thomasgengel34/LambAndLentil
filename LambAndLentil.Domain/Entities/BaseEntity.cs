@@ -45,5 +45,12 @@ namespace LambAndLentil.Domain.Entities
         public DateTime ModifiedDate { get; set; }
         public string AddedByUser { get; set; }
         public string ModifiedByUser { get; set; }
+
+        public virtual ICollection<Recipe> Recipes { get; set; }
+        public virtual ICollection<Ingredient> Ingredients { get; set; }
+        public virtual ICollection<Menu> Menus { get; set; }
+        public virtual ICollection<Plan> Plans { get; set; }
+        public virtual ICollection<ShoppingList> ShoppingLists { get; set; }
+        public virtual ICollection<Person>Persons { get; set; }
     }
 }

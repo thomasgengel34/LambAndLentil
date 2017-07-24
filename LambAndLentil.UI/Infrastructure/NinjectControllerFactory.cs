@@ -1,6 +1,8 @@
 ﻿using LambAndLentil.Domain.Abstract;
 using LambAndLentil.Domain.Concrete;
+using LambAndLentil.Domain.Entities;
 using LambAndLentil.UI.Infrastructure.ModelMetaData;
+using LambAndLentil.UI.Models;
 using Ninject;
 using System;
 using System.Web.Mvc;
@@ -25,8 +27,14 @@ namespace LambAndLentil.UI.Infrastructure
 
         private void AddBindings()
         {
-            ninjectKernel.Bind<IRepository>().To<EFRepository>(); 
-            ninjectKernel= ModelMetaDataRegistry.AddMetaDataBindings(ninjectKernel);
+            //ninjectKernel.Bind<IRepository>().To<EFRepository>();
+            ninjectKernel.Bind<IRepository<Ingredient, IngredientVM>>().To<EFRepository<Ingredient, IngredientVM>>();
+            ninjectKernel.Bind<IRepository<Recipe,RecipeVM>>().To<EFRepository<Recipe,RecipeVM>>();
+            ninjectKernel.Bind<IRepository<Menu,MenuVM>>().To<EFRepository<Menu,MenuVM>>();
+            ninjectKernel.Bind<IRepository<Plan,PlanVM>>().To<EFRepository<Plan,PlanVM>>();
+            ninjectKernel.Bind<IRepository<ShoppingList,ShoppingListVM>>().To<EFRepository<ShoppingList,ShoppingListVM>>();
+            ninjectKernel.Bind<IRepository<Person,PersonVM>>().To<EFRepository<Person,PersonVM>>();
+            ninjectKernel = ModelMetaDataRegistry.AddMetaDataBindings(ninjectKernel);
         }
     }
 }

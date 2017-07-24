@@ -5,6 +5,7 @@ using LambAndLentil.Tests.Infrastructure;
 using LambAndLentil.UI;
 using LambAndLentil.UI.Controllers;
 using LambAndLentil.UI.Infrastructure.Alerts;
+using LambAndLentil.UI.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
@@ -17,11 +18,12 @@ namespace LambAndLentil.Tests.Controllers
     [TestCategory("IngredientsController")]
     public class IngredientsControllerShould
     {
-        static Mock<IRepository> mock;
+        static Mock<IRepository<Ingredient,IngredientVM>> mock;
         public static MapperConfiguration AutoMapperConfig { get; set; }
         public IngredientsControllerShould()
         {
             AutoMapperConfigForTests.InitializeMap();
+            mock = new Mock<IRepository<Ingredient,IngredientVM>>();
         }
 
         [TestMethod]
@@ -406,8 +408,8 @@ namespace LambAndLentil.Tests.Controllers
 
         private IngredientsController SetUpController()
         {
-            mock = new Mock<IRepository>();
-            mock.Setup(m => m.Ingredients).Returns(new Ingredient[] {
+             mock = new Mock<IRepository<Ingredient,IngredientVM>>();
+            mock.Setup(m => m.Ingredient).Returns(new Ingredient[] {
                 new Ingredient {ID = 1, Name = "P1",  ModifiedDate=DateTime.MaxValue.AddYears(-10)},
                 new Ingredient {ID = 2, Name = "P2" , ModifiedDate=DateTime.MaxValue.AddYears(-20)},
                 new Ingredient {ID = 3, Name = "P3" },
@@ -415,7 +417,7 @@ namespace LambAndLentil.Tests.Controllers
                 new Ingredient {ID = 5, Name = "P5" }
             }.AsQueryable());
 
-            IngredientsController controller = new IngredientsController(mock.Object);
+            IngredientsController controller = new IngredientsController();
             controller.PageSize = 3;
 
             return controller;
@@ -423,12 +425,9 @@ namespace LambAndLentil.Tests.Controllers
 
         private IngredientsController SetUpSimpleController()
         {
-            Mock<IRepository> mock = new Mock<IRepository>();
-            IngredientsController controller = new IngredientsController(mock.Object);
+             mock = new Mock<IRepository<Ingredient, IngredientVM>>();
+            IngredientsController controller = new IngredientsController();
             return controller;
-        }
-
-       
-
+        } 
     }
 }

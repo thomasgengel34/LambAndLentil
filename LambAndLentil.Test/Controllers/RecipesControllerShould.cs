@@ -19,12 +19,13 @@ namespace LambAndLentil.Tests.Controllers
     [TestCategory("RecipesController")]
     public class RecipesControllerShould
     {
-        static Mock<IRepository> mock;
+         static Mock<IRepository<Recipe,RecipeVM>> mock { get; set; }
         public static MapperConfiguration AutoMapperConfig { get; set; }
 
         public RecipesControllerShould()
         { 
-            AutoMapperConfigForTests.InitializeMap();   
+            AutoMapperConfigForTests.InitializeMap();
+            mock = new Mock<IRepository<Recipe,RecipeVM>>();
         }
 
 
@@ -92,11 +93,12 @@ namespace LambAndLentil.Tests.Controllers
             // Act
             ViewResult view1 = controller.Index(1);
 
-            int count1 = ((ListVM)(view1.Model)).Recipes.Count();
+          
+               int count1 =   ((ListVM<Recipe,RecipeVM>)view1.Model).Entities.Count();
 
             ViewResult view2 = controller.Index(2);
 
-            int count2 = ((ListVM)(view2.Model)).Recipes.Count();
+            int count2 = ((ListVM<Recipe,RecipeVM>)view2.Model).Entities.Count();
 
             int count = count1 + count2;
 
@@ -119,7 +121,7 @@ namespace LambAndLentil.Tests.Controllers
 
             // Act
 
-            ListVM resultT = (ListVM)((ViewResult)controller.Index(2)).Model;
+           ListVM<Recipe,RecipeVM> resultT = (ListVM<Recipe,RecipeVM>)((ViewResult)controller.Index(2)).Model;
 
 
             // Assert
@@ -135,18 +137,19 @@ namespace LambAndLentil.Tests.Controllers
         [TestMethod]
         public void  Index_FirstPageIsCorrect()
         {
+            Mock<IRepository<Recipe,RecipeVM>> mock = new Mock<IRepository<Recipe,RecipeVM>>();
             // Arrange
             RecipesController controller = SetUpController();
-#pragma warning disable IDE0017 // Simplify object initialization
-            ListVM ilvm = new  ListVM();
-#pragma warning restore IDE0017 // Simplify object initialization
-            ilvm.Recipes = (IEnumerable<Recipe>)mock.Object.Recipes;
+ 
+           ListVM<Recipe,RecipeVM> ilvm = new ListVM<Recipe,RecipeVM>();
+ 
+            ilvm.Entities  = ((ListVM<Recipe,RecipeVM>)mock.Object).Entities;
             controller.PageSize = 8;
 
             // Act
             ViewResult view1 = controller.Index(1);
 
-            int count1 = ((ListVM)(view1.Model)).Recipes.Count();
+            int count1 = ((ListVM<Recipe,RecipeVM>)(view1.Model)).Entities.Count();
 
 
 
@@ -155,9 +158,9 @@ namespace LambAndLentil.Tests.Controllers
             Assert.AreEqual(5, count1);
             Assert.AreEqual("Index", view1.ViewName);
 
-            Assert.AreEqual("oldRecipe1", ((ListVM)(view1.Model)).Recipes.FirstOrDefault().Name);
-            Assert.AreEqual("oldRecipe2", ((ListVM)(view1.Model)).Recipes.Skip(1).FirstOrDefault().Name);
-            Assert.AreEqual("oldRecipe3", ((ListVM)(view1.Model)).Recipes.Skip(2).FirstOrDefault().Name);
+            Assert.AreEqual("oldRecipe1", ((ListVM<Recipe,RecipeVM>)(view1.Model)).Entities.FirstOrDefault().Name);
+            Assert.AreEqual("oldRecipe2", ((ListVM<Recipe,RecipeVM>)(view1.Model)).Entities.Skip(1).FirstOrDefault().Name);
+            Assert.AreEqual("oldRecipe3", ((ListVM<Recipe,RecipeVM>)(view1.Model)).Entities.Skip(2).FirstOrDefault().Name);
 
 
         }
@@ -170,10 +173,10 @@ namespace LambAndLentil.Tests.Controllers
 
 
             // Action
-            int totalItems = ((ListVM)((ViewResult)controller.Index()).Model).PagingInfo.TotalItems;
-            int currentPage = ((ListVM)((ViewResult)controller.Index()).Model).PagingInfo.CurrentPage;
-            int itemsPerPage = ((ListVM)((ViewResult)controller.Index()).Model).PagingInfo.ItemsPerPage;
-            int totalPages = ((ListVM)((ViewResult)controller.Index()).Model).PagingInfo.TotalPages;
+            int totalItems = ((ListVM<Recipe,RecipeVM>)((ViewResult)controller.Index()).Model).PagingInfo.TotalItems;
+            int currentPage = ((ListVM<Recipe,RecipeVM>)((ViewResult)controller.Index()).Model).PagingInfo.CurrentPage;
+            int itemsPerPage = ((ListVM<Recipe,RecipeVM>)((ViewResult)controller.Index()).Model).PagingInfo.ItemsPerPage;
+            int totalPages = ((ListVM<Recipe,RecipeVM>)((ViewResult)controller.Index()).Model).PagingInfo.TotalPages;
 
 
 
@@ -190,22 +193,22 @@ namespace LambAndLentil.Tests.Controllers
         {
             //// Arrange
             //RecipesController controller = SetUpController();
-            //ListVM ilvm = new ListVM();
-            //ilvm.Recipes = (IEnumerable<Recipe>)mock.Object.Recipes;
+            //ListVM<Recipe,RecipeVM> ilvm = new ListVM<Recipe,RecipeVM>();
+            //ilvm.Recipes = (IEnumerable<Recipe,RecipeVM>)mock.Object.Recipes;
 
             //// Act
             //ViewResult view  = controller.Index(null, null, null, 2);
 
-            //int count  = ((ListVM)(view.Model)).Recipes.Count(); 
+            //int count  = (ListVM<Recipe,RecipeVM>)(view.Model)).Recipes.Count(); 
 
             //// Assert
             //Assert.IsNotNull(view);
             //Assert.AreEqual(0, count );
             //Assert.AreEqual("Index", view.ViewName); 
-            // Assert.AreEqual("P5", ((ListVM)(view.Model)).Recipes.FirstOrDefault().Name);
-            // Assert.AreEqual( 5, ((ListVM)(view.Model)).Recipes.FirstOrDefault().ID);
-            // Assert.AreEqual("C", ((ListVM)(view.Model)).Recipes.FirstOrDefault().Maker);
-            // Assert.AreEqual("CC", ((ListVM)(view.Model)).Recipes.FirstOrDefault().Brand);
+            // Assert.AreEqual("P5", (ListVM<Recipe,RecipeVM>)(view.Model)).Recipes.FirstOrDefault().Name);
+            // Assert.AreEqual( 5, (ListVM<Recipe,RecipeVM>)(view.Model)).Recipes.FirstOrDefault().ID);
+            // Assert.AreEqual("C", (ListVM<Recipe,RecipeVM>)(view.Model)).Recipes.FirstOrDefault().Maker);
+            // Assert.AreEqual("CC", (ListVM<Recipe,RecipeVM>)(view.Model)).Recipes.FirstOrDefault().Brand);
 
         }
 
@@ -216,12 +219,12 @@ namespace LambAndLentil.Tests.Controllers
             RecipesController controller = SetUpController();
 
             // Act
-            var result = (ListVM)(controller.Index(1)).Model;
+            var result = (ListVM<Recipe,RecipeVM>)(controller.Index(1)).Model;
 
 
 
             // Assert
-            Recipe[] ingrArray1 = result.Recipes.ToArray();
+            Recipe[] ingrArray1 = result.Entities.ToArray();
             Assert.IsTrue(ingrArray1.Length == 5);
             Assert.AreEqual("oldRecipe1", ingrArray1[0].Name);
             Assert.AreEqual("oldRecipe4", ingrArray1[3].Name);
@@ -390,29 +393,29 @@ namespace LambAndLentil.Tests.Controllers
         public void  DeleteValidRecipe()
         {
             // Arrange - create an recipe
-            Recipe recipe = new Recipe { ID = 2, Name = "Test2" };
+            RecipeVM recipeVM = new RecipeVM { ID = 2, Name = "Test2" };
 
             // Arrange - create the mock repository
-            Mock<IRepository> mock = new Mock<IRepository>();
-            mock.Setup(m => m.Recipes).Returns(new Recipe[]
+            mock = new Mock<IRepository<Recipe,RecipeVM>>();
+            mock.Setup(m => m.Recipe).Returns(new RecipeVM[]
             {
-                new Recipe {ID=1,Name="Test1"},
+                new RecipeVM {ID=1,Name="Test1"},
 
-                recipe,
+                recipeVM,
 
-                new Recipe {ID=3,Name="Test3"},
+                new RecipeVM {ID=3,Name="Test3"},
             }.AsQueryable());
-            mock.Setup(m => m.Delete<Recipe>(It.IsAny<int>())).Verifiable();
+            mock.Setup(m => m.Remove( It.IsAny< RecipeVM>())).Verifiable();
             // Arrange - create the controller
-            RecipesController controller = new RecipesController(mock.Object);
+            RecipesController controller = new RecipesController( );
 
             // Act - delete the recipe
-            ActionResult result = controller.DeleteConfirmed(recipe.ID);
+            ActionResult result = controller.DeleteConfirmed(recipeVM.ID);
 
             AlertDecoratorResult adr = (AlertDecoratorResult)result;
 
             // Assert - ensure that the repository delete method was called with a correct Recipe
-            mock.Verify(m => m.Delete<Recipe>(recipe.ID));
+            mock.Verify(m => m.Remove(recipeVM) );
 
 
             Assert.AreEqual("Test2 has been deleted", adr.Message);
@@ -423,12 +426,17 @@ namespace LambAndLentil.Tests.Controllers
         [TestCategory("Edit")]
         public void  CanEditRecipe()
         {
+              mock = new Mock<IRepository<Recipe,RecipeVM>>();
+
             // Arrange
             RecipesController controller = SetUpController();
+            Recipe recipe = mock.Object.Recipe.Cast<Recipe>().First();
+            //    RecipeVM recipeVM = mock.Object.Recipe.Cast<RecipeVM>().First();
+            RecipeVM recipeVM = Mapper.Map<Recipe, RecipeVM>(recipe);
 
-            Recipe recipe = mock.Object.Recipes.First();
-            mock.Setup(c => c.Save(recipe)).Verifiable();
-            recipe.Name = "First edited";
+
+            mock.Setup(c => c.Save(recipeVM)).Verifiable();
+            recipeVM.Name = "First edited";
 
             // Act 
 
@@ -482,8 +490,8 @@ namespace LambAndLentil.Tests.Controllers
         private RecipesController SetUpController()
         {
             // - create the mock repository
-            mock = new Mock<IRepository>();
-            mock.Setup(m => m.Recipes).Returns(new Recipe[] {
+              mock = new Mock<IRepository<Recipe,RecipeVM>>();
+            mock.Setup(m => m.Recipe).Returns(new Recipe[] {
                 new Recipe {ID = 1, Name = "oldRecipe1", Description="old Description A", ModifiedByUser="UserA"},
                 new Recipe {ID = 2, Name = "oldRecipe2", Description= "old Description B", ModifiedByUser= "UserB" },
                 new Recipe {ID = 3, Name = "oldRecipe3", Description= "old Description rA", ModifiedByUser= "UserA" },
@@ -493,7 +501,7 @@ namespace LambAndLentil.Tests.Controllers
 
             // Arrange - create a controller
  
-            RecipesController controller = new RecipesController(mock.Object);
+            RecipesController controller = new RecipesController();
  
             controller.PageSize = 3;
             return controller;
@@ -502,11 +510,11 @@ namespace LambAndLentil.Tests.Controllers
         private RecipesController SetUpSimpleController()
         {
             // - create the mock repository
-            Mock<IRepository> mock = new Mock<IRepository>();
+              mock = new Mock<IRepository<Recipe,RecipeVM>>();
 
 
             // Arrange - create a controller
-            RecipesController controller = new RecipesController(mock.Object);
+            RecipesController controller = new RecipesController();
             // controller.PageSize = 3;
 
             return controller;

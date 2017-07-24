@@ -9,24 +9,19 @@ namespace LambAndLentil.UI.Controllers
 {
     public class IngredientsController : BaseController
     {
-        public IngredientsController(IRepository repo) : base(repo)
-        {
-            List<Ingredient> ingredients = repository.Ingredients.ToList<Ingredient>();
-            Ingredients = new Ingredients(ingredients); 
-        }
+        
 
 
         // GET: Ingredients 
         //[OutputCache(CacheProfile = "IngredientIndexAsc")]
         public ViewResult Index(int page = 1)
         {
-            ViewResult view = BaseIndex(UIControllerType.Ingredients, page);
-            return View(view.ViewName, view.Model);
+            return BaseIndex<Ingredient,IngredientVM>(page); 
         }
     
         public ActionResult Details(int id = 1, UIViewType actionMethod = UIViewType.Details)
         {
-            return BaseDetails<Ingredient, IngredientsController, IngredientVM>(UIControllerType.Ingredients, id,actionMethod);
+            return BaseDetails<Ingredient,IngredientVM>(UIControllerType.Ingredients, id,actionMethod);
         }
 
         
@@ -43,7 +38,7 @@ namespace LambAndLentil.UI.Controllers
         [HttpGet]
         public ViewResult Edit(int id = 1)
         {
-            return BaseEdit<Ingredient, IngredientsController, IngredientVM>(UIControllerType.Ingredients, id);
+            return BaseEdit<Ingredient,IngredientVM>(UIControllerType.Ingredients, id);
         }
 
 
@@ -54,7 +49,7 @@ namespace LambAndLentil.UI.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult PostEdit([Bind(Include = "ID, Name, Description, CreationDate, ModifiedDate,  IngredientsList")]  IngredientVM ingredientVM)
         {
-            return BasePostEdit<Ingredient, IngredientsController, IngredientVM>(ingredientVM);
+            return BasePostEdit<Ingredient,IngredientVM>(ingredientVM);
         }
 
         // GET: Ingredients/Delete/5
@@ -62,7 +57,7 @@ namespace LambAndLentil.UI.Controllers
         public ActionResult Delete(int id = 1, UIViewType actionMethod = UIViewType.Delete)
         {
             ViewBag.ActionMethod = UIViewType.Delete;
-            return BaseDelete<Ingredient, IngredientsController, IngredientVM>(UIControllerType.Ingredients, id);
+            return BaseDelete<Ingredient,IngredientVM>(UIControllerType.Ingredients, id);
         }
 
         // POST: Ingredients/Delete/5
@@ -70,7 +65,7 @@ namespace LambAndLentil.UI.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            return BaseDeleteConfirmed<Ingredient, IngredientsController>(UIControllerType.Ingredients, id);
+            return BaseDeleteConfirmed<Ingredient,IngredientVM>(UIControllerType.Ingredients, id);
         }
 
     }

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using LambAndLentil.Domain.Concrete;
 using LambAndLentil.Domain.Entities;
+using LambAndLentil.Tests.Controllers;
 using LambAndLentil.UI;
 using LambAndLentil.UI.Controllers;
 using LambAndLentil.UI.Infrastructure.Alerts;
@@ -23,8 +24,8 @@ namespace MsTestIntegrationTests
         public void CreateAnMenu()
         {
             // Arrange
-            EFRepository repo = new EFRepository(); ;
-            MenusController controller = new MenusController(repo);
+            EFRepository<Menu, MenuVM> repo = new EFRepository<Menu, MenuVM>(); ;
+            MenusController controller = new MenusController();
             // Act
             ViewResult vr = controller.Create(LambAndLentil.UI.UIViewType.Create);
             MenuVM vm = (MenuVM)vr.Model;
@@ -40,8 +41,8 @@ namespace MsTestIntegrationTests
         public void SaveAValidMenu()
         {
             // Arrange
-            EFRepository repo = new EFRepository(); ;
-            MenusController controller = new MenusController(repo);
+            EFRepository<Menu, MenuVM> repo = new EFRepository<Menu, MenuVM>(); ;
+            MenusController controller = new MenusController();
             MenuVM vm = new MenuVM();
             vm.Name = "test";
             // Act
@@ -66,11 +67,8 @@ namespace MsTestIntegrationTests
             }
             finally
             {
-                // Clean Up - should run a  delete test to make sure this works 
-                List<Menu> menus = repo.Menus.ToList<Menu>();
-                Menu menu = menus.Where(m => m.Name == "test").FirstOrDefault();
-
-                // Delete it
+                // Clean Up - should run a  delete test to make sure this works  
+                Menu menu =  repo.GetAll().Where(m => m.Name == "test").FirstOrDefault();  
                 controller.DeleteConfirmed(menu.ID);
             }
         }
@@ -80,24 +78,24 @@ namespace MsTestIntegrationTests
         public void SaveEditedMenuWithNameChange()
         {
             // Arrange
-            EFRepository repo = new EFRepository(); ;
-            MenusController controller1 = new MenusController(repo);
-            MenusController controller2 = new MenusController(repo);
-            MenusController controller3 = new MenusController(repo);
-            MenusController controller4 = new MenusController(repo);
-            MenusController controller5 = new MenusController(repo);
+            EFRepository<Menu, MenuVM> repo = new EFRepository<Menu, MenuVM>(); ;
+            MenusController controller1 = new MenusController();
+            MenusController controller2 = new MenusController();
+            MenusController controller3 = new MenusController();
+            MenusController controller4 = new MenusController();
+            MenusController controller5 = new MenusController();
             MenuVM vm = new MenuVM();
             vm.Name = "0000 test";
 
             // Act 
             ActionResult ar1 = controller1.PostEdit(vm);
             ViewResult view1 = controller2.Index();
-            ListVM listVM = (ListVM)view1.Model;
-            var result = (from m in listVM.Menus
+           ListVM<Menu,MenuVM> listVM = (ListVM<Menu,MenuVM>)view1.Model;
+            var result = (from m in listVM.Entities
                           where m.Name == "0000 test"
-                          select m).AsQueryable();
-
-            Menu menu = result.FirstOrDefault();
+                          select m).FirstOrDefault();
+          
+            MenuVM menu =  Mapper.Map<Menu, MenuVM>( result);
             try
             {
                 // verify initial value:
@@ -112,13 +110,13 @@ namespace MsTestIntegrationTests
             vm.ID = menu.ID;
             ActionResult ar2 = controller3.PostEdit(vm);
             ViewResult view2 = controller4.Index();
-            ListVM listVM2 = (ListVM)view2.Model;
-            var result2 = (from m in listVM2.Menus
+           ListVM<Menu,MenuVM> listVM2 = (ListVM<Menu,MenuVM>)view2.Model;
+            var result2 = (from m in listVM2.Entities
                            where m.Name == "0000 test Edited"
-                           select m).AsQueryable();
+                           select m).AsQueryable().FirstOrDefault();
 
-            menu = result2.FirstOrDefault();
-
+            
+            MenuVM menu2 = Mapper.Map<Menu, MenuVM>(result2);
             try
             {
                 // Assert
@@ -143,12 +141,12 @@ namespace MsTestIntegrationTests
         public void SaveEditedMenuWithNameAndDayOfWeekChange()
         {
             // Arrange
-            EFRepository repo = new EFRepository(); ;
-            MenusController controller1 = new MenusController(repo);
-            MenusController controller2 = new MenusController(repo);
-            MenusController controller3 = new MenusController(repo);
-            MenusController controller4 = new MenusController(repo);
-            MenusController controller5 = new MenusController(repo);
+            EFRepository<Menu, MenuVM> repo = new EFRepository<Menu, MenuVM>(); ;
+            MenusController controller1 = new MenusController();
+            MenusController controller2 = new MenusController();
+            MenusController controller3 = new MenusController();
+            MenusController controller4 = new MenusController();
+            MenusController controller5 = new MenusController();
             MenuVM vm = new MenuVM();
             vm.Name = "0000 test";
 
@@ -156,12 +154,12 @@ namespace MsTestIntegrationTests
             // Act 
             ActionResult ar1 = controller1.PostEdit(vm);
             ViewResult view1 = controller2.Index();
-            ListVM listVM = (ListVM)view1.Model;
-            var result = (from m in listVM.Menus
+           ListVM<Menu,MenuVM> listVM = (ListVM<Menu,MenuVM>)view1.Model;
+            var result = (from m in listVM.Entities
                           where m.Name == "0000 test"
-                          select m).AsQueryable();
+                          select m).AsQueryable().FirstOrDefault();
 
-            Menu menu = result.FirstOrDefault();
+            MenuVM menu = Mapper.Map<Menu, MenuVM>(result);
             try
             {
                 // verify initial value:
@@ -181,18 +179,18 @@ namespace MsTestIntegrationTests
 
             ActionResult ar2 = controller3.PostEdit(vm);
             ViewResult view2 = controller4.Index();
-            ListVM listVM2 = (ListVM)view2.Model;
-            var result2 = (from m in listVM2.Menus
+          ListVM<Menu,MenuVM> listVM2 = (ListVM<Menu,MenuVM>)view2.Model;
+            var result2 = (from m in listVM2.Entities
                            where m.Name == "0000 test Edited"
-                           select m).AsQueryable();
+                           select m).AsQueryable().FirstOrDefault();
 
-            menu = result2.FirstOrDefault();
+            MenuVM menuVM =  Mapper.Map<Menu, MenuVM>(result2);
 
             try
             {
                 // Assert
-                Assert.AreEqual("0000 test Edited", menu.Name);
-                Assert.AreEqual(DayOfWeek.Friday, menu.DayOfWeek);
+                Assert.AreEqual("0000 test Edited", menuVM.Name);
+                Assert.AreEqual(DayOfWeek.Friday, menuVM.DayOfWeek);
             }
             catch (Exception)
             {
@@ -211,24 +209,19 @@ namespace MsTestIntegrationTests
         public void ActuallyDeleteAMenuFromTheDatabase()
         {
             // Arrange
-            EFRepository repo = new EFRepository(); ;
-            MenusController editController = new MenusController(repo);
-            MenusController indexController = new MenusController(repo);
-            MenusController deleteController = new MenusController(repo);
-            MenuVM vm = new MenuVM();
-            vm.Name = "0000" + new Guid().ToString();
-            ActionResult ar = editController.PostEdit(vm);
+            EFRepository<Menu, MenuVM> repo = new EFRepository<Menu, MenuVM>(); ;
+           
+            MenusController indexController = new MenusController();
+            MenusController deleteController = new MenusController();
+           
             ViewResult view = indexController.Index();
-            ListVM listVM = (ListVM)view.Model;
-            var result = (from m in listVM.Menus
-                          where m.Name == vm.Name
-                          select m).AsQueryable();
-            Menu item = result.FirstOrDefault();
+            
+            Menu item = GetMenu(repo, "test ActuallyDeleteAMenuFromTheDatabase");
 
             //Act
             deleteController.DeleteConfirmed(item.ID);
-            var deletedItem = (from m in repo.Menus
-                               where m.Name == vm.Name
+            var deletedItem = (from m in repo.GetAll()
+                               where m.Description == item.Description
                                select m).AsQueryable();
 
             //Assert
@@ -240,12 +233,12 @@ namespace MsTestIntegrationTests
         public void SaveEditedMenuWithDescriptionChange()
         {
             // Arrange
-            EFRepository repo = new EFRepository(); ;
-            MenusController controller1 = new MenusController(repo);
-            MenusController controller2 = new MenusController(repo);
-            MenusController controller3 = new MenusController(repo);
-            MenusController controller4 = new MenusController(repo);
-            MenusController controller5 = new MenusController(repo);
+            EFRepository<Menu, MenuVM> repo = new EFRepository<Menu, MenuVM>(); ;
+            MenusController controller1 = new MenusController();
+            MenusController controller2 = new MenusController();
+            MenusController controller3 = new MenusController();
+            MenusController controller4 = new MenusController();
+            MenusController controller5 = new MenusController();
             MenuVM vm = new MenuVM();
             vm.Name = "0000 test";
             vm.Description = "SaveEditedMenuWithDescriptionChange Pre-test";
@@ -254,42 +247,41 @@ namespace MsTestIntegrationTests
             // Act 
             ActionResult ar1 = controller1.PostEdit(vm);
             ViewResult view1 = controller2.Index();
-            ListVM listVM = (ListVM)view1.Model;
-            var result = (from m in listVM.Menus
+          ListVM<Menu,MenuVM> listVM = (ListVM<Menu,MenuVM>)view1.Model;
+            var result = (from m in listVM.Entities
                           where m.Name == "0000 test"
-                          select m).AsQueryable();
-
-            Menu menu = result.FirstOrDefault();
+                          select m).AsQueryable().FirstOrDefault();
+             
+            MenuVM menuVM = Mapper.Map<Menu, MenuVM>(result);
             try
             {
                 // verify initial value:
-                Assert.AreEqual("SaveEditedMenuWithDescriptionChange Pre-test", menu.Description);
+                Assert.AreEqual("SaveEditedMenuWithDescriptionChange Pre-test", menuVM.Description);
             }
             catch (Exception)
             {
-                controller4.DeleteConfirmed(menu.ID);
+                controller4.DeleteConfirmed(menuVM.ID);
                 throw;
             }
 
             // now edit it
-            vm.ID = menu.ID;
+            vm.ID = menuVM.ID;
             vm.Name = "0000 test Edited";
             vm.Description = "SaveEditedMenuWithDescriptionChange Post-test";
 
             ActionResult ar2 = controller3.PostEdit(vm);
             ViewResult view2 = controller4.Index();
-            ListVM listVM2 = (ListVM)view2.Model;
-            var result2 = (from m in listVM2.Menus
+          ListVM<Menu,MenuVM> listVM2 = (ListVM<Menu,MenuVM>)view2.Model;
+            var result2 = (from m in listVM2.Entities
                            where m.Name == "0000 test Edited"
-                           select m).AsQueryable();
-
-            menu = result2.FirstOrDefault();
+                           select m).AsQueryable().FirstOrDefault(); 
+             menuVM = Mapper.Map<Menu, MenuVM>(result2);
 
             try
             {
                 // Assert
-                Assert.AreEqual("0000 test Edited", menu.Name);
-                Assert.AreEqual("SaveEditedMenuWithDescriptionChange Post-test", menu.Description);
+                Assert.AreEqual("0000 test Edited", menuVM.Name);
+                Assert.AreEqual("SaveEditedMenuWithDescriptionChange Post-test", menuVM.Description);
             }
             catch (Exception)
             {
@@ -367,22 +359,22 @@ namespace MsTestIntegrationTests
             MenuVM vm = new MenuVM(CreationDate);
             vm.Name = "001 Test ";
 
-            EFRepository repo = new EFRepository();
-            MenusController controllerEdit = new MenusController(repo);
-            MenusController controllerView = new MenusController(repo);
-            MenusController controllerDelete = new MenusController(repo);
+            EFRepository<Menu, MenuVM> repo = new EFRepository<Menu, MenuVM>();
+            MenusController controllerEdit = new MenusController();
+            MenusController controllerView = new MenusController();
+            MenusController controllerDelete = new MenusController();
 
             // Act
             controllerEdit.PostEdit(vm);
             ViewResult view = controllerView.Index();
-            ListVM listVM = (ListVM)view.Model;
-            var result = (from m in listVM.Menus
+          ListVM<Menu,MenuVM> listVM = (ListVM<Menu,MenuVM>)view.Model;
+            var result = (from m in listVM.Entities
                           where m.Name == "001 Test "
-                          select m).AsQueryable();
+                          select m).AsQueryable().FirstOrDefault();
 
-            Menu menu = result.FirstOrDefault();
+            MenuVM menuVM = Mapper.Map<Menu,MenuVM>(result);
 
-            DateTime shouldBeSameDate = menu.CreationDate;
+            DateTime shouldBeSameDate = menuVM.CreationDate;
             try
             {
                 // Assert
@@ -395,7 +387,7 @@ namespace MsTestIntegrationTests
             finally
             {
                 // Cleanup
-                controllerDelete.DeleteConfirmed(menu.ID);
+                controllerDelete.DeleteConfirmed(menuVM.ID);
             }
         }
 
@@ -404,11 +396,11 @@ namespace MsTestIntegrationTests
         public void UpdateTheModificationDateBetweenPostedEdits()
         {
             // Arrange
-            EFRepository repo = new EFRepository();
-            MenusController controllerPost = new MenusController(repo);
-            MenusController controllerPost1 = new MenusController(repo);
-            MenusController controllerView = new MenusController(repo);
-            MenusController controllerDelete = new MenusController(repo);
+            EFRepository<Menu, MenuVM> repo = new EFRepository<Menu, MenuVM>();
+            MenusController controllerPost = new MenusController();
+            MenusController controllerPost1 = new MenusController();
+            MenusController controllerView = new MenusController();
+            MenusController controllerDelete = new MenusController();
 
             MenuVM vm = new MenuVM();
             vm.Name = "002 Test Mod";
@@ -418,25 +410,26 @@ namespace MsTestIntegrationTests
             // Act
             controllerPost.PostEdit(vm);
             ViewResult view = controllerView.Index();
-            ListVM listVM = (ListVM)view.Model;
-            var result = (from m in listVM.Menus
+           ListVM<Menu,MenuVM> listVM = (ListVM<Menu,MenuVM>)view.Model;
+            var result = (from m in listVM.Entities
                           where m.Name == "002 Test Mod"
                           select m).AsQueryable();
-            Menu menu = (Menu)result.FirstOrDefault();
-            vm = Mapper.Map<Menu, MenuVM>(menu);
-            vm.Description = "I've been edited to delay a bit";
-            controllerPost1.PostEdit(vm);
+            Menu item = result.FirstOrDefault();
+             MenuVM menuVM = Mapper.Map<Menu, MenuVM>(item);
+             
+           
+            menuVM.Description = "I've been edited to delay a bit";
+            controllerPost1.PostEdit(menuVM);
 
             ViewResult view1 = controllerView.Index();
-            listVM = (ListVM)view1.Model;
-            var result1 = (from m in listVM.Menus
+            listVM = (ListVM<Menu,MenuVM>)view1.Model;
+            var result1 = (from m in listVM.Entities
                            where m.Name == "002 Test Mod"
-                           select m).AsQueryable();
+                           select m).AsQueryable().FirstOrDefault();
+              menuVM = Mapper.Map<Menu, MenuVM>(result1); 
 
-            menu = result1.FirstOrDefault();
-
-            DateTime shouldBeSameDate = menu.CreationDate;
-            DateTime shouldBeLaterDate = menu.ModifiedDate;
+            DateTime shouldBeSameDate = menuVM.CreationDate;
+            DateTime shouldBeLaterDate = menuVM.ModifiedDate;
             try
             {
                 // Assert
@@ -450,8 +443,56 @@ namespace MsTestIntegrationTests
             finally
             {
                 // Cleanup
-                controllerDelete.DeleteConfirmed(menu.ID);
+                controllerDelete.DeleteConfirmed(menuVM.ID);
             }
+        }
+
+        [TestMethod]
+        [TestCategory("Attach-Detach")]
+        public void ReturnIndexWithSuccessAttachAnExistingRecipeToAnExistingMenu()
+        {
+            // Arrange
+
+            EFRepository<Menu, MenuVM> repo = new EFRepository<Menu, MenuVM>();
+            EFRepository<Recipe, RecipeVM> repoRecipe = new EFRepository<Recipe, RecipeVM>();
+            MenusController controllerAttach = new MenusController();
+            RecipesController controllerAttachI = new RecipesController();
+            MenusController controllerCleanup = new MenusController();
+
+
+            Menu menu = GetMenu(repo, "test AttachAnExistingRecipeToAnExistingMenu");
+ 
+
+            Recipe recipe = new RecipesControllerShould().GetRecipe(repoRecipe, "test AttachAnExistingRecipeToAnExistingMenu");
+             
+            // Act
+           var x = controllerAttach.AttachRecipe(menu.ID, recipe.ID);
+           
+            // Assert 
+            Assert.AreEqual(1, menu.Recipes.Count());
+            // how do I know the correct recipe was added?
+            Assert.AreEqual(recipe.ID, menu.Recipes.First().ID);
+
+            // Cleanup
+            RecipesController recipeController = new RecipesController();
+
+            MenuVM menu1VM = Mapper.Map<Menu, MenuVM>(menu);
+            RecipeVM recipe2VM = Mapper.Map<Recipe, RecipeVM>(recipe);
+            controllerCleanup.DeleteConfirmed(menu.ID);
+            recipeController.DeleteConfirmed(recipe.ID);
+        }
+
+        internal Menu GetMenu(EFRepository<Menu, MenuVM> repo, string description)
+        {
+            MenusController controller = new MenusController();
+            MenuVM mvm = new MenuVM();
+            mvm.Description = description;
+            controller.PostEdit(mvm);
+
+            Menu menu = ((from m in repo.GetAll() 
+                                      where m.Description == description
+                                      select m).AsQueryable()).FirstOrDefault();
+            return menu;
         }
     }
 }

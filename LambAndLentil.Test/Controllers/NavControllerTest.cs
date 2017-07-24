@@ -10,6 +10,7 @@ using Moq;
 using LambAndLentil.Domain.Abstract;
 using LambAndLentil.Domain.Entities;
 using System.Collections;
+using LambAndLentil.UI.Models;
 
 namespace LambAndLentil.Tests.Controllers
 { 
@@ -52,8 +53,8 @@ namespace LambAndLentil.Tests.Controllers
         private NavController SetUpController()
         {
             // - create the mock repository
-            Mock<IRepository> mock = new Mock<IRepository>();
-            mock.Setup(m => m.Ingredients).Returns(new Ingredient[] {
+            Mock<IRepository<Ingredient,IngredientVM>> mock = new Mock<IRepository<Ingredient,IngredientVM>>();
+            mock.Setup(m => m.Ingredient).Returns(new Ingredient[] {
                 new Ingredient {ID = 1, Name = "P1" },
                 new Ingredient {ID = 2, Name = "P2" },
                 new Ingredient {ID = 3, Name = "P3"  },
@@ -62,7 +63,7 @@ namespace LambAndLentil.Tests.Controllers
             }.AsQueryable());
 
             // Arrange - create a controller
-            NavController controller = new NavController(mock.Object);
+            NavController controller = new NavController();
             
 
             return controller;

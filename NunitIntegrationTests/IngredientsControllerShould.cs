@@ -23,8 +23,8 @@ namespace MsTestIntegrationTests
         public void CreateAnIngredient()
         {
             // Arrange
-            EFRepository repo = new EFRepository(); ;
-            IngredientsController controller = new IngredientsController(repo);
+            EFRepository<Ingredient,IngredientVM> repo = new EFRepository<Ingredient,IngredientVM>(); ;
+            IngredientsController controller = new IngredientsController();
             // Act
             ViewResult vr = controller.Create(LambAndLentil.UI.UIViewType.Create);
             string modelName = ((IngredientVM)vr.Model).Name;
@@ -38,8 +38,8 @@ namespace MsTestIntegrationTests
         public void SaveAValidIngredient()
         {
             // Arrange
-            EFRepository repo = new EFRepository(); ;
-            IngredientsController controller = new IngredientsController(repo);
+            EFRepository<Ingredient,IngredientVM> repo = new EFRepository<Ingredient,IngredientVM>(); ;
+            IngredientsController controller = new IngredientsController();
             IngredientVM vm = new IngredientVM();
             vm.Name = "test";
             // Act
@@ -66,8 +66,8 @@ namespace MsTestIntegrationTests
             finally
             {
                 // Clean Up - should run a  delete test to make sure this works 
-                List<Ingredient> items = repo.Ingredients.ToList<Ingredient>();
-                Ingredient item = items.Where(m => m.Name == "test").FirstOrDefault();
+               
+                Ingredient item =repo.GetAll().Where(m => m.Name == "test").FirstOrDefault();
 
                 // Delete it
                 controller.DeleteConfirmed(item.ID);
@@ -79,44 +79,44 @@ namespace MsTestIntegrationTests
         public void SaveEditedIngredient()
         {
             // Arrange
-            EFRepository repo = new EFRepository(); ;
-            IngredientsController controller1 = new IngredientsController(repo);
-            IngredientsController controller2 = new IngredientsController(repo);
-            IngredientsController controller3 = new IngredientsController(repo);
-            IngredientsController controller4 = new IngredientsController(repo);
-            IngredientsController controller5 = new IngredientsController(repo);
+            EFRepository<Ingredient,IngredientVM> repo = new EFRepository<Ingredient,IngredientVM>(); ;
+            IngredientsController controller1 = new IngredientsController();
+            IngredientsController controller2 = new IngredientsController();
+            IngredientsController controller3 = new IngredientsController();
+            IngredientsController controller4 = new IngredientsController();
+            IngredientsController controller5 = new IngredientsController();
             IngredientVM vm = new IngredientVM();
             vm.Name = "0000 test";
 
             // Act 
             ActionResult ar1 = controller1.PostEdit(vm);
             ViewResult view1 = controller2.Index();
-            ListVM listVM = (ListVM)view1.Model;
-            var result = (from m in listVM.Ingredients
+           ListVM<Ingredient,IngredientVM>  listVM = (ListVM<Ingredient,IngredientVM> )view1.Model;
+            var result = (from m in listVM.Entities 
                           where m.Name == "0000 test"
-                          select m).AsQueryable();
+                          select m).AsQueryable().FirstOrDefault();
 
-            Ingredient ingredient = result.FirstOrDefault();
+            IngredientVM ingredientVM = Mapper.Map<Ingredient, IngredientVM>(result);
 
             // verify initial value:
-            Assert.AreEqual("0000 test", ingredient.Name);
+            Assert.AreEqual("0000 test", ingredientVM.Name);
 
             // now edit it
             vm.Name = "0000 test Edited";
-            vm.ID = ingredient.ID;
+            vm.ID = ingredientVM.ID;
             ActionResult ar2 = controller3.PostEdit(vm);
             ViewResult view2 = controller4.Index();
-            ListVM listVM2 = (ListVM)view2.Model;
-            var result2 = (from m in listVM2.Ingredients
+           ListVM<Ingredient,IngredientVM>  listVM2 = (ListVM<Ingredient,IngredientVM> )view2.Model;
+            var result2 = (from m in listVM2.Entities
                            where m.Name == "0000 test Edited"
-                           select m).AsQueryable();
+                           select m).AsQueryable().FirstOrDefault(); 
 
-            ingredient = result2.FirstOrDefault();
+            ingredientVM =  Mapper.Map<Ingredient, IngredientVM>(result2);
 
             try
             {
                 // Assert
-                Assert.AreEqual("0000 test Edited", ingredient.Name);
+                Assert.AreEqual("0000 test Edited", ingredientVM.Name);
             }
             catch (Exception)
             {
@@ -134,28 +134,16 @@ namespace MsTestIntegrationTests
         public void ActuallyDeleteAnIngredientFromTheDatabase()
         {
             // Arrange
-            EFRepository repo = new EFRepository(); ;
-            IngredientsController editController = new IngredientsController(repo);
-            IngredientsController indexController = new IngredientsController(repo);
-            IngredientsController deleteController = new IngredientsController(repo);
-            IngredientVM vm = new IngredientVM();
-            vm.Name = "0000" + new Guid().ToString();
-            ActionResult ar = editController.PostEdit(vm);
-            ViewResult view = indexController.Index();
-            ListVM listVM = (ListVM)view.Model;
-            var result = (from m in listVM.Ingredients
-                          where m.Name == vm.Name
-                          select m).AsQueryable();
-            Ingredient item = result.FirstOrDefault();
+            EFRepository<Ingredient,IngredientVM> repo = new EFRepository<Ingredient,IngredientVM>(); 
+            IngredientsController controller = new IngredientsController();
+            var item = new RecipesControllerShould().GetIngredient(repo, "test ActuallyDeleteAnIngredientFromTheDatabase");
 
             //Act
-            deleteController.DeleteConfirmed(item.ID);
-            var deletedItem = (from m in repo.Ingredients
-                               where m.Name == vm.Name
-                               select m).AsQueryable();
+            controller.DeleteConfirmed(item.ID);
+            var deletedItem = new RecipesControllerShould().GetIngredient(repo, "test ActuallyDeleteAnIngredientFromTheDatabase");
 
             //Assert
-            Assert.AreEqual(0, deletedItem.Count());
+            Assert.IsNull(  deletedItem );
         }
 
         [TestMethod]
@@ -209,22 +197,22 @@ namespace MsTestIntegrationTests
             IngredientVM ingredientVM = new IngredientVM(CreationDate);
             ingredientVM.Name = "001 Test ";
 
-            EFRepository repo = new EFRepository(); ;
-            IngredientsController controllerEdit = new IngredientsController(repo);
-            IngredientsController controllerView = new IngredientsController(repo);
-            IngredientsController controllerDelete = new IngredientsController(repo);
+            EFRepository<Ingredient,IngredientVM> repo = new EFRepository<Ingredient,IngredientVM>(); ;
+            IngredientsController controllerEdit = new IngredientsController();
+            IngredientsController controllerView = new IngredientsController();
+            IngredientsController controllerDelete = new IngredientsController();
 
             // Act
             controllerEdit.PostEdit(ingredientVM);
             ViewResult view = controllerView.Index();
-            ListVM listVM = (ListVM)view.Model;
-            var result = (from m in listVM.Ingredients
+           ListVM<Ingredient,IngredientVM>  listVM = (ListVM<Ingredient,IngredientVM> )view.Model;
+            var result = (from m in listVM.Entities
                           where m.Name == "001 Test "
-                          select m).AsQueryable();
+                          select m).AsQueryable().FirstOrDefault();
 
-            Ingredient ingredient = result.FirstOrDefault();
+            IngredientVM ingredientVM1 = Mapper.Map<Ingredient, IngredientVM>(result);
 
-            DateTime shouldBeSameDate = ingredient.CreationDate;
+            DateTime shouldBeSameDate = ingredientVM1.CreationDate;
             try
             {
                 // Assert
@@ -237,7 +225,7 @@ namespace MsTestIntegrationTests
             finally
             {
                 // Cleanup
-                controllerDelete.DeleteConfirmed(ingredient.ID);
+                controllerDelete.DeleteConfirmed(ingredientVM1.ID);
             }
         }
 
@@ -247,12 +235,12 @@ namespace MsTestIntegrationTests
         public void UpdateTheModificationDateBetweenPostedEdits()
         {
             // Arrange
-            EFRepository repo = new EFRepository();
-            IngredientsController controllerPost = new IngredientsController(repo);
-            IngredientsController controllerPost1 = new IngredientsController(repo);
-            IngredientsController controllerView = new IngredientsController(repo);
-            IngredientsController controllerView1 = new IngredientsController(repo);
-            IngredientsController controllerDelete = new IngredientsController(repo);
+            EFRepository<Ingredient,IngredientVM> repo = new EFRepository<Ingredient,IngredientVM>();
+            IngredientsController controllerPost = new IngredientsController();
+            IngredientsController controllerPost1 = new IngredientsController();
+            IngredientsController controllerView = new IngredientsController();
+            IngredientsController controllerView1 = new IngredientsController();
+            IngredientsController controllerDelete = new IngredientsController();
 
             IngredientVM vm = new IngredientVM();
             vm.Name = "002 Test Mod";
@@ -263,28 +251,28 @@ namespace MsTestIntegrationTests
             controllerPost.PostEdit(vm);
 
             ViewResult view = controllerView.Index();
-            ListVM listVM = (ListVM)view.Model;
-            var result = (from m in listVM.Ingredients
+           ListVM<Ingredient,IngredientVM>  listVM = (ListVM<Ingredient,IngredientVM> )view.Model;
+            var result = (from m in listVM.Entities
                           where m.Name == "002 Test Mod"
-                          select m).AsQueryable();
-            Ingredient ingredient = result.FirstOrDefault();
-            vm = Mapper.Map<Ingredient, IngredientVM>(ingredient);
+                          select m).AsQueryable().FirstOrDefault();
+            IngredientVM ingredientVM = Mapper.Map<Ingredient, IngredientVM>(result);
 
-            vm.Description = "I've been edited to delay a bit";
 
-            controllerPost1.PostEdit(vm);
+            ingredientVM.Description = "I've been edited to delay a bit";
+
+            controllerPost1.PostEdit(ingredientVM);
 
 
             ViewResult view1 = controllerView.Index();
-            listVM = (ListVM)view1.Model;
-            var result1 = (from m in listVM.Ingredients
+            listVM = (ListVM<Ingredient,IngredientVM> )view1.Model;
+            var result1 = (from m in listVM.Entities
                            where m.Name == "002 Test Mod"
-                           select m).AsQueryable();
+                           select m).AsQueryable().FirstOrDefault();
 
-            ingredient = result1.FirstOrDefault();
+           IngredientVM ingredientVM2 = Mapper.Map<Ingredient, IngredientVM>(result1);
 
-            DateTime shouldBeSameDate = ingredient.CreationDate;
-            DateTime shouldBeLaterDate = ingredient.ModifiedDate;
+            DateTime shouldBeSameDate = ingredientVM2.CreationDate;
+            DateTime shouldBeLaterDate = ingredientVM2.ModifiedDate;
 
             try
             {
@@ -299,7 +287,7 @@ namespace MsTestIntegrationTests
             finally
             {
                 // Cleanup
-                controllerDelete.DeleteConfirmed(ingredient.ID);
+                controllerDelete.DeleteConfirmed(ingredientVM.ID);
             }
         }
 

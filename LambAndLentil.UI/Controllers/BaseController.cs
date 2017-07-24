@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using LambAndLentil.Domain.Abstract;
+using LambAndLentil.Domain.Concrete;
 using LambAndLentil.Domain.Entities;
 using LambAndLentil.UI.Infrastructure.Alerts;
 using LambAndLentil.UI.Models;
@@ -16,58 +17,62 @@ namespace LambAndLentil.UI.Controllers
     {
         public int PageSize { get; set; }
 
-        protected IRepository repository;
-        public Ingredients Ingredients { get; set; }
-        public Recipes Recipes { get; set; }
-        public Menus Menus { get; set; }
-        public Persons Persons { get; set; }
-        public Plans Plans { get; set; }
-        public ShoppingLists ShoppingLists { get; set; }
-
-        public BaseController(IRepository repo)
+        public BaseController()
         {
-            repository = repo;
+
         }
 
-        // I want the filter here
-        // currently not filtering because Filter() needs to be written - Maker is vestigial. Filter should handle ascending and descending alternatives for all columns. Whew.  
-        public ViewResult BaseIndex(UIControllerType T, int page = 1)
+
+        private Type GetControllerType<TVM>()
+        {
+
+            char[] charsToTrim = { 'V', 'M' };
+            string className = typeof(TVM).ToString().TrimEnd(charsToTrim);
+            string controllerName = String.Concat(className, "sController");
+            return Type.GetType(controllerName);
+        }
+
+        //  TODO: filter
+
+        public ViewResult BaseIndex<T,TVM>(int page = 1)
+            where T:BaseEntity,IEntity
+            where TVM : BaseVM
         {
             PageSize = 8;
-            //  string entity =  T.ToString().Split('.').Last();
-            string entity = T.ToString();
-            ListVM model = BaseVM.GetIndexedModel(entity, repository, PageSize, page);
-            model.PagingInfo = BaseVM.PagingFunction(entity, repository, page, PageSize);
+            ListVM<T,TVM> model = new ListVM<T,TVM>();
+           model.List = BaseVM.GetIndexedModel<T,TVM>(PageSize, page);
+            model.PagingInfo = BaseVM.PagingFunction<T,TVM>(page, PageSize);
             return View(UIViewType.Index.ToString(), model);
-
         }
 
 
-        public ActionResult BaseDetails<T, TController, TVM>(UIControllerType uIController, int id = 1, UIViewType actionMethod = UIViewType.Details)
-           where T : BaseEntity
-           where TController : BaseController
-           where TVM : BaseVM
+
+        public ActionResult BaseDetails<T, TVM>(UIControllerType uIController, int id = 1, UIViewType actionMethod = UIViewType.Details)
+            where T : class
+           where TVM : BaseVM, IEntity
         {
+            IRepository<T, TVM> repo = new EFRepository<T, TVM>();
+
             ViewBag.Title = actionMethod.ToString();
             if (actionMethod == UIViewType.Delete)
             {
-                return BaseDelete<T, TController, TVM>(uIController, id);
+                return BaseDelete<T,TVM>(uIController, id);
             }
             else if (actionMethod == UIViewType.DeleteConfirmed)
             {
-                return BaseDeleteConfirmed<T, TController>(uIController, id);
+                return BaseDeleteConfirmed<T,TVM>(uIController, id);
             }
             else
             {
-                ActionResult result = GuardId<T, TController>(uIController, id);
-                MvcApplication.InitializeMap();  // needed for testing.  This is being run in Application_Start normally. 
-                string entity = typeof(T).ToString().Split('.').Last();
-                BaseEntity item = BaseVM.GetBaseEntity(entity, repository, id);
+                ActionResult result = GuardId<T,TVM>(uIController, id);
+                MvcApplication.InitializeMap();  // needed for testing.  This is being run in Application_Start normally.  Move to Repository
 
-                TVM itemVM = Mapper.Map<T, TVM>((T)item);
+                TVM item = repo.GetById(id);
+
+                // TVM itemVM = Mapper.Map<T, TVM>((T)item); Move to Repository
                 if (result is EmptyResult)
                 {
-                    return View(UIViewType.Details.ToString(), itemVM);
+                    return View(UIViewType.Details.ToString(), item);
                 }
                 return result;
             }
@@ -82,64 +87,61 @@ namespace LambAndLentil.UI.Controllers
             return View(UIViewType.Details.ToString(), vm);
         }
 
-        public ViewResult BaseEdit<T, TController, TVM>(UIControllerType uIControllerType, int id = 1, UIViewType actionMethod = UIViewType.Edit)
-        where T : BaseEntity
-        where TController : BaseController
-        where TVM : BaseVM
+        public ViewResult BaseEdit<T, TVM>(UIControllerType uIControllerType, int id = 1, UIViewType actionMethod = UIViewType.Edit)
+            where T : class
+        where TVM : BaseVM, IEntity
         {
+            IRepository<T, TVM> repo = new EFRepository<T, TVM>();
 
-
-            MvcApplication.InitializeMap();  // needed for testing.  This is being run in Application_Start normally.  
+            MvcApplication.InitializeMap();  // needed for testing.  This is being run in Application_Start normally.  Move to Repository
             ActionResult result = new EmptyResult();
             if (actionMethod == UIViewType.Delete)
             {
-                result = BaseDelete<T, TController, TVM>(UIControllerType.Ingredients, id = 1, UIViewType.Details);
+                result = BaseDelete<T,TVM>(UIControllerType.Ingredients, id = 1, UIViewType.Details);
 
             }
             else
             {
                 if (id != 0)
                 {
-                    result = GuardId<T, TController>(uIControllerType, id);
+                    result = GuardId<T,TVM>(uIControllerType, id);
                 }
 
-                string entity = typeof(T).ToString().Split('.').Last();
-                BaseEntity item = BaseVM.GetBaseEntity(entity, repository, id);
 
-                TVM itemVM = Mapper.Map<T, TVM>((T)item);
+                TVM item = repo.GetById(id);
+
+
                 if (result is EmptyResult)
                 {
-                    return View(UIViewType.Details.ToString(), itemVM);
+                    return View(UIViewType.Details.ToString(), item);
                 }
             }
             return result as ViewResult;
         }
 
-        public ActionResult BasePostEdit<T, TController, TVM>(IBaseVM vm)
-                     where T : BaseEntity, new()
-                     where TController : BaseController
-                     where TVM : BaseVM
+        public ActionResult BasePostEdit<T, TVM>(IBaseVM vm)
+            where T : class
+            where TVM : BaseVM, IEntity, new()
         {
             MvcApplication.InitializeMap();  // needed for testing.  This is being run in Application_Start normally. 
-
-
-            T item;
+            IRepository<T, TVM> repo = new EFRepository<T, TVM>();
+            IController TController = (IController)GetControllerType<TVM>();
+            TVM item = (TVM)vm;
             // new ingredientVM - saves double writing the Create Post method
             if (vm.ID == 0 && ModelState.IsValid)
             {
-                item = new T();
+                item = new TVM();
 
             }
 
-            item = Mapper.Map<TVM, T>((TVM)vm);
+            //TODO: move this to Repository
+            // item = Mapper.Map<TVM, T>((TVM)vm);
 
             if (ModelState.IsValid)
             {
-                string entity = typeof(T).ToString().Split('.').Last();
-                repository.Save<T>(item);
-                UIControllerType controllerType = GetControllerType(entity);
-                // vm.Name = vm.Name;   
-                return RedirectToAction<TController>(c => c.BaseIndex(controllerType, 1)).WithSuccess(string.Format("{0} has been saved", vm.Name));
+
+                repo.Update(item, item.ID);
+                return RedirectToAction(UIViewType.BaseIndex.ToString()).WithSuccess(string.Format("{0} has been saved", vm.Name));
             }
             else
             {
@@ -148,79 +150,96 @@ namespace LambAndLentil.UI.Controllers
         }
 
 
-        public ActionResult BaseDelete<T, TController, TVM>(UIControllerType uiControllerType, int id = 1, UIViewType actionMethod = UIViewType.Delete)
-            where T : BaseEntity
-            where TController : BaseController
-            where TVM : BaseVM
+        public ActionResult BaseDelete<T,TVM>(UIControllerType uiControllerType, int id = 1, UIViewType actionMethod = UIViewType.Delete)
+            where T:class
+            where TVM : BaseVM, IEntity
         {
+            IRepository<T,TVM> repo = new EFRepository<T,TVM>();
             MvcApplication.InitializeMap();  // needed for testing.  This is being run in Application_Start normally.  
-            ActionResult result = GuardId<T, TController>(uiControllerType, id);
-            string entity = typeof(T).ToString().Split('.').Last();
-            BaseEntity item = BaseVM.GetBaseEntity(entity, repository, id);
+            ActionResult result = GuardId<T,TVM>(uiControllerType, id);
+            TVM item = repo.GetById(id);
+
             if (actionMethod == UIViewType.Delete)
             {
                 ViewBag.ActionMethod = UIViewType.Delete;
             }
-            TVM vm = Mapper.Map<T, TVM>((T)item);
+            //  TVM vm = Mapper.Map<T, TVM>((T)item); MOVE TO Repository
             if (result is EmptyResult)
             {
-                return View(UIViewType.Details.ToString(), vm);
+                return View(UIViewType.Details.ToString(), item);
             }
             return result;
         }
 
-        public ActionResult BaseDeleteConfirmed<T, TController>(UIControllerType controllerType, int id)
-           where T : BaseEntity
-            where TController : BaseController
+        public ActionResult BaseDeleteConfirmed<T,TVM>(UIControllerType controllerType, int id)
+            where T :class
+            where TVM : BaseVM, IEntity
         {
-            ActionResult result = GuardId<T, TController>(controllerType, id);
-            string entity = typeof(T).ToString().Split('.').Last();
-            BaseEntity item = BaseVM.GetBaseEntity(entity, repository, id);
-            repository.Delete<T>(id);
+            IRepository<T,TVM> repo = new EFRepository<T,TVM>();
+            ActionResult result = GuardId<T,TVM>(controllerType, id);
+            TVM item = repo.GetById(id);
+            repo.Remove(item);
             ViewBag.ActionMethod = UIViewType.Delete.ToString();
             if (result is EmptyResult)
             {
-                return RedirectToAction<TController>(c => c.BaseIndex(controllerType, 1)).WithSuccess(string.Format("{0} has been deleted", item.Name));
+                return RedirectToAction(UIViewType.BaseIndex.ToString()).WithSuccess(string.Format("{0} has been deleted", item.Name));
             }
             return result;
         }
 
-        public ActionResult BaseAttach<TParent, TChild>(int? parentID, int? childID) where TParent : Recipe 
-            where TChild : Ingredient
-        {  // conditions guard against people trying thngs out manually  
-            ViewBag.listOfIngredients = GetListOfIngredients();
+        public ActionResult BaseAttach<TParent, TChild>(int? parentID, int? childID, AttachOrDetach attachOrDetach = AttachOrDetach.Attach)
+            where TParent : BaseEntity, IEntity
+            where TChild : BaseEntity, IEntity
+        {
+            // conditions guard against people trying thngs out manually  
+            IRepository< TParent,BaseVM> repository = new EFRepository<TParent,BaseVM>();
+            IRepository<TChild,BaseVM> childRepository = new EFRepository<TChild,BaseVM>();
+            string entity = typeof(TParent).ToString().Split('.').Last();
+            string childEntity = typeof(TChild).ToString().Split('.').Last();
+            ViewBag.listOfChildren =   childRepository.GetAll();
             if (parentID == null)
             {
-                return RedirectToAction(UIViewType.Index.ToString()).WithWarning("Recipe was not found");
+                return RedirectToAction(UIViewType.Index.ToString()).WithWarning(entity + " was not found");
             }
             else
             {
-                string entity = typeof(TParent).ToString().Split('.').Last();
-              
-                   TParent parent = (TParent)repository.Recipes.Where(m => m.ID == parentID).SingleOrDefault();
-                    if (parent == null)
-                    {
-                        // todo: log error - this could be a developer problem
-                        return RedirectToAction(UIViewType.Index.ToString()).WithWarning("Recipe was not found");
-                    }
-                
+                int parentNonNullID = (int)parentID;
+
+                 
+                BaseVM parentFromDB = repository.GetById(parentNonNullID);
+                TParent parent = Mapper.Map<BaseVM, TParent >(parentFromDB);
+                    
+                if (parent == null)
+                {
+                    // TODO: log error - this could be a developer problem
+                    return RedirectToAction(UIViewType.Index.ToString()).WithWarning(entity + " was not found");
+                }
+
                 if (childID == null)
-                {    // this should have a warning that the child is not in the db
-                    return RedirectToAction(UIViewType.Details.ToString(), new { id = parentID, actionMethod = UIViewType.Details }).WithWarning("Ingredient was not found"); ;
+                {
+                    return RedirectToAction(UIViewType.Details.ToString(), new { id = parentID, actionMethod = UIViewType.Edit }).WithWarning(entity + " was not found"); ;
                 }
                 else
                 {
-                    TChild child = (TChild)repository.Ingredients.Where(m => m.ID == childID).SingleOrDefault();
+                    int childNonNullID = (int)childID;
+                    IEntity child = childRepository.GetById(childNonNullID);
+
                     if (child == null)
                     {
-                        return RedirectToAction(UIViewType.Edit.ToString(), new { id = parentID, actionMethod = UIViewType.Details }).WithWarning("Please choose an ingredient");
+                        return RedirectToAction(UIViewType.Details.ToString(), new { id = parentID, actionMethod = UIViewType.Edit }).WithWarning("Please choose a(n) " + childEntity);
                     }
                     else
                     {
-                        parent.Ingredients.Add(child);
-                        repository.Save<TParent>(parent);
-
-                        return RedirectToAction(UIViewType.Details.ToString(), new { id = parentID, actionMethod = UIViewType.Details }).WithSuccess("Successfully added!");
+                        if (attachOrDetach == AttachOrDetach.Detach)
+                        {
+                            repository.DetachAnIndependentChild<TParent, TChild>(parent.ID, child.ID);
+                            return RedirectToAction(UIViewType.Details.ToString(), new { id = parentID, actionMethod = UIViewType.Edit }).WithSuccess(childEntity + " was Successfully Detached!");
+                        }
+                        else
+                        {
+                            repository.AttachAnIndependentChild<TParent, TChild>(parent.ID, child.ID);
+                            return RedirectToAction(UIViewType.Details.ToString(), new { id = parentID, actionMethod = UIViewType.Edit }).WithSuccess(childEntity + "was Successfully Attached!");
+                        }
                     }
                 }
             }
@@ -233,108 +252,70 @@ namespace LambAndLentil.UI.Controllers
             return ControllerExtensions.RedirectToAction(this, action);
         }
 
-        protected ActionResult GuardId<T, TController>(UIControllerType tController, int id)
-            where T : BaseEntity
-            where TController : BaseController
+        protected ActionResult GuardId<T,TVM>(UIControllerType tController, int id)
+            where T:class
+            where TVM : BaseVM, IEntity
         {
+            IRepository<T,TVM> repo = new EFRepository<T,TVM>();
 
-            string entity = typeof(T).Name.ToLower();
-            T item = (T)BaseVM.GetBaseEntity(entity, repository, id);
-            if (item == null && entity == "shoppinglist")
+            TVM item = repo.GetById(id);
+            string className = new EFRepository<T,TVM>().GetClassName();
+            if (item == null)
             {
-                return RedirectToAction<TController>(c => c.BaseIndex(tController, 1)).WithError("No shopping list was found with that id.");
-            }
-            else
-            {
-                if (item == null)
-                {
-                    return RedirectToAction<TController>(c => c.BaseIndex(tController, 1)).WithError("No " + entity + " was found with that id.");
-                }
+                return RedirectToAction(UIViewType.BaseIndex.ToString()).WithError("No " + className + "  was found with that id.");
             }
             return new EmptyResult();
         }
 
-        //// gross violation of open/closed principle following
-        private UIControllerType GetControllerType(string entity)
-        {
-            UIControllerType controllerType = UIControllerType.Ingredients;
-            //// gross violation of open/closed principle following
-            switch (entity)
-            {
-                case "Ingredient":
-                    controllerType = UIControllerType.Ingredients;
-                    break;
-                case "Recipe":
-                    controllerType = UIControllerType.Recipes;
-                    break;
-                case "Menu":
-                    controllerType = UIControllerType.Menus;
-                    break;
-                case "Plan":
-                    controllerType = UIControllerType.Plans;
-                    break;
-                case "Person":
-                    controllerType = UIControllerType.Persons;
-                    break;
-                case "ShoppingList":
-                    controllerType = UIControllerType.ShoppingLists;
-                    break;
-                default:
-                    break;
-            }
-            return controllerType;
-        }
 
 
-        protected SelectList GetListOfRecipes()
-        {
-            var result = from m in repository.Recipes
-                         orderby m.Name
-                         select new SelectListItem
-                         {
-                             Text = m.Name,
-                             Value = m.ID.ToString()
-                         };
-            SelectList list = null;
-            if (result.Count() == 0)
-            {
-                List<string> item = new List<string>();
-                item.Add("Nothing was found");
-                list = new SelectList(item);
-            }
-            else
-            {
-                list = new SelectList(result, "Value", "Text", result.First());
-            }
-            return list;
-        }
 
-        protected SelectList GetListOfIngredients()
-        {
-            var result = from m in repository.Ingredients
-                         orderby m.Name
-                         select new SelectListItem
-                         {
-                             Text = m.Name,
-                             Value = m.ID.ToString()
-                         };
-            SelectList list = null;
-            if (result.Count() == 0)
-            {
-                List<string> item = new List<string>();
-                item.Add("Nothing was found");
-                list = new SelectList(item);
-            }
-            else
-            {
-                list = new SelectList(result, "Value", "Text", result.First());
-            }
-            return list;
-        }
+        //protected SelectList GetList<T>(IRepository<T,TVM> repo) 
+        //    where T : BaseEntity, IEntity
+        //    where TVM:BaseVM, IEntity
+        //{
+        //    var result = from m in repo.GetAll()
+        //                 orderby m.Name
+        //                 select new SelectListItem
+        //                 {
+        //                     Text = m.Name,
+        //                     Value = m.ID.ToString()
+        //                 };
+        //    SelectList list = null;
+        //    if (result.Count() == 0)
+        //    {
+        //        List<string> item = new List<string>();
+        //        item.Add("Nothing was found");
+        //        list = new SelectList(item);
+        //    }
+        //    else
+        //    {
+        //        list = new SelectList(result, "Value", "Text", result.First());
+        //    }
+        //    return list;
+        //}
 
-        protected override void Dispose(bool disposing)
-        {
-            base.Dispose(disposing);
-        }
+
+        //protected IEntity Get<T>(IRepository<T,TVM> repo, int id)
+        //     where T : BaseEntity, IEntity
+        //    where TVM : BaseVM, IEntity
+        //{
+        //    IEntity result = null;
+
+        //    if (typeof(T) == typeof(Ingredient))
+        //    {
+        //        result = (from m in repo.GetAll()
+        //                  where m.ID == id
+        //                  select m).FirstOrDefault();
+        //    }
+        //    return result;
+        //}
+
+        //protected override void Dispose(bool disposing)
+        //{
+        //    base.Dispose(disposing);
+        //}
+
+
     }
 }

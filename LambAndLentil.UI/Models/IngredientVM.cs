@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LambAndLentil.UI.Models
 {
-    public class IngredientVM: BaseVM,IBaseVM
+    public class IngredientVM: BaseVM,IBaseVM,IEntity
     {
         public IngredientVM():base()
         { 
@@ -17,7 +17,7 @@ namespace LambAndLentil.UI.Models
             CreationDate = creationDate;
         }
 
-        public int ID { get; set; }
+      
         [DataType(DataType.MultilineText)]
         public string IngredientsList { get; set; }
 

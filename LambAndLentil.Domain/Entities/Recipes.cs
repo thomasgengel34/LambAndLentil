@@ -4,8 +4,9 @@ using System.Web.Mvc;
 
 namespace LambAndLentil.Domain.Entities
 {
-    public class Recipes
+    public class Recipes  
     {
+        public int ID { get; set; }
         public List<Recipe> MyRecipes { get; set; }
 
         public Recipes(List<Recipe>Recipe)

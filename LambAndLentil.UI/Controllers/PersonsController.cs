@@ -10,24 +10,20 @@ namespace LambAndLentil.UI.Controllers
 {
     public class PersonsController : BaseController
     { 
-        public PersonsController(IRepository repo):base(repo)
-        {
-            List<Person>persons = repository.Persons.ToList<Person>();
-            Persons = new Persons(persons);
-        }
+        
 
 
         // GET: Persons
         public ViewResult Index(int page=1)
         {
-            ViewResult view = BaseIndex(UIControllerType.Persons, page);
+            ViewResult view = BaseIndex<Person,PersonVM>(page);
             return View(view.ViewName, view.Model);
         }
 
         // GET: Persons/Details/5
         public ActionResult Details(int id = 1, UIViewType actionMethod = UIViewType.Details)
         {
-            return BaseDetails<Person , PersonsController, PersonVM>(UIControllerType.Persons, id, actionMethod);
+            return BaseDetails<Person,PersonVM>(UIControllerType.Persons, id, actionMethod);
         }
          
 
@@ -41,7 +37,7 @@ namespace LambAndLentil.UI.Controllers
         // GET: Persons/Edit/5
         public ViewResult Edit(int id = 1)
         {
-            return BaseEdit<Person, PersonsController, PersonVM>(UIControllerType.Persons, id);
+            return BaseEdit<Person,PersonVM>(UIControllerType.Persons, id);
         }
 
 
@@ -55,7 +51,7 @@ namespace LambAndLentil.UI.Controllers
         { 
             personVM.Name = String.Concat(personVM.FirstName, " ", personVM.LastName);
             
-            return BasePostEdit<Person, PersonsController, PersonVM>(personVM);
+            return BasePostEdit<Person, PersonVM>(personVM);
             
         }
 
@@ -64,7 +60,7 @@ namespace LambAndLentil.UI.Controllers
         [ActionName("Delete")]
         public ActionResult Delete(int id = 1)
         {
-            return BaseDelete<Person, PersonsController, PersonVM>(UIControllerType.Persons, id);
+            return BaseDelete<Person, PersonVM>(UIControllerType.Persons, id);
         }
 
         // POST: Persons/Delete/5
@@ -72,7 +68,7 @@ namespace LambAndLentil.UI.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            return BaseDeleteConfirmed<Person, PersonsController>(UIControllerType.Persons, id);
+            return BaseDeleteConfirmed<Person, PersonVM>(UIControllerType.Persons, id);
         }
         }
 }

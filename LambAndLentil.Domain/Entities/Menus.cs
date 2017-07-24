@@ -4,8 +4,9 @@ using System.Web.Mvc;
 
 namespace LambAndLentil.Domain.Entities
 {
-    public  class Menus
-    { 
+    public  class Menus  
+    {
+        public int ID { get; set; }
         public List<Menu> MyMenus { get; set; }
 
         public Menus(List<Menu> Menu)

@@ -7,8 +7,9 @@ using System.Web.Mvc;
 
 namespace LambAndLentil.Domain.Entities
 {
-    public class ShoppingLists
+    public class ShoppingLists  
     {
+        public int ID { get; set; }
         public List<ShoppingList> MyShoppingLists { get; set; }
 
         public ShoppingLists(List<ShoppingList> ShoppingList)

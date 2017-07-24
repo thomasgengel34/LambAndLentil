@@ -22,8 +22,7 @@ namespace LambAndLentil.Domain.Entities
         public DayOfWeek DayOfWeek { get; set; } 
         public int Diners { get; set; }
 
-        public virtual ICollection<Recipe> Recipes { get; set; }
-        public virtual ICollection<Ingredient> Ingredients { get; set; }
+       
 
     }
 }

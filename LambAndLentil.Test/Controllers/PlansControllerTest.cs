@@ -20,7 +20,7 @@ namespace LambAndLentil.Tests.Controllers
     [TestCategory("PlansController")]
     public class PlansControllerTest
     {
-        static Mock<IRepository> mock;
+        static Mock<IRepository<Plan,PlanVM>> mock;
         public static MapperConfiguration AutoMapperConfig { get; set; }
 
         public PlansControllerTest()
@@ -31,7 +31,7 @@ namespace LambAndLentil.Tests.Controllers
         }
 
         [TestMethod]
-    public void PlansCtr_IsPublic()
+    public void EntitiesCtr_IsPublic()
     {
         // Arrange
         PlansController testController = SetUpSimpleController();
@@ -48,7 +48,7 @@ namespace LambAndLentil.Tests.Controllers
 
   
         [TestMethod]
-        public void PlansCtr_InheritsFromBaseControllerCorrectly()
+        public void EntitiesCtr_InheritsFromBaseControllerCorrectly()
         {
 
             // Arrange
@@ -66,7 +66,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Index")]
-        public void PlansCtr_Index()
+        public void EntitiesCtr_Index()
         {
             // Arrange
             PlansController controller = SetUpController();
@@ -82,21 +82,21 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Index")]
-        public void PlansCtr_Index_ContainsAllPlans()
+        public void EntitiesCtr_Index_ContainsAllEntities()
         {
             // Arrange
             PlansController controller = SetUpController();
-            ListVM ilvm = new ListVM();
-            ilvm.Plans = (IEnumerable<Plan>)mock.Object.Plans;
+            ListVM<Plan,PlanVM> ilvm = new ListVM<Plan,PlanVM>();
+            ilvm.Entities = (IEnumerable<Plan>)mock.Object.Plan;
 
             // Act
             ViewResult view1 = controller.Index(1);
 
-            int count1 = ((ListVM)(view1.Model)).Plans.Count();
+            int count1 = ((ListVM<Plan,PlanVM>)(view1.Model)).Entities.Count();
 
             ViewResult view2 = controller.Index(2);
 
-            int count2 = ((ListVM)(view2.Model)).Plans.Count();
+            int count2 = ((ListVM<Plan,PlanVM>)(view2.Model)).Entities.Count();
 
             int count = count1 + count2;
 
@@ -109,28 +109,28 @@ namespace LambAndLentil.Tests.Controllers
             Assert.AreEqual("Index", view1.ViewName);
             Assert.AreEqual("Index", view2.ViewName);
 
-            //Assert.AreEqual("P1", ((ListVM)(view1.Model)).Plans.FirstOrDefault().Name);
-            //Assert.AreEqual("P2", ((ListVM)(view1.Model)).Plans.Skip(1).FirstOrDefault().Name);
-            //Assert.AreEqual("P3", ((ListVM)(view1.Model)).Plans.Skip(2).FirstOrDefault().Name);
-            //Assert.AreEqual("P5", ((ListVM)(view2.Model)).Plans.FirstOrDefault().Name);
+            //Assert.AreEqual("P1", ((ListVM<Plan,PlanVM>)(view1.Model)).Entities.FirstOrDefault().Name);
+            //Assert.AreEqual("P2", ((ListVM<Plan,PlanVM>)(view1.Model)).Entities.Skip(1).FirstOrDefault().Name);
+            //Assert.AreEqual("P3", ((ListVM<Plan,PlanVM>)(view1.Model)).Entities.Skip(2).FirstOrDefault().Name);
+            //Assert.AreEqual("P5", ((ListVM<Plan,PlanVM>)(view2.Model)).Entities.FirstOrDefault().Name);
 
         }
 
 
         [TestMethod]
         [TestCategory("Index")]
-        public void PlansCtr_Index_FirstPageIsCorrect()
+        public void EntitiesCtr_Index_FirstPageIsCorrect()
         {
             // Arrange
             PlansController controller = SetUpController();
-            ListVM ilvm = new ListVM();
-            ilvm.Plans = (IEnumerable<Plan>)mock.Object.Plans;
+            ListVM<Plan,PlanVM> ilvm = new ListVM<Plan,PlanVM>();
+            ilvm.Entities = (IEnumerable<Plan>)mock.Object.Plan;
             controller.PageSize = 8;
 
             // Act
             ViewResult view1 = controller.Index(1);
 
-            int count1 = ((ListVM)(view1.Model)).Plans.Count();
+            int count1 = ((ListVM<Plan,PlanVM>)(view1.Model)).Entities.Count();
 
 
 
@@ -139,9 +139,9 @@ namespace LambAndLentil.Tests.Controllers
             Assert.AreEqual(5, count1);
             Assert.AreEqual("Index", view1.ViewName);
 
-            Assert.AreEqual("Old Name 1", ((ListVM)(view1.Model)).Plans.FirstOrDefault().Name);
-            Assert.AreEqual("Old Name 2", ((ListVM)(view1.Model)).Plans.Skip(1).FirstOrDefault().Name);
-            Assert.AreEqual("Old Name 3", ((ListVM)(view1.Model)).Plans.Skip(2).FirstOrDefault().Name);
+            Assert.AreEqual("Old Name 1", ((ListVM<Plan,PlanVM>)(view1.Model)).Entities.FirstOrDefault().Name);
+            Assert.AreEqual("Old Name 2", ((ListVM<Plan,PlanVM>)(view1.Model)).Entities.Skip(1).FirstOrDefault().Name);
+            Assert.AreEqual("Old Name 3", ((ListVM<Plan,PlanVM>)(view1.Model)).Entities.Skip(2).FirstOrDefault().Name);
 
 
         }
@@ -150,32 +150,32 @@ namespace LambAndLentil.Tests.Controllers
         [TestMethod]
         [TestCategory("Index")]
         // currently we only have one page here
-        public void PlansCtr_Index_SecondPageIsCorrect()
+        public void EntitiesCtr_Index_SecondPageIsCorrect()
         {
             //// Arrange
             //PlansController controller = SetUpController();
-            //ListVM ilvm = new ListVM();
-            //ilvm.Plans = (IEnumerable<Plan>)mock.Object.Plans;
+            //ListVM<Plan,PlanVM> ilvm = new ListVM<Plan,PlanVM>();
+            //ilvm.Entities = (IEnumerable<Plan,PlanVM>)mock.Object.Entities;
 
             //// Act
             //ViewResult view  = controller.Index(null, null, null, 2);
 
-            //int count  = ((ListVM)(view.Model)).Plans.Count(); 
+            //int count  = ((ListVM<Plan,PlanVM>)(view.Model)).Entities.Count(); 
 
             //// Assert
             //Assert.IsNotNull(view);
             //Assert.AreEqual(0, count );
             //Assert.AreEqual("Index", view.ViewName); 
-            // Assert.AreEqual("P5", ((ListVM)(view.Model)).Plans.FirstOrDefault().Name);
-            // Assert.AreEqual( 5, ((ListVM)(view.Model)).Plans.FirstOrDefault().ID);
-            // Assert.AreEqual("C", ((ListVM)(view.Model)).Plans.FirstOrDefault().Maker);
-            // Assert.AreEqual("CC", ((ListVM)(view.Model)).Plans.FirstOrDefault().Brand);
+            // Assert.AreEqual("P5", ((ListVM<Plan,PlanVM>)(view.Model)).Entities.FirstOrDefault().Name);
+            // Assert.AreEqual( 5, ((ListVM<Plan,PlanVM>)(view.Model)).Entities.FirstOrDefault().ID);
+            // Assert.AreEqual("C", ((ListVM<Plan,PlanVM>)(view.Model)).Entities.FirstOrDefault().Maker);
+            // Assert.AreEqual("CC", ((ListVM<Plan,PlanVM>)(view.Model)).Entities.FirstOrDefault().Brand);
 
         }
 
         [TestMethod]
         [TestCategory("Index")]
-        public void PlansCtr_Index_CanSendPaginationViewModel()
+        public void EntitiesCtr_Index_CanSendPaginationViewModel()
         {
 
             // Arrange
@@ -183,7 +183,7 @@ namespace LambAndLentil.Tests.Controllers
 
             // Act
 
-            ListVM resultT = (ListVM)((ViewResult)controller.Index(2)).Model;
+            ListVM<Plan,PlanVM> resultT = (ListVM<Plan,PlanVM>)((ViewResult)controller.Index(2)).Model;
 
 
             // Assert
@@ -198,17 +198,17 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Index")]
-        public void PlansCtr_Index_PagingInfoIsCorrect()
+        public void EntitiesCtr_Index_PagingInfoIsCorrect()
         {
             // Arrange
             PlansController controller = SetUpController();
 
 
             // Action
-            int totalItems = ((ListVM)((ViewResult)controller.Index()).Model).PagingInfo.TotalItems;
-            int currentPage = ((ListVM)((ViewResult)controller.Index()).Model).PagingInfo.CurrentPage;
-            int itemsPerPage = ((ListVM)((ViewResult)controller.Index()).Model).PagingInfo.ItemsPerPage;
-            int totalPages = ((ListVM)((ViewResult)controller.Index()).Model).PagingInfo.TotalPages;
+            int totalItems = ((ListVM<Plan,PlanVM>)((ViewResult)controller.Index()).Model).PagingInfo.TotalItems;
+            int currentPage = ((ListVM<Plan,PlanVM>)((ViewResult)controller.Index()).Model).PagingInfo.CurrentPage;
+            int itemsPerPage = ((ListVM<Plan,PlanVM>)((ViewResult)controller.Index()).Model).PagingInfo.ItemsPerPage;
+            int totalPages = ((ListVM<Plan,PlanVM>)((ViewResult)controller.Index()).Model).PagingInfo.TotalPages;
 
 
 
@@ -221,18 +221,18 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Index")]
-        public void PlansCtr_IndexCanPaginate()
+        public void EntitiesCtr_IndexCanPaginate()
         {
             // Arrange
             PlansController controller = SetUpController();
 
             // Act
-            var result = (ListVM)(controller.Index(1)).Model;
+            var result = (ListVM<Plan,PlanVM>)(controller.Index(1)).Model;
 
 
 
             // Assert
-            Plan[] ingrArray1 = result.Plans.ToArray();
+            Plan[] ingrArray1 = result.Entities.ToArray();
             Assert.IsTrue(ingrArray1.Length == 5);
             Assert.AreEqual("Old Name 1", ingrArray1[0].Name);
             Assert.AreEqual("Old Name 4", ingrArray1[3].Name);
@@ -240,7 +240,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Details")]
-        public void PlansCtr_DetailsRecipeIDIsNegative()
+        public void EntitiesCtr_DetailsRecipeIDIsNegative()
         {
             // Arrange
             PlansController controller = SetUpController();
@@ -263,7 +263,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Details")]
-        public void PlansCtr_DetailsWorksWithValidRecipeID()
+        public void EntitiesCtr_DetailsWorksWithValidRecipeID()
         {
             // Arrange
             PlansController controller = SetUpController();
@@ -281,7 +281,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Details")]
-        public void PlansCtr_DetailsRecipeIDTooHigh()
+        public void EntitiesCtr_DetailsRecipeIDTooHigh()
         {
             // Arrange
             PlansController controller = SetUpController();
@@ -299,7 +299,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Details")]
-        public void PlansCtr_DetailsRecipeIDPastIntLimit()
+        public void EntitiesCtr_DetailsRecipeIDPastIntLimit()
         {
             // Arrange
             PlansController controller = SetUpController();
@@ -315,7 +315,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Details")]
-        public void PlansCtr_DetailsRecipeIDIsZero()
+        public void EntitiesCtr_DetailsRecipeIDIsZero()
         {
             // Arrange
             PlansController controller = SetUpController();
@@ -337,7 +337,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Create")]
-        public void PlansCtr_Create()
+        public void EntitiesCtr_Create()
         {
             // Arrange
             PlansController controller = SetUpController();
@@ -351,7 +351,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Delete")]
-        public void PlansCtr_DeleteAFoundPlan()
+        public void EntitiesCtr_DeleteAFoundPlan()
         {
             // Arrange
             PlansController controller = SetUpController();
@@ -368,7 +368,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Delete")]
-        public void PlansCtr_DeleteAnInvalidPlan()
+        public void EntitiesCtr_DeleteAnInvalidPlan()
         {
             // Arrange
             PlansController controller = SetUpController();
@@ -387,46 +387,46 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Delete")]
-        public void PlansCtr_DeleteConfirmed()
+        public void EntitiesCtr_DeleteConfirmed()
         {
             // Arrange
             PlansController controller = SetUpController();
             // Act
             ActionResult result = controller.DeleteConfirmed(1) as ActionResult;
             // improve this test when I do some route tests to return a more exact result
-            //RedirectToRouteResult x = new RedirectToRouteResult("default",new  RouteValueDictionary { new Route( { controller = "Plans", Action = "Index" } } );
+            //RedirectToRouteResult x = new RedirectToRouteResult("default",new  RouteValueDictionary { new Route( { controller = "Entities", Action = "Index" } } );
             // Assert 
             Assert.IsNotNull(result);
         }
 
         [TestMethod]
         [TestCategory("Delete")]
-        public void Plans_Ctr_CanDeleteValidPlan()
+        public void Entities_Ctr_CanDeleteValidPlan()
         {
             // Arrange - create an plan
-            Plan plan = new Plan { ID = 2, Name = "Test2" };
+            PlanVM planVM = new PlanVM { ID = 2, Name = "Test2" };
 
             // Arrange - create the mock repository
-            Mock<IRepository> mock = new Mock<IRepository>();
-            mock.Setup(m => m.Plans).Returns(new Plan[]
+            Mock<IRepository<Plan,PlanVM>> mock = new Mock<IRepository<Plan,PlanVM>>();
+            mock.Setup(m => m.Plan).Returns(new PlanVM[]
             {
-                new Plan {ID=1,Name="Test1"},
+                new PlanVM {ID=1,Name="Test1"},
 
-                plan,
+                planVM,
 
-                new Plan {ID=3,Name="Test3"},
+                new PlanVM {ID=3,Name="Test3"},
             }.AsQueryable());
-            mock.Setup(m => m.Delete<Plan>(It.IsAny<int>())).Verifiable();
+            mock.Setup(m => m.Remove(It.IsAny<PlanVM >())).Verifiable();
             // Arrange - create the controller
-            PlansController controller = new PlansController(mock.Object);
+            PlansController controller = new PlansController();
 
             // Act - delete the plan
-            ActionResult result = controller.DeleteConfirmed(plan.ID);
+            ActionResult result = controller.DeleteConfirmed(planVM.ID);
 
             AlertDecoratorResult adr = (AlertDecoratorResult)result;
 
             // Assert - ensure that the repository delete method was called with a correct Plan
-            mock.Verify(m => m.Delete<Plan>(plan.ID));
+            mock.Verify(m => m.Remove(planVM));
 
 
             Assert.AreEqual("Test2 has been deleted", adr.Message);
@@ -435,14 +435,14 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Edit")]
-        public void PlansCtr_CanEditPlan()
+        public void EntitiesCtr_CanEditPlan()
         {
             // Arrange
             PlansController controller = SetUpController();
 
-            Plan plan = mock.Object.Plans.First();
-            mock.Setup(c => c.Save(plan)).Verifiable();
-            plan.Name = "First edited";
+            PlanVM planVM = (PlanVM)mock.Object.Plan;
+            mock.Setup(c => c.Save(planVM)).Verifiable();
+            planVM.Name = "First edited";
 
             // Act 
 
@@ -467,7 +467,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Edit")]
-        public void PlansCtr_CannotEditNonexistentPlan()
+        public void EntitiesCtr_CannotEditNonexistentPlan()
         {
             //    // Arrange
             //    PlansController controller = SetUpController();
@@ -478,7 +478,7 @@ namespace LambAndLentil.Tests.Controllers
             //}
 
             //[TestMethod]
-            //public void PlansCtr_CreateReturnsNonNull()
+            //public void EntitiesCtr_CreateReturnsNonNull()
             //{
             //    // Arrange
             //    PlansController controller = SetUpController();
@@ -495,8 +495,8 @@ namespace LambAndLentil.Tests.Controllers
         private PlansController SetUpController()
         {
             // - create the mock repository
-            mock = new Mock<IRepository>();
-            mock.Setup(m => m.Plans).Returns(new Plan[] {
+            mock = new Mock<IRepository<Plan,PlanVM>>();
+            mock.Setup(m => m.Plan).Returns(new Plan[] {
                 new Plan {ID = 1, Name = "Old Name 1" },
                 new Plan {ID = 2, Name = "Old Name 2" },
                 new Plan {ID = 3, Name = "Old Name 3" },
@@ -505,7 +505,7 @@ namespace LambAndLentil.Tests.Controllers
             }.AsQueryable());
 
             // Arrange - create a controller
-            PlansController controller = new PlansController(mock.Object);
+            PlansController controller = new PlansController();
             controller.PageSize = 3;
 
             return controller;
@@ -516,11 +516,11 @@ namespace LambAndLentil.Tests.Controllers
         private PlansController SetUpSimpleController()
         {
             // - create the mock repository
-            Mock<IRepository> mock = new Mock<IRepository>();
+            Mock<IRepository<Plan,PlanVM>> mock = new Mock<IRepository<Plan,PlanVM>>();
 
 
             // Arrange - create a controller
-            PlansController controller = new PlansController(mock.Object);
+            PlansController controller = new PlansController();
             // controller.PageSize = 3;
 
             return controller;

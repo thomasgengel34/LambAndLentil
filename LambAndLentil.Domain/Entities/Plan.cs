@@ -22,6 +22,6 @@ namespace LambAndLentil.Domain.Entities
         }
 
         public int ID { get; set; }
-        public ICollection<Menu> Menus   { get; set; }
+        
     } 
 }

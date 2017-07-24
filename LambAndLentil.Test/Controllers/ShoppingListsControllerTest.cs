@@ -20,7 +20,7 @@ namespace LambAndLentil.Tests.Controllers
     [TestCategory("ShoppingListsController")]
     public class ShoppingListsControllerTest
     {
-        static Mock<IRepository> mock;
+        static Mock<IRepository<ShoppingList,ShoppingListVM>> mock;
         public static MapperConfiguration AutoMapperConfig { get; set; }
 
         public ShoppingListsControllerTest()
@@ -85,17 +85,17 @@ namespace LambAndLentil.Tests.Controllers
         {
             // Arrange
             ShoppingListsController controller = SetUpController();
-            ListVM ilvm = new ListVM();
-            ilvm.ShoppingLists = (IEnumerable<ShoppingList>)mock.Object.ShoppingLists;
+           ListVM<ShoppingList,ShoppingListVM> ilvm = new ListVM<ShoppingList,ShoppingListVM>();
+            ilvm.Entities = (IEnumerable<ShoppingList>)mock.Object.ShoppingList;
 
             // Act
             ViewResult view1 = controller.Index(1);
 
-            int count1 = ((ListVM)(view1.Model)).ShoppingLists.Count();
+            int count1 = ((ListVM<ShoppingList,ShoppingListVM>)(view1.Model)).Entities.Count();
 
             ViewResult view2 = controller.Index(2);
 
-            int count2 = ((ListVM)(view2.Model)).ShoppingLists.Count();
+            int count2 = ((ListVM<ShoppingList,ShoppingListVM>)(view2.Model)).Entities.Count();
 
             int count = count1 + count2;
 
@@ -116,14 +116,14 @@ namespace LambAndLentil.Tests.Controllers
         {
             // Arrange
             ShoppingListsController controller = SetUpController();
-            ListVM ilvm = new ListVM();
-            ilvm.ShoppingLists = (IEnumerable<ShoppingList>)mock.Object.ShoppingLists;
+           ListVM<ShoppingList,ShoppingListVM> ilvm = new ListVM<ShoppingList,ShoppingListVM>();
+            ilvm.Entities = (IEnumerable<ShoppingList>)mock.Object.ShoppingList;
             controller.PageSize = 8;
 
             // Act
             ViewResult view1 = controller.Index(1);
 
-            int count1 = ((ListVM)(view1.Model)).ShoppingLists.Count();
+            int count1 = ((ListVM<ShoppingList,ShoppingListVM>)(view1.Model)).Entities.Count();
 
 
 
@@ -132,9 +132,9 @@ namespace LambAndLentil.Tests.Controllers
             Assert.AreEqual(5, count1);
             Assert.AreEqual("Index", view1.ViewName);
 
-            Assert.AreEqual("Old Name 1", ((ListVM)(view1.Model)).ShoppingLists.FirstOrDefault().Name);
-            Assert.AreEqual("Old Name 2", ((ListVM)(view1.Model)).ShoppingLists.Skip(1).FirstOrDefault().Name);
-            Assert.AreEqual("Old Name 3", ((ListVM)(view1.Model)).ShoppingLists.Skip(2).FirstOrDefault().Name);
+            Assert.AreEqual("Old Name 1", ((ListVM<ShoppingList,ShoppingListVM>)(view1.Model)).Entities.FirstOrDefault().Name);
+            Assert.AreEqual("Old Name 2", ((ListVM<ShoppingList,ShoppingListVM>)(view1.Model)).Entities.Skip(1).FirstOrDefault().Name);
+            Assert.AreEqual("Old Name 3", ((ListVM<ShoppingList,ShoppingListVM>)(view1.Model)).Entities.Skip(2).FirstOrDefault().Name);
 
 
         }
@@ -145,7 +145,7 @@ namespace LambAndLentil.Tests.Controllers
         // currently we only have one page here
         public void ShoppingListsCtr_Index_SecondPageIsCorrect()
         {
-            
+
         }
 
         [TestMethod]
@@ -158,7 +158,7 @@ namespace LambAndLentil.Tests.Controllers
 
             // Act
 
-            ListVM resultT = (ListVM)((ViewResult)controller.Index(2)).Model;
+           ListVM<ShoppingList,ShoppingListVM> resultT = (ListVM<ShoppingList,ShoppingListVM>)((ViewResult)controller.Index(2)).Model;
 
 
             // Assert
@@ -180,10 +180,10 @@ namespace LambAndLentil.Tests.Controllers
 
 
             // Action
-            int totalItems = ((ListVM)((ViewResult)controller.Index()).Model).PagingInfo.TotalItems;
-            int currentPage = ((ListVM)((ViewResult)controller.Index()).Model).PagingInfo.CurrentPage;
-            int itemsPerPage = ((ListVM)((ViewResult)controller.Index()).Model).PagingInfo.ItemsPerPage;
-            int totalPages = ((ListVM)((ViewResult)controller.Index()).Model).PagingInfo.TotalPages;
+            int totalItems = ((ListVM<ShoppingList,ShoppingListVM>)((ViewResult)controller.Index()).Model).PagingInfo.TotalItems;
+            int currentPage = ((ListVM<ShoppingList,ShoppingListVM>)((ViewResult)controller.Index()).Model).PagingInfo.CurrentPage;
+            int itemsPerPage = ((ListVM<ShoppingList,ShoppingListVM>)((ViewResult)controller.Index()).Model).PagingInfo.ItemsPerPage;
+            int totalPages = ((ListVM<ShoppingList,ShoppingListVM>)((ViewResult)controller.Index()).Model).PagingInfo.TotalPages;
 
 
 
@@ -202,12 +202,10 @@ namespace LambAndLentil.Tests.Controllers
             ShoppingListsController controller = SetUpController();
 
             // Act
-            var result = (ListVM)(controller.Index(1)).Model;
-
-
+            var result = (ListVM<ShoppingList,ShoppingListVM>)(controller.Index(1)).Model; 
 
             // Assert
-            ShoppingList[] ingrArray1 = result.ShoppingLists.ToArray();
+            ShoppingList[] ingrArray1 = result.Entities.ToArray();
             Assert.IsTrue(ingrArray1.Length == 5);
             Assert.AreEqual("Old Name 1", ingrArray1[0].Name);
             Assert.AreEqual("Old Name 4", ingrArray1[3].Name);
@@ -228,8 +226,8 @@ namespace LambAndLentil.Tests.Controllers
         }
 
         [TestMethod]
-        [TestCategory("Delete")]
-        public void ShoppingListsCtr_DeleteAFoundShoppingList()
+        [TestCategory("Remove")]
+        public void ShoppingListsCtr_RemoveAFoundShoppingList()
         {
             // Arrange
             ShoppingListsController controller = SetUpController();
@@ -245,8 +243,8 @@ namespace LambAndLentil.Tests.Controllers
 
 
         [TestMethod]
-        [TestCategory("Delete")]
-        public void ShoppingListsCtr_DeleteAnInvalidShoppingList()
+        [TestCategory("Remove")]
+        public void ShoppingListsCtr_RemoveAnInvalidShoppingList()
         {
             // Arrange
             ShoppingListsController controller = SetUpController();
@@ -258,15 +256,15 @@ namespace LambAndLentil.Tests.Controllers
             // Assert
             Assert.IsNotNull(view);
             Assert.AreEqual("No shopping list was found with that id.", adr.Message);
-             Assert.AreEqual("alert-danger", adr.AlertClass);
-           Assert.AreEqual(UIControllerType.ShoppingLists.ToString(), ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(0).ToString());
+            Assert.AreEqual("alert-danger", adr.AlertClass);
+            Assert.AreEqual(UIControllerType.ShoppingLists.ToString(), ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(0).ToString());
             Assert.AreEqual(UIViewType.BaseIndex.ToString(), ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(1).ToString());
             Assert.AreEqual(1, ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(3));
         }
 
         [TestMethod]
-        [TestCategory("Delete")]
-        public void ShoppingListsCtr_DeleteConfirmed()
+        [TestCategory("Remove")]
+        public void ShoppingListsCtr_RemoveConfirmed()
         {
             // Arrange
             ShoppingListsController controller = SetUpController();
@@ -279,33 +277,33 @@ namespace LambAndLentil.Tests.Controllers
         }
 
         [TestMethod]
-        [TestCategory("Delete")]
-        public void ShoppingLists_Ctr_CanDeleteValidShoppingList()
+        [TestCategory("Remove")]
+        public void ShoppingLists_Ctr_CanRemoveValidShoppingList()
         {
             // Arrange - create an shoppingList
-            ShoppingList shoppingList = new ShoppingList { ID = 2, Name = "Test2" };
+            ShoppingListVM shoppingListVM = new ShoppingListVM { ID = 2, Name = "Test2" };
 
             // Arrange - create the mock repository
-            Mock<IRepository> mock = new Mock<IRepository>();
-            mock.Setup(m => m.ShoppingLists).Returns(new ShoppingList[]
+            Mock<IRepository<ShoppingList, ShoppingListVM>> mock = new Mock<IRepository<ShoppingList, ShoppingListVM>>();
+            mock.Setup(m => m.ShoppingList).Returns(new ShoppingListVM[]
             {
-                new ShoppingList {ID=1,Name="Test1"},
+                new ShoppingListVM {ID=1,Name="Test1"},
 
-                shoppingList,
+                shoppingListVM,
 
-                new ShoppingList {ID=3,Name="Test3"},
+                new ShoppingListVM {ID=3,Name="Test3"},
             }.AsQueryable());
-            mock.Setup(m => m.Delete<ShoppingList>(It.IsAny<int>())).Verifiable();
+            mock.Setup(m => m.Remove(It.IsAny<ShoppingListVM>())).Verifiable();
             // Arrange - create the controller
-            ShoppingListsController controller = new ShoppingListsController(mock.Object);
+            ShoppingListsController controller = new ShoppingListsController();
 
             // Act - delete the shoppingList
-            ActionResult result = controller.DeleteConfirmed(shoppingList.ID);
+            ActionResult result = controller.DeleteConfirmed(shoppingListVM.ID);
 
             AlertDecoratorResult adr = (AlertDecoratorResult)result;
 
             // Assert - ensure that the repository delete method was called with a correct ShoppingList
-            mock.Verify(m => m.Delete<ShoppingList>(shoppingList.ID));
+            mock.Verify(m => m.Remove(shoppingListVM));
 
 
             Assert.AreEqual("Test2 has been deleted", adr.Message);
@@ -320,30 +318,30 @@ namespace LambAndLentil.Tests.Controllers
             // Arrange
             ShoppingListsController controller = SetUpController();
 
-            ShoppingList shoppingList = mock.Object.ShoppingLists.First();
-            mock.Setup(c => c.Save(shoppingList)).Verifiable();
-            shoppingList.Name = "First edited";
+            ShoppingListVM shoppingListVM = (ShoppingListVM)mock.Object.ShoppingList;
+            mock.Setup(c => c.Save(shoppingListVM)).Verifiable();
+            shoppingListVM.Name = "First edited";
 
             // Act 
 
             ViewResult view1 = controller.Edit(1);
-            ShoppingListVM p1 = (ShoppingListVM)view1.Model;
+           ListVM<ShoppingList,ShoppingListVM> p1 = (ListVM<ShoppingList,ShoppingListVM>)view1.Model;
             ViewResult view2 = controller.Edit(2);
-            ShoppingListVM p2 = (ShoppingListVM)view2.Model;
+           ListVM<ShoppingList,ShoppingListVM> p2 = (ListVM<ShoppingList,ShoppingListVM>)view2.Model;
             ViewResult view3 = controller.Edit(3);
-            ShoppingListVM p3 = (ShoppingListVM)view3.Model;
+           ListVM<ShoppingList,ShoppingListVM> p3 = (ListVM<ShoppingList,ShoppingListVM>)view3.Model;
 
 
             // Assert 
             Assert.IsNotNull(view1);
-            Assert.AreEqual(1, p1.ID);
-            Assert.AreEqual(2, p2.ID);
-            Assert.AreEqual(3, p3.ID);
-            Assert.AreEqual("First edited", p1.Name);
-            Assert.AreEqual("Old Name 2", p2.Name);
+            Assert.AreEqual(1, p1.Entities.First().ID);
+            Assert.AreEqual(2, p2.Entities.First().ID);
+            Assert.AreEqual(3, p3.Entities.First().ID);
+            Assert.AreEqual("First edited", p1.Entities.First().Name);
+            Assert.AreEqual("Old Name 2", p2.Entities.First().Name);
         }
 
-     
+
 
         [TestMethod]
         [TestCategory("Edit")]
@@ -374,17 +372,17 @@ namespace LambAndLentil.Tests.Controllers
         private ShoppingListsController SetUpController()
         {
             // - create the mock repository
-            mock = new Mock<IRepository>();
-            mock.Setup(m => m.ShoppingLists).Returns(new ShoppingList[] {
-                new ShoppingList {ID = 1, Name = "Old Name 1" },
-                new ShoppingList {ID = 2, Name = "Old Name 2" },
-                new ShoppingList {ID = 3, Name = "Old Name 3" },
-                new ShoppingList {ID = 4, Name = "Old Name 4", },
-                new ShoppingList {ID = 5, Name = "Old Name 5" }
+            mock = new Mock<IRepository<ShoppingList,ShoppingListVM>>();
+            mock.Setup(m => m.ShoppingList).Returns(new  ShoppingListVM[] {
+                new ShoppingListVM {ID = 1, Name = "Old Name 1" },
+                new ShoppingListVM {ID = 2, Name = "Old Name 2" },
+                new ShoppingListVM {ID = 3, Name = "Old Name 3" },
+                new ShoppingListVM {ID = 4, Name = "Old Name 4", },
+                new ShoppingListVM {ID = 5, Name = "Old Name 5" }
             }.AsQueryable());
 
             // Arrange - create a controller
-            ShoppingListsController controller = new ShoppingListsController(mock.Object);
+            ShoppingListsController controller = new ShoppingListsController();
             controller.PageSize = 3;
 
             return controller;
@@ -395,11 +393,11 @@ namespace LambAndLentil.Tests.Controllers
         private ShoppingListsController SetUpSimpleController()
         {
             // - create the mock repository
-            Mock<IRepository> mock = new Mock<IRepository>();
+            Mock<IRepository<ShoppingList,ShoppingListVM>> mock = new Mock<IRepository<ShoppingList,ShoppingListVM>>();
 
 
             // Arrange - create a controller
-            ShoppingListsController controller = new ShoppingListsController(mock.Object);
+            ShoppingListsController controller = new ShoppingListsController();
             // controller.PageSize = 3;
 
             return controller;

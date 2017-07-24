@@ -1,4 +1,5 @@
-﻿using LambAndLentil.Domain.Concrete;
+﻿using AutoMapper;
+using LambAndLentil.Domain.Concrete;
 using LambAndLentil.Domain.Entities;
 using LambAndLentil.UI;
 using LambAndLentil.UI.Controllers;
@@ -22,8 +23,8 @@ namespace MsTestIntegrationTests
         public void CreateAnPlan()
         {
             // Arrange
-            EFRepository repo = new EFRepository(); ;
-            PlansController controller = new PlansController(repo);
+             EFRepository<Plan,PlanVM> repo = new  EFRepository<Plan,PlanVM>(); ;
+            PlansController controller = new PlansController();
             // Act
             ViewResult vr = controller.Create(UIViewType.Create);
             PlanVM vm = (PlanVM)vr.Model;
@@ -38,8 +39,8 @@ namespace MsTestIntegrationTests
         public void SaveAValidPlan()
         {
             // Arrange
-            EFRepository repo = new EFRepository(); ;
-            PlansController controller = new PlansController(repo);
+             EFRepository<Plan,PlanVM> repo = new  EFRepository<Plan,PlanVM>(); ;
+            PlansController controller = new PlansController();
             PlanVM vm = new PlanVM();
             vm.Name = "test";
             // Act
@@ -65,11 +66,8 @@ namespace MsTestIntegrationTests
             }
             finally
             {
-                // Clean Up - should run a  delete test to make sure this works 
-                List<Plan> plans = repo.Plans.ToList<Plan>();
-                Plan plan = plans.Where(m => m.Name == "test").FirstOrDefault();
-
-                // Delete it
+                // Clean Up - should run a  delete test to make sure this works  
+                Plan plan = repo.GetAll().Where(m => m.Name == "test").FirstOrDefault();
                 controller.DeleteConfirmed(plan.ID);
             }
         }
@@ -79,28 +77,29 @@ namespace MsTestIntegrationTests
         public void SaveEditedPlanWithNameChange()
         {
             // Arrange
-            EFRepository repo = new EFRepository(); ;
-            PlansController controller1 = new PlansController(repo);
-            PlansController controller2 = new PlansController(repo);
-            PlansController controller3 = new PlansController(repo);
-            PlansController controller4 = new PlansController(repo);
-            PlansController controller5 = new PlansController(repo);
+             EFRepository<Plan,PlanVM> repo = new  EFRepository<Plan,PlanVM>(); ;
+            PlansController controller1 = new PlansController();
+            PlansController controller2 = new PlansController();
+            PlansController controller3 = new PlansController();
+            PlansController controller4 = new PlansController();
+            PlansController controller5 = new PlansController();
             PlanVM vm = new PlanVM();
             vm.Name = "0000 test";
 
             // Act 
             ActionResult ar1 = controller1.PostEdit(vm);
             ViewResult view1 = controller2.Index();
-            ListVM listVM = (ListVM)view1.Model;
-            var result = (from m in listVM.Plans
+            ListVM<Plan,PlanVM> listVM = (ListVM<Plan, PlanVM>)view1.Model;
+            var result = (from m in listVM.Entities
                           where m.Name == "0000 test"
                           select m).AsQueryable();
 
-            Plan ingredient = result.FirstOrDefault();
+            Plan plan = result.FirstOrDefault(); 
+            PlanVM item = Mapper.Map<Plan, PlanVM>(plan);
             try
             {
                 // verify initial value:
-                Assert.AreEqual("0000 test", ingredient.Name);
+                Assert.AreEqual("0000 test", item.Name);
             }
             catch (Exception)
             {
@@ -109,19 +108,20 @@ namespace MsTestIntegrationTests
             }
             // now edit it
             vm.Name = "0000 test Edited";
-            vm.ID = ingredient.ID;
+            vm.ID = item.ID;
             ActionResult ar2 = controller3.PostEdit(vm);
             ViewResult view2 = controller4.Index();
-            ListVM listVM2 = (ListVM)view2.Model;
-            var result2 = (from m in listVM2.Plans
+            ListVM<Plan, PlanVM> listVM2 = (ListVM<Plan, PlanVM>)view2.Model;
+            var result2 = (from m in listVM2.Entities
                            where m.Name == "0000 test Edited"
                            select m).AsQueryable();
-
-            ingredient = result2.FirstOrDefault();
+ 
+            Plan plan2 = result2.FirstOrDefault();
+            PlanVM item2 = Mapper.Map<Plan, PlanVM>(plan2);
             try
             {
                 // Assert
-                Assert.AreEqual("0000 test Edited", ingredient.Name);
+                Assert.AreEqual("0000 test Edited", item2.Name);
             }
             catch (Exception)
             {
@@ -131,7 +131,7 @@ namespace MsTestIntegrationTests
             finally
             {
                 // clean up 
-                controller5.DeleteConfirmed(vm.ID);
+                controller5.DeleteConfirmed(item2.ID);
             }
         }
 
@@ -143,12 +143,12 @@ namespace MsTestIntegrationTests
         public void SaveEditedPlanWithDescriptionChange()
         {
             // Arrange
-            EFRepository repo = new EFRepository(); ;
-            PlansController controller1 = new PlansController(repo);
-            PlansController controller2 = new PlansController(repo);
-            PlansController controller3 = new PlansController(repo);
-            PlansController controller4 = new PlansController(repo);
-            PlansController controller5 = new PlansController(repo);
+             EFRepository<Plan,PlanVM> repo = new  EFRepository<Plan,PlanVM>(); ;
+            PlansController controller1 = new PlansController();
+            PlansController controller2 = new PlansController();
+            PlansController controller3 = new PlansController();
+            PlansController controller4 = new PlansController();
+            PlansController controller5 = new PlansController();
             PlanVM vm = new PlanVM();
             vm.Name = "0000 test";
             vm.Description = "SaveEditedPlanWithDescriptionChange Pre-test";
@@ -157,12 +157,14 @@ namespace MsTestIntegrationTests
             // Act 
             ActionResult ar1 = controller1.PostEdit(vm);
             ViewResult view1 = controller2.Index();
-            ListVM listVM = (ListVM)view1.Model;
-            var result = (from m in listVM.Plans
+            ListVM<Plan, PlanVM> listVM = (ListVM<Plan, PlanVM>)view1.Model;
+            var result = (from m in listVM.Entities
                           where m.Name == "0000 test"
                           select m).AsQueryable();
 
-            Plan plan = result.FirstOrDefault();
+            Plan  x = result.FirstOrDefault(); 
+            PlanVM plan = Mapper.Map<Plan, PlanVM>(x);
+
             try
             {
                 // verify initial value:
@@ -183,18 +185,20 @@ namespace MsTestIntegrationTests
 
             ActionResult ar2 = controller3.PostEdit(vm);
             ViewResult view2 = controller4.Index();
-            ListVM listVM2 = (ListVM)view2.Model;
-            var result2 = (from m in listVM2.Plans
+            ListVM<Plan, PlanVM> listVM2 = (ListVM<Plan, PlanVM>)view2.Model;
+            var result2 = (from m in listVM2.Entities
                            where m.Name == "0000 test Edited"
                            select m).AsQueryable();
 
-            plan = result2.FirstOrDefault();
+            
+            Plan item = result2.FirstOrDefault();
+            PlanVM planVM = Mapper.Map<Plan, PlanVM>(item);
 
             try
             {
                 // Assert
-                Assert.AreEqual("0000 test Edited", plan.Name);
-                Assert.AreEqual("SaveEditedPlanWithDescriptionChange Post-test", plan.Description);
+                Assert.AreEqual("0000 test Edited", planVM.Name);
+                Assert.AreEqual("SaveEditedPlanWithDescriptionChange Post-test", planVM.Description);
             }
             catch (Exception)
             {
@@ -213,23 +217,25 @@ namespace MsTestIntegrationTests
         public void ActuallyDeleteAPlanFromTheDatabase()
         {
             // Arrange
-            EFRepository repo = new EFRepository(); ;
-            PlansController editController = new PlansController(repo);
-            PlansController indexController = new PlansController(repo);
-            PlansController deleteController = new PlansController(repo);
+             EFRepository<Plan,PlanVM> repo = new  EFRepository<Plan,PlanVM>(); ;
+            PlansController editController = new PlansController();
+            PlansController indexController = new PlansController();
+            PlansController deleteController = new PlansController();
             PlanVM vm = new PlanVM();
             vm.Name = "0000" + new Guid().ToString();
             ActionResult ar = editController.PostEdit(vm);
             ViewResult view = indexController.Index();
-            ListVM listVM = (ListVM)view.Model;
-            var result = (from m in listVM.Plans
+            ListVM<Plan, PlanVM> listVM = (ListVM<Plan, PlanVM>)view.Model;
+            var result = (from m in listVM.Entities
                           where m.Name == vm.Name
                           select m).AsQueryable();
-            Plan item = result.FirstOrDefault();
+            
+            Plan plan = result.FirstOrDefault();
+            PlanVM item = Mapper.Map<Plan, PlanVM>(plan);
 
             //Act
             deleteController.DeleteConfirmed(item.ID);
-            var deletedItem = (from m in repo.Plans
+            var deletedItem = (from m in repo.GetAll()
                                where m.Name == vm.Name
                                select m).AsQueryable();
 
@@ -245,20 +251,20 @@ namespace MsTestIntegrationTests
             PlanVM planVM = new PlanVM(CreationDate);
             planVM.Name = "001 Test ";
 
-            EFRepository repo = new EFRepository(); ;
-            PlansController controllerEdit = new PlansController(repo);
-            PlansController controllerView = new PlansController(repo);
-            PlansController controllerDelete = new PlansController(repo);
+             EFRepository<Plan,PlanVM> repo = new  EFRepository<Plan,PlanVM>(); ;
+            PlansController controllerEdit = new PlansController();
+            PlansController controllerView = new PlansController();
+            PlansController controllerDelete = new PlansController();
 
             // Act
             controllerEdit.PostEdit(planVM);
             ViewResult view = controllerView.Index();
-            ListVM listVM = (ListVM)view.Model;
-            var result = (from m in listVM.Plans
+            ListVM<Plan, PlanVM> listVM = (ListVM<Plan, PlanVM>)view.Model;
+            var result = (from m in listVM.Entities
                           where m.Name == "001 Test "
-                          select m).AsQueryable();
-
-            Plan plan = result.FirstOrDefault();
+                          select m).AsQueryable(); 
+            Plan item = result.FirstOrDefault();
+            PlanVM plan = Mapper.Map<Plan, PlanVM>(item);
 
             DateTime shouldBeSameDate = plan.CreationDate;
             try
@@ -282,10 +288,10 @@ namespace MsTestIntegrationTests
         public void UpdateTheModificationDateBetweenPostedEdits()
         {
             // Arrange
-            EFRepository repo = new EFRepository();
-            PlansController controllerPost = new PlansController(repo);
-            PlansController controllerView = new PlansController(repo);
-            PlansController controllerDelete = new PlansController(repo);
+             EFRepository<Plan,PlanVM> repo = new  EFRepository<Plan,PlanVM>();
+            PlansController controllerPost = new PlansController();
+            PlansController controllerView = new PlansController();
+            PlansController controllerDelete = new PlansController();
 
             PlanVM planVM = new PlanVM();
             planVM.Name = "002 Test Mod";
@@ -295,12 +301,13 @@ namespace MsTestIntegrationTests
             // Act
             controllerPost.PostEdit(planVM);
             ViewResult view = controllerView.Index();
-            ListVM listVM = (ListVM)view.Model;
-            var result = (from m in listVM.Plans
+            ListVM<Plan, PlanVM> listVM = (ListVM<Plan, PlanVM>)view.Model;
+            var result = (from m in listVM.Entities
                           where m.Name == "002 Test Mod"
                           select m).AsQueryable();
 
-            Plan plan = result.FirstOrDefault();
+            Plan item = result.FirstOrDefault();
+            PlanVM plan = Mapper.Map<Plan, PlanVM>(item);
 
             DateTime shouldBeSameDate = plan.CreationDate;
             DateTime shouldBeLaterDate = plan.ModifiedDate;

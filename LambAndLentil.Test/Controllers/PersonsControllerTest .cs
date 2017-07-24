@@ -84,18 +84,19 @@ namespace LambAndLentil.Tests.Controllers
         public void PersonsCtr_Index_ContainsAllPersons()
         {
             // Arrange
+            Mock<IRepository<Person,PersonVM>> mock = new Mock<IRepository<Person,PersonVM>>();
             PersonsController controller = SetUpController();
-            ListVM ilvm = new ListVM();
-            ilvm.Persons = (IEnumerable<Person>)mock.Object.Persons;
+            ListVM<Person,PersonVM> ilvm = new ListVM<Person,PersonVM>();
+            ilvm.Entities = (IEnumerable<Person>)mock.Object.Person;
 
             // Act
             ViewResult view1 = controller.Index(1);
 
-            int count1 = ((ListVM)(view1.Model)).Persons.Count();
+            int count1 = ((ListVM<Person,PersonVM>)(view1.Model)).Entities.Count();
 
             ViewResult view2 = controller.Index(2);
 
-            int count2 = ((ListVM)(view2.Model)).Persons.Count();
+            int count2 = ((ListVM<Person,PersonVM>)(view2.Model)).Entities.Count();
 
             int count = count1 + count2;
 
@@ -108,10 +109,10 @@ namespace LambAndLentil.Tests.Controllers
             Assert.AreEqual("Index", view1.ViewName);
             Assert.AreEqual("Index", view2.ViewName);
 
-            //Assert.AreEqual("P1", ((ListVM)(view1.Model)).Persons.FirstOrDefault().Name);
-            //Assert.AreEqual("P2", ((ListVM)(view1.Model)).Persons.Skip(1).FirstOrDefault().Name);
-            //Assert.AreEqual("P3", ((ListVM)(view1.Model)).Persons.Skip(2).FirstOrDefault().Name);
-            //Assert.AreEqual("P5", ((ListVM)(view2.Model)).Persons.FirstOrDefault().Name);
+            //Assert.AreEqual("P1", ((ListVM<Person,PersonVM>)(view1.Model)).Entities.FirstOrDefault().Name);
+            //Assert.AreEqual("P2", ((ListVM<Person,PersonVM>)(view1.Model)).Entities.Skip(1).FirstOrDefault().Name);
+            //Assert.AreEqual("P3", ((ListVM<Person,PersonVM>)(view1.Model)).Entities.Skip(2).FirstOrDefault().Name);
+            //Assert.AreEqual("P5", ((ListVM<Person,PersonVM>)(view2.Model)).Entities.FirstOrDefault().Name);
 
         }
 
@@ -121,15 +122,16 @@ namespace LambAndLentil.Tests.Controllers
         public void PersonsCtr_Index_FirstPageIsCorrect()
         {
             // Arrange
+            Mock<IRepository<Person,PersonVM>> mock = new Mock<IRepository<Person,PersonVM>>();
             PersonsController controller = SetUpController();
-            ListVM ilvm = new ListVM();
-            ilvm.Persons = (IEnumerable<Person>)mock.Object.Persons;
+            ListVM<Person,PersonVM> ilvm = new ListVM<Person,PersonVM>();
+            ilvm.Entities = (IEnumerable<Person>)mock.Object.Person;
             controller.PageSize = 8;
 
             // Act
             ViewResult view1 = controller.Index(1);
 
-            int count1 = ((ListVM)(view1.Model)).Persons.Count();
+            int count1 = ((ListVM<Person,PersonVM>)(view1.Model)).Entities.Count();
 
 
 
@@ -138,9 +140,9 @@ namespace LambAndLentil.Tests.Controllers
             Assert.AreEqual(5, count1);
             Assert.AreEqual("Index", view1.ViewName);
 
-            Assert.AreEqual("Old Name 1", ((ListVM)(view1.Model)).Persons.FirstOrDefault().Name);
-            Assert.AreEqual("Old Name 2", ((ListVM)(view1.Model)).Persons.Skip(1).FirstOrDefault().Name);
-            Assert.AreEqual("Old Name 3", ((ListVM)(view1.Model)).Persons.Skip(2).FirstOrDefault().Name);
+            Assert.AreEqual("Old Name 1", ((ListVM<Person,PersonVM>)(view1.Model)).Entities.FirstOrDefault().Name);
+            Assert.AreEqual("Old Name 2", ((ListVM<Person,PersonVM>)(view1.Model)).Entities.Skip(1).FirstOrDefault().Name);
+            Assert.AreEqual("Old Name 3", ((ListVM<Person,PersonVM>)(view1.Model)).Entities.Skip(2).FirstOrDefault().Name);
 
 
         }
@@ -153,22 +155,22 @@ namespace LambAndLentil.Tests.Controllers
         {
             //// Arrange
             //PersonsController controller = SetUpController();
-            //ListVM ilvm = new ListVM();
-            //ilvm.Persons = (IEnumerable<Person>)mock.Object.Persons;
+            //ListVM<Person,PersonVM> ilvm = new ListVM<Person,PersonVM>();
+            //ilvm.Entities = (IEnumerable<Person,PersonVM>)mock.Object.Entities;
 
             //// Act
             //ViewResult view  = controller.Index(null, null, null, 2);
 
-            //int count  = ((ListVM)(view.Model)).Persons.Count(); 
+            //int count  = ((ListVM<Person,PersonVM>)(view.Model)).Entities.Count(); 
 
             //// Assert
             //Assert.IsNotNull(view);
             //Assert.AreEqual(0, count );
             //Assert.AreEqual("Index", view.ViewName); 
-            // Assert.AreEqual("P5", ((ListVM)(view.Model)).Persons.FirstOrDefault().Name);
-            // Assert.AreEqual( 5, ((ListVM)(view.Model)).Persons.FirstOrDefault().ID);
-            // Assert.AreEqual("C", ((ListVM)(view.Model)).Persons.FirstOrDefault().Maker);
-            // Assert.AreEqual("CC", ((ListVM)(view.Model)).Persons.FirstOrDefault().Brand);
+            // Assert.AreEqual("P5", ((ListVM<Person,PersonVM>)(view.Model)).Entities.FirstOrDefault().Name);
+            // Assert.AreEqual( 5, ((ListVM<Person,PersonVM>)(view.Model)).Entities.FirstOrDefault().ID);
+            // Assert.AreEqual("C", ((ListVM<Person,PersonVM>)(view.Model)).Entities.FirstOrDefault().Maker);
+            // Assert.AreEqual("CC", ((ListVM<Person,PersonVM>)(view.Model)).Entities.FirstOrDefault().Brand);
 
         }
 
@@ -182,7 +184,7 @@ namespace LambAndLentil.Tests.Controllers
 
             // Act
 
-            ListVM resultT = (ListVM)((ViewResult)controller.Index(2)).Model;
+            ListVM<Person,PersonVM> resultT = (ListVM<Person,PersonVM>)((ViewResult)controller.Index(2)).Model;
 
 
             // Assert
@@ -204,10 +206,10 @@ namespace LambAndLentil.Tests.Controllers
 
 
             // Action
-            int totalItems = ((ListVM)((ViewResult)controller.Index()).Model).PagingInfo.TotalItems;
-            int currentPage = ((ListVM)((ViewResult)controller.Index()).Model).PagingInfo.CurrentPage;
-            int itemsPerPage = ((ListVM)((ViewResult)controller.Index()).Model).PagingInfo.ItemsPerPage;
-            int totalPages = ((ListVM)((ViewResult)controller.Index()).Model).PagingInfo.TotalPages;
+            int totalItems = ((ListVM<Person,PersonVM>)((ViewResult)controller.Index()).Model).PagingInfo.TotalItems;
+            int currentPage = ((ListVM<Person,PersonVM>)((ViewResult)controller.Index()).Model).PagingInfo.CurrentPage;
+            int itemsPerPage = ((ListVM<Person,PersonVM>)((ViewResult)controller.Index()).Model).PagingInfo.ItemsPerPage;
+            int totalPages = ((ListVM<Person,PersonVM>)((ViewResult)controller.Index()).Model).PagingInfo.TotalPages;
 
 
 
@@ -226,12 +228,12 @@ namespace LambAndLentil.Tests.Controllers
             PersonsController controller = SetUpController();
 
             // Act
-            var result = (ListVM)(controller.Index(1)).Model;
+            var result = (ListVM<Person,PersonVM>)(controller.Index(1)).Model;
 
 
 
             // Assert
-            Person[] ingrArray1 = result.Persons.ToArray();
+            Person[] ingrArray1 = result.Entities.ToArray();
             Assert.IsTrue(ingrArray1.Length == 5);
             Assert.AreEqual("Old Name 1", ingrArray1[0].Name);
             Assert.AreEqual("Old Name 4", ingrArray1[3].Name);
@@ -301,7 +303,7 @@ namespace LambAndLentil.Tests.Controllers
         {
             // Arrange
             PersonsController controller = SetUpController();
-          //  AutoMapperConfigForTests.AMConfigForTests();
+            //  AutoMapperConfigForTests.AMConfigForTests();
 
 
             // Act
@@ -402,29 +404,29 @@ namespace LambAndLentil.Tests.Controllers
         public void Persons_Ctr_CanDeleteValidPerson()
         {
             // Arrange - create an person
-            Person person = new Person { ID = 2, Name = "Test2" };
+            PersonVM personVM = new PersonVM { ID = 2, Name = "Test2" };
 
             // Arrange - create the mock repository
-            Mock<IRepository> mock = new Mock<IRepository>();
-            mock.Setup(m => m.Persons).Returns(new Person[]
+            Mock<IRepository<Person,PersonVM>> mock = new Mock<IRepository<Person,PersonVM>>();
+            mock.Setup(m => m.Person).Returns(new PersonVM[]
             {
-                new Person {ID=1,Name="Test1"},
+                new PersonVM {ID=1,Name="Test1"},
 
-                person,
+                personVM,
 
-                new Person {ID=3,Name="Test3"},
+                new PersonVM {ID=3,Name="Test3"},
             }.AsQueryable());
-            mock.Setup(m => m.Delete<Person>(It.IsAny<int>())).Verifiable();
+            mock.Setup(m => m.Remove(It.IsAny< PersonVM>()));
             // Arrange - create the controller
-            PersonsController controller = new PersonsController(mock.Object);
+            PersonsController controller = new PersonsController();
 
             // Act - delete the person
-            ActionResult result = controller.DeleteConfirmed(person.ID);
+            ActionResult result = controller.DeleteConfirmed(personVM.ID);
 
             AlertDecoratorResult adr = (AlertDecoratorResult)result;
 
             // Assert - ensure that the repository delete method was called with a correct Person
-            mock.Verify(m => m.Delete<Person>(person.ID));
+            mock.Verify(m => m.Remove(personVM));
 
 
             Assert.AreEqual("Test2 has been deleted", adr.Message);
@@ -434,12 +436,13 @@ namespace LambAndLentil.Tests.Controllers
         [TestCategory("Edit")]
         public void PersonsCtr_CanEditPerson()
         {
+            Mock<IRepository<Person,PersonVM>> mock = new Mock<IRepository<Person,PersonVM>>();
             // Arrange
             PersonsController controller = SetUpController();
 
-            Person person = mock.Object.Persons.First();
-            mock.Setup(c => c.Save(person)).Verifiable();
-            person.Name = "First edited";
+            PersonVM personVM = (PersonVM)mock.Object.Person;
+            mock.Setup(c => c.Save(personVM)).Verifiable();
+            personVM.Name = "First edited";
 
             // Act 
 
@@ -460,7 +463,7 @@ namespace LambAndLentil.Tests.Controllers
             Assert.AreEqual("Old Name 2", p2.Name);
         }
 
-        
+
 
         [TestMethod]
         [TestCategory("Edit")]
@@ -495,8 +498,8 @@ namespace LambAndLentil.Tests.Controllers
         private PersonsController SetUpController()
         {
             // - create the mock repository
-            mock = new Mock<IRepository>();
-            mock.Setup(m => m.Persons).Returns(new Person[] {
+            Mock<IRepository<Person,PersonVM>>  mock = new Mock<IRepository<Person,PersonVM>>();
+            mock.Setup(m => m.Person).Returns(new Person[] {
                 new Person {ID = 1, Name = "Old Name 1" },
                 new Person {ID = 2, Name = "Old Name 2" },
                 new Person {ID = 3, Name = "Old Name 3" },
@@ -505,7 +508,7 @@ namespace LambAndLentil.Tests.Controllers
             }.AsQueryable());
 
             // Arrange - create a controller
-            PersonsController controller = new PersonsController(mock.Object);
+            PersonsController controller = new PersonsController();
             controller.PageSize = 3;
 
             return controller;
@@ -520,10 +523,10 @@ namespace LambAndLentil.Tests.Controllers
 
 
             // Arrange - create a controller
-            PersonsController controller = new PersonsController(mock.Object);
+            PersonsController controller = new PersonsController();
             // controller.PageSize = 3;
 
             return controller;
-        } 
+        }
     }
 }

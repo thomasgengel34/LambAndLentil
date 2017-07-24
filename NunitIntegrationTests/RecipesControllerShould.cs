@@ -22,8 +22,8 @@ namespace MsTestIntegrationTests
         public void CreateAnRecipe()
         {
             // Arrange
-            EFRepository repo = new EFRepository(); ;
-            RecipesController controller = new RecipesController(repo);
+           EFRepository<Recipe, RecipeVM> repo = new EFRepository<Recipe, RecipeVM>(); ;
+            RecipesController controller = new RecipesController();
             // Act
             ViewResult vr = controller.Create(LambAndLentil.UI.UIViewType.Create);
             RecipeVM vm = (RecipeVM)vr.Model;
@@ -38,8 +38,8 @@ namespace MsTestIntegrationTests
         public void SaveAValidRecipe()
         {
             // Arrange
-            EFRepository repo = new EFRepository(); ;
-            RecipesController controller = new RecipesController(repo);
+           EFRepository<Recipe, RecipeVM> repo = new EFRepository<Recipe, RecipeVM>(); ;
+            RecipesController controller = new RecipesController();
             RecipeVM vm = new RecipeVM();
             vm.Name = "test";
             // Act
@@ -65,11 +65,8 @@ namespace MsTestIntegrationTests
             }
             finally
             {
-                // Clean Up - should run a  delete test to make sure this works 
-                List<Recipe> menus = repo.Recipes.ToList<Recipe>();
-                Recipe menu = menus.Where(m => m.Name == "test").FirstOrDefault();
-
-                // Delete it
+                // Clean Up - should run a  delete test to make sure this works  
+                Recipe menu = repo.GetAll().Where(m => m.Name == "test").FirstOrDefault(); 
                 controller.DeleteConfirmed(menu.ID);
             }
         }
@@ -79,44 +76,46 @@ namespace MsTestIntegrationTests
         public void SaveEditedRecipeWithNameChange()
         {
             // Arrange
-            EFRepository repo = new EFRepository(); ;
-            RecipesController controller1 = new RecipesController(repo);
-            RecipesController controller2 = new RecipesController(repo);
-            RecipesController controller3 = new RecipesController(repo);
-            RecipesController controller4 = new RecipesController(repo);
-            RecipesController controller5 = new RecipesController(repo);
+           EFRepository<Recipe, RecipeVM> repo = new EFRepository<Recipe, RecipeVM>(); ;
+            RecipesController controller1 = new RecipesController();
+            RecipesController controller2 = new RecipesController();
+            RecipesController controller3 = new RecipesController();
+            RecipesController controller4 = new RecipesController();
+            RecipesController controller5 = new RecipesController();
             RecipeVM vm = new RecipeVM();
             vm.Name = "0000 test";
 
             // Act 
             ActionResult ar1 = controller1.PostEdit(vm);
             ViewResult view1 = controller2.Index();
-            ListVM listVM = (ListVM)view1.Model;
-            var result = (from m in listVM.Recipes
+           ListVM<Recipe,RecipeVM> listVM = (ListVM<Recipe,RecipeVM>)view1.Model;
+            var result = (from m in listVM.Entities
                           where m.Name == "0000 test"
                           select m).AsQueryable();
 
-            Recipe ingredient = result.FirstOrDefault();
+            Recipe  item= result.FirstOrDefault();
+            RecipeVM recipe = Mapper.Map<Recipe, RecipeVM>(item);
 
             // verify initial value:
-            Assert.AreEqual("0000 test", ingredient.Name);
+            Assert.AreEqual("0000 test",recipe.Name);
 
             // now edit it
             vm.Name = "0000 test Edited";
-            vm.ID = ingredient.ID;
+            vm.ID = recipe.ID;
             ActionResult ar2 = controller3.PostEdit(vm);
             ViewResult view2 = controller4.Index();
-            ListVM listVM2 = (ListVM)view2.Model;
-            var result2 = (from m in listVM2.Recipes
+           ListVM<Recipe,RecipeVM> listVM2 = (ListVM<Recipe,RecipeVM>)view2.Model;
+            var result2 = (from m in listVM2.Entities
                            where m.Name == "0000 test Edited"
                            select m).AsQueryable();
 
-            ingredient = result2.FirstOrDefault();
-
+             
+            Recipe item2 = result2.FirstOrDefault();
+            RecipeVM recipe2 = Mapper.Map<Recipe, RecipeVM>(item);
             try
             {
                 // Assert
-                Assert.AreEqual("0000 test Edited", ingredient.Name);
+                Assert.AreEqual("0000 test Edited", recipe2.Name);
             }
             catch (Exception)
             {
@@ -136,23 +135,24 @@ namespace MsTestIntegrationTests
         public void ActuallyDeleteARecipeFromTheDatabase()
         {
             // Arrange
-            EFRepository repo = new EFRepository(); ;
-            RecipesController editController = new RecipesController(repo);
-            RecipesController indexController = new RecipesController(repo);
-            RecipesController deleteController = new RecipesController(repo);
+           EFRepository<Recipe, RecipeVM> repo = new EFRepository<Recipe, RecipeVM>(); ;
+            RecipesController editController = new RecipesController();
+            RecipesController indexController = new RecipesController();
+            RecipesController deleteController = new RecipesController();
             RecipeVM vm = new RecipeVM();
             vm.Name = "0000" + new Guid().ToString();
             ActionResult ar = editController.PostEdit(vm);
             ViewResult view = indexController.Index();
-            ListVM listVM = (ListVM)view.Model;
-            var result = (from m in listVM.Recipes
+           ListVM<Recipe,RecipeVM> listVM = (ListVM<Recipe,RecipeVM>)view.Model;
+            var result = (from m in listVM.Entities
                           where m.Name == vm.Name
                           select m).AsQueryable();
-            Recipe item = result.FirstOrDefault();
+            Recipe  item = result.FirstOrDefault(); 
+            RecipeVM recipe2 = Mapper.Map<Recipe, RecipeVM>(item);
 
             //Act
             deleteController.DeleteConfirmed(item.ID);
-            var deletedItem = (from m in repo.Recipes
+            var deletedItem = (from m in repo.GetAll()
                                where m.Name == vm.Name
                                select m).AsQueryable();
             //Assert
@@ -164,12 +164,12 @@ namespace MsTestIntegrationTests
         public void SaveEditedRecipeWithDescriptionChange()
         {
             // Arrange
-            EFRepository repo = new EFRepository(); ;
-            RecipesController controller1 = new RecipesController(repo);
-            RecipesController controller2 = new RecipesController(repo);
-            RecipesController controller3 = new RecipesController(repo);
-            RecipesController controller4 = new RecipesController(repo);
-            RecipesController controller5 = new RecipesController(repo);
+           EFRepository<Recipe, RecipeVM> repo = new EFRepository<Recipe, RecipeVM>(); ;
+            RecipesController controller1 = new RecipesController();
+            RecipesController controller2 = new RecipesController();
+            RecipesController controller3 = new RecipesController();
+            RecipesController controller4 = new RecipesController();
+            RecipesController controller5 = new RecipesController();
             RecipeVM vm = new RecipeVM();
             vm.Name = "0000 test";
             vm.Description = "SaveEditedRecipeWithDescriptionChange Pre-test";
@@ -178,16 +178,18 @@ namespace MsTestIntegrationTests
             // Act 
             ActionResult ar1 = controller1.PostEdit(vm);
             ViewResult view1 = controller2.Index();
-            ListVM listVM = (ListVM)view1.Model;
-            var result = (from m in listVM.Recipes
+           ListVM<Recipe,RecipeVM> listVM = (ListVM<Recipe,RecipeVM>)view1.Model;
+            var result = (from m in listVM.Entities
                           where m.Name == "0000 test"
                           select m).AsQueryable();
 
-            Recipe menu = result.FirstOrDefault();
+            Recipe  item = result.FirstOrDefault();             
+            RecipeVM recipe = Mapper.Map<Recipe, RecipeVM>(item);
+
             try
             {
                 // verify initial value:
-                Assert.AreEqual("SaveEditedRecipeWithDescriptionChange Pre-test", menu.Description);
+                Assert.AreEqual("SaveEditedRecipeWithDescriptionChange Pre-test", recipe.Description);
             }
             catch (Exception)
             {
@@ -196,24 +198,23 @@ namespace MsTestIntegrationTests
                 throw;
             }
             // now edit it
-            vm.ID = menu.ID;
+            vm.ID = recipe.ID;
             vm.Name = "0000 test Edited";
             vm.Description = "SaveEditedRecipeWithDescriptionChange Post-test";
 
             ActionResult ar2 = controller3.PostEdit(vm);
             ViewResult view2 = controller4.Index();
-            ListVM listVM2 = (ListVM)view2.Model;
-            var result2 = (from m in listVM2.Recipes
+           ListVM<Recipe,RecipeVM> listVM2 = (ListVM<Recipe,RecipeVM>)view2.Model;
+            var result2 = (from m in listVM2.Entities
                            where m.Name == "0000 test Edited"
-                           select m).AsQueryable();
-
-            menu = result2.FirstOrDefault();
-
+                           select m).AsQueryable(); 
+            Recipe item2 = result2.FirstOrDefault();
+            RecipeVM recipe2 = Mapper.Map<Recipe, RecipeVM>(item);
             try
             {
                 // Assert
-                Assert.AreEqual("0000 test Edited", menu.Name);
-                Assert.AreEqual("SaveEditedRecipeWithDescriptionChange Post-test", menu.Description);
+                Assert.AreEqual("0000 test Edited", recipe2.Name);
+                Assert.AreEqual("SaveEditedRecipeWithDescriptionChange Post-test", recipe2.Description);
             }
             catch (Exception)
             {
@@ -243,7 +244,7 @@ namespace MsTestIntegrationTests
 
         [TestMethod]
         [TestCategory("Edit")]
-        public void ShouldSaveTheCreationDateOnRecipeCreationWithDateTimeParameter()
+        public void  SaveTheCreationDateOnRecipeCreationWithDateTimeParameter()
         {
             // Arrange
             DateTime CreationDate = new DateTime(2010, 1, 1);
@@ -291,20 +292,21 @@ namespace MsTestIntegrationTests
             RecipeVM recipeVM = new RecipeVM(CreationDate);
             recipeVM.Name = "001 Test ";
 
-            EFRepository repo = new EFRepository(); ;
-            RecipesController controllerEdit = new RecipesController(repo);
-            RecipesController controllerView = new RecipesController(repo);
-            RecipesController controllerDelete = new RecipesController(repo);
+           EFRepository<Recipe, RecipeVM> repo = new EFRepository<Recipe, RecipeVM>(); ;
+            RecipesController controllerEdit = new RecipesController();
+            RecipesController controllerView = new RecipesController();
+            RecipesController controllerDelete = new RecipesController();
 
             // Act
             controllerEdit.PostEdit(recipeVM);
             ViewResult view = controllerView.Index();
-            ListVM listVM = (ListVM)view.Model;
-            var result = (from m in listVM.Recipes
+           ListVM<Recipe,RecipeVM> listVM = (ListVM<Recipe,RecipeVM>)view.Model;
+            var result = (from m in listVM.Entities
                           where m.Name == "001 Test "
                           select m).AsQueryable();
-
-            Recipe recipe = result.FirstOrDefault();
+            Recipe item  = result.FirstOrDefault();
+            RecipeVM recipe  = Mapper.Map<Recipe, RecipeVM>(item);
+           
 
             DateTime shouldBeSameDate = recipe.CreationDate;
             try
@@ -329,12 +331,12 @@ namespace MsTestIntegrationTests
         public void UpdateTheModificationDateBetweenPostedEdits()
         {
             // Arrange
-            EFRepository repo = new EFRepository();
-            RecipesController controllerPost = new RecipesController(repo);
-            RecipesController controllerPost1 = new RecipesController(repo);
-            RecipesController controllerView = new RecipesController(repo);
-            RecipesController controllerView1 = new RecipesController(repo);
-            RecipesController controllerDelete = new RecipesController(repo);
+           EFRepository<Recipe, RecipeVM> repo = new EFRepository<Recipe, RecipeVM>();
+            RecipesController controllerPost = new RecipesController();
+            RecipesController controllerPost1 = new RecipesController();
+            RecipesController controllerView = new RecipesController();
+            RecipesController controllerView1 = new RecipesController();
+            RecipesController controllerDelete = new RecipesController();
 
             RecipeVM vm = new RecipeVM();
             vm.Name = "002 Test Mod";
@@ -345,28 +347,30 @@ namespace MsTestIntegrationTests
             controllerPost.PostEdit(vm);
 
             ViewResult view = controllerView.Index();
-            ListVM listVM = (ListVM)view.Model;
-            var result = (from m in listVM.Recipes
+           ListVM<Recipe,RecipeVM> listVM = (ListVM<Recipe,RecipeVM>)view.Model;
+            var result = (from m in listVM.Entities
                           where m.Name == "002 Test Mod"
                           select m).AsQueryable();
-            Recipe ingredient = result.FirstOrDefault();
-            vm = Mapper.Map<Recipe, RecipeVM>(ingredient);
+             
+            Recipe item = result.FirstOrDefault();
+            RecipeVM vm2 = Mapper.Map<Recipe, RecipeVM>(item);
 
             vm.Description = "I've been edited to delay a bit";
 
-            controllerPost1.PostEdit(vm);
+            controllerPost1.PostEdit(vm2);
 
 
             ViewResult view1 = controllerView.Index();
-            listVM = (ListVM)view1.Model;
-            var result1 = (from m in listVM.Recipes
+            listVM = (ListVM<Recipe,RecipeVM>)view1.Model;
+            var result1 = (from m in listVM.Entities
                            where m.Name == "002 Test Mod"
                            select m).AsQueryable();
 
-            ingredient = result1.FirstOrDefault();
-
-            DateTime shouldBeSameDate = ingredient.CreationDate;
-            DateTime shouldBeLaterDate = ingredient.ModifiedDate;
+            
+            Recipe item3  = result1.FirstOrDefault();
+            RecipeVM vm3 = Mapper.Map<Recipe, RecipeVM>(item3);
+            DateTime shouldBeSameDate = vm3.CreationDate;
+            DateTime shouldBeLaterDate = vm3.ModifiedDate;
             try
             {
                 // Assert
@@ -380,17 +384,17 @@ namespace MsTestIntegrationTests
             finally
             {
                 // Cleanup
-                controllerDelete.DeleteConfirmed(ingredient.ID);
+                controllerDelete.DeleteConfirmed(vm3.ID);
             }
         }
         [TestMethod]
         public void SaveAllPropertiesInBaseEntity()
         {
             // Arrange
-            EFRepository repo = new EFRepository();
-            RecipesController controllerPost = new RecipesController(repo);
-            RecipesController controllerView = new RecipesController(repo);
-            RecipesController controllerDelete = new RecipesController(repo);
+           EFRepository<Recipe, RecipeVM> repo = new EFRepository<Recipe, RecipeVM>();
+            RecipesController controllerPost = new RecipesController();
+            RecipesController controllerView = new RecipesController();
+            RecipesController controllerDelete = new RecipesController();
             RecipeVM vm = new RecipeVM();
             vm.Name = "___test387";
             vm.Description = "test387 description";
@@ -398,12 +402,13 @@ namespace MsTestIntegrationTests
             // Act
             controllerPost.PostEdit(vm);
             ViewResult view1 = controllerView.Index();
-            ListVM listVM = (ListVM)view1.Model;
-            var result1 = (from m in listVM.Recipes
+           ListVM<Recipe,RecipeVM> listVM = (ListVM<Recipe,RecipeVM>)view1.Model;
+            var result1 = (from m in listVM.Entities
                            where m.Name == "___test387"
-                           select m).AsQueryable();
+                           select m).AsQueryable(); 
 
-            Recipe recipe = result1.FirstOrDefault();
+            Recipe item = result1.FirstOrDefault();
+            RecipeVM recipe  = Mapper.Map<Recipe, RecipeVM>(item);
 
             try
             {
@@ -428,48 +433,34 @@ namespace MsTestIntegrationTests
 
         [TestMethod]
         [TestCategory("Attach-Detach")]
-        public void AddAnExistingIngredientToAnExistingRecipe()
+        public void AttachAnExistingIngredientToAnExistingRecipe()
         {
             // Arrange
 
-            EFRepository repo = new EFRepository();
-            RecipesController controllerAdd = new RecipesController(repo);
-            IngredientsController controllerAddI = new IngredientsController(repo);
-            RecipesController controllerCleanup = new RecipesController(repo);
-            RecipeVM recipeVM = new RecipeVM();
-            recipeVM.Description = "test AddAnExistingIngredientToAnExistingRecipe";
-            IngredientVM ingredientVM = new IngredientVM();
-            ingredientVM.Description = "test AddAnExistingIngredientToAnExistingRecipe";
-            controllerAdd.PostEdit(recipeVM);
-            controllerAddI.PostEdit(ingredientVM);
+           EFRepository<Recipe, RecipeVM> repo = new EFRepository<Recipe, RecipeVM>();
+           EFRepository<Ingredient, IngredientVM> repoIngredient= new EFRepository<Ingredient, IngredientVM>();
+            RecipesController controller = new RecipesController(); 
 
-            var result1 = (from m in repo.Recipes
-                           where m.Description == "test AddAnExistingIngredientToAnExistingRecipe"
-                           select m).AsQueryable();
-
-            Recipe recipe1 = result1.FirstOrDefault();
-
-            var result2 = (from m in repo.Ingredients
-                           where m.Description == "test AddAnExistingIngredientToAnExistingRecipe"
-                           select m).AsQueryable();
-
-            Ingredient ingredient2 = result2.FirstOrDefault();
+            Recipe recipe = GetRecipe(repo, "test AttachAnExistingIngredientToAnExistingRecipe");
+            Ingredient ingredient = GetIngredient(repoIngredient, "test AttachAnExistingIngredientToAnExistingRecipe"); 
 
             // Act
-            controllerAdd.AttachIngredient(recipe1.ID, ingredient2.ID);
+            controller.AttachIngredient(recipe.ID, ingredient.ID);
 
             // Assert 
-            Assert.AreEqual(1, recipe1.Ingredients.Count());
+            Assert.AreEqual(1, recipe.Ingredients.Count());
             // how do I know the correct ingredient was added?
-            Assert.AreEqual(ingredient2.ID, recipe1.Ingredients.First().ID);
+            Assert.AreEqual(ingredient.ID, recipe.Ingredients.First().ID);
 
             // Cleanup
-            IngredientsController icontroller = new IngredientsController(repo);
+            IngredientsController  controllerCleanupIngredient = new IngredientsController();;
+            RecipesController controllerCleanupRecipe = new RecipesController();
 
-            RecipeVM recipe1VM = Mapper.Map<Recipe, RecipeVM>(recipe1);
-            IngredientVM ingredient2VM = Mapper.Map<Ingredient, IngredientVM>(ingredient2);
-            controllerCleanup.DeleteConfirmed(recipe1VM.ID);
-            icontroller.DeleteConfirmed(ingredient2VM.ID);
+            RecipeVM recipeVM = Mapper.Map<Recipe, RecipeVM>(recipe);
+            IngredientVM ingredientVM = Mapper.Map<Ingredient, IngredientVM>(ingredient);
+
+            controllerCleanupRecipe.DeleteConfirmed(recipeVM.ID);
+            controllerCleanupIngredient.DeleteConfirmed(ingredientVM.ID);
         }
 
         [TestMethod]
@@ -477,29 +468,16 @@ namespace MsTestIntegrationTests
         public void NotDeleteAnIngredientAfterIngredientIsDetached()
         {
             // Arrange
-            EFRepository repo = new EFRepository();
-            RecipesController controllerAdd = new RecipesController(repo);
-            RecipesController controllerSubtract = new RecipesController(repo);
-            IngredientsController controllerAddI = new IngredientsController(repo);
-            RecipeVM recipeVM = new RecipeVM();
-            recipeVM.Description = "test NotDeleteAnIngredientAfterIngredientIsDetached";
-            IngredientVM ingredientVM = new IngredientVM();
-            ingredientVM.Description = "test NotDeleteAnIngredientAfterIngredientIsDetached";
-            controllerAdd.PostEdit(recipeVM);
-            controllerAddI.PostEdit(ingredientVM);
+           EFRepository<Recipe, RecipeVM> repo = new EFRepository<Recipe, RecipeVM>(); 
+           EFRepository<Ingredient, IngredientVM> repoIngredient = new EFRepository<Ingredient, IngredientVM>();
+            RecipesController controller  = new RecipesController();  
+            RecipesController controllerSubtract  = new RecipesController();
 
-            var result1 = (from m in repo.Recipes
-                           where m.Description == "test NotDeleteAnIngredientAfterIngredientIsDetached"
-                           select m).AsQueryable();
+            Recipe recipe1 = GetRecipe(repo, "test NotDeleteAnIngredientAfterIngredientIsDetached");
 
-            Recipe recipe1 = result1.FirstOrDefault();
 
-            var result2 = (from m in repo.Ingredients
-                           where m.Description == "test NotDeleteAnIngredientAfterIngredientIsDetached"
-                           select m).AsQueryable();
-
-            Ingredient ingredient2 = result2.FirstOrDefault();
-            controllerAdd.AttachIngredient(recipe1.ID, ingredient2.ID);
+            Ingredient ingredient2 = GetIngredient(repoIngredient, "test NotDeleteAnIngredientAfterIngredientIsDetached");
+            controller.AttachIngredient(recipe1.ID, ingredient2.ID);
             // Act
             controllerSubtract.RemoveIngredient(recipe1.ID, ingredient2.ID);
 
@@ -508,8 +486,8 @@ namespace MsTestIntegrationTests
             Assert.IsNotNull(ingredient2);
 
             // Cleanup
-            RecipesController controllerCleanupRecipe = new RecipesController(repo);
-            IngredientsController controllerCleanupIngredient = new IngredientsController(repo);
+            RecipesController controllerCleanupRecipe = new RecipesController();
+            IngredientsController controllerCleanupIngredient = new IngredientsController();;
             controllerCleanupRecipe.DeleteConfirmed(recipe1.ID);
             controllerCleanupIngredient.DeleteConfirmed(ingredient2.ID);
         }
@@ -519,22 +497,17 @@ namespace MsTestIntegrationTests
         public void ReturnIndexViewWithWarningWhenAttachingExistIngredientToNonExistingRecipe()
         {
             // Arrange
-            EFRepository repo = new EFRepository();
-            RecipesController controllerAdd = new RecipesController(repo);
-            RecipesController controllerSubtract = new RecipesController(repo);
-            IngredientsController controllerAddI = new IngredientsController(repo);
-            IngredientVM ingredientVM = new IngredientVM();
-            ingredientVM.Description = "test ReturnIndexViewWhenAttachingExistIngredientToNonExistingRecipe";
-            controllerAddI.PostEdit(ingredientVM);
+           EFRepository<Recipe, RecipeVM> repo = new EFRepository<Recipe, RecipeVM>();
+           EFRepository<Ingredient, IngredientVM> repoIngredient = new EFRepository<Ingredient, IngredientVM>();
+            RecipesController controllerAttach = new RecipesController();
+            RecipesController controllerSubtract = new RecipesController();
 
-            var result2 = (from m in repo.Ingredients
-                           where m.Description == "test ReturnIndexViewWhenAttachingExistIngredientToNonExistingRecipe"
-                           select m).AsQueryable();
+            string description = "test ReturnIndexViewWhenAttachingExistIngredientToNonExistingRecipe";
 
-            Ingredient ingredient2 = result2.FirstOrDefault();
+            Ingredient ingredient = GetIngredient(repoIngredient   , description);
 
             // Act
-            AlertDecoratorResult adr = (AlertDecoratorResult)controllerAdd.AttachIngredient(-1, ingredient2.ID);
+            AlertDecoratorResult adr = (AlertDecoratorResult)controllerAttach.AttachIngredient(-1, ingredient.ID);
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
             var routeValues = rtrr.RouteValues.Values;
 
@@ -553,30 +526,22 @@ namespace MsTestIntegrationTests
             finally
             {
                 // Cleanup 
-                IngredientsController controllerCleanupIngredient = new IngredientsController(repo);
-                controllerCleanupIngredient.DeleteConfirmed(ingredient2.ID);
+                IngredientsController controllerCleanupIngredient = new IngredientsController();;
+                controllerCleanupIngredient.DeleteConfirmed(ingredient.ID);
             }
         }
 
         [TestMethod]
         [TestCategory("Attach-Detach")]
-        public void ReturnRecipeEditViewWithWarningMessageWhenAddingNonExistingIngredientToExistingRrecipe()
+        public void ReturnRecipeEditViewWithWarningMessageWhenAttachingNonExistingIngredientToExistingRrecipe()
         {
             // Arrange
-            EFRepository repo = new EFRepository();
-            RecipesController controllerAddRecipe = new RecipesController(repo);
-            RecipeVM rvm = new RecipeVM();
-            rvm.Description = "test ReturnRecipeEditViewWithErrorMessageWhenAddingNonExistingIngredientToExistingRrecipe";
-            controllerAddRecipe.PostEdit(rvm);
-            RecipesController controllerAttachIngredient = new RecipesController(repo);
-            var result1 = (from m in repo.Recipes
-                           where m.Description == "test ReturnRecipeEditViewWithErrorMessageWhenAddingNonExistingIngredientToExistingRrecipe"
-                           select m).AsQueryable();
-
-            Recipe recipe1 = result1.FirstOrDefault();
+           EFRepository<Recipe, RecipeVM> repo = new EFRepository<Recipe, RecipeVM>();  
+            RecipesController controller = new RecipesController(); 
+            Recipe recipe  = GetRecipe(repo, "test ReturnRecipeEditViewWithErrorMessageWhenAttachingNonExistingIngredientToExistingRrecipe");
 
             // Act  
-            AlertDecoratorResult adr = (AlertDecoratorResult)controllerAttachIngredient.AttachIngredient(recipe1.ID, -1);
+            AlertDecoratorResult adr = (AlertDecoratorResult)controller.AttachIngredient(recipe.ID, -1);
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
             var routeValues = rtrr.RouteValues.Values;
 
@@ -584,10 +549,10 @@ namespace MsTestIntegrationTests
             try
             {
                 Assert.AreEqual("alert-warning", adr.AlertClass);
-                Assert.AreEqual("Please choose an ingredient", adr.Message);
-                 Assert.AreEqual(3, routeValues.Count);
-                 Assert.AreEqual(UIViewType.Details.ToString(), routeValues.ElementAt(1).ToString());
-                 Assert.AreEqual(UIViewType.Edit.ToString(), routeValues.ElementAt(2).ToString());
+                Assert.AreEqual("Please choose a(n) Ingredient", adr.Message);
+                Assert.AreEqual(3, routeValues.Count);
+                Assert.AreEqual(UIViewType.Details.ToString(), routeValues.ElementAt(2).ToString());
+                Assert.AreEqual(UIViewType.Edit.ToString(), routeValues.ElementAt(1).ToString());
             }
             catch (Exception)
             {
@@ -596,8 +561,8 @@ namespace MsTestIntegrationTests
             finally
             {
                 // Cleanup 
-                RecipesController controllerCleanupIngredient = new RecipesController(repo);
-                controllerCleanupIngredient.DeleteConfirmed(recipe1.ID);
+                RecipesController controllerCleanupRecipe = new RecipesController();
+                controllerCleanupRecipe.DeleteConfirmed(recipe.ID);
             }
         }
 
@@ -606,8 +571,8 @@ namespace MsTestIntegrationTests
         public void ReturnIndexViewWithWarningWhenAttachingNonExistIngredientToNonExistingRecipe()
         {
             // Arrange
-            EFRepository repo = new EFRepository();
-            RecipesController controller  = new RecipesController(repo);
+           EFRepository<Recipe, RecipeVM> repo = new EFRepository<Recipe, RecipeVM>();
+            RecipesController controller = new RecipesController();
 
             // Act 
             AlertDecoratorResult adr = (AlertDecoratorResult)controller.AttachIngredient(-1, -1);
@@ -618,7 +583,7 @@ namespace MsTestIntegrationTests
             Assert.AreEqual("alert-warning", adr.AlertClass);
             Assert.AreEqual("Recipe was not found", adr.Message);
             Assert.AreEqual(1, routeValues.Count);
-            Assert.AreEqual(UIViewType.Index.ToString(), routeValues.ElementAt(0).ToString()); 
+            Assert.AreEqual(UIViewType.Index.ToString(), routeValues.ElementAt(0).ToString());
 
             // Clean up not needed
 
@@ -626,38 +591,26 @@ namespace MsTestIntegrationTests
 
         [TestMethod]
         [TestCategory("Attach-Detach")]
-        public void ReturnRecipeEditViewWithSuccessMessageWhenRemovingExistingIngredientFromExistingRecipe()
+        public void ReturnRecipeEditViewWithSuccessMessageWhenDetachingExistingIngredientFromExistingRecipe()
         {
             // Arrange
-            EFRepository repo = new EFRepository();
-            RecipesController controllerAddRecipe = new RecipesController(repo);
-            RecipesController controllerAttachIngredient = new RecipesController(repo);
-            RecipesController controllerRemoveIngredient = new RecipesController(repo);
-            IngredientsController controllerIngredient = new IngredientsController(repo);
+           EFRepository<Recipe, RecipeVM> repo = new EFRepository<Recipe, RecipeVM>();
+           EFRepository<Ingredient, IngredientVM> repoIngredient = new EFRepository<Ingredient, IngredientVM>();
 
-            RecipeVM rvm = new RecipeVM();
-            rvm.Description = "test ReturnRecipeEditViewWithSuccessMessageWhenRemovingExistingIngredientFromExistingRecipe";
-            controllerAddRecipe.PostEdit(rvm);
-          
-            var result1 = (from m in repo.Recipes
-                           where m.Description == "test ReturnRecipeEditViewWithSuccessMessageWhenRemovingExistingIngredientFromExistingRecipe"
-                           select m).AsQueryable();
+            RecipesController controllerAttachIngredient = new RecipesController();
+            RecipesController controllerRemoveIngredient = new RecipesController(); 
+  
+            Recipe recipe  = GetRecipe(repo, "test ReturnRecipeEditViewWithSuccessMessageWhenDetachingExistingIngredientFromExistingRecipe");
 
-            Recipe recipe1 = result1.FirstOrDefault();
 
-            IngredientVM ivm = new IngredientVM();
-           ivm.Description = "test ReturnRecipeEditViewWithSuccessMessageWhenRemovingExistingIngredientFromExistingRecipe";
-            controllerIngredient.PostEdit(ivm);
 
-            var result2 = (from m in repo.Ingredients
-                           where m.Description == "test ReturnRecipeEditViewWithSuccessMessageWhenRemovingExistingIngredientFromExistingRecipe"
-                           select m).AsQueryable();
 
-            Ingredient ingredient2 = result2.FirstOrDefault();
-            controllerAttachIngredient.AttachIngredient(recipe1.ID, ingredient2.ID);
+
+            Ingredient ingredient  = GetIngredient(repoIngredient, "test ReturnRecipeEditViewWithSuccessMessageWhenDetachingExistingIngredientFromExistingRecipe");
+            controllerAttachIngredient.AttachIngredient(recipe.ID, ingredient.ID);
 
             // Act          
-            AlertDecoratorResult adr = (AlertDecoratorResult)   controllerRemoveIngredient.RemoveIngredient(recipe1.ID, ingredient2.ID); 
+            AlertDecoratorResult adr = (AlertDecoratorResult)controllerRemoveIngredient.RemoveIngredient(recipe.ID, ingredient.ID);
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
             var routeValues = rtrr.RouteValues.Values;
 
@@ -665,7 +618,7 @@ namespace MsTestIntegrationTests
             try
             {
                 Assert.AreEqual("alert-success", adr.AlertClass);
-                Assert.AreEqual("Ingredient was Successfully Removed", adr.Message);
+                Assert.AreEqual("Ingredient was Successfully Detached!", adr.Message);
                 Assert.AreEqual(3, routeValues.Count);
                 Assert.AreEqual(UIViewType.Edit.ToString(), routeValues.ElementAt(1).ToString());
                 Assert.AreEqual(UIViewType.Details.ToString(), routeValues.ElementAt(2).ToString());
@@ -677,31 +630,26 @@ namespace MsTestIntegrationTests
             finally
             {
                 // Cleanup 
-                RecipesController controllerCleanupRecipe = new RecipesController(repo);
-                controllerCleanupRecipe.DeleteConfirmed(recipe1.ID);
-                IngredientsController controllerCleanupIngredient = new IngredientsController(repo);
-                controllerCleanupIngredient.DeleteConfirmed(ingredient2.ID);
+                RecipesController controllerCleanupRecipe = new RecipesController();
+                controllerCleanupRecipe.DeleteConfirmed(recipe.ID);
+                IngredientsController controllerCleanupIngredient = new IngredientsController();;
+                controllerCleanupIngredient.DeleteConfirmed(ingredient.ID);
             }
         }
 
         [TestMethod]
         [TestCategory("Attach-Detach")]
-        public void ReturnIndexViewWithWarningWhenDetachingExistingIngredientAttachedToNoExistingRecipe()
+        public void ReturnIndexViewWithWarningWhenDetachingExistingIngredientAttachedToNonExistingRecipe()
         {
             // Arrange
-            EFRepository repo = new EFRepository();
-            IngredientsController controllerIngredient = new IngredientsController(repo);
-            RecipesController controllerRemoveIngredient = new RecipesController(repo);
+           EFRepository<Recipe, RecipeVM> repo = new EFRepository<Recipe, RecipeVM>();
+           EFRepository<Ingredient, IngredientVM> repoIngredient = new EFRepository<Ingredient, IngredientVM>();
+            RecipesController controllerDetachIngredient = new RecipesController();
+            string description = "test ReturnIndexViewWithWarningWhenDetachingExistingIngredientAttachedToNoExistingRecipe";
 
-            IngredientVM ivm = new IngredientVM();
-            ivm.Description = "test ReturnIndexViewWithWarningWhenDetachingExistingIngredientAttachedToNoExistingRecipe";
-            controllerIngredient.PostEdit(ivm);
-
-            Ingredient ingredient = ((from m in repo.Ingredients
-                                      where m.Description == "test ReturnRecipeEditViewWithSuccessMessageWhenRemovingExistingIngredientFromExistingRecipe"
-                                      select m).AsQueryable()).FirstOrDefault();
+            Ingredient ingredient = GetIngredient(repoIngredient, description);
             // Act  
-            AlertDecoratorResult adr = (AlertDecoratorResult)controllerRemoveIngredient.RemoveIngredient(-1, ingredient.ID);
+            AlertDecoratorResult adr = (AlertDecoratorResult)controllerDetachIngredient.RemoveIngredient(-1, ingredient.ID);
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
             var routeValues = rtrr.RouteValues.Values;
 
@@ -711,7 +659,7 @@ namespace MsTestIntegrationTests
                 Assert.AreEqual("alert-warning", adr.AlertClass);
                 Assert.AreEqual("Recipe was not found", adr.Message);
                 Assert.AreEqual(1, routeValues.Count);
-                Assert.AreEqual(UIViewType.Index.ToString(), routeValues.ElementAt(0).ToString()); 
+                Assert.AreEqual(UIViewType.Index.ToString(), routeValues.ElementAt(0).ToString());
             }
             catch (Exception)
             {
@@ -720,24 +668,142 @@ namespace MsTestIntegrationTests
             finally
             {
                 // Cleanup 
-          
-                IngredientsController controllerCleanupIngredient = new IngredientsController(repo);
+
+                IngredientsController controllerCleanupIngredient = new IngredientsController();;
                 controllerCleanupIngredient.DeleteConfirmed(ingredient.ID);
             }
         }
 
         [TestMethod]
         [TestCategory("Attach-Detach")]
-        public void ReturnRecipeEditViewWithWarningWhenRemovingExistingingredientNotAttachedToAnExistingRrecipe()
+        public void ReturnRecipeIndexViewWithWarningWhenDetachingExistingingredientNotAttachedToAnExistingRecipe()
         {
             // Arrange
-
+           EFRepository<Recipe, RecipeVM> repo = new EFRepository<Recipe, RecipeVM>();
+            EFRepository<Ingredient, IngredientVM> repoIngredient = new EFRepository<Ingredient, IngredientVM>();
+            IngredientsController controllerIngredient = new IngredientsController();;
+            RecipesController controllerDetachIngredient = new RecipesController();
+            string description = "test ReturnRecipeIndexViewWithWarningWhenDetachingExistingingredientNotAttachedToAnExistingRecipe";
+            Ingredient ingredient = GetIngredient(repoIngredient, description);
             // Act 
+            AlertDecoratorResult adr = (AlertDecoratorResult)controllerDetachIngredient.RemoveIngredient(-1, ingredient.ID);
+            RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
+            var routeValues = rtrr.RouteValues.Values;
 
             // Assert
-            Assert.Fail();
+            try
+            {
+                Assert.AreEqual("alert-warning", adr.AlertClass);
+                Assert.AreEqual("Recipe was not found", adr.Message);
+                Assert.AreEqual(1, routeValues.Count);
+                Assert.AreEqual(UIViewType.Index.ToString(), routeValues.ElementAt(0).ToString());
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                // Cleanup 
 
-            // Clean up
+                IngredientsController controllerCleanupIngredient = new IngredientsController();
+                controllerCleanupIngredient.DeleteConfirmed(ingredient.ID);
+            }
+        }
+
+        [TestMethod]
+        [TestCategory("Attach-Detach")]
+        public void ReturnRecipeEditViewWithWarningMessageWhenDetachingNonExistingIngredientAttachedToExistingRecipe()
+        {
+            // Arrange
+           EFRepository<Recipe, RecipeVM> repo = new EFRepository<Recipe, RecipeVM>();
+            RecipesController controllerRecipe = new RecipesController();
+            RecipesController controllerDetachIngredient = new RecipesController();
+            Recipe recipe = GetRecipe(repo, "test ReturnRecipeEditViewWithWarningMessageWhenDetachingNonExistingIngredientAttachedToExistingRecipe");
+            // Act 
+            AlertDecoratorResult adr = (AlertDecoratorResult)controllerDetachIngredient.RemoveIngredient(recipe.ID, -1);
+            RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
+            var routeValues = rtrr.RouteValues.Values;
+
+            // Assert
+            try
+            {
+                Assert.AreEqual("alert-warning", adr.AlertClass);
+                Assert.AreEqual("Please choose a(n) Ingredient", adr.Message);
+                Assert.AreEqual(3, routeValues.Count);
+                Assert.AreEqual(UIViewType.Details.ToString(), routeValues.ElementAt(2).ToString());
+                Assert.AreEqual(UIViewType.Edit.ToString(), routeValues.ElementAt(1).ToString());
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                // Cleanup 
+
+                RecipesController controllerCleanup = new RecipesController();
+                controllerCleanup.DeleteConfirmed(recipe.ID);
+            }
+        }
+
+        [TestMethod]
+        [TestCategory("Attach-Detach")]
+        public void ReturnIndexViewWithWarningMessageWhenDetachingNonExistingIngredientAttachedToANonExistingRecipe()
+        {
+            // Arrange
+           EFRepository<Recipe, RecipeVM> repo = new EFRepository<Recipe, RecipeVM>();
+            RecipesController controller = new RecipesController();
+
+            // Act 
+            AlertDecoratorResult adr = (AlertDecoratorResult)controller.RemoveIngredient(-1, -1);
+
+            RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
+            var routeValues = rtrr.RouteValues.Values;
+
+            // Assert
+            try
+            {
+                Assert.AreEqual("alert-warning", adr.AlertClass);
+                Assert.AreEqual("Recipe was not found", adr.Message);
+                Assert.AreEqual(1, routeValues.Count);
+                Assert.AreEqual(UIViewType.Index.ToString(), routeValues.ElementAt(0).ToString());
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                // Cleanup not needed - this is kept for the sake of completeness
+            }
+        }
+
+      internal Ingredient GetIngredient(EFRepository<Ingredient, IngredientVM> repo, string description)
+        {
+            IngredientsController controller = new IngredientsController();
+            IngredientVM ivm = new IngredientVM();
+            ivm.Description = description;
+            controller.PostEdit(ivm);
+
+            Ingredient ingredient = ((from m in repo.GetAll()
+                                      where m.Description == description
+                                      select m).AsQueryable()).FirstOrDefault();
+            return ingredient;
+        }
+
+
+        internal Recipe GetRecipe(EFRepository<Recipe, RecipeVM> repo, string description)
+        {
+            RecipesController controller = new RecipesController();
+            RecipeVM vm = new RecipeVM();
+            vm.Description = description;
+            controller.PostEdit(vm);
+
+            Recipe recipe = ((from m in repo.GetAll()
+                              where m.Description == description
+                              select m).AsQueryable()).FirstOrDefault();
+            return recipe;
         }
     }
 }

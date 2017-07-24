@@ -23,8 +23,8 @@ namespace MsTestIntegrationTests
         public void CreateAnPerson()
         {
             // Arrange
-            EFRepository repo = new EFRepository(); ;
-            PersonsController controller = new PersonsController(repo);
+             EFRepository<Person,PersonVM>  repo = new  EFRepository<Person,PersonVM>(); ;
+            PersonsController controller = new PersonsController();
             // Act
             ViewResult vr = controller.Create(LambAndLentil.UI.UIViewType.Create);
             PersonVM vm = (PersonVM)vr.Model;
@@ -43,8 +43,8 @@ namespace MsTestIntegrationTests
         public void SaveAValidPerson()
         {
             // Arrange
-            EFRepository repo = new EFRepository(); ;
-            PersonsController controller = new PersonsController(repo);
+             EFRepository<Person,PersonVM> repo = new  EFRepository<Person,PersonVM>(); ;
+            PersonsController controller = new PersonsController();
             PersonVM vm = new PersonVM();
             vm.Name = "test";
             vm.Description = "Test.SaveAValidPerson";
@@ -71,11 +71,8 @@ namespace MsTestIntegrationTests
             }
             finally
             {
-                // Clean Up - should run a  delete test to make sure this works after this
-                List<Person> persons = repo.Persons.ToList<Person>();
-                Person person = persons.Where(m => m.Name == "First Name Last Name").FirstOrDefault();
-
-                // Delete it
+                // Clean Up - should run a  delete test to make sure this works after this 
+                Person person = repo.GetAll().Where(m => m.Name == "First Name Last Name").FirstOrDefault(); 
                 controller.DeleteConfirmed(person.ID);
             }
         }
@@ -85,12 +82,12 @@ namespace MsTestIntegrationTests
         public void SaveEditedPersonWithNameChange()
         {
             // Arrange
-            EFRepository repo = new EFRepository(); ;
-            PersonsController controller1 = new PersonsController(repo);
-            PersonsController controller2 = new PersonsController(repo);
-            PersonsController controller3 = new PersonsController(repo);
-            PersonsController controller4 = new PersonsController(repo);
-            PersonsController controller5 = new PersonsController(repo);
+             EFRepository<Person,PersonVM> repo = new  EFRepository<Person,PersonVM>(); ;
+            PersonsController controller1 = new PersonsController();
+            PersonsController controller2 = new PersonsController();
+            PersonsController controller3 = new PersonsController();
+            PersonsController controller4 = new PersonsController();
+            PersonsController controller5 = new PersonsController();
             PersonVM vm = new PersonVM();
             vm.FirstName = "0000";
             vm.LastName = "test";
@@ -99,12 +96,12 @@ namespace MsTestIntegrationTests
             // Act 
             ActionResult ar1 = controller1.PostEdit(vm);
             ViewResult view1 = controller2.Index();
-            ListVM listVM = (ListVM)view1.Model;
-            var result = (from m in listVM.Persons
+           ListVM<Person,PersonVM>  listVM = ( ListVM<Person, PersonVM> )view1.Model;
+            var result = (from m in listVM.Entities
                           where m.Name == "0000 test"
-                          select m).AsQueryable();
+                          select m).AsQueryable().FirstOrDefault();
 
-            Person person = result.FirstOrDefault();
+            PersonVM person = Mapper.Map<Person,PersonVM>(result);
 
             try
             {
@@ -123,12 +120,12 @@ namespace MsTestIntegrationTests
             vm.ID = person.ID;
             ActionResult ar2 = controller3.PostEdit(vm);
             ViewResult view2 = controller4.Index();
-            ListVM listVM2 = (ListVM)view2.Model;
-            var result2 = (from m in listVM2.Persons
+          ListVM<Person, PersonVM>  listVM2 =  (ListVM<Person, PersonVM> )view2.Model;
+            var result2 = (from m in listVM2.Entities
                            where m.Name == "0000 test Edited"
-                           select m).AsQueryable();
+                           select m).AsQueryable().FirstOrDefault();
 
-            person = result2.FirstOrDefault();
+            person = Mapper.Map<Person,PersonVM>(result2);
 
             try
             {
@@ -151,12 +148,12 @@ namespace MsTestIntegrationTests
         public void SaveEditedPersonWithDescriptionChange()
         {
             // Arrange
-            EFRepository repo = new EFRepository(); ;
-            PersonsController controller1 = new PersonsController(repo);
-            PersonsController controller2 = new PersonsController(repo);
-            PersonsController controller3 = new PersonsController(repo);
-            PersonsController controller4 = new PersonsController(repo);
-            PersonsController controller5 = new PersonsController(repo);
+             EFRepository<Person,PersonVM> repo = new  EFRepository<Person,PersonVM>(); ;
+            PersonsController controller1 = new PersonsController();
+            PersonsController controller2 = new PersonsController();
+            PersonsController controller3 = new PersonsController();
+            PersonsController controller4 = new PersonsController();
+            PersonsController controller5 = new PersonsController();
             PersonVM vm = new PersonVM();
             vm.Description = "SaveEditedPersonWithDescriptionChange Pre-test";
 
@@ -164,12 +161,13 @@ namespace MsTestIntegrationTests
             // Act 
             ActionResult ar1 = controller1.PostEdit(vm);
             ViewResult view1 = controller2.Index();
-            ListVM listVM = (ListVM)view1.Model;
-            var result = (from m in listVM.Persons
+            ListVM<Person, PersonVM>  listVM =  (ListVM<Person, PersonVM> )view1.Model;
+            var result = (from m in listVM.Entities
                           where m.Description == "SaveEditedPersonWithDescriptionChange Pre-test"
-                          select m).AsQueryable();
+                          select m).AsQueryable().FirstOrDefault();
 
-            Person person = result.FirstOrDefault();
+           
+            PersonVM person = Mapper.Map<Person, PersonVM>(result);
             try
             {
                 // verify initial value:
@@ -188,12 +186,11 @@ namespace MsTestIntegrationTests
 
             ActionResult ar2 = controller3.PostEdit(vm);
             ViewResult view2 = controller4.Index();
-            ListVM listVM2 = (ListVM)view2.Model;
-            var result2 = (from m in listVM2.Persons
+           ListVM<Person, PersonVM>  listVM2 =  (ListVM<Person, PersonVM> )view2.Model;
+            var result2 = (from m in listVM2.Entities
                            where m.Description == "SaveEditedPersonWithDescriptionChange Post-test"
-                           select m).AsQueryable();
-
-            person = result2.FirstOrDefault();
+                           select m).AsQueryable().FirstOrDefault();
+           person = Mapper.Map<Person, PersonVM>(result2); 
 
             try
             {
@@ -218,23 +215,23 @@ namespace MsTestIntegrationTests
         public void ActuallyDeleteAPersonFromTheDatabase()
         {
             // Arrange
-            EFRepository repo = new EFRepository(); ;
-            PersonsController editController = new PersonsController(repo);
-            PersonsController indexController = new PersonsController(repo);
-            PersonsController deleteController = new PersonsController(repo);
+             EFRepository<Person,PersonVM> repo = new  EFRepository<Person,PersonVM>(); ;
+            PersonsController editController = new PersonsController();
+            PersonsController indexController = new PersonsController();
+            PersonsController deleteController = new PersonsController();
             PersonVM vm = new PersonVM();
             vm.Description = "Test.ActuallyDeleteAPersonfromDB";
             ActionResult ar = editController.PostEdit(vm);
             ViewResult view = indexController.Index();
-            ListVM listVM = (ListVM)view.Model;
-            var result = (from m in listVM.Persons
+             ListVM<Person, PersonVM>  listVM =  (ListVM<Person, PersonVM> )view.Model;
+            var result = (from m in listVM.Entities
                           where m.Description == vm.Description
-                          select m).AsQueryable();
-            Person item = result.FirstOrDefault();
+                          select m).AsQueryable().FirstOrDefault();
+            PersonVM item =   Mapper.Map<Person, PersonVM>(result); ;
 
             //Act
             deleteController.DeleteConfirmed(item.ID);
-            var deletedItem = (from m in repo.Persons
+            var deletedItem = (from m in repo.GetAll() 
                                where m.Description == vm.Description
                                select m).AsQueryable();
 
@@ -254,20 +251,21 @@ namespace MsTestIntegrationTests
             PersonVM personVM = new PersonVM(CreationDate);
             personVM.Description = "001 Test ";
 
-            EFRepository repo = new EFRepository(); ;
-            PersonsController controllerEdit = new PersonsController(repo);
-            PersonsController controllerView = new PersonsController(repo);
-            PersonsController controllerDelete = new PersonsController(repo);
+             EFRepository<Person,PersonVM> repo = new  EFRepository<Person,PersonVM>(); ;
+            PersonsController controllerEdit = new PersonsController();
+            PersonsController controllerView = new PersonsController();
+            PersonsController controllerDelete = new PersonsController();
 
             // Act
             controllerEdit.PostEdit(personVM);
             ViewResult view = controllerView.Index();
-            ListVM listVM = (ListVM)view.Model;
-            var result = (from m in listVM.Persons
+           ListVM<Person, PersonVM>  listVM =  (ListVM<Person, PersonVM> )view.Model;
+            var result = (from m in listVM.Entities
                           where m.Description == "001 Test "
-                          select m).AsQueryable();
+                          select m).AsQueryable().FirstOrDefault();
 
-            Person person = result.FirstOrDefault();
+           PersonVM person = Mapper.Map<Person, PersonVM>(result);
+         
 
             DateTime shouldBeSameDate = person.CreationDate;
             try
@@ -291,12 +289,12 @@ namespace MsTestIntegrationTests
         public void UpdateTheModificationDateBetweenPostedEdits()
         {
             // Arrange
-            EFRepository repo = new EFRepository();
-            PersonsController controllerPost = new PersonsController(repo);
-            PersonsController controllerPost1 = new PersonsController(repo);
-            PersonsController controllerView = new PersonsController(repo);
-            PersonsController controllerView1 = new PersonsController(repo);
-            PersonsController controllerDelete = new PersonsController(repo);
+             EFRepository<Person,PersonVM> repo = new  EFRepository<Person,PersonVM>();
+            PersonsController controllerPost = new PersonsController();
+            PersonsController controllerPost1 = new PersonsController();
+            PersonsController controllerView = new PersonsController();
+            PersonsController controllerView1 = new PersonsController();
+            PersonsController controllerDelete = new PersonsController();
 
             PersonVM vm = new PersonVM();
             vm.Name = "002 Test Mod";
@@ -307,26 +305,26 @@ namespace MsTestIntegrationTests
             // Act
             controllerPost.PostEdit(vm);
             ViewResult view = controllerView.Index();
-            ListVM listVM = (ListVM)view.Model;
-            var result = (from m in listVM.Persons
+            ListVM<Person, PersonVM>  listVM = (ListVM<Person, PersonVM> )view.Model;
+            var result = (from m in listVM.Entities
                           where m.Description == "Test.UpdateModDate"
-                          select m).AsQueryable();
+                          select m).AsQueryable().FirstOrDefault();
 
-            Person person = result.FirstOrDefault();
-            vm = Mapper.Map<Person, PersonVM>(person);
+            PersonVM person = Mapper.Map<Person, PersonVM>(result);
+            
 
-            vm.Description = "I've been edited to delay a bit";
+           person.Description = "I've been edited to delay a bit";
 
-            controllerPost1.PostEdit(vm);
+            controllerPost1.PostEdit(person);
 
 
             ViewResult view1 = controllerView.Index();
-            listVM = (ListVM)view1.Model;
-            var result1 = (from m in listVM.Persons
+            listVM =  (ListVM<Person,PersonVM> )view1.Model;
+            var result1 = (from m in listVM.Entities
                            where m.Description == "I've been edited to delay a bit"
-                           select m).AsQueryable();
-
-            person = result1.FirstOrDefault();
+                           select m).AsQueryable().FirstOrDefault(); 
+             
+            person = Mapper.Map<Person, PersonVM>(result1);
 
             DateTime shouldBeSameDate = person.CreationDate;
             DateTime shouldBeLaterDate = person.ModifiedDate;
