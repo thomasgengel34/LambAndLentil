@@ -10,7 +10,14 @@ using System.Collections.Generic;
 namespace LambAndLentil.UI.Controllers
 {
     public class ShoppingListsController : BaseController
-    { 
+    {
+        
+
+        public ShoppingListsController(IRepository<ShoppingList, ShoppingListVM> repo)
+        {
+
+        }
+
 
         // GET: ShoppingList
         public ViewResult Index(int page = 1)

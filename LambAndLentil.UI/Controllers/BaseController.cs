@@ -17,11 +17,7 @@ namespace LambAndLentil.UI.Controllers
     {
         public int PageSize { get; set; }
 
-        public BaseController()
-        {
-
-        }
-
+       
 
         private Type GetControllerType<TVM>()
         {
@@ -40,7 +36,7 @@ namespace LambAndLentil.UI.Controllers
         {
             PageSize = 8;
             ListVM<T,TVM> model = new ListVM<T,TVM>();
-           model.List = BaseVM.GetIndexedModel<T,TVM>(PageSize, page);
+           model.List = (IEnumerable<TVM>)BaseVM.GetIndexedModel<T,TVM>(PageSize, page);
             model.PagingInfo = BaseVM.PagingFunction<T,TVM>(page, PageSize);
             return View(UIViewType.Index.ToString(), model);
         }
@@ -48,10 +44,10 @@ namespace LambAndLentil.UI.Controllers
 
 
         public ActionResult BaseDetails<T, TVM>(UIControllerType uIController, int id = 1, UIViewType actionMethod = UIViewType.Details)
-            where T : class
+            where T :BaseEntity,IEntity
            where TVM : BaseVM, IEntity
         {
-            IRepository<T, TVM> repo = new EFRepository<T, TVM>();
+          IRepository<T, TVM> repo = new EFRepository<T, TVM>();
 
             ViewBag.Title = actionMethod.ToString();
             if (actionMethod == UIViewType.Delete)
@@ -88,7 +84,7 @@ namespace LambAndLentil.UI.Controllers
         }
 
         public ViewResult BaseEdit<T, TVM>(UIControllerType uIControllerType, int id = 1, UIViewType actionMethod = UIViewType.Edit)
-            where T : class
+            where T : BaseEntity,IEntity
         where TVM : BaseVM, IEntity
         {
             IRepository<T, TVM> repo = new EFRepository<T, TVM>();
@@ -120,7 +116,7 @@ namespace LambAndLentil.UI.Controllers
         }
 
         public ActionResult BasePostEdit<T, TVM>(IBaseVM vm)
-            where T : class
+            where T : BaseEntity,IEntity
             where TVM : BaseVM, IEntity, new()
         {
             MvcApplication.InitializeMap();  // needed for testing.  This is being run in Application_Start normally. 
@@ -151,7 +147,7 @@ namespace LambAndLentil.UI.Controllers
 
 
         public ActionResult BaseDelete<T,TVM>(UIControllerType uiControllerType, int id = 1, UIViewType actionMethod = UIViewType.Delete)
-            where T:class
+            where T:BaseEntity,IEntity
             where TVM : BaseVM, IEntity
         {
             IRepository<T,TVM> repo = new EFRepository<T,TVM>();
@@ -172,7 +168,7 @@ namespace LambAndLentil.UI.Controllers
         }
 
         public ActionResult BaseDeleteConfirmed<T,TVM>(UIControllerType controllerType, int id)
-            where T :class
+            where T :BaseEntity,IEntity
             where TVM : BaseVM, IEntity
         {
             IRepository<T,TVM> repo = new EFRepository<T,TVM>();
@@ -253,7 +249,7 @@ namespace LambAndLentil.UI.Controllers
         }
 
         protected ActionResult GuardId<T,TVM>(UIControllerType tController, int id)
-            where T:class
+            where T:BaseEntity,IEntity
             where TVM : BaseVM, IEntity
         {
             IRepository<T,TVM> repo = new EFRepository<T,TVM>();

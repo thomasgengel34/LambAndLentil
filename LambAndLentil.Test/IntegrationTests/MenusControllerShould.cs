@@ -209,17 +209,12 @@ using System.Web.Mvc;
         public void ActuallyDeleteAMenuFromTheDatabase()
         {
             // Arrange
-            EFRepository<Menu, MenuVM> repoMenu = new EFRepository<Menu, MenuVM>(); ;
-           
-            MenusController indexController = new MenusController(repoMenu);
-            MenusController deleteController = new MenusController(repoMenu);
-           
-            ViewResult view = indexController.Index();
-            
+            EFRepository<Menu, MenuVM> repoMenu = new EFRepository<Menu, MenuVM>();             
+            MenusController controller = new MenusController(repoMenu);             
             Menu item = GetMenu(repoMenu, "test ActuallyDeleteAMenuFromTheDatabase");
 
             //Act
-            deleteController.DeleteConfirmed(item.ID);
+            controller.DeleteConfirmed(item.ID);
             var deletedItem = (from m in repoMenu.GetAll()
                                where m.Description == item.Description
                                select m).AsQueryable();
@@ -484,6 +479,7 @@ using System.Web.Mvc;
 
         internal Menu GetMenu(EFRepository<Menu, MenuVM> repo, string description)
         {
+
             EFRepository<Menu, MenuVM> repoMenu = new EFRepository<Menu, MenuVM>();
             MenusController controller = new MenusController(repoMenu);
             MenuVM mvm = new MenuVM();

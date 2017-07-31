@@ -418,7 +418,7 @@ namespace LambAndLentil.Tests.Controllers
             }.AsQueryable());
             mock.Setup(m => m.Remove(It.IsAny< PersonVM>()));
             // Arrange - create the controller
-            PersonsController controller = new PersonsController();
+            PersonsController controller = new PersonsController(mock.Object);
 
             // Act - delete the person
             ActionResult result = controller.DeleteConfirmed(personVM.ID);
@@ -508,7 +508,7 @@ namespace LambAndLentil.Tests.Controllers
             }.AsQueryable());
 
             // Arrange - create a controller
-            PersonsController controller = new PersonsController();
+            PersonsController controller = new PersonsController(mock.Object);
             controller.PageSize = 3;
 
             return controller;
@@ -519,11 +519,11 @@ namespace LambAndLentil.Tests.Controllers
         private PersonsController SetUpSimpleController()
         {
             // - create the mock repository
-            mock = new Mock<IRepository>();
+            Mock<IRepository<Person, PersonVM>> mock = new Mock<IRepository<Person, PersonVM>>();
 
 
             // Arrange - create a controller
-            PersonsController controller = new PersonsController();
+            PersonsController controller = new PersonsController(mock.Object);
             // controller.PageSize = 3;
 
             return controller;

@@ -11,20 +11,23 @@ using System.Linq;
 using System.Web.Mvc;
 using AutoMapper;
 
-namespace MsTestIntegrationTests
+using IntegrationTests;
+
+//namespace  IntegrationTests
+namespace LambAndLentil.Test.Infrastructure
 { 
     [TestClass]
     [TestCategory("Integration")]
     [TestCategory("IngredientsController")]
-    public class IngredientsControllerShould
+    public class IT_IngredientsControllerShould
     {
         [TestMethod]
         [TestCategory("Create")]
         public void CreateAnIngredient()
         {
             // Arrange
-            EFRepository<Ingredient,IngredientVM> repo = new EFRepository<Ingredient,IngredientVM>(); ;
-            IngredientsController controller = new IngredientsController();
+            EFRepository<Ingredient,IngredientVM> repoIngredient = new EFRepository<Ingredient,IngredientVM>(); ;
+            IngredientsController controller = new IngredientsController( repoIngredient);
             // Act
             ViewResult vr = controller.Create(LambAndLentil.UI.UIViewType.Create);
             string modelName = ((IngredientVM)vr.Model).Name;
@@ -38,8 +41,8 @@ namespace MsTestIntegrationTests
         public void SaveAValidIngredient()
         {
             // Arrange
-            EFRepository<Ingredient,IngredientVM> repo = new EFRepository<Ingredient,IngredientVM>(); ;
-            IngredientsController controller = new IngredientsController();
+            EFRepository<Ingredient,IngredientVM> repoIngredient = new EFRepository<Ingredient,IngredientVM>(); ;
+            IngredientsController controller = new IngredientsController(repoIngredient);
             IngredientVM vm = new IngredientVM();
             vm.Name = "test";
             // Act
@@ -67,7 +70,7 @@ namespace MsTestIntegrationTests
             {
                 // Clean Up - should run a  delete test to make sure this works 
                
-                Ingredient item =repo.GetAll().Where(m => m.Name == "test").FirstOrDefault();
+                Ingredient item =repoIngredient.GetAll().Where(m => m.Name == "test").FirstOrDefault();
 
                 // Delete it
                 controller.DeleteConfirmed(item.ID);
@@ -79,12 +82,12 @@ namespace MsTestIntegrationTests
         public void SaveEditedIngredient()
         {
             // Arrange
-            EFRepository<Ingredient,IngredientVM> repo = new EFRepository<Ingredient,IngredientVM>(); ;
-            IngredientsController controller1 = new IngredientsController();
-            IngredientsController controller2 = new IngredientsController();
-            IngredientsController controller3 = new IngredientsController();
-            IngredientsController controller4 = new IngredientsController();
-            IngredientsController controller5 = new IngredientsController();
+            EFRepository<Ingredient,IngredientVM> repoIngredient = new EFRepository<Ingredient,IngredientVM>(); ;
+            IngredientsController controller1 = new IngredientsController(repoIngredient);
+            IngredientsController controller2 = new IngredientsController(repoIngredient);
+            IngredientsController controller3 = new IngredientsController(repoIngredient);
+            IngredientsController controller4 = new IngredientsController(repoIngredient);
+            IngredientsController controller5 = new IngredientsController(repoIngredient);
             IngredientVM vm = new IngredientVM();
             vm.Name = "0000 test";
 
@@ -134,13 +137,13 @@ namespace MsTestIntegrationTests
         public void ActuallyDeleteAnIngredientFromTheDatabase()
         {
             // Arrange
-            EFRepository<Ingredient,IngredientVM> repo = new EFRepository<Ingredient,IngredientVM>(); 
-            IngredientsController controller = new IngredientsController();
-            var item = new RecipesControllerShould().GetIngredient(repo, "test ActuallyDeleteAnIngredientFromTheDatabase");
+            EFRepository<Ingredient,IngredientVM> repoIngredient = new EFRepository<Ingredient,IngredientVM>(); 
+            IngredientsController controller = new IngredientsController(repoIngredient);
+            var item = new RecipesControllerShould().GetIngredient(repoIngredient, "test ActuallyDeleteAnIngredientFromTheDatabase");
 
             //Act
             controller.DeleteConfirmed(item.ID);
-            var deletedItem = new RecipesControllerShould().GetIngredient(repo, "test ActuallyDeleteAnIngredientFromTheDatabase");
+            var deletedItem = new RecipesControllerShould().GetIngredient(repoIngredient, "test ActuallyDeleteAnIngredientFromTheDatabase");
 
             //Assert
             Assert.IsNull(  deletedItem );
@@ -197,10 +200,10 @@ namespace MsTestIntegrationTests
             IngredientVM ingredientVM = new IngredientVM(CreationDate);
             ingredientVM.Name = "001 Test ";
 
-            EFRepository<Ingredient,IngredientVM> repo = new EFRepository<Ingredient,IngredientVM>(); ;
-            IngredientsController controllerEdit = new IngredientsController();
-            IngredientsController controllerView = new IngredientsController();
-            IngredientsController controllerDelete = new IngredientsController();
+            EFRepository<Ingredient,IngredientVM> repoIngredient = new EFRepository<Ingredient,IngredientVM>(); ;
+            IngredientsController controllerEdit = new IngredientsController(repoIngredient);
+            IngredientsController controllerView = new IngredientsController(repoIngredient);
+            IngredientsController controllerDelete = new IngredientsController(repoIngredient);
 
             // Act
             controllerEdit.PostEdit(ingredientVM);
@@ -235,12 +238,12 @@ namespace MsTestIntegrationTests
         public void UpdateTheModificationDateBetweenPostedEdits()
         {
             // Arrange
-            EFRepository<Ingredient,IngredientVM> repo = new EFRepository<Ingredient,IngredientVM>();
-            IngredientsController controllerPost = new IngredientsController();
-            IngredientsController controllerPost1 = new IngredientsController();
-            IngredientsController controllerView = new IngredientsController();
-            IngredientsController controllerView1 = new IngredientsController();
-            IngredientsController controllerDelete = new IngredientsController();
+            EFRepository<Ingredient,IngredientVM> repoIngredient = new EFRepository<Ingredient,IngredientVM>();
+            IngredientsController controllerPost = new IngredientsController(repoIngredient);
+            IngredientsController controllerPost1 = new IngredientsController(repoIngredient);
+            IngredientsController controllerView = new IngredientsController(repoIngredient);
+            IngredientsController controllerView1 = new IngredientsController(repoIngredient);
+            IngredientsController controllerDelete = new IngredientsController(repoIngredient);
 
             IngredientVM vm = new IngredientVM();
             vm.Name = "002 Test Mod";

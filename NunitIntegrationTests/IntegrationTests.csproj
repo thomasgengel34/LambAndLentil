@@ -68,8 +68,9 @@
     <Compile Include="ShoppingListsControllerShould.cs" />
     <Compile Include="PlansControllerShould.cs" />
     <Compile Include="MenusControllerShould.cs" />
-    <Compile Include="IngredientsControllerShould.cs" />
+    <Compile Include="IT_IngredientsControllerShould.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UnitTest1.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

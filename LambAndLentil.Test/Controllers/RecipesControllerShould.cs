@@ -407,7 +407,7 @@ namespace LambAndLentil.Tests.Controllers
             }.AsQueryable());
             mock.Setup(m => m.Remove( It.IsAny< RecipeVM>())).Verifiable();
             // Arrange - create the controller
-            RecipesController controller = new RecipesController( );
+            RecipesController controller = new RecipesController( mock.Object);
 
             // Act - delete the recipe
             ActionResult result = controller.DeleteConfirmed(recipeVM.ID);
@@ -501,7 +501,7 @@ namespace LambAndLentil.Tests.Controllers
 
             // Arrange - create a controller
  
-            RecipesController controller = new RecipesController();
+            RecipesController controller = new RecipesController(mock.Object);
  
             controller.PageSize = 3;
             return controller;
@@ -514,7 +514,7 @@ namespace LambAndLentil.Tests.Controllers
 
 
             // Arrange - create a controller
-            RecipesController controller = new RecipesController();
+            RecipesController controller = new RecipesController(mock.Object);
             // controller.PageSize = 3;
 
             return controller;

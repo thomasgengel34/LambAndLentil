@@ -9,7 +9,12 @@ namespace LambAndLentil.UI.Controllers
 {
     public class IngredientsController : BaseController
     {
-        
+         
+
+        public IngredientsController(IRepository<Ingredient,IngredientVM> repo) 
+        {
+             
+        }
 
 
         // GET: Ingredients 

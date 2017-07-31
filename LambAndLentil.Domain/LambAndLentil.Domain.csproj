@@ -39,6 +39,9 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -57,6 +60,7 @@
     <Compile Include="Abstract\IRepository.cs" />
     <Compile Include="Concrete\EFDbContext.cs" />
     <Compile Include="Concrete\EFRepository.cs" />
+    <Compile Include="Concrete\JSONRepository.cs" />
     <Compile Include="Concrete\LinqHelpers.cs" />
     <Compile Include="Entities\BaseEntity.cs" />
     <Compile Include="Entities\ContainerSizeUnit.cs" />
@@ -71,45 +75,9 @@
     <Compile Include="Entities\Plan.cs" />
     <Compile Include="Entities\Recipe.cs" />
     <Compile Include="Entities\ShoppingList.cs" />
-    <Compile Include="Migrations\201706211706551_initial.cs" />
-    <Compile Include="Migrations\201706211706551_initial.Designer.cs">
-      <DependentUpon>201706211706551_initial.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201706211724059_tryAgain.cs" />
-    <Compile Include="Migrations\201706211724059_tryAgain.Designer.cs">
-      <DependentUpon>201706211724059_tryAgain.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201706212126405_tryAgainAndAgain.cs" />
-    <Compile Include="Migrations\201706212126405_tryAgainAndAgain.Designer.cs">
-      <DependentUpon>201706212126405_tryAgainAndAgain.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201706232302236_x.cs" />
-    <Compile Include="Migrations\201706232302236_x.Designer.cs">
-      <DependentUpon>201706232302236_x.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201706240236402_x1.cs" />
-    <Compile Include="Migrations\201706240236402_x1.Designer.cs">
-      <DependentUpon>201706240236402_x1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201707051615581_MenuPublicICollection.cs" />
-    <Compile Include="Migrations\201707051615581_MenuPublicICollection.Designer.cs">
-      <DependentUpon>201707051615581_MenuPublicICollection.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201707061843319_AddICollectionIngredientsToMenu.cs" />
-    <Compile Include="Migrations\201707061843319_AddICollectionIngredientsToMenu.Designer.cs">
-      <DependentUpon>201707061843319_AddICollectionIngredientsToMenu.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201707111902449_AdditionalICollections.cs" />
-    <Compile Include="Migrations\201707111902449_AdditionalICollections.Designer.cs">
-      <DependentUpon>201707111902449_AdditionalICollections.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201707131720118_PluralClassesID.cs" />
-    <Compile Include="Migrations\201707131720118_PluralClassesID.Designer.cs">
-      <DependentUpon>201707131720118_PluralClassesID.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201707171924525_ChangesForGenericRepository.cs" />
-    <Compile Include="Migrations\201707171924525_ChangesForGenericRepository.Designer.cs">
-      <DependentUpon>201707171924525_ChangesForGenericRepository.cs</DependentUpon>
+    <Compile Include="Migrations\201707251938382_initial.cs" />
+    <Compile Include="Migrations\201707251938382_initial.Designer.cs">
+      <DependentUpon>201707251938382_initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -121,35 +89,16 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201706211706551_initial.resx">
-      <DependentUpon>201706211706551_initial.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201706211724059_tryAgain.resx">
-      <DependentUpon>201706211724059_tryAgain.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201706212126405_tryAgainAndAgain.resx">
-      <DependentUpon>201706212126405_tryAgainAndAgain.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201706232302236_x.resx">
-      <DependentUpon>201706232302236_x.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201706240236402_x1.resx">
-      <DependentUpon>201706240236402_x1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201707051615581_MenuPublicICollection.resx">
-      <DependentUpon>201707051615581_MenuPublicICollection.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201707061843319_AddICollectionIngredientsToMenu.resx">
-      <DependentUpon>201707061843319_AddICollectionIngredientsToMenu.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201707111902449_AdditionalICollections.resx">
-      <DependentUpon>201707111902449_AdditionalICollections.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201707131720118_PluralClassesID.resx">
-      <DependentUpon>201707131720118_PluralClassesID.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201707171924525_ChangesForGenericRepository.resx">
-      <DependentUpon>201707171924525_ChangesForGenericRepository.cs</DependentUpon>
+    <Folder Include="App_Data\JSON\Ingredient\" />
+    <Folder Include="App_Data\JSON\Menu\" />
+    <Folder Include="App_Data\JSON\Person\" />
+    <Folder Include="App_Data\JSON\Plan\" />
+    <Folder Include="App_Data\JSON\Recipe\" />
+    <Folder Include="App_Data\JSON\ShoppingList\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201707251938382_initial.resx">
+      <DependentUpon>201707251938382_initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

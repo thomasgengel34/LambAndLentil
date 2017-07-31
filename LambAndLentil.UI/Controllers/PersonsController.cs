@@ -9,10 +9,13 @@ using System.Web.Mvc;
 namespace LambAndLentil.UI.Controllers
 {
     public class PersonsController : BaseController
-    { 
-        
+    {
+         
 
+        public PersonsController(IRepository<Person, PersonVM> repo)
+        {
 
+        } 
         // GET: Persons
         public ViewResult Index(int page=1)
         {

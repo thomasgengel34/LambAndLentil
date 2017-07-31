@@ -12,6 +12,11 @@ namespace LambAndLentil.UI.Controllers
     public class RecipesController : BaseController
     {
          
+       
+        public RecipesController(IRepository<Recipe,RecipeVM> repo)  
+        {
+            
+        }
 
 
         // GET: Recipes

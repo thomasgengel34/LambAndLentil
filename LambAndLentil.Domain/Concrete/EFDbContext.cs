@@ -12,7 +12,9 @@ namespace LambAndLentil.Domain.Concrete
 {
     public class EFDbContext : DbContext //, ILambAndLentilContext
     {
-        public EFDbContext() : base("name=EFDbContext")
+                                              
+      // public EFDbContext() : base("name=EFDbContext") LambAndLentilContextR2;
+      public EFDbContext() : base("LambAndLentil") 
         {
 
         }

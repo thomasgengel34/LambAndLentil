@@ -11,8 +11,8 @@ using LambAndLentil.Domain.Concrete;
 namespace LambAndLentil.UI.Controllers
 {
     public class MenusController : BaseController
-    {
-         
+    {  
+        public MenusController(IRepository<Menu, MenuVM> repo)   { }
 
         // GET: Menus
         public ViewResult Index(int page = 1)

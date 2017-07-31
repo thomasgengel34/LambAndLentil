@@ -12,7 +12,7 @@ using System.Reflection;
 namespace LambAndLentil.Domain.Concrete
 {
     public class EFRepository<T,TVM> : IRepository<T,TVM>
-        where T :class
+        where T :BaseEntity,IEntity
         where TVM : class, IEntity
         
     {
@@ -23,12 +23,7 @@ namespace LambAndLentil.Domain.Concrete
             context = new EFDbContext(); 
         }
 
-        private dynamic ConvertVMtoClass()
-        {
-            string className = GetPlainClassName();
-            dynamic type = Type.GetType(className, true); 
-            return type;
-        }
+        
 
         public string GetPlainClassName()
         {
@@ -59,22 +54,7 @@ namespace LambAndLentil.Domain.Concrete
 
 
         public void Add(TVM entity)
-        {
-            dynamic T = ConvertVMtoClass();
-            // object T = new Ingredient();
-            AddHelper((dynamic)T, entity);
-        }
-
-        public void AddHelper<T>(T obj, TVM entity)
-            where T : BaseEntity, IEntity
-        {
-            AddWithT<T>(entity);
-        }
-
-        private void AddWithT<T>(TVM entity)
-            where T : BaseEntity, IEntity
-        {
-
+        { 
             T item = Mapper.Map<TVM, T>(entity);
             context.Set<T>().Add(item);
             context.SaveChanges();
@@ -161,25 +141,10 @@ namespace LambAndLentil.Domain.Concrete
         }
 
         public IEnumerable<T> GetAll()
-        {
-            //string T = GetPlainClassName();
+        { 
             return (IEnumerable<T>)context.Set<T>().ToList();
-            // return GetAllHelper(T);
-        }
-
-        //private IEnumerable<T> GetAllHelper<T>(T obj)
-        //       where T : class
-        //{
-
-        //    return GetAllWithT<T>();
-        //}
-
-        //private IEnumerable<T> GetAllWithT<T>()
-        //    where T : class
-        //{
-        //    return (IEnumerable<T>)context.Set<T>().ToList(); 
-        //}
-
+           
+        } 
 
         public TVM GetById(int id)
         { 
@@ -193,47 +158,21 @@ namespace LambAndLentil.Domain.Concrete
         }
 
         public void Remove(TVM entity)
-        {
-            Type T = ConvertVMtoClass();
-            RemoveHelper((dynamic)T, entity);
-        }
-
-        private void RemoveHelper<T>(T obj, TVM entity)
-            where T : class
-        {
-            RemoveWithT<T>(entity);
-        }
-
-        private void RemoveWithT<T>(TVM entity)
-             where T : class
-        {
+        {            
             T item = Mapper.Map<TVM, T>(entity);
             context.Set<T>().Remove(item);
             context.SaveChanges();
         }
 
-        private void Remove<T>(TVM entity) where T : class
-        {
-            T item = Mapper.Map<TVM, T>(entity);
-            context.Set<T>().Remove(item);
-            context.SaveChanges();
-        }
+        //private void Remove<T>(TVM entity) where T : class
+        //{
+        //    T item = Mapper.Map<TVM, T>(entity);
+        //    context.Set<T>().Remove(item);
+        //    context.SaveChanges();
+        //}
 
         public void Save(TVM entity)
-        {
-            Type T = ConvertVMtoClass();
-            SaveHelper((dynamic)T, entity);
-        }
-
-        private void SaveHelper<T>(T ob, TVM entity)
-   where T : class, IEntity
-        {
-            SaveWithT<T>(entity);
-        }
-
-        private void SaveWithT<T>(TVM entity)
-         where T : class, IEntity
-        {
+        { 
             T item = Mapper.Map<TVM, T>(entity);
 
             if (item == null)
@@ -253,22 +192,10 @@ namespace LambAndLentil.Domain.Concrete
 
 
 
-        public void Update(TVM entity, int key)
-        {
-            dynamic T = ConvertVMtoClass();
-            UpdateHelper( T, entity, key);
-        }
-
-        private void UpdateHelper<T>(T ob, TVM entity, int key)
-        where T : BaseEntity
-        {
-            UpdateWithT<T>(entity, key);
-        }
-
-        private void UpdateWithT<T>(TVM entity, int key)
-        where T : BaseEntity
+        public void Update(TVM entity, int key)  
         {
             T updated = Mapper.Map<TVM, T>(entity);
+          
             T existing = context.Set<T>().Find(key);
             if (existing != null)
             {
@@ -296,21 +223,7 @@ namespace LambAndLentil.Domain.Concrete
         }
 
         public int Count()
-        {
-            Type T = ConvertVMtoClass();
-            return CountHelper((dynamic)T);
-        }
-
-        private int CountHelper<T>(T ob)
-        where T : BaseEntity, IEntity
-        {
-            return CountWithT<T>();
-        }
-
-
-        private int CountWithT<T>()
-                where T : BaseEntity, IEntity
-        {
+        {  
             return context.Set<T>().ToList().Count;
         }
     }

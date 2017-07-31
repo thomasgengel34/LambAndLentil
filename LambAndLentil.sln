@@ -9,13 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LambAndLentil.UI", "LambAnd
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LambAndLentil.Test", "LambAndLentil.Test\LambAndLentil.Test.csproj", "{A3348C9C-2CF1-438F-A378-0629FB23521A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LambAndLentil.Domain.Test", "LambAndLentil.Domain.Test\LambAndLentil.Domain.Test.csproj", "{5141997D-D504-4EE2-972D-3AAF02292AB7}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Integration Tests", "Integration Tests", "{A5957792-2BA3-493B-A0CA-63A2435EF48D}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationTests", "NunitIntegrationTests\IntegrationTests.csproj", "{CBB1E76F-75B4-462C-86E9-2E400878835C}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Unit Tests", "Unit Tests", "{8F7C3E6A-1D96-4B13-8830-C3F253DB537B}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{8F7C3E6A-1D96-4B13-8830-C3F253DB537B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,21 +29,11 @@ Global
 		{A3348C9C-2CF1-438F-A378-0629FB23521A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A3348C9C-2CF1-438F-A378-0629FB23521A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A3348C9C-2CF1-438F-A378-0629FB23521A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5141997D-D504-4EE2-972D-3AAF02292AB7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5141997D-D504-4EE2-972D-3AAF02292AB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5141997D-D504-4EE2-972D-3AAF02292AB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5141997D-D504-4EE2-972D-3AAF02292AB7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CBB1E76F-75B4-462C-86E9-2E400878835C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CBB1E76F-75B4-462C-86E9-2E400878835C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CBB1E76F-75B4-462C-86E9-2E400878835C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CBB1E76F-75B4-462C-86E9-2E400878835C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{A3348C9C-2CF1-438F-A378-0629FB23521A} = {8F7C3E6A-1D96-4B13-8830-C3F253DB537B}
-		{5141997D-D504-4EE2-972D-3AAF02292AB7} = {8F7C3E6A-1D96-4B13-8830-C3F253DB537B}
-		{CBB1E76F-75B4-462C-86E9-2E400878835C} = {A5957792-2BA3-493B-A0CA-63A2435EF48D}
 	EndGlobalSection
 EndGlobal

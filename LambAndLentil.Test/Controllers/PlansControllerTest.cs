@@ -418,7 +418,7 @@ namespace LambAndLentil.Tests.Controllers
             }.AsQueryable());
             mock.Setup(m => m.Remove(It.IsAny<PlanVM >())).Verifiable();
             // Arrange - create the controller
-            PlansController controller = new PlansController();
+            PlansController controller = new PlansController(mock.Object);
 
             // Act - delete the plan
             ActionResult result = controller.DeleteConfirmed(planVM.ID);
@@ -505,7 +505,7 @@ namespace LambAndLentil.Tests.Controllers
             }.AsQueryable());
 
             // Arrange - create a controller
-            PlansController controller = new PlansController();
+            PlansController controller = new PlansController(mock.Object);
             controller.PageSize = 3;
 
             return controller;
@@ -520,7 +520,7 @@ namespace LambAndLentil.Tests.Controllers
 
 
             // Arrange - create a controller
-            PlansController controller = new PlansController();
+            PlansController controller = new PlansController(mock.Object);
             // controller.PageSize = 3;
 
             return controller;

@@ -11,10 +11,13 @@ using System.Collections.Generic;
 namespace LambAndLentil.UI.Controllers
 {
     public class PlansController : BaseController
-    { 
-        
+    {
+         
+        public PlansController(IRepository<Plan, PlanVM> repo)
+        {
 
-
+        }
+         
         // GET: Plans
         public ViewResult Index(int page = 1)
         {

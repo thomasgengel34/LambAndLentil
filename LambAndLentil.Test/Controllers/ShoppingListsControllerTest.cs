@@ -295,7 +295,7 @@ namespace LambAndLentil.Tests.Controllers
             }.AsQueryable());
             mock.Setup(m => m.Remove(It.IsAny<ShoppingListVM>())).Verifiable();
             // Arrange - create the controller
-            ShoppingListsController controller = new ShoppingListsController();
+            ShoppingListsController controller = new ShoppingListsController(mock.Object);
 
             // Act - delete the shoppingList
             ActionResult result = controller.DeleteConfirmed(shoppingListVM.ID);
@@ -382,7 +382,7 @@ namespace LambAndLentil.Tests.Controllers
             }.AsQueryable());
 
             // Arrange - create a controller
-            ShoppingListsController controller = new ShoppingListsController();
+            ShoppingListsController controller = new ShoppingListsController(mock.Object);
             controller.PageSize = 3;
 
             return controller;
@@ -397,7 +397,7 @@ namespace LambAndLentil.Tests.Controllers
 
 
             // Arrange - create a controller
-            ShoppingListsController controller = new ShoppingListsController();
+            ShoppingListsController controller = new ShoppingListsController(mock.Object);
             // controller.PageSize = 3;
 
             return controller;

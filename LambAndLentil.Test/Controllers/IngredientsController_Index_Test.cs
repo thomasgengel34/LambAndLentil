@@ -557,7 +557,7 @@ namespace LambAndLentil.Tests.Controllers
                 new Ingredient {ID = 5, Name = "P5",  AddedByUser="John Doe",  ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(50), ModifiedDate=DateTime.MaxValue.AddYears(-100)}
             }.AsQueryable());
 
-            IngredientsController controller = new IngredientsController();
+            IngredientsController controller = new IngredientsController(mock.Object);
             controller.PageSize = 3;
 
             return controller;
@@ -565,8 +565,8 @@ namespace LambAndLentil.Tests.Controllers
 
         private IngredientsController SetUpSimpleController()
         {
-            Mock<IRepository> mock = new Mock<IRepository>();
-            IngredientsController controller = new IngredientsController();
+            Mock<IRepository<Ingredient, IngredientVM>> mock = new  Mock<IRepository<Ingredient, IngredientVM>>();
+            IngredientsController controller = new IngredientsController(mock.Object);
             return controller;
         }
     }

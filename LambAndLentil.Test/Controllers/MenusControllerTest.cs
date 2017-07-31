@@ -403,7 +403,7 @@ namespace LambAndLentil.Tests.Controllers
             }.AsQueryable());
             mock.Setup(m => m.Remove(It.IsAny<MenuVM>())).Verifiable();
             // Arrange - create the controller
-            MenusController controller = new MenusController();
+            MenusController controller = new MenusController(mock.Object);
 
             // Act - delete the menu
             ActionResult result = controller.DeleteConfirmed(menu.ID);
@@ -489,7 +489,7 @@ namespace LambAndLentil.Tests.Controllers
             }.AsQueryable());
 
             // Arrange - create a controller
-            MenusController controller = new MenusController();
+            MenusController controller = new MenusController(mock.Object);
             controller.PageSize = 3;
 
             return controller;
@@ -500,11 +500,11 @@ namespace LambAndLentil.Tests.Controllers
         private MenusController SetUpSimpleController()
         {
             // - create the mock repository
-            Mock<IRepository> mock = new Mock<IRepository>();
+            Mock<IRepository<Menu, MenuVM>> mock = new Mock<IRepository<Menu, MenuVM>>();
 
 
             // Arrange - create a controller
-            MenusController controller = new MenusController();
+            MenusController controller = new MenusController(mock.Object);
             // controller.PageSize = 3;
 
             return controller;

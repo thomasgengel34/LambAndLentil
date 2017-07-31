@@ -417,7 +417,7 @@ namespace LambAndLentil.Tests.Controllers
                 new Ingredient {ID = 5, Name = "P5" }
             }.AsQueryable());
 
-            IngredientsController controller = new IngredientsController();
+            IngredientsController controller = new IngredientsController(mock.Object);
             controller.PageSize = 3;
 
             return controller;
@@ -426,7 +426,7 @@ namespace LambAndLentil.Tests.Controllers
         private IngredientsController SetUpSimpleController()
         {
              mock = new Mock<IRepository<Ingredient, IngredientVM>>();
-            IngredientsController controller = new IngredientsController();
+            IngredientsController controller = new IngredientsController(mock.Object);
             return controller;
         } 
     }
