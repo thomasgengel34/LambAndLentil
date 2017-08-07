@@ -1,0 +1,27 @@
+﻿<script src="~/Scripts/jquery-3.1.1.js"></script>
+<script src="~/Scripts/getUsdaIngredient.js"></script>
+@{
+    ViewBag.Title = "GetNdbno";
+}
+
+ <h3>Use a text box to find ingredients (one step short of autocomplete)</h3>
+
+<p>https://ndb.nal.usda.gov/ndb/doc/apioptionst/API-SEARCH.md</p>
+
+<form>
+    <p>Food to find:</p>
+    <input type="text" id="text" name="searchItem" autofocus />
+    <input type="submit" value="Search" id="btnSearch">
+</form>
+<pre id="output">
+        </pre>
+<select id="outputList">
+    <option id="starter" value=0> none selected</option>
+</select>
+<p id="selectedText"></p>
+<p id="optionstOfIngredients"></p>
+
+
+
+
+ 

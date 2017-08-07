@@ -73,23 +73,23 @@ namespace LambAndLentil.UI.Controllers
 
         public ActionResult AttachRecipe( int? menuID, int? recipeID)
         {  
-            return BaseAttach<MenuVM, RecipeVM>(menuID, recipeID); 
+            return BaseAttach<Menu, MenuVM, Recipe, RecipeVM>(menuID, recipeID); 
         }
 
         public ActionResult DetachRecipe(int? menuID, int? recipeID)
         {
-            return BaseAttach<MenuVM, IngredientVM>(menuID, recipeID, AttachOrDetach.Detach);
+            return BaseAttach<Menu, MenuVM, Recipe, RecipeVM>(menuID, recipeID, AttachOrDetach.Detach);
         }
 
         public ActionResult AttachIngredient(int? menuID, int? ingredientID)
         {
-            return BaseAttach<MenuVM, IngredientVM>(menuID, ingredientID);
+            return BaseAttach<Menu, MenuVM, Ingredient, IngredientVM>(menuID, ingredientID);
         }
          
 
         public ActionResult DetachIngredient(int? menuID, int? ingredientID)
         {
-            return BaseAttach<MenuVM, IngredientVM>(menuID, ingredientID, AttachOrDetach.Detach);
+            return BaseAttach<Menu, MenuVM, Ingredient, IngredientVM>(menuID, ingredientID, AttachOrDetach.Detach);
         }
 
         private Menu GetMenu()

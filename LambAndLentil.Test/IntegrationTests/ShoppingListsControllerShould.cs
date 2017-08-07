@@ -20,14 +20,14 @@ namespace IntegrationTests
     public class ShoppingListsControllerShould
     {
         [TestMethod]
-        public void CreateAnShoppingList()
+        public void CreateAShoppingList()
         {
             // Arrange
-            EFRepository<ShoppingList, ShoppingListVM> repo = new EFRepository<ShoppingList, ShoppingListVM>(); ;
+           JSONRepository<ShoppingList, ShoppingListVM> repo = new JSONRepository<ShoppingList, ShoppingListVM>(); ;
             ShoppingListsController controller = new ShoppingListsController(repo);
             // Act
             ViewResult vr = controller.Create(LambAndLentil.UI.UIViewType.Create);
-            ListVM<ShoppingList, ShoppingListVM> vm = (ListVM<ShoppingList, ShoppingListVM>)vr.Model;
+            ShoppingListVM vm = (ShoppingListVM)vr.Model;
             string modelName = vm.Name;
 
             // Assert 
@@ -39,7 +39,7 @@ namespace IntegrationTests
         public void SaveAValidShoppingList()
         {
             // Arrange
-            EFRepository<ShoppingList, ShoppingListVM> repo = new EFRepository<ShoppingList, ShoppingListVM>(); ;
+            JSONRepository<ShoppingList, ShoppingListVM> repo = new JSONRepository<ShoppingList, ShoppingListVM>(); ;
             ShoppingListsController controller = new ShoppingListsController(repo);
             ShoppingListVM vm = new ShoppingListVM();
             vm.Name = "test";
@@ -66,7 +66,7 @@ namespace IntegrationTests
             finally
             {
                 // Clean Up - should run a  delete test to make sure this works  
-                ShoppingList shoppingList = repo.GetAll().Where(m => m.Name == "test").FirstOrDefault();
+                ShoppingList shoppingList = repo.GetAllT().Where(m => m.Name == "test").FirstOrDefault();
                 controller.DeleteConfirmed(shoppingList.ID);
             }
         }
@@ -76,7 +76,7 @@ namespace IntegrationTests
         public void SaveEditedShoppingListWithNameChange()
         {
             // Arrange
-            EFRepository<ShoppingList, ShoppingListVM> repo = new EFRepository<ShoppingList, ShoppingListVM>(); ;
+            JSONRepository<ShoppingList, ShoppingListVM> repo = new JSONRepository<ShoppingList, ShoppingListVM>(); ;
             ShoppingListsController controller1 = new ShoppingListsController(repo);
             ShoppingListsController controller2 = new ShoppingListsController(repo);
             ShoppingListsController controller3 = new ShoppingListsController(repo);
@@ -145,7 +145,7 @@ namespace IntegrationTests
         public void SaveEditedShoppingListWithDescriptionChange()
         {
             // Arrange
-            EFRepository<ShoppingList, ShoppingListVM> repo = new EFRepository<ShoppingList, ShoppingListVM>(); ;
+            JSONRepository<ShoppingList, ShoppingListVM> repo = new JSONRepository<ShoppingList, ShoppingListVM>(); ;
             ShoppingListsController controller1 = new ShoppingListsController(repo);
             ShoppingListsController controller2 = new ShoppingListsController(repo);
             ShoppingListsController controller3 = new ShoppingListsController(repo);
@@ -215,27 +215,13 @@ namespace IntegrationTests
         public void ActuallyDeleteAShoppingListFromTheDatabase()
         {
             // Arrange
-            EFRepository<ShoppingList, ShoppingListVM> repo = new EFRepository<ShoppingList, ShoppingListVM>(); ;
-            ShoppingListsController editController = new ShoppingListsController(repo);
-            ShoppingListsController indexController = new ShoppingListsController(repo);
-            ShoppingListsController deleteController = new ShoppingListsController(repo);
-            ShoppingListVM vm = new ShoppingListVM();
-            vm.Name = "0000" + new Guid().ToString();
-            ActionResult ar = editController.PostEdit(vm);
-            ViewResult view = indexController.Index();
-            ListVM<ShoppingList, ShoppingListVM> listVM = (ListVM<ShoppingList, ShoppingListVM>)view.Model;
-            var result = (from m in listVM.Entities
-                          where m.Name == vm.Name
-                          select m).AsQueryable();
-
-
-            ShoppingList sl = result.FirstOrDefault();
-            ShoppingListVM item = Mapper.Map<ShoppingList, ShoppingListVM>(sl);
-
+            JSONRepository<ShoppingList, ShoppingListVM> repoShoppingList = new JSONRepository<ShoppingList, ShoppingListVM>();
+            ShoppingListsController controller = new ShoppingListsController(repoShoppingList);
+            ShoppingList item = GetShoppingList(repoShoppingList, "test ActuallyDeleteAShoppingListFromTheDatabase");
             //Act
-            deleteController.DeleteConfirmed(item.ID);
-            var deletedItem = (from m in repo.GetAll()
-                               where m.Name == vm.Name
+            controller.DeleteConfirmed(item.ID);
+            var deletedItem = (from m in repoShoppingList.GetAllT()
+                               where m.Description == item.Description
                                select m).AsQueryable();
 
             //Assert
@@ -251,7 +237,7 @@ namespace IntegrationTests
             ShoppingListVM shoppingListVM = new ShoppingListVM(CreationDate);
             shoppingListVM.Name = "001 Test ";
 
-            EFRepository<ShoppingList, ShoppingListVM> repo = new EFRepository<ShoppingList, ShoppingListVM>(); ;
+            JSONRepository<ShoppingList, ShoppingListVM> repo = new JSONRepository<ShoppingList, ShoppingListVM>(); ;
             ShoppingListsController controllerEdit = new ShoppingListsController(repo);
             ShoppingListsController controllerView = new ShoppingListsController(repo);
             ShoppingListsController controllerDelete = new ShoppingListsController(repo);
@@ -290,7 +276,7 @@ namespace IntegrationTests
         public void UpdateTheModificationDateBetweenPostedEdits()
         {
             // Arrange
-            EFRepository<ShoppingList, ShoppingListVM> repo = new EFRepository<ShoppingList, ShoppingListVM>();
+            JSONRepository<ShoppingList, ShoppingListVM> repo = new JSONRepository<ShoppingList, ShoppingListVM>();
             ShoppingListsController controllerPost = new ShoppingListsController(repo);
             ShoppingListsController controllerPost1 = new ShoppingListsController(repo);
             ShoppingListsController controllerView = new ShoppingListsController(repo);
@@ -342,6 +328,121 @@ namespace IntegrationTests
                 // Cleanup
                 controllerDelete.DeleteConfirmed(item.ID);
             }
+        }
+
+        internal ShoppingList GetShoppingList(JSONRepository<ShoppingList, ShoppingListVM> repo, string description)
+        {
+
+            JSONRepository<ShoppingList, ShoppingListVM> repoShoppingList = new JSONRepository<ShoppingList, ShoppingListVM>();
+            ShoppingListsController controller = new ShoppingListsController(repoShoppingList);
+            ShoppingListVM  vm = new ShoppingListVM();
+             vm.ID = int.MaxValue;
+             vm.Description = description;
+            controller.PostEdit(vm);
+
+            ShoppingList menu = ((from m in repoShoppingList.GetAllT()
+                          where m.Description ==  description
+                          select m).AsQueryable()).FirstOrDefault();
+            return menu;
+        }
+
+        [TestMethod]
+        [TestCategory("Attach-Detach")]
+        public void AttachAnExistingIngredientToAnExistingShoppingList()
+        {
+            // Arrange
+            JSONRepository<ShoppingList, ShoppingListVM> repoShoppingList = new JSONRepository<ShoppingList, ShoppingListVM>();
+            JSONRepository<Ingredient, IngredientVM> repoIngredient = new JSONRepository<Ingredient, IngredientVM>();
+            ShoppingListsController controller = new ShoppingListsController(repoShoppingList);
+
+            ShoppingList menu = GetShoppingList(repoShoppingList, "test AttachAnExistingIngredientToAnExistingShoppingList");
+            Ingredient ingredient = new RecipesControllerShould().GetIngredient(repoIngredient, "test AttachAnExistingIngredientToAnExistingShoppingList");
+
+            // Act
+            controller.AttachIngredient(menu.ID, ingredient.ID);
+            ShoppingList returnedShoppingList = (from m in repoShoppingList.GetAllT()
+                                 where m.Description == menu.Description
+                                 select m).FirstOrDefault();
+
+
+
+            // Assert 
+            Assert.AreEqual(1, returnedShoppingList.Ingredients.Count());
+            // how do I know the correct ingredient was added?
+            Assert.AreEqual(ingredient.ID, returnedShoppingList.Ingredients.First().ID);
+
+            // Cleanup
+            IngredientsController controllerCleanupIngredient = new IngredientsController(repoIngredient);
+            ShoppingListsController controllerCleanupShoppingList = new ShoppingListsController(repoShoppingList);
+
+            ShoppingListVM menuVM = Mapper.Map<ShoppingList, ShoppingListVM>(menu);
+            IngredientVM ingredientVM = Mapper.Map<Ingredient, IngredientVM>(ingredient);
+
+            controllerCleanupShoppingList.DeleteConfirmed(menuVM.ID);
+            controllerCleanupIngredient.DeleteConfirmed(ingredientVM.ID);
+        }
+
+        [TestMethod]
+        [TestCategory("Attach-Detach")]
+        public void NotDeleteAnIngredientAfterIngredientIsDetachedFromShoppingList()
+        {
+            Assert.Fail();
+        }
+         
+
+        [TestMethod]
+        [TestCategory("Attach-Detach")]
+        public void ReturnIndexViewWithWarningMessageWhenDetachingNonExistingIngredientAttachedToANonExistingShoppingList()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod]
+        [TestCategory("Attach-Detach")]
+        public void ReturnIndexViewWithWarningWhenAttachingExistIngredientToNonExistingShoppingList()
+        {
+            Assert.Fail();
+        }
+        [TestMethod]
+        [TestCategory("Attach-Detach")]
+        public void ReturnIndexViewWithWarningWhenAttachingNonExistIngredientToNonExistingShoppingList()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod]
+        [TestCategory("Attach-Detach")]
+        public void ReturnIndexViewWithWarningWhenDetachingExistingIngredientAttachedToNonExistingShoppingList()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod]
+        [TestCategory("Attach-Detach")]
+        public void ReturnShoppingListEditViewWithSuccessMessageWhenDetachingExistingIngredientFromExistingShoppingList()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod]
+        [TestCategory("Attach-Detach")]
+        public void ReturnShoppingListEditViewWithWarningMessageWhenAttachingNonExistingIngredientToExistingShoppingList()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod]
+        [TestCategory("Attach-Detach")]
+        public void ReturnShoppingListEditViewWithWarningMessageWhenDetachingNonExistingIngredientAttachedToExistingShoppingList()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod]
+        [TestCategory("Attach-Detach")]
+        public void ReturnShoppingListIndexViewWithWarningWhenDetachingExistingingredientNotAttachedToAnExistingShoppingList()
+        {
+            Assert.Fail();
         }
     }
 }

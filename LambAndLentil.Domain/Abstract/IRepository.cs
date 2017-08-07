@@ -11,13 +11,13 @@ namespace LambAndLentil.Domain.Abstract
 {
     public interface IRepository
     { }
-       
 
-        public interface IRepository<T,TVM>
-        where T:class
-        where TVM : class
+
+    public interface IRepository<T, TVM>
+    where T : class
+    where TVM : class
     {
-        EFDbContext context { get; set; }
+        //  EFDbContext context { get; set; }
         IQueryable Ingredient { get; }
         IQueryable Recipe { get; }
         IQueryable Menu { get; }
@@ -25,21 +25,29 @@ namespace LambAndLentil.Domain.Abstract
         IQueryable Person { get; }
         IQueryable ShoppingList { get; }
 
-        TVM GetById(int id);
+        T  GetTById(int id);
+        TVM GetTVMById(int id);
 
         int Count();
 
-        IEnumerable<T> GetAll();
+        IEnumerable<T> GetAllT();
+        IEnumerable<TVM> GetAllTVM();
 
-        IEnumerable<T> Query(Expression<Func<TVM, bool>> filter);
+        IEnumerable<T> Query(Expression<Func<T , bool>> filter);
+        IEnumerable<TVM> Query(Expression<Func<TVM , bool>> filter);
 
-        void Add(TVM entity);
+        void AddTVM(TVM entity);
 
-        void Remove(TVM entity);
+        void AddT(T entity);
 
-        void Update(TVM entity, int key);
+        void RemoveTVM(TVM entity); 
+        void RemoveT(T t);
 
-        void Save(TVM entity);
+        void UpdateTVM(TVM entity, int key);
+        void UpdateT(T  t, int key);
+
+        void SaveTVM(TVM entity); 
+        void SaveT(T t);
 
         void AttachAnIndependentChild<TParent, TChild>(int parentID, int childID)
             where TParent : BaseEntity, IEntity

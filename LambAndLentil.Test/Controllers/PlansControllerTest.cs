@@ -416,7 +416,7 @@ namespace LambAndLentil.Tests.Controllers
 
                 new PlanVM {ID=3,Name="Test3"},
             }.AsQueryable());
-            mock.Setup(m => m.Remove(It.IsAny<PlanVM >())).Verifiable();
+            mock.Setup(m => m.RemoveTVM(It.IsAny<PlanVM >())).Verifiable();
             // Arrange - create the controller
             PlansController controller = new PlansController(mock.Object);
 
@@ -426,7 +426,7 @@ namespace LambAndLentil.Tests.Controllers
             AlertDecoratorResult adr = (AlertDecoratorResult)result;
 
             // Assert - ensure that the repository delete method was called with a correct Plan
-            mock.Verify(m => m.Remove(planVM));
+            mock.Verify(m => m.RemoveTVM(planVM));
 
 
             Assert.AreEqual("Test2 has been deleted", adr.Message);
@@ -441,7 +441,7 @@ namespace LambAndLentil.Tests.Controllers
             PlansController controller = SetUpController();
 
             PlanVM planVM = (PlanVM)mock.Object.Plan;
-            mock.Setup(c => c.Save(planVM)).Verifiable();
+            mock.Setup(c => c.SaveTVM(planVM)).Verifiable();
             planVM.Name = "First edited";
 
             // Act 

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using LambAndLentil.Domain.Abstract;
 using LambAndLentil.Domain.Concrete;
 using LambAndLentil.Domain.Entities;
 using LambAndLentil.UI;
@@ -23,7 +24,7 @@ namespace  IntegrationTests
         public void CreateAnPerson()
         {
             // Arrange
-             EFRepository<Person,PersonVM>  planRepo = new  EFRepository<Person,PersonVM>(); ;
+             JSONRepository<Person,PersonVM>  planRepo = new  JSONRepository<Person,PersonVM>(); ;
             PersonsController controller = new PersonsController(planRepo);
             // Act
             ViewResult vr = controller.Create(LambAndLentil.UI.UIViewType.Create);
@@ -43,7 +44,7 @@ namespace  IntegrationTests
         public void SaveAValidPerson()
         {
             // Arrange
-             EFRepository<Person,PersonVM> planRepo = new  EFRepository<Person,PersonVM>(); ;
+             JSONRepository<Person,PersonVM> planRepo = new  JSONRepository<Person,PersonVM>(); ;
             PersonsController controller = new PersonsController(planRepo);
             PersonVM vm = new PersonVM();
             vm.Name = "test";
@@ -72,7 +73,7 @@ namespace  IntegrationTests
             finally
             {
                 // Clean Up - should run a  delete test to make sure this works after this 
-                Person person = planRepo.GetAll().Where(m => m.Name == "First Name Last Name").FirstOrDefault(); 
+                Person person = planRepo.GetAllT().Where(m => m.Name == "First Name Last Name").FirstOrDefault(); 
                 controller.DeleteConfirmed(person.ID);
             }
         }
@@ -82,7 +83,7 @@ namespace  IntegrationTests
         public void SaveEditedPersonWithNameChange()
         {
             // Arrange
-             EFRepository<Person,PersonVM> planRepo = new  EFRepository<Person,PersonVM>(); ;
+             JSONRepository<Person,PersonVM> planRepo = new  JSONRepository<Person,PersonVM>(); ;
             PersonsController controller1 = new PersonsController(planRepo);
             PersonsController controller2 = new PersonsController(planRepo);
             PersonsController controller3 = new PersonsController(planRepo);
@@ -148,7 +149,7 @@ namespace  IntegrationTests
         public void SaveEditedPersonWithDescriptionChange()
         {
             // Arrange
-             EFRepository<Person,PersonVM> planRepo = new  EFRepository<Person,PersonVM>(); ;
+             JSONRepository<Person,PersonVM> planRepo = new  JSONRepository<Person,PersonVM>(); ;
             PersonsController controller1 = new PersonsController(planRepo);
             PersonsController controller2 = new PersonsController(planRepo);
             PersonsController controller3 = new PersonsController(planRepo);
@@ -215,24 +216,16 @@ namespace  IntegrationTests
         public void ActuallyDeleteAPersonFromTheDatabase()
         {
             // Arrange
-             EFRepository<Person,PersonVM> planRepo = new  EFRepository<Person,PersonVM>(); ;
-            PersonsController editController = new PersonsController(planRepo);
-            PersonsController indexController = new PersonsController(planRepo);
-            PersonsController deleteController = new PersonsController(planRepo);
-            PersonVM vm = new PersonVM();
-            vm.Description = "Test.ActuallyDeleteAPersonfromDB";
-            ActionResult ar = editController.PostEdit(vm);
-            ViewResult view = indexController.Index();
-             ListVM<Person, PersonVM>  listVM =  (ListVM<Person, PersonVM> )view.Model;
-            var result = (from m in listVM.Entities
-                          where m.Description == vm.Description
-                          select m).AsQueryable().FirstOrDefault();
-            PersonVM item =   Mapper.Map<Person, PersonVM>(result); ;
+             JSONRepository<Person,PersonVM> repoPerson = new  JSONRepository<Person,PersonVM>(); ;
+            PersonsController controller = new PersonsController(repoPerson);
+
+            Person item = GetPerson(repoPerson, "Test.ActuallyDeleteAPersonfromDB");
+           
 
             //Act
-            deleteController.DeleteConfirmed(item.ID);
-            var deletedItem = (from m in planRepo.GetAll() 
-                               where m.Description == vm.Description
+          controller.DeleteConfirmed(item.ID);
+            var deletedItem = (from m in repoPerson.GetAllT() 
+                               where m.Description == item.Description
                                select m).AsQueryable();
 
             //Assert
@@ -251,7 +244,7 @@ namespace  IntegrationTests
             PersonVM personVM = new PersonVM(CreationDate);
             personVM.Description = "001 Test ";
 
-             EFRepository<Person,PersonVM> planRepo = new  EFRepository<Person,PersonVM>(); ;
+             JSONRepository<Person,PersonVM> planRepo = new  JSONRepository<Person,PersonVM>(); ;
             PersonsController controllerEdit = new PersonsController(planRepo);
             PersonsController controllerView = new PersonsController(planRepo);
             PersonsController controllerDelete = new PersonsController(planRepo);
@@ -289,7 +282,7 @@ namespace  IntegrationTests
         public void UpdateTheModificationDateBetweenPostedEdits()
         {
             // Arrange
-             EFRepository<Person,PersonVM> planRepo = new  EFRepository<Person,PersonVM>();
+             JSONRepository<Person,PersonVM> planRepo = new  JSONRepository<Person,PersonVM>();
             PersonsController controllerPost = new PersonsController(planRepo);
             PersonsController controllerPost1 = new PersonsController(planRepo);
             PersonsController controllerView = new PersonsController(planRepo);
@@ -344,6 +337,20 @@ namespace  IntegrationTests
                 // Cleanup
                 controllerDelete.DeleteConfirmed(person.ID);
             }
+        }
+
+        internal Person GetPerson(IRepository<Person, PersonVM> repoPerson, string description)
+        {
+            PersonsController controller = new PersonsController(repoPerson);
+            PersonVM vm = new PersonVM();
+            vm.Description = description;
+            vm.ID = int.MaxValue;
+            controller.PostEdit(vm);
+
+            Person person = ((from m in repoPerson.GetAllT()
+                              where m.Description == description
+                              select m).AsQueryable()).FirstOrDefault();
+            return person;
         }
     }
 }

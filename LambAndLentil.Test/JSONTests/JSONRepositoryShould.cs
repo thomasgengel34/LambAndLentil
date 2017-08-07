@@ -1,17 +1,13 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using AutoMapper;
 using LambAndLentil.Domain.Abstract;
-using LambAndLentil.Domain.Entities;
-using LambAndLentil.UI.Models;
 using LambAndLentil.Domain.Concrete;
-using AutoMapper;
+using LambAndLentil.Domain.Entities;
+using LambAndLentil.Tests.Infrastructure;
+using LambAndLentil.UI.Models;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.IO;
 using System.Text.RegularExpressions;
-using LambAndLentil.Tests.Infrastructure;
-using System.Linq;
-using System.Security.AccessControl;
-using System.Threading;
-using System.Diagnostics;
 
 namespace LambAndLentil.Test.JSONTests
 {
@@ -20,10 +16,36 @@ namespace LambAndLentil.Test.JSONTests
     {
         public static MapperConfiguration AutoMapperConfig { get; set; }
         static string path = @"../../../\LambAndLentil.Domain\App_Data\JSON\TestReturnCountOfThreeForDirectoryWithThreeFiles\";
+
         public JSONRepositoryShould()
         {
             AutoMapperConfigForTests.InitializeMap();
         }
+
+        [TestMethod]
+        public void SaveOneIngredient()
+        {
+            // Arrange
+
+            // Act
+
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [TestMethod]
+        public void SaveOneRecipe()
+        {
+            // Arrange
+
+            // Act
+
+
+            // Assert
+            Assert.Fail();
+        }
+
         [TestMethod]
         public void SaveOneMenu()
         {
@@ -37,7 +59,7 @@ namespace LambAndLentil.Test.JSONTests
             // Act
             try
             {
-                repo.Add(menuVM);
+                repo.AddTVM(menuVM);
                 file = @"../../../\LambAndLentil.Domain\App_Data\JSON\Menu\" + menuVM.Name + ".txt";
                 StreamReader sr = new StreamReader(file);
                 string theFile = "";
@@ -65,6 +87,41 @@ namespace LambAndLentil.Test.JSONTests
             }
         }
 
+        [TestMethod]
+        public void SaveOnePlan()
+        {
+            // Arrange
+
+            // Act
+
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [TestMethod]
+        public void SaveOneShoppingList()
+        {
+            // Arrange
+
+            // Act
+
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [TestMethod]
+        public void SaveOnePerson()
+        {
+            // Arrange
+
+            // Act
+
+
+            // Assert
+            Assert.Fail();
+        }
 
         [TestMethod]
         public void ReturnZeroCountForEmptyDirectory()
@@ -92,94 +149,9 @@ namespace LambAndLentil.Test.JSONTests
                 Directory.Delete(path);
             }
         }
-
-        [TestMethod]
-        public void ReturnCountOfThreeForDirectoryWithThreeFiles()
-        {
-            // Arrange
-            Process x = Process.GetCurrentProcess();
          
-            try
-            {
-                using (GetRidOfMe g = new GetRidOfMe())
-                {
-                    Process y = Process.GetCurrentProcess();
-                    CreateThreeFiles(path);
-                    g.Dispose();
-                    y.Close();
-                }
-                using (GetRidOfMe g1 = new GetRidOfMe())
-                {
-                    Process z = Process.GetCurrentProcess();
-                    IRepository<TestReturnCountOfThreeForDirectoryWithThreeFiles, TestReturnCountOfThreeForDirectoryWithThreeFilesVM> repo = new JSONRepository<TestReturnCountOfThreeForDirectoryWithThreeFiles, TestReturnCountOfThreeForDirectoryWithThreeFilesVM>();
-                    // Act
-                    int count = repo.Count(); 
-                    // Assert
-                    Assert.AreEqual(3, count);
-                    g1.Dispose();
-                    z.Close();
-                }
-                x.Close();
-                x.WaitForExit();
-            }
-            catch (Exception)
-            {
-                Process w = Process.GetCurrentProcess();
-                w.Close();
-                throw;
-            }
-            finally
-            {
-                
-                // clean up
-                try
-                {
-                  
-                  
-                 
-                   x.WaitForExit();
-                    // int interval = 1000;
-                    //Thread.Sleep(interval);
-                  
-                    //var files = (from file in Directory.EnumerateFiles(path, "*.txt" )
-                    //            from line in File.ReadLines(file)
-                    //            select file).ToList(); 
 
-                    //foreach (string file in files)
-                    //{  
-                    //    File.Delete(file);
-                    //}
-                }
-                catch (UnauthorizedAccessException UAEx)
-                {
-                    Console.WriteLine(UAEx.Message);
-                }
-                catch (PathTooLongException PathEx)
-                {
-                    Console.WriteLine(PathEx.Message);
-                }
-                catch (Exception  )
-                {
-                    throw;
-                }
-
-            }
-        }
-        [TestCleanup()]
-        public void Cleanup()
-        {
-            File.Delete(path + "Ni.txt");
-            File.Delete(path + "Ichi.txt");
-            File.Delete(path + "San.txt");
-            Directory.Delete(path);
-        }
-        private static void CreateThreeFiles(string path)
-        {
-            Directory.CreateDirectory(path);
-            File.Create(path + "Ichi.txt");
-            File.Create(path + "Ni.txt");
-            File.Create(path + "San.txt");
-        }
+    
 
         private class TestReturnZeroCountForEmptyDirectory : BaseEntity, IEntity
         {
@@ -190,16 +162,7 @@ namespace LambAndLentil.Test.JSONTests
         {
 
         }
-
-        private class TestReturnCountOfThreeForDirectoryWithThreeFiles : BaseEntity, IEntity
-        {
-            public int ID { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        }
-
-        private class TestReturnCountOfThreeForDirectoryWithThreeFilesVM : BaseVM, IEntity
-        {
-
-        }
+         
 
         private class GetRidOfMe : IDisposable
         {

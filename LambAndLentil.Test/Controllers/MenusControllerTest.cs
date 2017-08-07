@@ -401,7 +401,7 @@ namespace LambAndLentil.Tests.Controllers
 
                 new MenuVM {ID=3,Name="Test3"},
             }.AsQueryable());
-            mock.Setup(m => m.Remove(It.IsAny<MenuVM>())).Verifiable();
+            mock.Setup(m => m.RemoveTVM(It.IsAny<MenuVM>())).Verifiable();
             // Arrange - create the controller
             MenusController controller = new MenusController(mock.Object);
 
@@ -411,7 +411,7 @@ namespace LambAndLentil.Tests.Controllers
             AlertDecoratorResult adr = (AlertDecoratorResult)result;
 
             // Assert - ensure that the repository delete method was called with a correct Menu
-            mock.Verify(m => m.Remove (menu));
+            mock.Verify(m => m.RemoveTVM(menu));
 
 
             Assert.AreEqual("Test2 has been deleted", adr.Message);
@@ -425,7 +425,7 @@ namespace LambAndLentil.Tests.Controllers
             MenusController controller = SetUpController();
 
             MenuVM menuVM = (MenuVM)mock.Object.Menu ;
-            mock.Setup(c => c.Save(menuVM)).Verifiable();
+            mock.Setup(c => c.SaveTVM(menuVM)).Verifiable();
             menuVM.Name = "First edited";
 
             // Act 

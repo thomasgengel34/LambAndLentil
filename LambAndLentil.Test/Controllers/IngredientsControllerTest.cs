@@ -9,6 +9,7 @@ using LambAndLentil.UI.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
+using System.IO;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -18,16 +19,16 @@ namespace LambAndLentil.Tests.Controllers
     [TestCategory("IngredientsController")]
     public class IngredientsControllerShould
     {
-        static Mock<IRepository<Ingredient,IngredientVM>> mock;
+        static Mock<IRepository<Ingredient, IngredientVM>> mock;
         public static MapperConfiguration AutoMapperConfig { get; set; }
         public IngredientsControllerShould()
         {
             AutoMapperConfigForTests.InitializeMap();
-            mock = new Mock<IRepository<Ingredient,IngredientVM>>();
+            mock = new Mock<IRepository<Ingredient, IngredientVM>>();
         }
 
         [TestMethod]
-        public void  InheritFromBaseControllerCorrectlyPageSizeRight()
+        public void InheritFromBaseControllerCorrectlyPageSizeRight()
         {
 
             // Arrange
@@ -43,7 +44,7 @@ namespace LambAndLentil.Tests.Controllers
         }
 
         [TestMethod]
-        public void  InheritFromBaseControllerCorrectlyDisposeExists()
+        public void InheritFromBaseControllerCorrectlyDisposeExists()
         {
 
             // Arrange
@@ -77,14 +78,14 @@ namespace LambAndLentil.Tests.Controllers
         {
             AutoMapperConfigForTests.InitializeMap();
             MapperConfiguration AutoMapperConfig = AutoMapperConfigForTests.AMConfigForTests();
-            AutoMapperConfig.AssertConfigurationIsValid(); 
+            AutoMapperConfig.AssertConfigurationIsValid();
         }
-         
- 
-  
+
+
+
         [TestMethod]
         [TestCategory("Details")]
-        public void  DetailsWorksWithValidIngredientID()
+        public void DetailsWorksWithValidIngredientID()
         {
             // Arrange
             IngredientsController controller = SetUpController();
@@ -102,7 +103,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Details")]
-        public void  DetailsIngredientIDTooHighViewNotNull()
+        public void DetailsIngredientIDTooHighViewNotNull()
         {
             // Arrange
             IngredientsController controller = SetUpController();
@@ -115,7 +116,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Details")]
-        public void  DetailsIngredientIDTooHighMessageRight()
+        public void DetailsIngredientIDTooHighMessageRight()
         {
             // Arrange
             IngredientsController controller = SetUpController();
@@ -128,7 +129,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Details")]
-        public void  DetailsIngredientIDTooHighAlertClassCorrect()
+        public void DetailsIngredientIDTooHighAlertClassCorrect()
         {
             // Arrange
             IngredientsController controller = SetUpController();
@@ -154,7 +155,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Details")]
-        public void  DetailsIngredientIDTooHighCorrectController()
+        public void DetailsIngredientIDTooHighCorrectController()
         {
             // Arrange
             IngredientsController controller = SetUpController();
@@ -167,7 +168,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Details")]
-        public void  DetailsIngredientIDTooHighCorrectRouteValue()
+        public void DetailsIngredientIDTooHighCorrectRouteValue()
         {
             // Arrange
             IngredientsController controller = SetUpController();
@@ -180,7 +181,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Details")]
-        public void  DetailsIngredientIDPastIntLimit()
+        public void DetailsIngredientIDPastIntLimit()
         {
             // Arrange
             IngredientsController controller = SetUpController();
@@ -195,7 +196,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Details")]
-        public void  DetailsIngredientIDIsZeroViewIsNotNull()
+        public void DetailsIngredientIDIsZeroViewIsNotNull()
         {
             // Arrange
             IngredientsController controller = SetUpController();
@@ -212,7 +213,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Details")]
-        public void  DetailsIngredientIDIsZeroMessageIsCorrect()
+        public void DetailsIngredientIDIsZeroMessageIsCorrect()
         {
             // Arrange
             IngredientsController controller = SetUpController();
@@ -229,7 +230,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Details")]
-        public void  DetailsIngredientIDIsZeroAlertClassIsCorrect()
+        public void DetailsIngredientIDIsZeroAlertClassIsCorrect()
         {
             // Arrange
             IngredientsController controller = SetUpController();
@@ -246,7 +247,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Details")]
-        public void  DetailsIngredientIDIsZeroReturnModelIsCorrect()
+        public void DetailsIngredientIDIsZeroReturnModelIsCorrect()
         {
             // Arrange
             IngredientsController controller = SetUpController();
@@ -263,7 +264,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Details")]
-        public void  DetailsIngredientIDIsZeroReturnControllerIsCorrect()
+        public void DetailsIngredientIDIsZeroReturnControllerIsCorrect()
         {
             // Arrange
             IngredientsController controller = SetUpController();
@@ -280,7 +281,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Details")]
-        public void  DetailsIngredientIDIsZeroReturnRouteValueIsCorrect()
+        public void DetailsIngredientIDIsZeroReturnRouteValueIsCorrect()
         {
             // Arrange
             IngredientsController controller = SetUpController();
@@ -297,7 +298,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Details")]
-        public void  Details_IngredientIDIsNegative_ResultNotNull()
+        public void Details_IngredientIDIsNegative_ResultNotNull()
         {
             // Arrange
             IngredientsController controller = SetUpController();
@@ -314,7 +315,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Details")]
-        public void  Details_IngredientIDIsNegative_MessageCorrect()
+        public void Details_IngredientIDIsNegative_MessageCorrect()
         {
             // Arrange
             IngredientsController controller = SetUpController();
@@ -332,7 +333,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Details")]
-        public void  Details_IngredientIDIsNegative_AlertClassCorrect()
+        public void Details_IngredientIDIsNegative_AlertClassCorrect()
         {
             // Arrange
             IngredientsController controller = SetUpController();
@@ -349,7 +350,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Details")]
-        public void  Details_IngredientIDIsNegative_RouteClassCorrect()
+        public void Details_IngredientIDIsNegative_RouteClassCorrect()
         {
             // Arrange
             IngredientsController controller = SetUpController();
@@ -367,7 +368,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Details")]
-        public void  Details_IngredientIDIsNegative_ControllerIsCorrect()
+        public void Details_IngredientIDIsNegative_ControllerIsCorrect()
         {
             // Arrange
             IngredientsController controller = SetUpController();
@@ -384,7 +385,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Details")]
-        public void  Details_IngredientIDIsNegative_RouteValuesCorrect()
+        public void Details_IngredientIDIsNegative_RouteValuesCorrect()
         {
             // Arrange
             IngredientsController controller = SetUpController();
@@ -404,11 +405,11 @@ namespace LambAndLentil.Tests.Controllers
 
         //[TestMethod]
         //public void IngredientsCtr_DetailsIngredientIDIsNotAInteger() { } 
- 
+
 
         private IngredientsController SetUpController()
         {
-             mock = new Mock<IRepository<Ingredient,IngredientVM>>();
+            mock = new Mock<IRepository<Ingredient, IngredientVM>>();
             mock.Setup(m => m.Ingredient).Returns(new Ingredient[] {
                 new Ingredient {ID = 1, Name = "P1",  ModifiedDate=DateTime.MaxValue.AddYears(-10)},
                 new Ingredient {ID = 2, Name = "P2" , ModifiedDate=DateTime.MaxValue.AddYears(-20)},
@@ -425,9 +426,32 @@ namespace LambAndLentil.Tests.Controllers
 
         private IngredientsController SetUpSimpleController()
         {
-             mock = new Mock<IRepository<Ingredient, IngredientVM>>();
+            mock = new Mock<IRepository<Ingredient, IngredientVM>>();
             IngredientsController controller = new IngredientsController(mock.Object);
             return controller;
-        } 
+        }
+
+
+        [ClassCleanup()]
+        public static void ClassCleanup()
+        {
+            string path = @"C:\Dev\TGE\LambAndLentil\LambAndLentil.Domain\App_Data\JSON\Ingredient\";
+            int count = int.MaxValue;
+            try
+            {
+
+                for (int i = count; i > count - 6; i--)
+                {
+                    File.Delete(string.Concat(path, i, ".txt"));
+                }
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+        }
     }
 }

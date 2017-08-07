@@ -63,7 +63,6 @@ namespace LambAndLentil.Domain.Test.Entities
 
             // Assert 
             Assert.AreEqual("6/26/1977", ingredient.CreationDate.ToShortDateString());
-        }
-
+        } 
     }
 }

@@ -22,9 +22,9 @@ namespace LambAndLentil.UI.Models
             where T : BaseEntity, IEntity
             where TVM : BaseVM, IEntity
         {
-            IRepository<T, TVM> repository = new EFRepository<T, TVM>();
+            IRepository<T, TVM> repository = new JSONRepository<T, TVM>();
 
-            var result = repository.GetAll()
+            var result = repository.GetAllT()
                       .OrderBy(p => p.Name)
                       .Skip((page - 1) * PageSize)
                       .Take(PageSize);
@@ -44,7 +44,7 @@ namespace LambAndLentil.UI.Models
             where T : BaseEntity,IEntity
             where TVM : BaseVM, IEntity
         {
-            IRepository<T, TVM> repository = new EFRepository<T, TVM>();
+            IRepository<T, TVM> repository = new JSONRepository<T, TVM>();
 
             PagingInfo PagingInfo = new PagingInfo();
             PagingInfo.CurrentPage = page;

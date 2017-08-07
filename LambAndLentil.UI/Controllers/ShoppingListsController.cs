@@ -71,6 +71,11 @@ namespace LambAndLentil.UI.Controllers
         public  ActionResult DeleteConfirmed(int id)
         {
             return BaseDeleteConfirmed<ShoppingList,ShoppingListVM>(UIControllerType.ShoppingLists, id);
-        } 
+        }
+
+        public ActionResult AttachIngredient(int? shoppingListID, int? ingredientID)
+        {
+            return BaseAttach<ShoppingList, ShoppingListVM, Ingredient, IngredientVM>(shoppingListID, ingredientID);
+        }
     }
 }

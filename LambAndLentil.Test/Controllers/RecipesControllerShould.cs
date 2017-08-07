@@ -1,5 +1,6 @@
 ﻿using LambAndLentil.UI.Controllers;
 using LambAndLentil.Domain.Abstract;
+using LambAndLentil.Domain.Concrete;
 using LambAndLentil.Domain.Entities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -12,6 +13,7 @@ using AutoMapper;
 using LambAndLentil.Tests.Infrastructure;
 using LambAndLentil.UI.Infrastructure.Alerts;
 using LambAndLentil.UI;
+using System.IO;
 
 namespace LambAndLentil.Tests.Controllers
 {
@@ -19,13 +21,16 @@ namespace LambAndLentil.Tests.Controllers
     [TestCategory("RecipesController")]
     public class RecipesControllerShould
     {
-         static Mock<IRepository<Recipe,RecipeVM>> mock { get; set; }
-        public static MapperConfiguration AutoMapperConfig { get; set; }
+        static Mock<IRepository<Recipe, RecipeVM>> mock { get; set; }
+        static MapperConfiguration AutoMapperConfig { get; set; }
+        static JSONRepository<Recipe, RecipeVM> repo { get; set; }
+        static List<RecipeVM> recipeVMArray { get; set; }
 
         public RecipesControllerShould()
-        { 
+        {
             AutoMapperConfigForTests.InitializeMap();
-            mock = new Mock<IRepository<Recipe,RecipeVM>>();
+            mock = new Mock<IRepository<Recipe, RecipeVM>>();
+            repo = new JSONRepository<Recipe, RecipeVM>();
         }
 
 
@@ -38,7 +43,7 @@ namespace LambAndLentil.Tests.Controllers
         }
 
         [TestMethod]
-        public void  InheritFromBaseController()
+        public void InheritFromBaseController()
         {
             // Arrange
             RecipesController testController = SetUpController();
@@ -84,7 +89,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Index")]
-        public void  ShowAllRecipesonIndex()
+        public void ShowAllRecipesonIndex()
         {
             // Arrange
             RecipesController controller = SetUpController();
@@ -93,12 +98,12 @@ namespace LambAndLentil.Tests.Controllers
             // Act
             ViewResult view1 = controller.Index(1);
 
-          
-               int count1 =   ((ListVM<Recipe,RecipeVM>)view1.Model).Entities.Count();
+
+            int count1 = ((ListVM<Recipe, RecipeVM>)view1.Model).Entities.Count();
 
             ViewResult view2 = controller.Index(2);
 
-            int count2 = ((ListVM<Recipe,RecipeVM>)view2.Model).Entities.Count();
+            int count2 = ((ListVM<Recipe, RecipeVM>)view2.Model).Entities.Count();
 
             int count = count1 + count2;
 
@@ -109,19 +114,19 @@ namespace LambAndLentil.Tests.Controllers
             Assert.AreEqual(0, count2);
             Assert.AreEqual(5, count);
             Assert.AreEqual("Index", view1.ViewName);
-            Assert.AreEqual("Index", view2.ViewName); 
+            Assert.AreEqual("Index", view2.ViewName);
         }
 
         [TestMethod]
-        public void  CanSendPaginationViewModelonIndex()
+        public void CanSendPaginationViewModelonIndex()
         {
 
             // Arrange
-            RecipesController controller = SetUpController();
+            RecipesController controller = SetUpJSONController();
 
             // Act
 
-           ListVM<Recipe,RecipeVM> resultT = (ListVM<Recipe,RecipeVM>)((ViewResult)controller.Index(2)).Model;
+            ListVM<Recipe, RecipeVM> resultT = (ListVM<Recipe, RecipeVM>)((ViewResult)controller.Index(2)).Model;
 
 
             // Assert
@@ -129,27 +134,30 @@ namespace LambAndLentil.Tests.Controllers
             PagingInfo pageInfoT = resultT.PagingInfo;
             Assert.AreEqual(2, pageInfoT.CurrentPage);
             Assert.AreEqual(8, pageInfoT.ItemsPerPage);
-            Assert.AreEqual(5, pageInfoT.TotalItems);
+            Assert.AreEqual(repo.Count(), pageInfoT.TotalItems);
             Assert.AreEqual(1, pageInfoT.TotalPages);
+
+            // Cleanup
+            SetUpJSONController(false);
         }
 
 
         [TestMethod]
-        public void  Index_FirstPageIsCorrect()
+        public void Index_FirstPageIsCorrect()
         {
-            Mock<IRepository<Recipe,RecipeVM>> mock = new Mock<IRepository<Recipe,RecipeVM>>();
+            Mock<IRepository<Recipe, RecipeVM>> mock = new Mock<IRepository<Recipe, RecipeVM>>();
             // Arrange
             RecipesController controller = SetUpController();
- 
-           ListVM<Recipe,RecipeVM> ilvm = new ListVM<Recipe,RecipeVM>();
- 
-            ilvm.Entities  = ((ListVM<Recipe,RecipeVM>)mock.Object).Entities;
+
+            ListVM<Recipe, RecipeVM> ilvm = new ListVM<Recipe, RecipeVM>();
+
+            ilvm.Entities = ((ListVM<Recipe, RecipeVM>)mock.Object).Entities;
             controller.PageSize = 8;
 
             // Act
             ViewResult view1 = controller.Index(1);
 
-            int count1 = ((ListVM<Recipe,RecipeVM>)(view1.Model)).Entities.Count();
+            int count1 = ((ListVM<Recipe, RecipeVM>)(view1.Model)).Entities.Count();
 
 
 
@@ -158,25 +166,25 @@ namespace LambAndLentil.Tests.Controllers
             Assert.AreEqual(5, count1);
             Assert.AreEqual("Index", view1.ViewName);
 
-            Assert.AreEqual("oldRecipe1", ((ListVM<Recipe,RecipeVM>)(view1.Model)).Entities.FirstOrDefault().Name);
-            Assert.AreEqual("oldRecipe2", ((ListVM<Recipe,RecipeVM>)(view1.Model)).Entities.Skip(1).FirstOrDefault().Name);
-            Assert.AreEqual("oldRecipe3", ((ListVM<Recipe,RecipeVM>)(view1.Model)).Entities.Skip(2).FirstOrDefault().Name);
+            Assert.AreEqual("oldRecipe1", ((ListVM<Recipe, RecipeVM>)(view1.Model)).Entities.FirstOrDefault().Name);
+            Assert.AreEqual("oldRecipe2", ((ListVM<Recipe, RecipeVM>)(view1.Model)).Entities.Skip(1).FirstOrDefault().Name);
+            Assert.AreEqual("oldRecipe3", ((ListVM<Recipe, RecipeVM>)(view1.Model)).Entities.Skip(2).FirstOrDefault().Name);
 
 
         }
 
         [TestMethod]
-        public void  Index_PagingInfoIsCorrect()
+        public void Index_PagingInfoIsCorrect()
         {
             // Arrange
             RecipesController controller = SetUpController();
 
 
             // Action
-            int totalItems = ((ListVM<Recipe,RecipeVM>)((ViewResult)controller.Index()).Model).PagingInfo.TotalItems;
-            int currentPage = ((ListVM<Recipe,RecipeVM>)((ViewResult)controller.Index()).Model).PagingInfo.CurrentPage;
-            int itemsPerPage = ((ListVM<Recipe,RecipeVM>)((ViewResult)controller.Index()).Model).PagingInfo.ItemsPerPage;
-            int totalPages = ((ListVM<Recipe,RecipeVM>)((ViewResult)controller.Index()).Model).PagingInfo.TotalPages;
+            int totalItems = ((ListVM<Recipe, RecipeVM>)((ViewResult)controller.Index()).Model).PagingInfo.TotalItems;
+            int currentPage = ((ListVM<Recipe, RecipeVM>)((ViewResult)controller.Index()).Model).PagingInfo.CurrentPage;
+            int itemsPerPage = ((ListVM<Recipe, RecipeVM>)((ViewResult)controller.Index()).Model).PagingInfo.ItemsPerPage;
+            int totalPages = ((ListVM<Recipe, RecipeVM>)((ViewResult)controller.Index()).Model).PagingInfo.TotalPages;
 
 
 
@@ -189,7 +197,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         // currently we only have one page here
-        public void  Index_SecondPageIsCorrect()
+        public void Index_SecondPageIsCorrect()
         {
             //// Arrange
             //RecipesController controller = SetUpController();
@@ -213,13 +221,13 @@ namespace LambAndLentil.Tests.Controllers
         }
 
         [TestMethod]
-        public void  IndexCanPaginate()
+        public void IndexCanPaginate()
         {
             // Arrange
             RecipesController controller = SetUpController();
 
             // Act
-            var result = (ListVM<Recipe,RecipeVM>)(controller.Index(1)).Model;
+            var result = (ListVM<Recipe, RecipeVM>)(controller.Index(1)).Model;
 
 
 
@@ -232,7 +240,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Details")]
-        public void  DetailsRecipeIDIsNegative()
+        public void DetailsRecipeIDIsNegative()
         {
             // Arrange
             RecipesController controller = SetUpController();
@@ -254,7 +262,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Details")]
-        public void  DetailsWorksWithValidRecipeID()
+        public void DetailsWorksWithValidRecipeID()
         {
             // Arrange
             RecipesController controller = SetUpController();
@@ -290,7 +298,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Details")]
-        public void  DetailsRecipeIDPastIntLimit()
+        public void DetailsRecipeIDPastIntLimit()
         {
             // Arrange
             RecipesController controller = SetUpController();
@@ -306,7 +314,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Details")]
-        public void  DetailsRecipeIDIsZero()
+        public void DetailsRecipeIDIsZero()
         {
             // Arrange
             RecipesController controller = SetUpController();
@@ -328,7 +336,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Create")]
-        public void  Create()
+        public void Create()
         {
             // Arrange
             RecipesController controller = SetUpController();
@@ -342,29 +350,33 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Delete")]
-        public void  DeleteAFoundRecipe()
+        public void DeleteAFoundRecipe()
         {
             // Arrange
-            RecipesController controller = SetUpController();
+            RecipesController controller = SetUpJSONController();
 
             // Act 
-            var view = controller.Delete(1) as ViewResult;
+            var view = controller.Delete(int.MaxValue - 1) as ViewResult;
 
             // Assert
             Assert.IsNotNull(view);
             Assert.AreEqual(UIViewType.Details.ToString(), view.ViewName);
+
+            // Cleanup
+            SetUpJSONController(false);
         }
 
         [TestMethod]
         [TestCategory("Delete")]
-        public void  DeleteAnInvalidRecipe()
+        public void DeleteAnInvalidRecipe()
         {
             // Arrange
-            RecipesController controller = SetUpController();
+            RecipesController controller = SetUpJSONController();
 
             // Act 
-            var view = controller.Delete(4000) as ViewResult;
+            var view = controller.Delete(int.MaxValue - 6) as ViewResult;   // does not exist
             AlertDecoratorResult adr = (AlertDecoratorResult)view;
+
             // Assert
             Assert.IsNotNull(view);
             Assert.AreEqual("No recipe was found with that id.", adr.Message);
@@ -372,11 +384,14 @@ namespace LambAndLentil.Tests.Controllers
             Assert.AreEqual(UIControllerType.Recipes.ToString(), ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(0).ToString());
             Assert.AreEqual(UIViewType.BaseIndex.ToString(), ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(1).ToString());
             Assert.AreEqual(1, ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(3));
+
+            // Cleanup
+            SetUpJSONController(false);
         }
 
         [TestMethod]
         [TestCategory("Delete")]
-        public void  DeleteConfirmed()
+        public void DeleteConfirmed()
         {
             // Arrange
             RecipesController controller = SetUpController();
@@ -390,13 +405,13 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Delete")]
-        public void  DeleteValidRecipe()
+        public void DeleteValidRecipe()
         {
             // Arrange - create an recipe
             RecipeVM recipeVM = new RecipeVM { ID = 2, Name = "Test2" };
 
             // Arrange - create the mock repository
-            mock = new Mock<IRepository<Recipe,RecipeVM>>();
+            mock = new Mock<IRepository<Recipe, RecipeVM>>();
             mock.Setup(m => m.Recipe).Returns(new RecipeVM[]
             {
                 new RecipeVM {ID=1,Name="Test1"},
@@ -405,9 +420,9 @@ namespace LambAndLentil.Tests.Controllers
 
                 new RecipeVM {ID=3,Name="Test3"},
             }.AsQueryable());
-            mock.Setup(m => m.Remove( It.IsAny< RecipeVM>())).Verifiable();
+            mock.Setup(m => m.RemoveTVM(It.IsAny<RecipeVM>())).Verifiable();
             // Arrange - create the controller
-            RecipesController controller = new RecipesController( mock.Object);
+            RecipesController controller = new RecipesController(mock.Object);
 
             // Act - delete the recipe
             ActionResult result = controller.DeleteConfirmed(recipeVM.ID);
@@ -415,48 +430,51 @@ namespace LambAndLentil.Tests.Controllers
             AlertDecoratorResult adr = (AlertDecoratorResult)result;
 
             // Assert - ensure that the repository delete method was called with a correct Recipe
-            mock.Verify(m => m.Remove(recipeVM) );
+            mock.Verify(m => m.RemoveTVM(recipeVM));
 
 
             Assert.AreEqual("Test2 has been deleted", adr.Message);
         }
-         
+
 
         [TestMethod]
         [TestCategory("Edit")]
-        public void  CanEditRecipe()
+        public void EditRecipe()
         {
-              mock = new Mock<IRepository<Recipe,RecipeVM>>();
+            //  mock = new Mock<IRepository<Recipe,RecipeVM>>();
 
             // Arrange
-            RecipesController controller = SetUpController();
-            Recipe recipe = mock.Object.Recipe.Cast<Recipe>().First();
+            RecipesController controller = SetUpJSONController();
+            //  Recipe recipe = mock.Object.Recipe.Cast<Recipe>().First();
             //    RecipeVM recipeVM = mock.Object.Recipe.Cast<RecipeVM>().First();
-            RecipeVM recipeVM = Mapper.Map<Recipe, RecipeVM>(recipe);
+            // RecipeVM recipeVM = Mapper.Map<Recipe, RecipeVM>(recipe);
 
-
-            mock.Setup(c => c.Save(recipeVM)).Verifiable();
+            RecipeVM recipeVM = repo.GetById(int.MaxValue - 1);
+            //   mock.Setup(c => c.Save(recipeVM)).Verifiable(); 
             recipeVM.Name = "First edited";
 
             // Act 
 
-            ViewResult view1 = controller.Edit(1);
+            ViewResult view1 = controller.Edit(int.MaxValue - 1);
             RecipeVM p1 = (RecipeVM)view1.Model;
-            ViewResult view2 = controller.Edit(2);
+            ViewResult view2 = controller.Edit(int.MaxValue - 2);
             RecipeVM p2 = (RecipeVM)view2.Model;
-            ViewResult view3 = controller.Edit(3);
+            ViewResult view3 = controller.Edit(int.MaxValue - 3);
             RecipeVM p3 = (RecipeVM)view3.Model;
 
 
             // Assert 
             Assert.IsNotNull(view1);
-            Assert.AreEqual(1, p1.ID);
-            Assert.AreEqual(2, p2.ID);
-            Assert.AreEqual(3, p3.ID);
+            Assert.AreEqual(int.MaxValue - 1, p1.ID);
+            Assert.AreEqual(int.MaxValue - 2, p2.ID);
+            Assert.AreEqual(int.MaxValue - 3, p3.ID);
             Assert.AreEqual("First edited", p1.Name);
-            Assert.AreEqual("oldRecipe2", p2.Name); 
+            Assert.AreEqual("oldRecipe2", p2.Name);
+
+            // Cleanup
+            SetUpJSONController(false);
         }
-         
+
 
         [TestMethod]
         [TestCategory("Edit")]
@@ -490,7 +508,7 @@ namespace LambAndLentil.Tests.Controllers
         private RecipesController SetUpController()
         {
             // - create the mock repository
-              mock = new Mock<IRepository<Recipe,RecipeVM>>();
+            mock = new Mock<IRepository<Recipe, RecipeVM>>();
             mock.Setup(m => m.Recipe).Returns(new Recipe[] {
                 new Recipe {ID = 1, Name = "oldRecipe1", Description="old Description A", ModifiedByUser="UserA"},
                 new Recipe {ID = 2, Name = "oldRecipe2", Description= "old Description B", ModifiedByUser= "UserB" },
@@ -500,9 +518,9 @@ namespace LambAndLentil.Tests.Controllers
             }.AsQueryable());
 
             // Arrange - create a controller
- 
+
             RecipesController controller = new RecipesController(mock.Object);
- 
+
             controller.PageSize = 3;
             return controller;
         }
@@ -510,7 +528,7 @@ namespace LambAndLentil.Tests.Controllers
         private RecipesController SetUpSimpleController()
         {
             // - create the mock repository
-              mock = new Mock<IRepository<Recipe,RecipeVM>>();
+            mock = new Mock<IRepository<Recipe, RecipeVM>>();
 
 
             // Arrange - create a controller
@@ -518,6 +536,63 @@ namespace LambAndLentil.Tests.Controllers
             // controller.PageSize = 3;
 
             return controller;
-        } 
+        }
+
+        private RecipesController SetUpJSONController(bool setupNotDelete = true)
+        {
+            //JSONRepository<Recipe, RecipeVM> repo = new JSONRepository<Recipe, RecipeVM>();
+            List<RecipeVM> recipeVMArray = new List<RecipeVM>{
+                new RecipeVM {ID = int.MaxValue-1, Name = "oldRecipe1", Description="old Description A", ModifiedByUser="UserA"},
+                new RecipeVM {ID = int.MaxValue-2, Name = "oldRecipe2", Description= "old Description B", ModifiedByUser= "UserB" },
+                new RecipeVM {ID = int.MaxValue-3, Name = "oldRecipe3", Description= "old Description rA", ModifiedByUser= "UserA" },
+                new RecipeVM {ID =int.MaxValue-4, Name = "oldRecipe4", Description= "old Description B", ModifiedByUser= "UserB" },
+                new RecipeVM {ID = int.MaxValue-5, Name = "oldRecipe5", Description= "old Description C", ModifiedByUser= "UserC" }
+            };
+
+            foreach (RecipeVM recipeVM in recipeVMArray)
+            {
+                if (setupNotDelete)
+                {
+                    repo.Add(recipeVM);
+                }
+                else
+                {
+                    repo.RemoveTVM(recipeVM);
+                }
+
+            }
+
+            // Arrange - create a controller
+
+            RecipesController controller = new RecipesController(repo);
+
+            controller.PageSize = 3;
+            return controller;
+        }
+
+
+        [ClassCleanup()]
+        public static void ClassCleanup()
+        {
+            string path = @"C:\Dev\TGE\LambAndLentil\LambAndLentil.Domain\App_Data\JSON\Recipe\";
+            int count = int.MaxValue;
+            try
+            {
+                
+                for (int i = count; i > count-6; i--)
+                {
+                    File.Delete(string.Concat(path, i, ".txt"));
+                } 
+             
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+        }
+
+
     }
 }

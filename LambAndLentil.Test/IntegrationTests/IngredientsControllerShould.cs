@@ -1,3 +1,5 @@
+using AutoMapper;
+using IntegrationTests;
 using LambAndLentil.Domain.Concrete;
 using LambAndLentil.Domain.Entities;
 using LambAndLentil.UI;
@@ -6,17 +8,13 @@ using LambAndLentil.UI.Infrastructure.Alerts;
 using LambAndLentil.UI.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using AutoMapper;
 
-using IntegrationTests;
-
-//namespace  IntegrationTests
 namespace LambAndLentil.Test.Infrastructure
-{ 
+{
     [TestClass]
+    [Ignore]   // switching to WebApi methods, but something will be needed
     [TestCategory("Integration")]
     [TestCategory("IngredientsController")]
     public class IT_IngredientsControllerShould
@@ -26,8 +24,8 @@ namespace LambAndLentil.Test.Infrastructure
         public void CreateAnIngredient()
         {
             // Arrange
-            EFRepository<Ingredient,IngredientVM> repoIngredient = new EFRepository<Ingredient,IngredientVM>(); ;
-            IngredientsController controller = new IngredientsController( repoIngredient);
+            JSONRepository<Ingredient, IngredientVM> repoIngredient = new JSONRepository<Ingredient, IngredientVM>(); ;
+            IngredientsController controller = new IngredientsController(repoIngredient);
             // Act
             ViewResult vr = controller.Create(LambAndLentil.UI.UIViewType.Create);
             string modelName = ((IngredientVM)vr.Model).Name;
@@ -41,7 +39,7 @@ namespace LambAndLentil.Test.Infrastructure
         public void SaveAValidIngredient()
         {
             // Arrange
-            EFRepository<Ingredient,IngredientVM> repoIngredient = new EFRepository<Ingredient,IngredientVM>(); ;
+            JSONRepository<Ingredient, IngredientVM> repoIngredient = new JSONRepository<Ingredient, IngredientVM>(); ;
             IngredientsController controller = new IngredientsController(repoIngredient);
             IngredientVM vm = new IngredientVM();
             vm.Name = "test";
@@ -69,8 +67,8 @@ namespace LambAndLentil.Test.Infrastructure
             finally
             {
                 // Clean Up - should run a  delete test to make sure this works 
-               
-                Ingredient item =repoIngredient.GetAll().Where(m => m.Name == "test").FirstOrDefault();
+
+                Ingredient item = repoIngredient.GetAllT().Where(m => m.Name == "test").FirstOrDefault();
 
                 // Delete it
                 controller.DeleteConfirmed(item.ID);
@@ -82,7 +80,7 @@ namespace LambAndLentil.Test.Infrastructure
         public void SaveEditedIngredient()
         {
             // Arrange
-            EFRepository<Ingredient,IngredientVM> repoIngredient = new EFRepository<Ingredient,IngredientVM>(); ;
+            JSONRepository<Ingredient, IngredientVM> repoIngredient = new JSONRepository<Ingredient, IngredientVM>(); ;
             IngredientsController controller1 = new IngredientsController(repoIngredient);
             IngredientsController controller2 = new IngredientsController(repoIngredient);
             IngredientsController controller3 = new IngredientsController(repoIngredient);
@@ -94,8 +92,8 @@ namespace LambAndLentil.Test.Infrastructure
             // Act 
             ActionResult ar1 = controller1.PostEdit(vm);
             ViewResult view1 = controller2.Index();
-           ListVM<Ingredient,IngredientVM>  listVM = (ListVM<Ingredient,IngredientVM> )view1.Model;
-            var result = (from m in listVM.Entities 
+            ListVM<Ingredient, IngredientVM> listVM = (ListVM<Ingredient, IngredientVM>)view1.Model;
+            var result = (from m in listVM.Entities
                           where m.Name == "0000 test"
                           select m).AsQueryable().FirstOrDefault();
 
@@ -109,12 +107,12 @@ namespace LambAndLentil.Test.Infrastructure
             vm.ID = ingredientVM.ID;
             ActionResult ar2 = controller3.PostEdit(vm);
             ViewResult view2 = controller4.Index();
-           ListVM<Ingredient,IngredientVM>  listVM2 = (ListVM<Ingredient,IngredientVM> )view2.Model;
+            ListVM<Ingredient, IngredientVM> listVM2 = (ListVM<Ingredient, IngredientVM>)view2.Model;
             var result2 = (from m in listVM2.Entities
                            where m.Name == "0000 test Edited"
-                           select m).AsQueryable().FirstOrDefault(); 
+                           select m).AsQueryable().FirstOrDefault();
 
-            ingredientVM =  Mapper.Map<Ingredient, IngredientVM>(result2);
+            ingredientVM = Mapper.Map<Ingredient, IngredientVM>(result2);
 
             try
             {
@@ -137,7 +135,8 @@ namespace LambAndLentil.Test.Infrastructure
         public void ActuallyDeleteAnIngredientFromTheDatabase()
         {
             // Arrange
-            EFRepository<Ingredient,IngredientVM> repoIngredient = new EFRepository<Ingredient,IngredientVM>(); 
+
+            JSONRepository<Ingredient, IngredientVM> repoIngredient = new JSONRepository<Ingredient, IngredientVM>();
             IngredientsController controller = new IngredientsController(repoIngredient);
             var item = new RecipesControllerShould().GetIngredient(repoIngredient, "test ActuallyDeleteAnIngredientFromTheDatabase");
 
@@ -146,7 +145,7 @@ namespace LambAndLentil.Test.Infrastructure
             var deletedItem = new RecipesControllerShould().GetIngredient(repoIngredient, "test ActuallyDeleteAnIngredientFromTheDatabase");
 
             //Assert
-            Assert.IsNull(  deletedItem );
+            Assert.IsNull(deletedItem);
         }
 
         [TestMethod]
@@ -200,7 +199,7 @@ namespace LambAndLentil.Test.Infrastructure
             IngredientVM ingredientVM = new IngredientVM(CreationDate);
             ingredientVM.Name = "001 Test ";
 
-            EFRepository<Ingredient,IngredientVM> repoIngredient = new EFRepository<Ingredient,IngredientVM>(); ;
+            JSONRepository<Ingredient, IngredientVM> repoIngredient = new JSONRepository<Ingredient, IngredientVM>(); ;
             IngredientsController controllerEdit = new IngredientsController(repoIngredient);
             IngredientsController controllerView = new IngredientsController(repoIngredient);
             IngredientsController controllerDelete = new IngredientsController(repoIngredient);
@@ -208,7 +207,7 @@ namespace LambAndLentil.Test.Infrastructure
             // Act
             controllerEdit.PostEdit(ingredientVM);
             ViewResult view = controllerView.Index();
-           ListVM<Ingredient,IngredientVM>  listVM = (ListVM<Ingredient,IngredientVM> )view.Model;
+            ListVM<Ingredient, IngredientVM> listVM = (ListVM<Ingredient, IngredientVM>)view.Model;
             var result = (from m in listVM.Entities
                           where m.Name == "001 Test "
                           select m).AsQueryable().FirstOrDefault();
@@ -238,7 +237,7 @@ namespace LambAndLentil.Test.Infrastructure
         public void UpdateTheModificationDateBetweenPostedEdits()
         {
             // Arrange
-            EFRepository<Ingredient,IngredientVM> repoIngredient = new EFRepository<Ingredient,IngredientVM>();
+            JSONRepository<Ingredient, IngredientVM> repoIngredient = new JSONRepository<Ingredient, IngredientVM>();
             IngredientsController controllerPost = new IngredientsController(repoIngredient);
             IngredientsController controllerPost1 = new IngredientsController(repoIngredient);
             IngredientsController controllerView = new IngredientsController(repoIngredient);
@@ -254,7 +253,7 @@ namespace LambAndLentil.Test.Infrastructure
             controllerPost.PostEdit(vm);
 
             ViewResult view = controllerView.Index();
-           ListVM<Ingredient,IngredientVM>  listVM = (ListVM<Ingredient,IngredientVM> )view.Model;
+            ListVM<Ingredient, IngredientVM> listVM = (ListVM<Ingredient, IngredientVM>)view.Model;
             var result = (from m in listVM.Entities
                           where m.Name == "002 Test Mod"
                           select m).AsQueryable().FirstOrDefault();
@@ -267,12 +266,12 @@ namespace LambAndLentil.Test.Infrastructure
 
 
             ViewResult view1 = controllerView.Index();
-            listVM = (ListVM<Ingredient,IngredientVM> )view1.Model;
+            listVM = (ListVM<Ingredient, IngredientVM>)view1.Model;
             var result1 = (from m in listVM.Entities
                            where m.Name == "002 Test Mod"
                            select m).AsQueryable().FirstOrDefault();
 
-           IngredientVM ingredientVM2 = Mapper.Map<Ingredient, IngredientVM>(result1);
+            IngredientVM ingredientVM2 = Mapper.Map<Ingredient, IngredientVM>(result1);
 
             DateTime shouldBeSameDate = ingredientVM2.CreationDate;
             DateTime shouldBeLaterDate = ingredientVM2.ModifiedDate;
@@ -284,7 +283,7 @@ namespace LambAndLentil.Test.Infrastructure
                 Assert.AreNotEqual(mod, shouldBeLaterDate);
             }
             catch (Exception)
-            { 
+            {
                 throw;
             }
             finally
@@ -336,6 +335,63 @@ namespace LambAndLentil.Test.Infrastructure
         //    Ingredient result = (Ingredient)controller.Edit(8).ViewData.Model;
         //    // Assert
         //    Assert.IsNull(result);
+        //}
+     //   [AssemblyCleanup]
+        //public static void AssemblyCleanup()
+        //{
+
+        //    string path = @"../../../\LambAndLentil.Domain\App_Data\JSON\Ingredient\";
+        //    File.Delete(String.Concat(path, "0.txt"));
+
+        //    for (int i = 2; i < 8; i++)
+        //    {
+        //        File.Delete(String.Concat(path, 214748364, i, ".txt"));
+        //    }
+
+        //    for (int i = 2; i < 8; i++)
+        //    {
+        //        path = @"../../../\LambAndLentil.Domain\App_Data\JSON\Recipe\";
+        //        File.Delete(String.Concat(path, 214748364, i, ".txt"));
+        //    }
+        //    try
+        //    {
+        //        path = @"../../../\LambAndLentil.Domain\App_Data\JSON\TestJSONRepositoryGetByID\";
+        //        IEnumerable<string> files = Directory.EnumerateFiles(path);
+        //        foreach (string file in files)
+        //        {
+        //            File.Delete(file);
+        //        }
+
+        //        Directory.Delete(path);
+        //    }
+        //    catch (FileNotFoundException)
+        //    {
+        //    }
+        //    catch (Exception)
+        //    {
+        //        throw;
+        //    }
+        //    try
+        //    {
+        //        IEnumerable<string> files = Directory.EnumerateFiles(path);
+        //        path = @"../../../\LambAndLentil.Domain\App_Data\JSON\TestReturnCountOfThreeForDirectoryWithThreeFiles\";
+        //        files = (from file in Directory.EnumerateFiles(path, "*.txt")
+        //                 from line in File.ReadLines(file)
+        //                 select file).ToList();
+
+        //        foreach (string file in files)
+        //        {
+        //            File.Delete(file);
+        //        }
+        //        Directory.Delete(path);
+        //    }
+        //    catch (FileNotFoundException)
+        //    { 
+        //    }
+        //    catch(Exception)
+        //    {
+        //        throw;
+        //    } 
         //}
     }
 }

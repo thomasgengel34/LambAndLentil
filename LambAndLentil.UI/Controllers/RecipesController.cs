@@ -90,12 +90,12 @@ namespace LambAndLentil.UI.Controllers
 
         public ActionResult AttachIngredient(int? recipeID, int? ingredientID)
         {
-            return BaseAttach<RecipeVM, Ingredient >(recipeID, ingredientID);
+            return BaseAttach<Recipe, RecipeVM, Ingredient,IngredientVM >(recipeID, ingredientID);
         }
 
         public ActionResult RemoveIngredient(int? recipeID, int? ingredientID)
         {
-            return BaseAttach<Recipe,  Ingredient >(recipeID, ingredientID, AttachOrDetach.Detach);
+            return BaseAttach<Recipe, RecipeVM, Ingredient, IngredientVM>(recipeID, ingredientID, AttachOrDetach.Detach);
         }
          
 

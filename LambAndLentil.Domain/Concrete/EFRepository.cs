@@ -11,35 +11,21 @@ using System.Reflection;
 
 namespace LambAndLentil.Domain.Concrete
 {
-    public class EFRepository<T,TVM> : IRepository<T,TVM>
+    public class XXXXXXXXXXXXXXXXXXXXXXXXXXXXEFRepository<T,TVM> : IRepository<T,TVM>
         where T :BaseEntity,IEntity
         where TVM : class, IEntity
         
     {
         EFDbContext context;
 
-        public EFRepository()
-        {
-            context = new EFDbContext(); 
-        }
+        //public EFRepository()
+        //{
+        //    context = new EFDbContext(); 
+        //}
 
         
 
-        public string GetPlainClassName()
-        {
-            char[] charsToTrim = { 'V', 'M' };
-            string className = typeof(TVM).ToString().TrimEnd(charsToTrim);
-            char[] splitterArray = { '.' };
-            string[] classNameArray = className.Split(splitterArray);
-            className = String.Concat("LambAndLentil.Domain.Entities.",classNameArray.Last());
-            return className;
-        }
-
-        public string GetClassName()
-        {
-            string className = GetPlainClassName();
-            return (className == "ShoppingList") ? "Shopping List" : className;
-        }
+     
 
         //EFDbContext IRepository<T>.context { get; set; } 
 

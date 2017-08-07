@@ -293,7 +293,7 @@ namespace LambAndLentil.Tests.Controllers
 
                 new ShoppingListVM {ID=3,Name="Test3"},
             }.AsQueryable());
-            mock.Setup(m => m.Remove(It.IsAny<ShoppingListVM>())).Verifiable();
+            mock.Setup(m => m.RemoveTVM(It.IsAny<ShoppingListVM>())).Verifiable();
             // Arrange - create the controller
             ShoppingListsController controller = new ShoppingListsController(mock.Object);
 
@@ -303,7 +303,7 @@ namespace LambAndLentil.Tests.Controllers
             AlertDecoratorResult adr = (AlertDecoratorResult)result;
 
             // Assert - ensure that the repository delete method was called with a correct ShoppingList
-            mock.Verify(m => m.Remove(shoppingListVM));
+            mock.Verify(m => m.RemoveTVM(shoppingListVM));
 
 
             Assert.AreEqual("Test2 has been deleted", adr.Message);
@@ -319,7 +319,7 @@ namespace LambAndLentil.Tests.Controllers
             ShoppingListsController controller = SetUpController();
 
             ShoppingListVM shoppingListVM = (ShoppingListVM)mock.Object.ShoppingList;
-            mock.Setup(c => c.Save(shoppingListVM)).Verifiable();
+            mock.Setup(c => c.SaveTVM(shoppingListVM)).Verifiable();
             shoppingListVM.Name = "First edited";
 
             // Act 

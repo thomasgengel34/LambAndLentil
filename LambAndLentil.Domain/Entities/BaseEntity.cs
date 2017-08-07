@@ -19,6 +19,12 @@ namespace LambAndLentil.Domain.Entities
             ModifiedDate = DateTime.Now;
             AddedByUser = WindowsIdentity.GetCurrent().Name;
             ModifiedByUser = WindowsIdentity.GetCurrent().Name;
+            Ingredients = new List<Ingredient>();
+            Recipes = new List<Recipe>();
+            Menus = new List<Menu>();
+            Plans = new List<Plan>();
+            ShoppingLists = new List<ShoppingList>();
+            Persons = new List<Person>();
         }
 
         public BaseEntity(DateTime creationDate) : this()
@@ -47,7 +53,7 @@ namespace LambAndLentil.Domain.Entities
         public string ModifiedByUser { get; set; }
 
         public virtual ICollection<Recipe> Recipes { get; set; }
-        public virtual ICollection<Ingredient> Ingredients { get; set; }
+        public   ICollection<Ingredient> Ingredients { get; set; }
         public virtual ICollection<Menu> Menus { get; set; }
         public virtual ICollection<Plan> Plans { get; set; }
         public virtual ICollection<ShoppingList> ShoppingLists { get; set; }

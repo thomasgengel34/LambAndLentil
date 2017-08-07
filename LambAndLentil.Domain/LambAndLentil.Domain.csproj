@@ -33,12 +33,6 @@
     <Reference Include="AutoMapper, Version=6.1.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
       <HintPath>..\packages\AutoMapper.6.1.1\lib\net45\AutoMapper.dll</HintPath>
     </Reference>
-    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -58,14 +52,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Abstract\IRepository.cs" />
-    <Compile Include="Concrete\EFDbContext.cs" />
-    <Compile Include="Concrete\EFRepository.cs" />
     <Compile Include="Concrete\JSONRepository.cs" />
     <Compile Include="Concrete\LinqHelpers.cs" />
+    <Compile Include="Concrete\RepositoryHelperMethods.cs" />
     <Compile Include="Entities\BaseEntity.cs" />
     <Compile Include="Entities\ContainerSizeUnit.cs" />
     <Compile Include="Entities\FoodGroup.cs" />
-    <Compile Include="Concrete\ILambAndLentilContext.cs" />
     <Compile Include="Entities\IEntity.cs" />
     <Compile Include="Entities\Ingredient.cs" />
     <Compile Include="Entities\MealType.cs" />
@@ -75,11 +67,6 @@
     <Compile Include="Entities\Plan.cs" />
     <Compile Include="Entities\Recipe.cs" />
     <Compile Include="Entities\ShoppingList.cs" />
-    <Compile Include="Migrations\201707251938382_initial.cs" />
-    <Compile Include="Migrations\201707251938382_initial.Designer.cs">
-      <DependentUpon>201707251938382_initial.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -95,11 +82,7 @@
     <Folder Include="App_Data\JSON\Plan\" />
     <Folder Include="App_Data\JSON\Recipe\" />
     <Folder Include="App_Data\JSON\ShoppingList\" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201707251938382_initial.resx">
-      <DependentUpon>201707251938382_initial.cs</DependentUpon>
-    </EmbeddedResource>
+    <Folder Include="Migrations\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

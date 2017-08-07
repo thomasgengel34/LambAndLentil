@@ -80,5 +80,6 @@ namespace LambAndLentil.Domain.Test.Entities
             Assert.AreEqual(0,menu.Diners);
 
         }
+         
     }
 }

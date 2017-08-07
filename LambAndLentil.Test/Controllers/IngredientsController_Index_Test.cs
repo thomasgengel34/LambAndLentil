@@ -11,6 +11,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -568,6 +569,29 @@ namespace LambAndLentil.Tests.Controllers
             Mock<IRepository<Ingredient, IngredientVM>> mock = new  Mock<IRepository<Ingredient, IngredientVM>>();
             IngredientsController controller = new IngredientsController(mock.Object);
             return controller;
+        }
+
+
+        [ClassCleanup()]
+        public static void ClassCleanup()
+        {
+            string path = @"C:\Dev\TGE\LambAndLentil\LambAndLentil.Domain\App_Data\JSON\Ingredient\";
+            int count = int.MaxValue;
+            try
+            {
+
+                for (int i = count; i > count - 6; i--)
+                {
+                    File.Delete(string.Concat(path, i, ".txt"));
+                }
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
         }
     }
 }

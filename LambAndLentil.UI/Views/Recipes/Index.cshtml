@@ -1,5 +1,7 @@
 ﻿@using LambAndLentil.UI.HtmlHelpers
-@model LambAndLentil.UI.Models.ListVM 
+@using LambAndLentil.Domain.Entities
+@using LambAndLentil.UI.Models
+@model LambAndLentil.UI.Models.ListVM<Recipe,RecipeVM>
 
 @{
     ViewBag.Title = "Recipes Index"; 
@@ -15,24 +17,24 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Recipes.First().Name)
+            @Html.DisplayNameFor(model => model.Entities.First().Name)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Recipes.First().Description )
+            @Html.DisplayNameFor(model => model.Entities.First().Description )
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Recipes.First().Servings)
+            @Html.DisplayNameFor(model => model.Entities.First().Servings)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Recipes.First().MealType)
+            @Html.DisplayNameFor(model => model.Entities.First().MealType)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Recipes.First().Calories)
+            @Html.DisplayNameFor(model => model.Entities.First().Calories)
         </th>
         <th></th>
     </tr>
 
-@foreach (var recipe in Model.Recipes) {
+@foreach (var recipe in Model.Entities ) {
     <tr>
         <td>
             @Html.DisplayFor(modelItem => recipe.Name)

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using LambAndLentil.Domain.Concrete;
 using LambAndLentil.Domain.Entities;
+using LambAndLentil.Domain.Abstract;
 using LambAndLentil.UI;
 using LambAndLentil.UI.Controllers;
 using LambAndLentil.UI.Infrastructure.Alerts;
@@ -23,7 +24,7 @@ namespace IntegrationTests
         public void CreateAnPlan()
         {
             // Arrange
-             EFRepository<Plan,PlanVM> planRepo = new  EFRepository<Plan,PlanVM>(); ;
+             IRepository<Plan,PlanVM> planRepo = new  JSONRepository<Plan,PlanVM>(); ;
             PlansController controller = new PlansController(planRepo);
             // Act
             ViewResult vr = controller.Create(UIViewType.Create);
@@ -39,7 +40,7 @@ namespace IntegrationTests
         public void SaveAValidPlan()
         {
             // Arrange
-             EFRepository<Plan,PlanVM> planRepo = new  EFRepository<Plan,PlanVM>(); ;
+             IRepository<Plan,PlanVM> planRepo = new  JSONRepository<Plan,PlanVM>(); ;
             PlansController controller = new PlansController(planRepo);
             PlanVM vm = new PlanVM();
             vm.Name = "test";
@@ -67,7 +68,7 @@ namespace IntegrationTests
             finally
             {
                 // Clean Up - should run a  delete test to make sure this works  
-                Plan plan = planRepo.GetAll().Where(m => m.Name == "test").FirstOrDefault();
+                Plan plan = planRepo.GetAllT().Where(m => m.Name == "test").FirstOrDefault();
                 controller.DeleteConfirmed(plan.ID);
             }
         }
@@ -77,7 +78,7 @@ namespace IntegrationTests
         public void SaveEditedPlanWithNameChange()
         {
             // Arrange
-             EFRepository<Plan,PlanVM> planRepo = new  EFRepository<Plan,PlanVM>(); ;
+            IRepository<Plan,PlanVM> planRepo = new  JSONRepository<Plan,PlanVM>(); ;
             PlansController controller1 = new PlansController(planRepo);
             PlansController controller2 = new PlansController(planRepo);
             PlansController controller3 = new PlansController(planRepo);
@@ -143,7 +144,7 @@ namespace IntegrationTests
         public void SaveEditedPlanWithDescriptionChange()
         {
             // Arrange
-             EFRepository<Plan,PlanVM> planRepo = new  EFRepository<Plan,PlanVM>(); ;
+            IRepository<Plan,PlanVM> planRepo = new  JSONRepository<Plan,PlanVM>(); ;
             PlansController controller1 = new PlansController(planRepo);
             PlansController controller2 = new PlansController(planRepo);
             PlansController controller3 = new PlansController(planRepo);
@@ -217,26 +218,15 @@ namespace IntegrationTests
         public void ActuallyDeleteAPlanFromTheDatabase()
         {
             // Arrange
-             EFRepository<Plan,PlanVM> planRepo = new  EFRepository<Plan,PlanVM>(); ;
-            PlansController editController = new PlansController(planRepo);
-            PlansController indexController = new PlansController(planRepo);
-            PlansController deleteController = new PlansController(planRepo);
-            PlanVM vm = new PlanVM();
-            vm.Name = "0000" + new Guid().ToString();
-            ActionResult ar = editController.PostEdit(vm);
-            ViewResult view = indexController.Index();
-            ListVM<Plan, PlanVM> listVM = (ListVM<Plan, PlanVM>)view.Model;
-            var result = (from m in listVM.Entities
-                          where m.Name == vm.Name
-                          select m).AsQueryable();
+             JSONRepository<Plan,PlanVM> planRepo = new  JSONRepository<Plan,PlanVM>(); ;
             
-            Plan plan = result.FirstOrDefault();
-            PlanVM item = Mapper.Map<Plan, PlanVM>(plan);
+            PlansController controller = new PlansController(planRepo);
+            Plan item= GetPlan(planRepo, "test ActuallyDeleteAPlanFromTheDatabase");
 
             //Act
-            deleteController.DeleteConfirmed(item.ID);
-            var deletedItem = (from m in planRepo.GetAll()
-                               where m.Name == vm.Name
+            controller.DeleteConfirmed(item.ID);
+            var deletedItem = (from m in planRepo.GetAllT()
+                               where m.Description == item.Description
                                select m).AsQueryable();
 
             //Assert
@@ -251,7 +241,7 @@ namespace IntegrationTests
             PlanVM planVM = new PlanVM(CreationDate);
             planVM.Name = "001 Test ";
 
-             EFRepository<Plan,PlanVM> planRepo = new  EFRepository<Plan,PlanVM>(); ;
+             IRepository<Plan,PlanVM> planRepo = new  JSONRepository<Plan,PlanVM>(); ;
             PlansController controllerEdit = new PlansController(planRepo);
             PlansController controllerView = new PlansController(planRepo);
             PlansController controllerDelete = new PlansController(planRepo);
@@ -288,7 +278,7 @@ namespace IntegrationTests
         public void UpdateTheModificationDateBetweenPostedEdits()
         {
             // Arrange
-             EFRepository<Plan,PlanVM> planRepo = new  EFRepository<Plan,PlanVM>();
+             IRepository<Plan,PlanVM> planRepo = new  JSONRepository<Plan,PlanVM>();
             PlansController controllerPost = new PlansController(planRepo);
             PlansController controllerView = new PlansController(planRepo);
             PlansController controllerDelete = new PlansController(planRepo);
@@ -326,6 +316,121 @@ namespace IntegrationTests
                 // Cleanup
                 controllerDelete.DeleteConfirmed(plan.ID);
             }
+        }
+
+        internal Plan GetPlan(JSONRepository<Plan, PlanVM> repo, string description)
+        {
+
+            JSONRepository<Plan, PlanVM> repoPlan = new JSONRepository<Plan, PlanVM>();
+            PlansController controller = new PlansController(repoPlan);
+            PlanVM  vm = new PlanVM();
+             vm.ID = int.MaxValue;
+             vm.Description = description;
+            controller.PostEdit( vm);
+
+            Plan plan = ((from m in repoPlan.GetAllT()
+                          where m.Description == description
+                          select m).AsQueryable()).FirstOrDefault();
+            return plan;
+        }
+
+        [TestMethod]
+        [TestCategory("Attach-Detach")]
+        public void AttachAnExistingIngredientToAnExistingPlan()
+        {
+            // Arrange
+            JSONRepository<Plan, PlanVM> repoPlan = new JSONRepository<Plan, PlanVM>();
+            JSONRepository<Ingredient, IngredientVM> repoIngredient = new JSONRepository<Ingredient, IngredientVM>();
+            PlansController controller = new PlansController(repoPlan);
+
+            Plan menu = GetPlan(repoPlan, "test AttachAnExistingIngredientToAnExistingPlan");
+            Ingredient ingredient = new RecipesControllerShould().GetIngredient(repoIngredient, "test AttachAnExistingIngredientToAnExistingPlan");
+
+            // Act
+            controller.AttachIngredient(menu.ID, ingredient.ID);
+            Plan returnedPlan = (from m in repoPlan.GetAllT()
+                                 where m.Description == menu.Description
+                                 select m).FirstOrDefault();
+
+
+
+            // Assert 
+            Assert.AreEqual(1, returnedPlan.Ingredients.Count());
+            // how do I know the correct ingredient was added?
+            Assert.AreEqual(ingredient.ID, returnedPlan.Ingredients.First().ID);
+
+            // Cleanup
+            IngredientsController controllerCleanupIngredient = new IngredientsController(repoIngredient);
+            PlansController controllerCleanupPlan = new PlansController(repoPlan);
+
+            PlanVM menuVM = Mapper.Map<Plan, PlanVM>(menu);
+            IngredientVM ingredientVM = Mapper.Map<Ingredient, IngredientVM>(ingredient);
+
+            controllerCleanupPlan.DeleteConfirmed(menuVM.ID);
+            controllerCleanupIngredient.DeleteConfirmed(ingredientVM.ID);
+        } 
+
+        [TestMethod]
+        [TestCategory("Attach-Detach")]
+        public void NotDeleteAnIngredientAfterIngredientIsDetachedFromPlan()
+        {
+            Assert.Fail();
+        }
+         
+
+        [TestMethod]
+        [TestCategory("Attach-Detach")]
+        public void ReturnIndexViewWithWarningMessageWhenDetachingNonExistingIngredientAttachedToANonExistingPlan()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod]
+        [TestCategory("Attach-Detach")]
+        public void ReturnIndexViewWithWarningWhenAttachingExistIngredientToNonExistingPlan()
+        {
+            Assert.Fail();
+        }
+        [TestMethod]
+        [TestCategory("Attach-Detach")]
+        public void ReturnIndexViewWithWarningWhenAttachingNonExistIngredientToNonExistingPlan()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod]
+        [TestCategory("Attach-Detach")]
+        public void ReturnIndexViewWithWarningWhenDetachingExistingIngredientAttachedToNonExistingPlan()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod]
+        [TestCategory("Attach-Detach")]
+        public void ReturnPlanEditViewWithSuccessMessageWhenDetachingExistingIngredientFromExistingPlan()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod]
+        [TestCategory("Attach-Detach")]
+        public void ReturnPlanEditViewWithWarningMessageWhenAttachingNonExistingIngredientToExistingRPlan()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod]
+        [TestCategory("Attach-Detach")]
+        public void ReturnPlanEditViewWithWarningMessageWhenDetachingNonExistingIngredientAttachedToExistingPlan()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod]
+        [TestCategory("Attach-Detach")]
+        public void ReturnPlanIndexViewWithWarningWhenDetachingExistingingredientNotAttachedToAnExistingPlan()
+        {
+            Assert.Fail();
         }
     }
 }

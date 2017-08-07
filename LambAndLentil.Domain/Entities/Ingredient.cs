@@ -9,6 +9,7 @@ namespace LambAndLentil.Domain.Entities
         public int ID { get; set; }
 
         public virtual Recipe Recipe { get; set; }
+         
 
         public Ingredient() : base()
         {
