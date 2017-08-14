@@ -644,5 +644,13 @@ namespace LambAndLentil.Test.IntegrationTests
         // also some adds: shopping list changes because an ingredient was added to a recipe, etc.
         // there should be two separate methods for when an ingredient is deleted, and when it is detached. Deleted means it is no longer in the database. Detached means it was deliberately removed in a child. The word 'removed' should be changed to 'detached'.   I am not sure that when I start coding that there will be any difference. 
 
+        [TestMethod]
+        public void IngredientUpdatedOnUSDASiteShouldBeFlaggedForUserOptionToUpdateParent()
+        {
+            // if an ingredient is updated on the USDA site, it should be flagged with a user option to update the recipe, menu, etc. to the new information. 
+            Assert.Fail();
+        }
+
+
     }
 }

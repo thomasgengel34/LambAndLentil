@@ -71,6 +71,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdminSecurity\AdminSecurityTests.cs" />
+    <Compile Include="AdminSecurity\ManagerControllerTests.cs" />
+    <Compile Include="AdminSecurity\ErrorLogging.cs" />
     <Compile Include="Controllers\AccountControllerTest.cs" />
     <Compile Include="Controllers\HomeControllerTest.cs" />
     <Compile Include="Controllers\IngredientsController_Index_Test.cs" />
@@ -92,6 +95,8 @@
     <Compile Include="Infrastructure\AutoMapperConfigForTests.cs" />
     <Compile Include="Infrastructure\MetaDataBindingsTest.cs" />
     <Compile Include="Infrastructure\NinjectControllerFactoryTests.cs" />
+    <Compile Include="Infrastructure\AutoMapperShould.cs" />
+    <Compile Include="Infrastructure\BundleConfigShould.cs" />
     <Compile Include="IntegrationTests\ChangesInIngredientShould.cs" />
     <Compile Include="IntegrationTests\IngredientsControllerShould.cs" />
     <Compile Include="IntegrationTests\MenusControllerShould.cs" />
@@ -108,6 +113,27 @@
     <Compile Include="Models\ListVMShould.cs" />
     <Compile Include="Routes\RouteTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SeedDomainJSONFiles.cs" />
+    <Compile Include="Views\HomeContactViewShould.cs" />
+    <Compile Include="Views\IngredientListEditViewShould.cs" />
+    <Compile Include="Views\MenuDetailViewShould.cs" />
+    <Compile Include="Views\ShoppingListIndexViewShould .cs" />
+    <Compile Include="Views\PlanIndexViewShould.cs" />
+    <Compile Include="Views\ShoppingListEditViewShould.cs" />
+    <Compile Include="Views\PlanEditViewShould.cs" />
+    <Compile Include="Views\MenuEditViewShould.cs" />
+    <Compile Include="Views\RecipeEditViewShould.cs" />
+    <Compile Include="Views\PersonListEditViewShould.cs" />
+    <Compile Include="Views\IngredieintIndexViewShould.cs" />
+    <Compile Include="Views\RecipeDetailViewShould.cs" />
+    <Compile Include="Views\MenuIndexViewShould.cs" />
+    <Compile Include="Views\IngredientDetailViewShould.cs" />
+    <Compile Include="Views\LogonFormInViewShould.cs" />
+    <Compile Include="Views\RegisterViewShould.cs" />
+    <Compile Include="Views\ErrorPagViewShould.cs" />
+    <Compile Include="Views\IngredientDeleteViewShould.cs" />
+    <Compile Include="Views\RecipeIndexViewShould.cs" />
+    <Compile Include="Views\HomeAboutViewShould.cs" />
     <Compile Include="WebAPI\GetNdbnoShould.cs" />
     <Compile Include="WebAPI\WebApiShould.cs" />
   </ItemGroup>
@@ -126,7 +152,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Views\" />
+    <Folder Include="App_Data\JSON\Ingredient\" />
+    <Folder Include="App_Data\JSON\Recipe\" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -18,11 +18,11 @@ namespace LambAndLentil.UI.Models
         public int ID { get; set; }
 
 
-        internal static List<TVM> GetIndexedModel<T, TVM>(int PageSize, int page = 1)
+        internal   List<TVM> GetIndexedModel<T, TVM>(IRepository<T, TVM> repository, int PageSize, int page = 1)
             where T : BaseEntity, IEntity
             where TVM : BaseVM, IEntity
         {
-            IRepository<T, TVM> repository = new JSONRepository<T, TVM>();
+           
 
             var result = repository.GetAllT()
                       .OrderBy(p => p.Name)
@@ -40,12 +40,10 @@ namespace LambAndLentil.UI.Models
 
 
 
-        internal static PagingInfo PagingFunction<T, TVM>(int page, int PageSize)
+        internal   PagingInfo PagingFunction<T, TVM>(IRepository<T, TVM> repository, int page, int PageSize)
             where T : BaseEntity,IEntity
             where TVM : BaseVM, IEntity
         {
-            IRepository<T, TVM> repository = new JSONRepository<T, TVM>();
-
             PagingInfo PagingInfo = new PagingInfo();
             PagingInfo.CurrentPage = page;
             PagingInfo.ItemsPerPage = PageSize;

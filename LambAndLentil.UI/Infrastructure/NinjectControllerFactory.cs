@@ -1,6 +1,7 @@
 ﻿using LambAndLentil.Domain.Abstract;
 using LambAndLentil.Domain.Concrete;
 using LambAndLentil.Domain.Entities;
+using LambAndLentil.UI.Controllers;
 using LambAndLentil.UI.Infrastructure.ModelMetaData;
 using LambAndLentil.UI.Models;
 using Ninject;
@@ -29,6 +30,7 @@ namespace LambAndLentil.UI.Infrastructure
         {
             //ninjectKernel.Bind<IRepository>().To<JSONRepository>();
             ninjectKernel.Bind<IRepository<Ingredient, IngredientVM>>().To<JSONRepository<Ingredient, IngredientVM>>();
+
             ninjectKernel.Bind<IRepository<Recipe,RecipeVM>>().To<JSONRepository<Recipe,RecipeVM>>();
             ninjectKernel.Bind<IRepository<Menu,MenuVM>>().To<JSONRepository<Menu,MenuVM>>();
             ninjectKernel.Bind<IRepository<Plan,PlanVM>>().To<JSONRepository<Plan,PlanVM>>();

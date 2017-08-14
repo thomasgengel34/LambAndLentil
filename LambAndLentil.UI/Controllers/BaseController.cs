@@ -12,15 +12,24 @@ using System.Web.Mvc;
 
 namespace LambAndLentil.UI.Controllers
 {
-    public abstract class BaseController : Controller
+    public abstract class BaseController<T, TVM> : Controller
+        where T : BaseEntity, IEntity
+            where TVM : BaseVM, IEntity,new()
     {
         public int PageSize { get; set; }
 
+        protected static IRepository<T, TVM> repo { get; set; }
+
        
 
-        private Type GetControllerType<TVM>()
+        public BaseController(IRepository<T, TVM> repository)
         {
+            repo = repository;
+        }
 
+
+        private Type GetControllerType()
+        { 
             char[] charsToTrim = { 'V', 'M' };
             string className = typeof(TVM).ToString().TrimEnd(charsToTrim);
             string controllerName = String.Concat(className, "sController");
@@ -29,38 +38,30 @@ namespace LambAndLentil.UI.Controllers
 
         //  TODO: filter
 
-        public ViewResult BaseIndex<T,TVM>(int page = 1)
-            where T:BaseEntity,IEntity
-            where TVM : BaseVM
+        public ViewResult BaseIndex(IRepository<T, TVM> repo, int page = 1) 
         {
             PageSize = 8;
-            ListVM<T,TVM> model = new ListVM<T,TVM>();
+            ListVM<T, TVM> model = new ListVM<T, TVM>();
             // model.Entities = (IEnumerable<TVM>)BaseVM.GetIndexedModel<T,TVM>(PageSize, page);
-            model.List =  BaseVM.GetIndexedModel<T,TVM>(PageSize, page);
-            model.PagingInfo = BaseVM.PagingFunction<T,TVM>(page, PageSize);
+            model.ListTVM = new BaseVM().GetIndexedModel<T, TVM>(repo,PageSize, page);
+            model.PagingInfo = new BaseVM().PagingFunction<T, TVM>(repo, page, PageSize);
             return View(UIViewType.Index.ToString(), model);
         }
-
-
-
-        public ActionResult BaseDetails<T, TVM>(UIControllerType uIController, int id = 1, UIViewType actionMethod = UIViewType.Details)
-            where T :BaseEntity,IEntity
-           where TVM : BaseVM, IEntity
-        {
-          IRepository<T, TVM> repo = new  JSONRepository<T, TVM>();
-
+         
+        public ActionResult BaseDetails(IRepository<T, TVM> repo, UIControllerType uIController, int id = 1, UIViewType actionMethod = UIViewType.Details) 
+        { 
             ViewBag.Title = actionMethod.ToString();
             if (actionMethod == UIViewType.Delete)
             {
-                return BaseDelete<T,TVM>(uIController, id);
+                return BaseDelete(repo, uIController, id);
             }
             else if (actionMethod == UIViewType.DeleteConfirmed)
             {
-                return BaseDeleteConfirmed<T,TVM>(uIController, id);
+                return BaseDeleteConfirmed(repo, uIController, id);
             }
             else
             {
-                ActionResult result = GuardId<T,TVM>(uIController, id);
+                ActionResult result = GuardId(repo, uIController, id);
                 MvcApplication.InitializeMap();  // needed for testing.  This is being run in Application_Start normally.  Move to Repository
 
                 TVM item = repo.GetTVMById(id);
@@ -68,14 +69,14 @@ namespace LambAndLentil.UI.Controllers
                 // TVM itemVM = Mapper.Map<T, TVM>((T)item); Move to Repository
                 if (result is EmptyResult)
                 {
-                    return View(UIViewType.Details.ToString(), item);
+                    return View(UIViewType.Details.ToString(), item).WithError("Something is wrong with the data!");
                 }
-                return result;
+                return View(UIViewType.Details.ToString(), item).WithSuccess("Item Has been added or modified!");
             }
         }
 
 
-        public ViewResult BaseCreate<TVM>(UIViewType actionMethod) where TVM : BaseVM, new()
+        public ViewResult BaseCreate(UIViewType actionMethod) 
         {
             ViewBag.ActionMethod = UIViewType.Create;
             TVM vm = new TVM();
@@ -83,24 +84,20 @@ namespace LambAndLentil.UI.Controllers
             return View(UIViewType.Details.ToString(), vm);
         }
 
-        public ViewResult BaseEdit<T, TVM>(UIControllerType uIControllerType, int id = 1, UIViewType actionMethod = UIViewType.Edit)
-            where T : BaseEntity,IEntity
-        where TVM : BaseVM, IEntity
-        {
-            IRepository<T, TVM> repo = new  JSONRepository<T, TVM>();
-
+        public ViewResult BaseEdit(IRepository<T,TVM> repo, UIControllerType uIControllerType, int id = 1, UIViewType actionMethod = UIViewType.Edit) 
+        { 
             MvcApplication.InitializeMap();  // needed for testing.  This is being run in Application_Start normally.  Move to Repository
             ActionResult result = new EmptyResult();
             if (actionMethod == UIViewType.Delete)
             {
-                result = BaseDelete<T,TVM>(UIControllerType.Ingredients, id = 1, UIViewType.Details);
+                result = BaseDelete(repo, UIControllerType.Ingredients, id = 1, UIViewType.Details);
 
             }
             else
             {
                 if (id != 0)
                 {
-                    result = GuardId<T,TVM>(uIControllerType, id);
+                    result = GuardId(repo, uIControllerType, id);
                 }
 
 
@@ -115,13 +112,10 @@ namespace LambAndLentil.UI.Controllers
             return result as ViewResult;
         }
 
-        public ActionResult BasePostEdit<T, TVM>(IBaseVM vm)
-            where T : BaseEntity,IEntity
-            where TVM : BaseVM, IEntity, new()
+        public ActionResult BasePostEdit(IRepository<T,TVM> repo, TVM vm) 
         {
-            MvcApplication.InitializeMap();  // needed for testing.  This is being run in Application_Start normally. 
-            IRepository<T, TVM> repo = new  JSONRepository<T, TVM>();
-            IController TController = (IController)GetControllerType<TVM>();
+            MvcApplication.InitializeMap();  // needed for testing.  This is being run in Application_Start normally.  
+            IController TController = (IController)GetControllerType();
             TVM item = (TVM)vm;
             // new ingredientVM - saves double writing the Create Post method
             if (vm.ID == 0 && ModelState.IsValid)
@@ -146,13 +140,10 @@ namespace LambAndLentil.UI.Controllers
         }
 
 
-        public ActionResult BaseDelete<T,TVM>(UIControllerType uiControllerType, int id = 1, UIViewType actionMethod = UIViewType.Delete)
-            where T:BaseEntity,IEntity
-            where TVM : BaseVM, IEntity
-        {
-            IRepository<T,TVM> repo = new  JSONRepository<T,TVM>();
+        public ActionResult BaseDelete(IRepository<T,TVM> repo, UIControllerType uiControllerType, int id = 1, UIViewType actionMethod = UIViewType.Delete) 
+        { 
             MvcApplication.InitializeMap();  // needed for testing.  This is being run in Application_Start normally.  
-            ActionResult result = GuardId<T,TVM>(uiControllerType, id);
+            ActionResult result = GuardId(repo, uiControllerType, id);
             TVM item = repo.GetTVMById(id);
 
             if (actionMethod == UIViewType.Delete)
@@ -167,12 +158,9 @@ namespace LambAndLentil.UI.Controllers
             return result;
         }
 
-        public ActionResult BaseDeleteConfirmed<T,TVM>(UIControllerType controllerType, int id)
-            where T :BaseEntity,IEntity
-            where TVM : BaseVM, IEntity
-        {
-            IRepository<T,TVM> repo = new  JSONRepository<T,TVM>();
-            ActionResult result = GuardId<T,TVM>(controllerType, id);
+        public ActionResult BaseDeleteConfirmed(IRepository<T,TVM> repo, UIControllerType controllerType, int id) 
+        { 
+            ActionResult result = GuardId(repo, controllerType, id);
             TVM item = repo.GetTVMById(id);
             repo.RemoveTVM(item);
             ViewBag.ActionMethod = UIViewType.Delete.ToString();
@@ -182,20 +170,20 @@ namespace LambAndLentil.UI.Controllers
             }
             return result;
         }
-                                                      
+
         public ActionResult BaseAttach<TParent, TParentVM, TChild, TChildVM>(int? parentID, int? childID, AttachOrDetach attachOrDetach = AttachOrDetach.Attach)
             where TParent : BaseEntity, IEntity
-            where TParentVM:BaseVM, IEntity
+            where TParentVM : BaseVM, IEntity
             where TChild : BaseEntity, IEntity
-            where TChildVM:BaseVM,IEntity
+            where TChildVM : BaseVM, IEntity
         {
-             
+
             // conditions guard against people trying thngs out manually  
-            IRepository< TParent,TParentVM> repository = new  JSONRepository<TParent,TParentVM>();
-            IRepository<TChild,TChildVM> childRepository = new  JSONRepository<TChild,TChildVM>();
+            IRepository<TParent, TParentVM> repository = new JSONRepository<TParent, TParentVM>();
+            IRepository<TChild, TChildVM> childRepository = new JSONRepository<TChild, TChildVM>();
             string entity = typeof(TParent).ToString().Split('.').Last();
             string childEntity = typeof(TChild).ToString().Split('.').Last();
-            ViewBag.listOfChildren =   childRepository.GetAllTVM();
+            ViewBag.listOfChildren = childRepository.GetAllTVM();
             if (parentID == null)
             {
                 return RedirectToAction(UIViewType.Index.ToString()).WithWarning(entity + " was not found");
@@ -204,10 +192,10 @@ namespace LambAndLentil.UI.Controllers
             {
                 int parentNonNullID = (int)parentID;
 
-                 
+
                 BaseVM parentFromDB = repository.GetTVMById(parentNonNullID);
-                TParent parent = Mapper.Map<BaseVM, TParent >(parentFromDB);
-                    
+                TParent parent = Mapper.Map<BaseVM, TParent>(parentFromDB);
+
                 if (parent == null)
                 {
                     // TODO: log error - this could be a developer problem
@@ -251,14 +239,10 @@ namespace LambAndLentil.UI.Controllers
             return ControllerExtensions.RedirectToAction(this, action);
         }
 
-        protected ActionResult GuardId<T,TVM>(UIControllerType tController, int id)
-            where T:BaseEntity,IEntity
-            where TVM : class, IEntity
-        {
-            IRepository<T,TVM> repo = new  JSONRepository<T,TVM>();
-
+        protected ActionResult GuardId(IRepository<T,TVM> repo, UIControllerType tController, int id) 
+        { 
             TVM item = repo.GetTVMById(id);
-            string className = new  RepositoryHelperMethods().GetClassName<TVM>();
+            string className = new RepositoryHelperMethods().GetClassName<TVM>();
             if (item == null)
             {
                 return RedirectToAction(UIViewType.BaseIndex.ToString()).WithError("No " + className + "  was found with that id.");

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using LambAndLentil.Domain.Abstract;
+using LambAndLentil.Domain.Concrete;
 using LambAndLentil.Domain.Entities;
 using LambAndLentil.Tests.Infrastructure;
 using LambAndLentil.UI;
@@ -15,16 +16,21 @@ using System.Web.Mvc;
 
 namespace LambAndLentil.Tests.Controllers
 {
+
     [TestClass]
-    [TestCategory("IngredientsController")]
+    [TestCategory(" IngredientsController")]
     public class IngredientsControllerShould
     {
         static Mock<IRepository<Ingredient, IngredientVM>> mock;
+       // static string path = @"../../../\LambAndLentil.Test\App_Data\JSON\Ingredient\";
+        private static IRepository<Ingredient, IngredientVM> repo { get; set; }
         public static MapperConfiguration AutoMapperConfig { get; set; }
+
         public IngredientsControllerShould()
         {
             AutoMapperConfigForTests.InitializeMap();
             mock = new Mock<IRepository<Ingredient, IngredientVM>>();
+            repo = new TestRepository<Ingredient, IngredientVM>();
         }
 
         [TestMethod]
@@ -32,7 +38,7 @@ namespace LambAndLentil.Tests.Controllers
         {
 
             // Arrange
-            IngredientsController controller = SetUpController();
+            IngredientsController controller = SetUpControllerWithNoMock();
             // Act 
             controller.PageSize = 4;
 
@@ -43,12 +49,14 @@ namespace LambAndLentil.Tests.Controllers
             Assert.AreEqual(4, controller.PageSize);
         }
 
+
+
         [TestMethod]
         public void InheritFromBaseControllerCorrectlyDisposeExists()
         {
 
             // Arrange
-            IngredientsController controller = SetUpController();
+            IngredientsController controller = SetUpControllerWithNoMock();
             // Act 
             controller.PageSize = 4;
 
@@ -63,7 +71,7 @@ namespace LambAndLentil.Tests.Controllers
         public void BePublic()
         {
             // Arrange
-            IngredientsController controller = SetUpController();
+            IngredientsController controller = SetUpControllerWithNoMock();
 
             // Act
             Type type = controller.GetType();
@@ -88,25 +96,29 @@ namespace LambAndLentil.Tests.Controllers
         public void DetailsWorksWithValidIngredientID()
         {
             // Arrange
-            IngredientsController controller = SetUpController();
-            //     AutoMapperConfigForTests.AMConfigForTests();
+            IngredientsController controller = new IngredientsController(repo);
+            Ingredient ingredient = new Ingredient { ID = 1 };
+            repo.SaveT(ingredient);
 
 
             // Act
-            ViewResult view = controller.Details(1) as ViewResult;
+            ActionResult ar = controller.Details(1);
+            AlertDecoratorResult adr = (AlertDecoratorResult)ar;
+            ViewResult view = (ViewResult)adr.InnerResult;
             // Assert
-            Assert.IsNotNull(view);
+            Assert.IsNotNull(ar);
 
             Assert.AreEqual("Details", view.ViewName);
-            Assert.IsInstanceOfType(view.Model, typeof(LambAndLentil.UI.Models.IngredientVM));
+            Assert.IsInstanceOfType(view.Model, typeof(IngredientVM));
         }
 
+        [Ignore]
         [TestMethod]
         [TestCategory("Details")]
         public void DetailsIngredientIDTooHighViewNotNull()
-        {
-            // Arrange
-            IngredientsController controller = SetUpController();
+        {  // not sure what the desired behavior is yet
+           // Arrange
+            IngredientsController controller = SetUpControllerWithNoMock();
             //  AutoMapperConfigForTests.AMConfigForTests();
             ActionResult view = controller.Details(4000);
             AlertDecoratorResult adr = (AlertDecoratorResult)view;
@@ -114,25 +126,27 @@ namespace LambAndLentil.Tests.Controllers
             Assert.IsNotNull(view);
         }
 
+        [Ignore]
         [TestMethod]
         [TestCategory("Details")]
         public void DetailsIngredientIDTooHighMessageRight()
-        {
-            // Arrange
-            IngredientsController controller = SetUpController();
-            //  AutoMapperConfigForTests.AMConfigForTests();
-            ActionResult view = controller.Details(4000);
-            AlertDecoratorResult adr = (AlertDecoratorResult)view;
+        {// not sure what the desired behavior is yet
+         // Arrange
+            IngredientsController controller = SetUpControllerWithNoMock();
+     
+            ActionResult ar = controller.Details(4000);
+            AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             // Assert 
             Assert.AreEqual("No ingredient was found with that id.", adr.Message);
         }
 
+        [Ignore]
         [TestMethod]
         [TestCategory("Details")]
         public void DetailsIngredientIDTooHighAlertClassCorrect()
-        {
+        {   // not sure what the desired behavior is yet
             // Arrange
-            IngredientsController controller = SetUpController();
+            IngredientsController controller = SetUpControllerWithNoMock();
             //  AutoMapperConfigForTests.AMConfigForTests();
             ActionResult view = controller.Details(4000);
             AlertDecoratorResult adr = (AlertDecoratorResult)view;
@@ -140,12 +154,13 @@ namespace LambAndLentil.Tests.Controllers
             Assert.AreEqual("alert-danger", adr.AlertClass);
         }
 
+        [Ignore]
         [TestMethod]
         [TestCategory("Details")]
         public void DetailsIngredientIDTooHighCorrectModel()
         {
             // Arrange
-            IngredientsController controller = SetUpController();
+            IngredientsController controller = SetUpControllerWithNoMock();
             //  AutoMapperConfigForTests.AMConfigForTests();
             ActionResult view = controller.Details(4000);
             AlertDecoratorResult adr = (AlertDecoratorResult)view;
@@ -153,12 +168,13 @@ namespace LambAndLentil.Tests.Controllers
             Assert.AreEqual(UIControllerType.Ingredients.ToString(), ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(0).ToString());
         }
 
+        [Ignore]
         [TestMethod]
         [TestCategory("Details")]
         public void DetailsIngredientIDTooHighCorrectController()
         {
             // Arrange
-            IngredientsController controller = SetUpController();
+            IngredientsController controller = SetUpControllerWithNoMock();
             //  AutoMapperConfigForTests.AMConfigForTests();
             ActionResult view = controller.Details(4000);
             AlertDecoratorResult adr = (AlertDecoratorResult)view;
@@ -166,12 +182,13 @@ namespace LambAndLentil.Tests.Controllers
             Assert.AreEqual(UIViewType.BaseIndex.ToString(), ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(1).ToString());
         }
 
+        [Ignore]
         [TestMethod]
         [TestCategory("Details")]
         public void DetailsIngredientIDTooHighCorrectRouteValue()
         {
             // Arrange
-            IngredientsController controller = SetUpController();
+            IngredientsController controller = SetUpControllerWithNoMock();
             //  AutoMapperConfigForTests.AMConfigForTests();
             ActionResult view = controller.Details(4000);
             AlertDecoratorResult adr = (AlertDecoratorResult)view;
@@ -179,16 +196,18 @@ namespace LambAndLentil.Tests.Controllers
             Assert.AreEqual(1, ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(3));
         }
 
+        [Ignore]
         [TestMethod]
         [TestCategory("Details")]
         public void DetailsIngredientIDPastIntLimit()
         {
+            // I am not sure how I want this to operate.  Wait until UI is set up and see then.
             // Arrange
-            IngredientsController controller = SetUpController();
+            IngredientsController controller = SetUpControllerWithNoMock();
             //  AutoMapperConfigForTests.AMConfigForTests(); 
 
             // Act
-            ViewResult result = controller.Details(Int16.MaxValue + 1) as ViewResult;
+            ViewResult result = controller.Details(int.MaxValue) as ViewResult;
 
             // Assert
             Assert.IsNotNull(result);
@@ -199,9 +218,9 @@ namespace LambAndLentil.Tests.Controllers
         public void DetailsIngredientIDIsZeroViewIsNotNull()
         {
             // Arrange
-            IngredientsController controller = SetUpController();
-            //    AutoMapperConfigForTests.AMConfigForTests();
-
+            IngredientsController controller = new IngredientsController(repo);
+            Ingredient ingredient = new Ingredient { ID = 0 };
+            repo.SaveT(ingredient);
 
             // Act
             ViewResult view = controller.Details(0) as ViewResult;
@@ -216,16 +235,17 @@ namespace LambAndLentil.Tests.Controllers
         public void DetailsIngredientIDIsZeroMessageIsCorrect()
         {
             // Arrange
-            IngredientsController controller = SetUpController();
-            //    AutoMapperConfigForTests.AMConfigForTests();
+            IngredientsController controller = new IngredientsController(repo);
+            Ingredient ingredient = new Ingredient { ID = 0 };
+            repo.SaveT(ingredient);
 
 
             // Act
-            ViewResult view = controller.Details(0) as ViewResult;
-            AlertDecoratorResult adr = (AlertDecoratorResult)view;
+            ActionResult ar = controller.Details(0);
+            AlertDecoratorResult adr = (AlertDecoratorResult)ar;
 
             // Assert 
-            Assert.AreEqual("No ingredient was found with that id.", adr.Message);
+            Assert.AreEqual("Something is wrong with the data!", adr.Message);
         }
 
         [TestMethod]
@@ -233,13 +253,14 @@ namespace LambAndLentil.Tests.Controllers
         public void DetailsIngredientIDIsZeroAlertClassIsCorrect()
         {
             // Arrange
-            IngredientsController controller = SetUpController();
-            //    AutoMapperConfigForTests.AMConfigForTests();
+            IngredientsController controller = new IngredientsController(repo);
+            Ingredient ingredient = new Ingredient { ID = 0 };
+            repo.SaveT(ingredient);
 
 
             // Act
-            ViewResult view = controller.Details(0) as ViewResult;
-            AlertDecoratorResult adr = (AlertDecoratorResult)view;
+            ActionResult ar = controller.Details(0);
+            AlertDecoratorResult adr = (AlertDecoratorResult)ar;
 
             // Assert  
             Assert.AreEqual("alert-danger", adr.AlertClass);
@@ -250,63 +271,31 @@ namespace LambAndLentil.Tests.Controllers
         public void DetailsIngredientIDIsZeroReturnModelIsCorrect()
         {
             // Arrange
-            IngredientsController controller = SetUpController();
-            //    AutoMapperConfigForTests.AMConfigForTests();
+            IngredientsController controller = new IngredientsController(repo);
+            Ingredient ingredient = new Ingredient { ID = 0 };
+            repo.SaveT(ingredient);
 
 
             // Act
-            ViewResult view = controller.Details(0) as ViewResult;
-            AlertDecoratorResult adr = (AlertDecoratorResult)view;
-
-            // Assert   
-            Assert.AreEqual(UIControllerType.Ingredients.ToString(), ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(0).ToString());
-        }
-
-        [TestMethod]
-        [TestCategory("Details")]
-        public void DetailsIngredientIDIsZeroReturnControllerIsCorrect()
-        {
-            // Arrange
-            IngredientsController controller = SetUpController();
-            //    AutoMapperConfigForTests.AMConfigForTests();
-
-
-            // Act
-            ViewResult view = controller.Details(0) as ViewResult;
-            AlertDecoratorResult adr = (AlertDecoratorResult)view;
+            ActionResult ar = controller.Details(0);
+            AlertDecoratorResult adr = (AlertDecoratorResult)ar;
 
             // Assert    
-            Assert.AreEqual(UIViewType.BaseIndex.ToString(), ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(1).ToString());
+            Assert.IsNull(adr.Model);
         }
 
-        [TestMethod]
-        [TestCategory("Details")]
-        public void DetailsIngredientIDIsZeroReturnRouteValueIsCorrect()
-        {
-            // Arrange
-            IngredientsController controller = SetUpController();
-            //    AutoMapperConfigForTests.AMConfigForTests();
-
-
-            // Act
-            ViewResult view = controller.Details(0) as ViewResult;
-            AlertDecoratorResult adr = (AlertDecoratorResult)view;
-
-            // Assert     
-            Assert.AreEqual(1, ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(3));
-        }
 
         [TestMethod]
         [TestCategory("Details")]
         public void Details_IngredientIDIsNegative_ResultNotNull()
         {
             // Arrange
-            IngredientsController controller = SetUpController();
-            //    AutoMapperConfigForTests.AMConfigForTests();
-
+            IngredientsController controller = new IngredientsController(repo);
+            Ingredient ingredient = new Ingredient { ID = -1 };
+            repo.SaveT(ingredient);
 
             // Act
-            ViewResult view = controller.Details(0) as ViewResult;
+            ActionResult view = controller.Details(-1);
             AlertDecoratorResult adr = (AlertDecoratorResult)view;
 
             // Assert
@@ -318,17 +307,17 @@ namespace LambAndLentil.Tests.Controllers
         public void Details_IngredientIDIsNegative_MessageCorrect()
         {
             // Arrange
-            IngredientsController controller = SetUpController();
-            //    AutoMapperConfigForTests.AMConfigForTests();
-
+            IngredientsController controller = new IngredientsController(repo);
+            Ingredient ingredient = new Ingredient { ID = int.MaxValue };
+            repo.SaveT(ingredient);
 
             // Act
-            ViewResult view = controller.Details(0) as ViewResult;
-            AlertDecoratorResult adr = (AlertDecoratorResult)view;
+            ActionResult ar = controller.Details(int.MaxValue);
+            AlertDecoratorResult adr = (AlertDecoratorResult)ar;
 
             // Assert   adr.InnerResult).RouteValues.Values.ElementAt(1).ToString());
             //Assert.AreEqual(1, ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(3));
-            Assert.AreEqual("No ingredient was found with that id.", adr.Message);
+            Assert.AreEqual("Something is wrong with the data!", adr.Message);
         }
 
         [TestMethod]
@@ -336,69 +325,23 @@ namespace LambAndLentil.Tests.Controllers
         public void Details_IngredientIDIsNegative_AlertClassCorrect()
         {
             // Arrange
-            IngredientsController controller = SetUpController();
-            //    AutoMapperConfigForTests.AMConfigForTests();
-
+            IngredientsController controller = new IngredientsController(repo);
+            Ingredient ingredient = new Ingredient
+            {
+                ID = -1,
+                Name = "Details_IngredientIDIsNegative_AlertClassCorrect"
+            };
+            repo.SaveT(ingredient);
 
             // Act
-            ViewResult view = controller.Details(0) as ViewResult;
+            ActionResult view = controller.Details(-1);
             AlertDecoratorResult adr = (AlertDecoratorResult)view;
 
             // Assert  
             Assert.AreEqual("alert-danger", adr.AlertClass);
         }
 
-        [TestMethod]
-        [TestCategory("Details")]
-        public void Details_IngredientIDIsNegative_RouteClassCorrect()
-        {
-            // Arrange
-            IngredientsController controller = SetUpController();
-            //    AutoMapperConfigForTests.AMConfigForTests();
 
-
-            // Act
-            ViewResult view = controller.Details(0) as ViewResult;
-            AlertDecoratorResult adr = (AlertDecoratorResult)view;
-
-            // Assert   
-            Assert.AreEqual(UIControllerType.Ingredients.ToString(), ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(0).ToString());
-        }
-
-
-        [TestMethod]
-        [TestCategory("Details")]
-        public void Details_IngredientIDIsNegative_ControllerIsCorrect()
-        {
-            // Arrange
-            IngredientsController controller = SetUpController();
-            //    AutoMapperConfigForTests.AMConfigForTests();
-
-
-            // Act
-            ViewResult view = controller.Details(0) as ViewResult;
-            AlertDecoratorResult adr = (AlertDecoratorResult)view;
-
-            // Assert    
-            Assert.AreEqual(UIViewType.BaseIndex.ToString(), ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(1).ToString());
-        }
-
-        [TestMethod]
-        [TestCategory("Details")]
-        public void Details_IngredientIDIsNegative_RouteValuesCorrect()
-        {
-            // Arrange
-            IngredientsController controller = SetUpController();
-            //    AutoMapperConfigForTests.AMConfigForTests();
-
-
-            // Act
-            ViewResult view = controller.Details(0) as ViewResult;
-            AlertDecoratorResult adr = (AlertDecoratorResult)view;
-
-            // Assert    
-            Assert.AreEqual(1, ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(3));
-        }
         // the following are not really testable.  I am keeping them to remind me of that.
         //[TestMethod]
         //public void IngredientsCtr_DetailsIngredientIDIsNotANumber() { }
@@ -407,35 +350,36 @@ namespace LambAndLentil.Tests.Controllers
         //public void IngredientsCtr_DetailsIngredientIDIsNotAInteger() { } 
 
 
-        private IngredientsController SetUpController()
+        private IngredientsController SetUpControllerWithNoMock()
         {
-            mock = new Mock<IRepository<Ingredient, IngredientVM>>();
+
             mock.Setup(m => m.Ingredient).Returns(new Ingredient[] {
-                new Ingredient {ID = 1, Name = "P1",  ModifiedDate=DateTime.MaxValue.AddYears(-10)},
-                new Ingredient {ID = 2, Name = "P2" , ModifiedDate=DateTime.MaxValue.AddYears(-20)},
-                new Ingredient {ID = 3, Name = "P3" },
-                new Ingredient {ID = 4, Name = "P4" },
-                new Ingredient {ID = 5, Name = "P5" }
+                new Ingredient {ID = 1, Name = "IngredientsControllerTest1",  ModifiedDate=DateTime.MaxValue.AddYears(-10)},
+                new Ingredient {ID = 2, Name = "IngredientsControllerTest2" , ModifiedDate=DateTime.MaxValue.AddYears(-20)},
+                new Ingredient {ID = 3, Name = "IngredientsControllerTest3" },
+                new Ingredient {ID = 4, Name = "IngredientsControllerTest4" },
+                new Ingredient {ID = 5, Name = "IngredientsControllerTest5" }
             }.AsQueryable());
 
-            IngredientsController controller = new IngredientsController(mock.Object);
+            IngredientsController controller = new IngredientsController(repo);
             controller.PageSize = 3;
 
             return controller;
         }
 
-        private IngredientsController SetUpSimpleController()
-        {
-            mock = new Mock<IRepository<Ingredient, IngredientVM>>();
-            IngredientsController controller = new IngredientsController(mock.Object);
-            return controller;
-        }
+        //private  IngredientsController<Ingredient, IngredientVM> SetUpSimpleController()
+        //{
+        //    mock = new Mock<IRepository<Ingredient, IngredientVM>>();
+        //     IngredientsController  controller = new  IngredientsController (mock.Object);
+        //    return controller;
+        //}
 
 
         [ClassCleanup()]
         public static void ClassCleanup()
         {
-            string path = @"C:\Dev\TGE\LambAndLentil\LambAndLentil.Domain\App_Data\JSON\Ingredient\";
+            // TODO: replace this code with Directory methods
+            string path = @"C:\Dev\TGE\LambAndLentil\LambAndLentil.Test\App_Data\JSON\Ingredient\";
             int count = int.MaxValue;
             try
             {
@@ -452,6 +396,12 @@ namespace LambAndLentil.Tests.Controllers
                 throw;
             }
 
+        }
+        [Ignore]
+        [TestMethod]
+        public void CorrectIngredientsAreBoundInEdit()
+        {
+            Assert.Fail();
         }
     }
 }

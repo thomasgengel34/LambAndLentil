@@ -16,14 +16,13 @@ namespace LambAndLentil.Test.JSONTests
     public class JSONRepositoryShouldReturnCountOfThreeForDirectoryWithThreeFiles
     {
         public static MapperConfiguration AutoMapperConfig { get; set; }
-        static string path = @"../../../\LambAndLentil.Domain\App_Data\JSON\TestReturnCountOfThreeForDirectoryWithThreeFiles\";
-        private static JSONRepository<Ingredient, IngredientVM> repo { get; set; }
+        static string path = @"../../../\LambAndLentil.Test\App_Data\JSON\Ingredient\";
+        private static TestRepository<Ingredient, IngredientVM> repo { get; set; }
 
         public JSONRepositoryShouldReturnCountOfThreeForDirectoryWithThreeFiles()
         {
             AutoMapperConfigForTests.InitializeMap();
-            repo = new JSONRepository<Ingredient, IngredientVM>();
-            Directory.CreateDirectory(path);
+            repo = new TestRepository<Ingredient, IngredientVM>(); 
         }
 
 
@@ -31,7 +30,7 @@ namespace LambAndLentil.Test.JSONTests
         public void ReturnCountOfThreeForDirectoryWithThreeFiles()
         {
             // Arrange
-            // nothing
+            ClassCleanup();
 
 
             // Act
@@ -59,7 +58,7 @@ namespace LambAndLentil.Test.JSONTests
                 {
                     File.Delete(file);
                 }
-                Directory.Delete(path);
+               
             }
             catch (Exception)
             {

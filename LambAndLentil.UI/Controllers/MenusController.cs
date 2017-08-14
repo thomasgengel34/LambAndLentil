@@ -10,98 +10,103 @@ using LambAndLentil.Domain.Concrete;
 
 namespace LambAndLentil.UI.Controllers
 {
-    public class MenusController : BaseController
-    {  
-        public MenusController(IRepository<Menu, MenuVM> repo)   { }
-
-        // GET: Menus
-        public ViewResult Index(int page = 1)
+    public class MenusController<Menu, MenuVM> : BaseController<Menu, MenuVM>
+          where Menu : BaseEntity, IEntity
+            where MenuVM : BaseVM, IEntity, new()
+    {
+        public MenusController(IRepository<Menu, MenuVM> repository) : base(repository)
         {
-            ViewResult view = BaseIndex<Menu,MenuVM>(page);
-            return View(view.ViewName, view.Model);
+            repo = repository;
         }
 
-        // GET: Menus/Details/5 
-        public ActionResult Details(int id = 1, UIViewType actionMethod = UIViewType.Details)
-        {
-            return BaseDetails< Menu,MenuVM>(UIControllerType.Menus, id, actionMethod);
-        }
+        //// GET: Menus
+        //public ViewResult Index(int page = 1)
+        //{
+        //    ViewResult view = BaseIndex<Menu,MenuVM>(page);
+        //    return View(view.ViewName, view.Model);
+        //}
+
+        //// GET: Menus/Details/5 
+        //public ActionResult Details(int id = 1, UIViewType actionMethod = UIViewType.Details)
+        //{
+        //    return BaseDetails< Menu,MenuVM>(repo,UIControllerType.Menus, id, actionMethod);
+        //}
 
 
 
         // GET: Menus/Create 
-        public ViewResult Create(UIViewType actionMethod)
-        {
-            return BaseCreate<MenuVM>(actionMethod);
-        }
+        //public ViewResult Create(UIViewType actionMethod)
+        //{
+        //    return BaseCreate<MenuVM>(actionMethod);
+        //}
 
 
-        // GET: Menus/Edit/5
-        public ViewResult Edit(int id = 1)
-        {
-            return BaseEdit< Menu,MenuVM>(UIControllerType.Menus, id);
-        }
+        //// GET: Menus/Edit/5
+        //public ViewResult Edit(int id = 1)
+        //{
+        //    return BaseEdit< Menu,MenuVM>(UIControllerType.Menus, id);
+        //}
 
         // POST: Menus/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult PostEdit([Bind(Include = "ID,Name, DayOfWeek, Description,CreationDate, ModifiedDate,  AddedByUser, ModifiedByUser, MealType,Diners, Recipes, Ingredients")] MenuVM menuVM)
-        {
-            return BasePostEdit< Menu,MenuVM>(menuVM);
-        }
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult PostEdit([Bind(Include = "ID,Name, DayOfWeek, Description,CreationDate, ModifiedDate,  AddedByUser, ModifiedByUser, MealType,Diners, Recipes, Ingredients")] MenuVM menuVM)
+        //{
+        //    return BasePostEdit< Menu,MenuVM>(menuVM);
+        //}
 
-        // GET: Menus/Delete/5
-        [ActionName("Delete")]
-        public ActionResult Delete(int id = 1, UIViewType actionMethod = UIViewType.Delete)
-        { 
-            ViewBag.ActionMethod = UIViewType.Delete;
-            return BaseDelete< Menu,MenuVM>(UIControllerType.Menus, id);
-        }
-
-
-
-        // POST: Ingredients/Delete/5 
-        [HttpPost, ActionName("DeleteConfirmed")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            return BaseDeleteConfirmed<Menu,  MenuVM>(UIControllerType.Menus, id);
-        }
+        //// GET: Menus/Delete/5
+        //[ActionName("Delete")]
+        //public ActionResult Delete(int id = 1, UIViewType actionMethod = UIViewType.Delete)
+        //{ 
+        //    ViewBag.ActionMethod = UIViewType.Delete;
+        //    return BaseDelete< Menu,MenuVM>(UIControllerType.Menus, id);
+        //}
 
 
-        public ActionResult AttachRecipe( int? menuID, int? recipeID)
-        {  
-            return BaseAttach<Menu, MenuVM, Recipe, RecipeVM>(menuID, recipeID); 
-        }
 
-        public ActionResult DetachRecipe(int? menuID, int? recipeID)
-        {
-            return BaseAttach<Menu, MenuVM, Recipe, RecipeVM>(menuID, recipeID, AttachOrDetach.Detach);
-        }
+        //// POST: Ingredients/Delete/5 
+        //[HttpPost, ActionName("DeleteConfirmed")]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult DeleteConfirmed(int id)
+        //{
+        //    return BaseDeleteConfirmed<Menu,  MenuVM>(UIControllerType.Menus, id);
+        //}
 
-        public ActionResult AttachIngredient(int? menuID, int? ingredientID)
-        {
-            return BaseAttach<Menu, MenuVM, Ingredient, IngredientVM>(menuID, ingredientID);
-        }
-         
 
-        public ActionResult DetachIngredient(int? menuID, int? ingredientID)
-        {
-            return BaseAttach<Menu, MenuVM, Ingredient, IngredientVM>(menuID, ingredientID, AttachOrDetach.Detach);
-        }
+        //public ActionResult AttachRecipe( int? menuID, int? recipeID)
+        //{  
+        //    return BaseAttach<Menu, MenuVM, Recipe, RecipeVM>(menuID, recipeID); 
+        //}
 
-        private Menu GetMenu()
-        {
-            Menu recipe = (Menu)Session["Menu"];
-            if (recipe == null)
-            {
-                recipe = new Menu();
-                Session["Menu"] = recipe;
-            }
-            return recipe;
-        }
+        //public ActionResult DetachRecipe(int? menuID, int? recipeID)
+        //{
+        //    return BaseAttach<Menu, MenuVM, Recipe, RecipeVM>(menuID, recipeID, AttachOrDetach.Detach);
+        //}
+
+        //public ActionResult AttachIngredient(int? menuID, int? ingredientID)
+        //{
+        //    return BaseAttach<Menu, MenuVM, Ingredient, IngredientVM>(menuID, ingredientID);
+        //}
+
+
+        //public ActionResult DetachIngredient(int? menuID, int? ingredientID)
+        //{
+        //    return BaseAttach<Menu, MenuVM, Ingredient, IngredientVM>(menuID, ingredientID, AttachOrDetach.Detach);
+        //}
+
+        //private Menu GetMenu()
+        //{
+        //    Menu recipe = (Menu)Session["Menu"];
+        //    if (recipe == null)
+        //    {
+        //        recipe = new Menu();
+        //        Session["Menu"] = recipe;
+        //    }
+        //    return recipe;
+        //}
 
 
     }

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using LambAndLentil.Domain.Entities;
 using LambAndLentil.UI.Models;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace LambAndLentil.Tests.Infrastructure
 {
@@ -47,6 +48,6 @@ namespace LambAndLentil.Tests.Infrastructure
                 //cfg.AddProfile<FooProfile>(); not currently needed
             });
             return config;
-        }
+        } 
     }
 }

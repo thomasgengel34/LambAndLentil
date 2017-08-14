@@ -11,7 +11,7 @@ using System.Linq.Expressions;
 namespace LambAndLentil.Domain.Concrete
 {
     public class JSONRepository<T, TVM> : IRepository<T, TVM>
-        where T : BaseEntity, IEntity, new()
+        where T : BaseEntity, IEntity 
         where TVM : class, IEntity
     {
 
@@ -219,18 +219,14 @@ namespace LambAndLentil.Domain.Concrete
             }
             else
             {
-                T t = new T()
-                {
-                    ID = id
-                };
-                return t;
+                return null;
             }
 
         }
 
         public TVM GetTVMById(int id)
         {
-            IEnumerable<string> availableFiles = Directory.EnumerateFiles(fullPath);
+             IEnumerable<string> availableFiles = Directory.EnumerateFiles(fullPath);
 
             var result = from f in availableFiles
                          where f == string.Concat(fullPath, id, ".txt")

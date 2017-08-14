@@ -7,43 +7,47 @@ using System.Web.Mvc;
 
 namespace LambAndLentil.UI.Controllers
 {
-    public class IngredientsController : BaseController
-    {
-         
-
-        public IngredientsController(IRepository<Ingredient,IngredientVM> repo) 
+    public class IngredientsController : IngredientsGenericController<Ingredient, IngredientVM> {
+        public IngredientsController(IRepository<Ingredient, IngredientVM> repository) : base(repository)
         {
-             
+            repo=repository   ;
         }
 
+        public static IRepository<Ingredient, IngredientVM> repo  { get; private set; }
+    }
 
-        // GET: Ingredients 
-        //[OutputCache(CacheProfile = "IngredientIndexAsc")]
+    public class IngredientsGenericController<Ingredient,IngredientVM> : BaseController<Ingredient,IngredientVM>
+          where Ingredient : BaseEntity, IEntity
+            where IngredientVM :  BaseVM, IEntity, new()
+    {
+        
+        public IngredientsGenericController(IRepository<Ingredient, IngredientVM> repository) : base(repository)
+        {
+            repo = repository;
+        }
+
+        // GET: Ingredients  
         public ViewResult Index(int page = 1)
         {
-            return BaseIndex<Ingredient,IngredientVM>(page); 
+            return BaseIndex(repo, page); 
         }
     
         public ActionResult Details(int id = 1, UIViewType actionMethod = UIViewType.Details)
         {
-            return BaseDetails<Ingredient,IngredientVM>(UIControllerType.Ingredients, id,actionMethod);
-        }
+            return BaseDetails(repo,UIControllerType.Ingredients, id,actionMethod);
+        } 
 
-        
-
-        // GET: Ingredients/Create
-
+        // GET: Ingredients/Create 
         public ViewResult Create(UIViewType actionMethod)
         {
-            return BaseCreate<IngredientVM>(actionMethod);
-        }
-
+            return BaseCreate(actionMethod);
+        } 
 
         // GET: Ingredients/Edit/5
         [HttpGet]
         public ViewResult Edit(int id = 1)
         {
-            return BaseEdit<Ingredient,IngredientVM>(UIControllerType.Ingredients, id);
+            return BaseEdit( repo, UIControllerType.Ingredients, id);
         }
 
 
@@ -54,7 +58,7 @@ namespace LambAndLentil.UI.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult PostEdit([Bind(Include = "ID, Name, Description, CreationDate, ModifiedDate,  IngredientsList")]  IngredientVM ingredientVM)
         {
-            return BasePostEdit<Ingredient,IngredientVM>(ingredientVM);
+            return BasePostEdit(repo, ingredientVM);
         }
 
         // GET: Ingredients/Delete/5
@@ -62,7 +66,7 @@ namespace LambAndLentil.UI.Controllers
         public ActionResult Delete(int id = 1, UIViewType actionMethod = UIViewType.Delete)
         {
             ViewBag.ActionMethod = UIViewType.Delete;
-            return BaseDelete<Ingredient,IngredientVM>(UIControllerType.Ingredients, id);
+            return BaseDelete(repo, UIControllerType.Ingredients, id);
         }
 
         // POST: Ingredients/Delete/5
@@ -70,7 +74,7 @@ namespace LambAndLentil.UI.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            return BaseDeleteConfirmed<Ingredient,IngredientVM>(UIControllerType.Ingredients, id);
+            return BaseDeleteConfirmed(repo,UIControllerType.Ingredients, id);
         }
 
     }

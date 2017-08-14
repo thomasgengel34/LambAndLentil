@@ -202,6 +202,54 @@ namespace LambAndLentil.Test.IntegrationTests
         {
             Assert.Fail();
         }
+
+        [TestMethod]
+        public void RecipeTotalIngredientCalorieShouldTotalCaloriesOfComponentIngredients()
+        {
+
+        }
+
+        [TestMethod]
+        public void RecipeTotalIngredientCalorieShouldRecomputeTotalCaloriesOfComponentIngredientsWhenIngredientAdded()
+        {
+
+        }
+
+        [TestMethod]
+        public void RecipeTotalIngredientCalorieShouldRecomputeTotalCaloriesOfComponentIngredientsWhenIngredientModified()
+        {
+
+        }
+
+        [TestMethod]
+        public void RecipeTotalIngredientCalorieShouldRecomputeTotalCaloriesOfComponentIngredientsWhenIngredientRemoved()
+        {
+
+        }
+
+        [TestMethod]
+        public void RecipeIngredientSummaryListCalorieShouldIngredientListOfComponentIngredients()
+        {
+
+        }
+
+        [TestMethod]
+        public void RecipeIngredientSummaryListCalorieShouldRecomputeIngredientListOfComponentIngredientsWhenIngredientAdded()
+        {
+
+        }
+
+        [TestMethod]
+        public void RecipeIngredientSummaryListCalorieShouldRecomputeIngredientListOfComponentIngredientsWhenIngredientModified()
+        {
+
+        }
+
+        [TestMethod]
+        public void RecipeIngredientSummaryListCalorieShouldRecomputeIngredientListOfComponentIngredientsWhenIngredientRemoved()
+        {
+
+        }
     }
 } 
  

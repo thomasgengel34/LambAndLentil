@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace LambAndLentil.Test.WebAPI
-{     
+{    
+    [Ignore]
     [TestClass]
     public class WebApiShould
     { 

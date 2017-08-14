@@ -27,8 +27,12 @@ namespace LambAndLentil.UI.Models
 
         public ListVM()
         {
+            ListT = new List<T>();
+            ListTVM = new List<TVM>();
+            // phase these out as they can create problems - which is T and which is TV?
             Entities = new List<T>();
             List = new List<TVM>();
+         
         }
 
         public ListVM(DateTime creationDate)
@@ -37,8 +41,10 @@ namespace LambAndLentil.UI.Models
         }
 
         public string Name { get; set; }
-        public IEnumerable<T> Entities { get; set; }
-        public IEnumerable<TVM> List { get; set; }
+        public IEnumerable<T> Entities { get; set; }   // phase out
+        public IEnumerable<TVM> List { get; set; }    // phase out
+        public IEnumerable<T> ListT { get; set; }
+        public IEnumerable<TVM> ListTVM { get; set; }
         public PagingInfo PagingInfo { get; set; }
 
 

@@ -3,6 +3,7 @@ using LambAndLentil.Domain.Abstract;
 using LambAndLentil.Domain.Concrete;
 using LambAndLentil.Domain.Entities;
 using LambAndLentil.Tests.Infrastructure;
+using LambAndLentil.UI.Controllers;
 using LambAndLentil.UI.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -11,12 +12,13 @@ using System.Text.RegularExpressions;
 
 namespace LambAndLentil.Test.JSONTests
 {
+   
     [TestClass]
     public class JSONRepositoryShould
     {
         public static MapperConfiguration AutoMapperConfig { get; set; }
-        static string path = @"../../../\LambAndLentil.Domain\App_Data\JSON\TestReturnCountOfThreeForDirectoryWithThreeFiles\";
-
+        static string path = @"../../../\LambAndLentil.Test\App_Data\JSON\TestReturnCountOfThreeForDirectoryWithThreeFiles\";
+         
         public JSONRepositoryShould()
         {
             AutoMapperConfigForTests.InitializeMap();
@@ -26,14 +28,23 @@ namespace LambAndLentil.Test.JSONTests
         public void SaveOneIngredient()
         {
             // Arrange
+            IRepository<Ingredient, IngredientVM> repo = new TestRepository<Ingredient, IngredientVM>();
+            //IngredientsController<Ingredient,IngredientVM> controller = new IngredientsController<Ingredient,IngredientVM>(repo);
+            Ingredient ingredient = new Ingredient();
+            ingredient.ID = int.MaxValue;
+            ingredient.Name = "test SaveOneIngredient";
 
             // Act
+            repo.SaveT(ingredient);
 
+            Ingredient returnedIngredient = repo.GetTById(ingredient.ID);
 
             // Assert
-            Assert.Fail();
-        }
+            Assert.AreEqual(ingredient.ID, returnedIngredient.ID);
+            Assert.AreEqual(ingredient.Name, returnedIngredient.Name);
 
+        }
+        [Ignore]
         [TestMethod]
         public void SaveOneRecipe()
         {
@@ -45,7 +56,7 @@ namespace LambAndLentil.Test.JSONTests
             // Assert
             Assert.Fail();
         }
-
+        [Ignore]
         [TestMethod]
         public void SaveOneMenu()
         {
@@ -86,7 +97,7 @@ namespace LambAndLentil.Test.JSONTests
                 File.Delete(file);
             }
         }
-
+        [Ignore]
         [TestMethod]
         public void SaveOnePlan()
         {
@@ -98,7 +109,7 @@ namespace LambAndLentil.Test.JSONTests
             // Assert
             Assert.Fail();
         }
-
+        [Ignore]
         [TestMethod]
         public void SaveOneShoppingList()
         {
@@ -110,7 +121,7 @@ namespace LambAndLentil.Test.JSONTests
             // Assert
             Assert.Fail();
         }
-
+        [Ignore]
         [TestMethod]
         public void SaveOnePerson()
         {
@@ -127,8 +138,9 @@ namespace LambAndLentil.Test.JSONTests
         public void ReturnZeroCountForEmptyDirectory()
         {
             // Arrange
-            IRepository<TestReturnZeroCountForEmptyDirectory, TestReturnZeroCountForEmptyDirectoryVM> repo = new JSONRepository<TestReturnZeroCountForEmptyDirectory, TestReturnZeroCountForEmptyDirectoryVM>();
-            string path = @"../../../\LambAndLentil.Domain\App_Data\JSON\TestReturnZeroCountForEmptyDirectory\";
+            IRepository<TestReturnZeroCountForEmptyDirectory, TestReturnZeroCountForEmptyDirectoryVM> repo = new TestRepository<TestReturnZeroCountForEmptyDirectory, TestReturnZeroCountForEmptyDirectoryVM>();
+           string path = @"../../../\LambAndLentil.Test\App_Data\JSON\TestReturnZeroCountForEmptyDirectory\";
+         
             try
             {
                 Directory.CreateDirectory(path);

@@ -55,6 +55,7 @@
     <Compile Include="Concrete\JSONRepository.cs" />
     <Compile Include="Concrete\LinqHelpers.cs" />
     <Compile Include="Concrete\RepositoryHelperMethods.cs" />
+    <Compile Include="Concrete\TestRepository.cs" />
     <Compile Include="Entities\BaseEntity.cs" />
     <Compile Include="Entities\ContainerSizeUnit.cs" />
     <Compile Include="Entities\FoodGroup.cs" />
