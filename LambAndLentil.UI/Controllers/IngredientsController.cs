@@ -16,9 +16,9 @@ namespace LambAndLentil.UI.Controllers
         public static IRepository<Ingredient, IngredientVM> repo  { get; private set; }
     }
 
-    public class IngredientsGenericController<Ingredient,IngredientVM> : BaseController<Ingredient,IngredientVM>
-          where Ingredient : BaseEntity, IEntity
-            where IngredientVM :  BaseVM, IEntity, new()
+    public class IngredientsGenericController<T,TVM> : BaseController<Ingredient,IngredientVM>
+          where T:Ingredient  
+            where TVM:IngredientVM  
     {
         
         public IngredientsGenericController(IRepository<Ingredient, IngredientVM> repository) : base(repository)

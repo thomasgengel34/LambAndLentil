@@ -10,6 +10,11 @@ namespace LambAndLentil.Test.Views
         [TestMethod]
         public void NotReturnAServerErrorPage()
         {
+            // Arrange
+
+            // Act
+
+            // Assert
             Assert.Fail();
         }
 

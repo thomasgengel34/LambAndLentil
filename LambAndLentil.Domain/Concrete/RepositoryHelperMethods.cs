@@ -16,7 +16,7 @@ namespace LambAndLentil.Domain.Concrete
             string className = typeof(TVM).ToString().TrimEnd(charsToTrim);
             char[] splitterArray = { '.' };
             string[] classNameArray = className.Split(splitterArray);
-            className = String.Concat("LambAndLentil.Domain.Entities.", classNameArray.Last());
+            className =  classNameArray.Last() ;
             return className;
         }
 

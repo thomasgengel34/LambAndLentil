@@ -17,7 +17,7 @@ namespace LambAndLentil.Domain.Concrete
 
         public static MapperConfiguration AutoMapperConfig { get; set; }
         static string folder;
-        static string fullPath;
+        static   string fullPath  ;
 
         public JSONRepository()
         {
@@ -26,10 +26,7 @@ namespace LambAndLentil.Domain.Concrete
 
             // TODO: get relative path to work.  The first line works in testing but not in running it.
             // fullPath = @"../../../\LambAndLentil.Domain\App_Data\JSON\" + folder + "\\";
-            fullPath = @" C:\Dev\TGE\LambAndLentil\LambAndLentil.Domain\App_Data\JSON\" + folder + "\\";
-
-
-
+           fullPath = @" C:\Dev\TGE\LambAndLentil\LambAndLentil.Domain\App_Data\JSON\" + folder + "\\"; 
         }
 
 
@@ -196,11 +193,13 @@ namespace LambAndLentil.Domain.Concrete
 
         public void Update(TVM entity, int key)
         {
+            entity.ModifiedDate = DateTime.Now;
             Add(entity);
         }
 
         public void UpdateT(T t, int key)
         {
+            t.ModifiedDate = DateTime.Now;
             AddT(t);
         }
 
@@ -212,7 +211,7 @@ namespace LambAndLentil.Domain.Concrete
                          where f == string.Concat(fullPath, id, ".txt")
                          select f;
 
-            if (result != null)
+            if (result.Count() > 0)
             {
                 T entity = JsonConvert.DeserializeObject<T>(File.ReadAllText(String.Concat(fullPath, id, ".txt")));
                 return entity;
@@ -226,20 +225,20 @@ namespace LambAndLentil.Domain.Concrete
 
         public TVM GetTVMById(int id)
         {
-             IEnumerable<string> availableFiles = Directory.EnumerateFiles(fullPath);
+            IEnumerable<string> availableFiles = Directory.EnumerateFiles(fullPath);
 
             var result = from f in availableFiles
                          where f == string.Concat(fullPath, id, ".txt")
                          select f;
 
-            if (result != null)
+            if (result.Count() > 0)
             {
                 T entity = JsonConvert.DeserializeObject<T>(File.ReadAllText(String.Concat(fullPath, id, ".txt")));
                 return Mapper.Map<T, TVM>(entity);
             }
             else
             {
-                throw (new Exception());
+                return null;
             }
 
         }
@@ -284,7 +283,8 @@ namespace LambAndLentil.Domain.Concrete
 
         public void AddTVM(TVM entity)
         {
-            throw new NotImplementedException();
+            T t = Mapper.Map<TVM, T>(entity);
+            AddT(t);
         }
 
         public void RemoveTVM(TVM entity)

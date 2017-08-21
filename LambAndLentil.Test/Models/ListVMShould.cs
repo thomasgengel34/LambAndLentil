@@ -13,8 +13,8 @@ namespace LambAndLentil.Test.Models
         {
              ListVM<Ingredient,IngredientVM>  vm = new  ListVM<Ingredient, IngredientVM>();
 
-            Assert.IsNotNull(vm.Entities);
-            Assert.IsNotNull(vm.List);
+            Assert.IsNotNull(vm.ListT);
+            Assert.IsNotNull(vm.ListTVM);
         }
     }
 }

@@ -1,0 +1,1 @@
+{"ID":2147483643,"Servings":0.0,"MealType":0,"Calories":null,"CalsFromFat":null,"Name":"RecipesController_Index_Test P5","Description":"not yet described","CreationDate":"0051-01-01T00:00:00","ModifiedDate":"9899-12-31T23:59:59.9999999","AddedByUser":"John Doe","ModifiedByUser":"Richard Roe","Recipes":[],"Ingredients":[],"Menus":[],"Plans":[],"ShoppingLists":[],"Persons":[]}

@@ -7,9 +7,9 @@ using LambAndLentil.UI;
 using LambAndLentil.UI.Controllers;
 using LambAndLentil.UI.Infrastructure.Alerts;
 using LambAndLentil.UI.Models;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
+using Microsoft.VisualStudio.TestTools.UnitTesting; 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web.Mvc;
@@ -21,16 +21,15 @@ namespace LambAndLentil.Tests.Controllers
     [TestCategory(" IngredientsController")]
     public class IngredientsControllerShould
     {
-        static Mock<IRepository<Ingredient, IngredientVM>> mock;
-       // static string path = @"../../../\LambAndLentil.Test\App_Data\JSON\Ingredient\";
         private static IRepository<Ingredient, IngredientVM> repo { get; set; }
         public static MapperConfiguration AutoMapperConfig { get; set; }
+        static ListVM<Ingredient, IngredientVM> ilvm;
 
         public IngredientsControllerShould()
         {
-            AutoMapperConfigForTests.InitializeMap();
-            mock = new Mock<IRepository<Ingredient, IngredientVM>>();
+            AutoMapperConfigForTests.InitializeMap(); 
             repo = new TestRepository<Ingredient, IngredientVM>();
+            ilvm = new ListVM<Ingredient, IngredientVM>();
         }
 
         [TestMethod]
@@ -38,7 +37,7 @@ namespace LambAndLentil.Tests.Controllers
         {
 
             // Arrange
-            IngredientsController controller = SetUpControllerWithNoMock();
+            IngredientsController controller =SetUpController();
             // Act 
             controller.PageSize = 4;
 
@@ -56,7 +55,7 @@ namespace LambAndLentil.Tests.Controllers
         {
 
             // Arrange
-            IngredientsController controller = SetUpControllerWithNoMock();
+            IngredientsController controller =SetUpController();
             // Act 
             controller.PageSize = 4;
 
@@ -71,7 +70,7 @@ namespace LambAndLentil.Tests.Controllers
         public void BePublic()
         {
             // Arrange
-            IngredientsController controller = SetUpControllerWithNoMock();
+            IngredientsController controller =SetUpController();
 
             // Act
             Type type = controller.GetType();
@@ -118,7 +117,7 @@ namespace LambAndLentil.Tests.Controllers
         public void DetailsIngredientIDTooHighViewNotNull()
         {  // not sure what the desired behavior is yet
            // Arrange
-            IngredientsController controller = SetUpControllerWithNoMock();
+            IngredientsController controller =SetUpController();
             //  AutoMapperConfigForTests.AMConfigForTests();
             ActionResult view = controller.Details(4000);
             AlertDecoratorResult adr = (AlertDecoratorResult)view;
@@ -132,7 +131,7 @@ namespace LambAndLentil.Tests.Controllers
         public void DetailsIngredientIDTooHighMessageRight()
         {// not sure what the desired behavior is yet
          // Arrange
-            IngredientsController controller = SetUpControllerWithNoMock();
+            IngredientsController controller =SetUpController();
      
             ActionResult ar = controller.Details(4000);
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
@@ -146,7 +145,7 @@ namespace LambAndLentil.Tests.Controllers
         public void DetailsIngredientIDTooHighAlertClassCorrect()
         {   // not sure what the desired behavior is yet
             // Arrange
-            IngredientsController controller = SetUpControllerWithNoMock();
+            IngredientsController controller =SetUpController();
             //  AutoMapperConfigForTests.AMConfigForTests();
             ActionResult view = controller.Details(4000);
             AlertDecoratorResult adr = (AlertDecoratorResult)view;
@@ -160,7 +159,7 @@ namespace LambAndLentil.Tests.Controllers
         public void DetailsIngredientIDTooHighCorrectModel()
         {
             // Arrange
-            IngredientsController controller = SetUpControllerWithNoMock();
+            IngredientsController controller =SetUpController();
             //  AutoMapperConfigForTests.AMConfigForTests();
             ActionResult view = controller.Details(4000);
             AlertDecoratorResult adr = (AlertDecoratorResult)view;
@@ -174,7 +173,7 @@ namespace LambAndLentil.Tests.Controllers
         public void DetailsIngredientIDTooHighCorrectController()
         {
             // Arrange
-            IngredientsController controller = SetUpControllerWithNoMock();
+            IngredientsController controller =SetUpController();
             //  AutoMapperConfigForTests.AMConfigForTests();
             ActionResult view = controller.Details(4000);
             AlertDecoratorResult adr = (AlertDecoratorResult)view;
@@ -188,7 +187,7 @@ namespace LambAndLentil.Tests.Controllers
         public void DetailsIngredientIDTooHighCorrectRouteValue()
         {
             // Arrange
-            IngredientsController controller = SetUpControllerWithNoMock();
+            IngredientsController controller =SetUpController();
             //  AutoMapperConfigForTests.AMConfigForTests();
             ActionResult view = controller.Details(4000);
             AlertDecoratorResult adr = (AlertDecoratorResult)view;
@@ -203,7 +202,7 @@ namespace LambAndLentil.Tests.Controllers
         {
             // I am not sure how I want this to operate.  Wait until UI is set up and see then.
             // Arrange
-            IngredientsController controller = SetUpControllerWithNoMock();
+            IngredientsController controller =SetUpController();
             //  AutoMapperConfigForTests.AMConfigForTests(); 
 
             // Act
@@ -350,53 +349,51 @@ namespace LambAndLentil.Tests.Controllers
         //public void IngredientsCtr_DetailsIngredientIDIsNotAInteger() { } 
 
 
-        private IngredientsController SetUpControllerWithNoMock()
+        private IngredientsController SetUpController()
         {
+             IngredientsController controller = new IngredientsController_Index_Test().SetUpIngredientsController(repo);
 
-            mock.Setup(m => m.Ingredient).Returns(new Ingredient[] {
-                new Ingredient {ID = 1, Name = "IngredientsControllerTest1",  ModifiedDate=DateTime.MaxValue.AddYears(-10)},
-                new Ingredient {ID = 2, Name = "IngredientsControllerTest2" , ModifiedDate=DateTime.MaxValue.AddYears(-20)},
-                new Ingredient {ID = 3, Name = "IngredientsControllerTest3" },
-                new Ingredient {ID = 4, Name = "IngredientsControllerTest4" },
-                new Ingredient {ID = 5, Name = "IngredientsControllerTest5" }
-            }.AsQueryable());
 
-            IngredientsController controller = new IngredientsController(repo);
+            ilvm.ListT = new List<Ingredient> {
+                new Ingredient {ID = int.MaxValue, Name = "IngredientsControllerTest1" ,
+                    Description="test IngredientsController.Setup", AddedByUser ="John Doe" ,ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue, ModifiedDate=DateTime.MaxValue.AddYears(-10)},
+                new Ingredient {ID = int.MaxValue-1, Name = "IngredientsControllerTest2", 
+                    Description="test IngredientsController.Setup",  AddedByUser="Sally Doe",  ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(20), ModifiedDate=DateTime.MaxValue.AddYears(-20)},
+                new Ingredient {ID = int.MaxValue-2, Name = "IngredientsControllerTest3",
+                    Description="test IngredientsController.Setup",  AddedByUser="Sue Doe", ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(30), ModifiedDate=DateTime.MaxValue.AddYears(-30)},
+                new Ingredient {ID = int.MaxValue-3, Name = "IngredientsControllerTest4",
+                    Description="test IngredientsController.Setup",  AddedByUser="Kyle Doe" ,ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(40), ModifiedDate=DateTime.MaxValue.AddYears(-10)},
+                new Ingredient {ID = int.MaxValue-4, Name = "IngredientsControllerTest5",
+                    Description="test IngredientsController.Setup",  AddedByUser="John Doe",  ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(50), ModifiedDate=DateTime.MaxValue.AddYears(-100)}
+            }.AsQueryable();
+
+            foreach (Ingredient ingredient in ilvm.ListT)
+            {
+                repo.AddT(ingredient);
+            }
+            
+
+            controller = new IngredientsController(repo);
             controller.PageSize = 3;
 
             return controller;
         }
 
-        //private  IngredientsController<Ingredient, IngredientVM> SetUpSimpleController()
-        //{
-        //    mock = new Mock<IRepository<Ingredient, IngredientVM>>();
-        //     IngredientsController  controller = new  IngredientsController (mock.Object);
-        //    return controller;
-        //}
 
 
         [ClassCleanup()]
         public static void ClassCleanup()
         {
-            // TODO: replace this code with Directory methods
             string path = @"C:\Dev\TGE\LambAndLentil\LambAndLentil.Test\App_Data\JSON\Ingredient\";
-            int count = int.MaxValue;
-            try
+            IEnumerable<string> files = Directory.EnumerateFiles(path);
+
+            foreach (var file in files)
             {
-
-                for (int i = count; i > count - 6; i--)
-                {
-                    File.Delete(string.Concat(path, i, ".txt"));
-                }
-
-            }
-            catch (Exception)
-            {
-
-                throw;
+                File.Delete(file);
             }
 
         }
+
         [Ignore]
         [TestMethod]
         public void CorrectIngredientsAreBoundInEdit()

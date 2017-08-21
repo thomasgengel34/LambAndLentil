@@ -14,42 +14,42 @@ namespace LambAndLentil.UI.Controllers
 {
     public abstract class BaseController<T, TVM> : Controller
         where T : BaseEntity, IEntity
-            where TVM : BaseVM, IEntity,new()
+            where TVM : BaseVM, IEntity, new()
     {
+        private readonly string className;
+
         public int PageSize { get; set; }
 
         protected static IRepository<T, TVM> repo { get; set; }
 
-       
-
         public BaseController(IRepository<T, TVM> repository)
         {
             repo = repository;
+            className = new RepositoryHelperMethods().GetClassName<TVM>();
+            MvcApplication.InitializeMap();  // needed for testing
         }
 
 
         private Type GetControllerType()
-        { 
-            char[] charsToTrim = { 'V', 'M' };
-            string className = typeof(TVM).ToString().TrimEnd(charsToTrim);
+        {
             string controllerName = String.Concat(className, "sController");
             return Type.GetType(controllerName);
         }
 
         //  TODO: filter
 
-        public ViewResult BaseIndex(IRepository<T, TVM> repo, int page = 1) 
+        public ViewResult BaseIndex(IRepository<T, TVM> repo, int page = 1)
         {
             PageSize = 8;
             ListVM<T, TVM> model = new ListVM<T, TVM>();
             // model.Entities = (IEnumerable<TVM>)BaseVM.GetIndexedModel<T,TVM>(PageSize, page);
-            model.ListTVM = new BaseVM().GetIndexedModel<T, TVM>(repo,PageSize, page);
+            model.ListTVM = new BaseVM().GetIndexedModel<T, TVM>(repo, PageSize, page);
             model.PagingInfo = new BaseVM().PagingFunction<T, TVM>(repo, page, PageSize);
             return View(UIViewType.Index.ToString(), model);
         }
-         
-        public ActionResult BaseDetails(IRepository<T, TVM> repo, UIControllerType uIController, int id = 1, UIViewType actionMethod = UIViewType.Details) 
-        { 
+
+        public ActionResult BaseDetails(IRepository<T, TVM> repo, UIControllerType uIController, int id = 1, UIViewType actionMethod = UIViewType.Details)
+        {
             ViewBag.Title = actionMethod.ToString();
             if (actionMethod == UIViewType.Delete)
             {
@@ -62,21 +62,30 @@ namespace LambAndLentil.UI.Controllers
             else
             {
                 ActionResult result = GuardId(repo, uIController, id);
-                MvcApplication.InitializeMap();  // needed for testing.  This is being run in Application_Start normally.  Move to Repository
+                // MvcApplication.InitializeMap(); needed for testing.  This is being run in Application_Start normally.  Move to Repository
 
-                TVM item = repo.GetTVMById(id);
 
-                // TVM itemVM = Mapper.Map<T, TVM>((T)item); Move to Repository
-                if (result is EmptyResult)
+                if (result == null)
                 {
-                    return View(UIViewType.Details.ToString(), item).WithError("Something is wrong with the data!");
+                    return RedirectToAction(UIViewType.BaseIndex.ToString()).WithError("No " + className + " was found with that id.");
                 }
-                return View(UIViewType.Details.ToString(), item).WithSuccess("Item Has been added or modified!");
+                else
+                {
+                    TVM item = repo.GetTVMById(id);
+                    if (result is EmptyResult)
+                    {
+                        return View(UIViewType.Details.ToString(), item).WithError("Something is wrong with the data!");
+                    }
+                    else
+                    {
+                        return View(UIViewType.Details.ToString(), item).WithSuccess("Item Has been added or modified!");
+                    }
+                }
             }
         }
 
 
-        public ViewResult BaseCreate(UIViewType actionMethod) 
+        public ViewResult BaseCreate(UIViewType actionMethod)
         {
             ViewBag.ActionMethod = UIViewType.Create;
             TVM vm = new TVM();
@@ -84,8 +93,8 @@ namespace LambAndLentil.UI.Controllers
             return View(UIViewType.Details.ToString(), vm);
         }
 
-        public ViewResult BaseEdit(IRepository<T,TVM> repo, UIControllerType uIControllerType, int id = 1, UIViewType actionMethod = UIViewType.Edit) 
-        { 
+        public ViewResult BaseEdit(IRepository<T, TVM> repo, UIControllerType uIControllerType, int id = 1, UIViewType actionMethod = UIViewType.Edit)
+        {
             MvcApplication.InitializeMap();  // needed for testing.  This is being run in Application_Start normally.  Move to Repository
             ActionResult result = new EmptyResult();
             if (actionMethod == UIViewType.Delete)
@@ -99,11 +108,15 @@ namespace LambAndLentil.UI.Controllers
                 {
                     result = GuardId(repo, uIControllerType, id);
                 }
-
-
-                TVM item = repo.GetTVMById(id);
-
-
+                TVM item;
+                if (result != null)
+                {
+                    item = repo.GetTVMById(id);
+                }
+                else
+                {
+                    return (ViewResult)RedirectToAction(UIViewType.Index.ToString()).WithWarning(className + " was not found");
+                }
                 if (result is EmptyResult)
                 {
                     return View(UIViewType.Details.ToString(), item);
@@ -112,9 +125,9 @@ namespace LambAndLentil.UI.Controllers
             return result as ViewResult;
         }
 
-        public ActionResult BasePostEdit(IRepository<T,TVM> repo, TVM vm) 
+        public ActionResult BasePostEdit(IRepository<T, TVM> repo, TVM vm)
         {
-            MvcApplication.InitializeMap();  // needed for testing.  This is being run in Application_Start normally.  
+            //   // needed for testing.  This is being run in Application_Start normally.  
             IController TController = (IController)GetControllerType();
             TVM item = (TVM)vm;
             // new ingredientVM - saves double writing the Create Post method
@@ -124,8 +137,6 @@ namespace LambAndLentil.UI.Controllers
 
             }
 
-            //TODO: move this to Repository
-            // item = Mapper.Map<TVM, T>((TVM)vm);
 
             if (ModelState.IsValid)
             {
@@ -140,17 +151,19 @@ namespace LambAndLentil.UI.Controllers
         }
 
 
-        public ActionResult BaseDelete(IRepository<T,TVM> repo, UIControllerType uiControllerType, int id = 1, UIViewType actionMethod = UIViewType.Delete) 
+        public ActionResult BaseDelete(IRepository<T, TVM> repo, UIControllerType uiControllerType, int id = 1, UIViewType actionMethod = UIViewType.Delete)
         { 
-            MvcApplication.InitializeMap();  // needed for testing.  This is being run in Application_Start normally.  
-            ActionResult result = GuardId(repo, uiControllerType, id);
-            TVM item = repo.GetTVMById(id);
-
-            if (actionMethod == UIViewType.Delete)
+            ActionResult result = GuardId(repo, uiControllerType, id); 
+            ViewBag.ActionMethod = UIViewType.Delete; 
+            TVM item;
+            if (result != null)
             {
-                ViewBag.ActionMethod = UIViewType.Delete;
+                item = repo.GetTVMById(id);
             }
-            //  TVM vm = Mapper.Map<T, TVM>((T)item); MOVE TO Repository
+            else
+            {
+                return (ViewResult)RedirectToAction(UIViewType.Index.ToString()).WithWarning(className + " was not found");
+            }
             if (result is EmptyResult)
             {
                 return View(UIViewType.Details.ToString(), item);
@@ -158,8 +171,8 @@ namespace LambAndLentil.UI.Controllers
             return result;
         }
 
-        public ActionResult BaseDeleteConfirmed(IRepository<T,TVM> repo, UIControllerType controllerType, int id) 
-        { 
+        public ActionResult BaseDeleteConfirmed(IRepository<T, TVM> repo, UIControllerType controllerType, int id)
+        {
             ActionResult result = GuardId(repo, controllerType, id);
             TVM item = repo.GetTVMById(id);
             repo.RemoveTVM(item);
@@ -239,15 +252,18 @@ namespace LambAndLentil.UI.Controllers
             return ControllerExtensions.RedirectToAction(this, action);
         }
 
-        protected ActionResult GuardId(IRepository<T,TVM> repo, UIControllerType tController, int id) 
-        { 
+        protected ActionResult GuardId(IRepository<T, TVM> repo, UIControllerType tController, int id)
+        {
             TVM item = repo.GetTVMById(id);
-            string className = new RepositoryHelperMethods().GetClassName<TVM>();
+
             if (item == null)
             {
-                return RedirectToAction(UIViewType.BaseIndex.ToString()).WithError("No " + className + "  was found with that id.");
+                return null;
             }
-            return new EmptyResult();
+            else
+            {
+                return new EmptyResult();
+            }
         }
 
 

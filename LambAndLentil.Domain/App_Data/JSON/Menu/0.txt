@@ -1,0 +1,1 @@
+{"ID":0,"MealType":0,"DayOfWeek":0,"Diners":0,"Name":"Newly Created","Description":"not yet described","CreationDate":"2017-08-18T15:16:59.2333083-05:00","ModifiedDate":"2017-08-18T15:16:59.2333083-05:00","AddedByUser":"PFW\\Poncho","ModifiedByUser":"PFW\\Poncho","Recipes":[],"Ingredients":[],"Menus":[],"Plans":[],"ShoppingLists":[],"Persons":[]}

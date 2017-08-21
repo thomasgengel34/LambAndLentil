@@ -17,6 +17,8 @@ namespace LambAndLentil.Test.JSONTests
         static string path = @"../../../\LambAndLentil.Domain\App_Data\JSON\TestJSONRepositoryGetByID\";
 
         private static JSONRepository<Ingredient, IngredientVM> repo { get; set; }
+
+
         public JSONRepositoryGetByIDShould()
         {
             AutoMapperConfigForTests.InitializeMap();
@@ -44,22 +46,7 @@ namespace LambAndLentil.Test.JSONTests
             Assert.AreEqual(vm.Name, returnedVm.Name);
             Assert.AreEqual(vm.Description, returnedVm.Description);
         }
-
-        [TestMethod]
-        [ExpectedException(typeof(FileNotFoundException))]
-        public void ReturnExceptionForAnInvalidIngredientID()
-        {
-            //Arrange
-            int fileNumber = int.MaxValue - 1;
-            File.Delete(string.Concat(path, fileNumber, ".txt"));
-
-            //Act
-            IngredientVM vm = repo.GetById(fileNumber);
-
-            //Assert
-            Assert.IsNull(vm);
-        }
-
+         
 
         [ClassCleanup()]
         public static void ClassCleanup()

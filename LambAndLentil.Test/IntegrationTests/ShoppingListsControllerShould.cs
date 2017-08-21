@@ -8,6 +8,7 @@ using LambAndLentil.UI.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -388,7 +389,7 @@ namespace IntegrationTests
         //{
         //    Assert.Fail();
         //}
-         
+
 
         //[TestMethod]
         //[TestCategory("Attach-Detach")]
@@ -444,5 +445,18 @@ namespace IntegrationTests
         //{
         //    Assert.Fail();
         //}
+
+        [ClassCleanup()]
+        public static void ClassCleanup()
+        {
+            string path = @"C:\Dev\TGE\LambAndLentil\LambAndLentil.Test\App_Data\JSON\ShoppingList\";
+            IEnumerable<string> files = Directory.EnumerateFiles(path);
+
+            foreach (var file in files)
+            {
+                File.Delete(file);
+            }
+
+        }
     }
 }

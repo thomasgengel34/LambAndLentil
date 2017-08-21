@@ -3,15 +3,18 @@ using IntegrationTests;
 using LambAndLentil.Domain.Abstract;
 using LambAndLentil.Domain.Concrete;
 using LambAndLentil.Domain.Entities;
+using LambAndLentil.Tests.Controllers;
 using LambAndLentil.UI;
 using LambAndLentil.UI.Controllers;
 using LambAndLentil.UI.Infrastructure.Alerts;
 using LambAndLentil.UI.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web.Mvc;
+using LambAndLentil.Tests.Infrastructure;
 
 namespace LambAndLentil.Test.Infrastructure
 {
@@ -22,13 +25,40 @@ namespace LambAndLentil.Test.Infrastructure
     public class IngredientsControllerShould
     {
         static IRepository<Ingredient, IngredientVM> repo;
-        static IngredientsController  controller;
+        static IngredientsController controller;
+        static ListVM<Ingredient, IngredientVM> ilvm;
+        public static MapperConfiguration AutoMapperConfig  { get; set; }
 
         public IngredientsControllerShould()
         {
+            AutoMapperConfigForTests.InitializeMap();
             repo = new TestRepository<Ingredient, IngredientVM>();
-            controller = new IngredientsController(repo);
+            ilvm = new ListVM<Ingredient, IngredientVM>();
+            controller =  SetUpIngredientsController(repo);
         }
+
+
+        public IngredientsController SetUpIngredientsController(IRepository<Ingredient, IngredientVM> repo)
+        {
+            ilvm.ListT = new List<Ingredient> {
+                new Ingredient {ID = int.MaxValue, Name = "IngredientsController_Index_Test P1" ,AddedByUser="John Doe" ,ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue, ModifiedDate=DateTime.MaxValue.AddYears(-10)},
+                new Ingredient {ID = int.MaxValue-1, Name = "IngredientsController_Index_Test P2",  AddedByUser="Sally Doe",  ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(20), ModifiedDate=DateTime.MaxValue.AddYears(-20)},
+                new Ingredient {ID = int.MaxValue-2, Name = "IngredientsController_Index_Test P3",  AddedByUser="Sue Doe", ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(30), ModifiedDate=DateTime.MaxValue.AddYears(-30)},
+                new Ingredient {ID = int.MaxValue-3, Name = "IngredientsController_Index_Test P4",  AddedByUser="Kyle Doe" ,ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(40), ModifiedDate=DateTime.MaxValue.AddYears(-10)},
+                new Ingredient {ID = int.MaxValue-4, Name = "IngredientsController_Index_Test P5",  AddedByUser="John Doe",  ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(50), ModifiedDate=DateTime.MaxValue.AddYears(-100)}
+            }.AsQueryable();
+
+            foreach (Ingredient ingredient in ilvm.ListT)
+            {
+                repo.AddT(ingredient);
+            }
+
+            IngredientsController controller = new IngredientsController(repo);
+            controller.PageSize = 3;
+
+            return controller;
+        }
+
 
         [TestMethod]
         [TestCategory("Create")]
@@ -66,78 +96,56 @@ namespace LambAndLentil.Test.Infrastructure
 
         }
 
-        //[TestMethod]
-        //[TestCategory("Edit")]
-        //public void SaveEditedIngredient()
-        //{
-        //    // Arrange
-        //   IRepository<Ingredient, IngredientVM> repoIngredient = new JSONRepository<Ingredient, IngredientVM>(); ;
-        //     IngredientsController<Ingredient, IngredientVM> controller1 = new  IngredientsController<Ingredient, IngredientVM>(repoIngredient);
-        //     IngredientsController<Ingredient, IngredientVM> controller2 = new  IngredientsController<Ingredient, IngredientVM>(repoIngredient);
-        //     IngredientsController<Ingredient, IngredientVM> controller3 = new  IngredientsController<Ingredient, IngredientVM>(repoIngredient);
-        //     IngredientsController<Ingredient, IngredientVM> controller4 = new  IngredientsController<Ingredient, IngredientVM>(repoIngredient);
-        //     IngredientsController<Ingredient, IngredientVM> controller5 = new  IngredientsController<Ingredient, IngredientVM>(repoIngredient);
-        //    IngredientVM vm = new IngredientVM();
-        //    vm.Name = "0000 test";
+        [TestMethod]
+        [TestCategory("Edit")]
+        public void SaveEditedIngredient()
+        {
+            // Arrange
+            IngredientsController indexController = new IngredientsController(repo);
+            IngredientsController controller2 = new IngredientsController(repo);
+            IngredientsController controller3 = new IngredientsController(repo);
 
-        //    // Act 
-        //    ActionResult ar1 = controller1.PostEdit(vm);
-        //    ViewResult view1 = controller2.Index();
-        //    ListVM<Ingredient, IngredientVM> listVM = (ListVM<Ingredient, IngredientVM>)view1.Model;
-        //    var result = (from m in listVM.Entities
-        //                  where m.Name == "0000 test"
-        //                  select m).AsQueryable().FirstOrDefault();
 
-        //    IngredientVM ingredientVM = Mapper.Map<Ingredient, IngredientVM>(result);
+            IngredientVM vm = new IngredientVM();
+            vm.Name = "0000 test";
+            vm.ID = int.MaxValue - 100;
+            vm.Description = "test IngredientsControllerShould.SaveEditedIngredient";
 
-        //    // verify initial value:
-        //    Assert.AreEqual("0000 test", ingredientVM.Name);
+            // Act 
+            ActionResult ar1 = controller.PostEdit(vm);
 
-        //    // now edit it
-        //    vm.Name = "0000 test Edited";
-        //    vm.ID = ingredientVM.ID;
-        //    ActionResult ar2 = controller3.PostEdit(vm);
-        //    ViewResult view2 = controller4.Index();
-        //    ListVM<Ingredient, IngredientVM> listVM2 = (ListVM<Ingredient, IngredientVM>)view2.Model;
-        //    var result2 = (from m in listVM2.Entities
-        //                   where m.Name == "0000 test Edited"
-        //                   select m).AsQueryable().FirstOrDefault();
 
-        //    ingredientVM = Mapper.Map<Ingredient, IngredientVM>(result2);
+            // now edit it
+            vm.Name = "0000 test Edited";
+            vm.ID = 7777;
+            ActionResult ar2 = controller2.PostEdit(vm);
+            ViewResult view2 = controller3.Index();
+            ListVM<Ingredient, IngredientVM> listVM2 = (ListVM<Ingredient, IngredientVM>)view2.Model;
+            IngredientVM vm3 = (from m in listVM2.ListTVM
+                                where m.Name == "0000 test Edited"
+                                select m).AsQueryable().FirstOrDefault();
 
-        //    try
-        //    {
-        //        // Assert
-        //        Assert.AreEqual("0000 test Edited", ingredientVM.Name);
-        //    }
-        //    catch (Exception)
-        //    {
-        //        throw;
-        //    }
-        //    finally
-        //    {
-        //        // clean up 
-        //        controller5.DeleteConfirmed(vm.ID);
-        //    }
-        //}
+            // Assert
+            Assert.AreEqual("0000 test Edited", vm3.Name);
+            Assert.AreEqual(7777, vm3.ID);
 
-        //[TestMethod]
-        //[TestCategory("DeleteConfirmed")]
-        //public void ActuallyDeleteAnIngredientFromTheDatabase()
-        //{
-        //    // Arrange
+        }
 
-        //   IRepository<Ingredient, IngredientVM> repoIngredient = new JSONRepository<Ingredient, IngredientVM>();
-        //    IngredientsController<Ingredient, IngredientVM> controller = new IngredientsController<Ingredient, IngredientVM>(repoIngredient);
-        //    var item = new RecipesControllerShould().GetIngredient(repoIngredient, "test ActuallyDeleteAnIngredientFromTheDatabase");
+        [TestMethod]
+        [TestCategory("DeleteConfirmed")]
+        public void ActuallyDeleteAnIngredientFromTheDatabase()
+        {
+            // Arrange   
+            controller = new IngredientsController_Index_Test().SetUpIngredientsController(repo);
+            Ingredient item = repo.GetTById(int.MaxValue);
+            int countInRepo = repo.Count();
+            //Act
+            controller.DeleteConfirmed(item.ID);
+            int count = repo.Count();
 
-        //    //Act
-        //    controller.DeleteConfirmed(item.ID);
-        //    var deletedItem = new RecipesControllerShould().GetIngredient(repoIngredient, "test ActuallyDeleteAnIngredientFromTheDatabase");
-
-        //    //Assert
-        //    Assert.IsNull(deletedItem);
-        //}
+            //Assert
+            Assert.AreEqual(countInRepo - 1, count);
+        }
 
         [TestMethod]
         [TestCategory("Edit")]
@@ -181,157 +189,474 @@ namespace LambAndLentil.Test.Infrastructure
             Assert.AreEqual(CreationDate, ingredientVM.CreationDate);
         }
 
-        //[TestMethod]
-        //[TestCategory("Edit")]
-        //public void SaveTheCreationDateBetweenPostedEdits()
-        //{
-        //    // Arrange
-        //    DateTime CreationDate = new DateTime(2010, 1, 1);
-        //    IngredientVM ingredientVM = new IngredientVM(CreationDate);
-        //    ingredientVM.Name = "001 Test ";
-
-        //    IRepository<Ingredient, IngredientVM> repoIngredient = new JSONRepository<Ingredient, IngredientVM>(); ;
-        //     IngredientsController<Ingredient, IngredientVM> controllerEdit = new  IngredientsController<Ingredient, IngredientVM>(repoIngredient);
-        //     IngredientsController<Ingredient, IngredientVM> controllerView = new  IngredientsController<Ingredient, IngredientVM>(repoIngredient);
-        //     IngredientsController<Ingredient, IngredientVM> controllerDelete = new  IngredientsController<Ingredient, IngredientVM>(repoIngredient);
-
-        //    // Act
-        //    controllerEdit.PostEdit(ingredientVM);
-        //    ViewResult view = controllerView.Index();
-        //    ListVM<Ingredient, IngredientVM> listVM = (ListVM<Ingredient, IngredientVM>)view.Model;
-        //    var result = (from m in listVM.Entities
-        //                  where m.Name == "001 Test "
-        //                  select m).AsQueryable().FirstOrDefault();
-
-        //    IngredientVM ingredientVM1 = Mapper.Map<Ingredient, IngredientVM>(result);
-
-        //    DateTime shouldBeSameDate = ingredientVM1.CreationDate;
-        //    try
-        //    {
-        //        // Assert
-        //        Assert.AreEqual(CreationDate, shouldBeSameDate);
-        //    }
-        //    catch (Exception)
-        //    {
-        //        throw;
-        //    }
-        //    finally
-        //    {
-        //        // Cleanup
-        //        controllerDelete.DeleteConfirmed(ingredientVM1.ID);
-        //    }
-        //}
+        [TestMethod]
+        [TestCategory("Edit")]
+        public void SaveTheCreationDateBetweenPostedEdits()
+        {
+            // Arrange
+            DateTime CreationDate = new DateTime(2010, 1, 1);
+            IngredientVM ingredientVM = new IngredientVM(CreationDate);
+            ingredientVM.ID = int.MaxValue - 200;
+            ingredientVM.Name = "test IngredientsControllerShould.SaveTheCreationDateBetweenPostedEdits";
 
 
-        //[TestMethod]
-        //[TestCategory("Edit")]
-        //public void UpdateTheModificationDateBetweenPostedEdits()
-        //{
-        //    // Arrange
-        //    JSONRepository<Ingredient, IngredientVM> repoIngredient = new JSONRepository<Ingredient, IngredientVM>();
-        //     IngredientsController<Ingredient, IngredientVM> controllerPost = new  IngredientsController<Ingredient, IngredientVM>(repoIngredient);
-        //     IngredientsController<Ingredient, IngredientVM> controllerPost1 = new  IngredientsController<Ingredient, IngredientVM>(repoIngredient);
-        //     IngredientsController<Ingredient, IngredientVM> controllerView = new  IngredientsController<Ingredient, IngredientVM>(repoIngredient);
-        //     IngredientsController<Ingredient, IngredientVM> controllerView1 = new  IngredientsController<Ingredient, IngredientVM>(repoIngredient);
-        //     IngredientsController<Ingredient, IngredientVM> controllerDelete = new  IngredientsController<Ingredient, IngredientVM>(repoIngredient);
+            IngredientsController controllerEdit = new IngredientsController(repo);
+            IngredientsController controllerView = new IngredientsController(repo);
+            IngredientsController controllerDelete = new IngredientsController(repo);
 
-        //    IngredientVM vm = new IngredientVM();
-        //    vm.Name = "002 Test Mod";
-        //    DateTime CreationDate = vm.CreationDate;
-        //    DateTime mod = vm.ModifiedDate;
+            // Act
+            controllerEdit.PostEdit(ingredientVM);
+            ViewResult view = controllerView.Index();
+            ListVM<Ingredient, IngredientVM> listVM = (ListVM<Ingredient, IngredientVM>)view.Model;
+            IngredientVM returnedVm = repo.GetTVMById(ingredientVM.ID);
+            DateTime shouldBeSameDate = returnedVm.CreationDate;
 
-        //    // Act
-        //    controllerPost.PostEdit(vm);
-
-        //    ViewResult view = controllerView.Index();
-        //    ListVM<Ingredient, IngredientVM> listVM = (ListVM<Ingredient, IngredientVM>)view.Model;
-        //    var result = (from m in listVM.Entities
-        //                  where m.Name == "002 Test Mod"
-        //                  select m).AsQueryable().FirstOrDefault();
-        //    IngredientVM ingredientVM = Mapper.Map<Ingredient, IngredientVM>(result);
+            // Assert
+            Assert.AreEqual(CreationDate, shouldBeSameDate);
 
 
-        //    ingredientVM.Description = "I've been edited to delay a bit";
-
-        //    controllerPost1.PostEdit(ingredientVM);
+        }
 
 
-        //    ViewResult view1 = controllerView.Index();
-        //    listVM = (ListVM<Ingredient, IngredientVM>)view1.Model;
-        //    var result1 = (from m in listVM.Entities
-        //                   where m.Name == "002 Test Mod"
-        //                   select m).AsQueryable().FirstOrDefault();
+        [TestMethod]
+        [TestCategory("Edit")]
+        public void UpdateTheModificationDateBetweenPostedEdits()
+        {
+            // Arrange 
+            IngredientsController controllerPost = new IngredientsController(repo);
+            IngredientsController controllerPost1 = new IngredientsController(repo); 
+            IngredientVM vm = new IngredientVM();
+            vm.ID = int.MaxValue - 300;
+            vm.Name = "002 Test Mod";
+            vm.Description = "test IngredientsControllerShould.UpdateTheModificationDateBetweenPostedEdits";
+            DateTime CreationDate = vm.CreationDate;
+            DateTime mod = vm.ModifiedDate;
 
-        //    IngredientVM ingredientVM2 = Mapper.Map<Ingredient, IngredientVM>(result1);
+            // Act
+            controllerPost.PostEdit(vm);
 
-        //    DateTime shouldBeSameDate = ingredientVM2.CreationDate;
-        //    DateTime shouldBeLaterDate = ingredientVM2.ModifiedDate;
+            vm.Description += "I've been edited to delay a bit";
 
-        //    try
-        //    {
-        //        // Assert
-        //        Assert.AreEqual(CreationDate, shouldBeSameDate);
-        //        Assert.AreNotEqual(mod, shouldBeLaterDate);
-        //    }
-        //    catch (Exception)
-        //    {
-        //        throw;
-        //    }
-        //    finally
-        //    {
-        //        // Cleanup
-        //        controllerDelete.DeleteConfirmed(ingredientVM.ID);
-        //    }
-        //}
+            controllerPost1.PostEdit(vm);
 
-        // will need to test that we are not creating a second ingredient. Who is we??
+            IngredientVM returnedVM = repo.GetTVMById(vm.ID);
 
-        //[TestMethod]
-        //[Ignore]
-        //[TestCategory("Edit")]
-        //public void IngredientsCtr_CanSaveEditedIngredientVerifyFieldIsEdited()
-        //{
-        //    // Arrange
-        //    IngredientsController controller = SetUpController();
+            DateTime shouldBeSameDate = returnedVM.CreationDate;
+            DateTime shouldBeLaterDate = returnedVM.ModifiedDate;
 
-        //    Ingredient ingredient = mock.Object.Ingredients.First();
-        //    mock.Setup(c => c.Save(It.IsAny<Ingredient>()));
+            // Assert
+            Assert.AreEqual(CreationDate, shouldBeSameDate);
+            Assert.AreNotEqual(mod, shouldBeLaterDate);
+
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void NotCreateASecondElementOnEditingOneElement()
+        {
+            Assert.Fail();
+        }
+
+         
+
+        [TestMethod]
+        [TestCategory("Edit")]
+        public void IngredientsCtr_CannotEditNonexistentIngredient()
+        {
+            // Arrange
+
+            // Act 
+            ViewResult view = controller.Edit(8);
+            object Model = view.Model;
+
+            // Assert 
+            Assert.IsNotNull(view);
+            Assert.IsNull(Model);
+
+        }
+        [Ignore]
+        [TestMethod]
+        public void HaveIDBoundInCreateActionMethod()
+        {
+            //Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void HaveIDBoundInPostEditActionMethod()
+        {
+            //Arrange
+
+            //Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestCategory("BaseEntiity Property")]
+        [TestMethod]
+        public void HaveNameBoundInCreateActionMethod()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestCategory("BaseEntiity Property")]
+        [TestMethod]
+        public void HaveNameBoundInPostEditActionMethod()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
 
 
-        //    // leave this failing until I can figure out how to get Moq to work. 
+        [Ignore]
+        [TestCategory("BaseEntiity Property")]
+        [TestMethod]
+        public void HaveDescriptionBoundInCreateActionMethod()
+        {
+            // Arrange
 
-        //    // Act 
-        //    AutoMapperConfigForTests.InitializeMap();
-        //    IngredientVM ingredientVM = Mapper.Map<Ingredient, IngredientVM>(ingredient);
-        //    ingredientVM.Name = "First edited again 2";
-        //    var view1 = controller.PostEdit(ingredientVM);
+            // Act
 
-        //    //  IngredientVM p1 = (IngredientVM)view1.Model;
+            // Assert
+            Assert.Fail();
+        }
 
-        //    // Assert 
-        //    mock.Verify(foo => foo.Save(It.IsAny<Ingredient>()));
-        //    //  mock.Verify();
-        //    string name = mock.Object.Ingredients.First().Name;
-        //    //   Assert.AreEqual("First edited again 2", name);
-        //    // Assert.AreEqual(1, testSuccess);
-        //}
+        [Ignore]
+        [TestCategory("BaseEntiity Property")]
+        [TestMethod]
+        public void HaveDescriptionBoundInPostEditActionMethod()
+        {
+            // Arrange
 
-        //[TestMethod]
-        //[TestCategory("Edit")]
-        //public void IngredientsCtr_CannotEditNonexistentIngredient()
-        //{
-        //    // Arrange
-        //    IngredientsController controller = SetUpController();
-        //    // Act
-        //    Ingredient result = (Ingredient)controller.Edit(8).ViewData.Model;
-        //    // Assert
-        //    Assert.IsNull(result);
-        //}
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestCategory("BaseEntiity Property")]
+        [TestMethod]
+        public void HaveRecipeBoundInCreateActionMethod()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestCategory("BaseEntiity Property")]
+        [TestMethod]
+        public void HaveRecipeBoundInPostEditActionMethod()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestCategory("BaseEntiity Property")]
+        [TestMethod]
+        public void HaveCreationDateBoundInCreateActionMethod()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestCategory("BaseEntiity Property")]
+        [TestMethod]
+        public void HaveCreationDateBoundInPostEditActionMethod()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestCategory("BaseEntiity Property")]
+        [TestMethod]
+        public void HaveModifiedDateBoundInCreateActionMethod()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestCategory("BaseEntiity Property")]
+        [TestMethod]
+        public void HaveModifiedDateBoundInPostEditActionMethod()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestCategory("BaseEntiity Property")]
+        [TestMethod]
+        public void HaveAddedByUserBoundInPostEditActionMethod()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestCategory("BaseEntiity Property")]
+        [TestMethod]
+        public void HaveAddedByUserBoundInCreateActionMethod()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestCategory("BaseEntiity Property")]
+        [TestMethod]
+        public void HaveModifiedByUserBoundInPostEditActionMethod()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestCategory("BaseEntiity Property")]
+        [TestMethod]
+        public void HaveModifiedByUserBoundInCreateActionMethod()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestCategory("BaseEntiity Property")]
+        [TestMethod]
+        public void HaveRecipesBoundInPostEditActionMethod()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestCategory("BaseEntiity Property")]
+        [TestMethod]
+        public void HaveRecipesBoundInCreateActionMethod()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+
+        [Ignore]
+        [TestCategory("BaseEntiity Property")]
+        [TestMethod]
+        public void HaveIngredientsBoundInPostEditActionMethod()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestCategory("BaseEntiity Property")]
+        [TestMethod]
+        public void HaveIngredientsBoundInCreateActionMethod()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void HaveIngredientsListBoundInPostEditActionMethod()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+
+        [Ignore]
+        [TestCategory("BaseEntiity Property")]
+        [TestMethod]
+        public void HaveMenusBoundInCreateActionMethod()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestCategory("BaseEntiity Property")]
+        [TestMethod]
+        public void HaveMenusBoundInPostEditActionMethod()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+
+        [Ignore]
+        [TestCategory("BaseEntiity Property")]
+        [TestMethod]
+        public void HavePlansBoundInCreateActionMethod()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestCategory("BaseEntiity Property")]
+        [TestMethod]
+        public void HavePlansBoundInPostEditActionMethod()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+
+        [Ignore]
+        [TestCategory("BaseEntiity Property")]
+        [TestMethod]
+        public void HaveShoppingListsBoundInCreateActionMethod()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestCategory("BaseEntiity Property")]
+        [TestMethod]
+        public void HaveShoppingListsBoundInPostEditActionMethod()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestCategory("BaseEntiity Property")]
+        [TestMethod]
+        public void HavePersonsBoundInCreateActionMethod()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestCategory("BaseEntiity Property")]
+        [TestMethod]
+        public void HavePersonsBoundInPostEditActionMethod()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
 
         [ClassCleanup()]
         public static void ClassCleanup()
         {
-            Tests.Controllers.IngredientsController_Index_Test.ClassCleanup();
+            IngredientsController_Index_Test.ClassCleanup();
         }
     }
 }

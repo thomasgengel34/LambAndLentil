@@ -19,6 +19,13 @@ namespace LambAndLentil.UI.Models
             Name = String.Concat(FirstName ," ", LastName);
         }
 
+        public PersonVM(string firstName,string lastName) : this()
+        {
+            FirstName = firstName;
+            LastName = lastName;
+            Name = String.Concat(FirstName, " ", LastName);
+        }
+
         public PersonVM(DateTime creationDate):this()
         {
             CreationDate = creationDate;

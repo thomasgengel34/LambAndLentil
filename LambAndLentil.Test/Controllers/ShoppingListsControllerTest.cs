@@ -1,9 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using LambAndLentil.UI.Controllers;
-using LambAndLentil.Domain.Abstract;
-using Moq;
-using LambAndLentil.Domain.Entities;
+using LambAndLentil.Domain.Abstract;  
 using System.Linq;
 
 using LambAndLentil.UI.Models;
@@ -13,415 +11,488 @@ using AutoMapper;
 using LambAndLentil.Tests.Infrastructure;
 using LambAndLentil.UI;
 using LambAndLentil.UI.Infrastructure.Alerts;
+using LambAndLentil.Domain.Concrete;
+using LambAndLentil.Domain.Entities;
+using System.IO;
 
 namespace LambAndLentil.Tests.Controllers
 {
-    [Ignore]
+    
     [TestClass]
     [TestCategory("ShoppingListsController")]
     public class ShoppingListsControllerTest
     {
-        //static Mock<IRepository<ShoppingList,ShoppingListVM>> mock;
-        //public static MapperConfiguration AutoMapperConfig { get; set; }
-
-        //public ShoppingListsControllerTest()
-        //{
-        //    //AutoMapperConfig = AutoMapperConfigForTests.AMConfigForTests();
+        private static IRepository<ShoppingList, ShoppingListVM> repo { get; set; }
+        public static MapperConfiguration AutoMapperConfig { get; set; }
+        private static ListVM<ShoppingList, ShoppingListVM> listVM;
+        private static ShoppingListsController controller { get; set; } 
 
-        //}
+        public ShoppingListsControllerTest()
+        {
+            AutoMapperConfigForTests.InitializeMap();
+            repo = new TestRepository<ShoppingList, ShoppingListVM>();
+            listVM = new ListVM<ShoppingList, ShoppingListVM>();
+            controller = SetUpController(); 
+        }
 
-        //[TestMethod]
-        //public void ShoppingListsCtr_IsPublic()
-        //{
-        //    // Arrange
-        //    ShoppingListsController testController = SetUpSimpleController();
+        private ShoppingListsController  SetUpController()
+        {
 
-        //    // Act
-        //    Type type = testController.GetType();
-        //    bool isPublic = type.IsPublic;
+            listVM.ListT = new List<ShoppingList> {
+                new ShoppingList {ID = int.MaxValue, Name = "ShoppingListsController_Index_Test P1" ,AddedByUser="John Doe" ,ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue, ModifiedDate=DateTime.MaxValue.AddYears(-10)},
+                new ShoppingList {ID = int.MaxValue-1, Name = "ShoppingListsController_Index_Test P2",  AddedByUser="Sally Doe",  ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(20), ModifiedDate=DateTime.MaxValue.AddYears(-20)},
+                new ShoppingList {ID = int.MaxValue-2, Name = "ShoppingListsController_Index_Test P3",  AddedByUser="Sue Doe", ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(30), ModifiedDate=DateTime.MaxValue.AddYears(-30)},
+                new ShoppingList {ID = int.MaxValue-3, Name = "ShoppingListsController_Index_Test P4",  AddedByUser="Kyle Doe" ,ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(40), ModifiedDate=DateTime.MaxValue.AddYears(-10)},
+                new ShoppingList {ID = int.MaxValue-4, Name = "ShoppingListsController_Index_Test P5",  AddedByUser="John Doe",  ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(50), ModifiedDate=DateTime.MaxValue.AddYears(-100)}
+            }.AsQueryable();
 
-        //    // Assert 
-        //    Assert.AreEqual(isPublic, true);
-        //}
+            foreach (ShoppingList ingredient in listVM.ListT)
+            {
+                repo.AddT(ingredient);
+            }
 
+            controller = new ShoppingListsController(repo);
+            controller.PageSize = 3;
 
+            return controller;
+        }
+
+        [TestMethod]
+        public void  IsPublic()
+        {
+            // Arrange
+          
+
+            // Act
+            Type type = controller.GetType();
+            bool isPublic = type.IsPublic;
+
+            // Assert 
+            Assert.AreEqual(isPublic, true);
+        }
+
+
+
+
+        [TestMethod]
+        public void  InheritsFromBaseControllerCorrectly()
+        {
+
+            // Arrange
+          
+            // Act 
+            controller.PageSize = 4;
 
+            var type = typeof(ShoppingListsController);
+            var DoesDisposeExist = type.GetMethod("Dispose");
+
+            // Assert 
+            Assert.AreEqual(4, controller.PageSize);
+            Assert.IsNotNull(DoesDisposeExist);
+        }
 
-        //[TestMethod]
-        //public void ShoppingListsCtr_InheritsFromBaseControllerCorrectly()
-        //{
+        [TestMethod]
+        [TestCategory("Index")]
+        public void Index()
+        {
+            // Arrange
+
+
+            // Act
+            ViewResult result = controller.Index(1) as ViewResult;
+
 
-        //    // Arrange
-        //    ShoppingListsController controller = SetUpSimpleController();
-        //    // Act 
-        //    controller.PageSize = 4;
+            // Assert
+            Assert.IsNotNull(result);
 
-        //    var type = typeof(ShoppingListsController);
-        //    var DoesDisposeExist = type.GetMethod("Dispose");
+        }
 
-        //    // Assert 
-        //    Assert.AreEqual(4, controller.PageSize);
-        //    Assert.IsNotNull(DoesDisposeExist);
-        //}
-
-        //[TestMethod]
-        //[TestCategory("Index")]
-        //public void ShoppingListsCtr_Index()
-        //{
-        //    // Arrange
-        //    ShoppingListsController controller = SetUpController();
-
-        //    // Act
-        //    ViewResult result = controller.Index(1) as ViewResult;
-        //    ViewResult result1 = controller.Index(2) as ViewResult;
-
-        //    // Assert
-        //    Assert.IsNotNull(result);
-        //    Assert.IsNotNull(result1);
-        //}
-
-        //[TestMethod]
-        //[TestCategory("Index")]
-        //public void ShoppingListsCtr_Index_ContainsAllShoppingLists()
-        //{
-        //    // Arrange
-        //    ShoppingListsController controller = SetUpController();
-        //   ListVM<ShoppingList,ShoppingListVM> ilvm = new ListVM<ShoppingList,ShoppingListVM>();
-        //    ilvm.Entities = (IEnumerable<ShoppingList>)mock.Object.ShoppingList;
-
-        //    // Act
-        //    ViewResult view1 = controller.Index(1);
-
-        //    int count1 = ((ListVM<ShoppingList,ShoppingListVM>)(view1.Model)).Entities.Count();
-
-        //    ViewResult view2 = controller.Index(2);
-
-        //    int count2 = ((ListVM<ShoppingList,ShoppingListVM>)(view2.Model)).Entities.Count();
-
-        //    int count = count1 + count2;
-
-        //    // Assert
-        //    Assert.IsNotNull(view1);
-        //    Assert.IsNotNull(view2);
-        //    Assert.AreEqual(5, count1);
-        //    Assert.AreEqual(0, count2);
-        //    Assert.AreEqual(5, count);
-        //    Assert.AreEqual("Index", view1.ViewName);
-        //    Assert.AreEqual("Index", view2.ViewName);
-        //}
-
-
-        //[TestMethod]
-        //[TestCategory("Index")]
-        //public void ShoppingListsCtr_Index_FirstPageIsCorrect()
-        //{
-        //    // Arrange
-        //    ShoppingListsController controller = SetUpController();
-        //   ListVM<ShoppingList,ShoppingListVM> ilvm = new ListVM<ShoppingList,ShoppingListVM>();
-        //    ilvm.Entities = (IEnumerable<ShoppingList>)mock.Object.ShoppingList;
-        //    controller.PageSize = 8;
-
-        //    // Act
-        //    ViewResult view1 = controller.Index(1);
-
-        //    int count1 = ((ListVM<ShoppingList,ShoppingListVM>)(view1.Model)).Entities.Count();
-
-
-
-        //    // Assert
-        //    Assert.IsNotNull(view1);
-        //    Assert.AreEqual(5, count1);
-        //    Assert.AreEqual("Index", view1.ViewName);
-
-        //    Assert.AreEqual("Old Name 1", ((ListVM<ShoppingList,ShoppingListVM>)(view1.Model)).Entities.FirstOrDefault().Name);
-        //    Assert.AreEqual("Old Name 2", ((ListVM<ShoppingList,ShoppingListVM>)(view1.Model)).Entities.Skip(1).FirstOrDefault().Name);
-        //    Assert.AreEqual("Old Name 3", ((ListVM<ShoppingList,ShoppingListVM>)(view1.Model)).Entities.Skip(2).FirstOrDefault().Name);
-
-
-        //}
-
-
-        //[TestMethod]
-        //[TestCategory("Index")]
-        //// currently we only have one page here
-        //public void ShoppingListsCtr_Index_SecondPageIsCorrect()
-        //{
-
-        //}
-
-        //[TestMethod]
-        //[TestCategory("Index")]
-        //public void ShoppingListsCtr_Index_CanSendPaginationViewModel()
-        //{
-
-        //    // Arrange
-        //    ShoppingListsController controller = SetUpController();
-
-        //    // Act
-
-        //   ListVM<ShoppingList,ShoppingListVM> resultT = (ListVM<ShoppingList,ShoppingListVM>)((ViewResult)controller.Index(2)).Model;
-
-
-        //    // Assert
-
-        //    PagingInfo pageInfoT = resultT.PagingInfo;
-        //    Assert.AreEqual(2, pageInfoT.CurrentPage);
-        //    Assert.AreEqual(8, pageInfoT.ItemsPerPage);
-        //    Assert.AreEqual(5, pageInfoT.TotalItems);
-        //    Assert.AreEqual(1, pageInfoT.TotalPages);
-        //}
-
-
-        //[TestMethod]
-        //[TestCategory("Index")]
-        //public void ShoppingListsCtr_Index_PagingInfoIsCorrect()
-        //{
-        //    // Arrange
-        //    ShoppingListsController controller = SetUpController();
-
-
-        //    // Action
-        //    int totalItems = ((ListVM<ShoppingList,ShoppingListVM>)((ViewResult)controller.Index()).Model).PagingInfo.TotalItems;
-        //    int currentPage = ((ListVM<ShoppingList,ShoppingListVM>)((ViewResult)controller.Index()).Model).PagingInfo.CurrentPage;
-        //    int itemsPerPage = ((ListVM<ShoppingList,ShoppingListVM>)((ViewResult)controller.Index()).Model).PagingInfo.ItemsPerPage;
-        //    int totalPages = ((ListVM<ShoppingList,ShoppingListVM>)((ViewResult)controller.Index()).Model).PagingInfo.TotalPages;
-
-
-
-        //    // Assert
-        //    Assert.AreEqual(5, totalItems);
-        //    Assert.AreEqual(1, currentPage);
-        //    Assert.AreEqual(8, itemsPerPage);
-        //    Assert.AreEqual(1, totalPages);
-        //}
-
-        //[TestMethod]
-        //[TestCategory("Index")]
-        //public void ShoppingListsCtr_IndexCanPaginate()
-        //{
-        //    // Arrange
-        //    ShoppingListsController controller = SetUpController();
-
-        //    // Act
-        //    var result = (ListVM<ShoppingList,ShoppingListVM>)(controller.Index(1)).Model; 
-
-        //    // Assert
-        //    ShoppingList[] ingrArray1 = result.Entities.ToArray();
-        //    Assert.IsTrue(ingrArray1.Length == 5);
-        //    Assert.AreEqual("Old Name 1", ingrArray1[0].Name);
-        //    Assert.AreEqual("Old Name 4", ingrArray1[3].Name);
-        //}
-
-        //[TestMethod]
-        //[TestCategory("Create")]
-        //public void ShoppingListsCtr_Create()
-        //{
-        //    // Arrange
-        //    ShoppingListsController controller = SetUpController();
-        //    ViewResult view = controller.Create(UIViewType.Edit);
-
-
-        //    // Assert
-        //    Assert.IsNotNull(view);
-        //    Assert.AreEqual("Details", view.ViewName);
-        //}
-
-        //[TestMethod]
-        //[TestCategory("Remove")]
-        //public void ShoppingListsCtr_RemoveAFoundShoppingList()
-        //{
-        //    // Arrange
-        //    ShoppingListsController controller = SetUpController();
-
-        //    // Act 
-        //    var view = controller.Delete(1) as ViewResult;
-
-        //    // Assert
-        //    Assert.IsNotNull(view);
-        //    Assert.AreEqual(UIViewType.Details.ToString(), view.ViewName);
-        //}
-
-
-
-        //[TestMethod]
-        //[TestCategory("Remove")]
-        //public void ShoppingListsCtr_RemoveAnInvalidShoppingList()
-        //{
-        //    // Arrange
-        //    ShoppingListsController controller = SetUpController();
-
-        //    // Act 
-        //    var view = controller.Delete(4000) as ViewResult;
-        //    AlertDecoratorResult adr = (AlertDecoratorResult)view;
-
-        //    // Assert
-        //    Assert.IsNotNull(view);
-        //    Assert.AreEqual("No shopping list was found with that id.", adr.Message);
-        //    Assert.AreEqual("alert-danger", adr.AlertClass);
-        //    Assert.AreEqual(UIControllerType.ShoppingLists.ToString(), ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(0).ToString());
-        //    Assert.AreEqual(UIViewType.BaseIndex.ToString(), ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(1).ToString());
-        //    Assert.AreEqual(1, ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(3));
-        //}
-
-        //[TestMethod]
-        //[TestCategory("Remove")]
-        //public void ShoppingListsCtr_RemoveConfirmed()
-        //{
-        //    // Arrange
-        //    ShoppingListsController controller = SetUpController();
-        //    // Act
-        //    ActionResult result = controller.DeleteConfirmed(1) as ActionResult;
-        //    // improve this test when I do some route tests to return a more exact result
-        //    //RedirectToRouteResult x = new RedirectToRouteResult("default",new  RouteValueDictionary { new Route( { controller = "ShoppingLists", Action = "Index" } } );
-        //    // Assert 
-        //    Assert.IsNotNull(result);
-        //}
-
-        //[TestMethod]
-        //[TestCategory("Remove")]
-        //public void  CanRemoveValidShoppingList()
-        //{
-        //    // Arrange - create an shoppingList
-        //    ShoppingListVM shoppingListVM = new ShoppingListVM { ID = 2, Name = "Test2" };
-
-        //    // Arrange - create the mock repository
-        //    Mock<IRepository<ShoppingList, ShoppingListVM>> mock = new Mock<IRepository<ShoppingList, ShoppingListVM>>();
-        //    mock.Setup(m => m.ShoppingList).Returns(new ShoppingListVM[]
-        //    {
-        //        new ShoppingListVM {ID=1,Name="Test1"},
-
-        //        shoppingListVM,
-
-        //        new ShoppingListVM {ID=3,Name="Test3"},
-        //    }.AsQueryable());
-        //    mock.Setup(m => m.RemoveTVM(It.IsAny<ShoppingListVM>())).Verifiable();
-        //    // Arrange - create the controller
-        //    ShoppingListsController controller = new ShoppingListsController(mock.Object);
-
-        //    // Act - delete the shoppingList
-        //    ActionResult result = controller.DeleteConfirmed(shoppingListVM.ID);
-
-        //    AlertDecoratorResult adr = (AlertDecoratorResult)result;
-
-        //    // Assert - ensure that the repository delete method was called with a correct ShoppingList
-        //    mock.Verify(m => m.RemoveTVM(shoppingListVM));
-
-
-        //    Assert.AreEqual("Test2 has been deleted", adr.Message);
-        //}
-
-
-
-        //[TestMethod]
-        //[TestCategory("Edit")]
-        //public void CanEditShoppingList()
-        //{
-        //    // Arrange
-        //    ShoppingListsController controller = SetUpController();
-
-        //    ShoppingListVM shoppingListVM = (ShoppingListVM)mock.Object.ShoppingList;
-        //    mock.Setup(c => c.SaveTVM(shoppingListVM)).Verifiable();
-        //    shoppingListVM.Name = "First edited";
-
-        //    // Act 
-
-        //    ViewResult view1 = controller.Edit(1);
-        //   ListVM<ShoppingList,ShoppingListVM> p1 = (ListVM<ShoppingList,ShoppingListVM>)view1.Model;
-        //    ViewResult view2 = controller.Edit(2);
-        //   ListVM<ShoppingList,ShoppingListVM> p2 = (ListVM<ShoppingList,ShoppingListVM>)view2.Model;
-        //    ViewResult view3 = controller.Edit(3);
-        //   ListVM<ShoppingList,ShoppingListVM> p3 = (ListVM<ShoppingList,ShoppingListVM>)view3.Model;
-
-
-        //    // Assert 
-        //    Assert.IsNotNull(view1);
-        //    Assert.AreEqual(1, p1.Entities.First().ID);
-        //    Assert.AreEqual(2, p2.Entities.First().ID);
-        //    Assert.AreEqual(3, p3.Entities.First().ID);
-        //    Assert.AreEqual("First edited", p1.Entities.First().Name);
-        //    Assert.AreEqual("Old Name 2", p2.Entities.First().Name);
-        //}
-
-
-
-        //[TestMethod]
-        //[TestCategory("Edit")]
-        //public void ShoppingListsCtr_CannotEditNonexistentShoppingList()
-        //{
-        //    //    // Arrange
-        //    //    ShoppingListsController controller = SetUpController();
-        //    //    // Act
-        //    //    ShoppingList result = (ShoppingList)controller.Edit(8).ViewData.Model;
-        //    //    // Assert
-        //    //    Assert.IsNull(result);
-        //    //}
-
-        //    //[TestMethod]
-        //    //public void ShoppingListsCtr_CreateReturnsNonNull()
-        //    //{
-        //    //    // Arrange
-        //    //    ShoppingListsController controller = SetUpController();
-
-
-        //    //    // Act
-        //    //    ViewResult result = controller.Create(null) as ViewResult;
-
-        //    //    // Assert
-        //    //    Assert.IsNotNull(result);
-        //}
-
-        //private ShoppingListsController SetUpController()
-        //{
-        //    // - create the mock repository
-        //    mock = new Mock<IRepository<ShoppingList,ShoppingListVM>>();
-        //    mock.Setup(m => m.ShoppingList).Returns(new  ShoppingListVM[] {
-        //        new ShoppingListVM {ID = 1, Name = "Old Name 1" },
-        //        new ShoppingListVM {ID = 2, Name = "Old Name 2" },
-        //        new ShoppingListVM {ID = 3, Name = "Old Name 3" },
-        //        new ShoppingListVM {ID = 4, Name = "Old Name 4", },
-        //        new ShoppingListVM {ID = 5, Name = "Old Name 5" }
-        //    }.AsQueryable());
-
-        //    // Arrange - create a controller
-        //    ShoppingListsController controller = new ShoppingListsController(mock.Object);
-        //    controller.PageSize = 3;
-
-        //    return controller;
-        //}
-
-
-
-        //private ShoppingListsController SetUpSimpleController()
-        //{
-        //    // - create the mock repository
-        //    Mock<IRepository<ShoppingList,ShoppingListVM>> mock = new Mock<IRepository<ShoppingList,ShoppingListVM>>();
-
-
-        //    // Arrange - create a controller
-        //    ShoppingListsController controller = new ShoppingListsController(mock.Object);
-        //    // controller.PageSize = 3;
-
-        //    return controller;
-        //}
-
-        //[TestMethod]
-        //public void FlagAnIngredientFlaggedInAPerson()
-        //{
-        //    Assert.Fail();
-        //}
-
-
-        //[TestMethod]
-        //public void FlagAnIngredientFlaggedInTwoPersons()
-        //{
-        //    Assert.Fail();
-        //}
-
-        //[TestMethod]
-        //public void WhenAFlagHasBeenRemovedFromOnePersonStillThereForSecondFlaggedPerson()
-        //{
-        //    Assert.Fail();
-        //}
+        [TestMethod]
+        [TestCategory("Index")]
+        public void ContainsAllShoppingLists()
+        {
+            // Arrange
+            
+            // Act
+            ViewResult view1 = controller.Index(1);
+
+            int count1 = ((ListVM<ShoppingList, ShoppingListVM>)(view1.Model)).ListTVM.Count();
+
+            ViewResult view2 = controller.Index(2);
+
+            int count2 = ((ListVM<ShoppingList, ShoppingListVM>)(view2.Model)).ListTVM.Count();
+
+            int count = count1 + count2;
+
+            // Assert
+            Assert.IsNotNull(view1);
+            Assert.IsNotNull(view2);
+            Assert.AreEqual(5, count1);
+            Assert.AreEqual(0, count2);
+            Assert.AreEqual(5, count);
+            Assert.AreEqual("Index", view1.ViewName);
+            Assert.AreEqual("Index", view2.ViewName);
+        }
+
+
+        [TestMethod]
+        [TestCategory("Index")]
+        public void  FirstPageIsCorrect()
+        {
+            // Arrange
+            ShoppingListsController controller = SetUpController();
+            ListVM<ShoppingList, ShoppingListVM> ilvm = new ListVM<ShoppingList, ShoppingListVM>(); 
+            controller.PageSize = 8;
+
+            // Act
+            ViewResult view1 = controller.Index(1); 
+            int count1 = ((ListVM<ShoppingList, ShoppingListVM>)(view1.Model)).ListTVM.Count(); 
+
+            // Assert
+            Assert.IsNotNull(view1);
+            Assert.AreEqual(5, count1);
+            Assert.AreEqual("Index", view1.ViewName);
+
+            Assert.AreEqual("ShoppingListsController_Index_Test P1", ((ListVM<ShoppingList, ShoppingListVM>)(view1.Model)).ListTVM.FirstOrDefault().Name);
+            Assert.AreEqual("ShoppingListsController_Index_Test P2", ((ListVM<ShoppingList, ShoppingListVM>)(view1.Model)).ListTVM.Skip(1).FirstOrDefault().Name);
+            Assert.AreEqual("ShoppingListsController_Index_Test P3", ((ListVM<ShoppingList, ShoppingListVM>)(view1.Model)).ListTVM.Skip(2).FirstOrDefault().Name); 
+        }
+
+        [Ignore]
+        [TestMethod]
+        [TestCategory("Index")]
+        // currently we only have one page here
+        public void ShoppingListsCtr_Index_SecondPageIsCorrect()
+        {
+
+        }
+
+        [TestMethod]
+        [TestCategory("Index")]
+        public void  CanSendPaginationViewModel()
+        {
+
+            // Arrange
+            ShoppingListsController controller = SetUpController();
+
+            // Act 
+            ListVM<ShoppingList, ShoppingListVM> resultT = (ListVM<ShoppingList, ShoppingListVM>)((ViewResult)controller.Index(2)).Model;
+
+
+            // Assert 
+            PagingInfo pageInfoT = resultT.PagingInfo;
+            Assert.AreEqual(2, pageInfoT.CurrentPage);
+            Assert.AreEqual(8, pageInfoT.ItemsPerPage);
+            Assert.AreEqual(5, pageInfoT.TotalItems);
+            Assert.AreEqual(1, pageInfoT.TotalPages);
+        }
+
+
+        [TestMethod]
+        [TestCategory("Index")]
+        public void  PagingInfoIsCorrect()
+        {
+            // Arrange 
+
+            // Action
+            int totalItems = ((ListVM<ShoppingList, ShoppingListVM>)((ViewResult)controller.Index()).Model).PagingInfo.TotalItems;
+            int currentPage = ((ListVM<ShoppingList, ShoppingListVM>)((ViewResult)controller.Index()).Model).PagingInfo.CurrentPage;
+            int itemsPerPage = ((ListVM<ShoppingList, ShoppingListVM>)((ViewResult)controller.Index()).Model).PagingInfo.ItemsPerPage;
+            int totalPages = ((ListVM<ShoppingList, ShoppingListVM>)((ViewResult)controller.Index()).Model).PagingInfo.TotalPages;
+
+
+
+            // Assert
+            Assert.AreEqual(5, totalItems);
+            Assert.AreEqual(1, currentPage);
+            Assert.AreEqual(8, itemsPerPage);
+            Assert.AreEqual(1, totalPages);
+        }
+
+        [TestMethod]
+        [TestCategory("Index")]
+        public void  CanPaginate()
+        {
+            // Arrange
+        
+            // Act
+            var result = (ListVM<ShoppingList, ShoppingListVM>)(controller.Index(1)).Model;
+
+            // Assert 
+            Assert.IsTrue(result.ListTVM.Count() == 5);
+            Assert.AreEqual("ShoppingListsController_Index_Test P1", result.ListTVM.FirstOrDefault().Name);
+            Assert.AreEqual("ShoppingListsController_Index_Test P4", result.ListTVM.Skip(3).FirstOrDefault().Name); 
+        }
+
+        [TestMethod]
+        [TestCategory("Create")]
+        public void  Create()
+        {
+            // Arrange 
+            ViewResult view = controller.Create(UIViewType.Edit);
+
+
+            // Assert
+            Assert.IsNotNull(view);
+            Assert.AreEqual("Details", view.ViewName);
+        }
+
+        [TestMethod]
+        [TestCategory("Remove")]
+        public void RemoveAFoundShoppingList()
+        {   // does not actually remove, just sets up to remove it.
+            // TODO: verify "Are you sure you want to delete this?" message shows up.
+            // Arrange
+            int count = repo.Count();
+
+            // Act 
+            ActionResult ar = controller.Delete(int.MaxValue); 
+            ViewResult view = (ViewResult)ar;
+            int newCount = repo.Count();
+
+            // Assert
+            Assert.IsNotNull(view);
+            Assert.AreEqual(UIViewType.Details.ToString(), view.ViewName);
+            Assert.AreEqual(count , newCount);
+        }
+
+
+
+        [TestMethod]
+        [TestCategory("Remove")]
+        public void  RemoveAnInvalidShoppingList()
+        {
+            // Arrange 
+
+            // Act 
+            var view = controller.Delete(4000) as ViewResult;
+            AlertDecoratorResult adr = (AlertDecoratorResult)view;
+
+            // Assert
+            Assert.IsNotNull(view);
+            Assert.AreEqual("Shopping List was not found", adr.Message);
+            Assert.AreEqual("alert-warning", adr.AlertClass);
+          
+            Assert.AreEqual(UIViewType.Index.ToString(), ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(0).ToString());
+             
+        }
+
+        [TestMethod]
+        [TestCategory("Remove")]
+        public void  RemoveConfirmed()
+        {
+            // Arrange
+            int count = repo.Count();
+
+            // Act
+            ActionResult result = controller.DeleteConfirmed(int.MaxValue) as ActionResult;
+            int newCount = repo.Count();
+            // TODO: improve this test when I do some route tests to return a more exact result
+            //RedirectToRouteResult x = new RedirectToRouteResult("default",new  RouteValueDictionary { new Route( { controller = "ShoppingLists", Action = "Index" } } );
+            //TODO: check message
+
+            // Assert 
+            Assert.IsNotNull(result);
+            Assert.AreEqual(count - 1, newCount);
+        }
+
+        [TestMethod]
+        [TestCategory("Remove")]
+        public void CanRemoveValidShoppingList()
+        {
+            // Arrange - create an shoppingList
+            ShoppingListVM shoppingListVM = new ShoppingListVM { ID = 2, Name = "Test2" };
+            repo.AddTVM(shoppingListVM);
+
+            // Act - delete the shoppingList
+            ActionResult result = controller.DeleteConfirmed(shoppingListVM.ID);
+
+            AlertDecoratorResult adr = (AlertDecoratorResult)result;
+
+            // Assert - ensure that the repository delete method was called with a correct ShoppingList
+
+
+
+            Assert.AreEqual("Test2 has been deleted", adr.Message);
+        }
+
+
+        [Ignore]   // not working, not done, not sure it's worth pursuing or abandoning
+        [TestMethod]
+        [TestCategory("Edit")]
+        public void CanEditShoppingList()
+        {
+            // Arrange 
+            ShoppingListsController controller2 = new ShoppingListsController(repo);
+
+            // Act  
+            ViewResult view1 = controller.Edit(int.MaxValue);
+            ShoppingListVM  p1 = (ShoppingListVM)view1.Model;
+            ViewResult view2 = controller.Edit(int.MaxValue-1);
+            ShoppingListVM p2 = (ShoppingListVM)view2.Model;
+            ViewResult view3 = controller.Edit(int.MaxValue-2);
+            ShoppingListVM  p3 = (ShoppingListVM)view3.Model; 
+
+            // Assert 
+            Assert.IsNotNull(view1);
+             
+        }
+
+
+
+        [TestMethod]
+        [TestCategory("Edit")]
+        public void ShoppingListsCtr_CannotEditNonexistentShoppingList()
+        {
+            // Arrange
+            ShoppingListsController controller = SetUpController();
+            // Act
+            ShoppingList result = (ShoppingList)controller.Edit(8).ViewData.Model;
+            // Assert
+            Assert.IsNull(result);
+        }
+
+
+        [Ignore]   // look into why this is not working
+        [TestMethod]
+        [TestCategory("Edit")]
+        public void CanEditShoppingListXXX()
+        {
+            // Arrange
+            ShoppingListVM menuVM = new ShoppingListVM
+            {
+                ID = 1,
+                Name = "test ShoppingListControllerTest.CanEditShoppingList",
+                Description = "test ShoppingListControllerTest.CanEditShoppingList"
+            };
+            repo.SaveTVM(menuVM);
+
+            // Act 
+            menuVM.Name = "Name has been changed";
+
+            ViewResult view1 = controller.Edit(1);
+
+            var returnedShoppingListVM = (ShoppingListVM)(view1.Model);
+
+
+            // Assert 
+            Assert.IsNotNull(view1);
+            Assert.AreEqual("Name has been changed", returnedShoppingListVM.Name);
+            //Assert.AreEqual(menuVM.Description, returnedShoppingListVm.Description);
+            //Assert.AreEqual(menuVM.CreationDate, returnedShoppingListVm.CreationDate);
+        }
+
+        [TestMethod]
+        [TestCategory("Edit")]
+        public void SaveEditedShoppingList()
+        {
+            // Arrange
+            ShoppingListsController indexController = new ShoppingListsController(repo);
+            ShoppingListsController controller2 = new ShoppingListsController(repo);
+            ShoppingListsController controller3 = new ShoppingListsController(repo);
+
+
+            ShoppingListVM vm = new ShoppingListVM();
+            vm.Name = "0000 test";
+            vm.ID = int.MaxValue - 100;
+            vm.Description = "test ShoppingListsControllerShould.SaveEditedShoppingList";
+
+            // Act 
+            ActionResult ar1 = controller.PostEdit(vm);
+
+
+            // now edit it
+            vm.Name = "0000 test Edited";
+            vm.ID = 7777;
+            ActionResult ar2 = controller2.PostEdit(vm);
+            ViewResult view2 = controller3.Index();
+            ListVM<ShoppingList, ShoppingListVM> listVM2 = (ListVM<ShoppingList, ShoppingListVM>)view2.Model;
+            ShoppingListVM vm3 = (from m in listVM2.ListTVM
+                          where m.Name == "0000 test Edited"
+                          select m).AsQueryable().FirstOrDefault();
+
+            // Assert
+            Assert.AreEqual("0000 test Edited", vm3.Name);
+            Assert.AreEqual(7777, vm3.ID);
+
+        }
+
+        [Ignore]  // look into why this is not working
+        [TestMethod]
+        [TestCategory("Edit")]
+        public void CanPostEditShoppingList()
+        {
+            // Arrange
+            ShoppingListVM menuVM = new ShoppingListVM
+            {
+                ID = 1,
+                Name = "test ShoppingListControllerTest.CanEditShoppingList",
+                Description = "test ShoppingListControllerTest.CanEditShoppingList"
+            };
+            repo.AddTVM(menuVM);
+
+            // Act 
+            menuVM.Name = "Name has been changed";
+
+            ViewResult view1 = controller.Edit(1);
+
+            ShoppingListVM returnedShoppingListVm = repo.GetTVMById(1);
+
+            // Assert 
+            Assert.IsNotNull(view1);
+            Assert.AreEqual("Name has been changed", returnedShoppingListVm.Name);
+            Assert.AreEqual(menuVM.Description, returnedShoppingListVm.Description);
+            Assert.AreEqual(menuVM.CreationDate, returnedShoppingListVm.CreationDate);
+        }
+
+
+
+        [TestMethod]
+        [TestCategory("Edit")]
+        public void CannotEditNonexistentShoppingList()
+        {
+            // Arrange
+
+            // Act
+            ShoppingList result = (ShoppingList)controller.Edit(8).ViewData.Model;
+            // Assert
+            Assert.IsNull(result);
+        }
+
+        [TestMethod]
+        public void ShoppingListsCtr_CreateReturnsNonNull()
+        {
+            // Arrange
+            ShoppingListsController controller = SetUpController();
+
+
+            // Act
+            ViewResult result = controller.Create(UIViewType.Create) as ViewResult;
+
+            // Assert
+            Assert.IsNotNull(result);
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void FlagAnIngredientFlaggedInAPerson()
+        {
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void FlagAnIngredientFlaggedInTwoPersons()
+        {
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void WhenAFlagHasBeenRemovedFromOnePersonStillThereForSecondFlaggedPerson()
+        {
+            Assert.Fail();
+        }
 
         [Ignore]
         [TestCategory("Copy")]
@@ -436,6 +507,21 @@ namespace LambAndLentil.Tests.Controllers
         public void CorrectPropertiesAreBoundInEdit()
         {
             Assert.Fail();
+        }
+
+         
+
+        [ClassCleanup()]
+        public static void ClassCleanup()
+        {
+            string path = @"C:\Dev\TGE\LambAndLentil\LambAndLentil.Test\App_Data\JSON\ShoppingList\";
+            IEnumerable<string> files = Directory.EnumerateFiles(path);
+
+            foreach (var file in files)
+            {
+                File.Delete(file);
+            }
+
         }
     }
 }

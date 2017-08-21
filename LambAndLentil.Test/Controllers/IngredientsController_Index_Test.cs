@@ -3,12 +3,9 @@ using LambAndLentil.Domain.Abstract;
 using LambAndLentil.Domain.Concrete;
 using LambAndLentil.Domain.Entities;
 using LambAndLentil.Tests.Infrastructure;
-using LambAndLentil.UI;
 using LambAndLentil.UI.Controllers;
-using LambAndLentil.UI.HtmlHelpers;
-using LambAndLentil.UI.Infrastructure.Alerts;
 using LambAndLentil.UI.Models;
-using Microsoft.VisualStudio.TestTools.UnitTesting; 
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -17,22 +14,22 @@ using System.Web.Mvc;
 
 namespace LambAndLentil.Tests.Controllers
 {
-    
+
     [TestClass]
     [TestCategory("IngredientsController")]
     public class IngredientsController_Index_Test
-    { 
+    {
         public static MapperConfiguration AutoMapperConfig { get; set; }
         static ListVM<Ingredient, IngredientVM> ilvm;
         static IRepository<Ingredient, IngredientVM> repo;
-        static IngredientsController  controller;
+        static IngredientsController controller;
 
         public IngredientsController_Index_Test()
         {
-            AutoMapperConfigForTests.InitializeMap(); 
+            AutoMapperConfigForTests.InitializeMap();
             ilvm = new ListVM<Ingredient, IngredientVM>();
             repo = new TestRepository<Ingredient, IngredientVM>();
-            controller = SetUpController();
+            controller = SetUpIngredientsController(repo);
         }
 
 
@@ -42,7 +39,7 @@ namespace LambAndLentil.Tests.Controllers
         public void IngredientsCtr_Index()
         {
             // Arrange
-             
+
 
             // Act
             ViewResult result = controller.Index(1) as ViewResult;
@@ -58,7 +55,7 @@ namespace LambAndLentil.Tests.Controllers
         public void IngredientsCtr_Index1()
         {
             // Arrange
-           
+
 
             // Act
             ViewResult result = controller.Index(1) as ViewResult;
@@ -94,9 +91,9 @@ namespace LambAndLentil.Tests.Controllers
         public void ContainsAllIngredientsView1Count5()
         {
             // Arrange 
-          
+
             // Act
-           ilvm = (ListVM<Ingredient, IngredientVM>)(controller.Index(1)).Model;
+            ilvm = (ListVM<Ingredient, IngredientVM>)(controller.Index(1)).Model;
             IngredientVM[] ingrArray1 = ilvm.ListTVM.ToArray();
             int count1 = ingrArray1.Count();
 
@@ -126,7 +123,7 @@ namespace LambAndLentil.Tests.Controllers
             // Assert  
             Assert.AreEqual(0, count2);
         }
-         
+
 
         [TestMethod]
         [TestCategory("Index")]
@@ -135,8 +132,8 @@ namespace LambAndLentil.Tests.Controllers
             // Arrange  
 
             // Act
-            ViewResult view =  controller.Index(1);
-           
+            ViewResult view = controller.Index(1);
+
 
             // Assert    
             Assert.AreEqual("Index", view.ViewName);
@@ -322,7 +319,7 @@ namespace LambAndLentil.Tests.Controllers
             int count1 = ((ListVM<Ingredient, IngredientVM>)(view1.Model)).ListTVM.Count();
 
             // Assert   
-            Assert.AreEqual("IngredientsController_Index_Test P2",  ((ListVM<Ingredient, IngredientVM>)(view1.Model)).ListTVM.Skip(1).FirstOrDefault().Name);
+            Assert.AreEqual("IngredientsController_Index_Test P2", ((ListVM<Ingredient, IngredientVM>)(view1.Model)).ListTVM.Skip(1).FirstOrDefault().Name);
         }
 
 
@@ -361,10 +358,10 @@ namespace LambAndLentil.Tests.Controllers
         public void IngredientsCtr_IndexCanPaginate_ArrayLengthIsCorrect()
         {
             // Arrange
-          
+
 
             // Act
-            var result = (ListVM<Ingredient, IngredientVM>)(controller.Index(1)).Model; 
+            var result = (ListVM<Ingredient, IngredientVM>)(controller.Index(1)).Model;
 
             // Assert 
             Assert.IsTrue(result.ListTVM.Count() == 5);
@@ -375,14 +372,14 @@ namespace LambAndLentil.Tests.Controllers
         public void CanPaginate_ArrayFirstItemNameIsCorrect()
         {
             // Arrange
-        
+
 
             // Act
             var result = (ListVM<Ingredient, IngredientVM>)(controller.Index(1)).Model;
             IngredientVM[] ingrArray1 = result.ListTVM.ToArray();
 
             // Assert  
-            Assert.AreEqual( "IngredientsController_Index_Test P1",ingrArray1[0].Name);
+            Assert.AreEqual("IngredientsController_Index_Test P1", ingrArray1[0].Name);
         }
 
         [TestMethod]
@@ -396,7 +393,7 @@ namespace LambAndLentil.Tests.Controllers
             IngredientVM[] ingrArray1 = result.ListTVM.ToArray();
 
             // Assert  
-            Assert.AreEqual("IngredientsController_Index_Test P3",ingrArray1[2].Name );
+            Assert.AreEqual("IngredientsController_Index_Test P3", ingrArray1[2].Name);
         }
 
 
@@ -419,7 +416,7 @@ namespace LambAndLentil.Tests.Controllers
         public void IngredientsCtr_Index_CanSendPaginationViewModel_ItemsPerPageCorrect()
         {
             // Arrange
-       
+
 
             // Act 
             ListVM<Ingredient, IngredientVM> resultT = (ListVM<Ingredient, IngredientVM>)((ViewResult)controller.Index(2)).Model;
@@ -437,7 +434,7 @@ namespace LambAndLentil.Tests.Controllers
 
             // Act 
             ListVM<Ingredient, IngredientVM> resultT = (ListVM<Ingredient, IngredientVM>)((ViewResult)controller.Index(2)).Model;
-              PagingInfo pageInfoT =resultT.PagingInfo;
+            PagingInfo pageInfoT = resultT.PagingInfo;
             //   PagingInfo pageInfoT =ilvm.PagingInfo;
 
             // Assert 
@@ -450,7 +447,7 @@ namespace LambAndLentil.Tests.Controllers
         public void IngredientsCtr_Index_CanSendPaginationViewModel_TotalPagesCorrect()
         {
             // Arrange
-          
+
 
             // Act 
             ListVM<Ingredient, IngredientVM> resultT = (ListVM<Ingredient, IngredientVM>)((ViewResult)controller.Index(2)).Model;
@@ -459,11 +456,10 @@ namespace LambAndLentil.Tests.Controllers
             // Assert 
             Assert.AreEqual(1, pageInfoT.TotalPages);
         }
-         
 
-        private IngredientsController  SetUpController()
+
+        public IngredientsController SetUpIngredientsController(IRepository<Ingredient,IngredientVM> repo)
         {
-
             ilvm.ListT = new List<Ingredient> {
                 new Ingredient {ID = int.MaxValue, Name = "IngredientsController_Index_Test P1" ,AddedByUser="John Doe" ,ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue, ModifiedDate=DateTime.MaxValue.AddYears(-10)},
                 new Ingredient {ID = int.MaxValue-1, Name = "IngredientsController_Index_Test P2",  AddedByUser="Sally Doe",  ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(20), ModifiedDate=DateTime.MaxValue.AddYears(-20)},
@@ -477,14 +473,12 @@ namespace LambAndLentil.Tests.Controllers
                 repo.AddT(ingredient);
             }
 
-            IngredientsController  controller = new IngredientsController(repo);
+            IngredientsController controller = new IngredientsController(repo);
             controller.PageSize = 3;
 
-            return controller;
-
- 
+            return controller; 
         }
-         
+
 
         [Ignore]
         [TestMethod]
@@ -513,21 +507,12 @@ namespace LambAndLentil.Tests.Controllers
         {
             string path = @"C:\Dev\TGE\LambAndLentil\LambAndLentil.Test\App_Data\JSON\Ingredient\";
             int count = int.MaxValue;
-            try
+            IEnumerable<string> files = Directory.EnumerateFiles(path);
+
+            foreach (var file in files)
             {
-
-                for (int i = count; i > count - 6; i--)
-                {
-                    File.Delete(string.Concat(path, i, ".txt"));
-                }
-
+                File.Delete(file);
             }
-            catch (Exception)
-            {
-
-                throw;
-            }
-
         }
     }
 }

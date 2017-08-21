@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Web.Mvc;
+﻿using LambAndLentil.UI.Controllers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using LambAndLentil;
-using LambAndLentil.UI.Controllers;
+using System;
+using System.Web.Mvc;
 
 namespace LambAndLentil.Tests.Controllers
-{ 
+{
     [TestClass]
     [TestCategory("ManageController")]
     public class ManageControllerTest
