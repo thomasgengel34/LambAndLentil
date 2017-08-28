@@ -9,19 +9,18 @@ using LambAndLentil.UI.Infrastructure.Alerts;
 
 namespace LambAndLentil.UI.Controllers
 {
-    public class RecipesController : RecipesGenericController<Recipe, RecipeVM>
+    public class RecipesController : RecipesGenericController<RecipeVM>
     {
-        public RecipesController(IRepository<Recipe, RecipeVM> repository) : base(repository)
+        public RecipesController(IRepository<RecipeVM> repository) : base(repository)
         {
             repo = repository;
         } 
     }
 
-    public class RecipesGenericController<T,TVM> : BaseController<Recipe, RecipeVM>
-          where T:Recipe 
-            where TVM:RecipeVM  
+    public class RecipesGenericController<T > : BaseController<RecipeVM>
+          where T: RecipeVM  
     {
-        public RecipesGenericController(IRepository<Recipe, RecipeVM> repository) : base(repository)
+        public RecipesGenericController(IRepository<RecipeVM> repository) : base(repository)
         {
             repo = repository;
         }
@@ -83,12 +82,12 @@ namespace LambAndLentil.UI.Controllers
 
         public ActionResult AttachIngredient(int? recipeID, int? ingredientID)
         {
-            return BaseAttach<Recipe, RecipeVM, Ingredient, IngredientVM>(recipeID, ingredientID);
+            return BaseAttach<RecipeVM,  IngredientVM>(recipeID, ingredientID);
         }
 
         public ActionResult RemoveIngredient(int? recipeID, int? ingredientID)
         {
-            return BaseAttach<Recipe, RecipeVM, Ingredient, IngredientVM>(recipeID, ingredientID, AttachOrDetach.Detach);
+            return BaseAttach<RecipeVM,   IngredientVM>(recipeID, ingredientID, AttachOrDetach.Detach);
         }
 
          

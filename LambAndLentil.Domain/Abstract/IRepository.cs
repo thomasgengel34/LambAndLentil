@@ -13,9 +13,8 @@ namespace LambAndLentil.Domain.Abstract
     { }
 
 
-    public interface IRepository<T, TVM>
-    where T : class
-    where TVM : class
+    public interface IRepository<T >
+    where T : class 
     {
         //  EFDbContext context { get; set; }
         IQueryable Ingredient { get; }
@@ -25,36 +24,34 @@ namespace LambAndLentil.Domain.Abstract
         IQueryable Person { get; }
         IQueryable ShoppingList { get; }
 
-        T  GetTById(int id);
-        TVM GetTVMById(int id);
+        T  GetById(int id);
+      
 
         int Count();
 
-        IEnumerable<T> GetAllT();
-        IEnumerable<TVM> GetAllTVM();
+        IEnumerable<T> GetAll();
+       
 
         IEnumerable<T> Query(Expression<Func<T , bool>> filter);
-        IEnumerable<TVM> Query(Expression<Func<TVM , bool>> filter);
+       
 
-        void AddTVM(TVM entity);
+        void Add(T entity);
 
-        void AddT(T entity);
+       
 
-        void RemoveTVM(TVM entity); 
-        void RemoveT(T t);
+        void Remove(T entity); 
+      
 
-        void UpdateTVM(TVM entity, int key);
-        void UpdateT(T  t, int key);
+        void Update(T entity, int key);
+        
 
-        void SaveTVM(TVM entity); 
-        void SaveT(T t);
+        void Save(T entity); 
+       
 
-        void AttachAnIndependentChild<TParent, TChild>(int parentID, int childID)
-            where TParent : BaseEntity, IEntity
+        void AttachAnIndependentChild<TChild>(int parentID, int childID) 
             where TChild : BaseEntity, IEntity;
 
-        void DetachAnIndependentChild<TParent, TChild>(int parentID, int childID)
-            where TParent : BaseEntity, IEntity
+        void DetachAnIndependentChild<TChild>(int parentID, int childID) 
             where TChild : BaseEntity, IEntity;
     }
 }

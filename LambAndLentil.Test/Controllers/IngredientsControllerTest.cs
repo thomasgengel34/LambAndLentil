@@ -7,7 +7,7 @@ using LambAndLentil.UI;
 using LambAndLentil.UI.Controllers;
 using LambAndLentil.UI.Infrastructure.Alerts;
 using LambAndLentil.UI.Models;
-using Microsoft.VisualStudio.TestTools.UnitTesting; 
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -21,15 +21,20 @@ namespace LambAndLentil.Tests.Controllers
     [TestCategory(" IngredientsController")]
     public class IngredientsControllerShould
     {
-        private static IRepository<Ingredient, IngredientVM> repo { get; set; }
+        private static IRepository<IngredientVM> repo { get; set; }
         public static MapperConfiguration AutoMapperConfig { get; set; }
-        static ListVM<Ingredient, IngredientVM> ilvm;
+        static ListVM<IngredientVM> ilvm;
+        static IngredientsController controller;
+        static IngredientVM ingredientVM;
 
         public IngredientsControllerShould()
         {
-            AutoMapperConfigForTests.InitializeMap(); 
-            repo = new TestRepository<Ingredient, IngredientVM>();
-            ilvm = new ListVM<Ingredient, IngredientVM>();
+            AutoMapperConfigForTests.InitializeMap();
+            repo = new TestRepository<IngredientVM>();
+            ilvm = new ListVM<IngredientVM>();
+            controller = new IngredientsController(repo);
+            ingredientVM = new IngredientVM { ID = 1 };
+            repo.Save(ingredientVM);
         }
 
         [TestMethod]
@@ -37,7 +42,7 @@ namespace LambAndLentil.Tests.Controllers
         {
 
             // Arrange
-            IngredientsController controller =SetUpController();
+            IngredientsController controller = SetUpController();
             // Act 
             controller.PageSize = 4;
 
@@ -55,7 +60,7 @@ namespace LambAndLentil.Tests.Controllers
         {
 
             // Arrange
-            IngredientsController controller =SetUpController();
+            IngredientsController controller = SetUpController();
             // Act 
             controller.PageSize = 4;
 
@@ -70,7 +75,7 @@ namespace LambAndLentil.Tests.Controllers
         public void BePublic()
         {
             // Arrange
-            IngredientsController controller =SetUpController();
+            IngredientsController controller = SetUpController();
 
             // Act
             Type type = controller.GetType();
@@ -79,25 +84,12 @@ namespace LambAndLentil.Tests.Controllers
             // Assert 
             Assert.AreEqual(isPublic, true);
         }
-
-        [TestMethod]
-        public void AutoMapperIsConfigured()
-        {
-            AutoMapperConfigForTests.InitializeMap();
-            MapperConfiguration AutoMapperConfig = AutoMapperConfigForTests.AMConfigForTests();
-            AutoMapperConfig.AssertConfigurationIsValid();
-        }
-
-
-
+ 
         [TestMethod]
         [TestCategory("Details")]
         public void DetailsWorksWithValidIngredientID()
         {
             // Arrange
-            IngredientsController controller = new IngredientsController(repo);
-            Ingredient ingredient = new Ingredient { ID = 1 };
-            repo.SaveT(ingredient);
 
 
             // Act
@@ -117,7 +109,7 @@ namespace LambAndLentil.Tests.Controllers
         public void DetailsIngredientIDTooHighViewNotNull()
         {  // not sure what the desired behavior is yet
            // Arrange
-            IngredientsController controller =SetUpController();
+            IngredientsController controller = SetUpController();
             //  AutoMapperConfigForTests.AMConfigForTests();
             ActionResult view = controller.Details(4000);
             AlertDecoratorResult adr = (AlertDecoratorResult)view;
@@ -131,8 +123,8 @@ namespace LambAndLentil.Tests.Controllers
         public void DetailsIngredientIDTooHighMessageRight()
         {// not sure what the desired behavior is yet
          // Arrange
-            IngredientsController controller =SetUpController();
-     
+            IngredientsController controller = SetUpController();
+
             ActionResult ar = controller.Details(4000);
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             // Assert 
@@ -145,7 +137,7 @@ namespace LambAndLentil.Tests.Controllers
         public void DetailsIngredientIDTooHighAlertClassCorrect()
         {   // not sure what the desired behavior is yet
             // Arrange
-            IngredientsController controller =SetUpController();
+            IngredientsController controller = SetUpController();
             //  AutoMapperConfigForTests.AMConfigForTests();
             ActionResult view = controller.Details(4000);
             AlertDecoratorResult adr = (AlertDecoratorResult)view;
@@ -159,7 +151,7 @@ namespace LambAndLentil.Tests.Controllers
         public void DetailsIngredientIDTooHighCorrectModel()
         {
             // Arrange
-            IngredientsController controller =SetUpController();
+            IngredientsController controller = SetUpController();
             //  AutoMapperConfigForTests.AMConfigForTests();
             ActionResult view = controller.Details(4000);
             AlertDecoratorResult adr = (AlertDecoratorResult)view;
@@ -173,7 +165,7 @@ namespace LambAndLentil.Tests.Controllers
         public void DetailsIngredientIDTooHighCorrectController()
         {
             // Arrange
-            IngredientsController controller =SetUpController();
+            IngredientsController controller = SetUpController();
             //  AutoMapperConfigForTests.AMConfigForTests();
             ActionResult view = controller.Details(4000);
             AlertDecoratorResult adr = (AlertDecoratorResult)view;
@@ -187,7 +179,7 @@ namespace LambAndLentil.Tests.Controllers
         public void DetailsIngredientIDTooHighCorrectRouteValue()
         {
             // Arrange
-            IngredientsController controller =SetUpController();
+            IngredientsController controller = SetUpController();
             //  AutoMapperConfigForTests.AMConfigForTests();
             ActionResult view = controller.Details(4000);
             AlertDecoratorResult adr = (AlertDecoratorResult)view;
@@ -202,7 +194,7 @@ namespace LambAndLentil.Tests.Controllers
         {
             // I am not sure how I want this to operate.  Wait until UI is set up and see then.
             // Arrange
-            IngredientsController controller =SetUpController();
+            IngredientsController controller = SetUpController();
             //  AutoMapperConfigForTests.AMConfigForTests(); 
 
             // Act
@@ -217,9 +209,7 @@ namespace LambAndLentil.Tests.Controllers
         public void DetailsIngredientIDIsZeroViewIsNotNull()
         {
             // Arrange
-            IngredientsController controller = new IngredientsController(repo);
-            Ingredient ingredient = new Ingredient { ID = 0 };
-            repo.SaveT(ingredient);
+            
 
             // Act
             ViewResult view = controller.Details(0) as ViewResult;
@@ -234,17 +224,14 @@ namespace LambAndLentil.Tests.Controllers
         public void DetailsIngredientIDIsZeroMessageIsCorrect()
         {
             // Arrange
-            IngredientsController controller = new IngredientsController(repo);
-            Ingredient ingredient = new Ingredient { ID = 0 };
-            repo.SaveT(ingredient);
-
+             
 
             // Act
             ActionResult ar = controller.Details(0);
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
 
             // Assert 
-            Assert.AreEqual("Something is wrong with the data!", adr.Message);
+            Assert.AreEqual("No Ingredient was found with that id.", adr.Message);
         }
 
         [TestMethod]
@@ -253,8 +240,8 @@ namespace LambAndLentil.Tests.Controllers
         {
             // Arrange
             IngredientsController controller = new IngredientsController(repo);
-            Ingredient ingredient = new Ingredient { ID = 0 };
-            repo.SaveT(ingredient);
+            IngredientVM ingredientVM = new IngredientVM { ID = 0 };
+            repo.Save(ingredientVM);
 
 
             // Act
@@ -271,8 +258,8 @@ namespace LambAndLentil.Tests.Controllers
         {
             // Arrange
             IngredientsController controller = new IngredientsController(repo);
-            Ingredient ingredient = new Ingredient { ID = 0 };
-            repo.SaveT(ingredient);
+            IngredientVM ingredientVM = new IngredientVM { ID = 0 };
+            repo.Save(ingredientVM);
 
 
             // Act
@@ -289,9 +276,9 @@ namespace LambAndLentil.Tests.Controllers
         public void Details_IngredientIDIsNegative_ResultNotNull()
         {
             // Arrange
-            IngredientsController controller = new IngredientsController(repo);
-            Ingredient ingredient = new Ingredient { ID = -1 };
-            repo.SaveT(ingredient);
+             
+            IngredientVM ingredientVM = new IngredientVM { ID = -1 };
+            repo.Save(ingredientVM);
 
             // Act
             ActionResult view = controller.Details(-1);
@@ -306,9 +293,9 @@ namespace LambAndLentil.Tests.Controllers
         public void Details_IngredientIDIsNegative_MessageCorrect()
         {
             // Arrange
-            IngredientsController controller = new IngredientsController(repo);
-            Ingredient ingredient = new Ingredient { ID = int.MaxValue };
-            repo.SaveT(ingredient);
+            
+            ingredientVM.ID = int.MaxValue  ;
+            repo.Save(ingredientVM);
 
             // Act
             ActionResult ar = controller.Details(int.MaxValue);
@@ -325,12 +312,12 @@ namespace LambAndLentil.Tests.Controllers
         {
             // Arrange
             IngredientsController controller = new IngredientsController(repo);
-            Ingredient ingredient = new Ingredient
+            IngredientVM ingredientVM = new IngredientVM
             {
                 ID = -1,
                 Name = "Details_IngredientIDIsNegative_AlertClassCorrect"
             };
-            repo.SaveT(ingredient);
+            repo.Save(ingredientVM);
 
             // Act
             ActionResult view = controller.Details(-1);
@@ -351,27 +338,26 @@ namespace LambAndLentil.Tests.Controllers
 
         private IngredientsController SetUpController()
         {
-             IngredientsController controller = new IngredientsController_Index_Test().SetUpIngredientsController(repo);
+             
 
-
-            ilvm.ListT = new List<Ingredient> {
-                new Ingredient {ID = int.MaxValue, Name = "IngredientsControllerTest1" ,
+            ilvm.ListT = new List<IngredientVM> {
+                new IngredientVM {ID = int.MaxValue, Name = "IngredientsControllerTest1" ,
                     Description="test IngredientsController.Setup", AddedByUser ="John Doe" ,ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue, ModifiedDate=DateTime.MaxValue.AddYears(-10)},
-                new Ingredient {ID = int.MaxValue-1, Name = "IngredientsControllerTest2", 
+                new IngredientVM {ID = int.MaxValue-1, Name = "IngredientsControllerTest2",
                     Description="test IngredientsController.Setup",  AddedByUser="Sally Doe",  ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(20), ModifiedDate=DateTime.MaxValue.AddYears(-20)},
-                new Ingredient {ID = int.MaxValue-2, Name = "IngredientsControllerTest3",
+                new IngredientVM {ID = int.MaxValue-2, Name = "IngredientsControllerTest3",
                     Description="test IngredientsController.Setup",  AddedByUser="Sue Doe", ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(30), ModifiedDate=DateTime.MaxValue.AddYears(-30)},
-                new Ingredient {ID = int.MaxValue-3, Name = "IngredientsControllerTest4",
+                new IngredientVM {ID = int.MaxValue-3, Name = "IngredientsControllerTest4",
                     Description="test IngredientsController.Setup",  AddedByUser="Kyle Doe" ,ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(40), ModifiedDate=DateTime.MaxValue.AddYears(-10)},
-                new Ingredient {ID = int.MaxValue-4, Name = "IngredientsControllerTest5",
+                new IngredientVM {ID = int.MaxValue-4, Name = "IngredientsControllerTest5",
                     Description="test IngredientsController.Setup",  AddedByUser="John Doe",  ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(50), ModifiedDate=DateTime.MaxValue.AddYears(-100)}
             }.AsQueryable();
 
-            foreach (Ingredient ingredient in ilvm.ListT)
+            foreach (IngredientVM item in ilvm.ListT)
             {
-                repo.AddT(ingredient);
+                repo.Add(item);
             }
-            
+
 
             controller = new IngredientsController(repo);
             controller.PageSize = 3;

@@ -21,33 +21,33 @@ namespace LambAndLentil.Tests.Controllers
     [TestCategory("PersonsController")]
     public class PersonsControllerTest
     {
-        private static IRepository<Person, PersonVM> repo { get; set; }
+        private static IRepository<PersonVM > repo { get; set; }
         public static MapperConfiguration AutoMapperConfig { get; set; }
-        private static ListVM<Person, PersonVM> listVM;
+        private static ListVM< PersonVM> listVM;
         private static PersonsController controller { get; set; }
 
         public PersonsControllerTest()
         {
-            AutoMapperConfig = AutoMapperConfigForTests.AMConfigForTests();
-            AutoMapperConfigForTests.InitializeMap();
-            repo = new TestRepository<Person, PersonVM>();
-            listVM = new ListVM<Person, PersonVM>();
+            //AutoMapperConfig = AutoMapperConfigForTests.AMConfigForTests();
+            //AutoMapperConfigForTests.InitializeMap();
+            repo = new TestRepository< PersonVM>();
+            listVM = new ListVM<PersonVM>();
             controller = SetUpController();
         }
 
         private PersonsController SetUpController()
         {
-            listVM.ListT = new List<Person> {
-                new Person {ID = int.MaxValue, Name = "PersonsController_Index_Test P1" ,AddedByUser="John Doe" ,ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue, ModifiedDate=DateTime.MaxValue.AddYears(-10)},
-                new Person {ID = int.MaxValue-1, Name = "PersonsController_Index_Test P2",  AddedByUser="Sally Doe",  ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(20), ModifiedDate=DateTime.MaxValue.AddYears(-20)},
-                new Person {ID = int.MaxValue-2, Name = "PersonsController_Index_Test P3",  AddedByUser="Sue Doe", ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(30), ModifiedDate=DateTime.MaxValue.AddYears(-30)},
-                new Person {ID = int.MaxValue-3, Name = "PersonsController_Index_Test P4",  AddedByUser="Kyle Doe" ,ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(40), ModifiedDate=DateTime.MaxValue.AddYears(-10)},
-                new Person {ID = int.MaxValue-4, Name = "PersonsController_Index_Test P5",  AddedByUser="John Doe",  ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(50), ModifiedDate=DateTime.MaxValue.AddYears(-100)}
+            listVM.ListT = new List<PersonVM> {
+                new PersonVM{ID = int.MaxValue, Name = "PersonsController_Index_Test P1" ,AddedByUser="John Doe" ,ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue, ModifiedDate=DateTime.MaxValue.AddYears(-10)},
+                new PersonVM{ID = int.MaxValue-1, Name = "PersonsController_Index_Test P2",  AddedByUser="Sally Doe",  ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(20), ModifiedDate=DateTime.MaxValue.AddYears(-20)},
+                new PersonVM{ID = int.MaxValue-2, Name = "PersonsController_Index_Test P3",  AddedByUser="Sue Doe", ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(30), ModifiedDate=DateTime.MaxValue.AddYears(-30)},
+                new PersonVM{ID = int.MaxValue-3, Name = "PersonsController_Index_Test P4",  AddedByUser="Kyle Doe" ,ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(40), ModifiedDate=DateTime.MaxValue.AddYears(-10)},
+                new PersonVM{ID = int.MaxValue-4, Name = "PersonsController_Index_Test P5",  AddedByUser="John Doe",  ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(50), ModifiedDate=DateTime.MaxValue.AddYears(-100)}
             }.AsQueryable();
 
-            foreach (Person ingredient in listVM.ListT)
+            foreach (PersonVM person in listVM.ListT)
             {
-                repo.AddT(ingredient);
+                repo.Add(person);
             }
 
             controller = new PersonsController(repo);
@@ -114,11 +114,11 @@ namespace LambAndLentil.Tests.Controllers
             // Act
             ViewResult view1 = controller.Index(1);
 
-            int count1 = ((ListVM<Person, PersonVM>)(view1.Model)).ListTVM.Count();
+            int count1 = ((ListVM<PersonVM>)(view1.Model)).ListT.Count();
 
             ViewResult view2 = controller2.Index(2);
 
-            int count2 = ((ListVM<Person, PersonVM>)(view2.Model)).ListTVM.Count();
+            int count2 = ((ListVM<PersonVM>)(view2.Model)).ListT.Count();
 
             int count = count1 + count2;
 
@@ -131,10 +131,10 @@ namespace LambAndLentil.Tests.Controllers
             Assert.AreEqual("Index", view1.ViewName);
             Assert.AreEqual("Index", view2.ViewName);
 
-            Assert.AreEqual("PersonsController_Index_Test P1", ((ListVM<Person, PersonVM>)(view1.Model)).ListTVM.FirstOrDefault().Name);
-            Assert.AreEqual("PersonsController_Index_Test P2", ((ListVM<Person, PersonVM>)(view1.Model)).ListTVM.Skip(1).FirstOrDefault().Name);
-            Assert.AreEqual("PersonsController_Index_Test P3", ((ListVM<Person, PersonVM>)(view1.Model)).ListTVM.Skip(2).FirstOrDefault().Name);
-            Assert.AreEqual("PersonsController_Index_Test P5", ((ListVM<Person, PersonVM>)(view1.Model)).ListTVM.Skip(4).FirstOrDefault().Name);
+            Assert.AreEqual("PersonsController_Index_Test P1", ((ListVM<PersonVM>)(view1.Model)).ListT.FirstOrDefault().Name);
+            Assert.AreEqual("PersonsController_Index_Test P2", ((ListVM<PersonVM>)(view1.Model)).ListT.Skip(1).FirstOrDefault().Name);
+            Assert.AreEqual("PersonsController_Index_Test P3", ((ListVM<PersonVM>)(view1.Model)).ListT.Skip(2).FirstOrDefault().Name);
+            Assert.AreEqual("PersonsController_Index_Test P5", ((ListVM<PersonVM>)(view1.Model)).ListT.Skip(4).FirstOrDefault().Name);
 
         }
 
@@ -150,16 +150,16 @@ namespace LambAndLentil.Tests.Controllers
             // Act
             ViewResult view1 = controller.Index(1);
 
-            int count1 = ((ListVM<Person, PersonVM>)(view1.Model)).ListTVM.Count();
+            int count1 = ((ListVM<PersonVM>)(view1.Model)).ListT.Count();
 
             // Assert
             Assert.IsNotNull(view1);
             Assert.AreEqual(5, count1);
             Assert.AreEqual("Index", view1.ViewName);
 
-            Assert.AreEqual("PersonsController_Index_Test P1", ((ListVM<Person, PersonVM>)(view1.Model)).ListTVM.FirstOrDefault().Name);
-            Assert.AreEqual("PersonsController_Index_Test P2", ((ListVM<Person, PersonVM>)(view1.Model)).ListTVM.Skip(1).FirstOrDefault().Name);
-            Assert.AreEqual("PersonsController_Index_Test P3", ((ListVM<Person, PersonVM>)(view1.Model)).ListTVM.Skip(2).FirstOrDefault().Name);
+            Assert.AreEqual("PersonsController_Index_Test P1", ((ListVM<PersonVM>)(view1.Model)).ListT.FirstOrDefault().Name);
+            Assert.AreEqual("PersonsController_Index_Test P2", ((ListVM<PersonVM>)(view1.Model)).ListT.Skip(1).FirstOrDefault().Name);
+            Assert.AreEqual("PersonsController_Index_Test P3", ((ListVM<PersonVM>)(view1.Model)).ListT.Skip(2).FirstOrDefault().Name);
 
 
         }
@@ -183,7 +183,7 @@ namespace LambAndLentil.Tests.Controllers
             // Arrange 
 
             // Act 
-            ListVM<Person, PersonVM> resultT = (ListVM<Person, PersonVM>)((ViewResult)controller.Index(2)).Model;
+            ListVM<PersonVM> resultT = (ListVM<PersonVM>)((ViewResult)controller.Index(2)).Model;
 
             // Assert
             PagingInfo pageInfoT = resultT.PagingInfo;
@@ -201,10 +201,10 @@ namespace LambAndLentil.Tests.Controllers
             // Arrange 
 
             // Action
-            int totalItems = ((ListVM<Person, PersonVM>)((ViewResult)controller.Index()).Model).PagingInfo.TotalItems;
-            int currentPage = ((ListVM<Person, PersonVM>)((ViewResult)controller.Index()).Model).PagingInfo.CurrentPage;
-            int itemsPerPage = ((ListVM<Person, PersonVM>)((ViewResult)controller.Index()).Model).PagingInfo.ItemsPerPage;
-            int totalPages = ((ListVM<Person, PersonVM>)((ViewResult)controller.Index()).Model).PagingInfo.TotalPages;
+            int totalItems = ((ListVM<PersonVM>)((ViewResult)controller.Index()).Model).PagingInfo.TotalItems;
+            int currentPage = ((ListVM<PersonVM>)((ViewResult)controller.Index()).Model).PagingInfo.CurrentPage;
+            int itemsPerPage = ((ListVM<PersonVM>)((ViewResult)controller.Index()).Model).PagingInfo.ItemsPerPage;
+            int totalPages = ((ListVM<PersonVM>)((ViewResult)controller.Index()).Model).PagingInfo.TotalPages;
 
             // Assert
             Assert.AreEqual(5, totalItems);
@@ -220,8 +220,8 @@ namespace LambAndLentil.Tests.Controllers
             // Arrange
 
             // Act
-            var result = (ListVM<Person, PersonVM>)(controller.Index(1)).Model;
-            var listVM = result.ListTVM;
+            var result = (ListVM<PersonVM>)(controller.Index(1)).Model;
+            var listVM = result.ListT;
 
             // Assert 
             Assert.IsTrue(listVM.Count() == 5);
@@ -361,8 +361,8 @@ namespace LambAndLentil.Tests.Controllers
         public void DeleteConfirmed()
         {
             // Arrange
-            Person person = new Person { ID = 1 };
-            repo.AddT(person);
+            PersonVM person = new PersonVM{ ID = 1 };
+            repo.Add(person);
             // Act
             ActionResult result = controller.DeleteConfirmed(1) as ActionResult;
             // improve this test when I do some route tests to return a more exact result
@@ -379,7 +379,7 @@ namespace LambAndLentil.Tests.Controllers
             // Arrange  
             int initialCount = repo.Count();
             PersonVM pVM = new PersonVM("John","Doe") { ID = 100, Description = "test CanDeleteValidPerson"  };
-            repo.AddTVM(pVM);
+            repo.Add(pVM);
             int newCount= repo.Count();
 
             // Act - delete the person
@@ -439,7 +439,7 @@ namespace LambAndLentil.Tests.Controllers
                 Name = "test PersonControllerTest.CanEditPerson",
                 Description = "test PersonControllerTest.CanEditPerson"
             };
-            repo.SaveTVM(menuVM);
+            repo.Save(menuVM);
 
             // Act 
             menuVM.Name = "Name has been changed";
@@ -480,8 +480,8 @@ namespace LambAndLentil.Tests.Controllers
             vm.ID = 7777;
             ActionResult ar2 = controller2.PostEdit(vm);
             ViewResult view2 = controller3.Index();
-            ListVM<Person, PersonVM> listVM2 = (ListVM<Person, PersonVM>)view2.Model;
-            PersonVM vm3 = (from m in listVM2.ListTVM
+            ListVM<PersonVM> listVM2 = (ListVM<PersonVM>)view2.Model;
+            PersonVM vm3 = (from m in listVM2.ListT 
                           where m.ID == 7777
                           select m).AsQueryable().FirstOrDefault();
 
@@ -503,14 +503,14 @@ namespace LambAndLentil.Tests.Controllers
                 Name = "test PersonControllerTest.CanEditPerson",
                 Description = "test PersonControllerTest.CanEditPerson"
             };
-            repo.AddTVM(menuVM);
+            repo.Add(menuVM);
 
             // Act 
             menuVM.Name = "Name has been changed";
 
             ViewResult view1 = controller.Edit(1);
 
-            PersonVM returnedPersonVm = repo.GetTVMById(1);
+            PersonVM returnedPersonVm = repo.GetById(1);
 
             // Assert 
             Assert.IsNotNull(view1);
@@ -528,7 +528,7 @@ namespace LambAndLentil.Tests.Controllers
             // Arrange
 
             // Act
-            Person result = (Person)controller.Edit(8).ViewData.Model;
+            PersonVM result = (PersonVM)controller.Edit(8).ViewData.Model;
             // Assert
             Assert.IsNull(result);
         }

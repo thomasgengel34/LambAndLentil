@@ -10,19 +10,18 @@ using LambAndLentil.Domain.Concrete;
 
 namespace LambAndLentil.UI.Controllers
 {
-    public class MenusController : MenusGenericController<Menu, MenuVM>
+    public class MenusController : MenusGenericController<MenuVM>
     {
-        public MenusController(IRepository<Menu, MenuVM> repository) : base(repository)
+        public MenusController(IRepository<MenuVM> repository) : base(repository)
         {
             repo = repository;
         }
     }
 
-    public class MenusGenericController<Menu, MenuVM> : BaseController<Menu, MenuVM>
-          where Menu : BaseEntity, IEntity
+    public class MenusGenericController<MenuVM> : BaseController<MenuVM> 
             where MenuVM : BaseVM, IEntity, new()
     {
-        public MenusGenericController(IRepository<Menu, MenuVM> repository) : base(repository)
+        public MenusGenericController(IRepository<MenuVM> repository) : base(repository)
         {
             repo = repository;
         }
@@ -86,23 +85,23 @@ namespace LambAndLentil.UI.Controllers
 
         public ActionResult AttachRecipe(int? menuID, int? recipeID)
         {
-            return BaseAttach<Menu, MenuVM, Recipe, RecipeVM>(menuID, recipeID);
+            return   BaseAttach<MenuVM,  RecipeVM>(menuID, recipeID);
         }
 
         public ActionResult DetachRecipe(int? menuID, int? recipeID)
         {
-            return BaseAttach<Menu, MenuVM, Recipe, RecipeVM>(menuID, recipeID, AttachOrDetach.Detach);
+            return BaseAttach<MenuVM, RecipeVM>(menuID, recipeID, AttachOrDetach.Detach);
         }
 
         public ActionResult AttachIngredient(int? menuID, int? ingredientID)
         {
-            return BaseAttach<Menu, MenuVM, Ingredient, IngredientVM>(menuID, ingredientID);
+            return BaseAttach<MenuVM,   IngredientVM>(menuID, ingredientID);
         }
 
 
         public ActionResult DetachIngredient(int? menuID, int? ingredientID)
         {
-            return BaseAttach<Menu, MenuVM, Ingredient, IngredientVM>(menuID, ingredientID, AttachOrDetach.Detach);
+            return BaseAttach<MenuVM,   IngredientVM>(menuID, ingredientID, AttachOrDetach.Detach);
         }
 
         // probably not needed

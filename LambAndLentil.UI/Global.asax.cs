@@ -41,9 +41,12 @@ namespace LambAndLentil.UI
                 cfg.CreateMap<RecipeVM, Recipe>();
                 cfg.CreateMap<ShoppingList, ShoppingListVM>();
                 cfg.CreateMap<ShoppingListVM, ShoppingList>();
-                //cfg.AddProfile<FooProfile>(); not currently needed
-
+                cfg.CreateMap<BaseEntity, BaseVM>();
+                cfg.ShouldMapProperty = pi =>
+        pi.GetMethod != null && (pi.GetMethod.IsPublic || pi.GetMethod.IsPrivate);
+                //cfg.AddProfile<FooProfile>(); not currently needed 
             });
+           
         }
     }
 }

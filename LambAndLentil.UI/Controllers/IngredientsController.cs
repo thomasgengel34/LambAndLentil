@@ -7,21 +7,20 @@ using System.Web.Mvc;
 
 namespace LambAndLentil.UI.Controllers
 {
-    public class IngredientsController : IngredientsGenericController<Ingredient, IngredientVM> {
-        public IngredientsController(IRepository<Ingredient, IngredientVM> repository) : base(repository)
+    public class IngredientsController : IngredientsGenericController<IngredientVM> {
+        public IngredientsController(IRepository<  IngredientVM> repository) : base(repository)
         {
             repo=repository   ;
         }
 
-        public static IRepository<Ingredient, IngredientVM> repo  { get; private set; }
+        public static IRepository<IngredientVM> repo  { get; private set; }
     }
 
-    public class IngredientsGenericController<T,TVM> : BaseController<Ingredient,IngredientVM>
-          where T:Ingredient  
-            where TVM:IngredientVM  
+    public class IngredientsGenericController< T> : BaseController<IngredientVM>
+          where T:IngredientVM  
     {
         
-        public IngredientsGenericController(IRepository<Ingredient, IngredientVM> repository) : base(repository)
+        public IngredientsGenericController(IRepository<IngredientVM> repository) : base(repository)
         {
             repo = repository;
         }

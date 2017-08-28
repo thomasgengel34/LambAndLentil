@@ -1,0 +1,1 @@
+{"MealType":0,"DayOfWeek":0,"Diners":0,"ID":2147483645,"Name":"MenuVMsController_Index_Test P3","Description":"not yet described","CreationDate":"0031-01-01T00:00:00","ModifiedDate":"9969-12-31T23:59:59.9999999","AddedByUser":"Sue Doe","ModifiedByUser":"Richard Roe","Recipes":[],"Ingredients":[],"Menus":[],"Plans":[],"ShoppingLists":[],"Persons":[]}

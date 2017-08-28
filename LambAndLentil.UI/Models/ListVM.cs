@@ -18,17 +18,15 @@ namespace LambAndLentil.UI.Models
     //    public PagingInfo PagingInfo { get; set; } 
     //}
 
-    public class ListVM<T, TVM>
-        where T : class
-        where TVM : BaseVM
+    public class ListVM<T > 
+        where T  : BaseVM
     {
         private DateTime creationDate;
 
 
         public ListVM()
         {
-            ListT = new List<T>();
-            ListTVM = new List<TVM>(); 
+            ListT = new List<T>(); 
         }
 
         public ListVM(DateTime creationDate)
@@ -37,12 +35,11 @@ namespace LambAndLentil.UI.Models
         }
 
         public string Name { get; set; } 
-        public IEnumerable<T> ListT { get; set; }
-        public IEnumerable<TVM> ListTVM { get; set; }
+        public IEnumerable<T> ListT { get; set; } 
         public PagingInfo PagingInfo { get; set; }
 
 
-        public ListVM<T, TVM> Add(ListVM<T, TVM> list, BaseVM item)
+        public ListVM<T> Add(ListVM<T> list, BaseVM item)
         {
             return list;
         }

@@ -80,5 +80,76 @@ namespace LambAndLentil.Domain.Test.Entities
         }
 
 
+        [Ignore]
+        [TestMethod]
+        public void BeAbleToHaveIngredientChild()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void BeAbleToHaveRecipeChild()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void BeAbleToHaveMenuChild()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void  BeAbleToHavePlanChild()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void NotBeAbleToHaveShoppingListChild()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void NotBeAbleToHavePersonChild()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
     }
 }

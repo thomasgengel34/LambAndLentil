@@ -1,6 +1,6 @@
-﻿using AutoMapper;
+﻿ 
 using LambAndLentil.Domain.Abstract;
-using LambAndLentil.Domain.Entities;
+using LambAndLentil.Domain.Entities; 
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -10,26 +10,27 @@ using System.Linq.Expressions;
 
 namespace LambAndLentil.Domain.Concrete
 {
-    public class JSONRepository<T, TVM> : IRepository<T, TVM>
-        where T : BaseEntity, IEntity 
-        where TVM : class, IEntity
+    public class JSONRepository<T> : IRepository<T>
+        where T : class, IEntity
     {
+        // T should be an incoming view model, TE is the entity in the db
+        // but LambAndLentil.Domain only deals with Domain, does not have a dependency on UI and cannot,should not, will not.
 
-        public static MapperConfiguration AutoMapperConfig { get; set; }
-        static string folder;
-        static   string fullPath  ;
+ 
+        static string Folder { get; set; } 
+        protected static string FullPath { get; set; } 
 
-        public JSONRepository()
+       public JSONRepository()
         {
             char[] charsToTrim = { 'V', 'M' };
-            folder = typeof(T).ToString().Split('.').Last().Split('+').Last().TrimEnd(charsToTrim);
-
+            Folder = typeof(T).ToString().Split('.').Last().Split('+').Last().TrimEnd(charsToTrim);
+            string className = typeof(T).ToString().TrimEnd(charsToTrim);
+         //   E = Type.GetType(className, true);
             // TODO: get relative path to work.  The first line works in testing but not in running it.
             // fullPath = @"../../../\LambAndLentil.Domain\App_Data\JSON\" + folder + "\\";
-           fullPath = @" C:\Dev\TGE\LambAndLentil\LambAndLentil.Domain\App_Data\JSON\" + folder + "\\"; 
+            FullPath = @" C:\Dev\TGE\LambAndLentil\LambAndLentil.Domain\App_Data\JSON\" + Folder + "\\";
         }
-
-
+       
 
         public IQueryable Ingredient { get; set; }
 
@@ -43,25 +44,17 @@ namespace LambAndLentil.Domain.Concrete
 
         public IQueryable ShoppingList { get; set; }
 
-        public void Add(TVM entity)
+        public void Add(T entity)
         {
-            T _data = Mapper.Map<TVM, T>(entity);
             // using the ID allows spaces in the name
-            using (StreamWriter file = File.CreateText(fullPath + entity.ID + ".txt"))
-            {
-                JsonSerializer serializer = new JsonSerializer();
-                serializer.Serialize(file, _data);
-            }
-        }
-
-        public void AddT(T entity)
-        {
-            using (StreamWriter file = File.CreateText(fullPath + entity.ID + ".txt"))
+            using (StreamWriter file = File.CreateText(FullPath + entity.ID + ".txt"))
             {
                 JsonSerializer serializer = new JsonSerializer();
                 serializer.Serialize(file, entity);
-            }
+            } 
         }
+
+      
 
         /// <summary>
         /// not yet ready for prime time
@@ -80,12 +73,11 @@ namespace LambAndLentil.Domain.Concrete
             }
         }
 
-        public void AttachAnIndependentChild<T, TChild>(int parentID, int childID)
-            where T : BaseEntity, IEntity
-            where TChild : BaseEntity, IEntity
+        public void AttachAnIndependentChild<TChild>(int parentID, int childID) 
+            where TChild : BaseEntity,  IEntity 
         {
-            T parent = JsonConvert.DeserializeObject<T>(File.ReadAllText(String.Concat(fullPath, parentID, ".txt")));
-            TChild child = JsonConvert.DeserializeObject<TChild>(File.ReadAllText(String.Concat(fullPath, childID, ".txt")));
+            T parent = JsonConvert.DeserializeObject<T>(File.ReadAllText(String.Concat(FullPath, parentID, ".txt")));
+            TChild child = JsonConvert.DeserializeObject<TChild>(File.ReadAllText(String.Concat(FullPath, childID, ".txt")));
 
             if (parent != null && child != null)
             {
@@ -112,140 +104,75 @@ namespace LambAndLentil.Domain.Concrete
                 if (typeof(TChild) == typeof(ShoppingList))
                 {
                     parent.ShoppingLists.Add(child as ShoppingList);
-                }
-                TVM entity = Mapper.Map<T, TVM>(parent);
-                Add(entity);
+                } 
             }
         }
 
         public int Count()
         {
-            int fileCount = (from file in Directory.EnumerateFiles(fullPath, "*.txt", SearchOption.AllDirectories)
+            int fileCount = (from file in Directory.EnumerateFiles(FullPath, "*.txt", SearchOption.AllDirectories)
                              select file).Count();
 
             return fileCount;
         }
 
-        public void DetachAnIndependentChild<TParent, TChild>(int parentID, int childID)
-            where TParent : BaseEntity, IEntity
+        public void DetachAnIndependentChild<TChild>(int parentID, int childID) 
             where TChild : BaseEntity, IEntity
         {
             throw new NotImplementedException();
         }
-
-        //public IEnumerable<T> GetAll()
-        //{
-        //    var result = from file in Directory.EnumerateFiles(fullPath, "*.txt", SearchOption.AllDirectories)
-        //                 select file;
-        //    List<T> list = new List<T>();
-
-        //    foreach (string file in result)
-        //    {
-        //        T entity = JsonConvert.DeserializeObject<T>(File.ReadAllText(String.Concat(file)));
-        //        list.Add(entity);
-        //    }
-
-        //    return list;
-        //}
-
-        public TVM GetById(int id)
+         
+        public T GetById(int id)
         {
-            IEnumerable<string> availableFiles = Directory.EnumerateFiles(fullPath);
+            IEnumerable<string> availableFiles = Directory.EnumerateFiles(FullPath);
 
             var result = from f in availableFiles
-                         where f == string.Concat(fullPath, id, ".txt")
-                         select f;
-
-            if (result != null)
-            {
-                T entity = JsonConvert.DeserializeObject<T>(File.ReadAllText(String.Concat(fullPath, id, ".txt")));
-                return Mapper.Map<T, TVM>(entity);
-            }
-            throw (new Exception());
-        }
-
-
-
-        public IEnumerable<T> Query(Expression<Func<TVM, bool>> filter)
-        {
-            throw new NotImplementedException();
-        }
-
-        //public void Remove(TVM entity)
-        //{
-        //    File.Delete(String.Concat(fullPath, entity.ID, ".txt"));
-        //}
-
-        public void RemoveT(T t)
-        {
-            File.Delete(String.Concat(fullPath, t.ID, ".txt"));
-        }
-
-        public void Save(TVM entity)
-        {
-            Add(entity);
-        }
-
-        public void SaveT(T t)
-        {
-            AddT(t);
-        }
-
-        public void Update(TVM entity, int key)
-        {
-            entity.ModifiedDate = DateTime.Now;
-            Add(entity);
-        }
-
-        public void UpdateT(T t, int key)
-        {
-            t.ModifiedDate = DateTime.Now;
-            AddT(t);
-        }
-
-        public T GetTById(int id)
-        {
-            IEnumerable<string> availableFiles = Directory.EnumerateFiles(fullPath);
-
-            var result = from f in availableFiles
-                         where f == string.Concat(fullPath, id, ".txt")
+                         where f == string.Concat(FullPath, id, ".txt")
                          select f;
 
             if (result.Count() > 0)
             {
-                T entity = JsonConvert.DeserializeObject<T>(File.ReadAllText(String.Concat(fullPath, id, ".txt")));
+                T entity = JsonConvert.DeserializeObject<T>(File.ReadAllText(String.Concat(FullPath, id, ".txt")));
                 return entity;
             }
             else
             {
                 return null;
-            }
-
+            } 
         }
 
-        public TVM GetTVMById(int id)
+        public IEnumerable<T> Query(Expression<Func<T, bool>> filter)
         {
-            IEnumerable<string> availableFiles = Directory.EnumerateFiles(fullPath);
-
-            var result = from f in availableFiles
-                         where f == string.Concat(fullPath, id, ".txt")
-                         select f;
-
-            if (result.Count() > 0)
-            {
-                T entity = JsonConvert.DeserializeObject<T>(File.ReadAllText(String.Concat(fullPath, id, ".txt")));
-                return Mapper.Map<T, TVM>(entity);
-            }
-            else
-            {
-                return null;
-            }
-
+            throw new NotImplementedException();
         }
 
-        public IEnumerable<T> GetAllT()
+        //public void Remove(T entity)
+        //{
+        //    File.Delete(String.Concat(fullPath, entity.ID, ".txt"));
+        //}
+
+        public void Remove(T t)
         {
-            var result = from file in Directory.EnumerateFiles(fullPath, "*.txt", SearchOption.AllDirectories)
+            File.Delete(String.Concat(FullPath, t.ID, ".txt"));
+        }
+         
+
+        public void Save(T entity)
+        {
+            Add(entity);
+        }
+
+      
+        public void Update(T entity, int key)
+        {
+            entity.ModifiedDate = DateTime.Now;
+            Add(entity);
+        }
+         
+
+        public IEnumerable<T> GetAll()
+        {
+            var result = from file in Directory.EnumerateFiles(FullPath, "*.txt", SearchOption.AllDirectories)
                          select file;
             List<T> list = new List<T>();
 
@@ -255,51 +182,6 @@ namespace LambAndLentil.Domain.Concrete
                 list.Add(entity);
             }
             return list;
-        }
-
-        public IEnumerable<TVM> GetAllTVM()
-        {
-            var result = from file in Directory.EnumerateFiles(fullPath, "*.txt", SearchOption.AllDirectories)
-                         select file;
-            List<TVM> list = new List<TVM>();
-
-            foreach (string file in result)
-            {
-                TVM entity = JsonConvert.DeserializeObject<TVM>(File.ReadAllText(String.Concat(file)));
-                list.Add(entity);
-            }
-            return list;
-        }
-
-        public IEnumerable<T> Query(Expression<Func<T, bool>> filter)
-        {
-            throw new NotImplementedException();
-        }
-
-        IEnumerable<TVM> IRepository<T, TVM>.Query(Expression<Func<TVM, bool>> filter)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void AddTVM(TVM entity)
-        {
-            T t = Mapper.Map<TVM, T>(entity);
-            AddT(t);
-        }
-
-        public void RemoveTVM(TVM entity)
-        {
-            File.Delete(String.Concat(fullPath, entity.ID, ".txt"));
-        }
-
-        public void UpdateTVM(TVM entity, int key)
-        {
-            Add(entity);
-        }
-
-        public void SaveTVM(TVM entity)
-        {
-            Add(entity);
-        }
+        } 
     }
 }

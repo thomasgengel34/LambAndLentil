@@ -9,19 +9,18 @@ using System.Collections.Generic;
 
 namespace LambAndLentil.UI.Controllers
 {
-    public class ShoppingListsController : ShoppingListsGenericController<ShoppingList, ShoppingListVM>
+    public class ShoppingListsController : ShoppingListsGenericController<ShoppingListVM>
     {
-        public ShoppingListsController(IRepository<ShoppingList, ShoppingListVM> repository) : base(repository)
+        public ShoppingListsController(IRepository<ShoppingListVM> repository) : base(repository)
         {
             repo = repository;
         }
     }
 
-    public class ShoppingListsGenericController<T, TVM> : BaseController<ShoppingList, ShoppingListVM>
-          where T : ShoppingList
-            where TVM : ShoppingListVM
+    public class ShoppingListsGenericController<T> : BaseController<ShoppingListVM>
+          where T : ShoppingListVM
     {
-        public ShoppingListsGenericController(IRepository<ShoppingList, ShoppingListVM> repository) : base(repository)
+        public ShoppingListsGenericController(IRepository<ShoppingListVM> repository) : base(repository)
         {
             repo = repository;
         }
@@ -84,7 +83,7 @@ namespace LambAndLentil.UI.Controllers
 
         public ActionResult AttachIngredient(int? shoppingListID, int? ingredientID)
         {
-            return BaseAttach<ShoppingList, ShoppingListVM, Ingredient, IngredientVM>(shoppingListID, ingredientID);
+            return BaseAttach<ShoppingListVM,  IngredientVM>(shoppingListID, ingredientID);
         }
     }
 } 

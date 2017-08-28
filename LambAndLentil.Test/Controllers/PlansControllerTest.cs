@@ -18,37 +18,37 @@ using System.IO;
 namespace LambAndLentil.Tests.Controllers
 {
     [Ignore]
-    [TestClass]
+    [TestClass] 
     [TestCategory("PlansController")]
     public class PlansControllerTest
     {
          
-        private static IRepository<Plan, PlanVM> repo { get; set; }
+        private static IRepository<PlanVM> repo { get; set; }
         public static MapperConfiguration AutoMapperConfig { get; set; }
-        private static ListVM<Plan, PlanVM> listVM;
+        private static ListVM<PlanVM> listVM;
         private static PlansController controller { get; set; }
 
         public PlansControllerTest()
         { 
             AutoMapperConfigForTests.InitializeMap();
-            repo = new TestRepository<Plan, PlanVM>();
-            listVM = new ListVM<Plan, PlanVM>();
+            repo = new TestRepository<PlanVM>();
+            listVM = new ListVM<PlanVM>();
             controller = SetUpController();
         }
 
         private PlansController  SetUpController()
         {
-            listVM.ListT = new List<Plan> {
-                new Plan {ID = int.MaxValue, Name = "PlansController_Index_Test P1" ,AddedByUser="John Doe" ,ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue, ModifiedDate=DateTime.MaxValue.AddYears(-10)},
-                new Plan {ID = int.MaxValue-1, Name = "PlansController_Index_Test P2",  AddedByUser="Sally Doe",  ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(20), ModifiedDate=DateTime.MaxValue.AddYears(-20)},
-                new Plan {ID = int.MaxValue-2, Name = "PlansController_Index_Test P3",  AddedByUser="Sue Doe", ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(30), ModifiedDate=DateTime.MaxValue.AddYears(-30)},
-                new Plan {ID = int.MaxValue-3, Name = "PlansController_Index_Test P4",  AddedByUser="Kyle Doe" ,ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(40), ModifiedDate=DateTime.MaxValue.AddYears(-10)},
-                new Plan {ID = int.MaxValue-4, Name = "PlansController_Index_Test P5",  AddedByUser="John Doe",  ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(50), ModifiedDate=DateTime.MaxValue.AddYears(-100)}
+            listVM.ListT = new List<PlanVM> {
+                new PlanVM{ID = int.MaxValue, Name = "PlansController_Index_Test P1" ,AddedByUser="John Doe" ,ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue, ModifiedDate=DateTime.MaxValue.AddYears(-10)},
+                new PlanVM{ID = int.MaxValue-1, Name = "PlansController_Index_Test P2",  AddedByUser="Sally Doe",  ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(20), ModifiedDate=DateTime.MaxValue.AddYears(-20)},
+                new PlanVM{ID = int.MaxValue-2, Name = "PlansController_Index_Test P3",  AddedByUser="Sue Doe", ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(30), ModifiedDate=DateTime.MaxValue.AddYears(-30)},
+                new PlanVM{ID = int.MaxValue-3, Name = "PlansController_Index_Test P4",  AddedByUser="Kyle Doe" ,ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(40), ModifiedDate=DateTime.MaxValue.AddYears(-10)},
+                new PlanVM{ID = int.MaxValue-4, Name = "PlansController_Index_Test P5",  AddedByUser="John Doe",  ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(50), ModifiedDate=DateTime.MaxValue.AddYears(-100)}
             }.AsQueryable();
 
-            foreach (Plan ingredient in listVM.ListT)
+            foreach (PlanVM plan in listVM.ListT)
             {
-                repo.AddT(ingredient);
+                repo.Add(plan);
             }
 
             controller = new PlansController(repo);
@@ -115,11 +115,11 @@ namespace LambAndLentil.Tests.Controllers
             // Act
             ViewResult view1 = controller.Index(1);
 
-            int count1 = ((ListVM<Plan, PlanVM>)(view1.Model)).ListTVM.Count();
+            int count1 = ((ListVM<PlanVM>)(view1.Model)).ListT.Count();
 
             ViewResult view2 = controller.Index(2);
 
-            int count2 = ((ListVM<Plan, PlanVM>)(view2.Model)).ListTVM.Count();
+            int count2 = ((ListVM<PlanVM>)(view2.Model)).ListT.Count();
 
             int count = count1 + count2;
 
@@ -146,13 +146,13 @@ namespace LambAndLentil.Tests.Controllers
         {
             // Arrange
           
-            ListVM<Plan, PlanVM> illistVM = new ListVM<Plan, PlanVM>(); 
+            ListVM<PlanVM> illistVM = new ListVM<PlanVM>(); 
             controller.PageSize = 8;
 
             // Act
             ViewResult view1 = controller.Index(1);
 
-            int count1 = ((ListVM<Plan, PlanVM>)(view1.Model)).ListTVM.Count();
+            int count1 = ((ListVM<PlanVM>)(view1.Model)).ListT.Count();
 
 
 
@@ -161,9 +161,9 @@ namespace LambAndLentil.Tests.Controllers
             Assert.AreEqual(5, count1);
             Assert.AreEqual("Index", view1.ViewName);
 
-            Assert.AreEqual("Old Name 1", ((ListVM<Plan, PlanVM>)(view1.Model)).ListTVM.FirstOrDefault().Name);
-            Assert.AreEqual("Old Name 2", ((ListVM<Plan, PlanVM>)(view1.Model)).ListTVM.Skip(1).FirstOrDefault().Name);
-            Assert.AreEqual("Old Name 3", ((ListVM<Plan, PlanVM>)(view1.Model)).ListTVM.Skip(2).FirstOrDefault().Name);
+            Assert.AreEqual("Old Name 1", ((ListVM<PlanVM>)(view1.Model)).ListT.FirstOrDefault().Name);
+            Assert.AreEqual("Old Name 2", ((ListVM<PlanVM>)(view1.Model)).ListT.Skip(1).FirstOrDefault().Name);
+            Assert.AreEqual("Old Name 3", ((ListVM<PlanVM>)(view1.Model)).ListT.Skip(2).FirstOrDefault().Name);
 
 
         }
@@ -187,7 +187,7 @@ namespace LambAndLentil.Tests.Controllers
 
             // Act
 
-            ListVM<Plan, PlanVM> resultT = (ListVM<Plan, PlanVM>)((ViewResult)controller.Index(2)).Model;
+            ListVM<PlanVM> resultT = (ListVM<PlanVM>)((ViewResult)controller.Index(2)).Model;
 
 
             // Assert
@@ -209,10 +209,10 @@ namespace LambAndLentil.Tests.Controllers
 
 
             // Action
-            int totalItems = ((ListVM<Plan, PlanVM>)((ViewResult)controller.Index()).Model).PagingInfo.TotalItems;
-            int currentPage = ((ListVM<Plan, PlanVM>)((ViewResult)controller.Index()).Model).PagingInfo.CurrentPage;
-            int itemsPerPage = ((ListVM<Plan, PlanVM>)((ViewResult)controller.Index()).Model).PagingInfo.ItemsPerPage;
-            int totalPages = ((ListVM<Plan, PlanVM>)((ViewResult)controller.Index()).Model).PagingInfo.TotalPages;
+            int totalItems = ((ListVM<PlanVM>)((ViewResult)controller.Index()).Model).PagingInfo.TotalItems;
+            int currentPage = ((ListVM<PlanVM>)((ViewResult)controller.Index()).Model).PagingInfo.CurrentPage;
+            int itemsPerPage = ((ListVM<PlanVM>)((ViewResult)controller.Index()).Model).PagingInfo.ItemsPerPage;
+            int totalPages = ((ListVM<PlanVM>)((ViewResult)controller.Index()).Model).PagingInfo.TotalPages;
 
 
 
@@ -231,14 +231,14 @@ namespace LambAndLentil.Tests.Controllers
             
 
             // Act
-            var result = (ListVM<Plan, PlanVM>)(controller.Index(1)).Model;
+            var result = (ListVM<PlanVM>)(controller.Index(1)).Model;
 
 
 
             // Assert 
-            Assert.IsTrue(result.ListTVM.Count() == 5);
-            Assert.AreEqual("Old Name 1", result.ListTVM.First().Name);
-            Assert.AreEqual("Old Name 4", result.ListTVM.Skip(2).First().Name);
+            Assert.IsTrue(result.ListT.Count() == 5);
+            Assert.AreEqual("Old Name 1", result.ListT.First().Name);
+            Assert.AreEqual("Old Name 4", result.ListT.Skip(2).First().Name);
         }
 
         [TestMethod]
@@ -406,7 +406,7 @@ namespace LambAndLentil.Tests.Controllers
             // Arrange  
             PlanVM pVM = new PlanVM() { ID = 6000, Name = "test CanDeleteValidPlan" };
             int count = repo.Count();
-            repo.AddTVM(pVM);
+            repo.Add(pVM);
             int countPlus = repo.Count();
             // Act - delete the plan
                 ActionResult result = controller.DeleteConfirmed(pVM.ID);

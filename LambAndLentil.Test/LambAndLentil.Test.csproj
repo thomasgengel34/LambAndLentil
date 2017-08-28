@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>LambAndLentil.Test</RootNamespace>
     <AssemblyName>LambAndLentil.Test</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">15.0</VisualStudioVersion>
@@ -19,6 +19,7 @@
     <TestProjectType>UnitTest</TestProjectType>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -101,6 +102,7 @@
     <Compile Include="Infrastructure\NinjectControllerFactoryTests.cs" />
     <Compile Include="Infrastructure\AutoMapperShould.cs" />
     <Compile Include="Infrastructure\BundleConfigShould.cs" />
+    <Compile Include="Infrastructure\RepoWrapperShould.cs" />
     <Compile Include="IntegrationTests\ChangesInIngredientShould.cs" />
     <Compile Include="IntegrationTests\IngredientsControllerShould.cs" />
     <Compile Include="IntegrationTests\MenusControllerShould.cs" />
@@ -150,6 +152,15 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="App_Data\JSON\Ingredient\" />
+    <Folder Include="App_Data\JSON\Menu\" />
+    <Folder Include="App_Data\JSON\Person\" />
+    <Folder Include="App_Data\JSON\Plan\" />
+    <Folder Include="App_Data\JSON\Recipe\" />
+    <Folder Include="App_Data\JSON\ShoppingList\" />
+    <Folder Include="App_Data\JSON\TestReturnZeroCountForEmptyDirectory\" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\LambAndLentil.Domain\LambAndLentil.Domain.csproj">
       <Project>{011b34be-4a36-4772-b2af-dc1600948477}</Project>
       <Name>LambAndLentil.Domain</Name>
@@ -158,14 +169,6 @@
       <Project>{19290d3b-eb39-4496-a03d-48cd2efd56aa}</Project>
       <Name>LambAndLentil.UI</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\JSON\Ingredient\" />
-    <Folder Include="App_Data\JSON\Menu\" />
-    <Folder Include="App_Data\JSON\Person\" />
-    <Folder Include="App_Data\JSON\Plan\" />
-    <Folder Include="App_Data\JSON\Recipe\" />
-    <Folder Include="App_Data\JSON\ShoppingList\" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

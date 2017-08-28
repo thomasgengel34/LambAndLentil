@@ -80,6 +80,78 @@ namespace LambAndLentil.Domain.Test.Entities
             Assert.AreEqual(0,menu.Diners);
 
         }
-         
+
+
+        [Ignore]
+        [TestMethod]
+        public void BeAbleToHaveIngredientChild()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void  BeAbleToHaveRecipeChild()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void NotBeAbleToHaveMenuChild()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void NotBeAbleToHavePlanChild()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void NotBeAbleToHaveShoppingListChild()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void NotBeAbleToHavePersonChild()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
     }
 }

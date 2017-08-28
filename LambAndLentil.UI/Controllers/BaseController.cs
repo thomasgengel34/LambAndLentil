@@ -12,20 +12,20 @@ using System.Web.Mvc;
 
 namespace LambAndLentil.UI.Controllers
 {
-    public abstract class BaseController<T, TVM> : Controller
-        where T : BaseEntity, IEntity
-            where TVM : BaseVM, IEntity, new()
+    public abstract class BaseController<T > : Controller
+        
+            where T: BaseVM, IEntity, new()
     {
         private readonly string className;
 
         public int PageSize { get; set; }
 
-        protected static IRepository<T, TVM> repo { get; set; }
+        protected static IRepository<T> repo { get; set; }
 
-        public BaseController(IRepository<T, TVM> repository)
+        public BaseController(IRepository<T> repository)
         {
             repo = repository;
-            className = new RepositoryHelperMethods().GetClassName<TVM>();
+            className = new RepositoryHelperMethods().GetClassName<T>();
             MvcApplication.InitializeMap();  // needed for testing
         }
 
@@ -38,17 +38,17 @@ namespace LambAndLentil.UI.Controllers
 
         //  TODO: filter
 
-        public ViewResult BaseIndex(IRepository<T, TVM> repo, int page = 1)
+        public ViewResult BaseIndex(IRepository<T> repo, int page = 1)
         {
             PageSize = 8;
-            ListVM<T, TVM> model = new ListVM<T, TVM>();
-            // model.Entities = (IEnumerable<TVM>)BaseVM.GetIndexedModel<T,TVM>(PageSize, page);
-            model.ListTVM = new BaseVM().GetIndexedModel<T, TVM>(repo, PageSize, page);
-            model.PagingInfo = new BaseVM().PagingFunction<T, TVM>(repo, page, PageSize);
+            ListVM<T> model = new ListVM<T>();
+            // model.Entities = (IEnumerable<TVM>)BaseVM.GetIndexedModel<T>(PageSize, page);
+            model.ListT  = new BaseVM().GetIndexedModel<T>(repo, PageSize, page);
+            model.PagingInfo = new BaseVM().PagingFunction<T>(repo, page, PageSize);
             return View(UIViewType.Index.ToString(), model);
         }
 
-        public ActionResult BaseDetails(IRepository<T, TVM> repo, UIControllerType uIController, int id = 1, UIViewType actionMethod = UIViewType.Details)
+        public ActionResult BaseDetails(IRepository<T> repo, UIControllerType uIController, int id = 1, UIViewType actionMethod = UIViewType.Details)
         {
             ViewBag.Title = actionMethod.ToString();
             if (actionMethod == UIViewType.Delete)
@@ -71,7 +71,7 @@ namespace LambAndLentil.UI.Controllers
                 }
                 else
                 {
-                    TVM item = repo.GetTVMById(id);
+                    T  item = repo.GetById(id);
                     if (result is EmptyResult)
                     {
                         return View(UIViewType.Details.ToString(), item).WithError("Something is wrong with the data!");
@@ -88,14 +88,13 @@ namespace LambAndLentil.UI.Controllers
         public ViewResult BaseCreate(UIViewType actionMethod)
         {
             ViewBag.ActionMethod = UIViewType.Create;
-            TVM vm = new TVM();
+            T  vm = new T();
             vm.CreationDate = DateTime.Now;
             return View(UIViewType.Details.ToString(), vm);
         }
 
-        public ViewResult BaseEdit(IRepository<T, TVM> repo, UIControllerType uIControllerType, int id = 1, UIViewType actionMethod = UIViewType.Edit)
-        {
-            MvcApplication.InitializeMap();  // needed for testing.  This is being run in Application_Start normally.  Move to Repository
+        public ViewResult BaseEdit(IRepository<T> repo, UIControllerType uIControllerType, int id = 1, UIViewType actionMethod = UIViewType.Edit)
+        { 
             ActionResult result = new EmptyResult();
             if (actionMethod == UIViewType.Delete)
             {
@@ -108,10 +107,10 @@ namespace LambAndLentil.UI.Controllers
                 {
                     result = GuardId(repo, uIControllerType, id);
                 }
-                TVM item;
+                T  item;
                 if (result != null)
                 {
-                    item = repo.GetTVMById(id);
+                    item = repo.GetById(id);
                 }
                 else
                 {
@@ -125,15 +124,13 @@ namespace LambAndLentil.UI.Controllers
             return result as ViewResult;
         }
 
-        public ActionResult BasePostEdit(IRepository<T, TVM> repo, TVM vm)
-        {
-            //   // needed for testing.  This is being run in Application_Start normally.  
-            IController TController = (IController)GetControllerType();
-            TVM item = (TVM)vm;
+        public ActionResult BasePostEdit(IRepository<T> repo, T  vm)
+        { 
+            T  item = (T)vm;
             // new ingredientVM - saves double writing the Create Post method
             if (vm.ID == 0 && ModelState.IsValid)
             {
-                item = new TVM();
+                item = new T();
 
             }
 
@@ -141,7 +138,7 @@ namespace LambAndLentil.UI.Controllers
             if (ModelState.IsValid)
             {
 
-                repo.UpdateTVM(item, item.ID);
+                repo.Update(item, item.ID);
                 return RedirectToAction(UIViewType.BaseIndex.ToString()).WithSuccess(string.Format("{0} has been saved", vm.Name));
             }
             else
@@ -151,14 +148,14 @@ namespace LambAndLentil.UI.Controllers
         }
 
 
-        public ActionResult BaseDelete(IRepository<T, TVM> repo, UIControllerType uiControllerType, int id = 1, UIViewType actionMethod = UIViewType.Delete)
+        public ActionResult BaseDelete(IRepository<T> repo, UIControllerType uiControllerType, int id = 1, UIViewType actionMethod = UIViewType.Delete)
         { 
             ActionResult result = GuardId(repo, uiControllerType, id); 
             ViewBag.ActionMethod = UIViewType.Delete; 
-            TVM item;
+            T  item;
             if (result != null)
             {
-                item = repo.GetTVMById(id);
+                item = repo.GetById(id);
             }
             else
             {
@@ -171,11 +168,11 @@ namespace LambAndLentil.UI.Controllers
             return result;
         }
 
-        public ActionResult BaseDeleteConfirmed(IRepository<T, TVM> repo, UIControllerType controllerType, int id)
+        public ActionResult BaseDeleteConfirmed(IRepository<T> repo, UIControllerType controllerType, int id)
         {
             ActionResult result = GuardId(repo, controllerType, id);
-            TVM item = repo.GetTVMById(id);
-            repo.RemoveTVM(item);
+            T  item = repo.GetById(id);
+            repo.Remove(item);
             ViewBag.ActionMethod = UIViewType.Delete.ToString();
             if (result is EmptyResult)
             {
@@ -184,19 +181,17 @@ namespace LambAndLentil.UI.Controllers
             return result;
         }
 
-        public ActionResult BaseAttach<TParent, TParentVM, TChild, TChildVM>(int? parentID, int? childID, AttachOrDetach attachOrDetach = AttachOrDetach.Attach)
-            where TParent : BaseEntity, IEntity
-            where TParentVM : BaseVM, IEntity
-            where TChild : BaseEntity, IEntity
-            where TChildVM : BaseVM, IEntity
+        public ActionResult BaseAttach<TParent,  TChild >(int? parentID, int? childID, AttachOrDetach attachOrDetach = AttachOrDetach.Attach)
+            where TParent :   BaseVM, IEntity
+            where TChild :  BaseVM, IEntity
         {
 
             // conditions guard against people trying thngs out manually  
-            IRepository<TParent, TParentVM> repository = new JSONRepository<TParent, TParentVM>();
-            IRepository<TChild, TChildVM> childRepository = new JSONRepository<TChild, TChildVM>();
+            IRepository<TParent> repository = new JSONRepository<TParent>();
+            IRepository<TChild> childRepository = new JSONRepository<TChild>();
             string entity = typeof(TParent).ToString().Split('.').Last();
             string childEntity = typeof(TChild).ToString().Split('.').Last();
-            ViewBag.listOfChildren = childRepository.GetAllTVM();
+            ViewBag.listOfChildren = childRepository.GetAll();
             if (parentID == null)
             {
                 return RedirectToAction(UIViewType.Index.ToString()).WithWarning(entity + " was not found");
@@ -206,7 +201,7 @@ namespace LambAndLentil.UI.Controllers
                 int parentNonNullID = (int)parentID;
 
 
-                BaseVM parentFromDB = repository.GetTVMById(parentNonNullID);
+                BaseVM parentFromDB = repository.GetById(parentNonNullID);
                 TParent parent = Mapper.Map<BaseVM, TParent>(parentFromDB);
 
                 if (parent == null)
@@ -222,7 +217,7 @@ namespace LambAndLentil.UI.Controllers
                 else
                 {
                     int childNonNullID = (int)childID;
-                    IEntity child = childRepository.GetTById(childNonNullID);
+                    IEntity child = childRepository.GetById(childNonNullID);
 
                     if (child == null)
                     {
@@ -232,12 +227,12 @@ namespace LambAndLentil.UI.Controllers
                     {
                         if (attachOrDetach == AttachOrDetach.Detach)
                         {
-                            repository.DetachAnIndependentChild<TParent, TChild>(parent.ID, child.ID);
+                            repository.DetachAnIndependentChild< TChild>(parent.ID, child.ID);
                             return RedirectToAction(UIViewType.Details.ToString(), new { id = parentID, actionMethod = UIViewType.Edit }).WithSuccess(childEntity + " was Successfully Detached!");
                         }
                         else
                         {
-                            repository.AttachAnIndependentChild<TParent, TChild>(parent.ID, child.ID);
+                            repository.AttachAnIndependentChild<TChild>(parent.ID, child.ID);
                             return RedirectToAction(UIViewType.Details.ToString(), new { id = parentID, actionMethod = UIViewType.Edit }).WithSuccess(childEntity + "was Successfully Attached!");
                         }
                     }
@@ -252,9 +247,9 @@ namespace LambAndLentil.UI.Controllers
             return ControllerExtensions.RedirectToAction(this, action);
         }
 
-        protected ActionResult GuardId(IRepository<T, TVM> repo, UIControllerType tController, int id)
+        protected ActionResult GuardId(IRepository<T> repo, UIControllerType tController, int id)
         {
-            TVM item = repo.GetTVMById(id);
+            T  item = repo.GetById(id);
 
             if (item == null)
             {
@@ -269,7 +264,7 @@ namespace LambAndLentil.UI.Controllers
 
 
 
-        //protected SelectList GetList<T>(IRepository<T,TVM> repo) 
+        //protected SelectList GetList<T>(IRepository<T> repo) 
         //    where T : BaseEntity, IEntity
         //    where TVM:BaseVM, IEntity
         //{
@@ -295,7 +290,7 @@ namespace LambAndLentil.UI.Controllers
         //}
 
 
-        //protected IEntity Get<T>(IRepository<T,TVM> repo, int id)
+        //protected IEntity Get<T>(IRepository<T> repo, int id)
         //     where T : BaseEntity, IEntity
         //    where TVM : BaseVM, IEntity
         //{

@@ -28,20 +28,20 @@ namespace LambAndLentil.Test.JSONTests
         public void SaveOneIngredient()
         {
             // Arrange
-            IRepository<Ingredient, IngredientVM> repo = new TestRepository<Ingredient, IngredientVM>();
+            IRepository< IngredientVM> repo = new TestRepository< IngredientVM>();
             //IngredientsController<Ingredient,IngredientVM> controller = new IngredientsController<Ingredient,IngredientVM>(repo);
-            Ingredient ingredient = new Ingredient();
-            ingredient.ID = int.MaxValue;
-            ingredient.Name = "test SaveOneIngredient";
+            IngredientVM ingredientVM = new IngredientVM();
+            ingredientVM.ID = int.MaxValue;
+            ingredientVM.Name = "test SaveOneIngredient";
 
             // Act
-            repo.SaveT(ingredient);
+            repo.Save(ingredientVM);
 
-            Ingredient returnedIngredient = repo.GetTById(ingredient.ID);
+            IngredientVM returnedIngredient = repo.GetById(ingredientVM.ID);
 
             // Assert
-            Assert.AreEqual(ingredient.ID, returnedIngredient.ID);
-            Assert.AreEqual(ingredient.Name, returnedIngredient.Name);
+            Assert.AreEqual(ingredientVM.ID, returnedIngredient.ID);
+            Assert.AreEqual(ingredientVM.Name, returnedIngredient.Name);
 
         }
         [Ignore]
@@ -61,7 +61,7 @@ namespace LambAndLentil.Test.JSONTests
         public void SaveOneMenu()
         {
             // Arrange
-            IRepository<Menu, MenuVM> repo = new JSONRepository<Menu, MenuVM>();
+            IRepository< MenuVM> repo = new JSONRepository<  MenuVM>();
             MenuVM menuVM = new MenuVM();
             menuVM.Name = "SaveOneMenu Test ";
             menuVM.ModifiedDate = new DateTime(1990, 12, 12);
@@ -70,7 +70,7 @@ namespace LambAndLentil.Test.JSONTests
             // Act
             try
             {
-                repo.AddTVM(menuVM);
+                repo.Add(menuVM);
                 file = @"../../../\LambAndLentil.Domain\App_Data\JSON\Menu\" + menuVM.Name + ".txt";
                 StreamReader sr = new StreamReader(file);
                 string theFile = "";
@@ -138,7 +138,7 @@ namespace LambAndLentil.Test.JSONTests
         public void ReturnZeroCountForEmptyDirectory()
         {
             // Arrange
-            IRepository<TestReturnZeroCountForEmptyDirectory, TestReturnZeroCountForEmptyDirectoryVM> repo = new TestRepository<TestReturnZeroCountForEmptyDirectory, TestReturnZeroCountForEmptyDirectoryVM>();
+            IRepository<TestReturnZeroCountForEmptyDirectoryVM> repo = new TestRepository<TestReturnZeroCountForEmptyDirectoryVM>();
            string path = @"../../../\LambAndLentil.Test\App_Data\JSON\TestReturnZeroCountForEmptyDirectory\";
          
             try

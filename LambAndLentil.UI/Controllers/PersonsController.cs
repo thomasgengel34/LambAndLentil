@@ -7,26 +7,25 @@ using System.Linq;
 using System.Web.Mvc;
 
 namespace LambAndLentil.UI.Controllers
-{
-    public class PersonsController : PersonsGenericController<Person, PersonVM>
+{ 
+    public class PersonsController : PersonsGenericController<PersonVM>
     {
-        public PersonsController(IRepository<Person, PersonVM> repository) : base(repository)
+        public PersonsController(IRepository<PersonVM> repository) : base(repository)
         {
             repo = repository;
         }
 
-        public static IRepository<Person, PersonVM> repo { get; private set; }
+      //  public static IRepository<PersonVM> repo { get; private set; }
     }
 
 
-    public class PersonsGenericController<T, TVM> : BaseController<Person, PersonVM>
-        where T:Person
-        where TVM:PersonVM
-          //where Person :  BaseEntity,  IEntity
-          //  where PersonVM : BaseVM, IEntity, new()
+    public class PersonsGenericController<T> : BaseController<PersonVM> 
+        where T: PersonVM, new()
+        //where Person :  BaseEntity,  IEntity
+        //  where PersonVM : BaseVM, IEntity, new()
     {
 
-        public PersonsGenericController(IRepository<Person, PersonVM> repository) : base(repository)
+        public PersonsGenericController(IRepository<PersonVM> repository) : base(repository)
         {
             repo = repository;
         }

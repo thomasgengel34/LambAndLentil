@@ -11,10 +11,9 @@ namespace LambAndLentil.Test.Models
         [TestMethod]
         public void HaveEntitiesAndListInitializedOnConstruction()
         {
-             ListVM<Ingredient,IngredientVM>  vm = new  ListVM<Ingredient, IngredientVM>();
+             ListVM< IngredientVM>  vm = new  ListVM<IngredientVM>();
 
-            Assert.IsNotNull(vm.ListT);
-            Assert.IsNotNull(vm.ListTVM);
+            Assert.IsNotNull(vm.ListT); 
         }
     }
 }

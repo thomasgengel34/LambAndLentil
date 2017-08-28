@@ -22,34 +22,34 @@ namespace LambAndLentil.Tests.Controllers
     [TestCategory("MenusController")]
     public class MenusControllerTest
     {
-        private static IRepository<Menu, MenuVM> repo { get; set; }
+        private static IRepository<MenuVM> repo { get; set; }
         public static MapperConfiguration AutoMapperConfig { get; set; }
         private static MenusController controller { get; set; }
 
-        private ListVM<Menu, MenuVM> vm { get; set; }
+        private ListVM<MenuVM> vm { get; set; }
 
         public MenusControllerTest()
         {
             AutoMapperConfigForTests.InitializeMap();
-            repo = new TestRepository<Menu, MenuVM>();
-            vm = new ListVM<Menu, MenuVM>();
+            repo = new TestRepository<MenuVM>();
+            vm = new ListVM<MenuVM>();
             controller = SetUpController();
 
         }
 
         private MenusController SetUpController()
         {
-            vm.ListT = new List<Menu> {
-                new Menu {ID = int.MaxValue, Name = "MenusController_Index_Test P1" ,AddedByUser="John Doe" ,ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue, ModifiedDate=DateTime.MaxValue.AddYears(-10)},
-                new Menu {ID = int.MaxValue-1, Name = "MenusController_Index_Test P2",  AddedByUser="Sally Doe",  ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(20), ModifiedDate=DateTime.MaxValue.AddYears(-20)},
-                new Menu {ID = int.MaxValue-2, Name = "MenusController_Index_Test P3",  AddedByUser="Sue Doe", ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(30), ModifiedDate=DateTime.MaxValue.AddYears(-30)},
-                new Menu {ID = int.MaxValue-3, Name = "MenusController_Index_Test P4",  AddedByUser="Kyle Doe" ,ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(40), ModifiedDate=DateTime.MaxValue.AddYears(-10)},
-                new Menu {ID = int.MaxValue-4, Name = "MenusController_Index_Test P5",  AddedByUser="John Doe",  ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(50), ModifiedDate=DateTime.MaxValue.AddYears(-100)}
-            }.AsQueryable();
+            vm.ListT = new List<MenuVM> {
+                        new MenuVM {ID = int.MaxValue, Name = "MenusController_Index_Test P1" ,AddedByUser="John Doe" ,ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue, ModifiedDate=DateTime.MaxValue.AddYears(-10)},
+                        new MenuVM {ID = int.MaxValue-1, Name = "MenusController_Index_Test P2",  AddedByUser="Sally Doe",  ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(20), ModifiedDate=DateTime.MaxValue.AddYears(-20)},
+                        new MenuVM {ID = int.MaxValue-2, Name = "MenusController_Index_Test P3",  AddedByUser="Sue Doe", ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(30), ModifiedDate=DateTime.MaxValue.AddYears(-30)},
+                        new MenuVM {ID = int.MaxValue-3, Name = "MenusController_Index_Test P4",  AddedByUser="Kyle Doe" ,ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(40), ModifiedDate=DateTime.MaxValue.AddYears(-10)},
+                        new MenuVM {ID = int.MaxValue-4, Name = "MenusController_Index_Test P5",  AddedByUser="John Doe",  ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(50), ModifiedDate=DateTime.MaxValue.AddYears(-100)}
+                    }.AsQueryable();
 
-            foreach (Menu ingredient in vm.ListT)
+            foreach (MenuVM item in vm.ListT)
             {
-                repo.AddT(ingredient);
+                repo.Add(item);
             }
 
             controller = new MenusController(repo);
@@ -67,7 +67,7 @@ namespace LambAndLentil.Tests.Controllers
         }
 
         [TestMethod]
-        public void  IsPublic()
+        public void IsPublic()
         {
             // Arrange
             MenusController testController = SetUpController();
@@ -82,7 +82,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Index")]
-        public void  Index()
+        public void Index()
         {
             // Arrange
             MenusController controller = SetUpController();
@@ -107,14 +107,14 @@ namespace LambAndLentil.Tests.Controllers
             // Act
             ViewResult view1 = controller.Index(1);
 
-            int count1 = ((ListVM<Menu, MenuVM>)(view1.Model)).ListTVM.Count();
-            var firstName = ((ListVM<Menu, MenuVM>)(view1.Model)).ListTVM.FirstOrDefault().Name;
-            var secondName = ((ListVM<Menu, MenuVM>)(view1.Model)).ListTVM.Skip(1).FirstOrDefault().Name;
-            var thirdName = ((ListVM<Menu, MenuVM>)(view1.Model)).ListTVM.Skip(2).FirstOrDefault().Name;
-            var fifthName = ((ListVM<Menu, MenuVM>)(view1.Model)).ListTVM.Skip(4).FirstOrDefault().Name;
+            int count1 = ((ListVM<MenuVM>)(view1.Model)).ListT.Count();
+            var firstName = ((ListVM<MenuVM>)(view1.Model)).ListT.FirstOrDefault().Name;
+            var secondName = ((ListVM<MenuVM>)(view1.Model)).ListT.Skip(1).FirstOrDefault().Name;
+            var thirdName = ((ListVM<MenuVM>)(view1.Model)).ListT.Skip(2).FirstOrDefault().Name;
+            var fifthName = ((ListVM<MenuVM>)(view1.Model)).ListT.Skip(4).FirstOrDefault().Name;
 
             ViewResult view2 = controller2.Index(2);
-            int count2 = ((ListVM<Menu, MenuVM>)(view2.Model)).ListTVM.Count();
+            int count2 = ((ListVM<MenuVM>)(view2.Model)).ListT.Count();
 
             int count = count1 + count2;
 
@@ -128,15 +128,15 @@ namespace LambAndLentil.Tests.Controllers
             Assert.AreEqual("Index", view2.ViewName);
             Assert.AreEqual("MenusController_Index_Test P1", firstName);
             Assert.AreEqual("MenusController_Index_Test P2", secondName);
-            Assert.AreEqual("MenusController_Index_Test P3", thirdName); 
+            Assert.AreEqual("MenusController_Index_Test P3", thirdName);
             Assert.AreEqual("MenusController_Index_Test P5", fifthName);
-            
+
         }
 
 
         [TestMethod]
         [TestCategory("Index")]
-        public void  Index_FirstPageIsCorrect()
+        public void Index_FirstPageIsCorrect()
         {
             // Arrange    
             int repoCount = repo.Count();
@@ -144,18 +144,18 @@ namespace LambAndLentil.Tests.Controllers
             // Act
             ViewResult view = controller.Index(1);
 
-            int count  = ((ListVM<Menu, MenuVM>)(view.Model)).ListTVM.Count();
-            var firstName = ((ListVM<Menu, MenuVM>)(view.Model)).ListTVM.FirstOrDefault().Name;
-            var secondName = ((ListVM<Menu, MenuVM>)(view.Model)).ListTVM.Skip(1).FirstOrDefault().Name;
-            var thirdName = ((ListVM<Menu, MenuVM>)(view.Model)).ListTVM.Skip(2).FirstOrDefault().Name;
-            var fourthName = ((ListVM<Menu, MenuVM>)(view.Model)).ListTVM.Skip(3).FirstOrDefault().Name;
-            var fifthName = ((ListVM<Menu, MenuVM>)(view.Model)).ListTVM.Skip(4).FirstOrDefault().Name;
+            int count = ((ListVM<MenuVM>)(view.Model)).ListT.Count();
+            var firstName = ((ListVM<MenuVM>)(view.Model)).ListT.FirstOrDefault().Name;
+            var secondName = ((ListVM<MenuVM>)(view.Model)).ListT.Skip(1).FirstOrDefault().Name;
+            var thirdName = ((ListVM<MenuVM>)(view.Model)).ListT.Skip(2).FirstOrDefault().Name;
+            var fourthName = ((ListVM<MenuVM>)(view.Model)).ListT.Skip(3).FirstOrDefault().Name;
+            var fifthName = ((ListVM<MenuVM>)(view.Model)).ListT.Skip(4).FirstOrDefault().Name;
 
 
             // Assert
-            Assert.IsNotNull(view); 
-            Assert.AreEqual(repoCount, count );  
-            Assert.AreEqual("Index", view.ViewName); 
+            Assert.IsNotNull(view);
+            Assert.AreEqual(repoCount, count);
+            Assert.AreEqual("Index", view.ViewName);
             Assert.AreEqual("MenusController_Index_Test P1", firstName);
             Assert.AreEqual("MenusController_Index_Test P2", secondName);
             Assert.AreEqual("MenusController_Index_Test P3", thirdName);
@@ -168,22 +168,22 @@ namespace LambAndLentil.Tests.Controllers
         [TestMethod]
         [TestCategory("Index")]
         // currently we only have one page here
-        public void  Index_SecondPageIsCorrect()
+        public void Index_SecondPageIsCorrect()
         {
-          
+
 
         }
 
         [TestMethod]
         [TestCategory("Index")]
-        public void  Index_CanSendPaginationViewModel()
+        public void Index_CanSendPaginationViewModel()
         {
 
             // Arrange
             int count = repo.Count();
 
             // Act 
-            ListVM<Menu, MenuVM> resultT = (ListVM<Menu, MenuVM>)((ViewResult)controller.Index(1)).Model;
+            ListVM<MenuVM> resultT = (ListVM<MenuVM>)((ViewResult)controller.Index(1)).Model;
 
 
             // Assert 
@@ -197,18 +197,18 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Index")]
-        public void  Index_PagingInfoIsCorrect()
+        public void Index_PagingInfoIsCorrect()
         {
             // Arrange
             int count = repo.Count();
 
 
             // Action
-            int totalItems = ((ListVM<Menu, MenuVM>)((ViewResult)controller.Index()).Model).PagingInfo.TotalItems;
-            int currentPage = ((ListVM<Menu, MenuVM>)((ViewResult)controller.Index()).Model).PagingInfo.CurrentPage;
-            int itemsPerPage = ((ListVM<Menu, MenuVM>)((ViewResult)controller.Index()).Model).PagingInfo.ItemsPerPage;
-            int totalPages = ((ListVM<Menu, MenuVM>)((ViewResult)controller.Index()).Model).PagingInfo.TotalPages;
-              
+            int totalItems = ((ListVM<MenuVM>)((ViewResult)controller.Index()).Model).PagingInfo.TotalItems;
+            int currentPage = ((ListVM<MenuVM>)((ViewResult)controller.Index()).Model).PagingInfo.CurrentPage;
+            int itemsPerPage = ((ListVM<MenuVM>)((ViewResult)controller.Index()).Model).PagingInfo.ItemsPerPage;
+            int totalPages = ((ListVM<MenuVM>)((ViewResult)controller.Index()).Model).PagingInfo.TotalPages;
+
             // Assert
             Assert.AreEqual(count, totalItems);
             Assert.AreEqual(1, currentPage);
@@ -218,26 +218,26 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Index")]
-        public void  CanPaginate()
+        public void CanPaginate()
         {
             // Arrange 
             int repoCount = repo.Count();
             // Act
-            var result = (ListVM<Menu, MenuVM>)(controller.Index(1)).Model;
-             
+            var result = (ListVM<MenuVM>)(controller.Index(1)).Model;
+
             // Assert
-            
-            Assert.AreEqual(repoCount, result.ListTVM.Count());
-            Assert.AreEqual("MenusController_Index_Test P1", result.ListTVM.FirstOrDefault().Name);
-            Assert.AreEqual("MenusController_Index_Test P4",  result.ListTVM.Skip(3).FirstOrDefault().Name);
+
+            Assert.AreEqual(repoCount, result.ListT.Count());
+            Assert.AreEqual("MenusController_Index_Test P1", result.ListT.FirstOrDefault().Name);
+            Assert.AreEqual("MenusController_Index_Test P4", result.ListT.Skip(3).FirstOrDefault().Name);
         }
 
         [TestMethod]
         [TestCategory("Details")]
-        public void  DetailsRecipeIDIsNegative()
+        public void DetailsRecipeIDIsNegative()
         {
             // Arrange
-            
+
             // Act
             ViewResult view = controller.Details(0) as ViewResult;
             AlertDecoratorResult adr = (AlertDecoratorResult)view;
@@ -247,7 +247,7 @@ namespace LambAndLentil.Tests.Controllers
             Assert.AreEqual("No Menu was found with that id.", adr.Message);
             Assert.AreEqual("alert-danger", adr.AlertClass);
             Assert.AreEqual(UIViewType.BaseIndex.ToString(), ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(0).ToString());
-           
+
         }
 
         [TestMethod]
@@ -257,22 +257,22 @@ namespace LambAndLentil.Tests.Controllers
             // Arrange 
 
             // Act 
-           ActionResult ar =   controller.Details(vm.ListT.FirstOrDefault().ID);
+            ActionResult ar = controller.Details(vm.ListT.FirstOrDefault().ID);
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
-           ViewResult view = (ViewResult)adr.InnerResult ;
+            ViewResult view = (ViewResult)adr.InnerResult;
 
             // Assert
-            Assert.IsNotNull(ar); 
+            Assert.IsNotNull(ar);
             Assert.AreEqual("Details", view.ViewName);
             Assert.IsInstanceOfType(view.Model, typeof(MenuVM));
         }
 
         [TestMethod]
         [TestCategory("Details")]
-        public void  DetailsRecipeIDTooHigh()
+        public void DetailsRecipeIDTooHigh()
         {
             // Arrange
-             
+
             ActionResult view = controller.Details(4000);
             AlertDecoratorResult adr = (AlertDecoratorResult)view;
 
@@ -281,15 +281,15 @@ namespace LambAndLentil.Tests.Controllers
             Assert.AreEqual("No Menu was found with that id.", adr.Message);
             Assert.AreEqual("alert-danger", adr.AlertClass);
             Assert.AreEqual(UIViewType.BaseIndex.ToString(), ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(0).ToString());
-             
+
         }
 
         [TestMethod]
         [TestCategory("Details")]
-        public void  DetailsRecipeIDPastIntLimit()
+        public void DetailsRecipeIDPastIntLimit()
         {
             // Arrange
-         
+
             // Act
             ViewResult result = controller.Details(Int16.MaxValue + 1) as ViewResult;
 
@@ -299,10 +299,10 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Details")]
-        public void  DetailsRecipeIDIsZero()
+        public void DetailsRecipeIDIsZero()
         {
             // Arrange
-            
+
             // Act
             ViewResult view = controller.Details(0) as ViewResult;
             AlertDecoratorResult adr = (AlertDecoratorResult)view;
@@ -311,17 +311,17 @@ namespace LambAndLentil.Tests.Controllers
             Assert.IsNotNull(view);
             Assert.AreEqual("No Menu was found with that id.", adr.Message);
             Assert.AreEqual("alert-danger", adr.AlertClass);
-            Assert.AreEqual(UIViewType.BaseIndex.ToString(), ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(0).ToString()); 
+            Assert.AreEqual(UIViewType.BaseIndex.ToString(), ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(0).ToString());
         }
 
         [TestMethod]
         [TestCategory("Create")]
-        public void  Create()
+        public void Create()
         {
             // Arrange
 
             // Act
-            ViewResult view=controller.Create(UIViewType.Create);
+            ViewResult view = controller.Create(UIViewType.Create);
 
             // Assert
             Assert.IsNotNull(view);
@@ -330,7 +330,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Delete")]
-        public void  DeleteAFoundMenu()
+        public void DeleteAFoundMenu()
         {
             // Arrange
 
@@ -339,7 +339,7 @@ namespace LambAndLentil.Tests.Controllers
             ActionResult ar = controller.Details(vm.ListT.FirstOrDefault().ID);
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             ViewResult view = (ViewResult)adr.InnerResult;
-          
+
 
             // Assert
             Assert.IsNotNull(view);
@@ -361,16 +361,16 @@ namespace LambAndLentil.Tests.Controllers
             // Assert
             Assert.IsNotNull(view);
             Assert.AreEqual("Menu was not found", adr.Message);
-            Assert.AreEqual("alert-warning", adr.AlertClass); 
-            Assert.AreEqual(UIViewType.Index.ToString(), ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(0).ToString()); 
+            Assert.AreEqual("alert-warning", adr.AlertClass);
+            Assert.AreEqual(UIViewType.Index.ToString(), ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(0).ToString());
         }
 
         [TestMethod]
         [TestCategory("Delete")]
-        public void  DeleteConfirmed()
+        public void DeleteConfirmed()
         {
             // Arrange
-            
+
             // Act
             ActionResult result = controller.DeleteConfirmed(vm.ListT.FirstOrDefault().ID) as ActionResult;
             // improve this test when I do some more route tests to return a more exact result
@@ -381,16 +381,16 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Delete")]
-        public void  CanDeleteValidMenu()
+        public void CanDeleteValidMenu()
         {
             // Arrange 
 
-            MenuVM menu = new MenuVM { ID = 2, Name = "Test2", Description="test MenusControllerTest.CanDeleteValidMenu"  };
-            repo.AddTVM(menu);
-            int  beginningCount = repo.Count();
+            MenuVM menu = new MenuVM { ID = 2, Name = "Test2", Description = "test MenusControllerTest.CanDeleteValidMenu" };
+            repo.Add(menu);
+            int beginningCount = repo.Count();
 
             // Act - delete the menu
-            ActionResult result = controller.DeleteConfirmed(menu.ID); 
+            ActionResult result = controller.DeleteConfirmed(menu.ID);
             AlertDecoratorResult adr = (AlertDecoratorResult)result;
 
             // Assert
@@ -401,7 +401,7 @@ namespace LambAndLentil.Tests.Controllers
         [Ignore]   // look into why this is not working
         [TestMethod]
         [TestCategory("Edit")]
-        public void  CanEditMenu()
+        public void CanEditMenu()
         {
             // Arrange
             MenuVM menuVM = new MenuVM
@@ -410,7 +410,7 @@ namespace LambAndLentil.Tests.Controllers
                 Name = "test MenuControllerTest.CanEditMenu",
                 Description = "test MenuControllerTest.CanEditMenu"
             };
-            repo.SaveTVM(menuVM);
+            repo.Save(menuVM);
 
             // Act 
             menuVM.Name = "Name has been changed";
@@ -418,10 +418,10 @@ namespace LambAndLentil.Tests.Controllers
             ViewResult view1 = controller.Edit(1);
 
             var returnedMenuVM = (MenuVM)(view1.Model);
-             
+
 
             // Assert 
-            Assert.IsNotNull(view1); 
+            Assert.IsNotNull(view1);
             Assert.AreEqual("Name has been changed", returnedMenuVM.Name);
             //Assert.AreEqual(menuVM.Description, returnedMenuVm.Description);
             //Assert.AreEqual(menuVM.CreationDate, returnedMenuVm.CreationDate);
@@ -451,10 +451,10 @@ namespace LambAndLentil.Tests.Controllers
             vm.ID = 7777;
             ActionResult ar2 = controller2.PostEdit(vm);
             ViewResult view2 = controller3.Index();
-            ListVM<Menu, MenuVM> listVM2 = (ListVM<Menu, MenuVM>)view2.Model;
-            MenuVM vm3 = (from m in listVM2.ListTVM
-                                where m.Name == "0000 test Edited"
-                                select m).AsQueryable().FirstOrDefault();
+            ListVM<MenuVM> listVM2 = (ListVM<MenuVM>)view2.Model;
+            MenuVM vm3 = (from m in listVM2.ListT
+                          where m.Name == "0000 test Edited"
+                          select m).AsQueryable().FirstOrDefault();
 
             // Assert
             Assert.AreEqual("0000 test Edited", vm3.Name);
@@ -474,14 +474,14 @@ namespace LambAndLentil.Tests.Controllers
                 Name = "test MenuControllerTest.CanEditMenu",
                 Description = "test MenuControllerTest.CanEditMenu"
             };
-            repo.AddTVM(menuVM);
+            repo.Add(menuVM);
 
             // Act 
             menuVM.Name = "Name has been changed";
 
             ViewResult view1 = controller.Edit(1);
 
-            MenuVM returnedMenuVm = repo.GetTVMById(1);
+            MenuVM returnedMenuVm = repo.GetById(1);
 
             // Assert 
             Assert.IsNotNull(view1);
@@ -494,10 +494,10 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Edit")]
-        public void  CannotEditNonexistentMenu()
+        public void CannotEditNonexistentMenu()
         {
             // Arrange
-           
+
             // Act
             Menu result = (Menu)controller.Edit(8).ViewData.Model;
             // Assert
@@ -505,7 +505,7 @@ namespace LambAndLentil.Tests.Controllers
         }
 
         [TestMethod]
-        public void  CreateReturnsNonNull()
+        public void CreateReturnsNonNull()
         {
             // Arrange 
 
@@ -554,23 +554,23 @@ namespace LambAndLentil.Tests.Controllers
         }
 
         [TestCleanup()]
-        public   void TestCleanup()
+        public void TestCleanup()
         {
             string path = @"C:\Dev\TGE\LambAndLentil\LambAndLentil.Test\App_Data\JSON\Menu\";
 
-            IEnumerable<string> files=Directory.EnumerateFiles(path);
+            IEnumerable<string> files = Directory.EnumerateFiles(path);
 
             foreach (var file in files)
             {
                 File.Delete(file);
-            } 
+            }
 
         }
 
         [ClassCleanup()]
-        public static void ClassCleanup()
-        {
-            new MenusControllerTest().TestCleanup(); 
-        }
+public static void ClassCleanup()
+{
+    new MenusControllerTest().TestCleanup();
+}
     }
 }

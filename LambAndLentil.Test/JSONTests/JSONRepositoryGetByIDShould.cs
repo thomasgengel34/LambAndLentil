@@ -16,13 +16,13 @@ namespace LambAndLentil.Test.JSONTests
         public static MapperConfiguration AutoMapperConfig { get; set; }
         static string path = @"../../../\LambAndLentil.Domain\App_Data\JSON\TestJSONRepositoryGetByID\";
 
-        private static JSONRepository<Ingredient, IngredientVM> repo { get; set; }
+        private static JSONRepository<IngredientVM> repo { get; set; }
 
 
         public JSONRepositoryGetByIDShould()
         {
             AutoMapperConfigForTests.InitializeMap();
-            repo = new JSONRepository<Ingredient, IngredientVM>();
+            repo = new JSONRepository<IngredientVM>();
             Directory.CreateDirectory(path);
         }
 

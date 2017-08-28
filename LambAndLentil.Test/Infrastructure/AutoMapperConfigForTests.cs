@@ -8,9 +8,11 @@ namespace LambAndLentil.Tests.Infrastructure
     public static class AutoMapperConfigForTests
     {
         public static void InitializeMap()
-        {
+        { 
             Mapper.Initialize(cfg =>
             {
+                cfg.RecognizeDestinationPostfixes("VM");
+                cfg.RecognizePostfixes("VM");
                 cfg.CreateMap<Ingredient, IngredientVM>();
                 cfg.CreateMap<IngredientVM, Ingredient>();
                 cfg.CreateMap<Menu, MenuVM>();
@@ -23,8 +25,10 @@ namespace LambAndLentil.Tests.Infrastructure
                 cfg.CreateMap<RecipeVM, Recipe>();
                 cfg.CreateMap<ShoppingList, ShoppingListVM>();
                 cfg.CreateMap<ShoppingListVM, ShoppingList>();
+                //   cfg.ShouldMapProperty = pi =>
+                //             pi.GetMethod != null && (pi.GetMethod.IsPublic || pi.GetMethod.IsPrivate);
                 //cfg.AddProfile<FooProfile>(); not currently needed
-
+                
             });
         }
 
@@ -33,6 +37,8 @@ namespace LambAndLentil.Tests.Infrastructure
         {
             var config = new MapperConfiguration(cfg =>
             {
+                cfg.RecognizeDestinationPostfixes("VM");
+                cfg.RecognizePostfixes("VM");
                 cfg.CreateMap<Ingredient, IngredientVM>();
                 cfg.CreateMap<IngredientVM, Ingredient>();
                 cfg.CreateMap<Menu, MenuVM>();
@@ -48,6 +54,6 @@ namespace LambAndLentil.Tests.Infrastructure
                 //cfg.AddProfile<FooProfile>(); not currently needed
             });
             return config;
-        } 
+        }
     }
 }

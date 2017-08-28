@@ -1,0 +1,1 @@
+{"MealType":0,"DayOfWeek":0,"Diners":0,"ID":290,"Name":"001 Test ","Description":"test SaveTheCreationDateBetweenPostedEdits","CreationDate":"2010-01-01T00:00:00","ModifiedDate":"2017-08-23T08:19:58.6862217-05:00","AddedByUser":"PFW\\Poncho","ModifiedByUser":"PFW\\Poncho","Recipes":[],"Ingredients":[],"Menus":[],"Plans":[],"ShoppingLists":[],"Persons":[]}

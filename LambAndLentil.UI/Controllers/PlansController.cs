@@ -10,23 +10,22 @@ using System.Collections.Generic;
 
 namespace LambAndLentil.UI.Controllers
 {
-    public class PlansController : PlansGenericController<Plan, PlanVM>
+    public class PlansController : PlansGenericController<PlanVM>
     {
-        public PlansController(IRepository<Plan, PlanVM> repository) : base(repository)
+        public PlansController(IRepository<PlanVM> repository) : base(repository)
         {
             repo = repository;
         }
 
-        public static IRepository<Plan, PlanVM> repo { get; private set; }
+        public static IRepository<PlanVM> repo { get; private set; }
     }
 
 
 
-    public class PlansGenericController<T,TVM> : BaseController<Plan, PlanVM>
-          where T:Plan  
-            where TVM:PlanVM 
+    public class PlansGenericController<T > : BaseController<PlanVM>
+          where T: PlanVM 
     {
-        public PlansGenericController(IRepository<Plan, PlanVM> repository) : base(repository)
+        public PlansGenericController(IRepository<PlanVM> repository) : base(repository)
         {
             repo = repository;
         }
@@ -89,13 +88,13 @@ namespace LambAndLentil.UI.Controllers
 
         public ActionResult AttachIngredient(int? planID, int? ingredientID)
         {
-            return BaseAttach<Plan, PlanVM, Ingredient, IngredientVM>(planID, ingredientID);
+            return BaseAttach<PlanVM,  IngredientVM>(planID, ingredientID);
         }
 
 
         public ActionResult DetachIngredient(int? planID, int? ingredientID)
         {
-            return BaseAttach<Plan, PlanVM, Ingredient, IngredientVM>(planID, ingredientID, AttachOrDetach.Detach);
+            return BaseAttach<PlanVM,  IngredientVM>(planID, ingredientID, AttachOrDetach.Detach);
         }
     }
 }

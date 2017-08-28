@@ -65,6 +65,77 @@ namespace LambAndLentil.Domain.Test.Entities
             Assert.AreEqual("6/26/1977", plan.CreationDate.ToShortDateString());
         }
 
-         
+
+        [Ignore]
+        [TestMethod]
+        public void BeAbleToHaveIngredientChild()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void BeAbleToHaveRecipeChild()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void  BeAbleToHaveMenuChild()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void NotBeAbleToHavePlanChild()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void NotBeAbleToHaveShoppingListChild()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void NotBeAbleToHavePersonChild()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
     }
 }

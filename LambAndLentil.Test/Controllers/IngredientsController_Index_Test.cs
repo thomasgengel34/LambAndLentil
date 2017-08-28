@@ -20,15 +20,15 @@ namespace LambAndLentil.Tests.Controllers
     public class IngredientsController_Index_Test
     {
         public static MapperConfiguration AutoMapperConfig { get; set; }
-        static ListVM<Ingredient, IngredientVM> ilvm;
-        static IRepository<Ingredient, IngredientVM> repo;
+        static ListVM<IngredientVM> ilvm;
+        static IRepository<IngredientVM> repo;
         static IngredientsController controller;
 
         public IngredientsController_Index_Test()
         {
             AutoMapperConfigForTests.InitializeMap();
-            ilvm = new ListVM<Ingredient, IngredientVM>();
-            repo = new TestRepository<Ingredient, IngredientVM>();
+            ilvm = new ListVM<IngredientVM>();
+            repo = new TestRepository<IngredientVM>();
             controller = SetUpIngredientsController(repo);
         }
 
@@ -36,7 +36,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Index")]
-        public void IngredientsCtr_Index()
+        public void Index()
         {
             // Arrange
 
@@ -74,11 +74,11 @@ namespace LambAndLentil.Tests.Controllers
             // Act
             ViewResult view1 = controller.Index(1);
 
-            int count1 = ((ListVM<Ingredient, IngredientVM>)(view1.Model)).ListTVM.Count();
+            int count1 = ((ListVM<IngredientVM>)(view1.Model)).ListT.Count();
 
             ViewResult view2 = controller.Index(2);
 
-            int count2 = ((ListVM<Ingredient, IngredientVM>)(view2.Model)).ListTVM.Count();
+            int count2 = ((ListVM<IngredientVM>)(view2.Model)).ListT.Count();
 
             int count = count1 + count2;
 
@@ -93,8 +93,8 @@ namespace LambAndLentil.Tests.Controllers
             // Arrange 
 
             // Act
-            ilvm = (ListVM<Ingredient, IngredientVM>)(controller.Index(1)).Model;
-            IngredientVM[] ingrArray1 = ilvm.ListTVM.ToArray();
+            ilvm = (ListVM<IngredientVM>)(controller.Index(1)).Model;
+            IngredientVM[] ingrArray1 = ilvm.ListT.ToArray();
             int count1 = ingrArray1.Count();
 
             // Assert 
@@ -106,17 +106,17 @@ namespace LambAndLentil.Tests.Controllers
         public void ContainsAllIngredientsView2Count0()
         {
             // Arrange 
-            ilvm = (ListVM<Ingredient, IngredientVM>)(controller.Index(1)).Model;
-            IngredientVM[] ingrArray1 = ilvm.ListTVM.ToArray();
+            ilvm = (ListVM<IngredientVM>)(controller.Index(1)).Model;
+            IngredientVM[] ingrArray1 = ilvm.ListT.ToArray();
 
             // Act
             ViewResult view1 = controller.Index(1);
 
-            int count1 = ((ListVM<Ingredient, IngredientVM>)(view1.Model)).ListTVM.Count();
+            int count1 = ((ListVM<IngredientVM>)(view1.Model)).ListT.Count();
 
             ViewResult view2 = controller.Index(2);
 
-            int count2 = ((ListVM<Ingredient, IngredientVM>)(view2.Model)).ListTVM.Count();
+            int count2 = ((ListVM<IngredientVM>)(view2.Model)).ListT.Count();
 
             int count = count1 + count2;
 
@@ -144,17 +144,17 @@ namespace LambAndLentil.Tests.Controllers
         public void ContainsAllIngredientsView2NameIsIndex()
         {
             // Arrange 
-            ilvm = (ListVM<Ingredient, IngredientVM>)(controller.Index(1)).Model;
-            IngredientVM[] ingrArray1 = ilvm.ListTVM.ToArray();
+            ilvm = (ListVM<IngredientVM>)(controller.Index(1)).Model;
+            IngredientVM[] ingrArray1 = ilvm.ListT.ToArray();
 
             // Act
             ViewResult view1 = controller.Index(1);
 
-            int count1 = ((ListVM<Ingredient, IngredientVM>)(view1.Model)).ListTVM.Count();
+            int count1 = ((ListVM<IngredientVM>)(view1.Model)).ListT.Count();
 
             ViewResult view2 = controller.Index(2);
 
-            int count2 = ((ListVM<Ingredient, IngredientVM>)(view2.Model)).ListTVM.Count();
+            int count2 = ((ListVM<IngredientVM>)(view2.Model)).ListT.Count();
 
             int count = count1 + count2;
 
@@ -167,14 +167,14 @@ namespace LambAndLentil.Tests.Controllers
         public void FirstPageIsNotNull()
         {
             // Arrange 
-            ilvm = (ListVM<Ingredient, IngredientVM>)(controller.Index(1)).Model;
-            IngredientVM[] ingrArray1 = ilvm.ListTVM.ToArray();
+            ilvm = (ListVM<IngredientVM>)(controller.Index(1)).Model;
+            IngredientVM[] ingrArray1 = ilvm.ListT.ToArray();
             controller.PageSize = 8;
 
             // Act
             ViewResult view1 = controller.Index(1);
 
-            int count1 = ((ListVM<Ingredient, IngredientVM>)(view1.Model)).ListTVM.Count();
+            int count1 = ((ListVM<IngredientVM>)(view1.Model)).ListT.Count();
 
             // Assert
             Assert.IsNotNull(view1);
@@ -186,13 +186,13 @@ namespace LambAndLentil.Tests.Controllers
         public void FirstPageIsCorrectCountIsFive()
         {
             // Arrange 
-            ilvm = (ListVM<Ingredient, IngredientVM>)(controller.Index(1)).Model;
-            IngredientVM[] ingrArray1 = ilvm.ListTVM.ToArray();
+            ilvm = (ListVM<IngredientVM>)(controller.Index(1)).Model;
+            IngredientVM[] ingrArray1 = ilvm.ListT.ToArray();
             controller.PageSize = 8;
 
             // Act
             ViewResult view1 = controller.Index(1);
-            int count1 = ((ListVM<Ingredient, IngredientVM>)(view1.Model)).ListTVM.Count();
+            int count1 = ((ListVM<IngredientVM>)(view1.Model)).ListT.Count();
 
             // Assert 
             Assert.AreEqual(5, count1);
@@ -203,14 +203,14 @@ namespace LambAndLentil.Tests.Controllers
         public void FirstPageNameIsIndex()
         {
             // Arrange 
-            ilvm = (ListVM<Ingredient, IngredientVM>)(controller.Index(1)).Model;
-            IngredientVM[] ingrArray1 = ilvm.ListTVM.ToArray();
+            ilvm = (ListVM<IngredientVM>)(controller.Index(1)).Model;
+            IngredientVM[] ingrArray1 = ilvm.ListT.ToArray();
             controller.PageSize = 8;
 
             // Act
             ViewResult view1 = controller.Index(1);
 
-            int count1 = ((ListVM<Ingredient, IngredientVM>)(view1.Model)).ListTVM.Count();
+            int count1 = ((ListVM<IngredientVM>)(view1.Model)).ListT.Count();
 
             // Assert  
             Assert.AreEqual("Index", view1.ViewName);
@@ -223,17 +223,17 @@ namespace LambAndLentil.Tests.Controllers
         public void FirstItemNameIsCorrect()
         {
             // Arrange 
-            ilvm = (ListVM<Ingredient, IngredientVM>)(controller.Index(1)).Model;
-            IngredientVM[] ingrArray1 = ilvm.ListTVM.ToArray();
+            ilvm = (ListVM<IngredientVM>)(controller.Index(1)).Model;
+            IngredientVM[] ingrArray1 = ilvm.ListT.ToArray();
             controller.PageSize = 8;
 
             // Act
             ViewResult view1 = controller.Index(1);
 
-            int count1 = ((ListVM<Ingredient, IngredientVM>)(view1.Model)).ListTVM.Count();
+            int count1 = ((ListVM<IngredientVM>)(view1.Model)).ListT.Count();
 
             // Assert   
-            Assert.AreEqual("IngredientsController_Index_Test P1", ((ListVM<Ingredient, IngredientVM>)(view1.Model)).ListTVM.FirstOrDefault().Name);
+            Assert.AreEqual("IngredientsController_Index_Test P1", ((ListVM<IngredientVM>)(view1.Model)).ListT.FirstOrDefault().Name);
         }
 
 
@@ -243,15 +243,15 @@ namespace LambAndLentil.Tests.Controllers
         public void FirstIngredientAddedByUserIsCorrect()
         {
             // Arrange 
-            ilvm = (ListVM<Ingredient, IngredientVM>)(controller.Index(1)).Model;
-            IngredientVM[] ingrArray1 = ilvm.ListTVM.ToArray();
+            ilvm = (ListVM<IngredientVM>)(controller.Index(1)).Model;
+            IngredientVM[] ingrArray1 = ilvm.ListT.ToArray();
             controller.PageSize = 8;
 
             // Act
             ViewResult view1 = controller.Index(1);
 
             // Assert   
-            Assert.AreEqual("John Doe", ((ListVM<Ingredient, IngredientVM>)(view1.Model)).ListTVM.FirstOrDefault().AddedByUser);
+            Assert.AreEqual("John Doe", ((ListVM<IngredientVM>)(view1.Model)).ListT.FirstOrDefault().AddedByUser);
         }
 
         [TestMethod]
@@ -259,15 +259,15 @@ namespace LambAndLentil.Tests.Controllers
         public void FirstModifiedByUserIsCorrect()
         {
             // Arrange 
-            ilvm = (ListVM<Ingredient, IngredientVM>)(controller.Index(1)).Model;
-            IngredientVM[] ingrArray1 = ilvm.ListTVM.ToArray();
+            ilvm = (ListVM<IngredientVM>)(controller.Index(1)).Model;
+            IngredientVM[] ingrArray1 = ilvm.ListT.ToArray();
             controller.PageSize = 8;
 
             // Act
             ViewResult view1 = controller.Index(1);
 
             // Assert   
-            Assert.AreEqual("Richard Roe", ((ListVM<Ingredient, IngredientVM>)(view1.Model)).ListTVM.FirstOrDefault().ModifiedByUser);
+            Assert.AreEqual("Richard Roe", ((ListVM<IngredientVM>)(view1.Model)).ListT.FirstOrDefault().ModifiedByUser);
         }
 
         [TestMethod]
@@ -275,15 +275,15 @@ namespace LambAndLentil.Tests.Controllers
         public void FirstCreationDateIsCorrect()
         {
             // Arrange 
-            ilvm = (ListVM<Ingredient, IngredientVM>)(controller.Index(1)).Model;
-            IngredientVM[] ingrArray1 = ilvm.ListTVM.ToArray();
+            ilvm = (ListVM<IngredientVM>)(controller.Index(1)).Model;
+            IngredientVM[] ingrArray1 = ilvm.ListT.ToArray();
             controller.PageSize = 8;
 
             // Act
             ViewResult view1 = controller.Index(1);
 
             // Assert   
-            Assert.AreEqual(DateTime.MinValue, ((ListVM<Ingredient, IngredientVM>)(view1.Model)).ListTVM.FirstOrDefault().CreationDate);
+            Assert.AreEqual(DateTime.MinValue, ((ListVM<IngredientVM>)(view1.Model)).ListT.FirstOrDefault().CreationDate);
         }
 
         [TestMethod]
@@ -291,15 +291,15 @@ namespace LambAndLentil.Tests.Controllers
         public void Index_FirstModifiedDateIsCorrect()
         {
             // Arrange 
-            ilvm = (ListVM<Ingredient, IngredientVM>)(controller.Index(1)).Model;
-            IngredientVM[] ingrArray1 = ilvm.ListTVM.ToArray();
+            ilvm = (ListVM<IngredientVM>)(controller.Index(1)).Model;
+            IngredientVM[] ingrArray1 = ilvm.ListT.ToArray();
             controller.PageSize = 8;
 
             // Act
             ViewResult view1 = controller.Index(1);
 
             // Assert   
-            Assert.AreEqual(DateTime.MaxValue.AddYears(-10), ((ListVM<Ingredient, IngredientVM>)(view1.Model)).ListTVM.FirstOrDefault().ModifiedDate);
+            Assert.AreEqual(DateTime.MaxValue.AddYears(-10), ((ListVM<IngredientVM>)(view1.Model)).ListT.FirstOrDefault().ModifiedDate);
         }
 
 
@@ -309,17 +309,17 @@ namespace LambAndLentil.Tests.Controllers
         public void SecondItemNameIsCorrect()
         {
             // Arrange 
-            ilvm = (ListVM<Ingredient, IngredientVM>)(controller.Index(1)).Model;
-            IngredientVM[] ingrArray1 = ilvm.ListTVM.ToArray();
+            ilvm = (ListVM<IngredientVM>)(controller.Index(1)).Model;
+            IngredientVM[] ingrArray1 = ilvm.ListT.ToArray();
             controller.PageSize = 8;
 
             // Act
             ViewResult view1 = controller.Index(1);
 
-            int count1 = ((ListVM<Ingredient, IngredientVM>)(view1.Model)).ListTVM.Count();
+            int count1 = ((ListVM<IngredientVM>)(view1.Model)).ListT.Count();
 
             // Assert   
-            Assert.AreEqual("IngredientsController_Index_Test P2", ((ListVM<Ingredient, IngredientVM>)(view1.Model)).ListTVM.Skip(1).FirstOrDefault().Name);
+            Assert.AreEqual("IngredientsController_Index_Test P2", ((ListVM<IngredientVM>)(view1.Model)).ListT.Skip(1).FirstOrDefault().Name);
         }
 
 
@@ -328,17 +328,17 @@ namespace LambAndLentil.Tests.Controllers
         public void ThirdItemNameIsCorrect()
         {
             // Arrange 
-            ilvm = (ListVM<Ingredient, IngredientVM>)(controller.Index(1)).Model;
-            IngredientVM[] ingrArray1 = ilvm.ListTVM.ToArray();
+            ilvm = (ListVM<IngredientVM>)(controller.Index(1)).Model;
+            IngredientVM[] ingrArray1 = ilvm.ListT.ToArray();
             controller.PageSize = 8;
 
             // Act
             ViewResult view1 = controller.Index(1);
 
-            int count1 = ((ListVM<Ingredient, IngredientVM>)(view1.Model)).ListTVM.Count();
+            int count1 = ((ListVM<IngredientVM>)(view1.Model)).ListT.Count();
 
             // Assert   
-            Assert.AreEqual("IngredientsController_Index_Test P3", ((ListVM<Ingredient, IngredientVM>)(view1.Model)).ListTVM.Skip(2).FirstOrDefault().Name);
+            Assert.AreEqual("IngredientsController_Index_Test P3", ((ListVM<IngredientVM>)(view1.Model)).ListT.Skip(2).FirstOrDefault().Name);
         }
 
 
@@ -361,10 +361,10 @@ namespace LambAndLentil.Tests.Controllers
 
 
             // Act
-            var result = (ListVM<Ingredient, IngredientVM>)(controller.Index(1)).Model;
+            var result = (ListVM<IngredientVM>)(controller.Index(1)).Model;
 
             // Assert 
-            Assert.IsTrue(result.ListTVM.Count() == 5);
+            Assert.IsTrue(result.ListT.Count() == 5);
         }
 
         [TestMethod]
@@ -375,8 +375,8 @@ namespace LambAndLentil.Tests.Controllers
 
 
             // Act
-            var result = (ListVM<Ingredient, IngredientVM>)(controller.Index(1)).Model;
-            IngredientVM[] ingrArray1 = result.ListTVM.ToArray();
+            var result = (ListVM<IngredientVM>)(controller.Index(1)).Model;
+            IngredientVM[] ingrArray1 = result.ListT.ToArray();
 
             // Assert  
             Assert.AreEqual("IngredientsController_Index_Test P1", ingrArray1[0].Name);
@@ -389,8 +389,8 @@ namespace LambAndLentil.Tests.Controllers
             // Arrange 
 
             // Act
-            var result = (ListVM<Ingredient, IngredientVM>)(controller.Index(1)).Model;
-            IngredientVM[] ingrArray1 = result.ListTVM.ToArray();
+            var result = (ListVM<IngredientVM>)(controller.Index(1)).Model;
+            IngredientVM[] ingrArray1 = result.ListT.ToArray();
 
             // Assert  
             Assert.AreEqual("IngredientsController_Index_Test P3", ingrArray1[2].Name);
@@ -404,7 +404,7 @@ namespace LambAndLentil.Tests.Controllers
             // Arrange 
 
             // Act 
-            ListVM<Ingredient, IngredientVM> resultT = (ListVM<Ingredient, IngredientVM>)((ViewResult)controller.Index(2)).Model;
+            ListVM<IngredientVM> resultT = (ListVM<IngredientVM>)((ViewResult)controller.Index(2)).Model;
             PagingInfo pageInfoT = resultT.PagingInfo;
 
             // Assert  
@@ -419,7 +419,7 @@ namespace LambAndLentil.Tests.Controllers
 
 
             // Act 
-            ListVM<Ingredient, IngredientVM> resultT = (ListVM<Ingredient, IngredientVM>)((ViewResult)controller.Index(2)).Model;
+            ListVM<IngredientVM> resultT = (ListVM<IngredientVM>)((ViewResult)controller.Index(2)).Model;
             PagingInfo pageInfoT = resultT.PagingInfo;
 
             // Assert   
@@ -433,7 +433,7 @@ namespace LambAndLentil.Tests.Controllers
             // Arrange 
 
             // Act 
-            ListVM<Ingredient, IngredientVM> resultT = (ListVM<Ingredient, IngredientVM>)((ViewResult)controller.Index(2)).Model;
+            ListVM<IngredientVM> resultT = (ListVM<IngredientVM>)((ViewResult)controller.Index(2)).Model;
             PagingInfo pageInfoT = resultT.PagingInfo;
             //   PagingInfo pageInfoT =ilvm.PagingInfo;
 
@@ -450,7 +450,7 @@ namespace LambAndLentil.Tests.Controllers
 
 
             // Act 
-            ListVM<Ingredient, IngredientVM> resultT = (ListVM<Ingredient, IngredientVM>)((ViewResult)controller.Index(2)).Model;
+            ListVM<IngredientVM> resultT = (ListVM<IngredientVM>)((ViewResult)controller.Index(2)).Model;
             PagingInfo pageInfoT = resultT.PagingInfo;
 
             // Assert 
@@ -458,48 +458,48 @@ namespace LambAndLentil.Tests.Controllers
         }
 
 
-        public IngredientsController SetUpIngredientsController(IRepository<Ingredient,IngredientVM> repo)
+        public IngredientsController SetUpIngredientsController(IRepository<IngredientVM> repo)
         {
-            ilvm.ListT = new List<Ingredient> {
-                new Ingredient {ID = int.MaxValue, Name = "IngredientsController_Index_Test P1" ,AddedByUser="John Doe" ,ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue, ModifiedDate=DateTime.MaxValue.AddYears(-10)},
-                new Ingredient {ID = int.MaxValue-1, Name = "IngredientsController_Index_Test P2",  AddedByUser="Sally Doe",  ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(20), ModifiedDate=DateTime.MaxValue.AddYears(-20)},
-                new Ingredient {ID = int.MaxValue-2, Name = "IngredientsController_Index_Test P3",  AddedByUser="Sue Doe", ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(30), ModifiedDate=DateTime.MaxValue.AddYears(-30)},
-                new Ingredient {ID = int.MaxValue-3, Name = "IngredientsController_Index_Test P4",  AddedByUser="Kyle Doe" ,ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(40), ModifiedDate=DateTime.MaxValue.AddYears(-10)},
-                new Ingredient {ID = int.MaxValue-4, Name = "IngredientsController_Index_Test P5",  AddedByUser="John Doe",  ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(50), ModifiedDate=DateTime.MaxValue.AddYears(-100)}
-            }.AsQueryable();
+            ilvm.ListT = new List<IngredientVM> {
+                        new IngredientVM{ID = int.MaxValue, Name = "IngredientsController_Index_Test P1" ,AddedByUser="John Doe" ,ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue, ModifiedDate=DateTime.MaxValue.AddYears(-10)},
+                        new IngredientVM{ID = int.MaxValue-1, Name = "IngredientsController_Index_Test P2",  AddedByUser="Sally Doe",  ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(20), ModifiedDate=DateTime.MaxValue.AddYears(-20)},
+                        new IngredientVM{ID = int.MaxValue-2, Name = "IngredientsController_Index_Test P3",  AddedByUser="Sue Doe", ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(30), ModifiedDate=DateTime.MaxValue.AddYears(-30)},
+                        new IngredientVM{ID = int.MaxValue-3, Name = "IngredientsController_Index_Test P4",  AddedByUser="Kyle Doe" ,ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(40), ModifiedDate=DateTime.MaxValue.AddYears(-10)},
+                        new IngredientVM{ID = int.MaxValue-4, Name = "IngredientsController_Index_Test P5",  AddedByUser="John Doe",  ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(50), ModifiedDate=DateTime.MaxValue.AddYears(-100)}
+                    }.AsQueryable();
 
-            foreach (Ingredient ingredient in ilvm.ListT)
+            foreach (IngredientVM ingredientVM in ilvm.ListT)
             {
-                repo.AddT(ingredient);
+                repo.Add(ingredientVM);
             }
 
             IngredientsController controller = new IngredientsController(repo);
             controller.PageSize = 3;
 
-            return controller; 
+            return controller;
         }
 
 
-        [Ignore]
-        [TestMethod]
-        public void FlagAnIngredientFlaggedInAPerson()
-        {
-            Assert.Fail();
-        }
+        //        [Ignore]
+        //        [TestMethod]
+        //        public void FlagAnIngredientFlaggedInAPerson()
+        //        {
+        //            Assert.Fail();
+        //        }
 
-        [Ignore]
-        [TestMethod]
-        public void FlagAnIngredientFlaggedInTwoPersons()
-        {
-            Assert.Fail();
-        }
+        //        [Ignore]
+        //        [TestMethod]
+        //        public void FlagAnIngredientFlaggedInTwoPersons()
+        //        {
+        //            Assert.Fail();
+        //        }
 
-        [Ignore]
-        [TestMethod]
-        public void WhenAFlagHasBeenRemovedFromOnePersonStillThereForSecondFlaggedPerson()
-        {
-            Assert.Fail();
-        }
+        //        [Ignore]
+        //        [TestMethod]
+        //        public void WhenAFlagHasBeenRemovedFromOnePersonStillThereForSecondFlaggedPerson()
+        //        {
+        //            Assert.Fail();
+        //        }
 
 
         [ClassCleanup()]

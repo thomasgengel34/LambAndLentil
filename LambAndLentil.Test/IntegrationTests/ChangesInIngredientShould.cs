@@ -15,639 +15,641 @@ namespace LambAndLentil.Test.IntegrationTests
 {
     [Ignore]
     [TestClass]
-    public class ChangesInIngredientShould
+    public class ChangesInIngredientVMShould
     {
-        static IRepository<Ingredient, IngredientVM> repo;
+        static IRepository<IngredientVM> repo;
 
-        public ChangesInIngredientShould()
+        public ChangesInIngredientVMShould()
         {
-            repo = new JSONRepository<Ingredient, IngredientVM>();
+            repo = new TestRepository<IngredientVM>();
         }
 
 
         /// <summary>
-        /// Recipe/Ingredient: ingredient added: when an ingredient is added to a recipe, the recipe should change
+        /// Recipe/IngredientVM: ingredientVM added: when an ingredientVM is added to a recipe, the recipe should change
         /// </summary>
         [TestMethod]
-        public void ChangeParentRecipeWhenIngredientChildIsAdded()
-        {
-            Assert.Fail();
-        }
-
-        /// <summary>
-        /// Recipe/Ingredient: ingredient modified
-        /// </summary>
-        [TestMethod]
-        public void ChangeParentRecipeWhenIngredientChildIsModified()
+        public void ChangeParentRecipeWhenIngredientVMChildIsAdded()
         {
             Assert.Fail();
         }
 
         /// <summary>
-        /// Recipe/Ingredient: ingredient deleted
+        /// Recipe/IngredientVM: ingredientVM modified
         /// </summary>
         [TestMethod]
-        public void ChangeRecipeWhenIngredientChildIsDeleted()
+        public void ChangeParentRecipeWhenIngredientVMChildIsModified()
         {
             Assert.Fail();
         }
 
         /// <summary>
-        /// Recipe/Ingredient: ingredient removed
+        /// Recipe/IngredientVM: ingredientVM deleted
         /// </summary>
         [TestMethod]
-        public void ChangeParentRecipeWhenIngredientChildIsRemoved()
+        public void ChangeRecipeWhenIngredientVMChildIsDeleted()
         {
             Assert.Fail();
         }
 
         /// <summary>
-        ///  Menu/Ingredient: Ingredient added
+        /// Recipe/IngredientVM: ingredientVM removed
         /// </summary>
         [TestMethod]
-        public void ChangeParentMenuWhenIngredientChildIsAdded()
+        public void ChangeParentRecipeWhenIngredientVMChildIsRemoved()
         {
             Assert.Fail();
         }
 
         /// <summary>
-        ///  Menu/Ingredient: Ingredient modified
+        ///  Menu/IngredientVM: IngredientVM added
         /// </summary>
         [TestMethod]
-        public void ChangeParentMenuWhenIngredientChildIsModified()
+        public void ChangeParentMenuWhenIngredientVMChildIsAdded()
         {
             Assert.Fail();
         }
 
         /// <summary>
-        ///  Menu/Ingredient: Ingredient deleted
+        ///  Menu/IngredientVM: IngredientVM modified
         /// </summary>
         [TestMethod]
-        public void ChangeParentMenuWhenIngredientChildIsDeleted()
+        public void ChangeParentMenuWhenIngredientVMChildIsModified()
         {
             Assert.Fail();
         }
 
         /// <summary>
-        ///  Menu/Ingredient: Ingredient removed
+        ///  Menu/IngredientVM: IngredientVM deleted
         /// </summary>
         [TestMethod]
-        public void ChangeParentMenuWhenIngredientChildIsRemoved()
+        public void ChangeParentMenuWhenIngredientVMChildIsDeleted()
         {
             Assert.Fail();
         }
 
         /// <summary>
-        /// Plan/Ingredient: Ingredient added
+        ///  Menu/IngredientVM: IngredientVM removed
         /// </summary>
         [TestMethod]
-        public void ChangeParentPlanWhenIngredientChildIsAdded()
+        public void ChangeParentMenuWhenIngredientVMChildIsRemoved()
         {
             Assert.Fail();
         }
 
         /// <summary>
-        /// Plan/Ingredient: Ingredient changed
+        /// Plan/IngredientVM: IngredientVM added
         /// </summary>
         [TestMethod]
-        public void ChangeParentPlanWhenIngredientChildIsModified()
+        public void ChangeParentPlanWhenIngredientVMChildIsAdded()
         {
             Assert.Fail();
         }
 
         /// <summary>
-        /// Plan/Ingredient: Ingredient deleted
+        /// Plan/IngredientVM: IngredientVM changed
         /// </summary>
         [TestMethod]
-        public void ChangeParentPlanWhenIngredientChildIsDeleted()
+        public void ChangeParentPlanWhenIngredientVMChildIsModified()
         {
             Assert.Fail();
         }
 
         /// <summary>
-        /// Plan/Ingredient: Ingredient removed
+        /// Plan/IngredientVM: IngredientVM deleted
         /// </summary>
         [TestMethod]
-        public void ChangeParentPlanWhenIngredientChildIsRemoved()
+        public void ChangeParentPlanWhenIngredientVMChildIsDeleted()
         {
             Assert.Fail();
         }
 
         /// <summary>
-        /// ShoppingList/Ingredient: Ingredient added
+        /// Plan/IngredientVM: IngredientVM removed
         /// </summary>
         [TestMethod]
-        public void ChangeParentShoppingListWhenIngredientChildIsAdded()
+        public void ChangeParentPlanWhenIngredientVMChildIsRemoved()
         {
             Assert.Fail();
         }
 
         /// <summary>
-        /// ShoppingList/Ingredient: Ingredient modified
+        /// ShoppingList/IngredientVM: IngredientVM added
         /// </summary>
         [TestMethod]
-        public void ChangeParentShoppingListWhenIngredientChildIsModified()
+        public void ChangeParentShoppingListWhenIngredientVMChildIsAdded()
         {
             Assert.Fail();
         }
 
         /// <summary>
-        /// ShoppingList/Ingredient: Ingredient deleted
+        /// ShoppingList/IngredientVM: IngredientVM modified
         /// </summary>
         [TestMethod]
-        public void ChangeParentShoppingListWhenIngredientChildIsDeleted()
+        public void ChangeParentShoppingListWhenIngredientVMChildIsModified()
         {
             Assert.Fail();
         }
 
         /// <summary>
-        /// ShoppingList/Ingredient: Ingredient removed
+        /// ShoppingList/IngredientVM: IngredientVM deleted
         /// </summary>
         [TestMethod]
-        public void ChangeParentShoppingListWhenIngredientChildIsRemoved()
+        public void ChangeParentShoppingListWhenIngredientVMChildIsDeleted()
         {
             Assert.Fail();
         }
 
         /// <summary>
-        /// Menu/Recipe/Ingredient: Ingredient added
+        /// ShoppingList/IngredientVM: IngredientVM removed
         /// </summary>
         [TestMethod]
-        public void ChangeParentMenuWhenGrandchildIngredientInChildRecipeIsAdded()
+        public void ChangeParentShoppingListWhenIngredientVMChildIsRemoved()
         {
             Assert.Fail();
         }
 
         /// <summary>
-        /// Menu/Recipe/Ingredient: Ingredient changed
+        /// Menu/Recipe/IngredientVM: IngredientVM added
         /// </summary>
         [TestMethod]
-        public void ChangeParentMenuWhenGrandchildIngredientInChildRecipeIsModified()
+        public void ChangeParentMenuWhenGrandchildIngredientVMInChildRecipeIsAdded()
         {
             Assert.Fail();
         }
 
         /// <summary>
-        /// Menu/Recipe/Ingredient: Ingredient deleted
+        /// Menu/Recipe/IngredientVM: IngredientVM changed
         /// </summary>
         [TestMethod]
-        public void ChangeMenuRecipeWhenIngredientDeleted()
+        public void ChangeParentMenuWhenGrandchildIngredientVMInChildRecipeIsModified()
         {
-            // Arrange 
-            Menu menu = new Menu();
-            menu.ID = int.MaxValue;
-            Recipe recipe = new Recipe();
-            Ingredient ingredient = new Ingredient();
-            recipe.Ingredients.Add(ingredient);
-            menu.Recipes.Add(recipe);
-            Ingredient ingredient1 = new Ingredient();
-            recipe.Ingredients.Add(ingredient1);
-            IRepository<Menu, MenuVM> repoMenu = new JSONRepository<Menu, MenuVM>(); 
-            repoMenu.AddT(menu);
-
-            //Act
-            // repo.RemoveT(ingredient1); never the correct approach. Keeping it here because this is important.
-            menu.Recipes.First().Ingredients.Remove(ingredient1);
-            repoMenu.AddT(menu);
-            MenuVM retrievedMenuVM = repoMenu.GetTVMById(menu.ID);
-            // Assert
-            Assert.AreEqual(1, retrievedMenuVM.Recipes.First().Ingredients.Count());
-
-            // Clean Up
+            Assert.Fail();
         }
 
+        ///// <summary>
+        ///// Menu/Recipe/IngredientVM: IngredientVM deleted
+        ///// </summary>
+        //[TestMethod]
+        //public void ChangeMenuRecipeWhenIngredientVMDeleted()
+        //{
+        //    // Arrange 
+        //    Menu menu = new Menu();
+        //    menu.ID = int.MaxValue;
+        //    Recipe recipe = new Recipe();
+        //    IngredientVM ingredientVM = new IngredientVM();
+        //    recipe.IngredientVMs.Add(ingredientVM);
+        //    menu.Recipes.Add(recipe);
+        //    IngredientVM ingredientVM1 = new IngredientVM();
+        //    recipe.IngredientVMs.Add(ingredientVM1);
+        //    IRepository<MenuVM> repoMenu = new JSONRepository< MenuVM>(); 
+        //    repoMenu.Add(menu);
+
+        //    //Act
+        //    // repo.RemoveT(ingredientVM1); never the correct approach. Keeping it here because this is important.
+        //    menu.Recipes.First().IngredientVMs.Remove(ingredientVM1);
+        //    repoMenu.Add(menu);
+        //    MenuVM retrievedMenuVM = repoMenu.GetById(menu.ID);
+        //    // Assert
+        //    Assert.AreEqual(1, retrievedMenuVM.Recipes.First().IngredientVMs.Count());
+
+        //    // Clean Up
+        //}
+
         /// <summary>
-        /// Menu/Recipe/Ingredient: Ingredient removed
+        /// Menu/Recipe/IngredientVM: IngredientVM removed
         /// </summary>
         [TestMethod]
-        public void ChangeMenuRecipeWhenIngredientRemoved()
+        public void ChangeMenuRecipeWhenIngredientVMRemoved()
         {
             Assert.Fail();
         }
 
         /// <summary>
-        /// Plan/Menu/Ingredient: ingredient added
+        /// Plan/Menu/IngredientVM: ingredientVM added
         /// </summary>
         [TestMethod]
-        public void ChangePlanMenuWhenIngredientIsAdded()
+        public void ChangePlanMenuWhenIngredientVMIsAdded()
         {
             Assert.Fail();
         }
 
         /// <summary>
-        /// Plan/Menu/Ingredient: ingredient changed
+        /// Plan/Menu/IngredientVM: ingredientVM changed
         /// </summary>
         [TestMethod]
-        public void ChangePlanMenuWhenIngredientIsModified()
+        public void ChangePlanMenuWhenIngredientVMIsModified()
         {
             Assert.Fail();
         }
 
         /// <summary>
-        /// Plan/Menu/Ingredient: ingredient deleted
+        /// Plan/Menu/IngredientVM: ingredientVM deleted
         /// </summary>
         [TestMethod]
-        public void ChangePlanMenuWhenIngredientIsDeleted()
+        public void ChangePlanMenuWhenIngredientVMIsDeleted()
         {
             Assert.Fail();
         }
 
         /// <summary>
-        /// Plan/Menu/Ingredient: ingredient removed
+        /// Plan/Menu/IngredientVM: ingredientVM removed
         /// </summary>
         [TestMethod]
-        public void ChangePlanMenuWhenIngredientIsRemoved()
+        public void ChangePlanMenuWhenIngredientVMIsRemoved()
         {
             Assert.Fail();
         }
         /// <summary>
-        ///  menu/recipe/ingredient: ingredient  added
+        ///  menu/recipe/ingredientVM: ingredientVM  added
         /// </summary>
         [TestMethod]
-        public void ChangeMenuRecipeWhenIngredientInRecipeIsAdded()
-        {
-            Assert.Fail();
-        }
-
-        /// <summary>
-        ///  menu/recipe/ingredient: ingredient  changed
-        /// </summary>
-        [TestMethod]
-        public void ChangeMenuRecipeWhenIngredientIsChanged()
+        public void ChangeMenuRecipeWhenIngredientVMInRecipeIsAdded()
         {
             Assert.Fail();
         }
 
         /// <summary>
-        /// menu/recipe/ingredient: ingredient deleted  
+        ///  menu/recipe/ingredientVM: ingredientVM  changed
         /// </summary>
         [TestMethod]
-        public void ChangeMenuRecipeWhenIngredientIsDeleted()
+        public void ChangeMenuRecipeWhenIngredientVMIsChanged()
         {
             Assert.Fail();
         }
 
         /// <summary>
-        /// menu/recipe/ingredient: ingredient  removed
+        /// menu/recipe/ingredientVM: ingredientVM deleted  
         /// </summary>
         [TestMethod]
-        public void ChangeMenuRecipeWhenIngredientIsRemoved()
-        {
-            Assert.Fail();
-        }
-        /// <summary>
-        ///  shoppinglist/menu/recipe/ingredient: ingredient added
-        /// </summary>
-        [TestMethod]
-        public void ChangeShoppingListMenuRecipeWhenIngredientIsAdded()
+        public void ChangeMenuRecipeWhenIngredientVMIsDeleted()
         {
             Assert.Fail();
         }
 
         /// <summary>
-        ///  shoppinglist/menu/recipe/ingredient: ingredient changed
+        /// menu/recipe/ingredientVM: ingredientVM  removed
         /// </summary>
         [TestMethod]
-        public void ChangeShoppingListMenuRecipeWhenIngredientIsChanged()
-        {
-            string path = @"C:\Dev\TGE\LambAndLentil\LambAndLentil.Domain\App_Data\JSON\ShoppingList\";
-            try
-            {
-
-                // Arrange
-                JSONRepository<Ingredient, IngredientVM> repo = new JSONRepository<Ingredient, IngredientVM>();
-                ShoppingList shoppingList = new ShoppingList();
-                shoppingList.ID = int.MaxValue;
-                Menu menu = new Menu();
-                Recipe recipe = new Recipe();
-                Ingredient ingredient = new Ingredient();
-                recipe.Ingredients.Add(ingredient);
-                menu.Recipes.Add(recipe);
-                shoppingList.Menus.Add(menu);
-                ingredient.Name = "Test ChangeShoppingMenuRecipeWhenIngredientIsChanged";
-
-
-                using (var fs = File.CreateText(string.Concat(path, int.MaxValue, ".txt")))
-                {
-                    JsonSerializer serializer = new JsonSerializer();
-                    serializer.Serialize(fs, shoppingList);
-                }
-
-                // Act
-                ingredient.Name = "Test ChangeShoppingMenuRecipeWhenIngredientIsChanged  Has Been Changed";
-                repo.SaveT(ingredient);
-                //  Get the ingredient child of shoppingList 
-                ShoppingList returnedShoppingList = JsonConvert.DeserializeObject<ShoppingList>(File.ReadAllText(String.Concat(path, int.MaxValue, ".txt")));
-                IEnumerable<Menu> returnedMenus = returnedShoppingList.Menus;
-                IEnumerable<Recipe> returnedRecipes = returnedMenus.First().Recipes;
-                Ingredient returnedIngredient = returnedRecipes.First().Ingredients.First();
-
-                //Assert
-                Assert.AreEqual(ingredient.Name, returnedIngredient.Name);
-                // will need to go into the repo.Save method and determine if ingredient is a child anywhere,then update it there 
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-            finally
-            {
-                // Cleanup
-                File.Delete(String.Concat(path, int.MaxValue, ".txt"));
-            }
-
-
-        }
-
-        /// <summary>
-        ///  shoppinglist/menu/recipe/ingredient: ingredient deleted
-        /// </summary>
-        [TestMethod]
-        public void ChangeShoppingListMenuRecipeWhenIngredientIsDeleted()
-        {
-            Assert.Fail();
-        }
-
-        /// <summary>
-        ///  shoppinglist/menu/recipe/ingredient: ingredient removed
-        /// </summary>
-        [TestMethod]
-        public void ChangeShoppingListMenuRecipeWhenIngredientIsRemoved()
-        {
-            Assert.Fail();
-        }
-        /// <summary>
-        /// plan/menu/recipe/ingredient: ingredient added
-        /// </summary>
-        [TestMethod]
-        public void ChangePlanMenuRecipeWhenIngredientIsAdded()
-        {
-            Assert.Fail();
-        }
-
-        /// <summary>
-        /// plan/menu/recipe/ingredient: ingredient changed
-        /// </summary>
-        [TestMethod]
-        public void ChangePlanMenuRecipeWhenIngredientIsChanged()
-        {
-            Assert.Fail();
-        }
-
-        /// <summary>
-        /// plan/menu/recipe/ingredient: ingredient deleted or removed
-        /// </summary>
-        [TestMethod]
-        public void ChangePlanMenuRecipeWhenIngredientIsDeleted()
-        {
-            Assert.Fail();
-        }
-
-        /// <summary>
-        /// ShoppingList/Plan/menu/recipe/ingredient: ingredient added
-        /// </summary>
-        [TestMethod]
-        public void ChangeShoppingListPlanMenuRecipeWhenIngredientIsAdded()
-        {
-            Assert.Fail();
-        }
-
-        /// <summary>
-        /// ShoppingList/Plan/menu/recipe/ingredient: ingredient changed
-        /// </summary>
-        [TestMethod]
-        public void ChangeShoppingListPlanMenuRecipeWhenIngredientIsChanged()
+        public void ChangeMenuRecipeWhenIngredientVMIsRemoved()
         {
             Assert.Fail();
         }
 
 
         /// <summary>
-        /// ShoppingList/Plan/menu/recipe/ingredient: ingredient deleted
+        ///  shoppinglist/menu/recipe/ingredientVM: ingredientVM added
         /// </summary>
         [TestMethod]
-        public void ChangeShoppingListPlanMenuRecipeWhenIngredientIsDeleted()
+        public void ChangeShoppingListMenuRecipeWhenIngredientVMIsAdded()
         {
             Assert.Fail();
         }
 
         /// <summary>
-        /// ShoppingList/recipe/ingredient: ingredient added
+        ///  shoppinglist/menu/recipe/ingredientVM: ingredientVM changed
+        /// </summary>
+       // [TestMethod]
+        //public void ChangeShoppingListMenuRecipeWhenIngredientVMIsChanged()
+        //{
+        //    string path = @"C:\Dev\TGE\LambAndLentil\LambAndLentil.Domain\App_Data\JSON\ShoppingList\";
+        //    try
+        //    {
+
+        //        // Arrange
+                
+        //        ShoppingList shoppingList = new ShoppingList();
+        //        shoppingList.ID = int.MaxValue;
+        //        Menu menu = new Menu();
+        //        Recipe recipe = new Recipe();
+        //        Ingredient  ingredient  = new Ingredient();
+        //        recipe.Ingredients.Add(ingredient);
+        //        menu.Recipes.Add(recipe);
+        //        shoppingList.Menus.Add(menu);
+        //        ingredient.Name = "Test ChangeShoppingMenuRecipeWhenIngredientVMIsChanged";
+
+
+        //        using (var fs = File.CreateText(string.Concat(path, int.MaxValue, ".txt")))
+        //        {
+        //            JsonSerializer serializer = new JsonSerializer();
+        //            serializer.Serialize(fs, shoppingList);
+        //        }
+
+        //        // Act
+        //        ingredient.Name = "Test ChangeShoppingMenuRecipeWhenIngredientVMIsChanged  Has Been Changed";
+        //        repo.Save(ingredient);
+        //        //  Get the ingredientVM child of shoppingList 
+        //        ShoppingList returnedShoppingList = JsonConvert.DeserializeObject<ShoppingList>(File.ReadAllText(String.Concat(path, int.MaxValue, ".txt")));
+        //        IEnumerable<Menu> returnedMenus = returnedShoppingList.Menus;
+        //        IEnumerable<Recipe> returnedRecipes = returnedMenus.First().Recipes;
+        //        IngredientVM returnedIngredientVM = returnedRecipes.First().IngredientVMs.First();
+
+        //        //Assert
+        //        Assert.AreEqual(ingredientVM.Name, returnedIngredientVM.Name);
+        //        // will need to go into the repo.Save method and determine if ingredientVM is a child anywhere,then update it there 
+        //    }
+        //    catch (Exception)
+        //    {
+        //        throw;
+        //    }
+        //    finally
+        //    {
+        //        // Cleanup
+        //        File.Delete(String.Concat(path, int.MaxValue, ".txt"));
+        //    }
+
+
+        // }
+
+        /// <summary>
+        ///  shoppinglist/menu/recipe/ingredientVM: ingredientVM deleted
         /// </summary>
         [TestMethod]
-        public void ChangeShoppingListRecipeWhenIngredientIsAdded()
+        public void ChangeShoppingListMenuRecipeWhenIngredientVMIsDeleted()
         {
             Assert.Fail();
         }
 
         /// <summary>
-        /// ShoppingList/recipe/ingredient: ingredient modifed
+        ///  shoppinglist/menu/recipe/ingredientVM: ingredientVM removed
         /// </summary>
         [TestMethod]
-        public void ChangeShoppingListRecipeWhenIngredientIsChanged()
+        public void ChangeShoppingListMenuRecipeWhenIngredientVMIsRemoved()
+        {
+            Assert.Fail();
+        }
+        /// <summary>
+        /// plan/menu/recipe/ingredientVM: ingredientVM added
+        /// </summary>
+        [TestMethod]
+        public void ChangePlanMenuRecipeWhenIngredientVMIsAdded()
         {
             Assert.Fail();
         }
 
         /// <summary>
-        /// ShoppingList/recipe/ingredient: ingredient deleted or removed
+        /// plan/menu/recipe/ingredientVM: ingredientVM changed
         /// </summary>
         [TestMethod]
-        public void ChangeShoppingListRecipeWhenIngredientIsDeleted()
+        public void ChangePlanMenuRecipeWhenIngredientVMIsChanged()
         {
             Assert.Fail();
         }
 
         /// <summary>
-        /// Plan/recipe/ingredient: ingredient added
+        /// plan/menu/recipe/ingredientVM: ingredientVM deleted or removed
         /// </summary>
         [TestMethod]
-        public void ChangePlanRecipeWhenIngredientIsAdded()
+        public void ChangePlanMenuRecipeWhenIngredientVMIsDeleted()
         {
             Assert.Fail();
         }
 
         /// <summary>
-        /// Plan/recipe/ingredient: ingredient changed
+        /// ShoppingList/Plan/menu/recipe/ingredientVM: ingredientVM added
         /// </summary>
         [TestMethod]
-        public void ChangePlanRecipeWhenIngredientIsChanged()
+        public void ChangeShoppingListPlanMenuRecipeWhenIngredientVMIsAdded()
         {
             Assert.Fail();
         }
 
         /// <summary>
-        /// Plan/recipe/ingredient: ingredient deleted
+        /// ShoppingList/Plan/menu/recipe/ingredientVM: ingredientVM changed
         /// </summary>
         [TestMethod]
-        public void ChangePlanRecipeWhenIngredientIsDeleted()
+        public void ChangeShoppingListPlanMenuRecipeWhenIngredientVMIsChanged()
         {
             Assert.Fail();
         }
 
 
         /// <summary>
-        /// ShoppingList/Plan/recipe/ingredient: ingredient added
+        /// ShoppingList/Plan/menu/recipe/ingredientVM: ingredientVM deleted
         /// </summary>
         [TestMethod]
-        public void ChangeShoppingListPlanRecipeWhenIngredientIsAdded()
+        public void ChangeShoppingListPlanMenuRecipeWhenIngredientVMIsDeleted()
         {
             Assert.Fail();
         }
 
         /// <summary>
-        /// ShoppingList/Plan/recipe/ingredient: ingredient changed
+        /// ShoppingList/recipe/ingredientVM: ingredientVM added
         /// </summary>
         [TestMethod]
-        public void ChangeShoppingListPlanRecipeWhenIngredientIsChanged()
+        public void ChangeShoppingListRecipeWhenIngredientVMIsAdded()
         {
             Assert.Fail();
         }
 
         /// <summary>
-        /// ShoppingList/Plan/recipe/ingredient: ingredient deleted
+        /// ShoppingList/recipe/ingredientVM: ingredientVM modifed
         /// </summary>
         [TestMethod]
-        public void ChangeShoppingListPlanRecipeWhenIngredientIsDeleted()
+        public void ChangeShoppingListRecipeWhenIngredientVMIsChanged()
         {
             Assert.Fail();
         }
 
         /// <summary>
-        /// ShoppingList/Menu/Ingredient: Ingredient added
+        /// ShoppingList/recipe/ingredientVM: ingredientVM deleted or removed
         /// </summary>
         [TestMethod]
-        public void ChangeShoppingListMenuWhenIngredientIsAdded()
+        public void ChangeShoppingListRecipeWhenIngredientVMIsDeleted()
         {
             Assert.Fail();
         }
 
         /// <summary>
-        /// ShoppingList/Menu/Ingredient: Ingredient changed
+        /// Plan/recipe/ingredientVM: ingredientVM added
         /// </summary>
         [TestMethod]
-        public void ChangeShoppingListMenuWhenIngredientIsChanged()
+        public void ChangePlanRecipeWhenIngredientVMIsAdded()
         {
             Assert.Fail();
         }
 
         /// <summary>
-        /// ShoppingList/Menu/Ingredient: Ingredient deleted
+        /// Plan/recipe/ingredientVM: ingredientVM changed
         /// </summary>
         [TestMethod]
-        public void ChangeShoppingListMenuWhenIngredientIsDeleted()
+        public void ChangePlanRecipeWhenIngredientVMIsChanged()
         {
             Assert.Fail();
         }
 
         /// <summary>
-        /// ShoppingList/plan/menu/ingredient: ingredient added
+        /// Plan/recipe/ingredientVM: ingredientVM deleted
         /// </summary>
         [TestMethod]
-        public void ChangeShoppingListPlanMenuWhenIngredientIsAdded()
+        public void ChangePlanRecipeWhenIngredientVMIsDeleted()
+        {
+            Assert.Fail();
+        }
+
+
+        /// <summary>
+        /// ShoppingList/Plan/recipe/ingredientVM: ingredientVM added
+        /// </summary>
+        [TestMethod]
+        public void ChangeShoppingListPlanRecipeWhenIngredientVMIsAdded()
         {
             Assert.Fail();
         }
 
         /// <summary>
-        /// ShoppingList/plan/menu/ingredient: ingredient modified
+        /// ShoppingList/Plan/recipe/ingredientVM: ingredientVM changed
         /// </summary>
         [TestMethod]
-        public void ChangeShoppingListPlanMenuWhenIngredientIsModified()
+        public void ChangeShoppingListPlanRecipeWhenIngredientVMIsChanged()
         {
             Assert.Fail();
         }
 
         /// <summary>
-        /// ShoppingList/plan/menu/ingredient: ingredient deleted  
+        /// ShoppingList/Plan/recipe/ingredientVM: ingredientVM deleted
         /// </summary>
         [TestMethod]
-        public void ChangeShoppingListPlanMenuWhenIngredientIsDeleted()
+        public void ChangeShoppingListPlanRecipeWhenIngredientVMIsDeleted()
         {
             Assert.Fail();
         }
 
         /// <summary>
-        /// ShoppingList/plan/menu/ingredient: ingredient  detached
+        /// ShoppingList/Menu/IngredientVM: IngredientVM added
         /// </summary>
         [TestMethod]
-        public void ChangeShoppingListPlanMenuWhenIngredientIsDetached()
+        public void ChangeShoppingListMenuWhenIngredientVMIsAdded()
         {
             Assert.Fail();
         }
 
         /// <summary>
-        ///  ShoppingList/Plan/Ingredient: ingredient added
+        /// ShoppingList/Menu/IngredientVM: IngredientVM changed
         /// </summary>
         [TestMethod]
-        public void ChangeShoppingListPlanWhenIngredientIsAdded()
+        public void ChangeShoppingListMenuWhenIngredientVMIsChanged()
         {
             Assert.Fail();
         }
 
         /// <summary>
-        ///  ShoppingList/Plan/Ingredient: ingredient changed
+        /// ShoppingList/Menu/IngredientVM: IngredientVM deleted
         /// </summary>
         [TestMethod]
-        public void ChangeShoppingListPlanWhenIngredientIsChanged()
+        public void ChangeShoppingListMenuWhenIngredientVMIsDeleted()
         {
             Assert.Fail();
         }
 
         /// <summary>
-        ///  ShoppingList/Plan/Ingredient: ingredient Deleted
+        /// ShoppingList/plan/menu/ingredientVM: ingredientVM added
         /// </summary>
         [TestMethod]
-        public void ChangeShoppingListPlanWhenIngredientIsDeleted()
+        public void ChangeShoppingListPlanMenuWhenIngredientVMIsAdded()
         {
             Assert.Fail();
         }
 
         /// <summary>
-        ///  ShoppingList/Plan/Ingredient: ingredient Removed
+        /// ShoppingList/plan/menu/ingredientVM: ingredientVM modified
         /// </summary>
         [TestMethod]
-        public void ChangeShoppingListPlanWhenIngredientIsRemoved()
+        public void ChangeShoppingListPlanMenuWhenIngredientVMIsModified()
         {
             Assert.Fail();
         }
 
         /// <summary>
-        /// Recipe/multiple ingredients: ingredient added
+        /// ShoppingList/plan/menu/ingredientVM: ingredientVM deleted  
         /// </summary>
         [TestMethod]
-        public void NotChangeRecipeIngredientWhenSecondIngredientIsAdded()
+        public void ChangeShoppingListPlanMenuWhenIngredientVMIsDeleted()
         {
             Assert.Fail();
         }
 
         /// <summary>
-        /// Recipe/multiple ingredients: ingredient changed
+        /// ShoppingList/plan/menu/ingredientVM: ingredientVM  detached
         /// </summary>
         [TestMethod]
-        public void NotChangeRecipeIngredientWhenSecondIngredientIsChanged()
+        public void ChangeShoppingListPlanMenuWhenIngredientVMIsDetached()
         {
             Assert.Fail();
         }
 
         /// <summary>
-        /// Recipe/multiple ingredients: ingredient deleted
+        ///  ShoppingList/Plan/IngredientVM: ingredientVM added
         /// </summary>
         [TestMethod]
-        public void NotChangeRecipeIngredientWhenSecondIngredienteIsDeleted()
+        public void ChangeShoppingListPlanWhenIngredientVMIsAdded()
+        {
+            Assert.Fail();
+        }
+
+        /// <summary>
+        ///  ShoppingList/Plan/IngredientVM: ingredientVM changed
+        /// </summary>
+        [TestMethod]
+        public void ChangeShoppingListPlanWhenIngredientVMIsChanged()
+        {
+            Assert.Fail();
+        }
+
+        /// <summary>
+        ///  ShoppingList/Plan/IngredientVM: ingredientVM Deleted
+        /// </summary>
+        [TestMethod]
+        public void ChangeShoppingListPlanWhenIngredientVMIsDeleted()
+        {
+            Assert.Fail();
+        }
+
+        /// <summary>
+        ///  ShoppingList/Plan/IngredientVM: ingredientVM Removed
+        /// </summary>
+        [TestMethod]
+        public void ChangeShoppingListPlanWhenIngredientVMIsRemoved()
+        {
+            Assert.Fail();
+        }
+
+        /// <summary>
+        /// Recipe/multiple ingredientVMs: ingredientVM added
+        /// </summary>
+        [TestMethod]
+        public void NotChangeRecipeIngredientVMWhenSecondIngredientVMIsAdded()
+        {
+            Assert.Fail();
+        }
+
+        /// <summary>
+        /// Recipe/multiple ingredientVMs: ingredientVM changed
+        /// </summary>
+        [TestMethod]
+        public void NotChangeRecipeIngredientVMWhenSecondIngredientVMIsChanged()
+        {
+            Assert.Fail();
+        }
+
+        /// <summary>
+        /// Recipe/multiple ingredientVMs: ingredientVM deleted
+        /// </summary>
+        [TestMethod]
+        public void NotChangeRecipeIngredientVMWhenSecondIngredientVMeIsDeleted()
         {
             Assert.Fail();
         }
 
         //  TODO:          
 
-        // also some adds: shopping list changes because an ingredient was added to a recipe, etc.
-        // there should be two separate methods for when an ingredient is deleted, and when it is detached. Deleted means it is no longer in the database. Detached means it was deliberately removed in a child. The word 'removed' should be changed to 'detached'.   I am not sure that when I start coding that there will be any difference. 
+        // also some adds: shopping list changes because an ingredientVM was added to a recipe, etc.
+        // there should be two separate methods for when an ingredientVM is deleted, and when it is detached. Deleted means it is no longer in the database. Detached means it was deliberately removed in a child. The word 'removed' should be changed to 'detached'.   I am not sure that when I start coding that there will be any difference. 
 
         [TestMethod]
-        public void IngredientUpdatedOnUSDASiteShouldBeFlaggedForUserOptionToUpdateParent()
+        public void IngredientVMUpdatedOnUSDASiteShouldBeFlaggedForUserOptionToUpdateParent()
         {
-            // if an ingredient is updated on the USDA site, it should be flagged with a user option to update the recipe, menu, etc. to the new information. 
+            // if an ingredientVM is updated on the USDA site, it should be flagged with a user option to update the recipe, menu, etc. to the new information. 
             Assert.Fail();
         }
 
