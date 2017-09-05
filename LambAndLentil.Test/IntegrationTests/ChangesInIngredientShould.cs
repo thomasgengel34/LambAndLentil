@@ -17,11 +17,11 @@ namespace LambAndLentil.Test.IntegrationTests
     [TestClass]
     public class ChangesInIngredientVMShould
     {
-        static IRepository<IngredientVM> repo;
+        static IRepository<IngredientVM> Repo;
 
         public ChangesInIngredientVMShould()
         {
-            repo = new TestRepository<IngredientVM>();
+            Repo = new TestRepository<IngredientVM>();
         }
 
 
@@ -206,7 +206,7 @@ namespace LambAndLentil.Test.IntegrationTests
         //    repoMenu.Add(menu);
 
         //    //Act
-        //    // repo.RemoveT(ingredientVM1); never the correct approach. Keeping it here because this is important.
+        //    // Repo.RemoveT(ingredientVM1); never the correct approach. Keeping it here because this is important.
         //    menu.Recipes.First().IngredientVMs.Remove(ingredientVM1);
         //    repoMenu.Add(menu);
         //    MenuVM retrievedMenuVM = repoMenu.GetById(menu.ID);
@@ -337,7 +337,7 @@ namespace LambAndLentil.Test.IntegrationTests
 
         //        // Act
         //        ingredient.Name = "Test ChangeShoppingMenuRecipeWhenIngredientVMIsChanged  Has Been Changed";
-        //        repo.Save(ingredient);
+        //        Repo.Save(ingredient);
         //        //  Get the ingredientVM child of shoppingList 
         //        ShoppingList returnedShoppingList = JsonConvert.DeserializeObject<ShoppingList>(File.ReadAllText(String.Concat(path, int.MaxValue, ".txt")));
         //        IEnumerable<Menu> returnedMenus = returnedShoppingList.Menus;
@@ -346,7 +346,7 @@ namespace LambAndLentil.Test.IntegrationTests
 
         //        //Assert
         //        Assert.AreEqual(ingredientVM.Name, returnedIngredientVM.Name);
-        //        // will need to go into the repo.Save method and determine if ingredientVM is a child anywhere,then update it there 
+        //        // will need to go into the Repo.Save method and determine if ingredientVM is a child anywhere,then update it there 
         //    }
         //    catch (Exception)
         //    {
@@ -653,6 +653,17 @@ namespace LambAndLentil.Test.IntegrationTests
             Assert.Fail();
         }
 
+        [ClassCleanup()]
+        public static void ClassCleanup()
+        {
+            string path = @"C:\Dev\TGE\LambAndLentil\LambAndLentil.Test\App_Data\JSON\Ingredient\";
 
+            IEnumerable<string> files = Directory.EnumerateFiles(path);
+
+            foreach (var file in files)
+            {
+                File.Delete(file);
+            }
+        }
     }
 }

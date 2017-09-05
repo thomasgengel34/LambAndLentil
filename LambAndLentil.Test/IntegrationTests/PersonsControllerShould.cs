@@ -2,6 +2,7 @@
 using LambAndLentil.Domain.Abstract;
 using LambAndLentil.Domain.Concrete;
 using LambAndLentil.Domain.Entities;
+using LambAndLentil.Tests.Controllers;
 using LambAndLentil.UI;
 using LambAndLentil.UI.Controllers;
 using LambAndLentil.UI.Infrastructure.Alerts;
@@ -20,14 +21,14 @@ namespace IntegrationTests
     [TestCategory("PersonController")]
     public class PersonsControllerShould
     {
-        static IRepository<PersonVM> repo;
+        static IRepository<PersonVM> Repo;
         static PersonsController controller;
         static PersonVM personVM;
 
         public PersonsControllerShould()
         {
-            repo = new TestRepository<PersonVM>();
-            controller = new PersonsController(repo);
+            Repo = new TestRepository<PersonVM>();
+            controller = new PersonsController(Repo);
             personVM = new PersonVM();
             personVM.ID = 1000;
             personVM.Description = "test PersonControllerShould";
@@ -83,11 +84,11 @@ namespace IntegrationTests
         public void SaveEditedPersonWithNameChange()
         {
             // Arrange 
-            PersonsController controller1 = new PersonsController(repo);
-            PersonsController controller2 = new PersonsController(repo);
-            PersonsController controller3 = new PersonsController(repo);
-            PersonsController controller4 = new PersonsController(repo);
-            PersonsController controller5 = new PersonsController(repo);
+            PersonsController controller1 = new PersonsController(Repo);
+            PersonsController controller2 = new PersonsController(Repo);
+            PersonsController controller3 = new PersonsController(Repo);
+            PersonsController controller4 = new PersonsController(Repo);
+            PersonsController controller5 = new PersonsController(Repo);
             PersonVM vm = new PersonVM();
             vm.FirstName = "0000";
             vm.LastName = "test";
@@ -126,11 +127,11 @@ namespace IntegrationTests
         public void SaveEditedPersonWithDescriptionChange()
         {
             // Arrange 
-            PersonsController controller1 = new PersonsController(repo);
-            PersonsController controller2 = new PersonsController(repo);
-            PersonsController controller3 = new PersonsController(repo);
-            PersonsController controller4 = new PersonsController(repo);
-            PersonsController controller5 = new PersonsController(repo);
+            PersonsController controller1 = new PersonsController(Repo);
+            PersonsController controller2 = new PersonsController(Repo);
+            PersonsController controller3 = new PersonsController(Repo);
+            PersonsController controller4 = new PersonsController(Repo);
+            PersonsController controller5 = new PersonsController(Repo);
             PersonVM vm = new PersonVM();
             vm.Description = "SaveEditedPersonWithDescriptionChange Pre-test";
             vm.ID = 336;
@@ -170,11 +171,11 @@ namespace IntegrationTests
         {
             // Arrange
             personVM.Name = "Test.ActuallyDeleteAPersonfromDB";
-            repo.Save(personVM);
+            Repo.Save(personVM);
 
             //Act
             controller.DeleteConfirmed(personVM.ID);
-            var deletedItem = (from m in repo.GetAll()
+            var deletedItem = (from m in Repo.GetAll()
                                where m.Description == personVM.Description
                                select m).AsQueryable();
 
@@ -191,9 +192,9 @@ namespace IntegrationTests
             PersonVM personVM = new PersonVM(CreationDate);
             personVM.Description = "001 Test ";
             personVM.ID = 37;
-            PersonsController controllerEdit = new PersonsController(repo);
-            PersonsController controllerView = new PersonsController(repo);
-            PersonsController controllerDelete = new PersonsController(repo);
+            PersonsController controllerEdit = new PersonsController(Repo);
+            PersonsController controllerView = new PersonsController(Repo);
+            PersonsController controllerDelete = new PersonsController(Repo);
 
             // Act
             controllerEdit.PostEdit(personVM);
@@ -218,11 +219,11 @@ namespace IntegrationTests
         public void UpdateTheModificationDateBetweenPostedEdits()
         {
             // Arrange 
-            PersonsController controllerPost = new PersonsController(repo);
-            PersonsController controllerPost1 = new PersonsController(repo);
-            PersonsController controllerView = new PersonsController(repo);
-            PersonsController controllerView1 = new PersonsController(repo);
-            PersonsController controllerDelete = new PersonsController(repo);
+            PersonsController controllerPost = new PersonsController(Repo);
+            PersonsController controllerPost1 = new PersonsController(Repo);
+            PersonsController controllerView = new PersonsController(Repo);
+            PersonsController controllerView1 = new PersonsController(Repo);
+            PersonsController controllerDelete = new PersonsController(Repo);
 
             PersonVM vm = new PersonVM();
             vm.Name = "002 Test Mod";
@@ -262,18 +263,24 @@ namespace IntegrationTests
             Assert.AreNotEqual(mod, shouldBeLaterDate);
         }
 
-        internal PersonVM GetPerson(IRepository<PersonVM> repo, string description)
+        internal PersonVM GetPerson(IRepository<PersonVM> Repo,  string description)
         {
-            PersonsController controller = new PersonsController(repo);
+            PersonsController controller = new PersonsController(Repo);
             PersonVM vm = new PersonVM();
             vm.Description = description;
             vm.ID = int.MaxValue;
             controller.PostEdit(vm);
 
-            PersonVM personVM = ((from m in repo.GetAll()
+            PersonVM personVM = ((from m in Repo.GetAll()
                                   where m.Description == description
                                   select m).AsQueryable()).FirstOrDefault();
             return personVM;
+        }
+
+        [ClassCleanup()]
+        public static void ClassCleanup()
+        {
+            PersonsControllerTest.ClassCleanup();
         }
     }
 }

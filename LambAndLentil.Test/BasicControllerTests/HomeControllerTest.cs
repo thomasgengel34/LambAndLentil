@@ -17,7 +17,7 @@ namespace LambAndLentil.Tests.Controllers
     {
 
         [TestMethod]
-        public void HomeCtr_InheritsFromBaseController()
+        public void InheritsFromBaseController()
         {
             // Arrange
             HomeController testHomeController = new HomeController();
@@ -31,7 +31,7 @@ namespace LambAndLentil.Tests.Controllers
         }
 
         [TestMethod]
-        public void HomeCtr_IsPublic()
+        public void  IsPublic()
         {
             // Arrange
             HomeController testHomeController = new HomeController();
@@ -45,7 +45,7 @@ namespace LambAndLentil.Tests.Controllers
         }
 
         [TestMethod]
-        public void HomeCtr_Index()
+        public void  Index()
         {
             // Arrange
             HomeController controller = new HomeController();
@@ -58,7 +58,7 @@ namespace LambAndLentil.Tests.Controllers
         }
 
         [TestMethod]
-        public void HomeCtr_About()
+        public void  About()
         {
             // Arrange
             HomeController controller = new HomeController();

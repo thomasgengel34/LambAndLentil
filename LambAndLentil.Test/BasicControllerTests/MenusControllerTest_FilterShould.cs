@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
+using System.Collections.Generic;
 
 namespace LambAndLentil.Test.Controllers
 {
@@ -188,22 +189,13 @@ namespace LambAndLentil.Test.Controllers
         public static void ClassCleanup()
         {
             string path = @"C:\Dev\TGE\LambAndLentil\LambAndLentil.Test\App_Data\JSON\Menu\";
-            int count = int.MaxValue;
-            try
+
+            IEnumerable<string> files = Directory.EnumerateFiles(path);
+
+            foreach (var file in files)
             {
-
-                for (int i = count; i > count - 6; i--)
-                {
-                    File.Delete(string.Concat(path, i, ".txt"));
-                }
-
+                File.Delete(file);
             }
-            catch (Exception)
-            {
-
-                throw;
-            }
-
         }
     }
 } 

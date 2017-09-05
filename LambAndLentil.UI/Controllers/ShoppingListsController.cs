@@ -13,7 +13,7 @@ namespace LambAndLentil.UI.Controllers
     {
         public ShoppingListsController(IRepository<ShoppingListVM> repository) : base(repository)
         {
-            repo = repository;
+            Repo = repository;
         }
     }
 
@@ -22,7 +22,7 @@ namespace LambAndLentil.UI.Controllers
     {
         public ShoppingListsGenericController(IRepository<ShoppingListVM> repository) : base(repository)
         {
-            repo = repository;
+            Repo = repository;
         }
 
        
@@ -30,14 +30,14 @@ namespace LambAndLentil.UI.Controllers
         // GET: ShoppingList
         public ViewResult Index(int page = 1)
         {
-            ViewResult view = BaseIndex(repo, page);
+            ViewResult view = BaseIndex(Repo,  page);
             return View(view.ViewName, view.Model);
         }
 
         // GET: ShoppingList/Details/5
         public ActionResult Details(int id = 1, UIViewType actionMethod = UIViewType.Details)
         {
-            return BaseDetails(repo, UIControllerType.ShoppingLists, id, actionMethod);
+            return BaseDetails(Repo,  UIControllerType.ShoppingLists, id, actionMethod);
         }
 
         // GET: ShoppingList/Create 
@@ -49,9 +49,9 @@ namespace LambAndLentil.UI.Controllers
 
 
         // GET: ShoppingList/Edit/5
-        public ViewResult Edit(int id = 1)
+        public ActionResult Edit(int id = 1)
         {
-            return BaseEdit(repo, UIControllerType.ShoppingLists, id);
+            return BaseDetails(Repo,  UIControllerType.ShoppingLists, id, UIViewType.Edit);  
         }
 
 
@@ -63,14 +63,14 @@ namespace LambAndLentil.UI.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult PostEdit([Bind(Include = "ID,Name,Description, Author, CreationDate, ModifiedDate,  AddedByUser, ModifiedByUser")] ShoppingListVM shoppingListVM)
         {
-            return BasePostEdit(repo, shoppingListVM);
+            return BasePostEdit(Repo,  shoppingListVM);
         }
 
         // GET: ShoppingList/Delete/5
         [ActionName("Delete")]
         public ActionResult Delete(int id = 1, UIViewType actionMethod = UIViewType.Delete)
         {
-            return BaseDelete(repo, UIControllerType.ShoppingLists, id);
+            return BaseDelete(Repo,  UIControllerType.ShoppingLists, id);
         }
 
         // POST: ShoppingList/Delete/5
@@ -78,7 +78,7 @@ namespace LambAndLentil.UI.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            return BaseDeleteConfirmed(repo, UIControllerType.ShoppingLists, id);
+            return BaseDeleteConfirmed(Repo,  UIControllerType.ShoppingLists, id);
         }
 
         public ActionResult AttachIngredient(int? shoppingListID, int? ingredientID)

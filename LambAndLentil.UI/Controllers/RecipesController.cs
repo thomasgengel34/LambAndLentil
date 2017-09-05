@@ -13,7 +13,7 @@ namespace LambAndLentil.UI.Controllers
     {
         public RecipesController(IRepository<RecipeVM> repository) : base(repository)
         {
-            repo = repository;
+            Repo = repository;
         } 
     }
 
@@ -22,13 +22,13 @@ namespace LambAndLentil.UI.Controllers
     {
         public RecipesGenericController(IRepository<RecipeVM> repository) : base(repository)
         {
-            repo = repository;
+            Repo = repository;
         }
 
         // GET: Recipes
         public ViewResult Index(int page = 1)
         {
-            return BaseIndex(repo, page);
+            return BaseIndex(Repo, page);
         }
          
 
@@ -36,7 +36,7 @@ namespace LambAndLentil.UI.Controllers
         // GET: Recipes/Details/5
         public ActionResult Details(int id = 1, UIViewType actionMethod = UIViewType.Details)
         {
-            return BaseDetails(repo, UIControllerType.Recipes, id, actionMethod);
+            return BaseDetails(Repo,  UIControllerType.Recipes, id, actionMethod);
 
         }
 
@@ -48,9 +48,9 @@ namespace LambAndLentil.UI.Controllers
 
 
         // GET: Recipes/Edit/5
-        public ViewResult Edit(int id = 1)
+        public ActionResult Edit(int id = 1)
         {
-            return BaseEdit(repo,UIControllerType.Recipes, id);
+            return BaseDetails(Repo, UIControllerType.Recipes, id, UIViewType.Edit);
         }
 
 
@@ -62,14 +62,14 @@ namespace LambAndLentil.UI.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult PostEdit([Bind(Include = "ID,Name,Description,Servings,MealType,Calories,CalsFromFat,CreationDate, ModifiedDate,AddedByUser, ModifiedByUser ")] RecipeVM recipeVM)
         {
-            return BasePostEdit(repo,recipeVM);
+            return BasePostEdit(Repo, recipeVM);
         }
 
         // GET: Recipes/Delete/5
         [ActionName("Delete")]
         public ActionResult Delete(int id = 1, UIViewType actionMethod = UIViewType.Delete)
         {
-            return BaseDelete(repo,UIControllerType.Recipes, id);
+            return BaseDelete(Repo, UIControllerType.Recipes, id);
         }
 
         // POST: Recipes/Delete/5
@@ -77,7 +77,7 @@ namespace LambAndLentil.UI.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            return BaseDeleteConfirmed(repo,UIControllerType.Recipes, id);
+            return BaseDeleteConfirmed(Repo, UIControllerType.Recipes, id);
         }
 
         public ActionResult AttachIngredient(int? recipeID, int? ingredientID)

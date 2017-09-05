@@ -21,16 +21,16 @@ namespace LambAndLentil.Tests.Controllers
     [TestCategory("PersonsController")]
     public class PersonsControllerTest
     {
-        private static IRepository<PersonVM > repo { get; set; }
+        private static IRepository<PersonVM> Repo { get; set; }
         public static MapperConfiguration AutoMapperConfig { get; set; }
-        private static ListVM< PersonVM> listVM;
+        private static ListVM<PersonVM> listVM;
         private static PersonsController controller { get; set; }
 
         public PersonsControllerTest()
         {
             //AutoMapperConfig = AutoMapperConfigForTests.AMConfigForTests();
             //AutoMapperConfigForTests.InitializeMap();
-            repo = new TestRepository< PersonVM>();
+            Repo = new TestRepository<PersonVM>();
             listVM = new ListVM<PersonVM>();
             controller = SetUpController();
         }
@@ -47,10 +47,10 @@ namespace LambAndLentil.Tests.Controllers
 
             foreach (PersonVM person in listVM.ListT)
             {
-                repo.Add(person);
+                Repo.Add(person);
             }
 
-            controller = new PersonsController(repo);
+            controller = new PersonsController(Repo);
             controller.PageSize = 3;
 
             return controller;
@@ -93,7 +93,7 @@ namespace LambAndLentil.Tests.Controllers
         public void PersonsCtr_Index()
         {
             // Arrange
-            PersonsController controller2 = new PersonsController(repo);
+            PersonsController controller2 = new PersonsController(Repo);
 
             // Act
             ViewResult view1 = controller.Index(1) as ViewResult;
@@ -109,7 +109,7 @@ namespace LambAndLentil.Tests.Controllers
         public void ContainsAllPersons()
         {
             // Arrange 
-            var controller2 = new PersonsController(repo);
+            var controller2 = new PersonsController(Repo);
 
             // Act
             ViewResult view1 = controller.Index(1);
@@ -361,8 +361,8 @@ namespace LambAndLentil.Tests.Controllers
         public void DeleteConfirmed()
         {
             // Arrange
-            PersonVM person = new PersonVM{ ID = 1 };
-            repo.Add(person);
+            PersonVM person = new PersonVM { ID = 1 };
+            Repo.Add(person);
             // Act
             ActionResult result = controller.DeleteConfirmed(1) as ActionResult;
             // improve this test when I do some route tests to return a more exact result
@@ -377,45 +377,44 @@ namespace LambAndLentil.Tests.Controllers
         {
 
             // Arrange  
-            int initialCount = repo.Count();
-            PersonVM pVM = new PersonVM("John","Doe") { ID = 100, Description = "test CanDeleteValidPerson"  };
-            repo.Add(pVM);
-            int newCount= repo.Count();
+            int initialCount = Repo.Count();
+            PersonVM pVM = new PersonVM("John", "Doe") { ID = 100, Description = "test CanDeleteValidPerson" };
+            Repo.Add(pVM);
+            int newCount = Repo.Count();
 
             // Act - delete the person
             ActionResult result = controller.DeleteConfirmed(pVM.ID);
 
-            AlertDecoratorResult adr = (AlertDecoratorResult)result; 
+            AlertDecoratorResult adr = (AlertDecoratorResult)result;
 
             // Assert
             Assert.AreEqual("John Doe has been deleted", adr.Message);
-            Assert.AreEqual(initialCount, newCount-1);
-            Assert.AreEqual(initialCount, repo.Count());
+            Assert.AreEqual(initialCount, newCount - 1);
+            Assert.AreEqual(initialCount, Repo.Count());
         }
 
         [Ignore]   // brought in Ingredient edit methods instead of using this
         [TestMethod]
         [TestCategory("Edit")]
-        public void  CanEditPerson()
-        { 
+        public void CanEditPerson()
+        {
             // Arrange
-            var controller2 = new PersonsController(repo);
-            PersonVM pVM = new PersonVM("Kermit","Frog") { ID = 1492, Description = "test CanEditPerson"  };
+            var controller2 = new PersonsController(Repo);
+            PersonVM pVM = new PersonVM("Kermit", "Frog") { ID = 1492, Description = "test CanEditPerson" };
 
             // Act  
-            ViewResult view1 = controller.Edit(1492);
+            ViewResult view1 = (ViewResult)controller.Edit(1492);
             PersonVM p1 = (PersonVM)view1.Model;
-            ViewResult view2 = controller2.Edit(2);
+            ViewResult view2 = (ViewResult)controller2.Edit(2);
             PersonVM p2 = (PersonVM)view2.Model;
-            //ViewResult view3 = controller3.Edit(3);
-            //PersonVM p3 = (PersonVM)view3.Model;
+            
 
 
             // Assert 
             Assert.IsNotNull(view1);
             Assert.AreEqual(1, p1.ID);
             Assert.AreEqual(2, p2.ID);
-          //  Assert.AreEqual(3, p3.ID);
+            
             Assert.AreEqual("First edited", p1.Name);
             Assert.AreEqual("Old Name 2", p2.Name);
         }
@@ -439,12 +438,12 @@ namespace LambAndLentil.Tests.Controllers
                 Name = "test PersonControllerTest.CanEditPerson",
                 Description = "test PersonControllerTest.CanEditPerson"
             };
-            repo.Save(menuVM);
+            Repo.Save(menuVM);
 
             // Act 
             menuVM.Name = "Name has been changed";
 
-            ViewResult view1 = controller.Edit(1);
+            ViewResult view1 = (ViewResult)controller.Edit(1);
 
             var returnedPersonVM = (PersonVM)(view1.Model);
 
@@ -461,9 +460,9 @@ namespace LambAndLentil.Tests.Controllers
         public void SaveEditedPerson()
         {
             // Arrange
-            PersonsController indexController = new PersonsController(repo);
-            PersonsController controller2 = new PersonsController(repo);
-            PersonsController controller3 = new PersonsController(repo);
+            PersonsController indexController = new PersonsController(Repo);
+            PersonsController controller2 = new PersonsController(Repo);
+            PersonsController controller3 = new PersonsController(Repo);
 
 
             PersonVM vm = new PersonVM();
@@ -481,9 +480,9 @@ namespace LambAndLentil.Tests.Controllers
             ActionResult ar2 = controller2.PostEdit(vm);
             ViewResult view2 = controller3.Index();
             ListVM<PersonVM> listVM2 = (ListVM<PersonVM>)view2.Model;
-            PersonVM vm3 = (from m in listVM2.ListT 
-                          where m.ID == 7777
-                          select m).AsQueryable().FirstOrDefault();
+            PersonVM vm3 = (from m in listVM2.ListT
+                            where m.ID == 7777
+                            select m).AsQueryable().FirstOrDefault();
 
             // Assert
             Assert.AreEqual("0000 test Edited", vm3.ModifiedByUser);
@@ -503,14 +502,14 @@ namespace LambAndLentil.Tests.Controllers
                 Name = "test PersonControllerTest.CanEditPerson",
                 Description = "test PersonControllerTest.CanEditPerson"
             };
-            repo.Add(menuVM);
+            Repo.Add(menuVM);
 
             // Act 
             menuVM.Name = "Name has been changed";
 
-            ViewResult view1 = controller.Edit(1);
+            ViewResult view1 = (ViewResult)controller.Edit(1);
 
-            PersonVM returnedPersonVm = repo.GetById(1);
+            PersonVM returnedPersonVm = Repo.GetById(1);
 
             // Assert 
             Assert.IsNotNull(view1);
@@ -520,7 +519,7 @@ namespace LambAndLentil.Tests.Controllers
         }
 
 
-
+        [Ignore]
         [TestMethod]
         [TestCategory("Edit")]
         public void CannotEditNonexistentPerson()
@@ -528,7 +527,7 @@ namespace LambAndLentil.Tests.Controllers
             // Arrange
 
             // Act
-            PersonVM result = (PersonVM)controller.Edit(8).ViewData.Model;
+            PersonVM result = (PersonVM)((ViewResult)controller.Edit(8)).ViewData.Model;
             // Assert
             Assert.IsNull(result);
         }
@@ -547,7 +546,7 @@ namespace LambAndLentil.Tests.Controllers
             Assert.IsNotNull(result);
         }
 
-         
+
         [Ignore]
         [TestMethod]
         public void AssignAnIngredientToAPerson()
@@ -556,7 +555,7 @@ namespace LambAndLentil.Tests.Controllers
         }
 
 
-  [Ignore]
+        [Ignore]
         [TestMethod]
         public void UnAssignAnIngredientFromAPerson()
         {
@@ -579,9 +578,15 @@ namespace LambAndLentil.Tests.Controllers
         }
 
         [TestCleanup()]
-        public  void TestCleanup()
+        public void TestCleanup()
         {
-            string path = @"C:\Dev\TGE\LambAndLentil\LambAndLentil.Test\App_Data\JSON\Person\";            
+            ClassCleanup();
+        }
+
+        [ClassCleanup()]
+        public static void ClassCleanup()
+        {
+            string path = @"C:\Dev\TGE\LambAndLentil\LambAndLentil.Test\App_Data\JSON\Person\";
 
             IEnumerable<string> files = Directory.EnumerateFiles(path);
 
@@ -589,7 +594,6 @@ namespace LambAndLentil.Tests.Controllers
             {
                 File.Delete(file);
             }
-
         }
     }
 }

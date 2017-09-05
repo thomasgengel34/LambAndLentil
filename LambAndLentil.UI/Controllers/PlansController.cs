@@ -14,10 +14,10 @@ namespace LambAndLentil.UI.Controllers
     {
         public PlansController(IRepository<PlanVM> repository) : base(repository)
         {
-            repo = repository;
+            Repo = repository;
         }
 
-        public static IRepository<PlanVM> repo { get; private set; }
+        public static IRepository<PlanVM> Repo { get; private set; }
     }
 
 
@@ -27,20 +27,20 @@ namespace LambAndLentil.UI.Controllers
     {
         public PlansGenericController(IRepository<PlanVM> repository) : base(repository)
         {
-            repo = repository;
+            Repo = repository;
         }
 
         // GET: Plans
         public ViewResult Index(int page = 1)
         {
-            ViewResult view = BaseIndex(repo, page);
+            ViewResult view = BaseIndex(Repo,  page);
             return View(view.ViewName, view.Model);
         }
 
         // GET: Plans/Details/5 
         public ActionResult Details(int id = 1, UIViewType actionMethod = UIViewType.Details)
         {
-            return BaseDetails(repo, UIControllerType.Plans, id, actionMethod);
+            return BaseDetails(Repo,  UIControllerType.Plans, id, actionMethod);
         }
 
         //GET: Plans/Create
@@ -52,9 +52,9 @@ namespace LambAndLentil.UI.Controllers
 
 
         // GET: Plans/Edit/5
-        public ViewResult Edit(int id = 1)
+        public ActionResult Edit(int id = 1)
         {
-            return BaseEdit(repo,UIControllerType.Plans, id);
+            return BaseDetails(Repo,  UIControllerType.Plans, id, UIViewType.Edit);
         }
 
 
@@ -66,7 +66,7 @@ namespace LambAndLentil.UI.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult PostEdit([Bind(Include = "ID,Name,Description, CreationDate, ModifiedDate,  AddedByUser, ModifiedByUser")] PlanVM planVM)
         {
-            return BasePostEdit(repo,planVM);
+            return BasePostEdit(Repo, planVM);
         }
 
 
@@ -75,7 +75,7 @@ namespace LambAndLentil.UI.Controllers
         public ActionResult Delete(int id = 1, UIViewType actionMethod = UIViewType.Delete)
         {
             ViewBag.ActionMethod = UIViewType.Delete;
-            return BaseDelete(repo,UIControllerType.Plans, id);
+            return BaseDelete(Repo, UIControllerType.Plans, id);
         }
 
         // POST: Plans/Delete/5
@@ -83,7 +83,7 @@ namespace LambAndLentil.UI.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            return BaseDeleteConfirmed(repo,UIControllerType.Plans, id);
+            return BaseDeleteConfirmed(Repo, UIControllerType.Plans, id);
         }
 
         public ActionResult AttachIngredient(int? planID, int? ingredientID)

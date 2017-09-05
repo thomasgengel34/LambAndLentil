@@ -8,11 +8,13 @@ using System.Threading.Tasks;
 namespace LambAndLentil.Domain.Entities
 {
     [Table("PLAN.Plan")]
-    public class Plan:BaseEntity,IEntity
+    public class Plan : BaseEntity, IEntity, IPlan
     {
         public Plan():base()
         {
-
+            Ingredients = new List<Ingredient>();
+            Recipes = new List<Recipe>();
+            Menus = new List<Menu>();
         }
 
 
@@ -22,6 +24,8 @@ namespace LambAndLentil.Domain.Entities
         }
 
         public int ID { get; set; }
-        
+        public List<Ingredient> Ingredients { get;  set; }
+        public List<Recipe> Recipes { get;  set; }
+        public List<Menu> Menus { get;  set; }
     } 
 }

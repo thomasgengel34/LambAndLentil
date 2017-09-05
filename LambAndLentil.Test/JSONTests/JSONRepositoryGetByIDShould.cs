@@ -16,13 +16,13 @@ namespace LambAndLentil.Test.JSONTests
         public static MapperConfiguration AutoMapperConfig { get; set; }
         static string path = @"../../../\LambAndLentil.Domain\App_Data\JSON\TestJSONRepositoryGetByID\";
 
-        private static JSONRepository<IngredientVM> repo { get; set; }
+        private static JSONRepository<IngredientVM> Repo { get; set; }
 
 
         public JSONRepositoryGetByIDShould()
         {
             AutoMapperConfigForTests.InitializeMap();
-            repo = new JSONRepository<IngredientVM>();
+            Repo = new JSONRepository<IngredientVM>();
             Directory.CreateDirectory(path);
         }
 
@@ -36,10 +36,10 @@ namespace LambAndLentil.Test.JSONTests
                 Name = "test ReturnCorrectEntityForAValidIngredientID Name",
                 Description = "test ReturnCorrectEntityForAValidIngredientID Description"
             };
-            repo.Add(vm);
+            Repo.Add(vm);
 
             // Act
-            IngredientVM returnedVm = repo.GetById(vm.ID);
+            IngredientVM returnedVm = Repo.GetById(vm.ID);
 
             //Assert
             Assert.AreEqual(vm.ID, returnedVm.ID);

@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using LambAndLentil.Tests.Controllers;
 
 namespace IntegrationTests
 {
@@ -20,14 +21,14 @@ namespace IntegrationTests
     [TestCategory("PlansController")]
     public class PlansControllerShould
     {
-        static IRepository<PlanVM> repo;
+        static IRepository<PlanVM> Repo;
         static PlansController controller;
         static PlanVM planVM;
 
         public PlansControllerShould()
         {
-            repo = new TestRepository<PlanVM>();
-            controller = new PlansController(repo);
+            Repo = new TestRepository<PlanVM>();
+            controller = new PlansController(Repo);
             planVM = new PlanVM();
             planVM.ID = 1000;
             planVM.Description = "test PlanControllerShould";
@@ -75,11 +76,11 @@ namespace IntegrationTests
         public void SaveEditedPlanWithNameChange()
         {
             // Arrange 
-            PlansController controller1 = new PlansController(repo);
-            PlansController controller2 = new PlansController(repo);
-            PlansController controller3 = new PlansController(repo);
-            PlansController controller4 = new PlansController(repo);
-            PlansController controller5 = new PlansController(repo);
+            PlansController controller1 = new PlansController(Repo);
+            PlansController controller2 = new PlansController(Repo);
+            PlansController controller3 = new PlansController(Repo);
+            PlansController controller4 = new PlansController(Repo);
+            PlansController controller5 = new PlansController(Repo);
             PlanVM vm = new PlanVM();
             vm.Name = "0000 test";
 
@@ -115,11 +116,11 @@ namespace IntegrationTests
         public void SaveEditedPlanWithDescriptionChange()
         {
             // Arrange 
-            PlansController controller1 = new PlansController(repo);
-            PlansController controller2 = new PlansController(repo);
-            PlansController controller3 = new PlansController(repo);
-            PlansController controller4 = new PlansController(repo);
-            PlansController controller5 = new PlansController(repo);
+            PlansController controller1 = new PlansController(Repo);
+            PlansController controller2 = new PlansController(Repo);
+            PlansController controller3 = new PlansController(Repo);
+            PlansController controller4 = new PlansController(Repo);
+            PlansController controller5 = new PlansController(Repo);
             PlanVM vm = new PlanVM();
             vm.Name = "0000 test";
             vm.Description = "SaveEditedPlanWithDescriptionChange Pre-test";
@@ -164,7 +165,7 @@ namespace IntegrationTests
            
             //Act
             controller.DeleteConfirmed(planVM.ID);
-            var deletedItem = (from m in repo.GetAll()
+            var deletedItem = (from m in Repo.GetAll()
                                where m.Description == planVM.Description
                                select m).AsQueryable();
 
@@ -183,9 +184,9 @@ namespace IntegrationTests
             planVM.Name = "001 Test ";
 
              
-            PlansController controllerEdit = new PlansController(repo);
-            PlansController controllerView = new PlansController(repo);
-            PlansController controllerDelete = new PlansController(repo);
+            PlansController controllerEdit = new PlansController(Repo);
+            PlansController controllerView = new PlansController(Repo);
+            PlansController controllerDelete = new PlansController(Repo);
 
             // Act
             controllerEdit.PostEdit(planVM);
@@ -209,9 +210,9 @@ namespace IntegrationTests
         public void UpdateTheModificationDateBetweenPostedEdits()
         {
             // Arrange 
-            PlansController controllerPost = new PlansController(repo);
-            PlansController controllerView = new PlansController(repo);
-            PlansController controllerDelete = new PlansController(repo);
+            PlansController controllerPost = new PlansController(Repo);
+            PlansController controllerView = new PlansController(Repo);
+            PlansController controllerDelete = new PlansController(Repo);
 
             PlanVM planVM = new PlanVM();
             planVM.Name = "002 Test Mod";
@@ -244,7 +245,7 @@ namespace IntegrationTests
             // Arrange
             
            IRepository<IngredientVM> repoIngredient = new TestRepository<IngredientVM>();
-            PlansController controller = new PlansController(repo);
+            PlansController controller = new PlansController(Repo);
 
             planVM.Description = "test AttachAnExistingIngredientToAnExistingPlan";
             IngredientVM ingredientVM = new IngredientVM();
@@ -253,7 +254,7 @@ namespace IntegrationTests
 
             // Act
             controller.AttachIngredient(planVM.ID, ingredientVM.ID);
-            PlanVM returnedPlanVM = (from m in repo.GetAll()
+            PlanVM returnedPlanVM = (from m in Repo.GetAll()
                                  where m.Description == planVM.Description
                                  select m).FirstOrDefault(); 
 
@@ -333,6 +334,12 @@ namespace IntegrationTests
         public void ReturnPlanIndexViewWithWarningWhenDetachingExistingingredientNotAttachedToAnExistingPlan()
         {
             Assert.Fail();
+        }
+
+        [ClassCleanup()]
+        public static void ClassCleanup()
+        {
+            PlansControllerTest.ClassCleanup();
         }
     }
 }

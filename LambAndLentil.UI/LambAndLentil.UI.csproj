@@ -258,10 +258,12 @@
     <Compile Include="Models\BaseVM.cs" />
     <Compile Include="Models\IBaseVM.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\IShoppingListVM.cs" />
     <Compile Include="Models\ListVM.cs" />
     <Compile Include="Models\IngredientVM.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MenuVM.cs" />
+    <Compile Include="Models\ModelValidation.cs" />
     <Compile Include="Models\PagingInfo.cs" />
     <Compile Include="Models\PersonVM.cs" />
     <Compile Include="Models\PlanVM.cs" />

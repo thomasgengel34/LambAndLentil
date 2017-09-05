@@ -30,7 +30,7 @@ namespace LambAndLentil.Tests.Infrastructure
                 //cfg.AddProfile<FooProfile>(); not currently needed
                 
             });
-        }
+         }
 
 
         public static MapperConfiguration AMConfigForTests()

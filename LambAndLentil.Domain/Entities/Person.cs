@@ -13,7 +13,11 @@ namespace LambAndLentil.Domain.Entities
     {
         public Person():base()
         {
-
+            Ingredients = new List<Ingredient>();
+            Recipes = new List<Recipe>();
+            Menus = new List<Menu>();
+            Plans = new List<Plan>();
+            ShoppingLists = new List<ShoppingList>();
         }
         public Person(DateTime creationDate) : base(creationDate)
         {
@@ -29,7 +33,13 @@ namespace LambAndLentil.Domain.Entities
 
         public int MinCalories { get; set; }
         public int MaxCalories { get; set; }
-        public bool NoGarlic { get; set; } 
+        public bool NoGarlic { get; set; }
         //TODO: add all ingredients after I figure out how to economically
+         
+        public ICollection<Recipe> Recipes { get; set; }
+        public ICollection<Ingredient> Ingredients { get; set; }
+        public ICollection<Menu> Menus { get; set; }
+        public ICollection<Plan> Plans { get; set; }
+        public ICollection<ShoppingList> ShoppingLists { get; set; }
     }
 }

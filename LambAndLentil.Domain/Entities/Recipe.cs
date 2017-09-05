@@ -6,10 +6,11 @@ namespace LambAndLentil.Domain.Entities
 {
 
     [Table("RECIPE.Recipe")]
-    public class Recipe : BaseEntity, IEntity
+    public class Recipe : BaseEntity, IEntity, IRecipe
     {
         public Recipe() : base()
         {
+            Ingredients = new List<Ingredient>();
         }
 
         public Recipe(DateTime creationDate) : base(creationDate)
@@ -22,8 +23,8 @@ namespace LambAndLentil.Domain.Entities
         public MealType MealType { get; set; }
         public int? Calories { get; set; }
         public short? CalsFromFat { get; set; }
+        public ICollection<Ingredient> Ingredients { get; set; }
 
-         
 
     }
 }

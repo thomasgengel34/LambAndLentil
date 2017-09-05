@@ -9,7 +9,8 @@ namespace LambAndLentil.Test.Infrastructure
     public class AutoMapperShould
     {
         public static MapperConfiguration AutoMapperConfig { get; set; }
-
+        
+       
         [TestMethod]
         public void BeConfigured()
         {

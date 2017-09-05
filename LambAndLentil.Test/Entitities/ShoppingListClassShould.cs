@@ -1,6 +1,8 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using LambAndLentil.Domain.Entities;
+using System.Reflection;
+using System.Linq;
 
 namespace LambAndLentil.Domain.Test.Entities
 {
@@ -8,6 +10,14 @@ namespace LambAndLentil.Domain.Test.Entities
     [TestCategory("ShoppingList Class")]
     public class ShoppingListClassShould
     {
+        static ShoppingList shoppingList;
+
+        public ShoppingListClassShould()
+        {
+            shoppingList = new ShoppingList();
+        }
+
+
         [TestMethod]
         public void HaveCorrectDefaultsInConstructor()
         {
@@ -19,14 +29,14 @@ namespace LambAndLentil.Domain.Test.Entities
 
             // Assert 
             Assert.IsNotNull(shoppingList.CreationDate);
-            Assert.IsNotNull(shoppingList.ModifiedDate); 
-            Assert.IsNotNull(shoppingList.AddedByUser); 
+            Assert.IsNotNull(shoppingList.ModifiedDate);
+            Assert.IsNotNull(shoppingList.AddedByUser);
             Assert.IsNotNull(shoppingList.ModifiedByUser);
             Assert.AreEqual(shoppingList.AddedByUser, shoppingList.ModifiedByUser);
         }
 
         [TestMethod]
-        public void  InheritFromBaseEntity()
+        public void InheritFromBaseEntity()
         {
             // Arrange
             ShoppingList shoppingList = new ShoppingList();
@@ -64,7 +74,7 @@ namespace LambAndLentil.Domain.Test.Entities
 
             // Assert 
             Assert.AreEqual(new DateTime(2017, 06, 26), shoppingList.Date);
-            Assert.IsNull( shoppingList.Author); 
+            Assert.IsNull(shoppingList.Author);
         }
 
         [TestMethod]
@@ -80,76 +90,88 @@ namespace LambAndLentil.Domain.Test.Entities
         }
 
 
-        [Ignore]
+     [TestCategory("Class Child Test")]
         [TestMethod]
-        public void BeAbleToHaveIngredientChild()
+        public void BeAbleToHaveIngredientsChild()
         {
             // Arrange
 
             // Act
+            PropertyInfo[] props = shoppingList.GetType().GetProperties();
+            var result = props.Where(p => p.Name == "Ingredients");
 
             // Assert
-            Assert.Fail();
+            Assert.AreEqual(1, result.Count());
         }
 
-        [Ignore]
+        [TestCategory("Class Child Test")]
         [TestMethod]
-        public void BeAbleToHaveRecipeChild()
+        public void BeAbleToHaveRecipesChild()
         {
             // Arrange
 
             // Act
+            PropertyInfo[] props = shoppingList.GetType().GetProperties();
+            var result = props.Where(p => p.Name == "Recipes");
 
             // Assert
-            Assert.Fail();
+            Assert.AreEqual(1, result.Count());
         }
 
-        [Ignore]
+        [TestCategory("Class Child Test")]
         [TestMethod]
-        public void BeAbleToHaveMenuChild()
+        public void BeAbleToHaveMenusChild()
         {
             // Arrange
 
             // Act
+            PropertyInfo[] props = shoppingList.GetType().GetProperties();
+            var result = props.Where(p => p.Name == "Menus");
 
             // Assert
-            Assert.Fail();
+            Assert.AreEqual(1, result.Count());
         }
 
-        [Ignore]
+        [TestCategory("Class Child Test")]
         [TestMethod]
-        public void  BeAbleToHavePlanChild()
+        public void BeAbleToHavePlansChild()
         {
             // Arrange
 
             // Act
+            PropertyInfo[] props = shoppingList.GetType().GetProperties();
+            var result = props.Where(p => p.Name == "Plans");
 
             // Assert
-            Assert.Fail();
+            Assert.AreEqual(1, result.Count());
         }
 
-        [Ignore]
+        [TestCategory("Class Child Test")]
         [TestMethod]
-        public void NotBeAbleToHaveShoppingListChild()
+        public void NotBeAbleToHaveShoppingListsChild()
         {
             // Arrange
 
             // Act
+            PropertyInfo[] props = shoppingList.GetType().GetProperties();
+            var result = props.Where(p => p.Name == "ShoppingLists");
 
             // Assert
-            Assert.Fail();
+            Assert.AreEqual(0, result.Count());
         }
 
-        [Ignore]
+        [TestCategory("Class Child Test")]
         [TestMethod]
-        public void NotBeAbleToHavePersonChild()
+        public void NotBeAbleToHavePersonsChild()
         {
             // Arrange
 
             // Act
+            PropertyInfo[] props = shoppingList.GetType().GetProperties();
+            var result = props.Where(p => p.Name == "Persons");
 
             // Assert
-            Assert.Fail();
+            Assert.AreEqual(0, result.Count());
         }
     }
 }

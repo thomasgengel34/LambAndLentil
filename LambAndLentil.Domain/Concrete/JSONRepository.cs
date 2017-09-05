@@ -1,6 +1,6 @@
-﻿ 
+﻿using AutoMapper;
 using LambAndLentil.Domain.Abstract;
-using LambAndLentil.Domain.Entities; 
+using LambAndLentil.Domain.Entities;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -13,24 +13,25 @@ namespace LambAndLentil.Domain.Concrete
     public class JSONRepository<T> : IRepository<T>
         where T : class, IEntity
     {
-        // T should be an incoming view model, TE is the entity in the db
-        // but LambAndLentil.Domain only deals with Domain, does not have a dependency on UI and cannot,should not, will not.
+        // T should be an incoming view model 
+        //  LambAndLentil.Domain only deals with Domain, does not have a dependency on UI and cannot,should not, will not.
 
- 
-        static string Folder { get; set; } 
-        protected static string FullPath { get; set; } 
 
-       public JSONRepository()
+        static string Folder { get; set; }
+        protected static string FullPath { get; set; }
+        public static MapperConfiguration AutoMapperConfig { get; set; }
+
+        public JSONRepository()
         {
             char[] charsToTrim = { 'V', 'M' };
             Folder = typeof(T).ToString().Split('.').Last().Split('+').Last().TrimEnd(charsToTrim);
             string className = typeof(T).ToString().TrimEnd(charsToTrim);
-         //   E = Type.GetType(className, true);
+            //   E = Type.GetType(className, true);
             // TODO: get relative path to work.  The first line works in testing but not in running it.
             // fullPath = @"../../../\LambAndLentil.Domain\App_Data\JSON\" + folder + "\\";
-            FullPath = @" C:\Dev\TGE\LambAndLentil\LambAndLentil.Domain\App_Data\JSON\" + Folder + "\\";
+            FullPath = @" C:\Dev\TGE\LambAndLentil\LambAndLentil.Domain\App_Data\JSON\" + Folder + "\\"; 
         }
-       
+
 
         public IQueryable Ingredient { get; set; }
 
@@ -51,10 +52,10 @@ namespace LambAndLentil.Domain.Concrete
             {
                 JsonSerializer serializer = new JsonSerializer();
                 serializer.Serialize(file, entity);
-            } 
+            }
         }
 
-      
+
 
         /// <summary>
         /// not yet ready for prime time
@@ -73,38 +74,112 @@ namespace LambAndLentil.Domain.Concrete
             }
         }
 
-        public void AttachAnIndependentChild<TChild>(int parentID, int childID) 
-            where TChild : BaseEntity,  IEntity 
+        public void AttachAnIndependentChild<TChild>(int parentID, int childID)
+            where TChild : BaseEntity, IEntity
         {
             T parent = JsonConvert.DeserializeObject<T>(File.ReadAllText(String.Concat(FullPath, parentID, ".txt")));
             TChild child = JsonConvert.DeserializeObject<TChild>(File.ReadAllText(String.Concat(FullPath, childID, ".txt")));
-
             if (parent != null && child != null)
             {
-                if (typeof(TChild) == typeof(Ingredient))
+                if (typeof(T) == typeof(Ingredient))
                 {
-                    parent.Ingredients.Add(child as Ingredient);
+                    // cannot attach a child
+                    // do nothing
+                    // TODO: think about returning an error message. But user should not be given the chance to do this, so, aside from messing with the query string, how is this possible?  Make sure this is a POST request so no one can mess with the query string and get here. 
                 }
-                if (typeof(TChild) == typeof(Recipe))
+                if (typeof(T) == typeof(Recipe))   // can only attach an Ingredient   
                 {
-                    parent.Recipes.Add(child as Recipe);
+                    Recipe recipe = JsonConvert.DeserializeObject<Recipe>(File.ReadAllText(String.Concat(FullPath, parentID, ".txt")));
+                    if (typeof(TChild) == typeof(Ingredient))
+                    {
+                        Ingredient ingredient = JsonConvert.DeserializeObject<Ingredient>(File.ReadAllText(String.Concat(FullPath, childID, ".txt")));
+                        recipe.Ingredients.Add(ingredient);
+                    }
+                    else
+                    {
+                        // see notes above.  How did we get here? Try to and figure out how to block it. 
+                    }
                 }
-                if (typeof(TChild) == typeof(Menu))
+                else if (typeof(T) == typeof(Menu))   // can  attach an Ingredient or recipe
                 {
-                    parent.Menus.Add(child as Menu);
+                    Menu menu = JsonConvert.DeserializeObject<Menu>(File.ReadAllText
+                        (String.Concat(FullPath, parentID, ".txt")));
+
+                    if (typeof(TChild) == typeof(Ingredient))
+                    {
+                        menu.Ingredients.Add(child as Ingredient);
+                    }
+                    else if (typeof(TChild) == typeof(Recipe))
+                    {
+                        menu.Recipes.Add(child as Recipe);
+                    }
                 }
-                if (typeof(TChild) == typeof(Plan))
+                else if (typeof(T) == typeof(Plan))   // can  attach an Ingredient or recipe or menu
                 {
-                    parent.Plans.Add(child as Plan);
+                    Plan plan = JsonConvert.DeserializeObject<Plan>(File.ReadAllText
+                        (String.Concat(FullPath, parentID, ".txt")));
+
+                    if (typeof(TChild) == typeof(Ingredient))
+                    {
+                        plan.Ingredients.Add(child as Ingredient);
+                    }
+                    else if (typeof(TChild) == typeof(Recipe))
+                    {
+                        plan.Recipes.Add(child as Recipe);
+                    }
+                    else if (typeof(TChild) == typeof(Menu))
+                    {
+                        plan.Menus.Add(child as Menu);
+                    }
+                    else if (typeof(T) == typeof(ShoppingList))   // can  attach an Ingredient or recipe or menu or plan
+                    {
+                        ShoppingList shoppingList = JsonConvert.DeserializeObject<ShoppingList>(File.ReadAllText
+                            (String.Concat(FullPath, parentID, ".txt")));
+
+                        if (typeof(TChild) == typeof(Ingredient))
+                        {
+                            shoppingList.Ingredients.Add(child as Ingredient);
+                        }
+                        else if (typeof(TChild) == typeof(Recipe))
+                        {
+                            shoppingList.Recipes.Add(child as Recipe);
+                        }
+                        else if (typeof(TChild) == typeof(Menu))
+                        {
+                            shoppingList.Menus.Add(child as Menu);
+                        }
+                        else if (typeof(TChild) == typeof(Plan))
+                        {
+                            shoppingList.Plans.Add(child as Plan);
+                        } 
+                    }
+                    else if (typeof(T) == typeof(Person))
+                    {
+                        Person person = JsonConvert.DeserializeObject<Person>(File.ReadAllText
+                            (String.Concat(FullPath, parentID, ".txt")));
+
+                        if (typeof(TChild) == typeof(Ingredient))
+                        {
+                            person.Ingredients.Add(child as Ingredient);
+                        }
+                        else if (typeof(TChild) == typeof(Recipe))
+                        {
+                            person.Recipes.Add(child as Recipe);
+                        }
+                        else if (typeof(TChild) == typeof(Menu))
+                        {
+                            person.Menus.Add(child as Menu);
+                        }
+                        else if (typeof(TChild) == typeof(Plan))
+                        {
+                            person.Plans.Add(child as Plan);
+                        }
+                        else if (typeof(TChild) == typeof(ShoppingList))
+                        {
+                            person.ShoppingLists.Add(child as ShoppingList);
+                        }
+                    }
                 }
-                if (typeof(TChild) == typeof(Person))
-                {
-                    parent.Persons.Add(child as Person);
-                }
-                if (typeof(TChild) == typeof(ShoppingList))
-                {
-                    parent.ShoppingLists.Add(child as ShoppingList);
-                } 
             }
         }
 
@@ -116,12 +191,12 @@ namespace LambAndLentil.Domain.Concrete
             return fileCount;
         }
 
-        public void DetachAnIndependentChild<TChild>(int parentID, int childID) 
+        public void DetachAnIndependentChild<TChild>(int parentID, int childID)
             where TChild : BaseEntity, IEntity
         {
             throw new NotImplementedException();
         }
-         
+
         public T GetById(int id)
         {
             IEnumerable<string> availableFiles = Directory.EnumerateFiles(FullPath);
@@ -138,37 +213,32 @@ namespace LambAndLentil.Domain.Concrete
             else
             {
                 return null;
-            } 
+            }
         }
 
         public IEnumerable<T> Query(Expression<Func<T, bool>> filter)
         {
             throw new NotImplementedException();
         }
-
-        //public void Remove(T entity)
-        //{
-        //    File.Delete(String.Concat(fullPath, entity.ID, ".txt"));
-        //}
-
+         
         public void Remove(T t)
         {
             File.Delete(String.Concat(FullPath, t.ID, ".txt"));
         }
-         
+
 
         public void Save(T entity)
         {
             Add(entity);
         }
 
-      
+
         public void Update(T entity, int key)
         {
             entity.ModifiedDate = DateTime.Now;
             Add(entity);
         }
-         
+
 
         public IEnumerable<T> GetAll()
         {
@@ -182,6 +252,6 @@ namespace LambAndLentil.Domain.Concrete
                 list.Add(entity);
             }
             return list;
-        } 
+        }
     }
 }

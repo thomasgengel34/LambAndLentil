@@ -22,7 +22,7 @@ namespace IntegrationTests
     [TestCategory("MenusController")]
     public class MenusControllerShould
     {
-        static IRepository<MenuVM> repo;
+        static IRepository<MenuVM> Repo;
         static MenusController controller;
         static ListVM<MenuVM> listVM;
         public static MapperConfiguration AutoMapperConfig { get; set; }
@@ -30,9 +30,9 @@ namespace IntegrationTests
         public MenusControllerShould()
         {
             AutoMapperConfigForTests.InitializeMap();
-            repo = new TestRepository<MenuVM>();
+            Repo = new TestRepository<MenuVM>();
             listVM = new ListVM<MenuVM>();
-            controller = SetUpMenusController(repo);
+            controller = SetUpMenusController(Repo);
         }
 
         private MenusController SetUpMenusController(IRepository<MenuVM> repo)
@@ -47,10 +47,10 @@ namespace IntegrationTests
 
             foreach (MenuVM vm in listVM.ListT)
             {
-                repo.Add(vm);
+                Repo.Add(vm);
             }
 
-            MenusController controller = new MenusController(repo);
+            MenusController controller = new MenusController(Repo);
             controller.PageSize = 3;
 
             return controller;
@@ -97,12 +97,12 @@ namespace IntegrationTests
         public void SaveEditedMenuWithNameChange()
         {
             // Arrange
-            JSONRepository<MenuVM> repo = new JSONRepository<MenuVM>(); ;
-            MenusController controller1 = new MenusController(repo);
-            MenusController controller2 = new MenusController(repo);
-            MenusController controller3 = new MenusController(repo);
-            MenusController controller4 = new MenusController(repo);
-            MenusController controller5 = new MenusController(repo);
+            JSONRepository<MenuVM> Repo = new JSONRepository<MenuVM>(); ;
+            MenusController controller1 = new MenusController(Repo);
+            MenusController controller2 = new MenusController(Repo);
+            MenusController controller3 = new MenusController(Repo);
+            MenusController controller4 = new MenusController(Repo);
+            MenusController controller5 = new MenusController(Repo);
             MenuVM vm = new MenuVM();
             vm.Name = "0000 test";
             vm.ID = 33;
@@ -142,10 +142,10 @@ namespace IntegrationTests
         {
             // Arrange
 
-            MenusController controller1 = new MenusController(repo);
-            MenusController controller2 = new MenusController(repo);
-            MenusController controller3 = new MenusController(repo);
-            MenusController controller4 = new MenusController(repo);
+            MenusController controller1 = new MenusController(Repo);
+            MenusController controller2 = new MenusController(Repo);
+            MenusController controller3 = new MenusController(Repo);
+            MenusController controller4 = new MenusController(Repo);
             MenuVM vm = new MenuVM();
             vm.Name = "0000 test";
             vm.ID = 77777;
@@ -185,11 +185,11 @@ namespace IntegrationTests
         {
             // Arrange
 
-            MenusController controller1 = new MenusController(repo);
-            MenusController controller2 = new MenusController(repo);
-            MenusController controller3 = new MenusController(repo);
-            MenusController controller4 = new MenusController(repo);
-            MenusController controller5 = new MenusController(repo);
+            MenusController controller1 = new MenusController(Repo);
+            MenusController controller2 = new MenusController(Repo);
+            MenusController controller3 = new MenusController(Repo);
+            MenusController controller4 = new MenusController(Repo);
+            MenusController controller5 = new MenusController(Repo);
             MenuVM vm = new MenuVM();
             vm.Name = "0000 test";
             vm.Description = "SaveEditedMenuWithDescriptionChange Pre-test";
@@ -297,9 +297,9 @@ namespace IntegrationTests
             vm.Description = "test SaveTheCreationDateBetweenPostedEdits";
 
 
-            MenusController controllerEdit = new MenusController(repo);
-            MenusController controllerView = new MenusController(repo);
-            MenusController controllerDelete = new MenusController(repo);
+            MenusController controllerEdit = new MenusController(Repo);
+            MenusController controllerView = new MenusController(Repo);
+            MenusController controllerDelete = new MenusController(Repo);
 
             // Act
             controllerEdit.PostEdit(vm);
@@ -321,10 +321,10 @@ namespace IntegrationTests
         public void UpdateTheModificationDateBetweenPostedEdits()
         {
             // Arrange 
-            MenusController controllerPost = new MenusController(repo);
-            MenusController controllerPost1 = new MenusController(repo);
-            MenusController controllerView = new MenusController(repo);
-            MenusController controllerDelete = new MenusController(repo);
+            MenusController controllerPost = new MenusController(Repo);
+            MenusController controllerPost1 = new MenusController(Repo);
+            MenusController controllerView = new MenusController(Repo);
+            MenusController controllerDelete = new MenusController(Repo);
 
             MenuVM vm = new MenuVM();
             vm.Name = "002 Test Mod";
@@ -367,13 +367,13 @@ namespace IntegrationTests
         {
             // Arrange 
             IRepository<RecipeVM> repoRecipe = new TestRepository<RecipeVM>();
-            MenusController controllerAttach = new MenusController(repo);
+            MenusController controllerAttach = new MenusController(Repo);
             RecipesController controllerAttachI = new RecipesController(repoRecipe);
-            MenusController controllerCleanup = new MenusController(repo);
+            MenusController controllerCleanup = new MenusController(Repo);
 
 
             MenuVM menuVM = new MenuVM() { ID = 100, Description = "test AttachAnExistingRecipeToAnExistingMenu" };
-            repo.Add(menuVM);
+            Repo.Add(menuVM);
 
             RecipeVM recipeVM = new RecipeVM() { ID = 101, Description = "test AttachAnExistingRecipeToAnExistingMenu" };
             repoRecipe.Add(recipeVM);
@@ -402,7 +402,7 @@ namespace IntegrationTests
 
             // Act
             controller.AttachIngredient(menuVM.ID, ingredientVM.ID);
-            MenuVM returnedMenuVM = (from m in repo.GetAll()
+            MenuVM returnedMenuVM = (from m in Repo.GetAll()
                                  where m.Description == menuVM.Description
                                  select m).FirstOrDefault();
 

@@ -1,42 +1,42 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using LambAndLentil.UI.Controllers;
-using LambAndLentil.Domain.Abstract; 
+using LambAndLentil.Domain.Abstract;
 using LambAndLentil.Domain.Entities;
 using System.Linq;
- 
+
 using LambAndLentil.UI.Models;
 using System.Web.Mvc;
-using System.Collections.Generic; 
+using System.Collections.Generic;
 using AutoMapper;
 using LambAndLentil.Tests.Infrastructure;
 using LambAndLentil.UI.Infrastructure.Alerts;
 using LambAndLentil.UI;
 using LambAndLentil.Domain.Concrete;
-using System.IO; 
+using System.IO;
 
 namespace LambAndLentil.Tests.Controllers
 {
-    [Ignore]
-    [TestClass] 
+
+    [TestClass]
     [TestCategory("PlansController")]
     public class PlansControllerTest
     {
-         
-        private static IRepository<PlanVM> repo { get; set; }
+
+        private static IRepository<PlanVM> Repo { get; set; }
         public static MapperConfiguration AutoMapperConfig { get; set; }
         private static ListVM<PlanVM> listVM;
         private static PlansController controller { get; set; }
 
         public PlansControllerTest()
-        { 
+        {
             AutoMapperConfigForTests.InitializeMap();
-            repo = new TestRepository<PlanVM>();
+            Repo = new TestRepository<PlanVM>();
             listVM = new ListVM<PlanVM>();
             controller = SetUpController();
         }
 
-        private PlansController  SetUpController()
+        private PlansController SetUpController()
         {
             listVM.ListT = new List<PlanVM> {
                 new PlanVM{ID = int.MaxValue, Name = "PlansController_Index_Test P1" ,AddedByUser="John Doe" ,ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue, ModifiedDate=DateTime.MaxValue.AddYears(-10)},
@@ -48,17 +48,17 @@ namespace LambAndLentil.Tests.Controllers
 
             foreach (PlanVM plan in listVM.ListT)
             {
-                repo.Add(plan);
+                Repo.Add(plan);
             }
 
-            controller = new PlansController(repo);
+            controller = new PlansController(Repo);
             controller.PageSize = 3;
 
             return controller;
         }
 
         [TestMethod]
-        public void  IsPublic()
+        public void IsPublic()
         {
             // Arrange 
 
@@ -78,7 +78,7 @@ namespace LambAndLentil.Tests.Controllers
         {
 
             // Arrange
-           
+
             // Act 
             controller.PageSize = 4;
 
@@ -92,26 +92,26 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Index")]
-        public void  Index()
+        public void Index()
         {
             // Arrange
-            
+
 
             // Act
             ViewResult result = controller.Index(1) as ViewResult;
-             
+
 
             // Assert
             Assert.IsNotNull(result);
-            
+
         }
 
         [TestMethod]
         [TestCategory("Index")]
-        public void  ContainsAllListTVM()
+        public void ContainsAllListTVM()
         {
             // Arrange
-           
+
             // Act
             ViewResult view1 = controller.Index(1);
 
@@ -145,8 +145,8 @@ namespace LambAndLentil.Tests.Controllers
         public void FirstPageIsCorrect()
         {
             // Arrange
-          
-            ListVM<PlanVM> illistVM = new ListVM<PlanVM>(); 
+
+            ListVM<PlanVM> illistVM = new ListVM<PlanVM>();
             controller.PageSize = 8;
 
             // Act
@@ -161,9 +161,9 @@ namespace LambAndLentil.Tests.Controllers
             Assert.AreEqual(5, count1);
             Assert.AreEqual("Index", view1.ViewName);
 
-            Assert.AreEqual("Old Name 1", ((ListVM<PlanVM>)(view1.Model)).ListT.FirstOrDefault().Name);
-            Assert.AreEqual("Old Name 2", ((ListVM<PlanVM>)(view1.Model)).ListT.Skip(1).FirstOrDefault().Name);
-            Assert.AreEqual("Old Name 3", ((ListVM<PlanVM>)(view1.Model)).ListT.Skip(2).FirstOrDefault().Name);
+            Assert.AreEqual("PlansController_Index_Test P1", ((ListVM<PlanVM>)(view1.Model)).ListT.FirstOrDefault().Name);
+            Assert.AreEqual("PlansController_Index_Test P2", ((ListVM<PlanVM>)(view1.Model)).ListT.Skip(1).FirstOrDefault().Name);
+            Assert.AreEqual("PlansController_Index_Test P3", ((ListVM<PlanVM>)(view1.Model)).ListT.Skip(2).FirstOrDefault().Name);
 
 
         }
@@ -173,17 +173,17 @@ namespace LambAndLentil.Tests.Controllers
         [TestCategory("Index")]
         // currently we only have one page here
         public void ListTVMCtr_Index_SecondPageIsCorrect()
-        { 
+        {
 
         }
 
         [TestMethod]
         [TestCategory("Index")]
-        public void  CanSendPaginationViewModel()
+        public void CanSendPaginationViewModel()
         {
 
             // Arrange
-            
+
 
             // Act
 
@@ -202,10 +202,10 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Index")]
-        public void  PagingInfoIsCorrect()
+        public void PagingInfoIsCorrect()
         {
             // Arrange
-           
+
 
 
             // Action
@@ -225,20 +225,17 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Index")]
-        public void  CanPaginate()
+        public void CanPaginate()
         {
-            // Arrange
-            
+            // Arrange 
 
             // Act
-            var result = (ListVM<PlanVM>)(controller.Index(1)).Model;
-
-
+            var result = (ListVM<PlanVM>)(controller.Index(1)).Model; 
 
             // Assert 
             Assert.IsTrue(result.ListT.Count() == 5);
-            Assert.AreEqual("Old Name 1", result.ListT.First().Name);
-            Assert.AreEqual("Old Name 4", result.ListT.Skip(2).First().Name);
+            Assert.AreEqual("PlansController_Index_Test P1", result.ListT.First().Name);
+            Assert.AreEqual("PlansController_Index_Test P3", result.ListT.Skip(2).First().Name);
         }
 
         [TestMethod]
@@ -246,7 +243,7 @@ namespace LambAndLentil.Tests.Controllers
         public void RecipeIDIsNegative()
         {
             // Arrange
-            
+
             // AutoMapperConfigForTests.AMConfigForTests();
             AutoMapperConfigForTests.InitializeMap();
 
@@ -257,33 +254,31 @@ namespace LambAndLentil.Tests.Controllers
 
             // Assert
             Assert.IsNotNull(view);
-            Assert.AreEqual("No plan was found with that id.", adr.Message);
-            Assert.AreEqual("alert-danger", adr.AlertClass);
-            Assert.AreEqual(UIControllerType.Plans.ToString(), ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(0).ToString());
-            Assert.AreEqual(UIViewType.BaseIndex.ToString(), ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(1).ToString());
-            Assert.AreEqual(1, ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(3));
+            Assert.AreEqual("No Plan was found with that id.", adr.Message);
+            Assert.AreEqual("alert-danger", adr.AlertClass); 
+            Assert.AreEqual(UIViewType.BaseIndex.ToString(), ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(0).ToString()); 
         }
 
         [TestMethod]
         [TestCategory("Details")]
-        public void  WorksWithValidRecipeID()
+        public void WorksWithValidPlanID()
         {
-            // Arrange 
-            AutoMapperConfigForTests.InitializeMap();
-
+            // Arrange  
 
             // Act
-            ViewResult view = controller.Details(1) as ViewResult;
-            // Assert
-            Assert.IsNotNull(view);
+            ActionResult ar= controller.Details(int.MaxValue) ;
+            AlertDecoratorResult adr = (AlertDecoratorResult)ar;
+            ViewResult view = (ViewResult)adr.InnerResult ;
 
+            // Assert 
+            Assert.IsNotNull(view); 
             Assert.AreEqual("Details", view.ViewName);
             Assert.IsInstanceOfType(view.Model, typeof(LambAndLentil.UI.Models.PlanVM));
         }
 
         [TestMethod]
         [TestCategory("Details")]
-        public void  RecipeIDTooHigh()
+        public void RecipeIDTooHigh()
         {
             // Arrange 
             AutoMapperConfigForTests.InitializeMap();
@@ -291,19 +286,17 @@ namespace LambAndLentil.Tests.Controllers
             AlertDecoratorResult adr = (AlertDecoratorResult)view;
             // Assert
             Assert.IsNotNull(view);
-            Assert.AreEqual("No plan was found with that id.", adr.Message);
+            Assert.AreEqual("No Plan was found with that id.", adr.Message);
             Assert.AreEqual("alert-danger", adr.AlertClass);
-            Assert.AreEqual(UIControllerType.Plans.ToString(), ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(0).ToString());
-            Assert.AreEqual(UIViewType.BaseIndex.ToString(), ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(1).ToString());
-            Assert.AreEqual(1, ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(3));
+            Assert.AreEqual(UIViewType.BaseIndex.ToString(), ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(0).ToString());
         }
 
         [TestMethod]
         [TestCategory("Details")]
-        public void  RecipeIDPastIntLimit()
+        public void RecipeIDPastIntLimit()
         {
             // Arrange
-             
+
             AutoMapperConfigForTests.InitializeMap();
 
 
@@ -316,7 +309,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Details")]
-        public void  RecipeIDIsZero()
+        public void RecipeIDIsZero()
         {
             // Arrange 
             AutoMapperConfigForTests.InitializeMap();
@@ -328,11 +321,9 @@ namespace LambAndLentil.Tests.Controllers
 
             // Assert
             Assert.IsNotNull(view);
-            Assert.AreEqual("No plan was found with that id.", adr.Message);
-            Assert.AreEqual("alert-danger", adr.AlertClass);
-            Assert.AreEqual(UIControllerType.Plans.ToString(), ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(0).ToString());
-            Assert.AreEqual(UIViewType.BaseIndex.ToString(), ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(1).ToString());
-            Assert.AreEqual(1, ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(3));
+            Assert.AreEqual("No Plan was found with that id.", adr.Message);
+            Assert.AreEqual("alert-danger", adr.AlertClass); 
+            Assert.AreEqual(UIViewType.BaseIndex.ToString(), ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(0).ToString()); 
         }
 
         [TestMethod]
@@ -340,7 +331,7 @@ namespace LambAndLentil.Tests.Controllers
         public void Create()
         {
             // Arrange
-            
+
             ViewResult view = controller.Create(UIViewType.Edit);
 
 
@@ -354,14 +345,15 @@ namespace LambAndLentil.Tests.Controllers
         public void DeleteAFoundPlan()
         {
             // Arrange
-            
+
 
             // Act 
-            var view = controller.Delete(1) as ViewResult;
+            var view = controller.Delete(int.MaxValue) as ViewResult;
 
             // Assert
             Assert.IsNotNull(view);
             Assert.AreEqual(UIViewType.Details.ToString(), view.ViewName);
+            Assert.AreEqual(5, Repo.Count());  // shows this does not actually delete anything
         }
 
 
@@ -371,18 +363,18 @@ namespace LambAndLentil.Tests.Controllers
         public void DeleteAnInvalidPlan()
         {
             // Arrange
-             
+
 
             // Act 
             var view = controller.Delete(4000) as ViewResult;
             AlertDecoratorResult adr = (AlertDecoratorResult)view;
             // Assert
             Assert.IsNotNull(view);
-            Assert.AreEqual("No plan was found with that id.", adr.Message);
-            Assert.AreEqual("alert-danger", adr.AlertClass);
-            Assert.AreEqual(UIControllerType.Plans.ToString(), ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(0).ToString());
-            Assert.AreEqual(UIViewType.BaseIndex.ToString(), ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(1).ToString());
-            Assert.AreEqual(1, ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(3));
+            Assert.AreEqual("Plan was not found", adr.Message);
+            Assert.AreEqual("alert-warning", adr.AlertClass);
+            Assert.AreEqual(UIViewType.Index.ToString(), ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(0).ToString());
+            //Assert.AreEqual(UIViewType.BaseIndex.ToString(), ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(1).ToString());
+            //Assert.AreEqual(1, ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(3));
         }
 
         [TestMethod]
@@ -390,13 +382,14 @@ namespace LambAndLentil.Tests.Controllers
         public void DeleteConfirmed()
         {
             // Arrange
-            
+            int count = Repo.Count();
             // Act
-            ActionResult result = controller.DeleteConfirmed(1) as ActionResult;
+            ActionResult result = controller.DeleteConfirmed(int.MaxValue) as ActionResult;
             // improve this test when I do some route tests to return a more exact result
             //RedirectToRouteResult x = new RedirectToRouteResult("default",new  RouteValueDictionary { new Route( { controller = "ListTVM", Action = "Index" } } );
             // Assert 
             Assert.IsNotNull(result);
+            Assert.AreEqual(count - 1, Repo.Count());
         }
 
         [TestMethod]
@@ -405,57 +398,57 @@ namespace LambAndLentil.Tests.Controllers
         {
             // Arrange  
             PlanVM pVM = new PlanVM() { ID = 6000, Name = "test CanDeleteValidPlan" };
-            int count = repo.Count();
-            repo.Add(pVM);
-            int countPlus = repo.Count();
+            int count = Repo.Count();
+            Repo.Add(pVM);
+            int countPlus = Repo.Count();
+
             // Act - delete the plan
-                ActionResult result = controller.DeleteConfirmed(pVM.ID);
-            int countEnding = repo.Count();
+            ActionResult result = controller.DeleteConfirmed(pVM.ID);
+            int countEnding = Repo.Count();
             AlertDecoratorResult adr = (AlertDecoratorResult)result;
 
             // Assert 
-            Assert.AreEqual("Test2 has been deleted", adr.Message);
+            Assert.AreEqual("test CanDeleteValidPlan has been deleted", adr.Message);
             Assert.AreEqual(count, countEnding);
             Assert.AreEqual(count + 1, countPlus);
         }
 
-
+        [Ignore]
         [TestMethod]
         [TestCategory("Edit")]
-        public void CanEditPlan()
+        public void CanSetUpToEditPlan()
         {
-            // Arrange
-             
+            // Arrange 
 
-            // Act 
-
-            ViewResult view1 = controller.Edit(1);
-            PlanVM p1 = (PlanVM)view1.Model;
-            ViewResult view2 = controller.Edit(2);
+            // Act  
+            ViewResult view1 = (ViewResult)controller.Edit(int.MaxValue);
+            PlanVM p1   = (PlanVM)view1.Model;  
+            ViewResult view2 = (ViewResult)controller.Edit(int.MaxValue - 1);
             PlanVM p2 = (PlanVM)view2.Model;
-            ViewResult view3 = controller.Edit(3);
+            ViewResult view3 = (ViewResult)controller.Edit(int.MaxValue - 2);
             PlanVM p3 = (PlanVM)view3.Model;
 
 
             // Assert 
             Assert.IsNotNull(view1);
-            Assert.AreEqual(1, p1.ID);
-            Assert.AreEqual(2, p2.ID);
-            Assert.AreEqual(3, p3.ID);
-            Assert.AreEqual("First edited", p1.Name);
-            Assert.AreEqual("Old Name 2", p2.Name);
+            Assert.AreEqual(int.MaxValue, p1.ID);
+            Assert.AreEqual(int.MaxValue - 1, p2.ID);
+            Assert.AreEqual(int.MaxValue - 2, p3.ID);  
+            Assert.AreEqual("PlansController_Index_Test P1", p1.Name);
+            Assert.AreEqual("PlansController_Index_Test P2", p2.Name);
+            Assert.AreEqual("PlansController_Index_Test P3", p3.Name);
         }
 
 
-
+        [Ignore]
         [TestMethod]
         [TestCategory("Edit")]
         public void CannotEditNonexistentPlan()
         {
             // Arrange
-            
+
             // Act
-            Plan result = (Plan)controller.Edit(8).ViewData.Model;
+            Plan result = (Plan)((ViewResult)controller.Edit(8)).ViewData.Model;
             // Assert
             Assert.IsNull(result);
         }
@@ -464,7 +457,7 @@ namespace LambAndLentil.Tests.Controllers
         public void ListTVMCtr_CreateReturnsNonNull()
         {
             // Arrange
-          
+
 
             // Act
             ViewResult result = controller.Create(UIViewType.Create) as ViewResult;
@@ -473,8 +466,8 @@ namespace LambAndLentil.Tests.Controllers
             Assert.IsNotNull(result);
         }
 
-         
-         
+
+
         [Ignore]
         [TestMethod]
         public void FlagAnIngredientFlaggedInAPerson()
@@ -529,7 +522,6 @@ namespace LambAndLentil.Tests.Controllers
             {
                 File.Delete(file);
             }
-
         }
     }
 }

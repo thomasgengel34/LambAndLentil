@@ -14,7 +14,7 @@ namespace LambAndLentil.UI.Controllers
     {
         public MenusController(IRepository<MenuVM> repository) : base(repository)
         {
-            repo = repository;
+            Repo = repository;
         }
     }
 
@@ -23,20 +23,20 @@ namespace LambAndLentil.UI.Controllers
     {
         public MenusGenericController(IRepository<MenuVM> repository) : base(repository)
         {
-            repo = repository;
+            Repo = repository;
         }
 
         // GET: Menus
         public ViewResult Index(int page = 1)
         {
-            ViewResult view = BaseIndex(repo, page);
+            ViewResult view = BaseIndex(Repo,  page);
             return View(view.ViewName, view.Model);
         }
 
         // GET: Menus/Details/5 
         public ActionResult Details(int id = 1, UIViewType actionMethod = UIViewType.Details)
         {
-            return BaseDetails(repo, UIControllerType.Menus, id, actionMethod);
+            return BaseDetails(Repo,  UIControllerType.Menus, id, actionMethod);
         }
 
 
@@ -49,9 +49,9 @@ namespace LambAndLentil.UI.Controllers
 
 
         // GET: Menus/Edit/5
-        public ViewResult Edit(int id = 1)
+        public ActionResult Edit(int id = 1)
         {
-            return BaseEdit(repo, UIControllerType.Menus, id);
+             return BaseDetails(Repo,  UIControllerType.Menus, id, UIViewType.Edit);
         }
 
         //POST: Menus/Edit/5
@@ -61,7 +61,7 @@ namespace LambAndLentil.UI.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult PostEdit([Bind(Include = "ID,Name, DayOfWeek, Description,CreationDate, ModifiedDate,  AddedByUser, ModifiedByUser, MealType,Diners, Recipes, Ingredients")] MenuVM menuVM)
         {
-            return BasePostEdit(repo,menuVM);
+            return BasePostEdit(Repo, menuVM);
         }
 
         // GET: Menus/Delete/5
@@ -69,7 +69,7 @@ namespace LambAndLentil.UI.Controllers
         public ActionResult Delete(int id = 1, UIViewType actionMethod = UIViewType.Delete)
         {
             ViewBag.ActionMethod = UIViewType.Delete;
-            return BaseDelete(repo,UIControllerType.Menus, id);
+            return BaseDelete(Repo, UIControllerType.Menus, id);
         }
 
 
@@ -79,7 +79,7 @@ namespace LambAndLentil.UI.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            return BaseDeleteConfirmed(repo,UIControllerType.Menus, id);
+            return BaseDeleteConfirmed(Repo, UIControllerType.Menus, id);
         }
 
 

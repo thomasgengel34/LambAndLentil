@@ -12,58 +12,57 @@ using System.Web.Mvc;
 
 namespace LambAndLentil.UI.Controllers
 {
-    public abstract class BaseController<T > : Controller
-        
-            where T: BaseVM, IEntity, new()
+    public abstract class BaseController<T> : Controller
+
+            where T : BaseVM, IEntity, new()
     {
         private readonly string className;
 
         public int PageSize { get; set; }
 
-        protected static IRepository<T> repo { get; set; }
+        protected static IRepository<T> Repo { get; set; }
 
         public BaseController(IRepository<T> repository)
         {
-            repo = repository;
+            Repo = repository;
             className = new RepositoryHelperMethods().GetClassName<T>();
-            MvcApplication.InitializeMap();  // needed for testing
+            MvcApplication.InitializeMap();  // needed for testing. really??
         }
 
 
-        private Type GetControllerType()
-        {
-            string controllerName = String.Concat(className, "sController");
-            return Type.GetType(controllerName);
-        }
+        //private Type GetControllerType()
+        //{
+        //    string controllerName = String.Concat(className, "sController");
+        //    return Type.GetType(controllerName);
+        //}
 
         //  TODO: filter
 
-        public ViewResult BaseIndex(IRepository<T> repo, int page = 1)
+        public ViewResult BaseIndex(IRepository<T> Repo,  int page = 1)
         {
             PageSize = 8;
             ListVM<T> model = new ListVM<T>();
             // model.Entities = (IEnumerable<TVM>)BaseVM.GetIndexedModel<T>(PageSize, page);
-            model.ListT  = new BaseVM().GetIndexedModel<T>(repo, PageSize, page);
-            model.PagingInfo = new BaseVM().PagingFunction<T>(repo, page, PageSize);
+            model.ListT = new BaseVM().GetIndexedModel<T>(Repo,  PageSize, page);
+            model.PagingInfo = new BaseVM().PagingFunction<T>(Repo,  page, PageSize);
             return View(UIViewType.Index.ToString(), model);
         }
 
-        public ActionResult BaseDetails(IRepository<T> repo, UIControllerType uIController, int id = 1, UIViewType actionMethod = UIViewType.Details)
+        public ActionResult BaseDetails(IRepository<T> Repo,  UIControllerType uIController, int id = 1, UIViewType actionMethod = UIViewType.Details)
         {
+            ActionResult result;
             ViewBag.Title = actionMethod.ToString();
             if (actionMethod == UIViewType.Delete)
             {
-                return BaseDelete(repo, uIController, id);
+                return BaseDelete(Repo,  uIController, id);
             }
             else if (actionMethod == UIViewType.DeleteConfirmed)
             {
-                return BaseDeleteConfirmed(repo, uIController, id);
+                return BaseDeleteConfirmed(Repo,  uIController, id);
             }
-            else
+            else if (actionMethod == UIViewType.Details)
             {
-                ActionResult result = GuardId(repo, uIController, id);
-                // MvcApplication.InitializeMap(); needed for testing.  This is being run in Application_Start normally.  Move to Repository
-
+                result = GuardId(Repo,  uIController, id);
 
                 if (result == null)
                 {
@@ -71,46 +70,32 @@ namespace LambAndLentil.UI.Controllers
                 }
                 else
                 {
-                    T  item = repo.GetById(id);
-                    if (result is EmptyResult)
+                    T item = Repo.GetById(id);
+                    bool IsValid = IsModelValid(item);
+
+                    if (IsValid)
                     {
-                        return View(UIViewType.Details.ToString(), item).WithError("Something is wrong with the data!");
+                        return View(UIViewType.Details.ToString(), item).WithSuccess("Here it is!");
                     }
                     else
                     {
-                        return View(UIViewType.Details.ToString(), item).WithSuccess("Item Has been added or modified!");
+                        return View(UIViewType.Details.ToString(), item).WithError("Something is wrong with the data!");
                     }
                 }
             }
-        }
-
-
-        public ViewResult BaseCreate(UIViewType actionMethod)
-        {
-            ViewBag.ActionMethod = UIViewType.Create;
-            T  vm = new T();
-            vm.CreationDate = DateTime.Now;
-            return View(UIViewType.Details.ToString(), vm);
-        }
-
-        public ViewResult BaseEdit(IRepository<T> repo, UIControllerType uIControllerType, int id = 1, UIViewType actionMethod = UIViewType.Edit)
-        { 
-            ActionResult result = new EmptyResult();
-            if (actionMethod == UIViewType.Delete)
+            else if (actionMethod == UIViewType.Delete)
             {
-                result = BaseDelete(repo, UIControllerType.Ingredients, id = 1, UIViewType.Details);
-
+                T item = Repo.GetById(id);
+                return View(UIViewType.Details.ToString(), item).WithSuccess("Here it is!");   // not exactly what we want!
             }
-            else
+            else if (actionMethod == UIViewType.Edit)
             {
-                if (id != 0)
-                {
-                    result = GuardId(repo, uIControllerType, id);
-                }
-                T  item;
+                 
+                    result = GuardId(Repo,  uIController, id); 
+                T item;
                 if (result != null)
                 {
-                    item = repo.GetById(id);
+                    item = Repo.GetById(id);
                 }
                 else
                 {
@@ -119,14 +104,66 @@ namespace LambAndLentil.UI.Controllers
                 if (result is EmptyResult)
                 {
                     return View(UIViewType.Details.ToString(), item);
-                }
+                } 
+                return result as ViewResult;
             }
-            return result as ViewResult;
+            else
+            {
+                return View(UIViewType.Index);
+            }
         }
 
-        public ActionResult BasePostEdit(IRepository<T> repo, T  vm)
-        { 
-            T  item = (T)vm;
+        private bool IsModelValid(T item)
+        {
+            // TODO: implement
+            // intended as a second line of defense. JSON errors should be caught in the Repo methods.  This should catch logical errors in the model and mimic EF's model validation protocol(s)
+            //
+            return new ModelValidation().IsModelValid<T>(item);
+        }
+
+        public ViewResult BaseCreate(UIViewType actionMethod)
+        {
+            ViewBag.ActionMethod = UIViewType.Create;
+            T vm = new T();
+            vm.CreationDate = DateTime.Now;
+            return View(UIViewType.Details.ToString(), vm);
+        }
+
+        //public ActionResult BaseEdit(IRepository<T> Repo,  UIControllerType uIControllerType, int id = 1, UIViewType actionMethod = UIViewType.Edit)
+        //{
+        //    return BaseDetails(Repo,  uIControllerType, 1, UIViewType.Edit);
+        //ActionResult result = new EmptyResult();
+        //if (actionMethod == UIViewType.Delete)
+        //{
+        //    result = BaseDelete(Repo,  UIControllerType.Ingredients, id = 1, UIViewType.Details);
+
+        //}
+        //else
+        //{
+        //    if (id != 0)
+        //    {
+        //        result = GuardId(Repo,  uIControllerType, id);
+        //    }
+        //    T  item;
+        //    if (result != null)
+        //    {
+        //        item = Repo.GetById(id);
+        //    }
+        //    else
+        //    {
+        //        return (ViewResult)RedirectToAction(UIViewType.Index.ToString()).WithWarning(className + " was not found");
+        //    }
+        //    if (result is EmptyResult)
+        //    {
+        //        return View(UIViewType.Details.ToString(), item);
+        //    }
+        //}
+        //return result as ViewResult;
+        //   }
+
+        public ActionResult BasePostEdit(IRepository<T> Repo,  T vm)
+        {
+            T item = (T)vm;
             // new ingredientVM - saves double writing the Create Post method
             if (vm.ID == 0 && ModelState.IsValid)
             {
@@ -138,8 +175,8 @@ namespace LambAndLentil.UI.Controllers
             if (ModelState.IsValid)
             {
 
-                repo.Update(item, item.ID);
-                return RedirectToAction(UIViewType.BaseIndex.ToString()).WithSuccess(string.Format("{0} has been saved", vm.Name));
+                Repo.Update(item, item.ID);
+                return RedirectToAction(UIViewType.BaseIndex.ToString()).WithSuccess(string.Format("{0} has been saved or modified", vm.Name));
             }
             else
             {
@@ -148,18 +185,18 @@ namespace LambAndLentil.UI.Controllers
         }
 
 
-        public ActionResult BaseDelete(IRepository<T> repo, UIControllerType uiControllerType, int id = 1, UIViewType actionMethod = UIViewType.Delete)
-        { 
-            ActionResult result = GuardId(repo, uiControllerType, id); 
-            ViewBag.ActionMethod = UIViewType.Delete; 
-            T  item;
-            if (result != null)
+        public ActionResult BaseDelete(IRepository<T> Repo,  UIControllerType uiControllerType, int id = 1, UIViewType actionMethod = UIViewType.Delete)
+        {
+            ActionResult result = GuardId(Repo,  uiControllerType, id);
+            ViewBag.ActionMethod = UIViewType.Delete;
+            T item;
+            if (result == null)
             {
-                item = repo.GetById(id);
+                return (ViewResult)RedirectToAction(UIViewType.Index.ToString()).WithWarning(className + " was not found");
             }
             else
             {
-                return (ViewResult)RedirectToAction(UIViewType.Index.ToString()).WithWarning(className + " was not found");
+                item = Repo.GetById(id);
             }
             if (result is EmptyResult)
             {
@@ -168,11 +205,11 @@ namespace LambAndLentil.UI.Controllers
             return result;
         }
 
-        public ActionResult BaseDeleteConfirmed(IRepository<T> repo, UIControllerType controllerType, int id)
+        public ActionResult BaseDeleteConfirmed(IRepository<T> Repo,  UIControllerType controllerType, int id)
         {
-            ActionResult result = GuardId(repo, controllerType, id);
-            T  item = repo.GetById(id);
-            repo.Remove(item);
+            ActionResult result = GuardId(Repo,  controllerType, id);
+            T item = Repo.GetById(id);
+            Repo.Remove(item);
             ViewBag.ActionMethod = UIViewType.Delete.ToString();
             if (result is EmptyResult)
             {
@@ -181,9 +218,9 @@ namespace LambAndLentil.UI.Controllers
             return result;
         }
 
-        public ActionResult BaseAttach<TParent,  TChild >(int? parentID, int? childID, AttachOrDetach attachOrDetach = AttachOrDetach.Attach)
-            where TParent :   BaseVM, IEntity
-            where TChild :  BaseVM, IEntity
+        public ActionResult BaseAttach<TParent, TChild>(int? parentID, int? childID, AttachOrDetach attachOrDetach = AttachOrDetach.Attach)
+            where TParent : BaseVM, IEntity
+            where TChild : BaseVM, IEntity
         {
 
             // conditions guard against people trying thngs out manually  
@@ -227,7 +264,7 @@ namespace LambAndLentil.UI.Controllers
                     {
                         if (attachOrDetach == AttachOrDetach.Detach)
                         {
-                            repository.DetachAnIndependentChild< TChild>(parent.ID, child.ID);
+                            repository.DetachAnIndependentChild<TChild>(parent.ID, child.ID);
                             return RedirectToAction(UIViewType.Details.ToString(), new { id = parentID, actionMethod = UIViewType.Edit }).WithSuccess(childEntity + " was Successfully Detached!");
                         }
                         else
@@ -247,9 +284,9 @@ namespace LambAndLentil.UI.Controllers
             return ControllerExtensions.RedirectToAction(this, action);
         }
 
-        protected ActionResult GuardId(IRepository<T> repo, UIControllerType tController, int id)
+        protected ActionResult GuardId(IRepository<T> Repo,  UIControllerType tController, int id)
         {
-            T  item = repo.GetById(id);
+            T item = Repo.GetById(id);
 
             if (item == null)
             {
@@ -268,7 +305,7 @@ namespace LambAndLentil.UI.Controllers
         //    where T : BaseEntity, IEntity
         //    where TVM:BaseVM, IEntity
         //{
-        //    var result = from m in repo.GetAll()
+        //    var result = from m in Repo.GetAll()
         //                 orderby m.Name
         //                 select new SelectListItem
         //                 {
@@ -290,7 +327,7 @@ namespace LambAndLentil.UI.Controllers
         //}
 
 
-        //protected IEntity Get<T>(IRepository<T> repo, int id)
+        //protected IEntity Get<T>(IRepository<T> Repo,  int id)
         //     where T : BaseEntity, IEntity
         //    where TVM : BaseVM, IEntity
         //{
@@ -298,7 +335,7 @@ namespace LambAndLentil.UI.Controllers
 
         //    if (typeof(T) == typeof(Ingredient))
         //    {
-        //        result = (from m in repo.GetAll()
+        //        result = (from m in Repo.GetAll()
         //                  where m.ID == id
         //                  select m).FirstOrDefault();
         //    }

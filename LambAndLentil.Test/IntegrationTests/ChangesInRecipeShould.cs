@@ -1,5 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.Generic;
+using System.IO;
 
 namespace LambAndLentil.Test.IntegrationTests
 {
@@ -248,7 +250,20 @@ namespace LambAndLentil.Test.IntegrationTests
         [TestMethod]
         public void RecipeIngredientSummaryListCalorieShouldRecomputeIngredientListOfComponentIngredientsWhenIngredientRemoved()
         {
+            Assert.Fail();
+        }
 
+        [ClassCleanup()]
+        public static void ClassCleanup()
+        {
+            string path = @"C:\Dev\TGE\LambAndLentil\LambAndLentil.Test\App_Data\JSON\Recipe\";
+
+            IEnumerable<string> files = Directory.EnumerateFiles(path);
+
+            foreach (var file in files)
+            {
+                File.Delete(file);
+            }
         }
     }
 } 

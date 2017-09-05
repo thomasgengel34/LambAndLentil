@@ -1,6 +1,8 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using LambAndLentil.Domain.Entities;
+using System.Reflection;
+using System.Linq;
 
 namespace LambAndLentil.Domain.Test.Entities
 {
@@ -8,6 +10,13 @@ namespace LambAndLentil.Domain.Test.Entities
     [TestCategory("Person Class")]
     public class PersonClassShould
     {
+        static Person person; 
+
+        public PersonClassShould()
+        {
+            person = new Person();
+        }
+
         [TestMethod]
         public void HaveCorrectDefaultsInConstructor()
         {
@@ -83,77 +92,88 @@ namespace LambAndLentil.Domain.Test.Entities
             Assert.AreEqual("6/26/1977", person.CreationDate.ToShortDateString());
         }
 
-
-        [Ignore]
+        [TestCategory("Class Child Test")]
         [TestMethod]
-        public void BeAbleToHaveIngredientChild()
+        public void BeAbleToHaveIngredientsChild()
         {
             // Arrange
 
             // Act
+            PropertyInfo[] props = person.GetType().GetProperties();
+            var result = props.Where(p => p.Name == "Ingredients");
 
             // Assert
-            Assert.Fail();
+            Assert.AreEqual(1, result.Count());
         }
 
-        [Ignore]
+        [TestCategory("Class Child Test")]
         [TestMethod]
-        public void BeAbleToHaveRecipeChild()
+        public void BeAbleToHaveRecipesChild()
         {
             // Arrange
 
             // Act
+            PropertyInfo[] props = person.GetType().GetProperties();
+            var result = props.Where(p => p.Name == "Recipes");
 
             // Assert
-            Assert.Fail();
+            Assert.AreEqual(1, result.Count());
         }
 
-        [Ignore]
+        [TestCategory("Class Child Test")]
         [TestMethod]
-        public void BeAbleToHaveMenuChild()
+        public void BeAbleToHaveMenusChild()
         {
             // Arrange
 
             // Act
+            PropertyInfo[] props = person.GetType().GetProperties();
+            var result = props.Where(p => p.Name == "Menus");
 
             // Assert
-            Assert.Fail();
+            Assert.AreEqual(1, result.Count());
         }
 
-        [Ignore]
+        [TestCategory("Class Child Test")]
         [TestMethod]
-        public void BeAbleToHavePlanChild()
+        public void BeAbleToHavePlansChild()
         {
             // Arrange
-
+             
             // Act
+            PropertyInfo[] props = person.GetType().GetProperties();
+            var result = props.Where(p => p.Name == "Plans");
 
             // Assert
-            Assert.Fail();
+            Assert.AreEqual(1, result.Count());
         }
 
-        [Ignore]
+        [TestCategory("Class Child Test")]
         [TestMethod]
-        public void  BeAbleToHaveShoppingListChild()
+        public void  BeAbleToHaveShoppingListsChild()
         {
             // Arrange
 
             // Act
+            PropertyInfo[] props = person.GetType().GetProperties();
+            var result = props.Where(p => p.Name == "ShoppingLists");
 
             // Assert
-            Assert.Fail();
+            Assert.AreEqual(1, result.Count());
         }
 
-        [Ignore]
+        [TestCategory("Class Child Test")]
         [TestMethod]
-        public void NotBeAbleToHavePersonChild()
+        public void NotBeAbleToHavePersonsChild()
         {
             // Arrange
 
             // Act
+            PropertyInfo[] props = person.GetType().GetProperties();
+            var result = props.Where(p => p.Name == "Persons");
 
             // Assert
-            Assert.Fail();
+            Assert.AreEqual(0, result.Count());
         }
     }
 }

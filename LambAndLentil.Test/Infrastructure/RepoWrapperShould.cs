@@ -11,13 +11,13 @@ namespace LambAndLentil.Test.Infrastructure
     public class RepoWrapperShould : IRepository
     {
         static IRepository<IngredientVM> baseRepo;
-        static RepoWrapper<IngredientVM> repo;
+        static RepoWrapper<IngredientVM> Repo;
 
 
         public RepoWrapperShould()
         {
              baseRepo= new TestRepository<IngredientVM>();
-             repo = new RepoWrapper<IngredientVM>(baseRepo);
+             Repo = new RepoWrapper<IngredientVM>(baseRepo);
              
         }
 
@@ -31,7 +31,7 @@ namespace LambAndLentil.Test.Infrastructure
             // Act
            
             // Assert  
-            Assert.IsNotNull(repo);
+            Assert.IsNotNull(Repo);
         }
 
         [TestMethod]
@@ -41,10 +41,10 @@ namespace LambAndLentil.Test.Infrastructure
 
             // Act
             IRepository<IngredientVM> baseJRepo = new JSONRepository<IngredientVM>();
-            RepoWrapper<IngredientVM> Jrepo = new RepoWrapper<IngredientVM>(baseJRepo);
+            RepoWrapper<IngredientVM> JRepo = new RepoWrapper<IngredientVM>(baseJRepo);
 
             // Assert  
-            Assert.IsNotNull(Jrepo);
+            Assert.IsNotNull(Repo);
         }
 
         [Ignore]
@@ -83,7 +83,7 @@ namespace LambAndLentil.Test.Infrastructure
             Assert.Fail();
         }
 
-
+        [Ignore]
         [TestMethod]
         public void PassThroughRemoveToUnderlyingClass()
         {

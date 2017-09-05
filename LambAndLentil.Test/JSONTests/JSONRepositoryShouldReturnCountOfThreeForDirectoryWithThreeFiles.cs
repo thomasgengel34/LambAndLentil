@@ -17,12 +17,12 @@ namespace LambAndLentil.Test.JSONTests
     {
         public static MapperConfiguration AutoMapperConfig { get; set; }
         static string path = @"../../../\LambAndLentil.Test\App_Data\JSON\Ingredient\";
-        private static TestRepository< IngredientVM> repo { get; set; }
+        private static TestRepository< IngredientVM> Repo { get; set; }
 
         public JSONRepositoryShouldReturnCountOfThreeForDirectoryWithThreeFiles()
         {
             AutoMapperConfigForTests.InitializeMap();
-            repo = new TestRepository< IngredientVM>(); 
+            Repo = new TestRepository< IngredientVM>(); 
         }
 
 
@@ -34,12 +34,12 @@ namespace LambAndLentil.Test.JSONTests
 
 
             // Act
-            repo.Add(new IngredientVM() { ID = 1, Name = "Ichi" });
-            repo.Add(new IngredientVM() { ID = 2, Name = "Ni" });
-            repo.Add(new IngredientVM() { ID = 3, Name = "San" });
+            Repo.Add(new IngredientVM() { ID = 1, Name = "Ichi" });
+            Repo.Add(new IngredientVM() { ID = 2, Name = "Ni" });
+            Repo.Add(new IngredientVM() { ID = 3, Name = "San" });
 
 
-            int count = repo.Count();
+            int count = Repo.Count();
             int filesInDirectoryCount = Directory.EnumerateFiles(path).Count();
             // Assert
             Assert.AreEqual(3, count);

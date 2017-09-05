@@ -1,15 +1,17 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.IO;
+using System.Collections.Generic;
 
 namespace LambAndLentil.Test.Controllers
 {
     [Ignore]
     [TestClass]
-    public class PlansControllerTest_FilterShould
+    public class IngredientsControllerTest_FilterShould
     {
 
         [TestMethod]
-        public void FindPlansContainingOnionInASet()
+        public void FindIngredientsContainingOnionInASet()
         {
             // Arrange
 
@@ -20,7 +22,7 @@ namespace LambAndLentil.Test.Controllers
         }
 
         [TestMethod]
-        public void FindPlansNotContainingOnionInASet()
+        public void FindIngredientsNotContainingOnionInASet()
         {
             // Arrange
 
@@ -31,7 +33,7 @@ namespace LambAndLentil.Test.Controllers
         }
 
         [TestMethod]
-        public void FindPlansAddedBeforeACertainDate()
+        public void FindIngredientsAddedBeforeACertainDate()
         {
             // Arrange
 
@@ -42,7 +44,7 @@ namespace LambAndLentil.Test.Controllers
         }
 
         [TestMethod]
-        public void FindPlansAddedOnACertainDate()
+        public void FindIngredientsAddedOnACertainDate()
         {
             // Arrange
 
@@ -53,7 +55,7 @@ namespace LambAndLentil.Test.Controllers
         }
 
         [TestMethod]
-        public void FindPlansAddedAfterACertainDate()
+        public void FindIngredientsAddedAfterACertainDate()
         {
             // Arrange
 
@@ -64,7 +66,7 @@ namespace LambAndLentil.Test.Controllers
         }
 
         [TestMethod]
-        public void FindPlansAddedInADateRange()
+        public void FindIngredientsAddedInADateRange()
         {
             // Arrange
 
@@ -75,7 +77,7 @@ namespace LambAndLentil.Test.Controllers
         }
 
         [TestMethod]
-        public void FindPlansAddedOutsideADateRange()
+        public void FindIngredientsAddedOutsideADateRange()
         {
             // Arrange
 
@@ -86,7 +88,7 @@ namespace LambAndLentil.Test.Controllers
         }
 
         [TestMethod]
-        public void FindPlansAddedByOneUser()
+        public void FindIngredientsAddedByOneUser()
         {
             // Arrange
 
@@ -97,7 +99,7 @@ namespace LambAndLentil.Test.Controllers
         }
 
         [TestMethod]
-        public void FindPlansNotAddedByOneUser()
+        public void FindIngredientsNotAddedByOneUser()
         {
             // Arrange
 
@@ -108,7 +110,7 @@ namespace LambAndLentil.Test.Controllers
         }
 
         [TestMethod]
-        public void FindPlansAddedByASetOfUsers()
+        public void FindIngredientsAddedByASetOfUsers()
         {
             // Arrange
 
@@ -119,7 +121,7 @@ namespace LambAndLentil.Test.Controllers
         }
 
         [TestMethod]
-        public void FindPlansNotAddedByASetOfUsers()
+        public void FindIngredientsNotAddedByASetOfUsers()
         {
             // Arrange
 
@@ -130,7 +132,7 @@ namespace LambAndLentil.Test.Controllers
         }
 
         [TestMethod]
-        public void FindPlansAddedByAUserContainingOnion()
+        public void FindIngredientsAddedByAUserContainingOnion()
         {
             // Arrange
 
@@ -141,7 +143,7 @@ namespace LambAndLentil.Test.Controllers
         }
 
         [TestMethod]
-        public void FindPlansAddedByAUserContainingNotOnion()
+        public void FindIngredientsAddedByAUserContainingNotOnion()
         {
             // Arrange
 
@@ -152,7 +154,7 @@ namespace LambAndLentil.Test.Controllers
         }
 
         [TestMethod]
-        public void FindPlansNotAddedByAUserContainingOnion()
+        public void FindIngredientsNotAddedByAUserContainingOnion()
         {
             // Arrange
 
@@ -163,7 +165,7 @@ namespace LambAndLentil.Test.Controllers
         }
 
         [TestMethod]
-        public void FindPlansNotAddedByAUserNotContainingOnion()
+        public void FindIngredientsNotAddedByAUserNotContainingOnion()
         {
             // Arrange
 
@@ -173,7 +175,7 @@ namespace LambAndLentil.Test.Controllers
             Assert.Fail();
         }
 
-        public void FindPlansNotAddedByAUserNotContainingOnionAddedByACertainDate()
+        public void FindIngredientsNotAddedByAUserNotContainingOnionAddedByACertainDate()
         {
             // Arrange
 
@@ -181,6 +183,19 @@ namespace LambAndLentil.Test.Controllers
 
             // Assert
             Assert.Fail();
+        }
+
+        [ClassCleanup()]
+        public static void ClassCleanup()
+        {
+            string path = @"C:\Dev\TGE\LambAndLentil\LambAndLentil.Test\App_Data\JSON\Ingredient\";
+
+            IEnumerable<string> files = Directory.EnumerateFiles(path);
+
+            foreach (var file in files)
+            {
+                File.Delete(file);
+            }
         }
     }
 } 

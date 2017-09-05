@@ -7,14 +7,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace LambAndLentil.UI.Models
 {
-    public class ShoppingListVM:BaseVM,IBaseVM,IEntity
+    public class ShoppingListVM : BaseVM, IBaseVM, IShoppingList, IShoppingListVM
     {
+         
 
-
-        public string Author { get; set; }
-        public DateTime Date { get; set; }
-
-        //public List<Ingredient> Ingredients { get; set; }
+ 
         
 
         public ShoppingListVM()
@@ -26,5 +23,12 @@ namespace LambAndLentil.UI.Models
         {
             CreationDate = creationDate;
         }
+
+        public string Author { get; set; }
+        public DateTime Date { get; set; }
+        public ICollection<Ingredient> Ingredients { get; set; }
+        public ICollection<Menu> Menus { get; set; } 
+        public ICollection<Plan> Plans { get; set; }
+        public ICollection<Recipe> Recipes { get; set; }
     }
 }

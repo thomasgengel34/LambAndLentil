@@ -28,16 +28,16 @@ namespace LambAndLentil.Test.JSONTests
         public void SaveOneIngredient()
         {
             // Arrange
-            IRepository< IngredientVM> repo = new TestRepository< IngredientVM>();
-            //IngredientsController<Ingredient,IngredientVM> controller = new IngredientsController<Ingredient,IngredientVM>(repo);
+            IRepository< IngredientVM> Repo = new TestRepository< IngredientVM>();
+            //IngredientsController<Ingredient,IngredientVM> controller = new IngredientsController<Ingredient,IngredientVM>(Repo);
             IngredientVM ingredientVM = new IngredientVM();
             ingredientVM.ID = int.MaxValue;
             ingredientVM.Name = "test SaveOneIngredient";
 
             // Act
-            repo.Save(ingredientVM);
+            Repo.Save(ingredientVM);
 
-            IngredientVM returnedIngredient = repo.GetById(ingredientVM.ID);
+            IngredientVM returnedIngredient = Repo.GetById(ingredientVM.ID);
 
             // Assert
             Assert.AreEqual(ingredientVM.ID, returnedIngredient.ID);
@@ -61,7 +61,7 @@ namespace LambAndLentil.Test.JSONTests
         public void SaveOneMenu()
         {
             // Arrange
-            IRepository< MenuVM> repo = new JSONRepository<  MenuVM>();
+            IRepository< MenuVM> Repo = new JSONRepository<  MenuVM>();
             MenuVM menuVM = new MenuVM();
             menuVM.Name = "SaveOneMenu Test ";
             menuVM.ModifiedDate = new DateTime(1990, 12, 12);
@@ -70,7 +70,7 @@ namespace LambAndLentil.Test.JSONTests
             // Act
             try
             {
-                repo.Add(menuVM);
+                Repo.Add(menuVM);
                 file = @"../../../\LambAndLentil.Domain\App_Data\JSON\Menu\" + menuVM.Name + ".txt";
                 StreamReader sr = new StreamReader(file);
                 string theFile = "";
@@ -138,7 +138,7 @@ namespace LambAndLentil.Test.JSONTests
         public void ReturnZeroCountForEmptyDirectory()
         {
             // Arrange
-            IRepository<TestReturnZeroCountForEmptyDirectoryVM> repo = new TestRepository<TestReturnZeroCountForEmptyDirectoryVM>();
+            IRepository<TestReturnZeroCountForEmptyDirectoryVM> Repo = new TestRepository<TestReturnZeroCountForEmptyDirectoryVM>();
            string path = @"../../../\LambAndLentil.Test\App_Data\JSON\TestReturnZeroCountForEmptyDirectory\";
          
             try
@@ -146,7 +146,7 @@ namespace LambAndLentil.Test.JSONTests
                 Directory.CreateDirectory(path);
 
                 // Act
-                int count = repo.Count();
+                int count = Repo.Count();
 
                 // Assert
                 Assert.AreEqual(0, count);
@@ -179,7 +179,7 @@ namespace LambAndLentil.Test.JSONTests
         private class GetRidOfMe : IDisposable
         {
 
-            #region IDisposable Support
+           
             private bool disposedValue = false; // To detect redundant calls
 
             protected virtual void Dispose(bool disposing)
@@ -212,10 +212,51 @@ namespace LambAndLentil.Test.JSONTests
                 // TODO: uncomment the following line if the finalizer is overridden above.
                 // GC.SuppressFinalize(this);
             }
-            #endregion
+         
 
         }
 
-      
+        [Ignore]
+        [TestMethod]
+        public void NotThrowAnErrorForAValidModel()
+        {
+            // Arrange
+
+            // Act
+
+
+            // Assert
+            Assert.Fail();
+        }
+
+
+
+        [Ignore]
+        [TestMethod]
+        public void ThrowAnErrorForAnInvalidModel()
+        {
+            // Arrange
+
+            // Act
+
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void BubbleUpErrorToCallingMethodForAnInvalidModel()
+        {
+            // Arrange
+
+            // Act
+
+
+            // Assert
+            Assert.Fail();
+        }
+
+
     }
 }

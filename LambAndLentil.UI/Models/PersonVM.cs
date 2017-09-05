@@ -37,7 +37,12 @@ namespace LambAndLentil.UI.Models
         public decimal Weight { get; set; } 
         public int MinCalories { get; set; }
         public int MaxCalories { get; set; }
-        public bool NoGarlic { get; set; } 
+        public bool NoGarlic { get; set; }
         //TODO: add all ingredients after I figure out how to economically
+        public ICollection<Ingredient> Ingredients { get; set; }
+        public ICollection<Menu> Menus { get; set; }
+        public ICollection<Plan> Plans { get; set; }
+        public ICollection<Recipe> Recipes { get; set; }
+        public ICollection<ShoppingList> ShoppingLists { get; set; } 
     }
 }

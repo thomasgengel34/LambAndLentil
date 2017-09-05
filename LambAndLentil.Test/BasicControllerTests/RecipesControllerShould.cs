@@ -21,7 +21,7 @@ namespace LambAndLentil.Tests.Controllers
     public class RecipesControllerShould
     {
         // static List<RecipeVM> recipeVMArray { get; set; }
-        private static IRepository<RecipeVM> repo { get; set; }
+        private static IRepository<RecipeVM> Repo { get; set; }
         public static MapperConfiguration AutoMapperConfig { get; set; }
         private static RecipesController controller { get; set; }
         private ListVM<RecipeVM> vm { get; set; }
@@ -29,7 +29,7 @@ namespace LambAndLentil.Tests.Controllers
         public RecipesControllerShould()
         {
             AutoMapperConfigForTests.InitializeMap();
-            repo = new TestRepository<RecipeVM>();
+            Repo = new TestRepository<RecipeVM>();
             vm = new ListVM<RecipeVM>();
             controller = SetUpController();
         }
@@ -62,10 +62,10 @@ namespace LambAndLentil.Tests.Controllers
 
             foreach (RecipeVM recipe in vm.ListT)
             {
-                repo.Add(recipe);
+                Repo.Add(recipe);
             }
 
-            controller = new RecipesController(repo);
+            controller = new RecipesController(Repo);
             controller.PageSize = 3;
 
             return controller;
@@ -150,7 +150,7 @@ namespace LambAndLentil.Tests.Controllers
             PagingInfo pageInfoT = resultT.PagingInfo;
             Assert.AreEqual(2, pageInfoT.CurrentPage);
             Assert.AreEqual(8, pageInfoT.ItemsPerPage);
-            Assert.AreEqual(repo.Count(), pageInfoT.TotalItems);
+            Assert.AreEqual(Repo.Count(), pageInfoT.TotalItems);
             Assert.AreEqual(1, pageInfoT.TotalPages);
 
         }
@@ -395,17 +395,17 @@ namespace LambAndLentil.Tests.Controllers
         {
             // Arrange - create an recipe
             RecipeVM recipeVM = new RecipeVM { ID = 2, Name = "Test2" };
-            repo.Add(recipeVM);
-            int repoCount = repo.Count();
+            Repo.Add(recipeVM);
+            int repoCount = Repo.Count();
 
             // Arrange - create the controller
-            RecipesController controller = new RecipesController(repo);
+            RecipesController controller = new RecipesController(Repo);
 
             // Act - delete the recipe
             ActionResult result = controller.DeleteConfirmed(recipeVM.ID);
 
             AlertDecoratorResult adr = (AlertDecoratorResult)result;
-            int newRepoCount = repo.Count();
+            int newRepoCount = Repo.Count();
             // Assert
             Assert.AreEqual(repoCount - 1, newRepoCount);
             Assert.AreEqual("Test2 has been deleted", adr.Message);
@@ -426,7 +426,7 @@ namespace LambAndLentil.Tests.Controllers
             Assert.Fail();
         }
 
-
+        [Ignore]
         [TestMethod]
         [TestCategory("Edit")]
         public void NotEditNonexistentRecipe()
@@ -434,7 +434,7 @@ namespace LambAndLentil.Tests.Controllers
             // Arrange
             RecipesController controller = SetUpController();
             // Act
-            Recipe result = (Recipe)controller.Edit(8).ViewData.Model;
+            Recipe result = (Recipe)((ViewResult)controller.Edit(8)).ViewData.Model;
             // Assert
             Assert.IsNull(result);
         }
@@ -491,26 +491,23 @@ namespace LambAndLentil.Tests.Controllers
             Assert.Fail();
         }
 
+        [TestCleanup]
+        public void TestCleanup()
+        {
+            ClassCleanup();
+        }
 
         [ClassCleanup()]
         public static void ClassCleanup()
         {
             string path = @"C:\Dev\TGE\LambAndLentil\LambAndLentil.Test\App_Data\JSON\Recipe\";
-            int count = int.MaxValue;
-            try
+
+            IEnumerable<string> files = Directory.EnumerateFiles(path);
+
+            foreach (var file in files)
             {
-
-                for (int i = count; i > count - 6; i--)
-                {
-                    File.Delete(string.Concat(path, i, ".txt"));
-                }
-
-            }
-            catch (Exception)
-            {
-
-                throw;
+                File.Delete(file);
             }
         }
     }
-}
+    } 

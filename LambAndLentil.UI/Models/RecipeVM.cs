@@ -7,7 +7,7 @@ namespace LambAndLentil.UI.Models
 {
 
 
-    public class RecipeVM : BaseVM,IBaseVM,IEntity
+    public class RecipeVM : BaseVM,IBaseVM,IRecipe
     {
         public RecipeVM():base()
         {
@@ -34,9 +34,7 @@ namespace LambAndLentil.UI.Models
         public int? Calories { get; set; }
         [Display(Name = "Calories From Fat")]
         public short? CalsFromFat { get; set; }
-
-       
-
+        public ICollection<Ingredient> Ingredients { get; set; }
 
         public static short GetCalories(RecipeVM recipeVM)
         {

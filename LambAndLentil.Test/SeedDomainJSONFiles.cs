@@ -22,7 +22,7 @@ namespace LambAndLentil.Test
         {
             try
             {
-                IRepository<IngredientVM> repo = new JSONRepository< IngredientVM>();
+                IRepository<IngredientVM> Repo = new JSONRepository< IngredientVM>();
                 List<IngredientVM> list = new List<IngredientVM> {
             new IngredientVM{ ID = 1, Name = "Egg", Description = "Fresh" },
             new IngredientVM{ ID =2, Name = "AARDVARK HABENERO HOT SAUCE, UPC: 853393000030", Description = "AARDVARK HABENERO HOT SAUCE, UPC: 853393000030", IngredientsList= "TOMATOES (TOMATOES AND FIRE ROASTED TOMATOES, TOMATO JUICE, CITRIC ACID, CALCIUM CHLORIDE), WHITE WINE VINEGAR, CARROTS, WATER, YELLOW ONION, HABANERO CHILI PEPPER (HABANERO CHILI PEPPERS, WATER, SALT, CITRIC ACID), MUSTARD (DISTILLED VINEGAR, WATER, MUSTARD SEED, SALT, TURMERIC, SPICES), ORGANIC CANE SUGAR, SALT, MODIFIED FOOD STARCH, GARLIC, SUNFLOWER OIL, HERBS AND SPICES. Date Available: 09/23/2016" },
@@ -36,7 +36,7 @@ namespace LambAndLentil.Test
 
                 foreach (IngredientVM ingredientVM in list)
                 {
-                    repo.Add(ingredientVM);
+                    Repo.Add(ingredientVM);
                 }
 
             }

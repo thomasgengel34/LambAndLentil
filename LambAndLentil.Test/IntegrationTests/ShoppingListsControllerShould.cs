@@ -2,6 +2,7 @@
 using LambAndLentil.Domain.Abstract;
 using LambAndLentil.Domain.Concrete;
 using LambAndLentil.Domain.Entities;
+using LambAndLentil.Tests.Controllers;
 using LambAndLentil.UI;
 using LambAndLentil.UI.Controllers;
 using LambAndLentil.UI.Infrastructure.Alerts;
@@ -21,14 +22,14 @@ namespace IntegrationTests
     public class ShoppingListsControllerShould
     {
 
-        static IRepository<ShoppingListVM> repo;
+        static IRepository<ShoppingListVM> Repo;
         static ShoppingListsController controller;
         static ShoppingListVM vm;
 
         public ShoppingListsControllerShould()
         {
-            repo = new TestRepository<ShoppingListVM>();
-            controller = new ShoppingListsController(repo);
+            Repo = new TestRepository<ShoppingListVM>();
+            controller = new ShoppingListsController(Repo);
             vm = new ShoppingListVM();
             vm.ID = 400;
             vm.Name = "ShoppingListsControllerShould";
@@ -55,7 +56,7 @@ namespace IntegrationTests
         public void SaveAValidShoppingList()
         {
             // Arrange 
-            ShoppingListsController controller = new ShoppingListsController(repo);
+            ShoppingListsController controller = new ShoppingListsController(Repo);
             ShoppingListVM vm = new ShoppingListVM();
             vm.Name = "test";
             // Act
@@ -79,11 +80,11 @@ namespace IntegrationTests
         public void SaveEditedShoppingListWithNameChange()
         {
             // Arrange 
-            ShoppingListsController controller1 = new ShoppingListsController(repo);
-            ShoppingListsController controller2 = new ShoppingListsController(repo);
-            ShoppingListsController controller3 = new ShoppingListsController(repo);
-            ShoppingListsController controller4 = new ShoppingListsController(repo);
-            ShoppingListsController controller5 = new ShoppingListsController(repo);
+            ShoppingListsController controller1 = new ShoppingListsController(Repo);
+            ShoppingListsController controller2 = new ShoppingListsController(Repo);
+            ShoppingListsController controller3 = new ShoppingListsController(Repo);
+            ShoppingListsController controller4 = new ShoppingListsController(Repo);
+            ShoppingListsController controller5 = new ShoppingListsController(Repo);
             ShoppingListVM vm = new ShoppingListVM();
             vm.Name = "0000 test";
 
@@ -126,11 +127,11 @@ namespace IntegrationTests
         public void SaveEditedShoppingListWithDescriptionChange()
         {
             // Arrange 
-            ShoppingListsController controller1 = new ShoppingListsController(repo);
-            ShoppingListsController controller2 = new ShoppingListsController(repo);
-            ShoppingListsController controller3 = new ShoppingListsController(repo);
-            ShoppingListsController controller4 = new ShoppingListsController(repo);
-            ShoppingListsController controller5 = new ShoppingListsController(repo);
+            ShoppingListsController controller1 = new ShoppingListsController(Repo);
+            ShoppingListsController controller2 = new ShoppingListsController(Repo);
+            ShoppingListsController controller3 = new ShoppingListsController(Repo);
+            ShoppingListsController controller4 = new ShoppingListsController(Repo);
+            ShoppingListsController controller5 = new ShoppingListsController(Repo);
             ShoppingListVM vm = new ShoppingListVM();
             vm.Name = "0000 test";
             vm.Description = "SaveEditedShoppingListWithDescriptionChange Pre-test";
@@ -172,10 +173,10 @@ namespace IntegrationTests
         public void ActuallyDeleteAShoppingListFromTheDatabase()
         {
             // Arrange  
-            ShoppingListVM item = GetShoppingListVM(repo, "test ActuallyDeleteAShoppingListFromTheDatabase");
+            ShoppingListVM item = GetShoppingListVM(Repo,  "test ActuallyDeleteAShoppingListFromTheDatabase");
             //Act
             controller.DeleteConfirmed(item.ID);
-            var deletedItem = (from m in repo.GetAll()
+            var deletedItem = (from m in Repo.GetAll()
                                where m.Description == item.Description
                                select m).AsQueryable();
 
@@ -193,10 +194,10 @@ namespace IntegrationTests
             ShoppingListVM shoppingListVM = new ShoppingListVM(CreationDate);
             shoppingListVM.Name = "001 Test ";
 
-            JSONRepository<ShoppingList> repo = new JSONRepository<ShoppingList>(); ;
-            //ShoppingListsController controllerEdit = new ShoppingListsController(repo);
-            //ShoppingListsController controllerView = new ShoppingListsController(repo);
-            //ShoppingListsController controllerDelete = new ShoppingListsController(repo);
+            JSONRepository<ShoppingList> Repo = new JSONRepository<ShoppingList>(); ;
+            //ShoppingListsController controllerEdit = new ShoppingListsController(Repo);
+            //ShoppingListsController controllerView = new ShoppingListsController(Repo);
+            //ShoppingListsController controllerDelete = new ShoppingListsController(Repo);
 
             // Act
             //controllerEdit.PostEdit(shoppingListVM);
@@ -221,12 +222,12 @@ namespace IntegrationTests
         public void UpdateTheModificationDateBetweenPostedEdits()
         {
             // Arrange
-            JSONRepository<ShoppingList> repo = new JSONRepository<ShoppingList>();
-            //ShoppingListsController controllerPost = new ShoppingListsController(repo);
-            //ShoppingListsController controllerPost1 = new ShoppingListsController(repo);
-            //ShoppingListsController controllerView = new ShoppingListsController(repo);
-            //ShoppingListsController controllerView1 = new ShoppingListsController(repo);
-            //ShoppingListsController controllerDelete = new ShoppingListsController(repo);
+            JSONRepository<ShoppingList> Repo = new JSONRepository<ShoppingList>();
+            //ShoppingListsController controllerPost = new ShoppingListsController(Repo);
+            //ShoppingListsController controllerPost1 = new ShoppingListsController(Repo);
+            //ShoppingListsController controllerView = new ShoppingListsController(Repo);
+            //ShoppingListsController controllerView1 = new ShoppingListsController(Repo);
+            //ShoppingListsController controllerDelete = new ShoppingListsController(Repo);
 
             ShoppingListVM vm = new ShoppingListVM();
             vm.Name = "002 Test Mod";
@@ -265,14 +266,14 @@ namespace IntegrationTests
         
         }
 
-        internal ShoppingListVM GetShoppingListVM(IRepository<ShoppingListVM> repo, string description)
+        internal ShoppingListVM GetShoppingListVM(IRepository<ShoppingListVM> Repo,  string description)
         { 
             
             vm.ID = int.MaxValue;
             vm.Description = description;
             controller.PostEdit(vm);
 
-            ShoppingListVM result =  (from m in repo.GetAll()
+            ShoppingListVM result =  (from m in Repo.GetAll()
                                   where m.Description == vm.Description
                                   select m).AsQueryable().FirstOrDefault();
             return result;
@@ -285,14 +286,14 @@ namespace IntegrationTests
         {
             // Arrange 
             JSONRepository<IngredientVM> repoIngredient = new JSONRepository< IngredientVM>();
-            ShoppingListsController controller = new ShoppingListsController(repo );
+            ShoppingListsController controller = new ShoppingListsController(Repo );
 
-            ShoppingListVM  slVM = GetShoppingListVM(repo, "test AttachAnExistingIngredientToAnExistingShoppingList");
+            ShoppingListVM  slVM = GetShoppingListVM(Repo,  "test AttachAnExistingIngredientToAnExistingShoppingList");
             IngredientVM ingredientVM = new RecipesControllerShould().GetIngredientVM(repoIngredient, "test AttachAnExistingIngredientToAnExistingShoppingList");
 
             // Act
             controller.AttachIngredient(slVM.ID, ingredientVM.ID);
-            ShoppingListVM returnedShoppingListVM = (from m in repo.GetAll()
+            ShoppingListVM returnedShoppingListVM = (from m in Repo.GetAll()
                                                  where m.Description == slVM.Description
                                                  select m).FirstOrDefault();
 
@@ -380,13 +381,7 @@ namespace IntegrationTests
         [ClassCleanup()]
         public static void ClassCleanup()
         {
-            string path = @"C:\Dev\TGE\LambAndLentil\LambAndLentil.Test\App_Data\JSON\ShoppingList\";
-            IEnumerable<string> files = Directory.EnumerateFiles(path);
-
-            foreach (var file in files)
-            {
-                File.Delete(file);
-            }
+            ShoppingListsControllerTest.ClassCleanup();
 
         }
     }

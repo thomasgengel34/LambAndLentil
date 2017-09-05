@@ -24,7 +24,7 @@ namespace LambAndLentil.Test.Infrastructure
     [TestCategory("IngredientsController")]
     public class IngredientsControllerShould
     {
-        static IRepository<IngredientVM> repo;
+        static IRepository<IngredientVM> Repo;
         static IngredientsController controller;
         static ListVM<IngredientVM> ilvm;
         public static MapperConfiguration AutoMapperConfig  { get; set; }
@@ -32,9 +32,9 @@ namespace LambAndLentil.Test.Infrastructure
         public IngredientsControllerShould()
         {
             AutoMapperConfigForTests.InitializeMap();
-            repo = new TestRepository<IngredientVM>();
+            Repo = new TestRepository<IngredientVM>();
             ilvm = new ListVM<IngredientVM>();
-            controller =  SetUpIngredientsController(repo);
+            controller =  SetUpIngredientsController(Repo);
         }
 
 
@@ -50,10 +50,10 @@ namespace LambAndLentil.Test.Infrastructure
 
             foreach (IngredientVM item in ilvm.ListT)
             {
-                repo.Add(item);
+                Repo.Add(item);
             }
 
-            IngredientsController controller = new IngredientsController(repo);
+             IngredientsController controller = new IngredientsController(Repo);
             controller.PageSize = 3;
 
             return controller;
@@ -101,9 +101,9 @@ namespace LambAndLentil.Test.Infrastructure
         public void SaveEditedIngredient()
         {
             // Arrange
-            IngredientsController indexController = new IngredientsController(repo);
-            IngredientsController controller2 = new IngredientsController(repo);
-            IngredientsController controller3 = new IngredientsController(repo);
+            IngredientsController indexController = new IngredientsController(Repo);
+            IngredientsController controller2 = new IngredientsController(Repo);
+            IngredientsController controller3 = new IngredientsController(Repo);
 
 
             IngredientVM vm = new IngredientVM();
@@ -136,12 +136,12 @@ namespace LambAndLentil.Test.Infrastructure
         //public void ActuallyDeleteAnIngredientFromTheDatabase()
         //{
         //    // Arrange   
-        //    controller = new IngredientsController_Index_Test().SetUpIngredientsController(repo);
-        //    Ingredient item = repo.GetById(int.MaxValue);
-        //    int countInRepo = repo.Count();
+        //    controller = new IngredientsController_Index_Test().SetUpIngredientsController(Repo);
+        //    Ingredient item = Repo.GetById(int.MaxValue);
+        //    int countInRepo = Repo.Count();
         //    //Act
         //    controller.DeleteConfirmed(item.ID);
-        //    int count = repo.Count();
+        //    int count = Repo.Count();
 
         //    //Assert
         //    Assert.AreEqual(countInRepo - 1, count);
@@ -200,15 +200,15 @@ namespace LambAndLentil.Test.Infrastructure
             ingredientVM.Name = "test IngredientsControllerShould.SaveTheCreationDateBetweenPostedEdits";
 
 
-            IngredientsController controllerEdit = new IngredientsController(repo);
-            IngredientsController controllerView = new IngredientsController(repo);
-            IngredientsController controllerDelete = new IngredientsController(repo);
+            IngredientsController controllerEdit = new IngredientsController(Repo);
+            IngredientsController controllerView = new IngredientsController(Repo);
+            IngredientsController controllerDelete = new IngredientsController(Repo);
 
             // Act
             controllerEdit.PostEdit(ingredientVM);
             ViewResult view = controllerView.Index();
             ListVM<IngredientVM> listVM = (ListVM<IngredientVM>)view.Model;
-            IngredientVM returnedVm = repo.GetById(ingredientVM.ID);
+            IngredientVM returnedVm = Repo.GetById(ingredientVM.ID);
             DateTime shouldBeSameDate = returnedVm.CreationDate;
 
             // Assert
@@ -223,8 +223,8 @@ namespace LambAndLentil.Test.Infrastructure
         public void UpdateTheModificationDateBetweenPostedEdits()
         {
             // Arrange 
-            IngredientsController controllerPost = new IngredientsController(repo);
-            IngredientsController controllerPost1 = new IngredientsController(repo); 
+            IngredientsController controllerPost = new IngredientsController(Repo);
+            IngredientsController controllerPost1 = new IngredientsController(Repo); 
             IngredientVM vm = new IngredientVM();
             vm.ID = int.MaxValue - 300;
             vm.Name = "002 Test Mod";
@@ -239,7 +239,7 @@ namespace LambAndLentil.Test.Infrastructure
 
             controllerPost1.PostEdit(vm);
 
-            IngredientVM returnedVM = repo.GetById(vm.ID);
+            IngredientVM returnedVM = Repo.GetById(vm.ID);
 
             DateTime shouldBeSameDate = returnedVM.CreationDate;
             DateTime shouldBeLaterDate = returnedVM.ModifiedDate;
@@ -261,18 +261,20 @@ namespace LambAndLentil.Test.Infrastructure
 
         [TestMethod]
         [TestCategory("Edit")]
-        public void IngredientsCtr_CannotEditNonexistentIngredient()
+        public void ReturnIndexWithWarningForNonexistentIngredient()
         {
             // Arrange
 
             // Act 
-            ViewResult view = controller.Edit(1000);
-            object Model = view.Model;
+         AlertDecoratorResult adr =(AlertDecoratorResult)controller.Edit(1000);
+           //ViewResult view = (ViewResult)adr.InnerResult;
+            //     object Model = view.Model;
 
             // Assert 
-            Assert.IsNotNull(view);
-            Assert.IsNull(Model);
-
+            //    Assert.IsNotNull(view);
+            //    Assert.AreEqual(UIViewType.Index, adr.RouteValues.ElementAt(0).Value.ToString());
+            // Assert.AreEqual("Ingredient was not found", rdr..Message);
+            Assert.Fail();
         }
         [Ignore]
         [TestMethod]
@@ -653,10 +655,23 @@ namespace LambAndLentil.Test.Infrastructure
             Assert.Fail();
         }
 
+        [TestCleanup]
+        public void TestCleanup()
+        {
+            ClassCleanup();
+        }
+
         [ClassCleanup()]
         public static void ClassCleanup()
         {
-            IngredientsController_Index_Test.ClassCleanup();
+            string path = @"C:\Dev\TGE\LambAndLentil\LambAndLentil.Test\App_Data\JSON\Ingredient\";
+
+            IEnumerable<string> files = Directory.EnumerateFiles(path);
+
+            foreach (var file in files)
+            {
+                File.Delete(file);
+            }
         }
     }
 }

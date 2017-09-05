@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web.Mvc;
+using LambAndLentil.Tests.Controllers;
 
 namespace IntegrationTests
 {
@@ -21,14 +22,14 @@ namespace IntegrationTests
     [TestCategory("RecipesController")]
     public class RecipesControllerShould
     {
-        static IRepository<RecipeVM> repo;
+        static IRepository<RecipeVM> Repo;
         static RecipesController controller;
         static RecipeVM recipeVM;
 
         public RecipesControllerShould()
         {
-            repo = new TestRepository<RecipeVM>();
-            controller = new RecipesController(repo);
+            Repo = new TestRepository<RecipeVM>();
+            controller = new RecipesController(Repo);
             recipeVM = new RecipeVM();
         }
 
@@ -80,11 +81,11 @@ namespace IntegrationTests
         public void SaveEditedRecipeWithNameChange()
         {
             // Arrange 
-            RecipesController controller1 = new RecipesController(repo);
-            RecipesController controller2 = new RecipesController(repo);
-            RecipesController controller3 = new RecipesController(repo);
-            RecipesController controller4 = new RecipesController(repo);
-            RecipesController controller5 = new RecipesController(repo);
+            RecipesController controller1 = new RecipesController(Repo);
+            RecipesController controller2 = new RecipesController(Repo);
+            RecipesController controller3 = new RecipesController(Repo);
+            RecipesController controller4 = new RecipesController(Repo);
+            RecipesController controller5 = new RecipesController(Repo);
             RecipeVM vm = new RecipeVM();
             vm.Name = "0000 test";
 
@@ -124,7 +125,7 @@ namespace IntegrationTests
             recipeVM.Description = "test ActuallyDeleteARecipeFromTheDatabase";
             //Act
             controller.DeleteConfirmed(recipeVM.ID);
-            var deletedItem = (from m in repo.GetAll()
+            var deletedItem = (from m in Repo.GetAll()
                                where m.Description == recipeVM.Description
                                select m).AsQueryable();
 
@@ -138,11 +139,11 @@ namespace IntegrationTests
         public void SaveEditedRecipeWithDescriptionChange()
         {
             // Arrange 
-            RecipesController controller1 = new RecipesController(repo);
-            RecipesController controller2 = new RecipesController(repo);
-            RecipesController controller3 = new RecipesController(repo);
-            RecipesController controller4 = new RecipesController(repo);
-            RecipesController controller5 = new RecipesController(repo);
+            RecipesController controller1 = new RecipesController(Repo);
+            RecipesController controller2 = new RecipesController(Repo);
+            RecipesController controller3 = new RecipesController(Repo);
+            RecipesController controller4 = new RecipesController(Repo);
+            RecipesController controller5 = new RecipesController(Repo);
             RecipeVM vm = new RecipeVM();
             vm.Name = "0000 test";
             vm.Description = "SaveEditedRecipeWithDescriptionChange Pre-test";
@@ -269,11 +270,11 @@ namespace IntegrationTests
         public void UpdateTheModificationDateBetweenPostedEdits()
         {
             // Arrange 
-            RecipesController controllerPost = new RecipesController(repo);
-            RecipesController controllerPost1 = new RecipesController(repo);
-            RecipesController controllerView = new RecipesController(repo);
-            RecipesController controllerView1 = new RecipesController(repo);
-            RecipesController controllerDelete = new RecipesController(repo);
+            RecipesController controllerPost = new RecipesController(Repo);
+            RecipesController controllerPost1 = new RecipesController(Repo);
+            RecipesController controllerView = new RecipesController(Repo);
+            RecipesController controllerView1 = new RecipesController(Repo);
+            RecipesController controllerDelete = new RecipesController(Repo);
 
             RecipeVM vm = new RecipeVM();
             vm.Name = "002 Test Mod";
@@ -315,9 +316,9 @@ namespace IntegrationTests
         public void SaveAllPropertiesInBaseEntity()
         {
             // Arrange 
-            RecipesController controllerPost = new RecipesController(repo);
-            RecipesController controllerView = new RecipesController(repo);
-            RecipesController controllerDelete = new RecipesController(repo);
+            RecipesController controllerPost = new RecipesController(Repo);
+            RecipesController controllerView = new RecipesController(Repo);
+            RecipesController controllerDelete = new RecipesController(Repo);
             RecipeVM vm = new RecipeVM();
             vm.Name = "___test387";
             vm.Description = "test387 description";
@@ -423,7 +424,7 @@ namespace IntegrationTests
         {
             // Arrange
 
-            RecipeVM recipeVM = GetRecipeVM(repo, "test ReturnRecipeEditViewWithErrorMessageWhenAttachingNonExistingIngredientToExistingRrecipe");
+            RecipeVM recipeVM = GetRecipeVM(Repo,  "test ReturnRecipeEditViewWithErrorMessageWhenAttachingNonExistingIngredientToExistingRrecipe");
 
             // Act  
             AlertDecoratorResult adr = (AlertDecoratorResult)controller.AttachIngredient(recipeVM.ID, -1);
@@ -468,10 +469,10 @@ namespace IntegrationTests
 
             TestRepository<IngredientVM> repoIngredient = new TestRepository<IngredientVM>();
 
-            RecipesController controllerAttachIngredient = new RecipesController(repo);
-            RecipesController controllerRemoveIngredient = new RecipesController(repo);
+            RecipesController controllerAttachIngredient = new RecipesController(Repo);
+            RecipesController controllerRemoveIngredient = new RecipesController(Repo);
 
-            RecipeVM recipeVM = GetRecipeVM(repo, "test ReturnRecipeEditViewWithSuccessMessageWhenDetachingExistingIngredientFromExistingRecipe");
+            RecipeVM recipeVM = GetRecipeVM(Repo,  "test ReturnRecipeEditViewWithSuccessMessageWhenDetachingExistingIngredientFromExistingRecipe");
 
             IngredientVM ingredientVM = GetIngredientVM(repoIngredient, "test ReturnRecipeEditViewWithSuccessMessageWhenDetachingExistingIngredientFromExistingRecipe");
             controllerAttachIngredient.AttachIngredient(recipeVM.ID, ingredientVM.ID);
@@ -522,7 +523,7 @@ namespace IntegrationTests
             
             TestRepository<IngredientVM> repoIngredient = new TestRepository<IngredientVM>();
             IngredientsController  controllerIngredient = new IngredientsController(repoIngredient);
-            RecipesController controllerDetachIngredient = new RecipesController(repo);
+            RecipesController controllerDetachIngredient = new RecipesController(Repo);
             string description = "test ReturnRecipeIndexViewWithWarningWhenDetachingExistingingredientNotAttachedToAnExistingRecipe";
             IngredientVM ingredientVM = GetIngredientVM(repoIngredient, description);
             // Act 
@@ -582,36 +583,46 @@ namespace IntegrationTests
             
         }
 
-        internal IngredientVM GetIngredientVM(IRepository<IngredientVM> repo, string description)
+        internal IngredientVM GetIngredientVM(IRepository<IngredientVM> Repo,  string description)
         {
-            IngredientsController controller = new IngredientsController(repo);
+            IngredientsController controller = new IngredientsController(Repo);
             IngredientVM ivm = new IngredientVM();
             ivm.Description = description;
             ivm.ID = int.MaxValue;
             controller.PostEdit(ivm);
 
-            IngredientVM ingredientVM = ((from m in repo.GetAll()
+            IngredientVM ingredientVM = ((from m in Repo.GetAll()
                                           where m.Description == description
                                           select m).AsQueryable()).FirstOrDefault();
             return ingredientVM;
         }
 
 
-        internal RecipeVM GetRecipeVM(IRepository<RecipeVM> repo, string description)
+        internal RecipeVM GetRecipeVM(IRepository<RecipeVM> Repo,  string description)
         {
-            RecipesController controller = new RecipesController(repo);
+            RecipesController controller = new RecipesController(Repo);
             RecipeVM vm = new RecipeVM();
             vm.Description = description;
             vm.ID = int.MaxValue;
             controller.PostEdit(vm);
 
-            RecipeVM recipeVM = ((from m in repo.GetAll()
+            RecipeVM recipeVM = ((from m in Repo.GetAll()
                                   where m.Description == description
                                   select m).AsQueryable()).FirstOrDefault();
             return recipeVM;
         }
 
+        [ClassCleanup()]
+        public static void ClassCleanup()
+        {
+            string path = @"C:\Dev\TGE\LambAndLentil\LambAndLentil.Test\App_Data\JSON\Recipe\";
 
+            IEnumerable<string> files = Directory.EnumerateFiles(path);
 
+            foreach (var file in files)
+            {
+                File.Delete(file);
+            }
+        }
     }
 }

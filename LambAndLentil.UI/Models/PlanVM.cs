@@ -8,7 +8,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace LambAndLentil.UI.Models
 {
-    public class PlanVM : BaseVM, IBaseVM,IEntity
+    public class PlanVM : BaseVM, IBaseVM, IPlan
     {
         public PlanVM()
         {
@@ -17,6 +17,10 @@ namespace LambAndLentil.UI.Models
         public PlanVM(DateTime creationDate) : this()
         {
             CreationDate = creationDate;
-        } 
+        }
+
+        public List<Ingredient> Ingredients { get; set; }
+        public List<Menu> Menus { get; set; }
+        public List<Recipe> Recipes { get; set; }
     }
 }
