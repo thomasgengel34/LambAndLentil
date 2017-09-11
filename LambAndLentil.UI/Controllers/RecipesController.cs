@@ -80,14 +80,14 @@ namespace LambAndLentil.UI.Controllers
             return BaseDeleteConfirmed(Repo, UIControllerType.Recipes, id);
         }
 
-        public ActionResult AttachIngredient(int? recipeID, int? ingredientID)
+        public ActionResult AttachIngredient(int? recipeID, IngredientVM ingredientVM )
         {
-            return BaseAttach<RecipeVM,  IngredientVM>(recipeID, ingredientID);
+            return BaseAttach<IngredientVM>(Repo,recipeID, ingredientVM );
         }
 
-        public ActionResult RemoveIngredient(int? recipeID, int? ingredientID)
+        public ActionResult RemoveIngredient(int? recipeID, IngredientVM ingredientVM)
         {
-            return BaseAttach<RecipeVM,   IngredientVM>(recipeID, ingredientID, AttachOrDetach.Detach);
+            return BaseAttach<IngredientVM>(Repo, recipeID, ingredientVM, AttachOrDetach.Detach);
         }
 
          

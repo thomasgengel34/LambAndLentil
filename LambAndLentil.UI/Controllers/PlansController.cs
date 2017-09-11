@@ -86,15 +86,15 @@ namespace LambAndLentil.UI.Controllers
             return BaseDeleteConfirmed(Repo, UIControllerType.Plans, id);
         }
 
-        public ActionResult AttachIngredient(int? planID, int? ingredientID)
+        public ActionResult AttachIngredient(int? planID, IngredientVM ingredientVM)
         {
-            return BaseAttach<PlanVM,  IngredientVM>(planID, ingredientID);
+            return BaseAttach<IngredientVM>(Repo, planID, ingredientVM);
         }
 
 
-        public ActionResult DetachIngredient(int? planID, int? ingredientID)
+        public ActionResult DetachIngredient(int? planID, IngredientVM ingredientVM)
         {
-            return BaseAttach<PlanVM,  IngredientVM>(planID, ingredientID, AttachOrDetach.Detach);
+            return BaseAttach< IngredientVM>(Repo,planID, ingredientVM, AttachOrDetach.Detach);
         }
     }
 }

@@ -3,11 +3,12 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace LambAndLentil.Test.BasicControllerTests
 {
+    [Ignore]
     [TestClass]
-    public class IngredientsController_PostEdit_Should
+    public class RecipesController_DeleteConfirmed_Should
     {
         [TestMethod]
-        public void ReturnIndexWithValidModelStateWithSuccessMessageWhenSaved()
+        public void ReturnIndexWithWarningWhenIDIsNotFound()
         {
             // Arrange
 
@@ -18,7 +19,18 @@ namespace LambAndLentil.Test.BasicControllerTests
         }
 
         [TestMethod]
-        public void ReturnIndexWithInValidModelStateWithWarningMessageWhenSaved()
+        public void ReturnIndexWithConfirmationWhenIDIsFound()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [TestMethod]
+        public void RemoveTheCorrectItemAndNotOtherItemsWhenIDIsFound()
         {
             // Arrange
 

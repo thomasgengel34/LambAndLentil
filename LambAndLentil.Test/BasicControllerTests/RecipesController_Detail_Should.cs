@@ -17,23 +17,21 @@ using System.Web.Mvc;
 namespace LambAndLentil.Test.BasicControllerTests
 {
     [TestClass]
-    [TestCategory("IngredientsController")]
+    [TestCategory("RecipesController")]
     [TestCategory("Details")]
-    public class IngredientsController_Detail_Should:IngredientsController_Test_Should
+    public class RecipesController_Detail_Should:RecipesController_Test_Should
     {
          
-        static ListVM<IngredientVM> ilvm;
-        static IRepository<IngredientVM> Repo;
-        static IngredientsController controller;
-        static IngredientVM ingredientVM;
+        static ListVM<RecipeVM> ilvm; 
+        static RecipesController controller;
+        static RecipeVM ingredientVM;
 
-        public IngredientsController_Detail_Should()
+        public RecipesController_Detail_Should()
         {
             AutoMapperConfigForTests.InitializeMap();
-            ilvm = new ListVM<IngredientVM>();
-            Repo = new TestRepository<IngredientVM>();
+            ilvm = new ListVM<RecipeVM>(); 
             controller = SetUpController(Repo);
-            ingredientVM = new IngredientVM();
+            ingredientVM = new RecipeVM();
         }
          
         [TestMethod]
@@ -66,7 +64,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Assert
             Assert.IsNotNull(view);
             Assert.AreEqual("Details", view.ViewName);
-            Assert.IsInstanceOfType(view.Model, typeof(IngredientVM));
+            Assert.IsInstanceOfType(view.Model, typeof(RecipeVM));
             // no message
         }
 
@@ -78,7 +76,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             int count = Repo.Count();
             //Act
             controller.Details(int.MaxValue, UIViewType.DeleteConfirmed);
-            IngredientVM ingredientVM = Repo.GetById(int.MaxValue);
+            RecipeVM ingredientVM = Repo.GetById(int.MaxValue);
             //Assert
             Assert.AreEqual(count - 1, Repo.Count());
             Assert.IsNull(ingredientVM);
@@ -129,7 +127,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Assert
             Assert.IsNotNull(ar);
             Assert.AreEqual("Details", view.ViewName);
-            Assert.IsInstanceOfType(view.Model, typeof(IngredientVM));
+            Assert.IsInstanceOfType(view.Model, typeof(RecipeVM));
             Assert.AreEqual("Here it is!", adr.Message);
         }
 
@@ -152,7 +150,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void DetailsIngredientIDTooHighViewNotNull()
         {  // not sure what the desired behavior is yet
            // Arrange
-            IngredientsController controller = SetUpController(Repo);
+            RecipesController controller = SetUpController(Repo);
             //  AutoMapperConfigForTests.AMConfigForTests();
             ActionResult view = controller.Details(4000);
             AlertDecoratorResult adr = (AlertDecoratorResult)view;
@@ -176,7 +174,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void DetailsIngredientIDTooHighAlertClassCorrect()
         {   // not sure what the desired behavior is yet
             // Arrange
-            IngredientsController controller = SetUpController(Repo);
+            RecipesController controller = SetUpController(Repo);
             //  AutoMapperConfigForTests.AMConfigForTests();
             ActionResult view = controller.Details(4000);
             AlertDecoratorResult adr = (AlertDecoratorResult)view;
@@ -221,7 +219,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         {
             // I am not sure how I want this to operate.  Wait until UI is set up and see then.
             // Arrange
-            IngredientsController controller = SetUpController(Repo);
+            RecipesController controller = SetUpController(Repo);
             //  AutoMapperConfigForTests.AMConfigForTests(); 
 
             // Act
@@ -266,8 +264,8 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void DetailsIngredientIDIsZeroAlertClassIsCorrect()
         {
             // Arrange
-            IngredientsController controller = new IngredientsController(Repo);
-            IngredientVM ingredientVM = new IngredientVM { ID = 0 };
+            RecipesController controller = new RecipesController(Repo);
+            RecipeVM ingredientVM = new RecipeVM { ID = 0 };
             Repo.Save(ingredientVM);
 
 
@@ -284,8 +282,8 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void DetailsIngredientIDIsZeroReturnModelIsCorrect()
         {
             // Arrange
-            IngredientsController controller = new IngredientsController(Repo);
-            IngredientVM ingredientVM = new IngredientVM { ID = 0 };
+            RecipesController controller = new RecipesController(Repo);
+            RecipeVM ingredientVM = new RecipeVM { ID = 0 };
             Repo.Save(ingredientVM);
 
 
@@ -304,8 +302,8 @@ namespace LambAndLentil.Test.BasicControllerTests
         {
             // Arrange
 
-            IngredientVM ingredientVM = new IngredientVM { ID = -1 };
-            Repo.Save(ingredientVM);
+            RecipeVM ivm = new RecipeVM { ID = -1 };
+            Repo.Save(ivm);
 
             // Act
             ActionResult view = controller.Details(-1);
@@ -339,8 +337,8 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void NotBeSuccessfulWithInvalidIngredientID_IngredientIDIsNegative_AlertClassCorrect()
         {
             // Arrange
-            IngredientsController controller = new IngredientsController(Repo);
-            IngredientVM ingredientVM = new IngredientVM
+            RecipesController controller = new RecipesController(Repo);
+            RecipeVM ingredientVM = new RecipeVM
             {
                 ID = -1,
                 Name = "Details_IngredientIDIsNegative_AlertClassCorrect"
@@ -381,10 +379,10 @@ namespace LambAndLentil.Test.BasicControllerTests
         }
         // the following are not really testable.  I am keeping them to remind me of that.
         //[TestMethod]
-        //public void IngredientsCtr_DetailsIngredientIDIsNotANumber() { }
+        //public void RecipesCtr_DetailsIngredientIDIsNotANumber() { }
 
         //[TestMethod]
-        //public void IngredientsCtr_DetailsIngredientIDIsNotAInteger() { } 
+        //public void RecipesCtr_DetailsIngredientIDIsNotAInteger() { } 
 
     }
 }

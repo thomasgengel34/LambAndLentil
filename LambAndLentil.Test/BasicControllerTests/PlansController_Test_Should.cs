@@ -20,15 +20,15 @@ namespace LambAndLentil.Tests.Controllers
 
     [TestClass]
     [TestCategory("PlansController")]
-    public class PlansControllerTest
+    public class PlansController_Test_Should
     {
 
-        private static IRepository<PlanVM> Repo { get; set; }
-        public static MapperConfiguration AutoMapperConfig { get; set; }
+        protected static IRepository<PlanVM> Repo { get; set; }
+        protected static MapperConfiguration AutoMapperConfig { get; set; }
         private static ListVM<PlanVM> listVM;
         private static PlansController controller { get; set; }
 
-        public PlansControllerTest()
+        public PlansController_Test_Should()
         {
             AutoMapperConfigForTests.InitializeMap();
             Repo = new TestRepository<PlanVM>();
@@ -509,6 +509,19 @@ namespace LambAndLentil.Tests.Controllers
         public void CorrectPlanElementsAreBoundInEdit()
         {
             Assert.Fail();
+        }
+
+        [TestMethod]
+        public void GetTheClassNameCorrect()
+        {
+            // Arrange
+
+            // Act
+
+
+            // Assert
+            //  Assert.Fail();
+            Assert.AreEqual("LambAndLentil.UI.Controllers.PlansController", PlansController_Test_Should.controller.ToString());
         }
 
         [ClassCleanup()]

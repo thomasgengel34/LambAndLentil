@@ -360,33 +360,33 @@ namespace IntegrationTests
             
         }
 
-        [Ignore]
-        [TestMethod]
-        [TestCategory("Attach-Detach")]
-        public void ReturnIndexWithSuccessAttachAnExistingRecipeToAnExistingMenu()
-        {
-            // Arrange 
-            IRepository<RecipeVM> repoRecipe = new TestRepository<RecipeVM>();
-            MenusController controllerAttach = new MenusController(Repo);
-            RecipesController controllerAttachI = new RecipesController(repoRecipe);
-            MenusController controllerCleanup = new MenusController(Repo);
+        //[Ignore]
+        //[TestMethod]
+        //[TestCategory("Attach-Detach")]
+        //public void ReturnIndexWithSuccessAttachAnExistingRecipeToAnExistingMenu()
+        //{
+        //    // Arrange 
+        //    IRepository<RecipeVM> repoRecipe = new TestRepository<RecipeVM>();
+        //    MenusController controllerAttach = new MenusController(Repo);
+        //    RecipesController controllerAttachI = new RecipesController(repoRecipe);
+        //    MenusController controllerCleanup = new MenusController(Repo);
 
 
-            MenuVM menuVM = new MenuVM() { ID = 100, Description = "test AttachAnExistingRecipeToAnExistingMenu" };
-            Repo.Add(menuVM);
+        //    MenuVM menuVM = new MenuVM() { ID = 100, Description = "test AttachAnExistingRecipeToAnExistingMenu" };
+        //    Repo.Add(menuVM);
 
-            RecipeVM recipeVM = new RecipeVM() { ID = 101, Description = "test AttachAnExistingRecipeToAnExistingMenu" };
-            repoRecipe.Add(recipeVM);
-            // Act
-            var x = controllerAttach.AttachRecipe(menuVM.ID, recipeVM.ID);
+        //    RecipeVM recipeVM = new RecipeVM() { ID = 101, Description = "test AttachAnExistingRecipeToAnExistingMenu" };
+        //    repoRecipe.Add(recipeVM);
+        //    // Act
+        //    var x = controllerAttach.AttachRecipe(menuVM.ID, recipeVM );
 
-            // Assert 
-            Assert.AreEqual(1, menuVM.Recipes.Count());
-            // how do I know the correct recipe was added?
-            Assert.AreEqual(recipeVM.ID, menuVM.Recipes.First().ID);
+        //    // Assert 
+        //    Assert.AreEqual(1, menuVM.Recipes.Count());
+        //    // how do I know the correct recipe was added?
+        //    Assert.AreEqual(recipeVM.ID, menuVM.Recipes.First().ID);
 
 
-        }
+        //}
 
 
  [Ignore]
@@ -401,7 +401,7 @@ namespace IntegrationTests
              IngredientVM ingredientVM = new IngredientVM { ID = int.MaxValue - 100, Description = "test AttachAnExistingIngredientToAnExistingMenu" };
 
             // Act
-            controller.AttachIngredient(menuVM.ID, ingredientVM.ID);
+            controller.AttachIngredient(menuVM.ID, ingredientVM );
             MenuVM returnedMenuVM = (from m in Repo.GetAll()
                                  where m.Description == menuVM.Description
                                  select m).FirstOrDefault();
@@ -488,7 +488,7 @@ namespace IntegrationTests
         [ClassCleanup()]
         public static void ClassCleanup()
         {
-            MenusControllerTest.ClassCleanup();
+            MenusController_Test_Should.ClassCleanup();
         }
     }
 }

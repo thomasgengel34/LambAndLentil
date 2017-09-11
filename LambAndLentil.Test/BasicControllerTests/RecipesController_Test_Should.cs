@@ -14,24 +14,24 @@ using LambAndLentil.UI.Infrastructure.Alerts;
 using LambAndLentil.UI;
 using System.IO;
 
-namespace LambAndLentil.Tests.Controllers
+namespace LambAndLentil.Test.BasicControllerTests
 { 
     [TestClass]
     [TestCategory("RecipesController")]
-    public class RecipesControllerShould
+    public class RecipesController_Test_Should
     {
         // static List<RecipeVM> recipeVMArray { get; set; }
-        private static IRepository<RecipeVM> Repo { get; set; }
+        protected static IRepository<RecipeVM> Repo { get; set; }
         public static MapperConfiguration AutoMapperConfig { get; set; }
         private static RecipesController controller { get; set; }
         private ListVM<RecipeVM> vm { get; set; }
 
-        public RecipesControllerShould()
+        public RecipesController_Test_Should()
         {
             AutoMapperConfigForTests.InitializeMap();
             Repo = new TestRepository<RecipeVM>();
             vm = new ListVM<RecipeVM>();
-            controller = SetUpController();
+            controller = SetUpController(Repo);
         }
 
 
@@ -48,8 +48,8 @@ namespace LambAndLentil.Tests.Controllers
             // Assert 
             Assert.AreEqual(isBase, true);
         }
-
-        private RecipesController SetUpController()
+        
+      protected RecipesController SetUpController(IRepository<RecipeVM>  Repo)  
         {
 
             vm.ListT = new List<RecipeVM> {
@@ -91,7 +91,7 @@ namespace LambAndLentil.Tests.Controllers
         public void ReturnNonNullIndex()
         {
             // Arrange
-            RecipesController controller = SetUpController();
+            
 
             // Act
             ViewResult result = controller.Index(1) as ViewResult;
@@ -108,9 +108,7 @@ namespace LambAndLentil.Tests.Controllers
         public void ShowAllRecipesonIndex()
         {
             // Arrange
-            RecipesController controller = SetUpController();
-
-
+           
             // Act
             ViewResult view1 = controller.Index(1);
 
@@ -138,8 +136,7 @@ namespace LambAndLentil.Tests.Controllers
         {
 
             // Arrange
-            RecipesController controller = SetUpController();
-
+           
             // Act
 
             ListVM<RecipeVM> resultT = (ListVM<RecipeVM>)((ViewResult)controller.Index(2)).Model;
@@ -310,9 +307,7 @@ namespace LambAndLentil.Tests.Controllers
         [TestCategory("Details")]
         public void DetailsRecipeIDIsZero()
         {
-            // Arrange
-            RecipesController controller = SetUpController();
-
+            // Arrange 
 
             // Act
             ViewResult view = controller.Details(0) as ViewResult;
@@ -329,8 +324,7 @@ namespace LambAndLentil.Tests.Controllers
         [TestCategory("Create")]
         public void Create()
         {
-            // Arrange
-            RecipesController controller = SetUpController();
+            // Arrange 
             ViewResult view = controller.Create(UIViewType.Edit);
 
 
@@ -432,7 +426,7 @@ namespace LambAndLentil.Tests.Controllers
         public void NotEditNonexistentRecipe()
         {
             // Arrange
-            RecipesController controller = SetUpController();
+           
             // Act
             Recipe result = (Recipe)((ViewResult)controller.Edit(8)).ViewData.Model;
             // Assert
@@ -443,9 +437,7 @@ namespace LambAndLentil.Tests.Controllers
         public void RecipesCtr_CreateReturnsNonNull()
         {
             // Arrange
-            RecipesController controller = SetUpController();
-
-
+          
             // Act
             ViewResult result = controller.Create(UIViewType.Create) as ViewResult;
 
@@ -489,6 +481,19 @@ namespace LambAndLentil.Tests.Controllers
         public void CorrectRecipesAreBoundInEdit()
         {
             Assert.Fail();
+        }
+
+        [TestMethod]
+        public void GetTheClassNameCorrect()
+        {
+            // Arrange
+
+            // Act
+
+
+            // Assert
+            //  Assert.Fail();
+            Assert.AreEqual("LambAndLentil.UI.Controllers.RecipesController", RecipesController_Test_Should.controller.ToString());
         }
 
         [TestCleanup]

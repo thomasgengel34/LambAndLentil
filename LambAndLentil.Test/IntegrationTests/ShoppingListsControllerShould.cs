@@ -292,7 +292,7 @@ namespace IntegrationTests
             IngredientVM ingredientVM = new RecipesControllerShould().GetIngredientVM(repoIngredient, "test AttachAnExistingIngredientToAnExistingShoppingList");
 
             // Act
-            controller.AttachIngredient(slVM.ID, ingredientVM.ID);
+            controller.AttachIngredient(slVM.ID, ingredientVM);
             ShoppingListVM returnedShoppingListVM = (from m in Repo.GetAll()
                                                  where m.Description == slVM.Description
                                                  select m).FirstOrDefault();
@@ -381,7 +381,7 @@ namespace IntegrationTests
         [ClassCleanup()]
         public static void ClassCleanup()
         {
-            ShoppingListsControllerTest.ClassCleanup();
+            ShoppingListsController_Test_Should.ClassCleanup();
 
         }
     }

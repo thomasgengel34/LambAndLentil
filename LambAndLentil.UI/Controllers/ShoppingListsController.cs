@@ -81,9 +81,15 @@ namespace LambAndLentil.UI.Controllers
             return BaseDeleteConfirmed(Repo,  UIControllerType.ShoppingLists, id);
         }
 
-        public ActionResult AttachIngredient(int? shoppingListID, int? ingredientID)
+        public ActionResult AttachIngredient(int? shoppingListID, IngredientVM ingredientVM)
         {
-            return BaseAttach<ShoppingListVM,  IngredientVM>(shoppingListID, ingredientID);
+            return BaseAttach<IngredientVM>(Repo, shoppingListID, ingredientVM);
+        }
+
+
+        public ActionResult DetachIngredient(int? shoppingListID, IngredientVM ingredientVM)
+        {
+            return BaseAttach<IngredientVM>(Repo, shoppingListID, ingredientVM, AttachOrDetach.Detach);
         }
     }
 } 

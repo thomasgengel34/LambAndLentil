@@ -280,7 +280,7 @@ namespace IntegrationTests
         [ClassCleanup()]
         public static void ClassCleanup()
         {
-            PersonsControllerTest.ClassCleanup();
+            PersonsController_Test_Should.ClassCleanup();
         }
     }
 }

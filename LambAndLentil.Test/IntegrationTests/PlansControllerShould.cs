@@ -156,7 +156,7 @@ namespace IntegrationTests
             Assert.AreEqual("SaveEditedPlanWithDescriptionChange Post-test", planVM.Description);
         }
 
-        [Ignore]
+        
         [TestMethod]
         [TestCategory("DeleteConfirmed")]
         public void ActuallyDeleteAPlanFromTheDatabase()
@@ -253,7 +253,7 @@ namespace IntegrationTests
             ingredientVM.Description= "test AttachAnExistingIngredientToAnExistingPlan";
 
             // Act
-            controller.AttachIngredient(planVM.ID, ingredientVM.ID);
+            controller.AttachIngredient(planVM.ID, ingredientVM );
             PlanVM returnedPlanVM = (from m in Repo.GetAll()
                                  where m.Description == planVM.Description
                                  select m).FirstOrDefault(); 
@@ -339,7 +339,7 @@ namespace IntegrationTests
         [ClassCleanup()]
         public static void ClassCleanup()
         {
-            PlansControllerTest.ClassCleanup();
+            PlansController_Test_Should.ClassCleanup();
         }
     }
 }

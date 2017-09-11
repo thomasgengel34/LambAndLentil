@@ -115,7 +115,7 @@ namespace IntegrationTests
         }
 
 
-        [Ignore]
+       
         [TestMethod]
         [TestCategory("DeleteConfirmed")]
         public void ActuallyDeleteARecipeFromTheDatabase()
@@ -355,7 +355,7 @@ namespace IntegrationTests
             IngredientVM ingredientVM = GetIngredientVM(repoIngredient, "test AttachAnExistingIngredientToAnExistingRecipe");
 
             // Act
-            controller.AttachIngredient(recipeVM.ID, ingredientVM.ID);
+            controller.AttachIngredient(recipeVM.ID, ingredientVM);
             RecipeVM returnedRecipeVM = (from m in repoRecipe.GetAll()
                                          where m.Description == recipeVM.Description
                                          select m).FirstOrDefault();
@@ -380,9 +380,9 @@ namespace IntegrationTests
 
 
             IngredientVM ingredientVM2 = GetIngredientVM(repoIngredient, "test NotDeleteAnIngredientAfterIngredientIsDetached");
-            controller.AttachIngredient(recipeVM1.ID, ingredientVM2.ID);
+            controller.AttachIngredient(recipeVM1.ID, ingredientVM2);
             // Act
-            controllerSubtract.RemoveIngredient(recipeVM1.ID, ingredientVM2.ID);
+            controllerSubtract.RemoveIngredient(recipeVM1.ID, ingredientVM2);
 
 
             // Assert
@@ -405,7 +405,7 @@ namespace IntegrationTests
             IngredientVM ingredient = GetIngredientVM(repoIngredient, description);
 
             // Act
-            AlertDecoratorResult adr = (AlertDecoratorResult)controllerAttach.AttachIngredient(-1, ingredient.ID);
+            AlertDecoratorResult adr = (AlertDecoratorResult)controllerAttach.AttachIngredient(-1, ingredient );
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
             var routeValues = rtrr.RouteValues.Values;
 
@@ -425,9 +425,9 @@ namespace IntegrationTests
             // Arrange
 
             RecipeVM recipeVM = GetRecipeVM(Repo,  "test ReturnRecipeEditViewWithErrorMessageWhenAttachingNonExistingIngredientToExistingRrecipe");
-
+            IngredientVM ingredient = null;
             // Act  
-            AlertDecoratorResult adr = (AlertDecoratorResult)controller.AttachIngredient(recipeVM.ID, -1);
+            AlertDecoratorResult adr = (AlertDecoratorResult)controller.AttachIngredient(recipeVM.ID, ingredient);
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
             var routeValues = rtrr.RouteValues.Values;
 
@@ -447,9 +447,10 @@ namespace IntegrationTests
             // Arrange
             TestRepository<RecipeVM> repoRecipe = new TestRepository<RecipeVM>();
             RecipesController controller = new RecipesController(repoRecipe);
+            IngredientVM vm = null;
 
             // Act 
-            AlertDecoratorResult adr = (AlertDecoratorResult)controller.AttachIngredient(-1, -1);
+            AlertDecoratorResult adr = (AlertDecoratorResult)controller.AttachIngredient(-1, vm);
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
             var routeValues = rtrr.RouteValues.Values;
 
@@ -475,10 +476,10 @@ namespace IntegrationTests
             RecipeVM recipeVM = GetRecipeVM(Repo,  "test ReturnRecipeEditViewWithSuccessMessageWhenDetachingExistingIngredientFromExistingRecipe");
 
             IngredientVM ingredientVM = GetIngredientVM(repoIngredient, "test ReturnRecipeEditViewWithSuccessMessageWhenDetachingExistingIngredientFromExistingRecipe");
-            controllerAttachIngredient.AttachIngredient(recipeVM.ID, ingredientVM.ID);
+            controllerAttachIngredient.AttachIngredient(recipeVM.ID, ingredientVM );
 
             // Act          
-            AlertDecoratorResult adr = (AlertDecoratorResult)controllerRemoveIngredient.RemoveIngredient(recipeVM.ID, ingredientVM.ID);
+            AlertDecoratorResult adr = (AlertDecoratorResult)controllerRemoveIngredient.RemoveIngredient(recipeVM.ID, ingredientVM );
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
             var routeValues = rtrr.RouteValues.Values;
 
@@ -503,7 +504,7 @@ namespace IntegrationTests
 
             IngredientVM ingredientVM = GetIngredientVM(repoIngredient, description);
             // Act  
-            AlertDecoratorResult adr = (AlertDecoratorResult)controllerDetachIngredient.RemoveIngredient(-1, ingredientVM.ID);
+            AlertDecoratorResult adr = (AlertDecoratorResult)controllerDetachIngredient.RemoveIngredient(-1, ingredientVM );
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
             var routeValues = rtrr.RouteValues.Values;
 
@@ -527,7 +528,7 @@ namespace IntegrationTests
             string description = "test ReturnRecipeIndexViewWithWarningWhenDetachingExistingingredientNotAttachedToAnExistingRecipe";
             IngredientVM ingredientVM = GetIngredientVM(repoIngredient, description);
             // Act 
-            AlertDecoratorResult adr = (AlertDecoratorResult)controllerDetachIngredient.RemoveIngredient(-1, ingredientVM.ID);
+            AlertDecoratorResult adr = (AlertDecoratorResult)controllerDetachIngredient.RemoveIngredient(-1, ingredientVM );
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
             var routeValues = rtrr.RouteValues.Values;
 
@@ -549,7 +550,7 @@ namespace IntegrationTests
             RecipesController controllerDetachIngredient = new RecipesController(repoRecipe);
             RecipeVM recipeVM = GetRecipeVM(repoRecipe, "test ReturnRecipeEditViewWithWarningMessageWhenDetachingNonExistingIngredientAttachedToExistingRecipe");
             // Act 
-            AlertDecoratorResult adr = (AlertDecoratorResult)controllerDetachIngredient.RemoveIngredient(recipeVM.ID, -1);
+            AlertDecoratorResult adr = (AlertDecoratorResult)controllerDetachIngredient.RemoveIngredient(recipeVM.ID, null);
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
             var routeValues = rtrr.RouteValues.Values;
 
@@ -569,7 +570,7 @@ namespace IntegrationTests
             // Arrange 
 
             // Act 
-            AlertDecoratorResult adr = (AlertDecoratorResult)controller.RemoveIngredient(-1, -1);
+            AlertDecoratorResult adr = (AlertDecoratorResult)controller.RemoveIngredient(-1, null);
 
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
             var routeValues = rtrr.RouteValues.Values;

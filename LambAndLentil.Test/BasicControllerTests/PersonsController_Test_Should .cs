@@ -19,17 +19,15 @@ namespace LambAndLentil.Tests.Controllers
 
     [TestClass]
     [TestCategory("PersonsController")]
-    public class PersonsControllerTest
+    public class PersonsController_Test_Should
     {
-        private static IRepository<PersonVM> Repo { get; set; }
-        public static MapperConfiguration AutoMapperConfig { get; set; }
+        protected static IRepository<PersonVM> Repo { get; set; }
+        protected static MapperConfiguration AutoMapperConfig { get; set; }
         private static ListVM<PersonVM> listVM;
         private static PersonsController controller { get; set; }
 
-        public PersonsControllerTest()
-        {
-            //AutoMapperConfig = AutoMapperConfigForTests.AMConfigForTests();
-            //AutoMapperConfigForTests.InitializeMap();
+        public PersonsController_Test_Should()
+        { 
             Repo = new TestRepository<PersonVM>();
             listVM = new ListVM<PersonVM>();
             controller = SetUpController();
@@ -75,7 +73,7 @@ namespace LambAndLentil.Tests.Controllers
         }
 
         [TestMethod]
-        public void PersonsCtr_IsPublic()
+        public void IsPublic()
         {
             // Arrange
 
@@ -90,7 +88,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Index")]
-        public void PersonsCtr_Index()
+        public void  Index()
         {
             // Arrange
             PersonsController controller2 = new PersonsController(Repo);
@@ -178,7 +176,7 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         [TestCategory("Index")]
-        public void PersonsCtr_Index_CanSendPaginationViewModel()
+        public void  Index_CanSendPaginationViewModel()
         {
             // Arrange 
 
@@ -547,10 +545,20 @@ namespace LambAndLentil.Tests.Controllers
         }
 
 
-        [Ignore]
+        
         [TestMethod]
         public void AssignAnIngredientToAPerson()
         {
+            // Arrange
+            IngredientVM ivm = new IngredientVM();
+            ivm.ID = int.MaxValue;
+            ivm.Description = "test PersonControllerTest AssignAnIngredientToAPerson";
+            IRepository<IngredientVM> ing_repo = new TestRepository<IngredientVM>();
+            ing_repo.Add(ivm);
+            // Act
+          var x = controller.AttachIngredient(int.MaxValue, ivm);
+
+            //Assert
             Assert.Fail();
         }
 
@@ -575,6 +583,19 @@ namespace LambAndLentil.Tests.Controllers
         public void CorrectPersonsAreBoundInEdit()
         {
             Assert.Fail();
+        }
+
+        [TestMethod]
+        public void GetTheClassNameCorrect()
+        {
+            // Arrange
+
+            // Act
+
+
+            // Assert
+            //  Assert.Fail();
+            Assert.AreEqual("LambAndLentil.UI.Controllers.PersonsController", PersonsController_Test_Should.controller.ToString());
         }
 
         [TestCleanup()]

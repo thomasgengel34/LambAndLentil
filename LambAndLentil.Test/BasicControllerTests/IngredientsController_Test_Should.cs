@@ -14,14 +14,14 @@ using System.IO;
 using System.Linq;
 using System.Web.Mvc;
 
-namespace LambAndLentil.Tests.BasicControllerTests
+namespace LambAndLentil.Test.BasicControllerTests
 {
 
     [TestClass]
     [TestCategory(" IngredientsController")]
     public class IngredientsController_Test_Should
     {
-        private static IRepository<IngredientVM> Repo { get; set; }
+        protected static IRepository<IngredientVM> Repo { get; set; }
         public static MapperConfiguration AutoMapperConfig { get; set; }
         static ListVM<IngredientVM> ilvm;
         static IngredientsController controller;
@@ -32,7 +32,7 @@ namespace LambAndLentil.Tests.BasicControllerTests
             AutoMapperConfigForTests.InitializeMap();
             Repo = new TestRepository<IngredientVM>();
             ilvm = new ListVM<IngredientVM>();
-            controller = new IngredientsController(Repo);
+            controller = SetUpController(Repo);
             ingredientVM = new IngredientVM { ID = 1 };
             Repo.Save(ingredientVM);
         }
@@ -42,7 +42,7 @@ namespace LambAndLentil.Tests.BasicControllerTests
         {
 
             // Arrange
-            IngredientsController controller = SetUpController();
+        
             // Act 
             controller.PageSize = 4;
 
@@ -60,7 +60,7 @@ namespace LambAndLentil.Tests.BasicControllerTests
         {
 
             // Arrange
-            IngredientsController controller = SetUpController();
+           
             // Act 
             controller.PageSize = 4;
 
@@ -75,7 +75,7 @@ namespace LambAndLentil.Tests.BasicControllerTests
         public void BePublic()
         {
             // Arrange
-            IngredientsController controller = SetUpController();
+         
 
             // Act
             Type type = controller.GetType();
@@ -87,7 +87,7 @@ namespace LambAndLentil.Tests.BasicControllerTests
 
      
 
-        private IngredientsController SetUpController()
+       protected IngredientsController SetUpController(IRepository<IngredientVM> repo)
         {
 
 
@@ -116,11 +116,17 @@ namespace LambAndLentil.Tests.BasicControllerTests
             return controller;
         }
 
-        [Ignore]
+        
         [TestMethod]
         public void GetTheClassNameCorrect()
         {
-            Assert.Fail();
+            // Arrange
+
+            // Act
+
+
+            // Assert 
+           Assert.AreEqual("LambAndLentil.UI.Controllers.IngredientsController", IngredientsController_Test_Should.controller.ToString()); 
         }
 
 

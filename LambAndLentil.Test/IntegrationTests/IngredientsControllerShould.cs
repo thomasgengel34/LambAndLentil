@@ -267,15 +267,14 @@ namespace LambAndLentil.Test.Infrastructure
 
             // Act 
          AlertDecoratorResult adr =(AlertDecoratorResult)controller.Edit(1000);
-           //ViewResult view = (ViewResult)adr.InnerResult;
-            //     object Model = view.Model;
-
-            // Assert 
-            //    Assert.IsNotNull(view);
-            //    Assert.AreEqual(UIViewType.Index, adr.RouteValues.ElementAt(0).Value.ToString());
-            // Assert.AreEqual("Ingredient was not found", rdr..Message);
-            Assert.Fail();
+            RedirectToRouteResult rdr = (RedirectToRouteResult)adr.InnerResult;
+          
+            // Assert  
+         Assert.AreEqual(UIViewType.Index.ToString(), rdr.RouteValues.ElementAt(0).Value.ToString());
+             Assert.AreEqual("Ingredient was not found", adr.Message);
+            Assert.AreEqual("alert-warning", adr.AlertClass);
         }
+
         [Ignore]
         [TestMethod]
         public void HaveIDBoundInCreateActionMethod()

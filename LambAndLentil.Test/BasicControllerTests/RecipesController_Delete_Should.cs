@@ -1,12 +1,23 @@
-﻿using System;
+﻿////using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace LambAndLentil.Test.BasicControllerTests
 {
-    [Ignore]
     [TestClass]
-    public class IngredientsController_DeleteConfirmed_Should
+    public class RecipesController_Delete_Should 
     {
+        public RecipesController_Delete_Should()
+        {
+
+        }
+        [Ignore]
+        [TestMethod]
+        public void AllowUserToConfirmDeleteRequestAndCallConfirmDelete()
+        {
+            Assert.Fail();
+        }
+
+        [Ignore]
         [TestMethod]
         public void ReturnIndexWithWarningWhenIDIsNotFound()
         {
@@ -18,19 +29,9 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.Fail();
         }
 
+        [Ignore]
         [TestMethod]
-        public void ReturnIndexWithConfirmationWhenIDIsFound()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
-            Assert.Fail();
-        }
-
-        [TestMethod]
-        public void RemoveTheCorrectItemAndNotOtherItemsWhenIDIsFound()
+        public void ReturnIDetailsWhenIDIstFound()
         {
             // Arrange
 

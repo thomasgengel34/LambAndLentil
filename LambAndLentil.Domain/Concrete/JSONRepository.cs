@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using LambAndLentil.Domain.Abstract;
+﻿ using LambAndLentil.Domain.Abstract;
 using LambAndLentil.Domain.Entities;
 using Newtonsoft.Json;
 using System;
@@ -13,19 +12,19 @@ namespace LambAndLentil.Domain.Concrete
     public class JSONRepository<T> : IRepository<T>
         where T : class, IEntity
     {
-        // T should be an incoming view model 
-        //  LambAndLentil.Domain only deals with Domain, does not have a dependency on UI and cannot,should not, will not.
+        // T should be an incoming entity. It cannot be a view model.  LambAndLentil.Domain only deals with Domain, does not have a dependency on UI and cannot,should not, will not. I can get away with this as is because the ViewModels are identical to the Entities. If that changes, this will have to change.
 
 
         static string Folder { get; set; }
         protected static string FullPath { get; set; }
-        public static MapperConfiguration AutoMapperConfig { get; set; }
+        private static string className;
 
         public JSONRepository()
         {
             char[] charsToTrim = { 'V', 'M' };
             Folder = typeof(T).ToString().Split('.').Last().Split('+').Last().TrimEnd(charsToTrim);
-            string className = typeof(T).ToString().TrimEnd(charsToTrim);
+            //className = typeof(T).ToString().TrimEnd(charsToTrim);
+            className =Folder;
             //   E = Type.GetType(className, true);
             // TODO: get relative path to work.  The first line works in testing but not in running it.
             // fullPath = @"../../../\LambAndLentil.Domain\App_Data\JSON\" + folder + "\\";
@@ -74,25 +73,30 @@ namespace LambAndLentil.Domain.Concrete
             }
         }
 
-        public void AttachAnIndependentChild<TChild>(int parentID, int childID)
+        public void AttachAnIndependentChild<TChild>(int parentID, TChild child)
             where TChild : BaseEntity, IEntity
         {
+
+            char[] charsToTrim = { 'V', 'M' };
+            string childName = typeof(TChild).ToString().Split('.').Last().Split('+').Last().TrimEnd(charsToTrim);
+            
+
             T parent = JsonConvert.DeserializeObject<T>(File.ReadAllText(String.Concat(FullPath, parentID, ".txt")));
-            TChild child = JsonConvert.DeserializeObject<TChild>(File.ReadAllText(String.Concat(FullPath, childID, ".txt")));
+           
             if (parent != null && child != null)
             {
-                if (typeof(T) == typeof(Ingredient))
+                if (className== "Ingredient")
                 {
                     // cannot attach a child
                     // do nothing
                     // TODO: think about returning an error message. But user should not be given the chance to do this, so, aside from messing with the query string, how is this possible?  Make sure this is a POST request so no one can mess with the query string and get here. 
                 }
-                if (typeof(T) == typeof(Recipe))   // can only attach an Ingredient   
+                if (className == "Recipe")   // can only attach an Ingredient   
                 {
                     Recipe recipe = JsonConvert.DeserializeObject<Recipe>(File.ReadAllText(String.Concat(FullPath, parentID, ".txt")));
-                    if (typeof(TChild) == typeof(Ingredient))
+                    if (childName == "Ingredient")
                     {
-                        Ingredient ingredient = JsonConvert.DeserializeObject<Ingredient>(File.ReadAllText(String.Concat(FullPath, childID, ".txt")));
+                        Ingredient ingredient = child as Ingredient;
                         recipe.Ingredients.Add(ingredient);
                     }
                     else
@@ -100,86 +104,90 @@ namespace LambAndLentil.Domain.Concrete
                         // see notes above.  How did we get here? Try to and figure out how to block it. 
                     }
                 }
-                else if (typeof(T) == typeof(Menu))   // can  attach an Ingredient or recipe
+                else if (className == "Menu")   // can  attach an Ingredient or recipe
                 {
                     Menu menu = JsonConvert.DeserializeObject<Menu>(File.ReadAllText
                         (String.Concat(FullPath, parentID, ".txt")));
 
-                    if (typeof(TChild) == typeof(Ingredient))
+                    if (childName == "Ingredient")
                     {
                         menu.Ingredients.Add(child as Ingredient);
                     }
-                    else if (typeof(TChild) == typeof(Recipe))
+                    else if (childName == "Recipe")
                     {
                         menu.Recipes.Add(child as Recipe);
                     }
                 }
-                else if (typeof(T) == typeof(Plan))   // can  attach an Ingredient or recipe or menu
+                else if (className == "Plan")   // can  attach an Ingredient or recipe or menu
                 {
                     Plan plan = JsonConvert.DeserializeObject<Plan>(File.ReadAllText
                         (String.Concat(FullPath, parentID, ".txt")));
 
-                    if (typeof(TChild) == typeof(Ingredient))
+                    if (childName == "Ingredient")
                     {
                         plan.Ingredients.Add(child as Ingredient);
                     }
-                    else if (typeof(TChild) == typeof(Recipe))
+                    else if (childName == "Recipe")
                     {
                         plan.Recipes.Add(child as Recipe);
                     }
-                    else if (typeof(TChild) == typeof(Menu))
+                    else if (childName == "Menu")
                     {
                         plan.Menus.Add(child as Menu);
                     }
-                    else if (typeof(T) == typeof(ShoppingList))   // can  attach an Ingredient or recipe or menu or plan
-                    {
-                        ShoppingList shoppingList = JsonConvert.DeserializeObject<ShoppingList>(File.ReadAllText
-                            (String.Concat(FullPath, parentID, ".txt")));
+                }
+                else if (className == "ShoppingList")   // can  attach an Ingredient or recipe or menu or plan
+                {
+                    ShoppingList shoppingList = JsonConvert.DeserializeObject<ShoppingList>(File.ReadAllText
+                        (String.Concat(FullPath, parentID, ".txt")));
 
-                        if (typeof(TChild) == typeof(Ingredient))
-                        {
-                            shoppingList.Ingredients.Add(child as Ingredient);
-                        }
-                        else if (typeof(TChild) == typeof(Recipe))
-                        {
-                            shoppingList.Recipes.Add(child as Recipe);
-                        }
-                        else if (typeof(TChild) == typeof(Menu))
-                        {
-                            shoppingList.Menus.Add(child as Menu);
-                        }
-                        else if (typeof(TChild) == typeof(Plan))
-                        {
-                            shoppingList.Plans.Add(child as Plan);
-                        } 
+                    if (childName == "Ingredient")
+                    {
+                        shoppingList.Ingredients.Add(child as Ingredient);
                     }
-                    else if (typeof(T) == typeof(Person))
+                    else if (childName == "Recipe")
                     {
-                        Person person = JsonConvert.DeserializeObject<Person>(File.ReadAllText
-                            (String.Concat(FullPath, parentID, ".txt")));
-
-                        if (typeof(TChild) == typeof(Ingredient))
-                        {
-                            person.Ingredients.Add(child as Ingredient);
-                        }
-                        else if (typeof(TChild) == typeof(Recipe))
-                        {
-                            person.Recipes.Add(child as Recipe);
-                        }
-                        else if (typeof(TChild) == typeof(Menu))
-                        {
-                            person.Menus.Add(child as Menu);
-                        }
-                        else if (typeof(TChild) == typeof(Plan))
-                        {
-                            person.Plans.Add(child as Plan);
-                        }
-                        else if (typeof(TChild) == typeof(ShoppingList))
-                        {
-                            person.ShoppingLists.Add(child as ShoppingList);
-                        }
+                        shoppingList.Recipes.Add(child as Recipe);
+                    }
+                    else if (childName == "Menu")
+                    {
+                        shoppingList.Menus.Add(child as Menu);
+                    }
+                    else if (childName == "Plan")
+                    {
+                        shoppingList.Plans.Add(child as Plan);
                     }
                 }
+                else if (className == "Person")
+                {
+                    Person person = JsonConvert.DeserializeObject<Person>(File.ReadAllText
+                        (String.Concat(FullPath, parentID, ".txt")));
+
+                    if (childName == "Ingredient")
+                    {
+                        if (person.Ingredients == null)
+                        {
+                            person.Ingredients = new List<Ingredient>();
+                        }
+                        person.Ingredients.Add(child as Ingredient);
+                    }
+                    else if (childName == "Recipe")
+                    {
+                        person.Recipes.Add(child as Recipe);
+                    }
+                    else if (childName == "Menu")
+                    {
+                        person.Menus.Add(child as Menu);
+                    }
+                    else if (childName == "Plan")
+                    {
+                        person.Plans.Add(child as Plan);
+                    }
+                    else if (childName == "ShoppingList")
+                    {
+                        person.ShoppingLists.Add(child as ShoppingList);
+                    }
+                } 
             }
         }
 
@@ -191,7 +199,7 @@ namespace LambAndLentil.Domain.Concrete
             return fileCount;
         }
 
-        public void DetachAnIndependentChild<TChild>(int parentID, int childID)
+        public void DetachAnIndependentChild<TChild>(int parentID, TChild child)
             where TChild : BaseEntity, IEntity
         {
             throw new NotImplementedException();

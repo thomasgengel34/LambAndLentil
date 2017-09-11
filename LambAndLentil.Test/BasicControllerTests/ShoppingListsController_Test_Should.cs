@@ -1,33 +1,32 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using LambAndLentil.UI.Controllers;
-using LambAndLentil.Domain.Abstract;  
-using System.Linq;
-
-using LambAndLentil.UI.Models;
-using System.Web.Mvc;
-using System.Collections.Generic;
-using AutoMapper;
-using LambAndLentil.Tests.Infrastructure;
-using LambAndLentil.UI;
-using LambAndLentil.UI.Infrastructure.Alerts;
+﻿using AutoMapper;
+using LambAndLentil.Domain.Abstract;
 using LambAndLentil.Domain.Concrete;
 using LambAndLentil.Domain.Entities;
+using LambAndLentil.Tests.Infrastructure;
+using LambAndLentil.UI;
+using LambAndLentil.UI.Controllers;
+using LambAndLentil.UI.Infrastructure.Alerts;
+using LambAndLentil.UI.Models;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Web.Mvc;
 
 namespace LambAndLentil.Tests.Controllers
 {
 
     [TestClass]
     [TestCategory("ShoppingListsController")]
-    public class ShoppingListsControllerTest
+    public class  ShoppingListsController_Test_Should
     {
-        private static IRepository<ShoppingListVM> Repo { get; set; }
-        public static MapperConfiguration AutoMapperConfig { get; set; }
+        protected static IRepository<ShoppingListVM> Repo { get; set; }
+       protected static MapperConfiguration AutoMapperConfig { get; set; }
         private static ListVM<ShoppingListVM> listVM;
         private static ShoppingListsController controller { get; set; }
 
-        public ShoppingListsControllerTest()
+        public  ShoppingListsController_Test_Should()
         {
             AutoMapperConfigForTests.InitializeMap();
             Repo = new TestRepository<ShoppingListVM>();
@@ -509,6 +508,19 @@ namespace LambAndLentil.Tests.Controllers
         public void CorrectPropertiesAreBoundInEdit()
         {
             Assert.Fail();
+        }
+
+        [TestMethod]
+        public void GetTheClassNameCorrect()
+        {
+            // Arrange
+
+            // Act
+
+
+            // Assert
+            //  Assert.Fail();
+            Assert.AreEqual("LambAndLentil.UI.Controllers.ShoppingListsController", ShoppingListsController_Test_Should.controller.ToString());
         }
 
         [TestCleanup]

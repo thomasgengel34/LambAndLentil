@@ -20,15 +20,15 @@ namespace LambAndLentil.Tests.Controllers
 
     [TestClass]
     [TestCategory("MenusController")]
-    public class MenusControllerTest
+    public class MenusController_Test_Should
     {
-        private static IRepository<MenuVM> Repo { get; set; }
+        protected static IRepository<MenuVM> Repo { get; set; }
         public static MapperConfiguration AutoMapperConfig { get; set; }
         private static MenusController controller { get; set; }
 
         private ListVM<MenuVM> vm { get; set; }
 
-        public MenusControllerTest()
+        public MenusController_Test_Should()
         {
             AutoMapperConfigForTests.InitializeMap();
             Repo = new TestRepository<MenuVM>();
@@ -553,6 +553,19 @@ namespace LambAndLentil.Tests.Controllers
             Assert.Fail();
         }
 
+        [TestMethod]
+        public void GetTheClassNameCorrect()
+        {
+            // Arrange
+
+            // Act
+
+
+            // Assert
+            //  Assert.Fail();
+            Assert.AreEqual("LambAndLentil.UI.Controllers.MenusController", MenusController_Test_Should.controller.ToString());
+        }
+
         [TestCleanup()]
         public void TestCleanup()
         {
@@ -570,7 +583,7 @@ namespace LambAndLentil.Tests.Controllers
         [ClassCleanup()]
 public static void ClassCleanup()
 {
-    new MenusControllerTest().TestCleanup();
+    new MenusController_Test_Should().TestCleanup();
 }
     }
 }
