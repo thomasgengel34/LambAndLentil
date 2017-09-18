@@ -10,18 +10,19 @@ using LambAndLentil.Domain.Concrete;
 
 namespace LambAndLentil.UI.Controllers
 {
-    public class MenusController : MenusGenericController<MenuVM>
+    public class MenusController : MenusGenericController<Menu>
+       
     {
-        public MenusController(IRepository<MenuVM> repository) : base(repository)
+        public MenusController(IRepository<Menu> repository) : base(repository)
         {
             Repo = repository;
         }
     }
 
-    public class MenusGenericController<MenuVM> : BaseController<MenuVM> 
-            where MenuVM : BaseVM, IEntity, new()
+    public class MenusGenericController<Menu> : BaseController<Menu> 
+            where Menu : BaseEntity, IEntity, new()
     {
-        public MenusGenericController(IRepository<MenuVM> repository) : base(repository)
+        public MenusGenericController(IRepository<Menu> repository) : base(repository)
         {
             Repo = repository;
         }
@@ -59,7 +60,7 @@ namespace LambAndLentil.UI.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult PostEdit([Bind(Include = "ID,Name, DayOfWeek, Description,CreationDate, ModifiedDate,  AddedByUser, ModifiedByUser, MealType,Diners, Recipes, Ingredients")] MenuVM menuVM)
+        public ActionResult PostEdit([Bind(Include = "ID,Name, DayOfWeek, Description,CreationDate, ModifiedDate,  AddedByUser, ModifiedByUser, MealType,Diners, Recipes, Ingredients")] Menu menuVM)
         {
             return BasePostEdit(Repo, menuVM);
         }
@@ -83,25 +84,25 @@ namespace LambAndLentil.UI.Controllers
         }
 
 
-        //public ActionResult AttachRecipe(int? menuID, RecipeVM recipeVM)
+        //public ActionResult AttachRecipe(int? menuID, Recipe recipeVM)
         //{
-        //    return   BaseAttach< RecipeVM>(Repo,menuID, recipeVM);
+        //    return   BaseAttach< Recipe>(Repo,menuID, recipeVM);
         //}
 
-        //public ActionResult DetachRecipe(int? menuID, RecipeVM recipeVM)
+        //public ActionResult DetachRecipe(int? menuID, Recipe recipeVM)
         //{
-        //    return BaseAttach<RecipeVM>(Repo, menuID, recipeVM, AttachOrDetach.Detach);
+        //    return BaseAttach<Recipe>(Repo, menuID, recipeVM, AttachOrDetach.Detach);
         //}
 
-        public ActionResult AttachIngredient(int? menuID, IngredientVM ingredientVM)
+        public ActionResult AttachIngredient(int? menuID, Ingredient ingredient)
         {
-            return BaseAttach<IngredientVM>(Repo,menuID, ingredientVM);
+            return BaseAttach<Ingredient>(Repo,menuID, ingredient);
         }
 
 
-        public ActionResult DetachIngredient(int? menuID, IngredientVM ingredientVM)
+        public ActionResult DetachIngredient(int? menuID, Ingredient ingredient)
         {
-            return BaseAttach< IngredientVM>(Repo,menuID, ingredientVM, AttachOrDetach.Detach);
+            return BaseAttach< Ingredient>(Repo,menuID, ingredient, AttachOrDetach.Detach);
         }
 
         // probably not needed

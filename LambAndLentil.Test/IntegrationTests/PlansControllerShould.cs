@@ -1,19 +1,17 @@
-﻿using AutoMapper;
+﻿using LambAndLentil.Domain.Abstract;
 using LambAndLentil.Domain.Concrete;
 using LambAndLentil.Domain.Entities;
-using LambAndLentil.Domain.Abstract;
 using LambAndLentil.UI;
 using LambAndLentil.UI.Controllers;
 using LambAndLentil.UI.Infrastructure.Alerts;
 using LambAndLentil.UI.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using LambAndLentil.Tests.Controllers;
+using System.Collections.Generic;
 
-namespace IntegrationTests
+namespace LambAndLentil.Test.BasicControllerTests
 {
 
     [TestClass]
@@ -21,17 +19,19 @@ namespace IntegrationTests
     [TestCategory("PlansController")]
     public class PlansControllerShould
     {
-        static IRepository<PlanVM> Repo;
+        static IRepository<Plan> Repo;
         static PlansController controller;
-        static PlanVM planVM;
+        static Plan planVM;
 
         public PlansControllerShould()
         {
-            Repo = new TestRepository<PlanVM>();
+            Repo = new TestRepository<Plan>();
             controller = new PlansController(Repo);
-            planVM = new PlanVM();
-            planVM.ID = 1000;
-            planVM.Description = "test PlanControllerShould";
+            planVM = new Plan
+            {
+                ID = 1000,
+                Description = "test PlanControllerShould"
+            };
         }
 
         [TestMethod]
@@ -41,7 +41,7 @@ namespace IntegrationTests
 
             // Act
             ViewResult vr = controller.Create(UIViewType.Create);
-            PlanVM vm = (PlanVM)vr.Model;
+            Plan vm = (Plan)vr.Model;
             string modelName = vm.Name;
 
             // Assert 
@@ -81,14 +81,16 @@ namespace IntegrationTests
             PlansController controller3 = new PlansController(Repo);
             PlansController controller4 = new PlansController(Repo);
             PlansController controller5 = new PlansController(Repo);
-            PlanVM vm = new PlanVM();
-            vm.Name = "0000 test";
+            Plan vm = new Plan
+            {
+                Name = "0000 test"
+            };
 
             // Act 
             ActionResult ar1 = controller1.PostEdit(vm);
             ViewResult view1 = controller2.Index();
-            ListVM<PlanVM> listVM = (ListVM<PlanVM>)view1.Model;
-            PlanVM item = (from m in listVM.ListT
+            List<Plan> list = (List<Plan>)view1.Model;
+            Plan item = (from m in list
                            where m.Name == "0000 test"
                            select m).AsQueryable().First();
 
@@ -101,8 +103,8 @@ namespace IntegrationTests
             vm.ID = item.ID;
             ActionResult ar2 = controller3.PostEdit(vm);
             ViewResult view2 = controller4.Index();
-            ListVM<PlanVM> listVM2 = (ListVM<PlanVM>)view2.Model;
-            PlanVM planVM2 = (from m in listVM2.ListT
+            List<Plan> list2 = (List<Plan>)view2.Model;
+            Plan planVM2 = (from m in list2
                               where m.Name == "0000 test Edited"
                               select m).AsQueryable().First();
 
@@ -121,16 +123,18 @@ namespace IntegrationTests
             PlansController controller3 = new PlansController(Repo);
             PlansController controller4 = new PlansController(Repo);
             PlansController controller5 = new PlansController(Repo);
-            PlanVM vm = new PlanVM();
-            vm.Name = "0000 test";
-            vm.Description = "SaveEditedPlanWithDescriptionChange Pre-test";
+            Plan vm = new Plan
+            {
+                Name = "0000 test",
+                Description = "SaveEditedPlanWithDescriptionChange Pre-test"
+            };
 
 
             // Act 
             ActionResult ar1 = controller1.PostEdit(vm);
             ViewResult view1 = controller2.Index();
-            ListVM<PlanVM> listVM = (ListVM<PlanVM>)view1.Model;
-            PlanVM planVM = (from m in listVM.ListT
+            List<Plan> list = (List<Plan>)view1.Model;
+            Plan planVM = (from m in list
                              where m.Name == "0000 test"
                              select m).AsQueryable().FirstOrDefault();
 
@@ -146,8 +150,8 @@ namespace IntegrationTests
 
             ActionResult ar2 = controller3.PostEdit(vm);
             ViewResult view2 = controller4.Index();
-            ListVM<PlanVM> listVM2 = (ListVM<PlanVM>)view2.Model;
-            planVM = (from m in listVM2.ListT
+            List<Plan> list2 = (List<Plan>)view2.Model;
+            planVM = (from m in list2
                            where m.Name == "0000 test Edited"
                            select m).AsQueryable().FirstOrDefault(); 
 
@@ -180,10 +184,12 @@ namespace IntegrationTests
         {
             // Arrange
             DateTime CreationDate = new DateTime(2010, 1, 1);
-            PlanVM planVM = new PlanVM(CreationDate);
-            planVM.Name = "001 Test ";
+            Plan planVM = new Plan(CreationDate)
+            {
+                Name = "001 Test "
+            };
 
-             
+
             PlansController controllerEdit = new PlansController(Repo);
             PlansController controllerView = new PlansController(Repo);
             PlansController controllerDelete = new PlansController(Repo);
@@ -191,8 +197,8 @@ namespace IntegrationTests
             // Act
             controllerEdit.PostEdit(planVM);
             ViewResult view = controllerView.Index();
-            ListVM<PlanVM> listVM = (ListVM<PlanVM>)view.Model;
-            planVM = (from m in listVM.ListT
+            List<Plan> list = (List<Plan>)view.Model;
+            planVM = (from m in list
                           where m.Name == "001 Test "
                           select m).AsQueryable().First();
            
@@ -214,16 +220,18 @@ namespace IntegrationTests
             PlansController controllerView = new PlansController(Repo);
             PlansController controllerDelete = new PlansController(Repo);
 
-            PlanVM planVM = new PlanVM();
-            planVM.Name = "002 Test Mod";
+            Plan planVM = new Plan
+            {
+                Name = "002 Test Mod"
+            };
             DateTime CreationDate = planVM.CreationDate;
             DateTime mod = planVM.ModifiedDate;
 
             // Act
             controllerPost.PostEdit(planVM);
             ViewResult view = controllerView.Index();
-            ListVM<PlanVM> listVM = (ListVM<PlanVM>)view.Model;
-            planVM = (from m in listVM.ListT
+            List<Plan> list = (List<Plan>)view.Model;
+            planVM = (from m in list
                           where m.Name == "002 Test Mod"
                           select m).AsQueryable().First();
 
@@ -244,24 +252,26 @@ namespace IntegrationTests
         {
             // Arrange
             
-           IRepository<IngredientVM> repoIngredient = new TestRepository<IngredientVM>();
+           IRepository<Ingredient> repoIngredient = new TestRepository<Ingredient>();
             PlansController controller = new PlansController(Repo);
 
             planVM.Description = "test AttachAnExistingIngredientToAnExistingPlan";
-            IngredientVM ingredientVM = new IngredientVM();
-            ingredientVM.ID = 100;
-            ingredientVM.Description= "test AttachAnExistingIngredientToAnExistingPlan";
+            Ingredient ingredient = new Ingredient
+            {
+                ID = 100,
+                Description = "test AttachAnExistingIngredientToAnExistingPlan"
+            };
 
             // Act
-            controller.AttachIngredient(planVM.ID, ingredientVM );
-            PlanVM returnedPlanVM = (from m in Repo.GetAll()
+            controller.AttachIngredient(planVM.ID, ingredient );
+            Plan returnedPlan = (from m in Repo.GetAll()
                                  where m.Description == planVM.Description
                                  select m).FirstOrDefault(); 
 
             // Assert 
-            Assert.AreEqual(1, returnedPlanVM.Ingredients.Count());
+            Assert.AreEqual(1, returnedPlan.Ingredients.Count());
             // how do I know the correct ingredient was added?
-            Assert.AreEqual(ingredientVM.ID, returnedPlanVM.Ingredients.First().ID); 
+            Assert.AreEqual(ingredient.ID, returnedPlan.Ingredients.First().ID); 
         }
 
         [Ignore]

@@ -9,18 +9,18 @@ using LambAndLentil.UI.Infrastructure.Alerts;
 
 namespace LambAndLentil.UI.Controllers
 {
-    public class RecipesController : RecipesGenericController<RecipeVM>
+    public class RecipesController : RecipesGenericController<Recipe>
     {
-        public RecipesController(IRepository<RecipeVM> repository) : base(repository)
+        public RecipesController(IRepository<Recipe> repository) : base(repository)
         {
             Repo = repository;
         } 
     }
 
-    public class RecipesGenericController<T > : BaseController<RecipeVM>
-          where T: RecipeVM  
+    public class RecipesGenericController<T > : BaseController<Recipe>
+          where T: Recipe  
     {
-        public RecipesGenericController(IRepository<RecipeVM> repository) : base(repository)
+        public RecipesGenericController(IRepository<Recipe> repository) : base(repository)
         {
             Repo = repository;
         }
@@ -60,7 +60,7 @@ namespace LambAndLentil.UI.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult PostEdit([Bind(Include = "ID,Name,Description,Servings,MealType,Calories,CalsFromFat,CreationDate, ModifiedDate,AddedByUser, ModifiedByUser ")] RecipeVM recipeVM)
+        public ActionResult PostEdit([Bind(Include = "ID,Name,Description,Servings,MealType,Calories,CalsFromFat,CreationDate, ModifiedDate,AddedByUser, ModifiedByUser ")] Recipe recipeVM)
         {
             return BasePostEdit(Repo, recipeVM);
         }
@@ -80,14 +80,14 @@ namespace LambAndLentil.UI.Controllers
             return BaseDeleteConfirmed(Repo, UIControllerType.Recipes, id);
         }
 
-        public ActionResult AttachIngredient(int? recipeID, IngredientVM ingredientVM )
+        public ActionResult AttachIngredient(int? recipeID, Ingredient ingredient )
         {
-            return BaseAttach<IngredientVM>(Repo,recipeID, ingredientVM );
+            return BaseAttach<Ingredient>(Repo,recipeID, ingredient );
         }
 
-        public ActionResult RemoveIngredient(int? recipeID, IngredientVM ingredientVM)
+        public ActionResult RemoveIngredient(int? recipeID, Ingredient ingredient)
         {
-            return BaseAttach<IngredientVM>(Repo, recipeID, ingredientVM, AttachOrDetach.Detach);
+            return BaseAttach<Ingredient>(Repo, recipeID, ingredient, AttachOrDetach.Detach);
         }
 
          

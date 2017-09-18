@@ -29,13 +29,13 @@ namespace LambAndLentil.UI.Infrastructure
         private void AddBindings()
         {
             //ninjectKernel.Bind<IRepository>().To<JSONRepository>();
-            ninjectKernel.Bind<IRepository<IngredientVM>>().To<JSONRepository<IngredientVM>>();
+            ninjectKernel.Bind<IRepository<Ingredient >>().To<JSONRepository<Ingredient >>();
 
-            ninjectKernel.Bind<IRepository< RecipeVM>>().To<JSONRepository< RecipeVM>>();
-            ninjectKernel.Bind<IRepository< MenuVM>>().To<JSONRepository< MenuVM>>();
-            ninjectKernel.Bind<IRepository< PlanVM>>().To<JSONRepository< PlanVM>>();
-            ninjectKernel.Bind<IRepository< ShoppingListVM>>().To<JSONRepository< ShoppingListVM>>();
-            ninjectKernel.Bind<IRepository< PersonVM>>().To<JSONRepository< PersonVM>>();
+            ninjectKernel.Bind<IRepository< Recipe >>().To<JSONRepository< Recipe>>();
+            ninjectKernel.Bind<IRepository< Menu >>().To<JSONRepository< Menu >>();
+            ninjectKernel.Bind<IRepository< Plan >>().To<JSONRepository< Plan >>();
+            ninjectKernel.Bind<IRepository< ShoppingList >>().To<JSONRepository< ShoppingList >>();
+            ninjectKernel.Bind<IRepository< Person >>().To<JSONRepository< Person >>();
             ninjectKernel = ModelMetaDataRegistry.AddMetaDataBindings(ninjectKernel);
         }
     }

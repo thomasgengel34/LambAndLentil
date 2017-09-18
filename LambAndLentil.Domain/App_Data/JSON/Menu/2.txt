@@ -1,1 +1,0 @@
-{"MealType":0,"DayOfWeek":0,"Diners":0,"ID":2,"Name":"test","Description":"not yet described","CreationDate":"2017-08-23T08:19:43.5403684-05:00","ModifiedDate":"2017-08-23T08:19:43.5813691-05:00","AddedByUser":"PFW\\Poncho","ModifiedByUser":"PFW\\Poncho","Recipes":[],"Ingredients":[],"Menus":[],"Plans":[],"ShoppingLists":[],"Persons":[]}

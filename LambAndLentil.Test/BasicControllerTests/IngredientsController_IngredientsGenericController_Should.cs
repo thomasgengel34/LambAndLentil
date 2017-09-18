@@ -1,7 +1,8 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using LambAndLentil.UI.Controllers;
-using LambAndLentil.UI.Models; 
+using LambAndLentil.UI.Models;
+using LambAndLentil.Domain.Entities;
 
 namespace LambAndLentil.Test.BasicControllerTests
 {
@@ -11,29 +12,29 @@ namespace LambAndLentil.Test.BasicControllerTests
     public class IngredientsController_IngredientsGenericController_Should : IngredientsController_Test_Should
     {
         [TestMethod]
-        public void InheritBaseControllerInIngredientVM()
+        public void InheritBaseControllerInIngredient()
         {
             // Arrange
 
             // Act 
             Type type = Type.GetType("LambAndLentil.UI.Controllers.IngredientsController, LambAndLentil.UI", true);
             // Assert
-            Assert.IsTrue(type.IsSubclassOf(typeof(BaseController<IngredientVM>)));
+            Assert.IsTrue(type.IsSubclassOf(typeof(BaseController<Ingredient>)));
         }
 
         [TestMethod]
-        public void InheritIngredientsGenericControllerInIngredientVM()
+        public void InheritIngredientsGenericControllerInIngredient()
         {
             // Arrange
 
             // Act
             Type type = Type.GetType("LambAndLentil.UI.Controllers.IngredientsController, LambAndLentil.UI", true);
             // Assert
-            Assert.IsTrue(type.IsSubclassOf(typeof(IngredientsGenericController<IngredientVM>)));
+            Assert.IsTrue(type.IsSubclassOf(typeof(IngredientsGenericController<Ingredient>)));
         }
 
         [TestMethod]
-        public void CallRepositoryInIngredientVM()
+        public void CallRepositoryInIngredient()
         {
             // Arrange
 
@@ -41,7 +42,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Type type = Repo.GetType();
            string name=  type.GenericTypeArguments[0].Name;
             // Assert
-            Assert.AreEqual("IngredientVM", name);
+            Assert.AreEqual("Ingredient", name);
         }
     }
 }

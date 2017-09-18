@@ -9,18 +9,18 @@ using System.Collections.Generic;
 
 namespace LambAndLentil.UI.Controllers
 {
-    public class ShoppingListsController : ShoppingListsGenericController<ShoppingListVM>
+    public class ShoppingListsController : ShoppingListsGenericController<ShoppingList>
     {
-        public ShoppingListsController(IRepository<ShoppingListVM> repository) : base(repository)
+        public ShoppingListsController(IRepository<ShoppingList> repository) : base(repository)
         {
             Repo = repository;
         }
     }
 
-    public class ShoppingListsGenericController<T> : BaseController<ShoppingListVM>
-          where T : ShoppingListVM
+    public class ShoppingListsGenericController<T> : BaseController<ShoppingList>
+          where T : ShoppingList
     {
-        public ShoppingListsGenericController(IRepository<ShoppingListVM> repository) : base(repository)
+        public ShoppingListsGenericController(IRepository<ShoppingList> repository) : base(repository)
         {
             Repo = repository;
         }
@@ -61,7 +61,7 @@ namespace LambAndLentil.UI.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult PostEdit([Bind(Include = "ID,Name,Description, Author, CreationDate, ModifiedDate,  AddedByUser, ModifiedByUser")] ShoppingListVM shoppingListVM)
+        public ActionResult PostEdit([Bind(Include = "ID,Name,Description, Author, CreationDate, ModifiedDate,  AddedByUser, ModifiedByUser")] ShoppingList shoppingListVM)
         {
             return BasePostEdit(Repo,  shoppingListVM);
         }
@@ -81,15 +81,15 @@ namespace LambAndLentil.UI.Controllers
             return BaseDeleteConfirmed(Repo,  UIControllerType.ShoppingLists, id);
         }
 
-        public ActionResult AttachIngredient(int? shoppingListID, IngredientVM ingredientVM)
+        public ActionResult AttachIngredient(int? shoppingListID, Ingredient ingredient)
         {
-            return BaseAttach<IngredientVM>(Repo, shoppingListID, ingredientVM);
+            return BaseAttach<Ingredient>(Repo, shoppingListID, ingredient);
         }
 
 
-        public ActionResult DetachIngredient(int? shoppingListID, IngredientVM ingredientVM)
+        public ActionResult DetachIngredient(int? shoppingListID, Ingredient ingredient)
         {
-            return BaseAttach<IngredientVM>(Repo, shoppingListID, ingredientVM, AttachOrDetach.Detach);
+            return BaseAttach<Ingredient>(Repo, shoppingListID, ingredient, AttachOrDetach.Detach);
         }
     }
 } 

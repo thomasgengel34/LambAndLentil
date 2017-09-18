@@ -10,7 +10,7 @@ namespace LambAndLentil.Test.Infrastructure
     {
         public static MapperConfiguration AutoMapperConfig { get; set; }
         
-       
+       [Ignore]  // currently not using AutoMapper.  Keep if I go back.
         [TestMethod]
         public void BeConfigured()
         {

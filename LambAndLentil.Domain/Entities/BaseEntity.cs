@@ -6,11 +6,25 @@ using System.Threading.Tasks;
 using System.Security.Principal;
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
+using LambAndLentil.Domain.Abstract;
 
 namespace LambAndLentil.Domain.Entities
 {
-    public class BaseEntity  
+    public class BaseEntity
     {
+        [StringLength(50)]
+        [Required]
+        public string Name { get; set; }
+
+        [DataType(DataType.MultilineText)]
+        public string Description { get; set; }
+        public DateTime CreationDate { get; set; }
+        public DateTime ModifiedDate { get; set; }
+        public string AddedByUser { get; set; }
+        public string ModifiedByUser { get; set; }
+
+
+
         public BaseEntity()
         {
             Name = "Newly Created";
@@ -34,16 +48,44 @@ namespace LambAndLentil.Domain.Entities
 
         }
 
-       
-        [StringLength(50)]
-        [Required]
-        public string Name { get; set; }
 
-        [DataType(DataType.MultilineText)]
-        public string Description { get; set; }
-        public DateTime CreationDate { get; set; }
-        public DateTime ModifiedDate { get; set; }
-        public string AddedByUser { get; set; }
-        public string ModifiedByUser { get; set; } 
+
+//public int ID { get; set; }
+
+
+       public List<T> GetIndexedModel<T>(IRepository<T> repository, int PageSize, int page = 1)
+            where T : BaseEntity, IEntity
+        {
+
+
+            var result = repository.GetAll()
+                      .OrderBy(p => p.Name)
+                      .Skip((page - 1) * PageSize)
+                      .Take(PageSize);
+            List<T> listVM = new List<T>();
+            foreach (var item in result)
+            {
+
+                listVM.Add(item);
+            }
+
+            return listVM;
+        }
+
+
+
+       public PagingInfo PagingFunction<T>(IRepository<T> repository, int page, int PageSize)
+            where T : BaseEntity, IEntity
+        {
+            PagingInfo PagingInfo = new PagingInfo
+            {
+                CurrentPage = page,
+                ItemsPerPage = PageSize
+            };
+            int totalItems = repository.Count();
+            PagingInfo.TotalItems = totalItems;
+
+            return PagingInfo;
+        }
     }
 }

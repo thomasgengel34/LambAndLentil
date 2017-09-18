@@ -23,7 +23,7 @@ namespace LambAndLentil.Domain.Entities
         public MealType MealType { get; set; }
         public int? Calories { get; set; }
         public short? CalsFromFat { get; set; }
-        public ICollection<Ingredient> Ingredients { get; set; }
+        public List<Ingredient> Ingredients { get; set; }
 
 
     }

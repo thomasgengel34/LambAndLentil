@@ -7,18 +7,18 @@ using System.Web.Mvc;
 
 namespace LambAndLentil.UI.Controllers
 {
-    public class IngredientsController : IngredientsGenericController<IngredientVM> {
-        public IngredientsController(IRepository<  IngredientVM> repository) : base(repository)
+    public class IngredientsController : IngredientsGenericController<Ingredient> {
+        public IngredientsController(IRepository<  Ingredient> repository) : base(repository)
         {
             Repo=repository;
         } 
     }
 
-    public class IngredientsGenericController< T> : BaseController<IngredientVM>
-          where T:IngredientVM  
+    public class IngredientsGenericController< T> : BaseController<Ingredient>
+          where T:Ingredient  
     {
         
-        public IngredientsGenericController(IRepository<IngredientVM> repository) : base(repository)
+        public IngredientsGenericController(IRepository<Ingredient> repository) : base(repository)
         {
             Repo = repository;
         }
@@ -53,9 +53,9 @@ namespace LambAndLentil.UI.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult PostEdit([Bind(Include = "ID, Name, Description, CreationDate, ModifiedDate,  IngredientsList")]  IngredientVM ingredientVM)
+        public ActionResult PostEdit([Bind(Include = "ID, Name, Description, CreationDate, ModifiedDate,  IngredientsList")]  Ingredient ingredient)
         {
-            return BasePostEdit(Repo,  ingredientVM);
+            return BasePostEdit(Repo,  ingredient);
         }
 
         // GET: Ingredients/Delete/5

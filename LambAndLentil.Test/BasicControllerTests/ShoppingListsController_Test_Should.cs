@@ -14,46 +14,48 @@ using System.IO;
 using System.Linq;
 using System.Web.Mvc;
 
-namespace LambAndLentil.Tests.Controllers
+namespace LambAndLentil.Test.BasicControllerTests
 {
 
     [TestClass]
     [TestCategory("ShoppingListsController")]
     public class  ShoppingListsController_Test_Should
     {
-        protected static IRepository<ShoppingListVM> Repo { get; set; }
+        protected static IRepository<ShoppingList> Repo { get; set; }
        protected static MapperConfiguration AutoMapperConfig { get; set; }
-        private static ListVM<ShoppingListVM> listVM;
-        private static ShoppingListsController controller { get; set; }
+        private static ListEntity<ShoppingList> list;
+        protected static ShoppingListsController Controller { get; set; }
 
         public  ShoppingListsController_Test_Should()
         {
             AutoMapperConfigForTests.InitializeMap();
-            Repo = new TestRepository<ShoppingListVM>();
-            listVM = new ListVM<ShoppingListVM>();
-            controller = SetUpController();
+            Repo = new TestRepository<ShoppingList>();
+            list = new ListEntity<ShoppingList>();
+            Controller = SetUpController(Repo);
         }
 
-        private ShoppingListsController SetUpController()
+        protected ShoppingListsController SetUpController(IRepository<ShoppingList> Repo)
         {
 
-            listVM.ListT = new List<ShoppingListVM> {
-                new ShoppingListVM {ID = int.MaxValue, Name = "ShoppingListsController_Index_Test P1" ,AddedByUser="John Doe" ,ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue, ModifiedDate=DateTime.MaxValue.AddYears(-10)},
-                new ShoppingListVM {ID = int.MaxValue-1, Name = "ShoppingListsController_Index_Test P2",  AddedByUser="Sally Doe",  ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(20), ModifiedDate=DateTime.MaxValue.AddYears(-20)},
-                new ShoppingListVM {ID = int.MaxValue-2, Name = "ShoppingListsController_Index_Test P3",  AddedByUser="Sue Doe", ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(30), ModifiedDate=DateTime.MaxValue.AddYears(-30)},
-                new ShoppingListVM {ID = int.MaxValue-3, Name = "ShoppingListsController_Index_Test P4",  AddedByUser="Kyle Doe" ,ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(40), ModifiedDate=DateTime.MaxValue.AddYears(-10)},
-                new ShoppingListVM {ID = int.MaxValue-4, Name = "ShoppingListsController_Index_Test P5",  AddedByUser="John Doe",  ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(50), ModifiedDate=DateTime.MaxValue.AddYears(-100)}
-            }.AsQueryable();
+            list.ListT  = new List<ShoppingList> {
+                new ShoppingList {ID = int.MaxValue, Name = "ShoppingListsController_Index_Test P1" ,AddedByUser="John Doe" ,ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue, ModifiedDate=DateTime.MaxValue.AddYears(-10)},
+                new ShoppingList {ID = int.MaxValue-1, Name = "ShoppingListsController_Index_Test P2",  AddedByUser="Sally Doe",  ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(20), ModifiedDate=DateTime.MaxValue.AddYears(-20)},
+                new ShoppingList {ID = int.MaxValue-2, Name = "ShoppingListsController_Index_Test P3",  AddedByUser="Sue Doe", ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(30), ModifiedDate=DateTime.MaxValue.AddYears(-30)},
+                new ShoppingList {ID = int.MaxValue-3, Name = "ShoppingListsController_Index_Test P4",  AddedByUser="Kyle Doe" ,ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(40), ModifiedDate=DateTime.MaxValue.AddYears(-10)},
+                new ShoppingList {ID = int.MaxValue-4, Name = "ShoppingListsController_Index_Test P5",  AddedByUser="John Doe",  ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(50), ModifiedDate=DateTime.MaxValue.AddYears(-100)}
+            }.AsQueryable() ;
 
-            foreach (ShoppingListVM ingredient in listVM.ListT)
+            foreach (ShoppingList ingredient in list.ListT)
             {
                 Repo.Add(ingredient);
             }
 
-            controller = new ShoppingListsController(Repo);
-            controller.PageSize = 3;
+            Controller = new ShoppingListsController(Repo)
+            {
+                PageSize = 3
+            };
 
-            return controller;
+            return Controller;
         }
 
         [TestMethod]
@@ -63,7 +65,7 @@ namespace LambAndLentil.Tests.Controllers
 
 
             // Act
-            Type type = controller.GetType();
+            Type type = Controller.GetType();
             bool isPublic = type.IsPublic;
 
             // Assert 
@@ -80,13 +82,13 @@ namespace LambAndLentil.Tests.Controllers
             // Arrange
 
             // Act 
-            controller.PageSize = 4;
+            Controller.PageSize = 4;
 
             var type = typeof(ShoppingListsController);
             var DoesDisposeExist = type.GetMethod("Dispose");
 
             // Assert 
-            Assert.AreEqual(4, controller.PageSize);
+            Assert.AreEqual(4, Controller.PageSize);
             Assert.IsNotNull(DoesDisposeExist);
         }
 
@@ -98,7 +100,7 @@ namespace LambAndLentil.Tests.Controllers
 
 
             // Act
-            ViewResult result = controller.Index(1) as ViewResult;
+            ViewResult result = Controller.Index(1) as ViewResult;
 
 
             // Assert
@@ -114,13 +116,13 @@ namespace LambAndLentil.Tests.Controllers
             // Arrange
 
             // Act
-            ViewResult view1 = controller.Index(1);
+            ViewResult view1 = Controller.Index(1);
 
-            int count1 = ((ListVM<ShoppingListVM>)(view1.Model)).ListT.Count();
+            int count1 = ((ListEntity<ShoppingList>)(view1.Model)).ListT.Count();
 
-            ViewResult view2 = controller.Index(2);
+            ViewResult view2 = Controller.Index(2);
 
-            int count2 = ((ListVM<ShoppingListVM>)(view2.Model)).ListT.Count();
+            int count2 = ((ListEntity<ShoppingList>)(view2.Model)).ListT.Count();
 
             int count = count1 + count2;
 
@@ -139,23 +141,22 @@ namespace LambAndLentil.Tests.Controllers
         [TestCategory("Index")]
         public void FirstPageIsCorrect()
         {
-            // Arrange
-            ShoppingListsController controller = SetUpController();
-            ListVM<ShoppingListVM> ilvm = new ListVM<ShoppingListVM>();
-            controller.PageSize = 8;
+            // Arrange 
+            ListEntity<ShoppingList> list = new ListEntity<ShoppingList>();
+            Controller.PageSize = 8;
 
             // Act
-            ViewResult view1 = controller.Index(1);
-            int count1 = ((ListVM<ShoppingListVM>)(view1.Model)).ListT.Count();
+            ViewResult view1 = Controller.Index(1);
+            int count1 = ((ListEntity<ShoppingList>)(view1.Model)).ListT.Count();
 
             // Assert
             Assert.IsNotNull(view1);
             Assert.AreEqual(5, count1);
             Assert.AreEqual("Index", view1.ViewName);
 
-            Assert.AreEqual("ShoppingListsController_Index_Test P1", ((ListVM<ShoppingListVM>)(view1.Model)).ListT.FirstOrDefault().Name);
-            Assert.AreEqual("ShoppingListsController_Index_Test P2", ((ListVM<ShoppingListVM>)(view1.Model)).ListT.Skip(1).FirstOrDefault().Name);
-            Assert.AreEqual("ShoppingListsController_Index_Test P3", ((ListVM<ShoppingListVM>)(view1.Model)).ListT.Skip(2).FirstOrDefault().Name);
+            Assert.AreEqual("ShoppingListsController_Index_Test P1", ((ListEntity<ShoppingList>)(view1.Model)).ListT.FirstOrDefault().Name);
+            Assert.AreEqual("ShoppingListsController_Index_Test P2", ((ListEntity<ShoppingList>)(view1.Model)).ListT.Skip(1).FirstOrDefault().Name);
+            Assert.AreEqual("ShoppingListsController_Index_Test P3", ((ListEntity<ShoppingList>)(view1.Model)).ListT.Skip(2).FirstOrDefault().Name);
         }
 
         [Ignore]
@@ -174,10 +175,10 @@ namespace LambAndLentil.Tests.Controllers
         {
 
             // Arrange
-            ShoppingListsController controller = SetUpController();
+            
 
             // Act 
-            ListVM<ShoppingListVM> resultT = (ListVM<ShoppingListVM>)((ViewResult)controller.Index(2)).Model;
+            ListEntity<ShoppingList> resultT = (ListEntity<ShoppingList>)((ViewResult)Controller.Index(2)).Model;
 
 
             // Assert 
@@ -196,10 +197,10 @@ namespace LambAndLentil.Tests.Controllers
             // Arrange 
 
             // Action
-            int totalItems = ((ListVM<ShoppingListVM>)((ViewResult)controller.Index()).Model).PagingInfo.TotalItems;
-            int currentPage = ((ListVM<ShoppingListVM>)((ViewResult)controller.Index()).Model).PagingInfo.CurrentPage;
-            int itemsPerPage = ((ListVM<ShoppingListVM>)((ViewResult)controller.Index()).Model).PagingInfo.ItemsPerPage;
-            int totalPages = ((ListVM<ShoppingListVM>)((ViewResult)controller.Index()).Model).PagingInfo.TotalPages;
+            int totalItems = ((ListEntity<ShoppingList>)((ViewResult)Controller.Index()).Model).PagingInfo.TotalItems;
+            int currentPage = ((ListEntity<ShoppingList>)((ViewResult)Controller.Index()).Model).PagingInfo.CurrentPage;
+            int itemsPerPage = ((ListEntity<ShoppingList>)((ViewResult)Controller.Index()).Model).PagingInfo.ItemsPerPage;
+            int totalPages = ((ListEntity<ShoppingList>)((ViewResult)Controller.Index()).Model).PagingInfo.TotalPages;
 
 
 
@@ -217,7 +218,7 @@ namespace LambAndLentil.Tests.Controllers
             // Arrange
 
             // Act
-            var result = (ListVM<ShoppingListVM>)(controller.Index(1)).Model;
+            var result = (ListEntity<ShoppingList>)(Controller.Index(1)).Model;
 
             // Assert 
             Assert.IsTrue(result.ListT.Count() == 5);
@@ -230,7 +231,7 @@ namespace LambAndLentil.Tests.Controllers
         public void Create()
         {
             // Arrange 
-            ViewResult view = controller.Create(UIViewType.Edit);
+            ViewResult view = Controller.Create(UIViewType.Edit);
 
 
             // Assert
@@ -247,7 +248,7 @@ namespace LambAndLentil.Tests.Controllers
             int count = Repo.Count();
 
             // Act 
-            ActionResult ar = controller.Delete(int.MaxValue);
+            ActionResult ar = Controller.Delete(int.MaxValue);
             ViewResult view = (ViewResult)ar;
             int newCount = Repo.Count();
 
@@ -266,7 +267,7 @@ namespace LambAndLentil.Tests.Controllers
             // Arrange 
 
             // Act 
-            var view = controller.Delete(4000) as ViewResult;
+            var view = Controller.Delete(4000) as ViewResult;
             AlertDecoratorResult adr = (AlertDecoratorResult)view;
 
             // Assert
@@ -286,7 +287,7 @@ namespace LambAndLentil.Tests.Controllers
             int count = Repo.Count();
 
             // Act
-            ActionResult result = controller.DeleteConfirmed(int.MaxValue) as ActionResult;
+            ActionResult result = Controller.DeleteConfirmed(int.MaxValue) as ActionResult;
             int newCount = Repo.Count();
             // TODO: improve this test when I do some route tests to return a more exact result
             //RedirectToRouteResult x = new RedirectToRouteResult("default",new  RouteValueDictionary { new Route( { controller = "ShoppingLists", Action = "Index" } } );
@@ -301,12 +302,12 @@ namespace LambAndLentil.Tests.Controllers
         [TestCategory("Remove")]
         public void CanRemoveValidShoppingList()
         {
-            // Arrange - create an shoppingList
-            ShoppingListVM shoppingListVM = new ShoppingListVM { ID = 2, Name = "Test2" };
-            Repo.Add(shoppingListVM);
+            // Arrange - create an shoppingListEntity
+            ShoppingList shoppingListEntityVM = new ShoppingList { ID = 2, Name = "Test2" };
+            Repo.Add(shoppingListEntityVM);
 
-            // Act - delete the shoppingList
-            ActionResult result = controller.DeleteConfirmed(shoppingListVM.ID);
+            // Act - delete the shoppingListEntity
+            ActionResult result = Controller.DeleteConfirmed(shoppingListEntityVM.ID);
 
             AlertDecoratorResult adr = (AlertDecoratorResult)result;
 
@@ -327,12 +328,12 @@ namespace LambAndLentil.Tests.Controllers
             ShoppingListsController controller2 = new ShoppingListsController(Repo);
 
             // Act  
-            ViewResult view1 = (ViewResult)controller.Edit(int.MaxValue);
-            ShoppingListVM p1 = (ShoppingListVM)view1.Model;
-            ViewResult view2 = (ViewResult)controller.Edit(int.MaxValue - 1);
-            ShoppingListVM p2 = (ShoppingListVM)view2.Model;
-            ViewResult view3 = (ViewResult)controller.Edit(int.MaxValue - 2);
-            ShoppingListVM p3 = (ShoppingListVM)view3.Model;
+            ViewResult view1 = (ViewResult)Controller.Edit(int.MaxValue);
+            ShoppingList p1 = (ShoppingList)view1.Model;
+            ViewResult view2 = (ViewResult)Controller.Edit(int.MaxValue - 1);
+            ShoppingList p2 = (ShoppingList)view2.Model;
+            ViewResult view3 = (ViewResult)Controller.Edit(int.MaxValue - 2);
+            ShoppingList p3 = (ShoppingList)view3.Model;
 
             // Assert 
             Assert.IsNotNull(view1);
@@ -343,12 +344,12 @@ namespace LambAndLentil.Tests.Controllers
         [Ignore]
         [TestMethod]
         [TestCategory("Edit")]
-        public void ShoppingListsCtr_CannotEditNonexistentShoppingList()
+        public void  CannotEditNonexistentShoppingList()
         {
             // Arrange
-            ShoppingListsController controller = SetUpController();
+            
             // Act
-            ShoppingList result = (ShoppingList)((ViewResult)controller.Edit(8)).ViewData.Model;
+            ShoppingList result = (ShoppingList)((ViewResult)Controller.Edit(8)).ViewData.Model;
             // Assert
             Assert.IsNull(result);
         }
@@ -360,7 +361,7 @@ namespace LambAndLentil.Tests.Controllers
         public void CanEditShoppingListXXX()
         {
             // Arrange
-            ShoppingListVM menuVM = new ShoppingListVM
+            ShoppingList menuVM = new ShoppingList
             {
                 ID = 1,
                 Name = "test ShoppingListControllerTest.CanEditShoppingList",
@@ -371,16 +372,16 @@ namespace LambAndLentil.Tests.Controllers
             // Act 
             menuVM.Name = "Name has been changed";
 
-            ViewResult view1 = (ViewResult)controller.Edit(1);
+            ViewResult view1 = (ViewResult)Controller.Edit(1);
 
-            var returnedShoppingListVM = (ShoppingListVM)(view1.Model);
+            var returnedShoppingList = (ShoppingList)(view1.Model);
 
 
             // Assert 
             Assert.IsNotNull(view1);
-            Assert.AreEqual("Name has been changed", returnedShoppingListVM.Name);
-            //Assert.AreEqual(menuVM.Description, returnedShoppingListVm.Description);
-            //Assert.AreEqual(menuVM.CreationDate, returnedShoppingListVm.CreationDate);
+            Assert.AreEqual("Name has been changed", returnedShoppingList.Name);
+            //Assert.AreEqual(menuVM.Description, returnedShoppingListlist.Description);
+            //Assert.AreEqual(menuVM.CreationDate, returnedShoppingListlist.CreationDate);
         }
 
         [TestMethod]
@@ -393,13 +394,15 @@ namespace LambAndLentil.Tests.Controllers
             ShoppingListsController controller3 = new ShoppingListsController(Repo);
 
 
-            ShoppingListVM vm = new ShoppingListVM();
-            vm.Name = "0000 test";
-            vm.ID = int.MaxValue - 100;
-            vm.Description = "test ShoppingListsControllerShould.SaveEditedShoppingList";
+            ShoppingList vm = new ShoppingList
+            {
+                Name = "0000 test",
+                ID = int.MaxValue - 100,
+                Description = "test ShoppingListsControllerShould.SaveEditedShoppingList"
+            };
 
             // Act 
-            ActionResult ar1 = controller.PostEdit(vm);
+            ActionResult ar1 = Controller.PostEdit(vm);
 
 
             // now edit it
@@ -407,9 +410,9 @@ namespace LambAndLentil.Tests.Controllers
             vm.ID = 7777;
             ActionResult ar2 = controller2.PostEdit(vm);
             ViewResult view2 = controller3.Index();
-            ListVM<ShoppingListVM> listVM2 = (ListVM<ShoppingListVM>)view2.Model;
-            ShoppingListVM vm3 = (from m in listVM2.ListT
-                                  where m.Name == "0000 test Edited"
+            ListEntity<ShoppingList> list2 = (ListEntity<ShoppingList>)view2.Model;
+            ShoppingList vm3 = (from m in list2.ListT
+                                where m.Name == "0000 test Edited"
                                   select m).AsQueryable().FirstOrDefault();
 
             // Assert
@@ -424,7 +427,7 @@ namespace LambAndLentil.Tests.Controllers
         public void CanPostEditShoppingList()
         {
             // Arrange
-            ShoppingListVM menuVM = new ShoppingListVM
+            ShoppingList menuVM = new ShoppingList
             {
                 ID = 1,
                 Name = "test ShoppingListControllerTest.CanEditShoppingList",
@@ -435,40 +438,38 @@ namespace LambAndLentil.Tests.Controllers
             // Act 
             menuVM.Name = "Name has been changed";
 
-            ViewResult view1 = (ViewResult)controller.Edit(1);
+            ViewResult view1 = (ViewResult)Controller.Edit(1);
 
-            ShoppingListVM returnedShoppingListVm = Repo.GetById(1);
+            ShoppingList returnedShoppingListlist = Repo.GetById(1);
 
             // Assert 
             Assert.IsNotNull(view1);
-            Assert.AreEqual("Name has been changed", returnedShoppingListVm.Name);
-            Assert.AreEqual(menuVM.Description, returnedShoppingListVm.Description);
-            Assert.AreEqual(menuVM.CreationDate, returnedShoppingListVm.CreationDate);
+            Assert.AreEqual("Name has been changed", returnedShoppingListlist.Name);
+            Assert.AreEqual(menuVM.Description, returnedShoppingListlist.Description);
+            Assert.AreEqual(menuVM.CreationDate, returnedShoppingListlist.CreationDate);
         }
 
 
         [Ignore]
         [TestMethod]
         [TestCategory("Edit")]
-        public void CannotEditNonexistentShoppingList()
+        public void XxxCannotEditNonexistentShoppingList()
         {
             // Arrange
 
             // Act
-            ShoppingList result = (ShoppingList)((ViewResult)controller.Edit(8)).ViewData.Model;
+            ShoppingList result = (ShoppingList)((ViewResult)Controller.Edit(8)).ViewData.Model;
             // Assert
             Assert.IsNull(result);
         }
 
         [TestMethod]
-        public void ShoppingListsCtr_CreateReturnsNonNull()
+        public void  CreateReturnsNonNull()
         {
-            // Arrange
-            ShoppingListsController controller = SetUpController();
-
+            // Arrange 
 
             // Act
-            ViewResult result = controller.Create(UIViewType.Create) as ViewResult;
+            ViewResult result = Controller.Create(UIViewType.Create) as ViewResult;
 
             // Assert
             Assert.IsNotNull(result);
@@ -520,7 +521,7 @@ namespace LambAndLentil.Tests.Controllers
 
             // Assert
             //  Assert.Fail();
-            Assert.AreEqual("LambAndLentil.UI.Controllers.ShoppingListsController", ShoppingListsController_Test_Should.controller.ToString());
+            Assert.AreEqual("LambAndLentil.UI.Controllers.ShoppingListsController", ShoppingListsController_Test_Should.Controller.ToString());
         }
 
         [TestCleanup]

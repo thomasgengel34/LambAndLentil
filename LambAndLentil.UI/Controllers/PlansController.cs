@@ -10,22 +10,22 @@ using System.Collections.Generic;
 
 namespace LambAndLentil.UI.Controllers
 {
-    public class PlansController : PlansGenericController<PlanVM>
+    public class PlansController : PlansGenericController<Plan>
     {
-        public PlansController(IRepository<PlanVM> repository) : base(repository)
+        public PlansController(IRepository<Plan> repository) : base(repository)
         {
             Repo = repository;
         }
 
-        public static IRepository<PlanVM> Repo { get; private set; }
+        public static IRepository<Plan> Repo { get; private set; }
     }
 
 
 
-    public class PlansGenericController<T > : BaseController<PlanVM>
-          where T: PlanVM 
+    public class PlansGenericController<T > : BaseController<Plan>
+          where T: Plan 
     {
-        public PlansGenericController(IRepository<PlanVM> repository) : base(repository)
+        public PlansGenericController(IRepository<Plan> repository) : base(repository)
         {
             Repo = repository;
         }
@@ -64,7 +64,7 @@ namespace LambAndLentil.UI.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult PostEdit([Bind(Include = "ID,Name,Description, CreationDate, ModifiedDate,  AddedByUser, ModifiedByUser")] PlanVM planVM)
+        public ActionResult PostEdit([Bind(Include = "ID,Name,Description, CreationDate, ModifiedDate,  AddedByUser, ModifiedByUser")] Plan planVM)
         {
             return BasePostEdit(Repo, planVM);
         }
@@ -86,15 +86,15 @@ namespace LambAndLentil.UI.Controllers
             return BaseDeleteConfirmed(Repo, UIControllerType.Plans, id);
         }
 
-        public ActionResult AttachIngredient(int? planID, IngredientVM ingredientVM)
+        public ActionResult AttachIngredient(int? planID, Ingredient ingredient)
         {
-            return BaseAttach<IngredientVM>(Repo, planID, ingredientVM);
+            return BaseAttach<Ingredient>(Repo, planID, ingredient);
         }
 
 
-        public ActionResult DetachIngredient(int? planID, IngredientVM ingredientVM)
+        public ActionResult DetachIngredient(int? planID, Ingredient ingredient)
         {
-            return BaseAttach< IngredientVM>(Repo,planID, ingredientVM, AttachOrDetach.Detach);
+            return BaseAttach< Ingredient>(Repo,planID, ingredient, AttachOrDetach.Detach);
         }
     }
 }

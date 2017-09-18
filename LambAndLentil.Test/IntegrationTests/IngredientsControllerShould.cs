@@ -24,37 +24,39 @@ namespace LambAndLentil.Test.Infrastructure
     [TestCategory("IngredientsController")]
     public class IngredientsControllerShould
     {
-        static IRepository<IngredientVM> Repo;
+        static IRepository<Ingredient> Repo;
         static IngredientsController controller;
-        static ListVM<IngredientVM> ilvm;
+        static ListEntity<Ingredient> list;
         public static MapperConfiguration AutoMapperConfig  { get; set; }
 
         public IngredientsControllerShould()
         {
             AutoMapperConfigForTests.InitializeMap();
-            Repo = new TestRepository<IngredientVM>();
-            ilvm = new ListVM<IngredientVM>();
+            Repo = new TestRepository<Ingredient>();
+            list = new ListEntity<Ingredient>();
             controller =  SetUpIngredientsController(Repo);
         }
 
 
-        public IngredientsController SetUpIngredientsController(IRepository<IngredientVM> repo)
+        public IngredientsController SetUpIngredientsController(IRepository<Ingredient> repo)
         {
-            ilvm.ListT = new List<IngredientVM> {
-                new IngredientVM {ID = int.MaxValue, Name = "IngredientsController_Index_Test P1" ,AddedByUser="John Doe" ,ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue, ModifiedDate=DateTime.MaxValue.AddYears(-10)},
-                new IngredientVM {ID = int.MaxValue-1, Name = "IngredientsController_Index_Test P2",  AddedByUser="Sally Doe",  ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(20), ModifiedDate=DateTime.MaxValue.AddYears(-20)},
-                new IngredientVM {ID = int.MaxValue-2, Name = "IngredientsController_Index_Test P3",  AddedByUser="Sue Doe", ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(30), ModifiedDate=DateTime.MaxValue.AddYears(-30)},
-                new IngredientVM {ID = int.MaxValue-3, Name = "IngredientsController_Index_Test P4",  AddedByUser="Kyle Doe" ,ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(40), ModifiedDate=DateTime.MaxValue.AddYears(-10)},
-                new IngredientVM {ID = int.MaxValue-4, Name = "IngredientsController_Index_Test P5",  AddedByUser="John Doe",  ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(50), ModifiedDate=DateTime.MaxValue.AddYears(-100)}
+            list.ListT = new List<Ingredient> {
+                new Ingredient {ID = int.MaxValue, Name = "IngredientsController_Index_Test P1" ,AddedByUser="John Doe" ,ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue, ModifiedDate=DateTime.MaxValue.AddYears(-10)},
+                new Ingredient {ID = int.MaxValue-1, Name = "IngredientsController_Index_Test P2",  AddedByUser="Sally Doe",  ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(20), ModifiedDate=DateTime.MaxValue.AddYears(-20)},
+                new Ingredient {ID = int.MaxValue-2, Name = "IngredientsController_Index_Test P3",  AddedByUser="Sue Doe", ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(30), ModifiedDate=DateTime.MaxValue.AddYears(-30)},
+                new Ingredient {ID = int.MaxValue-3, Name = "IngredientsController_Index_Test P4",  AddedByUser="Kyle Doe" ,ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(40), ModifiedDate=DateTime.MaxValue.AddYears(-10)},
+                new Ingredient {ID = int.MaxValue-4, Name = "IngredientsController_Index_Test P5",  AddedByUser="John Doe",  ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(50), ModifiedDate=DateTime.MaxValue.AddYears(-100)}
             }.AsQueryable();
 
-            foreach (IngredientVM item in ilvm.ListT)
+            foreach (Ingredient item in list.ListT)
             {
                 Repo.Add(item);
             }
 
-             IngredientsController controller = new IngredientsController(Repo);
-            controller.PageSize = 3;
+            IngredientsController controller = new IngredientsController(Repo)
+            {
+                PageSize = 3
+            };
 
             return controller;
         }
@@ -68,7 +70,7 @@ namespace LambAndLentil.Test.Infrastructure
 
             // Act
             ViewResult vr = controller.Create(UIViewType.Create);
-            string modelName = ((IngredientVM)vr.Model).Name;
+            string modelName = ((Ingredient)vr.Model).Name;
             // Assert 
             Assert.AreEqual(vr.ViewName, UIViewType.Details.ToString());
             Assert.AreEqual(modelName, "Newly Created");
@@ -79,8 +81,11 @@ namespace LambAndLentil.Test.Infrastructure
         public void SaveAValidIngredientAndReturnIndexView()
         {
             // Arrange
-            IngredientVM vm = new IngredientVM();
-            vm.Name = "test";
+            Ingredient vm = new Ingredient
+            {
+                ID = 3000,
+                Name = "SaveAValidIngredientAndReturnIndexView"
+            };
 
             // Act
             AlertDecoratorResult adr = (AlertDecoratorResult)controller.PostEdit(vm);
@@ -106,10 +111,12 @@ namespace LambAndLentil.Test.Infrastructure
             IngredientsController controller3 = new IngredientsController(Repo);
 
 
-            IngredientVM vm = new IngredientVM();
-            vm.Name = "0000 test";
-            vm.ID = int.MaxValue - 100;
-            vm.Description = "test IngredientsControllerShould.SaveEditedIngredient";
+            Ingredient vm = new Ingredient
+            {
+                Name = "0000 test",
+                ID = int.MaxValue - 100,
+                Description = "test IngredientsControllerShould.SaveEditedIngredient"
+            };
 
             // Act 
             ActionResult ar1 = controller.PostEdit(vm);
@@ -120,8 +127,8 @@ namespace LambAndLentil.Test.Infrastructure
             vm.ID = 7777;
             ActionResult ar2 = controller2.PostEdit(vm);
             ViewResult view2 = controller3.Index();
-            ListVM<IngredientVM> listVM2 = (ListVM<IngredientVM>)view2.Model;
-            IngredientVM vm3 = (from m in listVM2.ListT 
+            List<Ingredient> list2 = (List<Ingredient>)view2.Model;
+            Ingredient vm3 = (from m in list2 
                                 where m.Name == "0000 test Edited"
                                 select m).AsQueryable().FirstOrDefault();
 
@@ -163,30 +170,30 @@ namespace LambAndLentil.Test.Infrastructure
 
         [TestMethod]
         [TestCategory("Edit")]
-        public void SaveTheCreationDateOnIngredientVMCreationWithNoParameterCtor()
+        public void SaveTheCreationDateOnIngredientCreationWithNoParameterCtor()
         {
             // Arrange
             DateTime CreationDate = DateTime.Now;
 
             // Act
-            IngredientVM ingredientVM = new IngredientVM();
+            Ingredient ingredient = new Ingredient();
 
             // Assert
-            Assert.AreEqual(CreationDate.Date, ingredientVM.CreationDate.Date);
+            Assert.AreEqual(CreationDate.Date, ingredient.CreationDate.Date);
         }
 
         [TestMethod]
         [TestCategory("Edit")]
-        public void SaveTheCreationDateOnIngredientVMCreationWithDateTimeParameter()
+        public void SaveTheCreationDateOnIngredientCreationWithDateTimeParameter()
         {
             // Arrange
             DateTime CreationDate = new DateTime(2010, 1, 1);
 
             // Act
-            IngredientVM ingredientVM = new IngredientVM(CreationDate);
+            Ingredient ingredient = new Ingredient(CreationDate);
 
             // Assert
-            Assert.AreEqual(CreationDate, ingredientVM.CreationDate);
+            Assert.AreEqual(CreationDate, ingredient.CreationDate);
         }
 
         [TestMethod]
@@ -195,9 +202,11 @@ namespace LambAndLentil.Test.Infrastructure
         {
             // Arrange
             DateTime CreationDate = new DateTime(2010, 1, 1);
-            IngredientVM ingredientVM = new IngredientVM(CreationDate);
-            ingredientVM.ID = int.MaxValue - 200;
-            ingredientVM.Name = "test IngredientsControllerShould.SaveTheCreationDateBetweenPostedEdits";
+            Ingredient ingredient = new Ingredient(CreationDate)
+            {
+                ID = int.MaxValue - 200,
+                Name = "test IngredientsControllerShould.SaveTheCreationDateBetweenPostedEdits"
+            };
 
 
             IngredientsController controllerEdit = new IngredientsController(Repo);
@@ -205,11 +214,11 @@ namespace LambAndLentil.Test.Infrastructure
             IngredientsController controllerDelete = new IngredientsController(Repo);
 
             // Act
-            controllerEdit.PostEdit(ingredientVM);
+            controllerEdit.PostEdit(ingredient);
             ViewResult view = controllerView.Index();
-            ListVM<IngredientVM> listVM = (ListVM<IngredientVM>)view.Model;
-            IngredientVM returnedVm = Repo.GetById(ingredientVM.ID);
-            DateTime shouldBeSameDate = returnedVm.CreationDate;
+            List<Ingredient> list = (List<Ingredient>)view.Model;
+            Ingredient returnedlist = Repo.GetById(ingredient.ID);
+            DateTime shouldBeSameDate = returnedlist.CreationDate;
 
             // Assert
             Assert.AreEqual(CreationDate, shouldBeSameDate);
@@ -224,11 +233,13 @@ namespace LambAndLentil.Test.Infrastructure
         {
             // Arrange 
             IngredientsController controllerPost = new IngredientsController(Repo);
-            IngredientsController controllerPost1 = new IngredientsController(Repo); 
-            IngredientVM vm = new IngredientVM();
-            vm.ID = int.MaxValue - 300;
-            vm.Name = "002 Test Mod";
-            vm.Description = "test IngredientsControllerShould.UpdateTheModificationDateBetweenPostedEdits";
+            IngredientsController controllerPost1 = new IngredientsController(Repo);
+            Ingredient vm = new Ingredient
+            {
+                ID = int.MaxValue - 300,
+                Name = "002 Test Mod",
+                Description = "test IngredientsControllerShould.UpdateTheModificationDateBetweenPostedEdits"
+            };
             DateTime CreationDate = vm.CreationDate;
             DateTime mod = vm.ModifiedDate;
 
@@ -239,7 +250,7 @@ namespace LambAndLentil.Test.Infrastructure
 
             controllerPost1.PostEdit(vm);
 
-            IngredientVM returnedVM = Repo.GetById(vm.ID);
+            Ingredient returnedVM = Repo.GetById(vm.ID);
 
             DateTime shouldBeSameDate = returnedVM.CreationDate;
             DateTime shouldBeLaterDate = returnedVM.ModifiedDate;

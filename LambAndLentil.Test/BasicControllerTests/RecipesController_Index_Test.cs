@@ -20,15 +20,15 @@ namespace LambAndLentil.Test.BasicControllerTests
     public class RecipesController_Index_Test
     {
         public static MapperConfiguration AutoMapperConfig { get; set; }
-        static ListVM<RecipeVM> ilvm;
-        static IRepository<RecipeVM> Repo;
+        static ListEntity<Recipe> list;
+        static IRepository<Recipe> Repo;
         static RecipesController controller;
 
         public RecipesController_Index_Test()
         {
             AutoMapperConfigForTests.InitializeMap();
-            ilvm = new ListVM<RecipeVM>();
-            Repo = new TestRepository<RecipeVM>();
+            list = new ListEntity<Recipe>();
+            Repo = new TestRepository<Recipe>();
             controller = SetUpRecipesController(Repo);
         }
 
@@ -74,11 +74,11 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Act
             ViewResult view1 = controller.Index(1);
 
-            int count1 = ((ListVM<RecipeVM>)(view1.Model)).ListT.Count();
+            int count1 = ((ListEntity<Recipe>)(view1.Model)).ListT.Count();
 
             ViewResult view2 = controller.Index(2);
 
-            int count2 = ((ListVM<RecipeVM>)(view2.Model)).ListT.Count();
+            int count2 = ((ListEntity<Recipe>)(view2.Model)).ListT.Count();
 
             int count = count1 + count2;
 
@@ -93,8 +93,8 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange 
 
             // Act
-            ilvm = (ListVM<RecipeVM>)(controller.Index(1)).Model;
-            RecipeVM[] ingrArray1 = ilvm.ListT.ToArray();
+            list = (ListEntity<Recipe>)(controller.Index(1)).Model;
+            Recipe[] ingrArray1 = list.ListT.ToArray();
             int count1 = ingrArray1.Count();
 
             // Assert 
@@ -106,17 +106,17 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void ContainsAllRecipesView2Count0()
         {
             // Arrange 
-            ilvm = (ListVM<RecipeVM>)(controller.Index(1)).Model;
-            RecipeVM[] ingrArray1 = ilvm.ListT.ToArray();
+            list = (ListEntity<Recipe>)(controller.Index(1)).Model;
+            Recipe[] ingrArray1 = list.ListT.ToArray();
 
             // Act
             ViewResult view1 = controller.Index(1);
 
-            int count1 = ((ListVM<RecipeVM>)(view1.Model)).ListT.Count();
+            int count1 = ((ListEntity<Recipe>)(view1.Model)).ListT.Count();
 
             ViewResult view2 = controller.Index(2);
 
-            int count2 = ((ListVM<RecipeVM>)(view2.Model)).ListT.Count();
+            int count2 = ((ListEntity<Recipe>)(view2.Model)).ListT.Count();
 
             int count = count1 + count2;
 
@@ -144,17 +144,17 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void ContainsAllRecipesView2NameIsIndex()
         {
             // Arrange 
-            ilvm = (ListVM<RecipeVM>)(controller.Index(1)).Model;
-            RecipeVM[] ingrArray1 = ilvm.ListT.ToArray();
+            list = (ListEntity<Recipe>)(controller.Index(1)).Model;
+            Recipe[] ingrArray1 = list.ListT.ToArray();
 
             // Act
             ViewResult view1 = controller.Index(1);
 
-            int count1 = ((ListVM<RecipeVM>)(view1.Model)).ListT.Count();
+            int count1 = ((ListEntity<Recipe>)(view1.Model)).ListT.Count();
 
             ViewResult view2 = controller.Index(2);
 
-            int count2 = ((ListVM<RecipeVM>)(view2.Model)).ListT.Count();
+            int count2 = ((ListEntity<Recipe>)(view2.Model)).ListT.Count();
 
             int count = count1 + count2;
 
@@ -167,14 +167,14 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void FirstPageIsNotNull()
         {
             // Arrange 
-            ilvm = (ListVM<RecipeVM>)(controller.Index(1)).Model;
-            RecipeVM[] ingrArray1 = ilvm.ListT.ToArray();
+            list = (ListEntity<Recipe>)(controller.Index(1)).Model;
+            Recipe[] ingrArray1 = list.ListT.ToArray();
             controller.PageSize = 8;
 
             // Act
             ViewResult view1 = controller.Index(1);
 
-            int count1 = ((ListVM<RecipeVM>)(view1.Model)).ListT.Count();
+            int count1 = ((ListEntity<Recipe>)(view1.Model)).ListT.Count();
 
             // Assert
             Assert.IsNotNull(view1);
@@ -186,13 +186,13 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void FirstPageIsCorrectCountIsFive()
         {
             // Arrange 
-            ilvm = (ListVM<RecipeVM>)(controller.Index(1)).Model;
-            RecipeVM[] ingrArray1 = ilvm.ListT.ToArray();
+            list = (ListEntity<Recipe>)(controller.Index(1)).Model;
+            Recipe[] ingrArray1 = list.ListT.ToArray();
             controller.PageSize = 8;
 
             // Act
             ViewResult view1 = controller.Index(1);
-            int count1 = ((ListVM<RecipeVM>)(view1.Model)).ListT.Count();
+            int count1 = ((ListEntity<Recipe>)(view1.Model)).ListT.Count();
 
             // Assert 
             Assert.AreEqual(5, count1);
@@ -203,14 +203,14 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void FirstPageNameIsIndex()
         {
             // Arrange 
-            ilvm = (ListVM<RecipeVM>)(controller.Index(1)).Model;
-            RecipeVM[] ingrArray1 = ilvm.ListT.ToArray();
+            list = (ListEntity<Recipe>)(controller.Index(1)).Model;
+            Recipe[] ingrArray1 = list.ListT.ToArray();
             controller.PageSize = 8;
 
             // Act
             ViewResult view1 = controller.Index(1);
 
-            int count1 = ((ListVM<RecipeVM>)(view1.Model)).ListT.Count();
+            int count1 = ((ListEntity<Recipe>)(view1.Model)).ListT.Count();
 
             // Assert  
             Assert.AreEqual("Index", view1.ViewName);
@@ -223,17 +223,17 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void FirstItemNameIsCorrect()
         {
             // Arrange 
-            ilvm = (ListVM<RecipeVM>)(controller.Index(1)).Model;
-            RecipeVM[] ingrArray1 = ilvm.ListT.ToArray();
+            list = (ListEntity<Recipe>)(controller.Index(1)).Model;
+            Recipe[] ingrArray1 = list.ListT.ToArray();
             controller.PageSize = 8;
 
             // Act
             ViewResult view1 = controller.Index(1);
 
-            int count1 = ((ListVM<RecipeVM>)(view1.Model)).ListT.Count();
+            int count1 = ((ListEntity<Recipe>)(view1.Model)).ListT.Count();
 
             // Assert   
-            Assert.AreEqual("RecipesController_Index_Test P1", ((ListVM<RecipeVM>)(view1.Model)).ListT.FirstOrDefault().Name);
+            Assert.AreEqual("RecipesController_Index_Test P1", ((ListEntity<Recipe>)(view1.Model)).ListT.FirstOrDefault().Name);
         }
 
 
@@ -243,15 +243,15 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void FirstRecipeAddedByUserIsCorrect()
         {
             // Arrange 
-            ilvm = (ListVM<RecipeVM>)(controller.Index(1)).Model;
-            RecipeVM[] ingrArray1 = ilvm.ListT.ToArray();
+            list = (ListEntity<Recipe>)(controller.Index(1)).Model;
+            Recipe[] ingrArray1 = list.ListT.ToArray();
             controller.PageSize = 8;
 
             // Act
             ViewResult view1 = controller.Index(1);
 
             // Assert   
-            Assert.AreEqual("John Doe", ((ListVM<RecipeVM>)(view1.Model)).ListT.FirstOrDefault().AddedByUser);
+            Assert.AreEqual("John Doe", ((ListEntity<Recipe>)(view1.Model)).ListT.FirstOrDefault().AddedByUser);
         }
 
         [TestMethod]
@@ -259,15 +259,15 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void FirstModifiedByUserIsCorrect()
         {
             // Arrange 
-            ilvm = (ListVM<RecipeVM>)(controller.Index(1)).Model;
-            RecipeVM[] ingrArray1 = ilvm.ListT.ToArray();
+            list = (ListEntity<Recipe>)(controller.Index(1)).Model;
+            Recipe[] ingrArray1 = list.ListT.ToArray();
             controller.PageSize = 8;
 
             // Act
             ViewResult view1 = controller.Index(1);
 
             // Assert   
-            Assert.AreEqual("Richard Roe", ((ListVM<RecipeVM>)(view1.Model)).ListT.FirstOrDefault().ModifiedByUser);
+            Assert.AreEqual("Richard Roe", ((ListEntity<Recipe>)(view1.Model)).ListT.FirstOrDefault().ModifiedByUser);
         }
 
         [TestMethod]
@@ -275,15 +275,15 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void FirstCreationDateIsCorrect()
         {
             // Arrange 
-            ilvm = (ListVM<RecipeVM>)(controller.Index(1)).Model;
-            RecipeVM[] ingrArray1 = ilvm.ListT.ToArray();
+            list = (ListEntity<Recipe>)(controller.Index(1)).Model;
+            Recipe[] ingrArray1 = list.ListT.ToArray();
             controller.PageSize = 8;
 
             // Act
             ViewResult view1 = controller.Index(1);
 
             // Assert   
-            Assert.AreEqual(DateTime.MinValue, ((ListVM<RecipeVM>)(view1.Model)).ListT.FirstOrDefault().CreationDate);
+            Assert.AreEqual(DateTime.MinValue, ((ListEntity<Recipe>)(view1.Model)).ListT.FirstOrDefault().CreationDate);
         }
 
         [TestMethod]
@@ -291,15 +291,15 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void Index_FirstModifiedDateIsCorrect()
         {
             // Arrange 
-            ilvm = (ListVM<RecipeVM>)(controller.Index(1)).Model;
-            RecipeVM[] ingrArray1 = ilvm.ListT.ToArray();
+            list = (ListEntity<Recipe>)(controller.Index(1)).Model;
+            Recipe[] ingrArray1 = list.ListT.ToArray();
             controller.PageSize = 8;
 
             // Act
             ViewResult view1 = controller.Index(1);
 
             // Assert   
-            Assert.AreEqual(DateTime.MaxValue.AddYears(-10), ((ListVM<RecipeVM>)(view1.Model)).ListT.FirstOrDefault().ModifiedDate);
+            Assert.AreEqual(DateTime.MaxValue.AddYears(-10), ((ListEntity<Recipe>)(view1.Model)).ListT.FirstOrDefault().ModifiedDate);
         }
 
 
@@ -309,17 +309,17 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void SecondItemNameIsCorrect()
         {
             // Arrange 
-            ilvm = (ListVM<RecipeVM>)(controller.Index(1)).Model;
-            RecipeVM[] ingrArray1 = ilvm.ListT.ToArray();
+            list = (ListEntity<Recipe>)(controller.Index(1)).Model;
+            Recipe[] ingrArray1 = list.ListT.ToArray();
             controller.PageSize = 8;
 
             // Act
             ViewResult view1 = controller.Index(1);
 
-            int count1 = ((ListVM<RecipeVM>)(view1.Model)).ListT.Count();
+            int count1 = ((ListEntity<Recipe>)(view1.Model)).ListT.Count();
 
             // Assert   
-            Assert.AreEqual("RecipesController_Index_Test P2", ((ListVM<RecipeVM>)(view1.Model)).ListT.Skip(1).FirstOrDefault().Name);
+            Assert.AreEqual("RecipesController_Index_Test P2", ((ListEntity<Recipe>)(view1.Model)).ListT.Skip(1).FirstOrDefault().Name);
         }
 
 
@@ -328,17 +328,17 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void ThirdItemNameIsCorrect()
         {
             // Arrange 
-            ilvm = (ListVM<RecipeVM>)(controller.Index(1)).Model;
-            RecipeVM[] ingrArray1 = ilvm.ListT.ToArray();
+            list = (ListEntity<Recipe>)(controller.Index(1)).Model;
+            Recipe[] ingrArray1 = list.ListT.ToArray();
             controller.PageSize = 8;
 
             // Act
             ViewResult view1 = controller.Index(1);
 
-            int count1 = ((ListVM<RecipeVM>)(view1.Model)).ListT.Count();
+            int count1 = ((ListEntity<Recipe>)(view1.Model)).ListT.Count();
 
             // Assert   
-            Assert.AreEqual("RecipesController_Index_Test P3", ((ListVM<RecipeVM>)(view1.Model)).ListT.Skip(2).FirstOrDefault().Name);
+            Assert.AreEqual("RecipesController_Index_Test P3", ((ListEntity<Recipe>)(view1.Model)).ListT.Skip(2).FirstOrDefault().Name);
         }
 
 
@@ -361,7 +361,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
 
             // Act
-            var result = (ListVM<RecipeVM>)(controller.Index(1)).Model;
+            var result = (ListEntity<Recipe>)(controller.Index(1)).Model;
 
             // Assert 
             Assert.IsTrue(result.ListT.Count() == 5);
@@ -376,8 +376,8 @@ namespace LambAndLentil.Test.BasicControllerTests
 
 
             // Act
-            var result = (ListVM<RecipeVM>)(controller.Index(1)).Model;
-            RecipeVM[] ingrArray1 = result.ListT.ToArray();
+            var result = (ListEntity<Recipe>)(controller.Index(1)).Model;
+            Recipe[] ingrArray1 = result.ListT.ToArray();
 
             // Assert  
             Assert.AreEqual("RecipesController_Index_Test P1", ingrArray1[0].Name);
@@ -391,8 +391,8 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange 
 
             // Act
-            var result = (ListVM<RecipeVM>)(controller.Index(1)).Model;
-            RecipeVM[] ingrArray1 = result.ListT.ToArray();
+            var result = (ListEntity<Recipe>)(controller.Index(1)).Model;
+            Recipe[] ingrArray1 = result.ListT.ToArray();
 
             // Assert  
             Assert.AreEqual("RecipesController_Index_Test P3", ingrArray1[2].Name);
@@ -406,7 +406,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange 
 
             // Act 
-            ListVM<RecipeVM> resultT = (ListVM<RecipeVM>)((ViewResult)controller.Index(2)).Model;
+            ListEntity<Recipe> resultT = (ListEntity<Recipe>)((ViewResult)controller.Index(2)).Model;
             PagingInfo pageInfoT = resultT.PagingInfo;
 
             // Assert  
@@ -421,7 +421,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
 
             // Act 
-            ListVM<RecipeVM> resultT = (ListVM<RecipeVM>)((ViewResult)controller.Index(2)).Model;
+            ListEntity<Recipe> resultT = (ListEntity<Recipe>)((ViewResult)controller.Index(2)).Model;
             PagingInfo pageInfoT = resultT.PagingInfo;
 
             // Assert   
@@ -435,9 +435,9 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange 
 
             // Act 
-            ListVM<RecipeVM> resultT = (ListVM<RecipeVM>)((ViewResult)controller.Index(2)).Model;
+            ListEntity<Recipe> resultT = (ListEntity<Recipe>)((ViewResult)controller.Index(2)).Model;
             PagingInfo pageInfoT = resultT.PagingInfo;
-            //   PagingInfo pageInfoT =ilvm.PagingInfo;
+            //   PagingInfo pageInfoT =list.PagingInfo;
 
             // Assert 
             Assert.AreEqual(5, pageInfoT.TotalItems);
@@ -452,7 +452,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
 
             // Act 
-            ListVM<RecipeVM> resultT = (ListVM<RecipeVM>)((ViewResult)controller.Index(2)).Model;
+            ListEntity<Recipe> resultT = (ListEntity<Recipe>)((ViewResult)controller.Index(2)).Model;
             PagingInfo pageInfoT = resultT.PagingInfo;
 
             // Assert 
@@ -460,23 +460,25 @@ namespace LambAndLentil.Test.BasicControllerTests
         }
 
 
-        public RecipesController SetUpRecipesController(IRepository<RecipeVM> repo)
+        public RecipesController SetUpRecipesController(IRepository<Recipe> repo)
         {
-            ilvm.ListT = new List<RecipeVM> {
-                        new RecipeVM{ID = int.MaxValue, Name = "RecipesController_Index_Test P1" ,AddedByUser="John Doe" ,ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue, ModifiedDate=DateTime.MaxValue.AddYears(-10)},
-                        new RecipeVM{ID = int.MaxValue-1, Name = "RecipesController_Index_Test P2",  AddedByUser="Sally Doe",  ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(20), ModifiedDate=DateTime.MaxValue.AddYears(-20)},
-                        new RecipeVM{ID = int.MaxValue-2, Name = "RecipesController_Index_Test P3",  AddedByUser="Sue Doe", ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(30), ModifiedDate=DateTime.MaxValue.AddYears(-30)},
-                        new RecipeVM{ID = int.MaxValue-3, Name = "RecipesController_Index_Test P4",  AddedByUser="Kyle Doe" ,ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(40), ModifiedDate=DateTime.MaxValue.AddYears(-10)},
-                        new RecipeVM{ID = int.MaxValue-4, Name = "RecipesController_Index_Test P5",  AddedByUser="John Doe",  ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(50), ModifiedDate=DateTime.MaxValue.AddYears(-100)}
+            list.ListT  = new List<Recipe> {
+                        new Recipe{ID = int.MaxValue, Name = "RecipesController_Index_Test P1" ,AddedByUser="John Doe" ,ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue, ModifiedDate=DateTime.MaxValue.AddYears(-10)},
+                        new Recipe{ID = int.MaxValue-1, Name = "RecipesController_Index_Test P2",  AddedByUser="Sally Doe",  ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(20), ModifiedDate=DateTime.MaxValue.AddYears(-20)},
+                        new Recipe{ID = int.MaxValue-2, Name = "RecipesController_Index_Test P3",  AddedByUser="Sue Doe", ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(30), ModifiedDate=DateTime.MaxValue.AddYears(-30)},
+                        new Recipe{ID = int.MaxValue-3, Name = "RecipesController_Index_Test P4",  AddedByUser="Kyle Doe" ,ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(40), ModifiedDate=DateTime.MaxValue.AddYears(-10)},
+                        new Recipe{ID = int.MaxValue-4, Name = "RecipesController_Index_Test P5",  AddedByUser="John Doe",  ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(50), ModifiedDate=DateTime.MaxValue.AddYears(-100)}
                     }.AsQueryable();
 
-            foreach (RecipeVM ingredientVM in ilvm.ListT)
+            foreach (Recipe ingredient in list.ListT)
             {
-                Repo.Add(ingredientVM);
+                Repo.Add(ingredient);
             }
 
-            RecipesController controller = new RecipesController(Repo);
-            controller.PageSize = 3;
+            RecipesController controller = new RecipesController(Repo)
+            {
+                PageSize = 3
+            };
 
             return controller;
         }

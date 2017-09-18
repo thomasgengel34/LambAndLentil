@@ -21,20 +21,20 @@ namespace LambAndLentil.Test.BasicControllerTests
     [TestCategory(" IngredientsController")]
     public class IngredientsController_Test_Should
     {
-        protected static IRepository<IngredientVM> Repo { get; set; }
+        protected static IRepository<Ingredient> Repo { get; set; }
         public static MapperConfiguration AutoMapperConfig { get; set; }
-        static ListVM<IngredientVM> ilvm;
-        static IngredientsController controller;
-        static IngredientVM ingredientVM;
+        static ListEntity<Ingredient> list;
+       protected static IngredientsController controller;
+        static Ingredient ingredient;
 
         public IngredientsController_Test_Should()
         {
             AutoMapperConfigForTests.InitializeMap();
-            Repo = new TestRepository<IngredientVM>();
-            ilvm = new ListVM<IngredientVM>();
+            Repo = new TestRepository<Ingredient>();
+            list = new ListEntity<Ingredient>();
             controller = SetUpController(Repo);
-            ingredientVM = new IngredientVM { ID = 1 };
-            Repo.Save(ingredientVM);
+            ingredient = new Ingredient { ID = 1, Description = "IngredientsController_Test_Should" };
+            Repo.Save(ingredient);
         }
 
         [TestMethod]
@@ -87,31 +87,33 @@ namespace LambAndLentil.Test.BasicControllerTests
 
      
 
-       protected IngredientsController SetUpController(IRepository<IngredientVM> repo)
+       protected IngredientsController SetUpController(IRepository<Ingredient> repo)
         {
 
 
-            ilvm.ListT = new List<IngredientVM> {
-                new IngredientVM {ID = int.MaxValue, Name = "IngredientsControllerTest1" ,
+            list.ListT = new List<Ingredient> {
+                new Ingredient {ID = int.MaxValue, Name = "IngredientsControllerTest1" ,
                     Description="test IngredientsController.Setup", AddedByUser ="John Doe" ,ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue, ModifiedDate=DateTime.MaxValue.AddYears(-10)},
-                new IngredientVM {ID = int.MaxValue-1, Name = "IngredientsControllerTest2",
+                new Ingredient {ID = int.MaxValue-1, Name = "IngredientsControllerTest2",
                     Description="test IngredientsController.Setup",  AddedByUser="Sally Doe",  ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(20), ModifiedDate=DateTime.MaxValue.AddYears(-20)},
-                new IngredientVM {ID = int.MaxValue-2, Name = "IngredientsControllerTest3",
+                new Ingredient {ID = int.MaxValue-2, Name = "IngredientsControllerTest3",
                     Description="test IngredientsController.Setup",  AddedByUser="Sue Doe", ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(30), ModifiedDate=DateTime.MaxValue.AddYears(-30)},
-                new IngredientVM {ID = int.MaxValue-3, Name = "IngredientsControllerTest4",
+                new Ingredient {ID = int.MaxValue-3, Name = "IngredientsControllerTest4",
                     Description="test IngredientsController.Setup",  AddedByUser="Kyle Doe" ,ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(40), ModifiedDate=DateTime.MaxValue.AddYears(-10)},
-                new IngredientVM {ID = int.MaxValue-4, Name = "IngredientsControllerTest5",
+                new Ingredient {ID = int.MaxValue-4, Name = "IngredientsControllerTest5",
                     Description="test IngredientsController.Setup",  AddedByUser="John Doe",  ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(50), ModifiedDate=DateTime.MaxValue.AddYears(-100)}
             }.AsQueryable();
 
-            foreach (IngredientVM item in ilvm.ListT)
+            foreach (Ingredient item in list.ListT)
             {
                 Repo.Add(item);
             }
 
 
-            controller = new IngredientsController(Repo);
-            controller.PageSize = 3;
+            controller = new IngredientsController(Repo)
+            {
+                PageSize = 3
+            };
 
             return controller;
         }

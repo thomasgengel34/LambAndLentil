@@ -22,18 +22,17 @@ namespace LambAndLentil.Test.BasicControllerTests
     public class IngredientsController_Detail_Should:IngredientsController_Test_Should
     {
          
-        static ListVM<IngredientVM> ilvm;
-        static IRepository<IngredientVM> Repo;
+        static ListEntity<Ingredient> list; 
         static IngredientsController controller;
-        static IngredientVM ingredientVM;
+        static Ingredient ingredient;
 
         public IngredientsController_Detail_Should()
         {
             AutoMapperConfigForTests.InitializeMap();
-            ilvm = new ListVM<IngredientVM>();
-            Repo = new TestRepository<IngredientVM>();
+            list = new ListEntity<Ingredient>();
+            Repo = new TestRepository<Ingredient>();
             controller = SetUpController(Repo);
-            ingredientVM = new IngredientVM();
+            ingredient = new Ingredient();
         }
          
         [TestMethod]
@@ -66,7 +65,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Assert
             Assert.IsNotNull(view);
             Assert.AreEqual("Details", view.ViewName);
-            Assert.IsInstanceOfType(view.Model, typeof(IngredientVM));
+            Assert.IsInstanceOfType(view.Model, typeof(Ingredient));
             // no message
         }
 
@@ -78,10 +77,10 @@ namespace LambAndLentil.Test.BasicControllerTests
             int count = Repo.Count();
             //Act
             controller.Details(int.MaxValue, UIViewType.DeleteConfirmed);
-            IngredientVM ingredientVM = Repo.GetById(int.MaxValue);
+            Ingredient ingredient = Repo.GetById(int.MaxValue);
             //Assert
             Assert.AreEqual(count - 1, Repo.Count());
-            Assert.IsNull(ingredientVM);
+            Assert.IsNull(ingredient);
             //   Assert.Fail();  // make sure the correct item was deleted before removing this line 
         }
 
@@ -129,7 +128,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Assert
             Assert.IsNotNull(ar);
             Assert.AreEqual("Details", view.ViewName);
-            Assert.IsInstanceOfType(view.Model, typeof(IngredientVM));
+            Assert.IsInstanceOfType(view.Model, typeof(Ingredient));
             Assert.AreEqual("Here it is!", adr.Message);
         }
 
@@ -267,8 +266,8 @@ namespace LambAndLentil.Test.BasicControllerTests
         {
             // Arrange
             IngredientsController controller = new IngredientsController(Repo);
-            IngredientVM ingredientVM = new IngredientVM { ID = 0 };
-            Repo.Save(ingredientVM);
+            Ingredient ingredient = new Ingredient { ID = 0 };
+            Repo.Save(ingredient);
 
 
             // Act
@@ -285,8 +284,8 @@ namespace LambAndLentil.Test.BasicControllerTests
         {
             // Arrange
             IngredientsController controller = new IngredientsController(Repo);
-            IngredientVM ingredientVM = new IngredientVM { ID = 0 };
-            Repo.Save(ingredientVM);
+            Ingredient ingredient = new Ingredient { ID = 0 };
+            Repo.Save(ingredient);
 
 
             // Act
@@ -304,8 +303,8 @@ namespace LambAndLentil.Test.BasicControllerTests
         {
             // Arrange
 
-            IngredientVM ingredientVM = new IngredientVM { ID = -1 };
-            Repo.Save(ingredientVM);
+            Ingredient ingredient = new Ingredient { ID = -1 };
+            Repo.Save(ingredient);
 
             // Act
             ActionResult view = controller.Details(-1);
@@ -321,8 +320,8 @@ namespace LambAndLentil.Test.BasicControllerTests
         {
             // Arrange
 
-            ingredientVM.ID = -500;
-            Repo.Save(ingredientVM);
+            ingredient.ID = -500;
+            Repo.Save(ingredient);
 
             // Act
             ActionResult ar = controller.Details(-500);
@@ -340,12 +339,12 @@ namespace LambAndLentil.Test.BasicControllerTests
         {
             // Arrange
             IngredientsController controller = new IngredientsController(Repo);
-            IngredientVM ingredientVM = new IngredientVM
+            Ingredient ingredient = new Ingredient
             {
                 ID = -1,
                 Name = "Details_IngredientIDIsNegative_AlertClassCorrect"
             };
-            Repo.Save(ingredientVM);
+            Repo.Save(ingredient);
 
             // Act
             ActionResult view = controller.Details(-1);

@@ -10,7 +10,7 @@ using System.Linq.Expressions;
 namespace LambAndLentil.Domain.Concrete
 {
     public class JSONRepository<T> : IRepository<T>
-        where T : class, IEntity
+        where T :  BaseEntity,IEntity
     {
         // T should be an incoming entity. It cannot be a view model.  LambAndLentil.Domain only deals with Domain, does not have a dependency on UI and cannot,should not, will not. I can get away with this as is because the ViewModels are identical to the Entities. If that changes, this will have to change.
 
@@ -106,12 +106,18 @@ namespace LambAndLentil.Domain.Concrete
                 }
                 else if (className == "Menu")   // can  attach an Ingredient or recipe
                 {
-                    Menu menu = JsonConvert.DeserializeObject<Menu>(File.ReadAllText
+                    Menu  menu = JsonConvert.DeserializeObject<Menu>(File.ReadAllText
                         (String.Concat(FullPath, parentID, ".txt")));
 
                     if (childName == "Ingredient")
                     {
+                        if (menu.Ingredients == null)
+                        {
+                           menu.Ingredients = new List<Ingredient>();
+                        }
                         menu.Ingredients.Add(child as Ingredient);
+                        IEntity menu1 = menu;
+                        Add((T)menu1);
                     }
                     else if (childName == "Recipe")
                     {
@@ -133,6 +139,11 @@ namespace LambAndLentil.Domain.Concrete
                     }
                     else if (childName == "Menu")
                     {
+                        if (plan.Menus == null)
+                        {
+                            plan.Menus = new List<Menu>();
+                        }
+
                         plan.Menus.Add(child as Menu);
                     }
                 }
@@ -188,7 +199,7 @@ namespace LambAndLentil.Domain.Concrete
                         person.ShoppingLists.Add(child as ShoppingList);
                     }
                 } 
-            }
+            } 
         }
 
         public int Count()

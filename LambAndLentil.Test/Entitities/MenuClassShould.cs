@@ -11,13 +11,13 @@ namespace LambAndLentil.Domain.Test.Entities
     [TestCategory("Menu Class")]
     public class MenuClassShould
     {
-        static Menu menu { get; set; }
+        static Menu Menu { get; set; }
         static List<string> list;
 
         public MenuClassShould()
         {
-           menu = new Menu();
-            list = new List<string>();
+           Menu = new Menu();
+            list = new List <string>();
         }
 
         [TestMethod]
@@ -100,7 +100,7 @@ namespace LambAndLentil.Domain.Test.Entities
             // Arrange
  
             // Act
-            PropertyInfo[] props = menu.GetType().GetProperties();
+            PropertyInfo[] props = Menu.GetType().GetProperties();
             var result = props.Where(p => p.Name == "Ingredients");
 
             // Assert
@@ -115,7 +115,7 @@ namespace LambAndLentil.Domain.Test.Entities
             // Arrange
 
             // Act
-            PropertyInfo[] props =menu.GetType().GetProperties();
+            PropertyInfo[] props =Menu.GetType().GetProperties();
             var result = props.Where(p => p.Name == "Recipes");
 
             // Assert
@@ -129,7 +129,7 @@ namespace LambAndLentil.Domain.Test.Entities
             // Arrange
 
             // Act
-            PropertyInfo[] props = menu.GetType().GetProperties();
+            PropertyInfo[] props = Menu.GetType().GetProperties();
             var result = props.Where(p => p.Name == "Menus");
 
             // Assert
@@ -143,7 +143,7 @@ namespace LambAndLentil.Domain.Test.Entities
             // Arrange
 
             // Act
-            PropertyInfo[] props = menu.GetType().GetProperties();
+            PropertyInfo[] props = Menu.GetType().GetProperties();
             var result = props.Where(p => p.Name == "Plans");
 
             // Assert
@@ -155,7 +155,7 @@ namespace LambAndLentil.Domain.Test.Entities
         public void NotBeAbleToHaveShoppingListsChild()
         {
             // Arrange
-            PropertyInfo[] props = menu.GetType().GetProperties();
+            PropertyInfo[] props = Menu.GetType().GetProperties();
             var result = props.Where(p => p.Name == "ShoppingLists");
 
             // Assert
@@ -169,7 +169,7 @@ namespace LambAndLentil.Domain.Test.Entities
             // Arrange
 
             // Act
-            PropertyInfo[] props = menu.GetType().GetProperties();
+            PropertyInfo[] props = Menu.GetType().GetProperties();
             var result = props.Where(p => p.Name == "Persons");
 
             // Assert

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using LambAndLentil.Domain.Abstract;
 using LambAndLentil.Domain.Concrete;
-using LambAndLentil.Domain.Entities;
+using LambAndLentil.Domain.Entities; 
 using LambAndLentil.Tests.Controllers;
 using LambAndLentil.UI;
 using LambAndLentil.UI.Controllers;
@@ -13,7 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 
-namespace IntegrationTests
+namespace LambAndLentil.Test.BasicControllerTests
 {
 
     [TestClass]
@@ -21,17 +21,19 @@ namespace IntegrationTests
     [TestCategory("PersonController")]
     public class PersonsControllerShould
     {
-        static IRepository<PersonVM> Repo;
+        static IRepository<Person> Repo;
         static PersonsController controller;
-        static PersonVM personVM;
+        static Person personVM;
 
         public PersonsControllerShould()
         {
-            Repo = new TestRepository<PersonVM>();
+            Repo = new TestRepository<Person>();
             controller = new PersonsController(Repo);
-            personVM = new PersonVM();
-            personVM.ID = 1000;
-            personVM.Description = "test PersonControllerShould";
+            personVM = new Person
+            {
+                ID = 1000,
+                Description = "test PersonControllerShould"
+            };
         }
 
 
@@ -43,25 +45,29 @@ namespace IntegrationTests
 
             // Act
             ViewResult vr = controller.Create(UIViewType.Create);
-            PersonVM vm = (PersonVM)vr.Model;
+            Person vm = (Person)vr.Model;
             vm.Description = "Test.CreateAPerson";
             vm.ID = 33;
             string modelName = vm.Name;
 
             // Assert 
             Assert.AreEqual(vr.ViewName, UIViewType.Details.ToString());
-            Assert.AreEqual("First Name Last Name", modelName);
+            Assert.AreEqual(" ", modelName);
         }
+
+       
 
         [Ignore]
         [TestMethod]
         public void SaveAValidPerson()
         {
             // Arrange 
-            PersonVM vm = new PersonVM();
-            vm.Name = "test";
-            vm.Description = "Test.SaveAValidPerson";
-            vm.ID = 334;
+            Person vm = new Person
+            {
+                Name = "test",
+                Description = "Test.SaveAValidPerson",
+                ID = 334
+            };
 
             // Act
             AlertDecoratorResult adr = (AlertDecoratorResult)controller.PostEdit(vm);
@@ -89,17 +95,19 @@ namespace IntegrationTests
             PersonsController controller3 = new PersonsController(Repo);
             PersonsController controller4 = new PersonsController(Repo);
             PersonsController controller5 = new PersonsController(Repo);
-            PersonVM vm = new PersonVM();
-            vm.FirstName = "0000";
-            vm.LastName = "test";
-            vm.Description = "Test.SaveEditedPersonWithNameChange";
-            vm.ID = 335;
+            Person vm = new Person
+            {
+                FirstName = "0000",
+                LastName = "test",
+                Description = "Test.SaveEditedPersonWithNameChange",
+                ID = 335
+            };
 
             // Act 
             ActionResult ar1 = controller1.PostEdit(vm);
             ViewResult view1 = controller2.Index();
-            ListVM<PersonVM> listVM = (ListVM<PersonVM>)view1.Model;
-            PersonVM person = (from m in listVM.ListT
+            List<Person> list = (List<Person>)view1.Model;
+            Person person = (from m in list
                                where m.Name == "0000 test"
                                select m).AsQueryable().FirstOrDefault();
 
@@ -112,8 +120,8 @@ namespace IntegrationTests
             vm.ID = person.ID;
             ActionResult ar2 = controller3.PostEdit(vm);
             ViewResult view2 = controller4.Index();
-            ListVM<PersonVM> listVM2 = (ListVM<PersonVM>)view2.Model;
-            person = (from m in listVM2.ListT
+            List<Person> list2 = (List<Person>)view2.Model;
+            person = (from m in list2 
                       where m.Name == "0000 test Edited"
                       select m).AsQueryable().FirstOrDefault();
 
@@ -132,15 +140,17 @@ namespace IntegrationTests
             PersonsController controller3 = new PersonsController(Repo);
             PersonsController controller4 = new PersonsController(Repo);
             PersonsController controller5 = new PersonsController(Repo);
-            PersonVM vm = new PersonVM();
-            vm.Description = "SaveEditedPersonWithDescriptionChange Pre-test";
-            vm.ID = 336;
+            Person vm = new Person
+            {
+                Description = "SaveEditedPersonWithDescriptionChange Pre-test",
+                ID = 336
+            };
 
             // Act 
             ActionResult ar1 = controller1.PostEdit(vm);
             ViewResult view1 = controller2.Index();
-            ListVM<PersonVM> listVM = (ListVM<PersonVM>)view1.Model;
-            PersonVM person = (from m in listVM.ListT
+            List<Person> list = (List<Person>)view1.Model;
+            Person person = (from m in list
                                where m.Description == "SaveEditedPersonWithDescriptionChange Pre-test"
                                select m).AsQueryable().FirstOrDefault();
 
@@ -153,8 +163,8 @@ namespace IntegrationTests
 
             ActionResult ar2 = controller3.PostEdit(vm);
             ViewResult view2 = controller4.Index();
-            ListVM<PersonVM> listVM2 = (ListVM<PersonVM>)view2.Model;
-            person = (from m in listVM2.ListT
+            List<Person> list2 = (List<Person>)view2.Model;
+            person = (from m in list2 
                       where m.Description == "SaveEditedPersonWithDescriptionChange Post-test"
                       select m).AsQueryable().FirstOrDefault();
 
@@ -176,7 +186,7 @@ namespace IntegrationTests
             //Act
             controller.DeleteConfirmed(personVM.ID);
             var deletedItem = (from m in Repo.GetAll()
-                               where m.Description == personVM.Description
+                               where m.Description == personVM.Name
                                select m).AsQueryable();
 
             //Assert
@@ -189,9 +199,11 @@ namespace IntegrationTests
         {
             // Arrange
             DateTime CreationDate = new DateTime(2010, 1, 1);
-            PersonVM personVM = new PersonVM(CreationDate);
-            personVM.Description = "001 Test ";
-            personVM.ID = 37;
+            Person personVM = new Person(CreationDate)
+            {
+                Description = "001 Test ",
+                ID = 37
+            };
             PersonsController controllerEdit = new PersonsController(Repo);
             PersonsController controllerView = new PersonsController(Repo);
             PersonsController controllerDelete = new PersonsController(Repo);
@@ -199,12 +211,12 @@ namespace IntegrationTests
             // Act
             controllerEdit.PostEdit(personVM);
             ViewResult view = controllerView.Index();
-            ListVM<PersonVM> listVM = (ListVM<PersonVM>)view.Model;
-            var result = (from m in listVM.ListT
+            List<Person> list = (List<Person>)view.Model;
+            var result = (from m in list
                           where m.Description == "001 Test "
                           select m).AsQueryable().FirstOrDefault();
 
-            PersonVM person = Mapper.Map<PersonVM>(result);
+            Person person = Mapper.Map<Person>(result);
 
 
             DateTime shouldBeSameDate = person.CreationDate;
@@ -225,21 +237,23 @@ namespace IntegrationTests
             PersonsController controllerView1 = new PersonsController(Repo);
             PersonsController controllerDelete = new PersonsController(Repo);
 
-            PersonVM vm = new PersonVM();
-            vm.Name = "002 Test Mod";
-            vm.Description = "Test.UpdateModDate";
+            Person vm = new Person
+            {
+                Name = "002 Test Mod",
+                Description = "Test.UpdateModDate"
+            };
             DateTime CreationDate = vm.CreationDate;
             DateTime mod = vm.ModifiedDate;
 
             // Act
             controllerPost.PostEdit(vm);
             ViewResult view = controllerView.Index();
-            ListVM<PersonVM> listVM = (ListVM<PersonVM>)view.Model;
-            var result = (from m in listVM.ListT
+            List<Person> list = (List<Person>)view.Model;
+            var result = (from m in list
                           where m.Description == "Test.UpdateModDate"
                           select m).AsQueryable().FirstOrDefault();
 
-            PersonVM person = Mapper.Map<PersonVM>(result);
+            Person person = Mapper.Map<Person>(result);
 
 
             person.Description = "I've been edited to delay a bit";
@@ -248,12 +262,12 @@ namespace IntegrationTests
 
 
             ViewResult view1 = controllerView.Index();
-            listVM = (ListVM<PersonVM>)view1.Model;
-            var result1 = (from m in listVM.ListT
+            list = (List<Person>)view1.Model;
+            var result1 = (from m in list
                            where m.Description == "I've been edited to delay a bit"
                            select m).AsQueryable().FirstOrDefault();
 
-            person = Mapper.Map<PersonVM>(result1);
+            person = Mapper.Map<Person>(result1);
 
             DateTime shouldBeSameDate = person.CreationDate;
             DateTime shouldBeLaterDate = person.ModifiedDate;
@@ -263,15 +277,17 @@ namespace IntegrationTests
             Assert.AreNotEqual(mod, shouldBeLaterDate);
         }
 
-        internal PersonVM GetPerson(IRepository<PersonVM> Repo,  string description)
+        internal Person GetPerson(IRepository<Person> Repo,  string description)
         {
             PersonsController controller = new PersonsController(Repo);
-            PersonVM vm = new PersonVM();
-            vm.Description = description;
-            vm.ID = int.MaxValue;
+            Person vm = new Person
+            {
+                Description = description,
+                ID = int.MaxValue
+            };
             controller.PostEdit(vm);
 
-            PersonVM personVM = ((from m in Repo.GetAll()
+            Person personVM = ((from m in Repo.GetAll()
                                   where m.Description == description
                                   select m).AsQueryable()).FirstOrDefault();
             return personVM;

@@ -66,9 +66,12 @@
     <Compile Include="Entities\IPlan.cs" />
     <Compile Include="Entities\IRecipe.cs" />
     <Compile Include="Entities\IShoppingList.cs" />
+    <Compile Include="Entities\ListExtensionMethods.cs" />
+    <Compile Include="Entities\ListVM.cs" />
     <Compile Include="Entities\MealType.cs" />
     <Compile Include="Entities\Measurement.cs" />
     <Compile Include="Entities\Menu.cs" />
+    <Compile Include="Entities\PagingInfo.cs" />
     <Compile Include="Entities\Person.cs" />
     <Compile Include="Entities\Plan.cs" />
     <Compile Include="Entities\Recipe.cs" />

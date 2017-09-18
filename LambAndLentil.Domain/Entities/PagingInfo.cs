@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace LambAndLentil.UI.Models
+namespace LambAndLentil.Domain.Entities
+
 {
     public class PagingInfo
     {

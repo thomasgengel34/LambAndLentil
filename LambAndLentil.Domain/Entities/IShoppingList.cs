@@ -7,9 +7,9 @@ namespace LambAndLentil.Domain.Entities
     {
         string Author { get; set; }
         DateTime Date { get; set; } 
-        ICollection<Ingredient> Ingredients { get; set; }
-        ICollection<Menu> Menus { get; set; } 
-        ICollection<Plan> Plans { get; set; }
-        ICollection<Recipe> Recipes { get; set; }
+        List<Ingredient> Ingredients { get; set; }
+        List<Menu> Menus { get; set; } 
+        List<Plan> Plans { get; set; }
+        List<Recipe> Recipes { get; set; }
     }
 }

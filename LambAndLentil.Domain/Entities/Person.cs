@@ -18,7 +18,16 @@ namespace LambAndLentil.Domain.Entities
             Menus = new List<Menu>();
             Plans = new List<Plan>();
             ShoppingLists = new List<ShoppingList>();
+            Name = String.Concat( FirstName, " ", LastName);
         }
+
+        public Person(string firstName, string lastName):base()
+        {
+            FirstName = firstName;
+            LastName = lastName;
+            Name = String.Concat(FirstName, " ", LastName);
+        }
+
         public Person(DateTime creationDate) : base(creationDate)
         {
             CreationDate = creationDate;
@@ -36,10 +45,10 @@ namespace LambAndLentil.Domain.Entities
         public bool NoGarlic { get; set; }
         //TODO: add all ingredients after I figure out how to economically
          
-        public ICollection<Recipe> Recipes { get; set; }
-        public ICollection<Ingredient> Ingredients { get; set; }
-        public ICollection<Menu> Menus { get; set; }
-        public ICollection<Plan> Plans { get; set; }
-        public ICollection<ShoppingList> ShoppingLists { get; set; }
+        public List<Recipe> Recipes { get; set; }
+        public List<Ingredient> Ingredients { get; set; }
+        public List<Menu> Menus { get; set; }
+        public List<Plan> Plans { get; set; }
+        public List<ShoppingList> ShoppingLists { get; set; }
     }
 }

@@ -16,13 +16,13 @@ namespace LambAndLentil.Test.Views
     [TestClass]
     public class IngredientIndexViewShould
     {
-        private IRepository<IngredientVM> Repo;
+        private IRepository<Ingredient> Repo;
         private IngredientsController controller;
         public static MapperConfiguration AutoMapperConfig { get; set; }
         public IngredientIndexViewShould()
         {
             AutoMapperConfigForTests.InitializeMap();
-            Repo = new TestRepository<IngredientVM>(); 
+            Repo = new TestRepository<Ingredient>(); 
             controller = new IngredientsController(Repo); 
         }
 

@@ -7,7 +7,7 @@ namespace LambAndLentil.Domain.Entities
         int? Calories { get; set; }
         short? CalsFromFat { get; set; }
         int ID { get; set; }
-        ICollection<Ingredient> Ingredients { get; set; }
+        List<Ingredient> Ingredients { get; set; }
         MealType MealType { get; set; }
         decimal Servings { get; set; }
     }

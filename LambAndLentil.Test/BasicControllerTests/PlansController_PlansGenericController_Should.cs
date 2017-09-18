@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using LambAndLentil.UI.Controllers;
 using LambAndLentil.UI.Models;
 using LambAndLentil.Tests.Controllers;
+using LambAndLentil.Domain.Entities;
 
 namespace LambAndLentil.Test.BasicControllerTests
 {
@@ -12,29 +13,29 @@ namespace LambAndLentil.Test.BasicControllerTests
     public class PlansController_PlansGenericController_Should : PlansController_Test_Should
     {
         [TestMethod]
-        public void InheritBaseControllerInPlanVM()
+        public void InheritBaseControllerInPlan()
         {
             // Arrange
 
             // Act 
             Type type = Type.GetType("LambAndLentil.UI.Controllers.PlansController, LambAndLentil.UI", true);
             // Assert
-            Assert.IsTrue(type.IsSubclassOf(typeof(BaseController<PlanVM>)));
+            Assert.IsTrue(type.IsSubclassOf(typeof(BaseController<Plan>)));
         }
 
         [TestMethod]
-        public void InheritPlansGenericControllerInPlanVM()
+        public void InheritPlansGenericControllerInPlan()
         {
             // Arrange
 
             // Act
             Type type = Type.GetType("LambAndLentil.UI.Controllers.PlansController, LambAndLentil.UI", true);
             // Assert
-            Assert.IsTrue(type.IsSubclassOf(typeof(PlansGenericController<PlanVM>)));
+            Assert.IsTrue(type.IsSubclassOf(typeof(PlansGenericController<Plan>)));
         }
 
         [TestMethod]
-        public void CallRepositoryInPlanVM()
+        public void CallRepositoryInPlan()
         {
             // Arrange
 
@@ -42,7 +43,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Type type = Repo.GetType();
            string name=  type.GenericTypeArguments[0].Name;
             // Assert
-            Assert.AreEqual("PlanVM", name);
+            Assert.AreEqual("Plan", name);
         }
     }
 }

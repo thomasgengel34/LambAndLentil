@@ -1,4 +1,4 @@
-﻿@model LambAndLentil.UI.Models.PersonVM
+﻿@model LambAndLentil.UI.Models.Person
 @using LambAndLentil.Domain.Entities
 @{
     string requestActionMethod = Request.AppRelativeCurrentExecutionFilePath.Split('/').Last();
@@ -39,7 +39,7 @@ else
 }
 
 <hr />
-@using (Html.BeginForm(actionMethod, UIControllerType.Persons.ToString(), FormMethod.Post, new { id = Model.ID, ingredientVM = Model }))
+@using (Html.BeginForm(actionMethod, UIControllerType.Persons.ToString(), FormMethod.Post, new { id = Model.ID, ingredient = Model }))
 {
 
     @Html.AntiForgeryToken()

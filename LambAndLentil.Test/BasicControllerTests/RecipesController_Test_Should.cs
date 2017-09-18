@@ -20,19 +20,20 @@ namespace LambAndLentil.Test.BasicControllerTests
     [TestCategory("RecipesController")]
     public class RecipesController_Test_Should
     {
-        // static List<RecipeVM> recipeVMArray { get; set; }
-        protected static IRepository<RecipeVM> Repo { get; set; }
+        // static ListEntity<Recipe> recipeVMArray { get; set; }
+        protected static IRepository<Recipe> Repo { get; set; }
         public static MapperConfiguration AutoMapperConfig { get; set; }
-        private static RecipesController controller { get; set; }
-        private ListVM<RecipeVM> vm { get; set; }
+       protected static RecipesController Controller { get; set; }
+        protected ListEntity<Recipe> ListEntity { get; set; }
 
         public RecipesController_Test_Should()
         {
             AutoMapperConfigForTests.InitializeMap();
-            Repo = new TestRepository<RecipeVM>();
-            vm = new ListVM<RecipeVM>();
-            controller = SetUpController(Repo);
+            Repo = new TestRepository<Recipe>();
+            ListEntity = new ListEntity<Recipe>();
+            Controller = SetUpController(Repo);
         }
+
 
 
         [TestMethod]
@@ -42,33 +43,35 @@ namespace LambAndLentil.Test.BasicControllerTests
 
 
             // Act 
-            Type baseType = typeof(BaseController<RecipeVM>);
-            bool isBase = baseType.IsInstanceOfType(controller);
-
+            Type baseType = typeof(BaseController<Recipe>);
+            bool isBase = baseType.IsInstanceOfType(Controller);
+             
             // Assert 
             Assert.AreEqual(isBase, true);
         }
         
-      protected RecipesController SetUpController(IRepository<RecipeVM>  Repo)  
+      protected RecipesController SetUpController(IRepository<Recipe>  Repo)  
         {
 
-            vm.ListT = new List<RecipeVM> {
-                new RecipeVM {ID = int.MaxValue, Name = "RecipesController_Index_Test P1" ,AddedByUser="John Doe" ,ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue, ModifiedDate=DateTime.MaxValue.AddYears(-10)},
-                new RecipeVM {ID = int.MaxValue-1, Name = "RecipesController_Index_Test P2",  AddedByUser="Sally Doe",  ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(20), ModifiedDate=DateTime.MaxValue.AddYears(-20)},
-                new RecipeVM {ID = int.MaxValue-2, Name = "RecipesController_Index_Test P3",  AddedByUser="Sue Doe", ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(30), ModifiedDate=DateTime.MaxValue.AddYears(-30)},
-                new RecipeVM {ID = int.MaxValue-3, Name = "RecipesController_Index_Test P4",  AddedByUser="Kyle Doe" ,ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(40), ModifiedDate=DateTime.MaxValue.AddYears(-10)},
-                new RecipeVM {ID = int.MaxValue-4, Name = "RecipesController_Index_Test P5",  AddedByUser="John Doe",  ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(50), ModifiedDate=DateTime.MaxValue.AddYears(-100)}
-            }.AsQueryable();
+            ListEntity.ListT = new List<Recipe> {
+                new Recipe {ID = int.MaxValue, Name = "RecipesController_Index_Test P1" ,AddedByUser="John Doe" ,ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue, ModifiedDate=DateTime.MaxValue.AddYears(-10)},
+                new Recipe {ID = int.MaxValue-1, Name = "RecipesController_Index_Test P2",  AddedByUser="Sally Doe",  ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(20), ModifiedDate=DateTime.MaxValue.AddYears(-20)},
+                new Recipe {ID = int.MaxValue-2, Name = "RecipesController_Index_Test P3",  AddedByUser="Sue Doe", ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(30), ModifiedDate=DateTime.MaxValue.AddYears(-30)},
+                new Recipe {ID = int.MaxValue-3, Name = "RecipesController_Index_Test P4",  AddedByUser="Kyle Doe" ,ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(40), ModifiedDate=DateTime.MaxValue.AddYears(-10)},
+                new Recipe {ID = int.MaxValue-4, Name = "RecipesController_Index_Test P5",  AddedByUser="John Doe",  ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(50), ModifiedDate=DateTime.MaxValue.AddYears(-100)}
+            } ;
 
-            foreach (RecipeVM recipe in vm.ListT)
+            foreach (Recipe recipe in ListEntity.ListT)
             {
                 Repo.Add(recipe);
             }
 
-            controller = new RecipesController(Repo);
-            controller.PageSize = 3;
+            Controller = new RecipesController(Repo)
+            {
+                PageSize = 3
+            };
 
-            return controller;
+            return Controller;
         }
 
 
@@ -76,15 +79,15 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestMethod]
         public void BePublic()
         {
-            // Arrange
-
+            // Arrange 
 
             // Act
-            Type type = controller.GetType();
+            Type type = Controller.GetType();
             bool isPublic = type.IsPublic;
 
             // Assert 
             Assert.AreEqual(isPublic, true);
+          
         }
 
         [TestMethod]
@@ -94,8 +97,8 @@ namespace LambAndLentil.Test.BasicControllerTests
             
 
             // Act
-            ViewResult result = controller.Index(1) as ViewResult;
-            ViewResult result1 = controller.Index(2) as ViewResult;
+            ViewResult result = Controller.Index(1) as ViewResult;
+            ViewResult result1 = Controller.Index(2) as ViewResult;
 
             // Assert
             Assert.IsNotNull(result);
@@ -110,14 +113,14 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange
            
             // Act
-            ViewResult view1 = controller.Index(1);
+            ViewResult view1 = Controller.Index(1);
 
 
-            int count1 = ((ListVM<RecipeVM>)view1.Model).ListT.Count();
+            int count1 = ((ListEntity<Recipe>)view1.Model).ListT.Count();
 
-            ViewResult view2 = controller.Index(2);
+            ViewResult view2 = Controller.Index(2);
 
-            int count2 = ((ListVM<RecipeVM>)view2.Model).ListT.Count();
+            int count2 = ((ListEntity<Recipe>)view2.Model).ListT.Count();
 
             int count = count1 + count2;
 
@@ -139,7 +142,7 @@ namespace LambAndLentil.Test.BasicControllerTests
            
             // Act
 
-            ListVM<RecipeVM> resultT = (ListVM<RecipeVM>)((ViewResult)controller.Index(2)).Model;
+            ListEntity<Recipe> resultT = (ListEntity<Recipe>)((ViewResult)Controller.Index(2)).Model;
 
 
             // Assert
@@ -158,12 +161,12 @@ namespace LambAndLentil.Test.BasicControllerTests
         {
 
             // Arrange 
-            controller.PageSize = 8;
+            Controller.PageSize = 8;
 
             // Act
-            ViewResult view1 = controller.Index(1);
+            ViewResult view1 = Controller.Index(1);
 
-            int count1 = ((ListVM<RecipeVM>)(view1.Model)).ListT.Count();
+            int count1 = ((ListEntity<Recipe>)(view1.Model)).ListT.Count();
 
 
 
@@ -172,9 +175,9 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.AreEqual(5, count1);
             Assert.AreEqual("Index", view1.ViewName);
 
-            Assert.AreEqual("RecipesController_Index_Test P1", ((ListVM<RecipeVM>)(view1.Model)).ListT.FirstOrDefault().Name);
-            Assert.AreEqual("RecipesController_Index_Test P2", ((ListVM<RecipeVM>)(view1.Model)).ListT.Skip(1).FirstOrDefault().Name);
-            Assert.AreEqual("RecipesController_Index_Test P3", ((ListVM<RecipeVM>)(view1.Model)).ListT.Skip(2).FirstOrDefault().Name);
+            Assert.AreEqual("RecipesController_Index_Test P1", ((ListEntity<Recipe>)(view1.Model)).ListT.FirstOrDefault().Name);
+            Assert.AreEqual("RecipesController_Index_Test P2", ((ListEntity<Recipe>)(view1.Model)).ListT.Skip(1).FirstOrDefault().Name);
+            Assert.AreEqual("RecipesController_Index_Test P3", ((ListEntity<Recipe>)(view1.Model)).ListT.Skip(2).FirstOrDefault().Name);
 
 
         }
@@ -186,10 +189,10 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange 
 
             // Action
-            int totalItems = ((ListVM<RecipeVM>)((ViewResult)controller.Index()).Model).PagingInfo.TotalItems;
-            int currentPage = ((ListVM<RecipeVM>)((ViewResult)controller.Index()).Model).PagingInfo.CurrentPage;
-            int itemsPerPage = ((ListVM<RecipeVM>)((ViewResult)controller.Index()).Model).PagingInfo.ItemsPerPage;
-            int totalPages = ((ListVM<RecipeVM>)((ViewResult)controller.Index()).Model).PagingInfo.TotalPages;
+            int totalItems = ((ListEntity<Recipe>)((ViewResult)Controller.Index()).Model).PagingInfo.TotalItems;
+            int currentPage = ((ListEntity<Recipe>)((ViewResult)Controller.Index()).Model).PagingInfo.CurrentPage;
+            int itemsPerPage = ((ListEntity<Recipe>)((ViewResult)Controller.Index()).Model).PagingInfo.ItemsPerPage;
+            int totalPages = ((ListEntity<Recipe>)((ViewResult)Controller.Index()).Model).PagingInfo.TotalPages;
 
 
 
@@ -216,7 +219,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
 
             // Act
-            var result = (ListVM<RecipeVM>)(controller.Index(1)).Model;
+            var result = (ListEntity<Recipe>)(Controller.Index(1)).Model;
 
             // Assert 
             Assert.IsTrue(result.ListT.Count() == 5);
@@ -231,7 +234,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange
 
             // Act
-            ViewResult view = controller.Details(-1) as ViewResult;
+            ViewResult view = Controller.Details(-1) as ViewResult;
             AlertDecoratorResult adr = (AlertDecoratorResult)view;
 
             // Assert
@@ -264,13 +267,13 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange 
 
             // Act
-            AlertDecoratorResult adr = (AlertDecoratorResult)controller.Details(int.MaxValue);
+            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.Details(int.MaxValue);
             ViewResult view = (ViewResult)adr.InnerResult;
             // Assert
             Assert.IsNotNull(view);
 
             Assert.AreEqual("Details", view.ViewName);
-            Assert.IsInstanceOfType(view.Model, typeof(RecipeVM));
+            Assert.IsInstanceOfType(view.Model, typeof(Recipe));
         }
 
         [TestMethod]
@@ -280,7 +283,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange
 
 
-            ActionResult view = controller.Details(4000);
+            ActionResult view = Controller.Details(4000);
             AlertDecoratorResult adr = (AlertDecoratorResult)view;
             // Assert
             Assert.IsNotNull(view);
@@ -296,7 +299,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange 
 
             // Act
-            ActionResult result = controller.Details(Int16.MaxValue + 1);
+            ActionResult result = Controller.Details(Int16.MaxValue + 1);
 
             // Assert
             Assert.IsNotNull(result);
@@ -310,7 +313,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange 
 
             // Act
-            ViewResult view = controller.Details(0) as ViewResult;
+            ViewResult view = Controller.Details(0) as ViewResult;
             AlertDecoratorResult adr = (AlertDecoratorResult)view;
 
             // Assert
@@ -325,7 +328,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void Create()
         {
             // Arrange 
-            ViewResult view = controller.Create(UIViewType.Edit);
+            ViewResult view = Controller.Create(UIViewType.Edit);
 
 
             // Assert
@@ -341,7 +344,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
 
             // Act 
-            var view = controller.Delete(int.MaxValue - 1) as ViewResult;
+            var view = Controller.Delete(int.MaxValue - 1) as ViewResult;
 
             // Assert
             Assert.IsNotNull(view);
@@ -357,7 +360,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange 
             ClassCleanup();
             // Act 
-            ActionResult ar = controller.Delete(int.MaxValue - 6) as ViewResult;   // does not exist
+            ActionResult ar = Controller.Delete(int.MaxValue - 6) as ViewResult;   // does not exist
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
 
             // Assert
@@ -376,7 +379,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange
 
             // Act
-            ActionResult result = controller.DeleteConfirmed(int.MaxValue) as ActionResult;
+            ActionResult result = Controller.DeleteConfirmed(int.MaxValue) as ActionResult;
             // improve this test when I do some route tests to return a more exact result
             //RedirectToRouteResult x = new RedirectToRouteResult("default",new  RouteValueDictionary { new Route( { controller = "Recipes", Action = "Index" } } );
             // Assert 
@@ -388,7 +391,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void DeleteValidRecipe()
         {
             // Arrange - create an recipe
-            RecipeVM recipeVM = new RecipeVM { ID = 2, Name = "Test2" };
+            Recipe recipeVM = new Recipe { ID = 2, Name = "Test2" };
             Repo.Add(recipeVM);
             int repoCount = Repo.Count();
 
@@ -428,7 +431,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange
            
             // Act
-            Recipe result = (Recipe)((ViewResult)controller.Edit(8)).ViewData.Model;
+            Recipe result = (Recipe)((ViewResult)Controller.Edit(8)).ViewData.Model;
             // Assert
             Assert.IsNull(result);
         }
@@ -439,7 +442,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange
           
             // Act
-            ViewResult result = controller.Create(UIViewType.Create) as ViewResult;
+            ViewResult result = Controller.Create(UIViewType.Create) as ViewResult;
 
             // Assert
             Assert.IsNotNull(result);
@@ -493,7 +496,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
             // Assert
             //  Assert.Fail();
-            Assert.AreEqual("LambAndLentil.UI.Controllers.RecipesController", RecipesController_Test_Should.controller.ToString());
+            Assert.AreEqual("LambAndLentil.UI.Controllers.RecipesController", RecipesController_Test_Should.Controller.ToString());
         }
 
         [TestCleanup]

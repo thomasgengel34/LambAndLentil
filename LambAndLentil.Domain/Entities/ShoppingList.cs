@@ -25,10 +25,10 @@ namespace LambAndLentil.Domain.Entities
         }
          
    
-        public   ICollection<Recipe> Recipes { get; set; }
-        public ICollection<Ingredient> Ingredients { get; set; }
-        public  ICollection<Menu> Menus { get; set; }
-        public   ICollection<Plan> Plans { get; set; } 
+        public   List<Recipe> Recipes { get; set; }
+        public List<Ingredient> Ingredients { get; set; }
+        public  List<Menu> Menus { get; set; }
+        public   List<Plan> Plans { get; set; } 
 
         public int ID { get; set; }
         public DateTime Date { get; set; } 

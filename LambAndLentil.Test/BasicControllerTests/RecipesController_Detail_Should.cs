@@ -22,16 +22,16 @@ namespace LambAndLentil.Test.BasicControllerTests
     public class RecipesController_Detail_Should:RecipesController_Test_Should
     {
          
-        static ListVM<RecipeVM> ilvm; 
+        static ListEntity<Recipe> list; 
         static RecipesController controller;
-        static RecipeVM ingredientVM;
+        static Recipe ingredient;
 
         public RecipesController_Detail_Should()
         {
             AutoMapperConfigForTests.InitializeMap();
-            ilvm = new ListVM<RecipeVM>(); 
+            list = new ListEntity<Recipe>(); 
             controller = SetUpController(Repo);
-            ingredientVM = new RecipeVM();
+            ingredient = new Recipe();
         }
          
         [TestMethod]
@@ -46,7 +46,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
             // Assert
             Assert.AreEqual(UIViewType.Index.ToString(), rdr.RouteValues.Values.ElementAt(0));
-            Assert.AreEqual("Ingredient was not found", adr.Message);
+            Assert.AreEqual("Recipe was not found", adr.Message);
             Assert.AreEqual("alert-warning", adr.AlertClass);
 
         }
@@ -64,7 +64,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Assert
             Assert.IsNotNull(view);
             Assert.AreEqual("Details", view.ViewName);
-            Assert.IsInstanceOfType(view.Model, typeof(RecipeVM));
+            Assert.IsInstanceOfType(view.Model, typeof(Recipe));
             // no message
         }
 
@@ -76,10 +76,10 @@ namespace LambAndLentil.Test.BasicControllerTests
             int count = Repo.Count();
             //Act
             controller.Details(int.MaxValue, UIViewType.DeleteConfirmed);
-            RecipeVM ingredientVM = Repo.GetById(int.MaxValue);
+            Recipe ingredient = Repo.GetById(int.MaxValue);
             //Assert
             Assert.AreEqual(count - 1, Repo.Count());
-            Assert.IsNull(ingredientVM);
+            Assert.IsNull(ingredient);
             //   Assert.Fail();  // make sure the correct item was deleted before removing this line 
         }
 
@@ -96,7 +96,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
             // Assert
             Assert.AreEqual(UIViewType.BaseIndex.ToString(), rdr.RouteValues.Values.ElementAt(0));
-            Assert.AreEqual("Ingredient was not found", adr.Message);
+            Assert.AreEqual("Recipe was not found", adr.Message);
             Assert.AreEqual("alert-warning", adr.AlertClass); 
         }
 
@@ -109,7 +109,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
             // Assert
             Assert.AreEqual(UIViewType.BaseIndex.ToString(), rdr.RouteValues.Values.ElementAt(0));
-            Assert.AreEqual("Ingredient was not found", adr.Message);
+            Assert.AreEqual("Recipe was not found", adr.Message);
             Assert.AreEqual("alert-warning", adr.AlertClass);
         } 
 
@@ -127,7 +127,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Assert
             Assert.IsNotNull(ar);
             Assert.AreEqual("Details", view.ViewName);
-            Assert.IsInstanceOfType(view.Model, typeof(RecipeVM));
+            Assert.IsInstanceOfType(view.Model, typeof(Recipe));
             Assert.AreEqual("Here it is!", adr.Message);
         }
 
@@ -256,7 +256,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
 
             // Assert 
-            Assert.AreEqual("No Ingredient was found with that id.", adr.Message);
+            Assert.AreEqual("No Recipe was found with that id.", adr.Message);
         }
 
         [TestMethod]
@@ -265,8 +265,8 @@ namespace LambAndLentil.Test.BasicControllerTests
         {
             // Arrange
             RecipesController controller = new RecipesController(Repo);
-            RecipeVM ingredientVM = new RecipeVM { ID = 0 };
-            Repo.Save(ingredientVM);
+            Recipe ingredient = new Recipe { ID = 0 };
+            Repo.Save(ingredient);
 
 
             // Act
@@ -283,8 +283,8 @@ namespace LambAndLentil.Test.BasicControllerTests
         {
             // Arrange
             RecipesController controller = new RecipesController(Repo);
-            RecipeVM ingredientVM = new RecipeVM { ID = 0 };
-            Repo.Save(ingredientVM);
+            Recipe ingredient = new Recipe { ID = 0 };
+            Repo.Save(ingredient);
 
 
             // Act
@@ -302,7 +302,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         {
             // Arrange
 
-            RecipeVM ivm = new RecipeVM { ID = -1 };
+            Recipe ivm = new Recipe { ID = -1 };
             Repo.Save(ivm);
 
             // Act
@@ -319,8 +319,8 @@ namespace LambAndLentil.Test.BasicControllerTests
         {
             // Arrange
 
-            ingredientVM.ID = -500;
-            Repo.Save(ingredientVM);
+            ingredient.ID = -500;
+            Repo.Save(ingredient);
 
             // Act
             ActionResult ar = controller.Details(-500);
@@ -338,12 +338,12 @@ namespace LambAndLentil.Test.BasicControllerTests
         {
             // Arrange
             RecipesController controller = new RecipesController(Repo);
-            RecipeVM ingredientVM = new RecipeVM
+            Recipe ingredient = new Recipe
             {
                 ID = -1,
                 Name = "Details_IngredientIDIsNegative_AlertClassCorrect"
             };
-            Repo.Save(ingredientVM);
+            Repo.Save(ingredient);
 
             // Act
             ActionResult view = controller.Details(-1);

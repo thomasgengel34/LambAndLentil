@@ -29,21 +29,21 @@ namespace LambAndLentil.UI
         {
             Mapper.Initialize(cfg =>
             {
-                cfg.CreateMap<Ingredient, IngredientVM>();
-                cfg.CreateMap<IngredientVM, Ingredient>();
-                cfg.CreateMap<Menu, MenuVM>();
-                cfg.CreateMap<MenuVM, Menu>();
-                cfg.CreateMap<PersonVM, Person>();
-                cfg.CreateMap<Person, PersonVM>();
-                cfg.CreateMap<PlanVM, Plan>();
-                cfg.CreateMap<Plan, PlanVM>();
-                cfg.CreateMap<Recipe, RecipeVM>();
-                cfg.CreateMap<RecipeVM, Recipe>();
-                cfg.CreateMap<ShoppingList, ShoppingListVM>();
-                cfg.CreateMap<ShoppingListVM, ShoppingList>();
-                cfg.CreateMap<BaseEntity, BaseVM>();
-                cfg.ShouldMapProperty = pi =>
-        pi.GetMethod != null && (pi.GetMethod.IsPublic || pi.GetMethod.IsPrivate);
+        //        cfg.CreateMap<Ingredient, Ingredient>();
+        //        cfg.CreateMap<Ingredient, Ingredient>();
+        //        cfg.CreateMap<Menu, Menu>();
+        //        cfg.CreateMap<Menu, Menu>();
+        //        cfg.CreateMap<Person, Person>();
+        //        cfg.CreateMap<Person, Person>();
+        //        cfg.CreateMap<Plan, Plan>();
+        //        cfg.CreateMap<Plan, Plan>();
+        //        cfg.CreateMap<Recipe, Recipe>();
+        //        cfg.CreateMap<Recipe, Recipe>();
+        //        cfg.CreateMap<ShoppingList, ShoppingList>();
+        //        cfg.CreateMap<ShoppingList, ShoppingList>();
+        //        cfg.CreateMap<BaseEntity, BaseEntity>();
+        //        cfg.ShouldMapProperty = pi =>
+        //pi.GetMethod != null && (pi.GetMethod.IsPublic || pi.GetMethod.IsPrivate);
                 //cfg.AddProfile<FooProfile>(); not currently needed 
             });
            

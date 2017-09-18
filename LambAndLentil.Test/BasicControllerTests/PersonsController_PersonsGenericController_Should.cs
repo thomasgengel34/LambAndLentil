@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using LambAndLentil.UI.Controllers;
 using LambAndLentil.UI.Models; 
 using LambAndLentil.Tests.Controllers;
+using LambAndLentil.Domain.Entities;
 
 namespace LambAndLentil.Test.BasicControllerTests
 {
@@ -12,29 +13,29 @@ namespace LambAndLentil.Test.BasicControllerTests
     public class PersonsController_PersonsGenericController_Should : PersonsController_Test_Should
     {
         [TestMethod]
-        public void InheritBaseControllerInPersonVM()
+        public void InheritBaseControllerInPerson()
         {
             // Arrange
 
             // Act 
             Type type = Type.GetType("LambAndLentil.UI.Controllers.PersonsController, LambAndLentil.UI", true);
             // Assert
-            Assert.IsTrue(type.IsSubclassOf(typeof(BaseController<PersonVM>)));
+            Assert.IsTrue(type.IsSubclassOf(typeof(BaseController<Person>)));
         }
 
         [TestMethod]
-        public void InheritPersonsGenericControllerInPersonVM()
+        public void InheritPersonsGenericControllerInPerson()
         {
             // Arrange
 
             // Act
             Type type = Type.GetType("LambAndLentil.UI.Controllers.PersonsController, LambAndLentil.UI", true);
             // Assert
-            Assert.IsTrue(type.IsSubclassOf(typeof(PersonsGenericController<PersonVM>)));
+            Assert.IsTrue(type.IsSubclassOf(typeof(PersonsGenericController<Person>)));
         }
 
         [TestMethod]
-        public void CallRepositoryInPersonVM()
+        public void CallRepositoryInPerson()
         {
             // Arrange
 
@@ -42,7 +43,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Type type = Repo.GetType();
            string name=  type.GenericTypeArguments[0].Name;
             // Assert
-            Assert.AreEqual("PersonVM", name);
+            Assert.AreEqual("Person", name);
         }
     }
 }

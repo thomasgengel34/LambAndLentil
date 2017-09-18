@@ -28,20 +28,22 @@ namespace LambAndLentil.Test.JSONTests
         public void SaveOneIngredient()
         {
             // Arrange
-            IRepository< IngredientVM> Repo = new TestRepository< IngredientVM>();
-            //IngredientsController<Ingredient,IngredientVM> controller = new IngredientsController<Ingredient,IngredientVM>(Repo);
-            IngredientVM ingredientVM = new IngredientVM();
-            ingredientVM.ID = int.MaxValue;
-            ingredientVM.Name = "test SaveOneIngredient";
+            IRepository< Ingredient> Repo = new TestRepository< Ingredient>();
+            //IngredientsController<Ingredient,Ingredient> controller = new IngredientsController<Ingredient,Ingredient>(Repo);
+            Ingredient ingredient = new Ingredient
+            {
+                ID = int.MaxValue,
+                Name = "test SaveOneIngredient"
+            };
 
             // Act
-            Repo.Save(ingredientVM);
+            Repo.Save(ingredient);
 
-            IngredientVM returnedIngredient = Repo.GetById(ingredientVM.ID);
+            Ingredient returnedIngredient = Repo.GetById(ingredient.ID);
 
             // Assert
-            Assert.AreEqual(ingredientVM.ID, returnedIngredient.ID);
-            Assert.AreEqual(ingredientVM.Name, returnedIngredient.Name);
+            Assert.AreEqual(ingredient.ID, returnedIngredient.ID);
+            Assert.AreEqual(ingredient.Name, returnedIngredient.Name);
 
         }
         [Ignore]
@@ -61,11 +63,13 @@ namespace LambAndLentil.Test.JSONTests
         public void SaveOneMenu()
         {
             // Arrange
-            IRepository< MenuVM> Repo = new JSONRepository<  MenuVM>();
-            MenuVM menuVM = new MenuVM();
-            menuVM.Name = "SaveOneMenu Test ";
-            menuVM.ModifiedDate = new DateTime(1990, 12, 12);
-            menuVM.CreationDate = new DateTime(2003, 1, 2);
+            IRepository< Menu> Repo = new JSONRepository<  Menu>();
+            Menu menuVM = new Menu
+            {
+                Name = "SaveOneMenu Test ",
+                ModifiedDate = new DateTime(1990, 12, 12),
+                CreationDate = new DateTime(2003, 1, 2)
+            };
             string file = "";
             // Act
             try
@@ -170,11 +174,11 @@ namespace LambAndLentil.Test.JSONTests
             public int ID { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         }
 
-        private class TestReturnZeroCountForEmptyDirectoryVM : BaseVM, IEntity
+        private class TestReturnZeroCountForEmptyDirectoryVM : BaseEntity, IEntity
         {
-
+            public int ID { get; set; }
         }
-         
+
 
         private class GetRidOfMe : IDisposable
         {

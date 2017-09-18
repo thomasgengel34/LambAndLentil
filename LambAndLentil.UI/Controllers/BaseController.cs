@@ -9,23 +9,39 @@ using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Web.Mvc;
+using System.Collections.Generic; 
 
 namespace LambAndLentil.UI.Controllers
 {
     public abstract class BaseController<T> : Controller
-            where T : BaseVM, IEntity, new()
+            where T : BaseEntity, IEntity, new()
     {
-        public static  string className { get; private set; } 
+        public    string ClassName { get; private set; } 
 
         public int PageSize { get; set; }
 
         public static IRepository<T> Repo { get; set; }
 
+        public static IRepository<Ingredient> IngredientRepo { get; set; }
+        public static IRepository<Menu> MenuRepo { get; set; }
+
         public BaseController(IRepository<T> repository)
         {
-            Repo = repository;
+            //if ( repository.GetType() ==typeof(TestRepository<Ingredient>))
+            //{
+            //    TestRepository<Ingredient> r = new TestRepository<Ingredient>();
+
+            //    Repo =  r ;
+            //}
+            //else if (repository.GetType() == typeof(TestRepository<Menu>))
+            //{
+            //    TestRepository<Menu> r = new TestRepository<Menu>();
+
+            //    Repo = (IRepository<T>)r;
+            //}
+           Repo = repository;
             MvcApplication.InitializeMap();  // needed for testing. really??
-            className = new RepositoryHelperMethods().GetClassName<T>();
+            ClassName = new RepositoryHelperMethods().GetClassName<T>();  
         }
 
 
@@ -35,10 +51,12 @@ namespace LambAndLentil.UI.Controllers
         public ViewResult BaseIndex(IRepository<T> Repo, int page = 1)
         {
             PageSize = 8;
-            ListVM<T> model = new ListVM<T>();
-            // model.Entities = (IEnumerable<TVM>)BaseVM.GetIndexedModel<T>(PageSize, page);
-            model.ListT = new BaseVM().GetIndexedModel<T>(Repo, PageSize, page);
-            model.PagingInfo = new BaseVM().PagingFunction<T>(Repo, page, PageSize);
+            ListEntity<T> model = new ListEntity<T>
+            {
+                // model.Entities = (IEnumerable<TVM>)BaseVM.GetIndexedModel<T>(PageSize, page);
+                ListT = new BaseEntity().GetIndexedModel<T>(Repo, PageSize, page),
+                PagingInfo = new BaseEntity().PagingFunction<T>(Repo, page, PageSize)
+            };
             return View(UIViewType.Index.ToString(), model);
         }
 
@@ -60,7 +78,7 @@ namespace LambAndLentil.UI.Controllers
 
                 if (result == null)
                 {
-                    return RedirectToAction(UIViewType.BaseIndex.ToString()).WithError("No " + className + " was found with that id.");
+                    return RedirectToAction(UIViewType.BaseIndex.ToString()).WithError("No " + ClassName + " was found with that id.");
                 }
                 else
                 {
@@ -93,7 +111,7 @@ namespace LambAndLentil.UI.Controllers
                 }
                 else
                 {
-                    return (ViewResult)RedirectToAction(UIViewType.Index.ToString()).WithWarning(className + " was not found");
+                    return (ViewResult)RedirectToAction(UIViewType.Index.ToString()).WithWarning(ClassName + " was not found");
                 }
                 if (result is EmptyResult)
                 {
@@ -118,8 +136,10 @@ namespace LambAndLentil.UI.Controllers
         public ViewResult BaseCreate(UIViewType actionMethod)
         {
             ViewBag.ActionMethod = UIViewType.Create;
-            T vm = new T();
-            vm.CreationDate = DateTime.Now;
+            T vm = new T
+            {
+                CreationDate = DateTime.Now
+            };
             return View(UIViewType.Details.ToString(), vm);
         }
 
@@ -157,18 +177,16 @@ namespace LambAndLentil.UI.Controllers
 
         public ActionResult BasePostEdit(IRepository<T> Repo, T vm)
         {
-            T item = (T)vm;
-            // new ingredientVM - saves double writing the Create Post method
-            if (vm.ID == 0 && ModelState.IsValid)
+             T item =  vm;
+            // new ingredient - saves double writing the Create Post method
+            bool isValid = IsModelValid(vm);
+             
+            if (isValid)
             {
-                item = new T();
-
-            }
-
-
-            if (ModelState.IsValid)
-            {
-
+                if (vm.ID == 0  )
+                {
+                    item = new T(); 
+                }
                 Repo.Update(item, item.ID);
                 return RedirectToAction(UIViewType.BaseIndex.ToString()).WithSuccess(string.Format("{0} has been saved or modified", vm.Name));
             }
@@ -186,7 +204,7 @@ namespace LambAndLentil.UI.Controllers
             T item;
             if (result == null)
             {
-                return (ViewResult)RedirectToAction(UIViewType.Index.ToString()).WithWarning(className + " was not found");
+                return (ViewResult)RedirectToAction(UIViewType.Index.ToString()).WithWarning(ClassName + " was not found");
             }
             else
             {
@@ -201,7 +219,7 @@ namespace LambAndLentil.UI.Controllers
             T item = Repo.GetById(id);
             if (item == null)
             {
-                return RedirectToAction(UIViewType.BaseIndex.ToString()).WithWarning(className + " was not found");
+                return RedirectToAction(UIViewType.BaseIndex.ToString()).WithWarning(ClassName + " was not found");
             }
             else
             {
@@ -212,7 +230,7 @@ namespace LambAndLentil.UI.Controllers
         }
 
         public ActionResult BaseAttach<TChild>(IRepository<T> Repo, int? parentID, TChild child, AttachOrDetach attachOrDetach = AttachOrDetach.Attach)
-         where TChild : IngredientVM 
+         where TChild : Ingredient 
         // where TChild : BaseVM, IEntity // todo: expand
         {
             // conditions guard against people trying thngs out manually  
@@ -233,10 +251,20 @@ namespace LambAndLentil.UI.Controllers
             {
                 throw new Exception("I have no idea what repository that is, but I do not like it.");
             }
-
+            
+            char[] charsToTrim = { 'V', 'M' }; 
             string entity = typeof(T).ToString().Split('.').Last();
-            string childEntity = typeof(TChild).ToString().Split('.').Last();
+            string childEntity = typeof(TChild).ToString().Split('.').Last().TrimEnd(charsToTrim); 
             ViewBag.listOfChildren = childRepository.GetAll();
+
+            Ingredient ingredientChild;
+
+            //if (typeof(T)==typeof(Ingredient))
+            //{
+              ingredientChild= Mapper.Map<Ingredient,Ingredient>(child);
+            //}
+
+
             if (parentID == null)
             {
                 return RedirectToAction(UIViewType.Index.ToString()).WithWarning(entity + " was not found");
@@ -270,19 +298,19 @@ namespace LambAndLentil.UI.Controllers
                     { 
                         //string childClassName;  // obtain this
                         //Type z = Type.GetType(childClassName);
-                        var childEntity1 = Mapper.Map<IngredientVM, Ingredient >(child);  // expand
+                        var childEntity1 = Mapper.Map<Ingredient, Ingredient >(child);  // expand
 
 
                         if (attachOrDetach == AttachOrDetach.Detach)
                         {
 
-                            Repo.DetachAnIndependentChild<Ingredient>(parent.ID, childEntity1);
-                            return RedirectToAction(UIViewType.Details.ToString(), new { id = parentID, actionMethod = UIViewType.Edit }).WithSuccess(childEntity1 + " was Successfully Detached!");
+                            Repo.DetachAnIndependentChild<Ingredient>(parent.ID, ingredientChild);
+                            return RedirectToAction(UIViewType.Details.ToString(), new { id = parentID, actionMethod = UIViewType.Edit }).WithSuccess(childEntity  + " was Successfully Detached!");
                         }
                         else
                         {
-                            Repo.AttachAnIndependentChild<Ingredient>(parent.ID, childEntity1);
-                            return RedirectToAction(UIViewType.Details.ToString(), new { id = parentID, actionMethod = UIViewType.Edit }).WithSuccess(childEntity1 + "was Successfully Attached!");
+                            Repo.AttachAnIndependentChild<Ingredient>(parent.ID, ingredientChild);
+                            return RedirectToAction(UIViewType.Details.ToString(), new { id = parentID, actionMethod = UIViewType.Edit }).WithSuccess(childEntity  + " was Successfully Attached!");
                         }
                     }
                 }
@@ -296,7 +324,7 @@ namespace LambAndLentil.UI.Controllers
             return ControllerExtensions.RedirectToAction(this, action);
         }
 
-        protected ActionResult GuardId(IRepository<T> Repo, UIControllerType tController, int id)
+       public ActionResult GuardId(IRepository<T> Repo, UIControllerType tController, int id)
         {
             T item = Repo.GetById(id);
 

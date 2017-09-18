@@ -14,7 +14,7 @@ using System.IO;
 using System.Linq;
 using System.Web.Mvc;
 
-namespace IntegrationTests
+namespace LambAndLentil.Test.BasicControllerTests
 {
     [TestClass]
     [TestCategory("Integration")]
@@ -22,17 +22,19 @@ namespace IntegrationTests
     public class ShoppingListsControllerShould
     {
 
-        static IRepository<ShoppingListVM> Repo;
+        static IRepository<ShoppingList> Repo;
         static ShoppingListsController controller;
-        static ShoppingListVM vm;
+        static ShoppingList vm;
 
         public ShoppingListsControllerShould()
         {
-            Repo = new TestRepository<ShoppingListVM>();
+            Repo = new TestRepository<ShoppingList>();
             controller = new ShoppingListsController(Repo);
-            vm = new ShoppingListVM();
-            vm.ID = 400;
-            vm.Name = "ShoppingListsControllerShould";
+            vm = new ShoppingList
+            {
+                ID = 400,
+                Name = "ShoppingListsControllerShould"
+            };
         }
 
 
@@ -43,7 +45,7 @@ namespace IntegrationTests
 
             // Act
             ViewResult vr = controller.Create(UIViewType.Create);
-            ShoppingListVM vm = (ShoppingListVM)vr.Model;
+            ShoppingList vm = (ShoppingList)vr.Model;
             string modelName = vm.Name;
 
             // Assert 
@@ -57,8 +59,10 @@ namespace IntegrationTests
         {
             // Arrange 
             ShoppingListsController controller = new ShoppingListsController(Repo);
-            ShoppingListVM vm = new ShoppingListVM();
-            vm.Name = "test";
+            ShoppingList vm = new ShoppingList
+            {
+                Name = "test"
+            };
             // Act
             AlertDecoratorResult adr = (AlertDecoratorResult)controller.PostEdit(vm);
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
@@ -85,18 +89,20 @@ namespace IntegrationTests
             ShoppingListsController controller3 = new ShoppingListsController(Repo);
             ShoppingListsController controller4 = new ShoppingListsController(Repo);
             ShoppingListsController controller5 = new ShoppingListsController(Repo);
-            ShoppingListVM vm = new ShoppingListVM();
-            vm.Name = "0000 test";
+            ShoppingList vm = new ShoppingList
+            {
+                Name = "0000 test"
+            };
 
             // Act 
             ActionResult ar1 = controller1.PostEdit(vm);
             ViewResult view1 = controller2.Index();
-            IEnumerable<ShoppingListVM> listVM = (IEnumerable<ShoppingListVM>)view1.Model;
-            var result = (from m in listVM
+            IEnumerable<ShoppingList> list = (IEnumerable<ShoppingList>)view1.Model;
+            var result = (from m in list
                           where m.Name == "0000 test"
                           select m).AsQueryable();
 
-            ShoppingListVM item = result.FirstOrDefault();
+            ShoppingList item = result.FirstOrDefault();
 
             // verify initial value:
             Assert.AreEqual("0000 test", item.Name);
@@ -107,8 +113,8 @@ namespace IntegrationTests
             vm.ID = item.ID;
             ActionResult ar2 = controller3.PostEdit(vm);
             ViewResult view2 = controller4.Index();
-            ListVM<ShoppingListVM> listVM2 = (ListVM<ShoppingListVM>)view2.Model;
-            ShoppingListVM result2 = (from m in listVM2.ListT
+            List<ShoppingList> list2 = (List<ShoppingList>)view2.Model;
+            ShoppingList result2 = (from m in list2
                                       where m.Name == "0000 test Edited"
                                       select m).AsQueryable().FirstOrDefault();
 
@@ -132,16 +138,18 @@ namespace IntegrationTests
             ShoppingListsController controller3 = new ShoppingListsController(Repo);
             ShoppingListsController controller4 = new ShoppingListsController(Repo);
             ShoppingListsController controller5 = new ShoppingListsController(Repo);
-            ShoppingListVM vm = new ShoppingListVM();
-            vm.Name = "0000 test";
-            vm.Description = "SaveEditedShoppingListWithDescriptionChange Pre-test";
+            ShoppingList vm = new ShoppingList
+            {
+                Name = "0000 test",
+                Description = "SaveEditedShoppingListWithDescriptionChange Pre-test"
+            };
 
 
             // Act 
             ActionResult ar1 = controller1.PostEdit(vm);
             ViewResult view1 = controller2.Index();
-            ListVM<ShoppingListVM> listVM = (ListVM<ShoppingListVM>)view1.Model;
-            ShoppingListVM shoppingListVM = (from m in listVM.ListT
+            List<ShoppingList> list = (List<ShoppingList>)view1.Model;
+            ShoppingList shoppingListVM = (from m in list
                                              where m.Name == "0000 test"
                                              select m).AsQueryable().FirstOrDefault();
 
@@ -156,8 +164,8 @@ namespace IntegrationTests
 
             ActionResult ar2 = controller3.PostEdit(vm);
             ViewResult view2 = controller4.Index();
-            ListVM<ShoppingListVM> listVM2 = (ListVM<ShoppingListVM>)view2.Model;
-            var result2 = (from m in listVM2.ListT
+            List<ShoppingList> list2 = (List<ShoppingList>)view2.Model;
+            var result2 = (from m in list2
                            where m.Name == "0000 test Edited"
                            select m).AsQueryable();
 
@@ -173,11 +181,14 @@ namespace IntegrationTests
         public void ActuallyDeleteAShoppingListFromTheDatabase()
         {
             // Arrange  
-            ShoppingListVM item = GetShoppingListVM(Repo,  "test ActuallyDeleteAShoppingListFromTheDatabase");
+               ShoppingList item = new ShoppingList { ID = 1, Description = "test ActuallyDeleteAShoppingListFromTheDatabase" };
+        
+            Repo.Add(item);
+
             //Act
             controller.DeleteConfirmed(item.ID);
             var deletedItem = (from m in Repo.GetAll()
-                               where m.Description == item.Description
+                               where m.ID == item.ID
                                select m).AsQueryable();
 
             //Assert
@@ -191,8 +202,10 @@ namespace IntegrationTests
         {
             // Arrange
             DateTime CreationDate = new DateTime(2010, 1, 1);
-            ShoppingListVM shoppingListVM = new ShoppingListVM(CreationDate);
-            shoppingListVM.Name = "001 Test ";
+            ShoppingList shoppingListVM = new ShoppingList(CreationDate)
+            {
+                Name = "001 Test "
+            };
 
             JSONRepository<ShoppingList> Repo = new JSONRepository<ShoppingList>(); ;
             //ShoppingListsController controllerEdit = new ShoppingListsController(Repo);
@@ -202,8 +215,8 @@ namespace IntegrationTests
             // Act
             //controllerEdit.PostEdit(shoppingListVM);
             //ViewResult view = controllerView.Index();
-            //ShoppingListVM listVM = (ShoppingListVM)view.Model;
-           // var result = (from m in listVM.ShoppingLists
+            //ShoppingList list = (ShoppingList)view.Model;
+           // var result = (from m in list.ShoppingLists
             //              where m.Name == "001 Test "
            //               select m).AsQueryable();
 
@@ -229,8 +242,10 @@ namespace IntegrationTests
             //ShoppingListsController controllerView1 = new ShoppingListsController(Repo);
             //ShoppingListsController controllerDelete = new ShoppingListsController(Repo);
 
-            ShoppingListVM vm = new ShoppingListVM();
-            vm.Name = "002 Test Mod";
+            ShoppingList vm = new ShoppingList
+            {
+                Name = "002 Test Mod"
+            };
             DateTime CreationDate = vm.CreationDate;
             DateTime mod = vm.ModifiedDate;
 
@@ -238,7 +253,7 @@ namespace IntegrationTests
           //  controllerPost.PostEdit(vm);
 
          //   ViewResult view = controllerView.Index();
-        //    ShoppingListVM vm2 = (ShoppingListVM)view.Model;
+        //    ShoppingList vm2 = (ShoppingList)view.Model;
             //var result = (from m in vm2.ShoppingLists
             //              where m.Name == "002 Test Mod"
             //              select m).AsQueryable();
@@ -249,8 +264,8 @@ namespace IntegrationTests
 
 
             //ViewResult view1 = controllerView.Index();
-            //ShoppingList listVM = (ShoppingList)view1.Model;
-            //var result1 = (from m in listVM.ShoppingLists
+            //ShoppingList list = (ShoppingList)view1.Model;
+            //var result1 = (from m in list.ShoppingLists
             //               where m.Name == "002 Test Mod"
             //               select m).AsQueryable();
 
@@ -266,14 +281,14 @@ namespace IntegrationTests
         
         }
 
-        internal ShoppingListVM GetShoppingListVM(IRepository<ShoppingListVM> Repo,  string description)
+        internal ShoppingList GetShoppingList(IRepository<ShoppingList> Repo,  string description)
         { 
             
             vm.ID = int.MaxValue;
             vm.Description = description;
             controller.PostEdit(vm);
 
-            ShoppingListVM result =  (from m in Repo.GetAll()
+            ShoppingList result =  (from m in Repo.GetAll()
                                   where m.Description == vm.Description
                                   select m).AsQueryable().FirstOrDefault();
             return result;
@@ -285,24 +300,24 @@ namespace IntegrationTests
         public void AttachAnExistingIngredientToAnExistingShoppingList()
         {
             // Arrange 
-            JSONRepository<IngredientVM> repoIngredient = new JSONRepository< IngredientVM>();
+            JSONRepository<Ingredient> repoIngredient = new TestRepository< Ingredient>();
             ShoppingListsController controller = new ShoppingListsController(Repo );
 
-            ShoppingListVM  slVM = GetShoppingListVM(Repo,  "test AttachAnExistingIngredientToAnExistingShoppingList");
-            IngredientVM ingredientVM = new RecipesControllerShould().GetIngredientVM(repoIngredient, "test AttachAnExistingIngredientToAnExistingShoppingList");
-
+            ShoppingList  slVM = GetShoppingList(Repo,  "test AttachAnExistingIngredientToAnExistingShoppingList");
+            Ingredient ingredient = new Ingredient { ID = 500, Description="test AttachAnExistingIngredientToAnExistingShoppingList" };
+            repoIngredient.Add(ingredient);
             // Act
-            controller.AttachIngredient(slVM.ID, ingredientVM);
-            ShoppingListVM returnedShoppingListVM = (from m in Repo.GetAll()
+            controller.AttachIngredient(slVM.ID, ingredient);
+            ShoppingList returnedShoppingList = (from m in Repo.GetAll()
                                                  where m.Description == slVM.Description
                                                  select m).FirstOrDefault();
 
 
 
             // Assert 
-            Assert.AreEqual(1, returnedShoppingListVM.Ingredients.Count());
+            Assert.AreEqual(1, returnedShoppingList.Ingredients.Count());
             // how do I know the correct ingredient was added?
-            Assert.AreEqual(ingredientVM.ID, returnedShoppingListVM.Ingredients.First().ID);
+            Assert.AreEqual(ingredient.ID, returnedShoppingList.Ingredients.First().ID);
              
         }
 

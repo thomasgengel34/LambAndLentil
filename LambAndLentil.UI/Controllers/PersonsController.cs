@@ -8,24 +8,24 @@ using System.Web.Mvc;
 
 namespace LambAndLentil.UI.Controllers
 { 
-    public class PersonsController : PersonsGenericController<PersonVM>
+    public class PersonsController : PersonsGenericController<Person>
     {
-        public PersonsController(IRepository<PersonVM> repository) : base(repository)
+        public PersonsController(IRepository<Person> repository) : base(repository)
         {
             Repo = repository;
         }
 
-      //  public static IRepository<PersonVM> Repo { get; private set; }
+      //  public static IRepository<Person> Repo { get; private set; }
     }
 
 
-    public class PersonsGenericController<T> : BaseController<PersonVM> 
-        where T: PersonVM, new()
+    public class PersonsGenericController<T> : BaseController<Person> 
+        where T: Person, new()
         //where Person :  BaseEntity,  IEntity
-        //  where PersonVM : BaseVM, IEntity, new()
+        //  where Person : BaseVM, IEntity, new()
     {
 
-        public PersonsGenericController(IRepository<PersonVM> repository) : base(repository)
+        public PersonsGenericController(IRepository<Person> repository) : base(repository)
         {
             Repo = repository;
         }
@@ -64,7 +64,7 @@ namespace LambAndLentil.UI.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult PostEdit([Bind(Include = "ID,FirstName,LastName, Name, Description, Weight,  MinCalories, MaxCalories, NoGarlic, CreationDate, ModifiedDate,  AddedByUser, ModifiedByUser")] PersonVM personVM)
+        public ActionResult PostEdit([Bind(Include = "ID,FirstName,LastName, Name, Description, Weight,  MinCalories, MaxCalories, NoGarlic, CreationDate, ModifiedDate,  AddedByUser, ModifiedByUser")] Person personVM)
         {
             personVM.Name = String.Concat(personVM.FirstName, " ", personVM.LastName);
 
@@ -88,14 +88,14 @@ namespace LambAndLentil.UI.Controllers
             return BaseDeleteConfirmed(Repo, UIControllerType.Persons, id);
         }
 
-        public ActionResult AttachIngredient(int? personID, IngredientVM ingredientVM)
+        public ActionResult AttachIngredient(int? personID, Ingredient ingredient)
           {
-            return BaseAttach< IngredientVM>(Repo, personID, ingredientVM);
+            return BaseAttach< Ingredient>(Repo, personID, ingredient);
         }
 
-        public ActionResult RemoveIngredient(int? personID, IngredientVM ingredientVM)
+        public ActionResult RemoveIngredient(int? personID, Ingredient ingredient)
         {
-            return BaseAttach< IngredientVM>(Repo, personID, ingredientVM, AttachOrDetach.Detach);
+            return BaseAttach< Ingredient>(Repo, personID, ingredient, AttachOrDetach.Detach);
         } 
     }
 }

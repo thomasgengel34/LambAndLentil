@@ -11,7 +11,7 @@ using System.Linq.Expressions;
 namespace LambAndLentil.Domain.Concrete
 {
     public class TestRepository<T > : JSONRepository<T >
-        where T : class, IEntity
+        where T : BaseEntity, IEntity
     { 
         static string Folder { get; set; } 
 

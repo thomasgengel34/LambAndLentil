@@ -4,20 +4,21 @@ using LambAndLentil.Domain.Abstract;
 using LambAndLentil.UI.Infrastructure;
 using LambAndLentil.UI.Models;
 using LambAndLentil.Domain.Concrete;
+using LambAndLentil.Domain.Entities;
 
 namespace LambAndLentil.Test.Infrastructure
 {
     [TestClass]
     public class RepoWrapperShould : IRepository
     {
-        static IRepository<IngredientVM> baseRepo;
-        static RepoWrapper<IngredientVM> Repo;
+        static IRepository<Ingredient> baseRepo;
+        static RepoWrapper<Ingredient> Repo;
 
 
         public RepoWrapperShould()
         {
-             baseRepo= new TestRepository<IngredientVM>();
-             Repo = new RepoWrapper<IngredientVM>(baseRepo);
+             baseRepo= new TestRepository<Ingredient>();
+             Repo = new RepoWrapper<Ingredient>(baseRepo);
              
         }
 
@@ -40,8 +41,8 @@ namespace LambAndLentil.Test.Infrastructure
             // Arrange
 
             // Act
-            IRepository<IngredientVM> baseJRepo = new JSONRepository<IngredientVM>();
-            RepoWrapper<IngredientVM> JRepo = new RepoWrapper<IngredientVM>(baseJRepo);
+            IRepository<Ingredient> baseJRepo = new JSONRepository<Ingredient>();
+            RepoWrapper<Ingredient> JRepo = new RepoWrapper<Ingredient>(baseJRepo);
 
             // Assert  
             Assert.IsNotNull(Repo);

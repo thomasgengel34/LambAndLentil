@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using LambAndLentil.UI.Controllers;
 using LambAndLentil.UI.Models; 
 using LambAndLentil.Tests.Controllers;
+using LambAndLentil.Domain.Entities;
 
 namespace LambAndLentil.Test.BasicControllerTests
 {
@@ -12,29 +13,29 @@ namespace LambAndLentil.Test.BasicControllerTests
     public class MenusController_MenusGenericController_Should : MenusController_Test_Should
     {
         [TestMethod]
-        public void InheritBaseControllerInMenuVM()
+        public void InheritBaseControllerInMenu()
         {
             // Arrange
 
             // Act 
             Type type = Type.GetType("LambAndLentil.UI.Controllers.MenusController, LambAndLentil.UI", true);
             // Assert
-            Assert.IsTrue(type.IsSubclassOf(typeof(BaseController<MenuVM>)));
+            Assert.IsTrue(type.IsSubclassOf(typeof(BaseController<Menu>)));
         }
 
         [TestMethod]
-        public void InheritMenusGenericControllerInMenuVM()
+        public void InheritMenusGenericControllerInMenu()
         {
             // Arrange
 
             // Act
             Type type = Type.GetType("LambAndLentil.UI.Controllers.MenusController, LambAndLentil.UI", true);
             // Assert
-            Assert.IsTrue(type.IsSubclassOf(typeof(MenusGenericController<MenuVM>)));
+            Assert.IsTrue(type.IsSubclassOf(typeof(MenusGenericController<Menu>)));
         }
 
         [TestMethod]
-        public void CallRepositoryInMenuVM()
+        public void CallRepositoryInMenu()
         {
             // Arrange
 
@@ -42,7 +43,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Type type = Repo.GetType();
            string name=  type.GenericTypeArguments[0].Name;
             // Assert
-            Assert.AreEqual("MenuVM", name);
+            Assert.AreEqual("Menu", name);
         }
     }
 }

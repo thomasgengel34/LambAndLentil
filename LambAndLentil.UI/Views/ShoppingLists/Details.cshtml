@@ -1,4 +1,4 @@
-﻿@model LambAndLentil.UI.Models.ShoppingListVM
+﻿@model LambAndLentil.UI.Models.ShoppingList
 @using LambAndLentil.Domain.Entities
 @{
     //  string requestActionMethod = Request.AppRelativeCurrentExecutionFilePath.Split('/').Reverse().Skip(1).Take(1).FirstOrDefault();
@@ -43,7 +43,7 @@ else
 }
 
 <hr />
-@using (Html.BeginForm(actionMethod, UIControllerType.ShoppingLists.ToString(), FormMethod.Post, new { id = Model.ID, ingredientVM = Model }))
+@using (Html.BeginForm(actionMethod, UIControllerType.ShoppingLists.ToString(), FormMethod.Post, new { id = Model.ID, ingredient = Model }))
 {
 
     @Html.AntiForgeryToken()
