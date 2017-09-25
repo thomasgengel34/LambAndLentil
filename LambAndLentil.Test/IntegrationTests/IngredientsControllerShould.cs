@@ -127,7 +127,7 @@ namespace LambAndLentil.Test.Infrastructure
             vm.ID = 7777;
             ActionResult ar2 = controller2.PostEdit(vm);
             ViewResult view2 = controller3.Index();
-            List<Ingredient> list2 = (List<Ingredient>)view2.Model;
+            List<Ingredient> list2 = (List<Ingredient>)((ListEntity<Ingredient>)view2.Model).ListT;
             Ingredient vm3 = (from m in list2 
                                 where m.Name == "0000 test Edited"
                                 select m).AsQueryable().FirstOrDefault();
@@ -216,7 +216,7 @@ namespace LambAndLentil.Test.Infrastructure
             // Act
             controllerEdit.PostEdit(ingredient);
             ViewResult view = controllerView.Index();
-            List<Ingredient> list = (List<Ingredient>)view.Model;
+            List<Ingredient> list = (List<Ingredient>)((ListEntity<Ingredient>)view.Model).ListT;  
             Ingredient returnedlist = Repo.GetById(ingredient.ID);
             DateTime shouldBeSameDate = returnedlist.CreationDate;
 

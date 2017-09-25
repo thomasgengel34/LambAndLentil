@@ -117,7 +117,7 @@ namespace IntegrationTests
             // Act 
             ActionResult ar1 = controller1.PostEdit(vm);
             ViewResult view1 = controller2.Index();
-            List<Menu> list = (List<Menu>)view1.Model;
+            List<Menu> list =  (List<Menu>)((ListEntity<Menu>)view1.Model).ListT;
             var menuVM = (from m in list
                           where m.Name == "0000 test"
                           select m).FirstOrDefault();
@@ -131,7 +131,7 @@ namespace IntegrationTests
             vm.ID = menuVM.ID;
             ActionResult ar2 = controller3.PostEdit(vm);
             ViewResult view2 = controller4.Index();
-            List<Menu> list2 = (List<Menu>)view2.Model;
+            List<Menu> list2 = (List<Menu>)((ListEntity<Menu>)view2.Model).ListT;
             Menu menu2 = (from m in list2
                             where m.Name == "0000 test Edited"
                             select m).AsQueryable().FirstOrDefault();
@@ -162,7 +162,7 @@ namespace IntegrationTests
             // Act 
             ActionResult ar1 = controller1.PostEdit(vm);
             ViewResult view1 = controller2.Index();
-            List<Menu> list = (List<Menu>)view1.Model;
+            List<Menu> list = (List<Menu>)((ListEntity<Menu>)view1.Model).ListT;
             Menu menu = (from m in list
                            where m.Name == "0000 test"
                            select m).AsQueryable().FirstOrDefault();
@@ -176,7 +176,7 @@ namespace IntegrationTests
 
             ActionResult ar2 = controller3.PostEdit(vm);
             ViewResult view2 = controller4.Index();
-            List<Menu> list2 = (List<Menu>)view2.Model;
+            List<Menu> list2 = (List<Menu>)((ListEntity<Menu>)view2.Model).ListT;
             Menu menuVM = (from m in list2
                              where m.Name == "0000 test Edited"
                              select m).AsQueryable().FirstOrDefault();
@@ -209,7 +209,7 @@ namespace IntegrationTests
             // Act 
             ActionResult ar1 = controller1.PostEdit(vm);
             ViewResult view1 = controller2.Index();
-            List<Menu> list = (List<Menu>)view1.Model;
+            List<Menu> list = (List<Menu>)((ListEntity<Menu>)view1.Model).ListT;
             Menu menuVM = (from m in list
                              where m.Name == "0000 test"
                              select m).AsQueryable().FirstOrDefault();
@@ -227,7 +227,7 @@ namespace IntegrationTests
 
             ActionResult ar2 = controller3.PostEdit(vm);
             ViewResult view2 = controller4.Index();
-            List<Menu> list2 = (List<Menu>)view2.Model;
+            List<Menu> list2 = (List<Menu>)((ListEntity<Menu>)view2.Model).ListT;
             menuVM = (from m in list2
                       where m.Name == "0000 test Edited"
                       select m).AsQueryable().FirstOrDefault();
@@ -306,7 +306,7 @@ namespace IntegrationTests
             // Act
             controllerEdit.PostEdit(vm);
             ViewResult view = controllerView.Index();
-            List<Menu> list = (List<Menu>)view.Model;
+            List<Menu> list = (List<Menu>)((ListEntity<Menu>)view.Model).ListT;
             Menu menuVM = (from m in list
                              where m.Name == "001 Test "
                              select m).AsQueryable().FirstOrDefault(); 
@@ -339,7 +339,7 @@ namespace IntegrationTests
             // Act
             controllerPost.PostEdit(vm);
             ViewResult view = controllerView.Index();
-            List<Menu> list = (List<Menu>)view.Model;
+            List<Menu> list = (List<Menu>)((ListEntity<Menu>)view.Model).ListT;
             Menu menuVM = (from m in list
                           where m.Name == "002 Test Mod"
                           select m).AsQueryable().FirstOrDefault();
@@ -349,8 +349,8 @@ namespace IntegrationTests
             controllerPost1.PostEdit(menuVM);
 
             ViewResult view1 = controllerView.Index();
-            list = (List<Menu>)view1.Model;
-               menuVM = (from m in list
+            list = (List<Menu>)((ListEntity<Menu>)view1.Model).ListT;
+            menuVM = (from m in list
                            where m.Name == "002 Test Mod"
                            select m).AsQueryable().FirstOrDefault();
         

@@ -77,6 +77,9 @@
     <Compile Include="AdminSecurity\ErrorLogging.cs" />
     <Compile Include="BasicControllerTests\AccountControllerTest.cs" />
     <Compile Include="BasicControllerTests\HomeControllerTest.cs" />
+    <Compile Include="BasicControllerTests\IngredientsController_Test_Misc.cs" />
+    <Compile Include="BasicControllerTests\MenusController_Test_Misc.cs" />
+    <Compile Include="BasicControllerTests\PersonsController_Test_Should_Misc.cs" />
     <Compile Include="BasicControllerTests\PlansController_Attach_Should.cs" />
     <Compile Include="BasicControllerTests\PersonsController_Attach_Should.cs" />
     <Compile Include="BasicControllerTests\MenusController_Attach_Should.cs" />
@@ -98,6 +101,8 @@
     <Compile Include="BasicControllerTests\PlansController_PostEdit_Should.cs" />
     <Compile Include="BasicControllerTests\PersonsController_PostEdit_Should.cs" />
     <Compile Include="BasicControllerTests\MenusController_PostEdit_Should.cs" />
+    <Compile Include="BasicControllerTests\PlansController_Test_Misc.cs" />
+    <Compile Include="BasicControllerTests\RecipesController_Test_Miscellaneous.cs" />
     <Compile Include="BasicControllerTests\ShoppingListsController_Attach_Should.cs" />
     <Compile Include="BasicControllerTests\RecipesController_Attach_Should.cs" />
     <Compile Include="BasicControllerTests\IngredientsController_Attach_Should.cs" />
@@ -134,6 +139,7 @@
     <Compile Include="BasicControllerTests\PersonsController_Test_Should .cs" />
     <Compile Include="BasicControllerTests\RecipesController_Test_Should.cs" />
     <Compile Include="BasicControllerTests\PlansController_Test_Should.cs" />
+    <Compile Include="BasicControllerTests\ShoppingListsController_Test_Should_Misc.cs" />
     <Compile Include="BasicControllerTests\ShoppingListsController_Test_Should.cs" />
     <Compile Include="BasicControllerTests\IngredientsControllerTest_FilterShould.cs" />
     <Compile Include="BasicControllerTests\IngredientsController_Edit_Should.cs" />

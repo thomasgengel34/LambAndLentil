@@ -256,7 +256,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
 
             // Assert 
-            Assert.AreEqual("No ShoppingList was found with that id.", adr.Message);
+            Assert.AreEqual("No Shopping List was found with that id.", adr.Message);
         }
 
         [TestMethod]

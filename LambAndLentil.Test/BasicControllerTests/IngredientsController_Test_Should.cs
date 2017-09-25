@@ -3,18 +3,14 @@ using LambAndLentil.Domain.Abstract;
 using LambAndLentil.Domain.Concrete;
 using LambAndLentil.Domain.Entities;
 using LambAndLentil.Tests.Infrastructure;
-using LambAndLentil.UI;
 using LambAndLentil.UI.Controllers;
-using LambAndLentil.UI.Infrastructure.Alerts;
-using LambAndLentil.UI.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Web.Mvc;
 
-namespace LambAndLentil.Test.BasicControllerTests
+namespace LambAndLentil.Test.BasicControllerTests 
 {
 
     [TestClass]
@@ -23,7 +19,7 @@ namespace LambAndLentil.Test.BasicControllerTests
     {
         protected static IRepository<Ingredient> Repo { get; set; }
         public static MapperConfiguration AutoMapperConfig { get; set; }
-        static ListEntity<Ingredient> list;
+        protected static ListEntity<Ingredient> list;
        protected static IngredientsController controller;
         static Ingredient ingredient;
 
@@ -37,53 +33,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Repo.Save(ingredient);
         }
 
-        [TestMethod]
-        public void InheritFromBaseControllerCorrectlyPageSizeRight()
-        {
-
-            // Arrange
-        
-            // Act 
-            controller.PageSize = 4;
-
-            var type = typeof(IngredientsController);
-            var DoesDisposeExist = type.GetMethod("Dispose");
-
-            // Assert 
-            Assert.AreEqual(4, controller.PageSize);
-        }
-
-
-
-        [TestMethod]
-        public void InheritFromBaseControllerCorrectlyDisposeExists()
-        {
-
-            // Arrange
-           
-            // Act 
-            controller.PageSize = 4;
-
-            var type = typeof(IngredientsController);
-            var DoesDisposeExist = type.GetMethod("Dispose");
-
-            // Assert  
-            Assert.IsNotNull(DoesDisposeExist);
-        }
-
-        [TestMethod]
-        public void BePublic()
-        {
-            // Arrange
          
-
-            // Act
-            Type type = controller.GetType();
-            bool isPublic = type.IsPublic;
-
-            // Assert 
-            Assert.AreEqual(isPublic, true);
-        }
 
      
 
@@ -119,17 +69,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         }
 
         
-        [TestMethod]
-        public void GetTheClassNameCorrect()
-        {
-            // Arrange
-
-            // Act
-
-
-            // Assert 
-           Assert.AreEqual("LambAndLentil.UI.Controllers.IngredientsController", IngredientsController_Test_Should.controller.ToString()); 
-        }
+       
 
 
         [ClassCleanup()]

@@ -64,11 +64,11 @@ namespace LambAndLentil.UI.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult PostEdit([Bind(Include = "ID,FirstName,LastName, Name, Description, Weight,  MinCalories, MaxCalories, NoGarlic, CreationDate, ModifiedDate,  AddedByUser, ModifiedByUser")] Person personVM)
+        public ActionResult PostEdit([Bind(Include = "ID,FirstName,LastName, Name, Description, Weight,  MinCalories, MaxCalories, NoGarlic, CreationDate, ModifiedDate,  AddedByUser, ModifiedByUser")] Person person)
         {
-            personVM.Name = String.Concat(personVM.FirstName, " ", personVM.LastName);
+            person.Name = String.Concat(person.FirstName, " ", person.LastName);
 
-            return BasePostEdit(Repo, personVM);
+            return BasePostEdit(Repo, person);
 
         }
 

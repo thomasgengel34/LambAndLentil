@@ -31,6 +31,7 @@ namespace LambAndLentil.Domain.Entities
         public Person(DateTime creationDate) : base(creationDate)
         {
             CreationDate = creationDate;
+            Name = String.Concat(FirstName, " ", LastName);
         }
 
         public int ID { get; set; }

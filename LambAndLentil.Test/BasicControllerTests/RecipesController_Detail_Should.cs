@@ -384,5 +384,88 @@ namespace LambAndLentil.Test.BasicControllerTests
         //[TestMethod]
         //public void RecipesCtr_DetailsIngredientIDIsNotAInteger() { } 
 
+        [TestMethod]
+        [TestCategory("Details")]
+        public void ReturnIndexWithErrorWhenRecipeIDIsNegative()
+        {
+            // Arrange
+
+            // Act
+            ViewResult view = Controller.Details(-1) as ViewResult;
+            AlertDecoratorResult adr = (AlertDecoratorResult)view;
+
+            // Assert
+            Assert.IsNotNull(view);
+            Assert.AreEqual("No Recipe was found with that id.", adr.Message);
+            Assert.AreEqual("alert-danger", adr.AlertClass);
+            Assert.AreEqual(UIViewType.BaseIndex.ToString(), ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(0).ToString());
+
+
+        }
+
+        [TestMethod]
+        [TestCategory("Details")]
+        public void ReturnDetailsWithSuccessWithValidRecipeID()
+        {
+            // Arrange 
+
+            // Act
+            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.Details(int.MaxValue);
+            ViewResult view = (ViewResult)adr.InnerResult;
+            // Assert
+            Assert.IsNotNull(view);
+
+            Assert.AreEqual("Details", view.ViewName);
+            Assert.IsInstanceOfType(view.Model, typeof(Recipe));
+        }
+
+        [TestMethod]
+        [TestCategory("Details")]
+        public void ReturnIndexWithErrorWhenRecipeIDTooHigh()
+        {
+            // Arrange
+
+
+            ActionResult view = Controller.Details(4000);
+            AlertDecoratorResult adr = (AlertDecoratorResult)view;
+            // Assert
+            Assert.IsNotNull(view);
+            Assert.AreEqual("No Recipe was found with that id.", adr.Message);
+            Assert.AreEqual("alert-danger", adr.AlertClass);
+            Assert.AreEqual(UIViewType.BaseIndex.ToString(), ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(0).ToString());
+        }
+
+        [TestMethod]
+        [TestCategory("Details")]
+        public void HandleItWhenRecipeIDPastIntLimit()
+        {
+            // Arrange 
+
+            // Act
+            ActionResult result = Controller.Details(Int16.MaxValue + 1);
+
+            // Assert
+            Assert.IsNotNull(result);
+        }
+
+        // [Ignore]
+        [TestMethod]
+        [TestCategory("Details")]
+        public void ReturnIndexWithErrorWhenDetailsRecipeIDIsZero()
+        {
+            // Arrange 
+
+            // Act
+            ViewResult view = Controller.Details(0) as ViewResult;
+            AlertDecoratorResult adr = (AlertDecoratorResult)view;
+
+            // Assert
+            Assert.IsNotNull(view);
+            Assert.AreEqual("No Recipe was found with that id.", adr.Message);
+            Assert.AreEqual("alert-danger", adr.AlertClass);
+            Assert.AreEqual(UIViewType.BaseIndex.ToString(), ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(0).ToString());
+        }
+         
+        // cleanup is in base class, so not needed here
     }
 }
