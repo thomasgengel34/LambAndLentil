@@ -1,32 +1,76 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using LambAndLentil.Test.BasicControllerTests;
 
 namespace LambAndLentil.Test.WebAPI
 {
     [Ignore]
     [TestClass]
-    public class GetNdbnoShould
-    {
+    public class GetNdbnoShould: IngredientsController_Test_Should
+    { 
+
         [TestMethod]
         public void ReturnTheCorrectErrorMessageWhenItemIsNotFound()
         {
+            // Arrange
+
+            // Act
+
+            //Assert
             Assert.Fail();
         }
         [TestMethod]
         public void ReturnFourItemsInTheDDLWhenHabeneroIsTheInput()
         {
+            // Arrange
+
+            // Act
+
+            //Assert
             Assert.Fail();
         }
         [TestMethod]
         public void ReturnOnlyFifteenItemsInTheDDLWhenThereAreMoreThanFifteenInTheUSDADb()
         {
+            // Arrange
+
+            // Act
+
+            //Assert
             Assert.Fail();
         }
         [TestMethod]
         public void ReturnCorrectIngredientsForAardvarkHabeneroOnSingleItemSearch()
         {
-            Assert.Fail();
+            // Arrange
+            string searchString =   "AARDVARK HABENERO HOT SAUCE, UPC: 853393000030";
+           
+            string correctIngredients = "TOMATOES(TOMATOES AND FIRE ROASTED TOMATOES, TOMATO JUICE, CITRIC ACID, CALCIUM CHLORIDE), WHITE WINE VINEGAR, CARROTS, WATER, YELLOW ONION, HABANERO CHILI PEPPER(HABANERO CHILI PEPPERS, WATER, SALT, CITRIC ACID), MUSTARD(DISTILLED VINEGAR, WATER, MUSTARD SEED, SALT, TURMERIC, SPICES), ORGANIC CANE SUGAR, SALT, MODIFIED FOOD STARCH, GARLIC, SUNFLOWER OIL, HERBS AND SPICES. Date Available: 09 / 23 / 2016";
+
+            // Act
+            string returnedIngredients = controller.GetIngredients(searchString);
+
+            // Assert
+           Assert.Fail();  // not actually working 
+            Assert.AreEqual(correctIngredients, returnedIngredients);
         }
+
+        [TestMethod]
+        public void ReturnCorrectNdbnoForAardvarkHabeneroOnSingleItemSearch()
+        {
+            // Arrange
+            string searchString = "AARDVARK HABENERO HOT SAUCE, UPC: 853393000030";
+            int corectNdbno = 45078606; 
+
+            // Act
+            int returnedNdbno = controller.GetNdbno(searchString);
+
+            // Assert
+             Assert.Fail();  // not actually working 
+              Assert.AreEqual(corectNdbno, returnedNdbno);
+        }
+
+
 
         /***********************************************************************
           * Beer tests
@@ -57,6 +101,11 @@ namespace LambAndLentil.Test.WebAPI
         public void ReturnCorrectIngredientsFor076606619663OnSingleItemSearch()
         {
             //	single item search: 076606619663 will return PICKLED ASPARAGUS , SPICY!, UPC: 076606619663
+            // Arrange
+
+            // Act
+
+            //Assert
             Assert.Fail();
         }
 
@@ -64,6 +113,11 @@ namespace LambAndLentil.Test.WebAPI
         public void ReturnCorrectIngredientsForAcornStewApacheOnSingleItemSearch()
         {
             //	single item search:  Acorn Stew(Apache)
+            // Arrange
+
+            // Act
+
+            //Assert
             Assert.Fail();
         }
         /* Butter
@@ -75,18 +129,33 @@ namespace LambAndLentil.Test.WebAPI
         [TestMethod]
         public void ReturnCorrectIngredientsForAardvarkHabeneroOnSeachOnHabenero()
         {
+            // Arrange
+
+            // Act
+
+            //Assert
             Assert.Fail();
         }
 
         [TestMethod]
         public void ReturnCorrectIngredientsForRaspberryHabeneroPreservesOnSeachOnHabenero()
         { // search: Habenero: PRIMO, RASPBERRY HABENERO PRESERVES, MILD HEAT, UPC: 1864350001571    
+            // Arrange
+
+            // Act
+
+            //Assert
             Assert.Fail();
         }
 
         [TestMethod]
         public void ReturnCorrectIngredientsForSackOhNutsGarlicHabeneroSmokedPistachiosOnSeachOnHabenero()
         { //  search: Habenero: SACK-OH-NUTS GARLIC HABENERO SMOKED PISTACHIOS, UPC: 8656400002122   
+            // Arrange
+
+            // Act
+
+            //Assert
             Assert.Fail();
         }
 
@@ -94,6 +163,11 @@ namespace LambAndLentil.Test.WebAPI
         public void ReturnCorrectIngredientsForPickledAsparagusSpicyOnSeachOnHabenero()
         { //   search for Habenero: selecting PICKLED ASPARAGUS , SPICY!, UPC: 076606619663 
             //  	search for Habenero: selecting SPICY HABENERO PICKLED ASPARAGUS, UPC: 868171000034  
+            // Arrange
+
+            // Act
+
+            //Assert
             Assert.Fail();
         }
 
@@ -103,6 +177,11 @@ namespace LambAndLentil.Test.WebAPI
         public void ReturnCorrectIngredientsForSpicyHabeneroPickledAsparagusOnSeachOnHabenero()
         {
             //  	search for Habenero: selecting SPICY HABENERO PICKLED ASPARAGUS, UPC: 868171000034  
+            // Arrange
+
+            // Act
+
+            //Assert
             Assert.Fail();
         }
         /* infant formula tests
@@ -113,6 +192,11 @@ namespace LambAndLentil.Test.WebAPI
         [TestMethod]
         public void ReturnAnOrangeOnSearchForOrange()
         {
+            // Arrange
+
+            // Act
+
+            //Assert
             Assert.Fail();
         }
 

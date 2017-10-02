@@ -1,19 +1,13 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using LambAndLentil.UI.Controllers;
-using LambAndLentil.Domain.Abstract;
+﻿using LambAndLentil.Domain.Concrete;
 using LambAndLentil.Domain.Entities;
-using System.Linq;
-
-using LambAndLentil.UI.Models;
-using System.Web.Mvc;
-using System.Collections.Generic;
-using AutoMapper;
 using LambAndLentil.Tests.Infrastructure;
-using LambAndLentil.UI.Infrastructure.Alerts;
 using LambAndLentil.UI;
-using LambAndLentil.Domain.Concrete;
-using System.IO;
+using LambAndLentil.UI.Controllers;
+using LambAndLentil.UI.Infrastructure.Alerts;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Linq;
+using System.Web.Mvc;
 
 namespace LambAndLentil.Test.BasicControllerTests
 {
@@ -492,6 +486,20 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.AreEqual("LambAndLentil.UI.Controllers.PlansController", PlansController_Test_Should.Controller.ToString());
         }
 
-      
+        private class FakeRepository : TestRepository<Plan> { }
+
+
+        [TestMethod]
+        [ExpectedException(typeof(Exception), "Fake Repostory")]
+        public void ReturnsErrorWithUnknownRepository()
+        {
+            // Arrange
+            FakeRepository fakeRepo = new FakeRepository();
+            PlansController fcontroller = new PlansController(fakeRepo);
+            // Act
+            ActionResult ar = fcontroller.BaseAttach(fakeRepo, int.MaxValue, new Ingredient());
+            // Assert
+
+        }
     }
 }

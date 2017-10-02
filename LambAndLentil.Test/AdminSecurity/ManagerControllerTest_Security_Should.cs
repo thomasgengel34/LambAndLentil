@@ -5,10 +5,10 @@ namespace LambAndLentil.Test.AdminSecurity
 {
     [Ignore]
     [TestClass]
-    public class ManagerControllerTests
+    public class ManagerControllerTest_Security_Should
     {
         [TestMethod]
-        public void TestMethod1()
+        public void DoSomethingSecure()
         {
             Assert.Fail();
         }

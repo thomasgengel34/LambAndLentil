@@ -3,11 +3,13 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.IO;
 
-namespace LambAndLentil.Test.Controllers
+namespace LambAndLentil.Test.BasicControllerTests
 {
     [Ignore]
+    [TestCategory("PlansController")] 
+    [TestCategory("Filter")]
     [TestClass]
-    public class PlansControllerTest_FilterShould
+    public class PlansControllerTest_FilterShould:PlansController_Test_Should
     {
 
         [TestMethod]

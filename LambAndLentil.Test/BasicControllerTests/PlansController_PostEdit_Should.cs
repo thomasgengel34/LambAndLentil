@@ -1,11 +1,12 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace LambAndLentil.Test.BasicControllerTests
 {
     [Ignore]
     [TestClass]
-    public class PlansController_PostEdit_Should
+    [TestCategory("PlansController")]
+    [TestCategory("PostEdit")] 
+    public class PlansController_PostEdit_Should:PlansController_Test_Should
     {
         [TestMethod]
         public void ReturnIndexWithValidModelStateWithSuccessMessageWhenSaved()

@@ -1,11 +1,12 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace LambAndLentil.Test.BasicControllerTests
 {
     [Ignore]
     [TestClass]
-    public class ShoppingListsController_DeleteConfirmed_Should
+    [TestCategory("ShoppingListsController")]
+
+    public class ShoppingListsController_DeleteConfirmed_Should:ShoppingListsController_Test_Should
     {
         [TestMethod]
         public void ReturnIndexWithWarningWhenIDIsNotFound()

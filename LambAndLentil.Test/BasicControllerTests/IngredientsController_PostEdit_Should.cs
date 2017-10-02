@@ -53,5 +53,42 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.AreEqual("alert-warning", adr.AlertClass);
             Assert.AreEqual("Details", view.ViewName); 
         }
+
+        [Ignore]
+        [TestMethod]
+        public void BindCorrectIngredientsBoundInEdit()
+        { // Bind(Include = "ID, Name, Description, CreationDate, ModifiedDate,  IngredientsList")] 
+            // Arrange
+            Ingredient ingredient = new Ingredient { ID = 1000, AddedByUser = "Not Changed", CreationDate = new DateTime(2014, 2, 2), Description = "Original Description", IngredientsList = "This, That, Those", ModifiedByUser = "See No Evil", ModifiedDate = new DateTime(2014, 2, 3), Name = "Punkin", Recipe = new Recipe { Name = "No Fat Flakes" } };
+            Repo.Add(ingredient);
+            // Act
+            ingredient.ID = 2000;
+            ingredient.AddedByUser = "Changed";
+            ingredient.CreationDate = new DateTime(2016, 4, 5);
+            ingredient.Description = "Changed";
+            ingredient.IngredientsList = "none of the above";
+            ingredient.ModifiedByUser = "Sam the Man";
+            ingredient.ModifiedDate = new DateTime(1776, 7, 4);
+            ingredient.Name = "Sweets";
+            ingredient.Recipe = new Recipe { Name = "Mostly Fat Flakes" };
+            ActionResult ar = controller.PostEdit(ingredient);
+
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [TestMethod]
+        public void NotBindIngredientsNotIdentifiedToBeBoundInEdit()
+        {
+
+        }
+
+        [TestCleanup]
+        [TestMethod]
+        public void TestCleanup()
+        {
+            ClassCleanup();
+        }
     }
 }

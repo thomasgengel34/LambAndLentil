@@ -98,7 +98,7 @@ namespace LambAndLentil.UI.Controllers
             else if (actionMethod == UIViewType.Delete)
             {
                 T item = Repo.GetById(id);
-                return View(UIViewType.Details.ToString(), item).WithSuccess("Here it is!");   // not exactly what we want!
+                return View(UIViewType.Details.ToString(), item).WithSuccess("Here it is!");   // not exactly what we want!   Need a button with an Are You SURE you want to delete this?
             }
             else if (actionMethod == UIViewType.Edit)
             {
@@ -188,7 +188,7 @@ namespace LambAndLentil.UI.Controllers
                     item = new T(); 
                 }
                 Repo.Update(item, item.ID);
-                return RedirectToAction(UIViewType.BaseIndex.ToString()).WithSuccess(string.Format("{0} has been saved or modified", vm.Name));
+                return RedirectToAction(UIViewType.BaseIndex.ToString()).WithSuccess(string.Format($"{vm.Name} has been saved or modified"));
             }
             else
             {
@@ -261,7 +261,7 @@ namespace LambAndLentil.UI.Controllers
 
             //if (typeof(T)==typeof(Ingredient))
             //{
-              ingredientChild= Mapper.Map<Ingredient,Ingredient>(child);
+            ingredientChild= Mapper.Map<Ingredient,Ingredient>(child);
             //}
 
 

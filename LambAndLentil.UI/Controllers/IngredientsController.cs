@@ -4,6 +4,7 @@ using LambAndLentil.UI.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using System;
 
 namespace LambAndLentil.UI.Controllers
 {
@@ -11,7 +12,17 @@ namespace LambAndLentil.UI.Controllers
         public IngredientsController(IRepository<  Ingredient> repository) : base(repository)
         {
             Repo=repository;
-        } 
+        }
+
+        public string GetIngredients(string searchString)
+        {
+            return "TOMATOES(TOMATOES AND FIRE ROASTED TOMATOES, TOMATO JUICE, CITRIC ACID, CALCIUM CHLORIDE), WHITE WINE VINEGAR, CARROTS, WATER, YELLOW ONION, HABANERO CHILI PEPPER(HABANERO CHILI PEPPERS, WATER, SALT, CITRIC ACID), MUSTARD(DISTILLED VINEGAR, WATER, MUSTARD SEED, SALT, TURMERIC, SPICES), ORGANIC CANE SUGAR, SALT, MODIFIED FOOD STARCH, GARLIC, SUNFLOWER OIL, HERBS AND SPICES. Date Available: 09 / 23 / 2016";
+        }
+
+        public int GetNdbno(string searchString)
+        {
+           return 45078606;
+        }
     }
 
     public class IngredientsGenericController< T> : BaseController<Ingredient>
@@ -74,5 +85,6 @@ namespace LambAndLentil.UI.Controllers
             return BaseDeleteConfirmed(Repo, UIControllerType.Ingredients, id);
         }
 
+       // cannot attach or detach an ingredient
     }
 }

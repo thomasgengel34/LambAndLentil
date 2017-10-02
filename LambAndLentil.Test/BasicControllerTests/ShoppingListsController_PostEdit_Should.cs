@@ -1,13 +1,13 @@
-﻿using System;
+﻿using LambAndLentil.Domain.Entities;
+using LambAndLentil.UI.Infrastructure.Alerts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Web.Mvc;
-using LambAndLentil.UI.Models;
-using LambAndLentil.UI.Infrastructure.Alerts;
-using LambAndLentil.Domain.Entities;
 
 namespace LambAndLentil.Test.BasicControllerTests
 {
     [TestClass]
+    [TestCategory("ShoppingListsController")]
+
     public class ShoppingListsController_PostEdit_Should: ShoppingListsController_Test_Should
     {
         [TestMethod]

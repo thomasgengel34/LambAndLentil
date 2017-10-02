@@ -15,6 +15,7 @@ namespace LambAndLentil.Test.BasicControllerTests
     {
         static IRepository<Ingredient> Repo;
         static IngredientsController controller;
+        private class FakeRepository : TestRepository<Ingredient> { }
 
         public BaseController_Should()
         {
@@ -77,6 +78,20 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Assert  
             Assert.AreEqual("PageSize", name);
             Assert.AreEqual("Int32",propertyType.Name);
+        }
+
+
+        [TestMethod]
+        [ExpectedException(typeof(Exception), "Fake Repostory")]
+        public void ReturnsErrorWithUnknownRepositoryOnAttach()
+        {
+            // Arrange
+            FakeRepository fakeRepo = new FakeRepository();
+            IngredientsController fcontroller = new IngredientsController(fakeRepo);
+            // Act
+            ActionResult ar = fcontroller.BaseAttach(fakeRepo, int.MaxValue, new Ingredient());
+            // Assert
+
         }
     }
 }

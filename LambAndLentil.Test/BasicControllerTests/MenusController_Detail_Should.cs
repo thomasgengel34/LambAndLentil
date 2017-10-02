@@ -1,16 +1,10 @@
-﻿using AutoMapper;
-using LambAndLentil.Domain.Abstract;
-using LambAndLentil.Domain.Concrete;
+﻿using LambAndLentil.Domain.Concrete;
 using LambAndLentil.Domain.Entities;
 using LambAndLentil.Tests.Infrastructure;
 using LambAndLentil.UI;
 using LambAndLentil.UI.Controllers;
 using LambAndLentil.UI.Infrastructure.Alerts;
-using LambAndLentil.UI.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -22,17 +16,16 @@ namespace LambAndLentil.Test.BasicControllerTests
     public class MenusController_Detail_Should:MenusController_Test_Should
     {
          
-        static ListEntity<Menu> list; 
-        static MenusController controller;
-        static Menu ingredient;
+        //static ListEntity<Menu>ListEntity;  
+        //static Menu menu;
 
         public MenusController_Detail_Should()
         {
-            AutoMapperConfigForTests.InitializeMap();
-            list = new ListEntity<Menu>();
-            Repo = new TestRepository<Menu>();
-            controller = SetUpController(Repo);
-            ingredient = new Menu();
+            //AutoMapperConfigForTests.InitializeMap();
+            //ListEntity = new ListEntity<Menu>();
+            //Repo = new TestRepository<Menu>();
+            //Controller = SetUpController(Repo);
+            //menu = new Menu();
         }
          
         [TestMethod]
@@ -42,7 +35,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange
 
             // Act 
-            AlertDecoratorResult adr = (AlertDecoratorResult)controller.Details(400, UIViewType.Delete);
+            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.Details(400, UIViewType.Delete);
             RedirectToRouteResult rdr = (RedirectToRouteResult)adr.InnerResult;
 
             // Assert
@@ -59,7 +52,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange
 
             // Act
-            ViewResult view = (ViewResult)controller.Details(int.MaxValue, UIViewType.Delete);
+            ViewResult view = (ViewResult)Controller.Details(int.MaxValue, UIViewType.Delete);
 
 
             // Assert
@@ -76,11 +69,11 @@ namespace LambAndLentil.Test.BasicControllerTests
           // Arrange
             int count = Repo.Count();
             //Act
-            controller.Details(int.MaxValue, UIViewType.DeleteConfirmed);
-            Menu ingredient = Repo.GetById(int.MaxValue);
+            Controller.Details(int.MaxValue, UIViewType.DeleteConfirmed);
+            Menu menu = Repo.GetById(int.MaxValue);
             //Assert
             Assert.AreEqual(count - 1, Repo.Count());
-            Assert.IsNull(ingredient);
+            Assert.IsNull(menu);
             //   Assert.Fail();  // make sure the correct item was deleted before removing this line 
         }
 
@@ -91,7 +84,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange
 
             // Act
-            ActionResult ar=controller.Details(4000, UIViewType.DeleteConfirmed);
+            ActionResult ar=Controller.Details(4000, UIViewType.DeleteConfirmed);
             AlertDecoratorResult adr = (AlertDecoratorResult)ar; 
             RedirectToRouteResult rdr = (RedirectToRouteResult)adr.InnerResult;
 
@@ -104,7 +97,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestMethod]
         public void ReturnDeleteConfirmedWithActionMethodDeleteConfirmedWithBadID()
         {
-            ActionResult ar = controller.Details(-1, UIViewType.DeleteConfirmed);
+            ActionResult ar = Controller.Details(-1, UIViewType.DeleteConfirmed);
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             RedirectToRouteResult rdr = (RedirectToRouteResult)adr.InnerResult;
 
@@ -121,7 +114,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
 
             // Act
-            ActionResult ar = controller.Details(int.MaxValue);
+            ActionResult ar = Controller.Details(int.MaxValue);
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             ViewResult view = (ViewResult)adr.InnerResult;
 
@@ -138,7 +131,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange
 
             // Act 
-            ViewResult view = (ViewResult)controller.Details(1, UIViewType.About); 
+            ViewResult view = (ViewResult)Controller.Details(1, UIViewType.About); 
 
             // Assert
             Assert.AreEqual(UIViewType.Index, view.Model);
@@ -151,9 +144,9 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void DetailsMenuIDTooHighViewNotNull()
         {  // not sure what the desired behavior is yet
            // Arrange
-            MenusController controller = SetUpController(Repo);
+            MenusController Controller = SetUpController(Repo);
             //  AutoMapperConfigForTests.AMConfigForTests();
-            ActionResult view = controller.Details(4000);
+            ActionResult view = Controller.Details(4000);
             AlertDecoratorResult adr = (AlertDecoratorResult)view;
             // Assert
             Assert.IsNotNull(view);
@@ -175,9 +168,9 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void DetailsMenuIDTooHighAlertClassCorrect()
         {   // not sure what the desired behavior is yet
             // Arrange
-            MenusController controller = SetUpController(Repo);
+            MenusController Controller = SetUpController(Repo);
             //  AutoMapperConfigForTests.AMConfigForTests();
-            ActionResult view = controller.Details(4000);
+            ActionResult view = Controller.Details(4000);
             AlertDecoratorResult adr = (AlertDecoratorResult)view;
             // Assert  
             Assert.AreEqual("alert-danger", adr.AlertClass);
@@ -220,11 +213,11 @@ namespace LambAndLentil.Test.BasicControllerTests
         {
             // I am not sure how I want this to operate.  Wait until UI is set up and see then.
             // Arrange
-            MenusController controller = SetUpController(Repo);
+            MenusController Controller = SetUpController(Repo);
             //  AutoMapperConfigForTests.AMConfigForTests(); 
 
             // Act
-            ViewResult result = controller.Details(int.MaxValue) as ViewResult;
+            ViewResult result = Controller.Details(int.MaxValue) as ViewResult;
 
             // Assert
             Assert.IsNotNull(result);
@@ -238,7 +231,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
 
             // Act
-            ViewResult view = controller.Details(0) as ViewResult;
+            ViewResult view = Controller.Details(0) as ViewResult;
             AlertDecoratorResult adr = (AlertDecoratorResult)view;
 
             // Assert
@@ -253,7 +246,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
 
             // Act
-            ActionResult ar = controller.Details(0);
+            ActionResult ar = Controller.Details(0);
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
 
             // Assert 
@@ -265,13 +258,13 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void DetailsMenuIDIsZeroAlertClassIsCorrect()
         {
             // Arrange
-            MenusController controller = new MenusController(Repo);
-            Menu ingredient = new Menu { ID = 0 };
-            Repo.Save(ingredient);
+            MenusController Controller = new MenusController(Repo);
+            Menu menu = new Menu { ID = 0 };
+            Repo.Save(menu);
 
 
             // Act
-            ActionResult ar = controller.Details(0);
+            ActionResult ar = Controller.Details(0);
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
 
             // Assert  
@@ -283,13 +276,13 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void DetailsMenuIDIsZeroReturnModelIsCorrect()
         {
             // Arrange
-            MenusController controller = new MenusController(Repo);
-            Menu ingredient = new Menu { ID = 0 };
-            Repo.Save(ingredient);
+            MenusController Controller = new MenusController(Repo);
+            Menu menu = new Menu { ID = 0 };
+            Repo.Save(menu);
 
 
             // Act
-            ActionResult ar = controller.Details(0);
+            ActionResult ar = Controller.Details(0);
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
 
             // Assert    
@@ -303,11 +296,11 @@ namespace LambAndLentil.Test.BasicControllerTests
         {
             // Arrange
 
-            Menu ingredient = new Menu { ID = -1 };
-            Repo.Save(ingredient);
+            Menu menu = new Menu { ID = -1 };
+            Repo.Save(menu);
 
             // Act
-            ActionResult view = controller.Details(-1);
+            ActionResult view = Controller.Details(-1);
             AlertDecoratorResult adr = (AlertDecoratorResult)view;
 
             // Assert
@@ -320,11 +313,11 @@ namespace LambAndLentil.Test.BasicControllerTests
         {
             // Arrange
 
-            ingredient.ID = -500;
-            Repo.Save(ingredient);
+            menu.ID = -500;
+            Repo.Save(menu);
 
             // Act
-            ActionResult ar = controller.Details(-500);
+            ActionResult ar = Controller.Details(-500);
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
 
             // Assert   adr.InnerResult).RouteValues.Values.ElementAt(1).ToString());
@@ -338,16 +331,16 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void NotBeSuccessfulWithInvalidMenuID_MenuIDIsNegative_AlertClassCorrect()
         {
             // Arrange
-            MenusController controller = new MenusController(Repo);
-            Menu ingredient = new Menu
+            MenusController Controller = new MenusController(Repo);
+            Menu menu = new Menu
             {
                 ID = -1,
                 Name = "Details_MenuIDIsNegative_AlertClassCorrect"
             };
-            Repo.Save(ingredient);
+            Repo.Save(menu);
 
             // Act
-            ActionResult view = controller.Details(-1);
+            ActionResult view = Controller.Details(-1);
             AlertDecoratorResult adr = (AlertDecoratorResult)view;
 
             // Assert  

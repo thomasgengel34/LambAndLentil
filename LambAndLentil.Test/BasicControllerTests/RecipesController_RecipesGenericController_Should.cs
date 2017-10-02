@@ -1,9 +1,7 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using LambAndLentil.Domain.Entities;
 using LambAndLentil.UI.Controllers;
-using LambAndLentil.UI.Models; 
-using LambAndLentil.Tests.Controllers;
-using LambAndLentil.Domain.Entities;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 
 namespace LambAndLentil.Test.BasicControllerTests
 {

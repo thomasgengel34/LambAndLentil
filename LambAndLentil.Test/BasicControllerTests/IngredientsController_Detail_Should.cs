@@ -1,16 +1,10 @@
-﻿using AutoMapper;
-using LambAndLentil.Domain.Abstract;
-using LambAndLentil.Domain.Concrete;
+﻿using LambAndLentil.Domain.Concrete;
 using LambAndLentil.Domain.Entities;
 using LambAndLentil.Tests.Infrastructure;
 using LambAndLentil.UI;
 using LambAndLentil.UI.Controllers;
 using LambAndLentil.UI.Infrastructure.Alerts;
-using LambAndLentil.UI.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -20,19 +14,10 @@ namespace LambAndLentil.Test.BasicControllerTests
     [TestCategory("IngredientsController")]
     [TestCategory("Details")]
     public class IngredientsController_Detail_Should:IngredientsController_Test_Should
-    {
-         
-        static ListEntity<Ingredient> list; 
-        static IngredientsController controller;
-        static Ingredient ingredient;
-
+    { 
         public IngredientsController_Detail_Should()
         {
-            AutoMapperConfigForTests.InitializeMap();
-            list = new ListEntity<Ingredient>();
-            Repo = new TestRepository<Ingredient>();
-            controller = SetUpController(Repo);
-            ingredient = new Ingredient();
+             
         }
          
         [TestMethod]
@@ -355,29 +340,44 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.AreEqual("Something is wrong with the data!", adr.Message);
         }
 
-        [Ignore]
+       
         [TestMethod]
         public void ReturnDetailsViewActionTypeEdit_ValidID()
-        {
+        { // return result as ViewResult;
+
             // Arrange
 
             // Act
+            ActionResult ar = controller.Details(int.MaxValue, UIViewType.Edit);
+            ViewResult vr = (ViewResult)ar;
+            int returnedID = ((Ingredient)(vr.Model)).ID;
 
             // Assert
-            Assert.Fail();
+            // Assert.Fail();
+            Assert.AreEqual("Details", vr.ViewName);
+            Assert.AreEqual(int.MaxValue, returnedID);
+           
         }
 
-        [Ignore]
+       
         [TestMethod]
         public void ReturnDetailsViewActionTypeEdit_InValidID()
-        {
-            // Arrange
+        { // return (ViewResult)RedirectToAction(UIViewType.Index.ToString()).WithWarning(ClassName + " was not found");
+
+            // Arrange 
 
             // Act
+            AlertDecoratorResult adr = (AlertDecoratorResult)controller.Details(8000, UIViewType.Edit);
+            RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
 
             // Assert
-            Assert.Fail();
+            Assert.AreEqual("Ingredient was not found", adr.Message);
+            Assert.AreEqual("alert-warning", adr.AlertClass);
+            Assert.AreEqual(1, rtrr.RouteValues.Count, 1);
+            Assert.AreEqual("Index", rtrr.RouteValues.Values.ElementAt(0).ToString());
         }
+
+
         // the following are not really testable.  I am keeping them to remind me of that.
         //[TestMethod]
         //public void IngredientsCtr_DetailsIngredientIDIsNotANumber() { }

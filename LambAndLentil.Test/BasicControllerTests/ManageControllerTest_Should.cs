@@ -7,11 +7,11 @@ namespace LambAndLentil.Tests.Controllers
 {
     [TestClass]
     [TestCategory("ManageController")]
-    public class ManageControllerTest
+    public class ManageControllerTest_Should
     {
 
         [TestMethod]
-        public void ManageCtr_InheritsFromBaseController()
+        public void  InheritsFromController()
         {
             // Arrange
             ManageController testController = new ManageController();

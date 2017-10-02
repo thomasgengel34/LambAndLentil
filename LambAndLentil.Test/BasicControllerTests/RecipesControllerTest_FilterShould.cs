@@ -1,11 +1,11 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.IO;
 
 namespace LambAndLentil.Test.Controllers
 {
     [Ignore]
+    [TestCategory("RecipesController")] 
     [TestClass]
     public class RecipesControllerTest_FilterShould
     {

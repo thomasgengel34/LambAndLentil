@@ -17,7 +17,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
     [TestClass]
     [TestCategory("ShoppingListsController")]
-    public class ShoppingListsController_Index_Test
+    public class ShoppingListsController_Index_Test:ShoppingListsController_Test_Should
     {
         public static MapperConfiguration AutoMapperConfig { get; set; }
         static ListEntity<ShoppingList> list;
@@ -49,6 +49,8 @@ namespace LambAndLentil.Test.BasicControllerTests
 
             Assert.IsNotNull(result);
         }
+
+       
 
         [TestMethod]
         [TestCategory("Index")]
@@ -367,7 +369,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.IsTrue(result.ListT.Count() == 5);
         }
 
-        [Ignore]
+        // [Ignore]
         [TestMethod]
         [TestCategory("Index")]
         public void CanPaginate_ArrayFirstItemNameIsCorrect()
@@ -383,7 +385,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.AreEqual("ShoppingListsController_Index_Test P1", ingrArray1[0].Name);
         }
 
-        [Ignore]
+        // [Ignore]
         [TestMethod]
         [TestCategory("Index")]
         public void CanPaginate_ArrayThirdItemNameIsCorrect()
@@ -443,7 +445,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.AreEqual(5, pageInfoT.TotalItems);
         }
 
-        [Ignore]
+        // [Ignore]
         [TestMethod]
         [TestCategory("Index")]
         public void ShoppingListsCtr_Index_CanSendPaginationViewModel_TotalPagesCorrect()
@@ -491,19 +493,140 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.Fail();
         }
 
-        [Ignore]
+         [Ignore]
         [TestMethod]
         public void FlagAnShoppingListFlaggedInTwoPersons()
         {
             Assert.Fail();
         }
 
-        [Ignore]
+          [Ignore]
         [TestMethod]
         public void WhenAFlagHasBeenRemovedFromOnePersonStillThereForSecondFlaggedPerson()
         {
             Assert.Fail();
         }
+
+     
+
+ 
+        [TestMethod]
+        [TestCategory("Index")]
+        public void ContainsAllShoppingLists()
+        {
+            // Arrange
+
+            // Act
+            ViewResult view1 = controller.Index(1);
+
+            int count1 = ((ListEntity<ShoppingList>)(view1.Model)).ListT.Count();
+
+            ViewResult view2 = controller.Index(2);
+
+            int count2 = ((ListEntity<ShoppingList>)(view2.Model)).ListT.Count();
+
+            int count = count1 + count2;
+
+            // Assert
+            Assert.IsNotNull(view1);
+            Assert.IsNotNull(view2);
+            Assert.AreEqual(5, count1);
+            Assert.AreEqual(0, count2);
+            Assert.AreEqual(5, count);
+            Assert.AreEqual("Index", view1.ViewName);
+            Assert.AreEqual("Index", view2.ViewName);
+        }
+
+       
+        [TestMethod]
+        [TestCategory("Index")]
+        public void FirstPageIsCorrect()
+        {
+            // Arrange 
+            ListEntity<ShoppingList> list = new ListEntity<ShoppingList>();
+            controller.PageSize = 8;
+
+            // Act
+            ViewResult view1 = controller.Index(1);
+            int count1 = ((ListEntity<ShoppingList>)(view1.Model)).ListT.Count();
+
+            // Assert
+            Assert.IsNotNull(view1);
+            Assert.AreEqual(5, count1);
+            Assert.AreEqual("Index", view1.ViewName);
+
+            Assert.AreEqual("ShoppingListsController_Index_Test P1", ((ListEntity<ShoppingList>)(view1.Model)).ListT.FirstOrDefault().Name);
+            Assert.AreEqual("ShoppingListsController_Index_Test P2", ((ListEntity<ShoppingList>)(view1.Model)).ListT.Skip(1).FirstOrDefault().Name);
+            Assert.AreEqual("ShoppingListsController_Index_Test P3", ((ListEntity<ShoppingList>)(view1.Model)).ListT.Skip(2).FirstOrDefault().Name);
+        }
+
+        // [Ignore]
+        [TestMethod]
+        [TestCategory("Index")]
+        // currently we only have one page here
+        public void ShoppingListsCtr_Index_SecondPageIsCorrect()
+        {
+
+        }
+
+        // [Ignore]
+        [TestMethod]
+        [TestCategory("Index")]
+        public void CanSendPaginationViewModel()
+        {
+
+            // Arrange
+
+
+            // Act 
+            ListEntity<ShoppingList> resultT = (ListEntity<ShoppingList>)((ViewResult)controller.Index(2)).Model;
+
+
+            // Assert 
+            PagingInfo pageInfoT = resultT.PagingInfo;
+            Assert.AreEqual(2, pageInfoT.CurrentPage);
+            Assert.AreEqual(8, pageInfoT.ItemsPerPage);
+            Assert.AreEqual(5, pageInfoT.TotalItems);
+            Assert.AreEqual(1, pageInfoT.TotalPages);
+        }
+
+        // [Ignore]
+        [TestMethod]
+        [TestCategory("Index")]
+        public void PagingInfoIsCorrect()
+        {
+            // Arrange 
+
+            // Action
+            int totalItems = ((ListEntity<ShoppingList>)((ViewResult)controller.Index()).Model).PagingInfo.TotalItems;
+            int currentPage = ((ListEntity<ShoppingList>)((ViewResult)controller.Index()).Model).PagingInfo.CurrentPage;
+            int itemsPerPage = ((ListEntity<ShoppingList>)((ViewResult)controller.Index()).Model).PagingInfo.ItemsPerPage;
+            int totalPages = ((ListEntity<ShoppingList>)((ViewResult)controller.Index()).Model).PagingInfo.TotalPages;
+
+
+
+            // Assert
+            Assert.AreEqual(5, totalItems);
+            Assert.AreEqual(1, currentPage);
+            Assert.AreEqual(8, itemsPerPage);
+            Assert.AreEqual(1, totalPages);
+        }
+
+        [TestMethod]
+        [TestCategory("Index")]
+        public void CanPaginate()
+        {
+            // Arrange
+
+            // Act
+            var result = (ListEntity<ShoppingList>)(controller.Index(1)).Model;
+
+            // Assert 
+            Assert.IsTrue(result.ListT.Count() == 5);
+            Assert.AreEqual("ShoppingListsController_Index_Test P1", result.ListT.FirstOrDefault().Name);
+            Assert.AreEqual("ShoppingListsController_Index_Test P4", result.ListT.Skip(3).FirstOrDefault().Name);
+        }
+
 
         [TestCleanup()]
         public void TestCleanup()

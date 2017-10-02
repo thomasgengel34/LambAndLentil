@@ -1,10 +1,11 @@
-﻿////using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace LambAndLentil.Test.BasicControllerTests
 {
     [TestClass]
-    public class PlansController_Delete_Should 
+    [TestCategory("PlansController")]
+    [TestCategory("Delete")]
+    public class PlansController_Delete_Should: PlansController_Test_Should
     {
         public PlansController_Delete_Should()
         {

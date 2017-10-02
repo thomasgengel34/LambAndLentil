@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace LambAndLentil.Test.BasicControllerTests 
+namespace LambAndLentil.Test.BasicControllerTests
 {
 
     [TestClass]
@@ -20,12 +20,13 @@ namespace LambAndLentil.Test.BasicControllerTests
         protected static IRepository<Ingredient> Repo { get; set; }
         public static MapperConfiguration AutoMapperConfig { get; set; }
         protected static ListEntity<Ingredient> list;
-       protected static IngredientsController controller;
-        static Ingredient ingredient;
+        protected static IngredientsController controller;
+        protected static Ingredient ingredient;
 
         public IngredientsController_Test_Should()
         {
             AutoMapperConfigForTests.InitializeMap();
+            ingredient = new Ingredient();
             Repo = new TestRepository<Ingredient>();
             list = new ListEntity<Ingredient>();
             controller = SetUpController(Repo);
@@ -33,11 +34,11 @@ namespace LambAndLentil.Test.BasicControllerTests
             Repo.Save(ingredient);
         }
 
-         
 
-     
 
-       protected IngredientsController SetUpController(IRepository<Ingredient> repo)
+
+
+        protected IngredientsController SetUpController(IRepository<Ingredient> repo)
         {
 
 
@@ -68,8 +69,8 @@ namespace LambAndLentil.Test.BasicControllerTests
             return controller;
         }
 
-        
-       
+
+
 
 
         [ClassCleanup()]
@@ -84,6 +85,6 @@ namespace LambAndLentil.Test.BasicControllerTests
             }
         }
 
-      
+
     }
 }

@@ -18,6 +18,8 @@ namespace LambAndLentil.Domain.Entities
             Menus = new List<Menu>();
             Plans = new List<Plan>();
             ShoppingLists = new List<ShoppingList>();
+            FirstName = "Newly";
+            LastName = "Created";
             Name = String.Concat( FirstName, " ", LastName);
         }
 
@@ -31,7 +33,7 @@ namespace LambAndLentil.Domain.Entities
         public Person(DateTime creationDate) : base(creationDate)
         {
             CreationDate = creationDate;
-            Name = String.Concat(FirstName, " ", LastName);
+         //   Name = String.Concat(FirstName, " ", LastName);
         }
 
         public int ID { get; set; }

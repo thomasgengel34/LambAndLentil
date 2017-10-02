@@ -25,7 +25,7 @@ namespace LambAndLentil.Test.JSONTests
             Repo = new JSONRepository<Ingredient>();
             Directory.CreateDirectory(path);
         }
-
+        [Ignore]
         [TestMethod]
         public void ReturnCorrectEntityForAValidIngredientID()
         {

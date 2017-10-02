@@ -17,16 +17,17 @@ namespace LambAndLentil.Test.BasicControllerTests
 
     [TestClass]
     [TestCategory("RecipesController")]
-    public class RecipesController_Index_Test
+    [TestCategory("Index")]
+    public class RecipesController_Index_Test:RecipesController_Test_Should
     {
-        public static MapperConfiguration AutoMapperConfig { get; set; }
+       
         static ListEntity<Recipe> list;
         static IRepository<Recipe> Repo;
         static RecipesController controller;
 
         public RecipesController_Index_Test()
         {
-            AutoMapperConfigForTests.InitializeMap();
+             
             list = new ListEntity<Recipe>();
             Repo = new TestRepository<Recipe>();
             controller = SetUpRecipesController(Repo);

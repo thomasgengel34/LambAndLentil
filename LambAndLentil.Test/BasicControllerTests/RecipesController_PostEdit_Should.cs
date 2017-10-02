@@ -1,12 +1,13 @@
-﻿using System;
+﻿using LambAndLentil.Domain.Entities;
+using LambAndLentil.UI.Infrastructure.Alerts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Web.Mvc;
-using LambAndLentil.UI.Models;
-using LambAndLentil.UI.Infrastructure.Alerts;
-using LambAndLentil.Domain.Entities;
 
 namespace LambAndLentil.Test.BasicControllerTests
 {
+    [TestCategory("RecipesController")]
+    [TestCategory("PostEdit")]
+
     [TestClass]
     public class RecipesController_PostEdit_Should: RecipesController_Test_Should
     {

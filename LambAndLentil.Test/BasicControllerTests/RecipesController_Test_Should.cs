@@ -1,17 +1,12 @@
-﻿using LambAndLentil.UI.Controllers;
+﻿using AutoMapper;
 using LambAndLentil.Domain.Abstract;
 using LambAndLentil.Domain.Concrete;
 using LambAndLentil.Domain.Entities;
+using LambAndLentil.Tests.Infrastructure;
+using LambAndLentil.UI.Controllers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Linq;
-using System.Web.Mvc;
-using LambAndLentil.UI.Models;
 using System.Collections.Generic;
-using AutoMapper;
-using LambAndLentil.Tests.Infrastructure;
-using LambAndLentil.UI.Infrastructure.Alerts;
-using LambAndLentil.UI;
 using System.IO;
 
 namespace LambAndLentil.Test.BasicControllerTests
@@ -19,16 +14,13 @@ namespace LambAndLentil.Test.BasicControllerTests
     [TestClass]
     [TestCategory("RecipesController")]
     public class RecipesController_Test_Should
-    {
-        // static ListEntity<Recipe> recipeVMArray { get; set; }
-        protected static IRepository<Recipe> Repo { get; set; }
-        public static MapperConfiguration AutoMapperConfig { get; set; }
+    { 
+        protected static IRepository<Recipe> Repo { get; set; } 
         protected static RecipesController Controller { get; set; }
         protected ListEntity<Recipe> ListEntity { get; set; }
 
         public RecipesController_Test_Should()
-        {
-            AutoMapperConfigForTests.InitializeMap();
+        { 
             Repo = new TestRepository<Recipe>();
             ListEntity = new ListEntity<Recipe>();
             Controller = SetUpController(Repo);

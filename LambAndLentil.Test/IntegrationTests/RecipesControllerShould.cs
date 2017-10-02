@@ -40,7 +40,7 @@ namespace IntegrationTests
             // Arrange 
 
             // Act
-            ViewResult vr = controller.Create(LambAndLentil.UI.UIViewType.Create);
+            ViewResult vr = controller.Create(UIViewType.Create);
             Recipe vm = (Recipe)vr.Model;
             string modelName = vm.Name;
 
@@ -49,7 +49,7 @@ namespace IntegrationTests
             Assert.AreEqual(modelName, "Newly Created");
         }
 
-        [Ignore]
+        // [Ignore]
         [TestMethod]
         public void SaveAValidRecipe()
         {
@@ -57,27 +57,25 @@ namespace IntegrationTests
 
             Recipe vm = new Recipe
             {
-                Name = "test"
+                Name = "test SaveAValidRecipe",
+                ID = int.MaxValue / 2 
             };
             // Act
             AlertDecoratorResult adr = (AlertDecoratorResult)controller.PostEdit(vm);
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
 
-            var routeValues = rtrr.RouteValues.Values;
+          var routeValues = rtrr.RouteValues.Values;
 
 
             // Assert 
 
             Assert.AreEqual("alert-success", adr.AlertClass);
-            Assert.AreEqual(4, routeValues.Count);
-            Assert.AreEqual(UIControllerType.Recipes.ToString(), routeValues.ElementAt(0).ToString());
-            Assert.AreEqual(UIViewType.BaseIndex.ToString(), routeValues.ElementAt(1).ToString());
-            Assert.AreEqual("Recipes", routeValues.ElementAt(2).ToString());
-            Assert.AreEqual(1.ToString(), routeValues.ElementAt(3).ToString());
-
+            Assert.AreEqual("test SaveAValidRecipe has been saved or modified", adr.Message);
+            Assert.AreEqual(1, routeValues.Count); 
+            Assert.AreEqual(UIViewType.BaseIndex.ToString(), routeValues.ElementAt(0).ToString()); 
         }
 
-        [Ignore]
+        // [Ignore]
         [TestMethod]
         [TestCategory("Edit")]
         public void SaveEditedRecipeWithNameChange()
@@ -90,13 +88,14 @@ namespace IntegrationTests
             RecipesController controller5 = new RecipesController(Repo);
             Recipe vm = new Recipe
             {
-                Name = "0000 test"
+                Name = "0000 test",
+                ID=1000
             };
 
             // Act 
             ActionResult ar1 = controller1.PostEdit(vm);
             ViewResult view1 = controller2.Index();
-            List<Recipe> list = (List<Recipe>)view1.Model;
+            List<Recipe> list = (List<Recipe>)(((ListEntity<Recipe>)view1.Model).ListT);
             Recipe recipeVM = (from m in list
                                  where m.Name == "0000 test"
                                  select m).AsQueryable().FirstOrDefault();
@@ -109,7 +108,7 @@ namespace IntegrationTests
             vm.ID = recipeVM.ID;
             ActionResult ar2 = controller3.PostEdit(vm);
             ViewResult view2 = controller4.Index();
-            List<Recipe> list2 = (List<Recipe>)view2.Model;
+            List<Recipe> list2 = (List<Recipe>)(((ListEntity<Recipe>)view2.Model).ListT);
             Recipe recipe2 = (from m in list2 
                                 where m.Name == "0000 test Edited"
                                 select m).AsQueryable().First();
@@ -137,166 +136,8 @@ namespace IntegrationTests
             Assert.AreEqual(0, deletedItem.Count());
         }
 
-        [Ignore]
-        [TestMethod]
-        [TestCategory("Edit")]
-        public void SaveEditedRecipeWithDescriptionChange()
-        {
-            // Arrange 
-            RecipesController controller1 = new RecipesController(Repo);
-            RecipesController controller2 = new RecipesController(Repo);
-            RecipesController controller3 = new RecipesController(Repo);
-            RecipesController controller4 = new RecipesController(Repo);
-            RecipesController controller5 = new RecipesController(Repo);
-            Recipe vm = new Recipe
-            {
-                Name = "0000 test",
-                Description = "SaveEditedRecipeWithDescriptionChange Pre-test"
-            };
 
-
-            // Act 
-            ActionResult ar1 = controller1.PostEdit(vm);
-            ViewResult view1 = controller2.Index();
-            List<Recipe> list = (List<Recipe>)view1.Model;
-            Recipe recipeVM = (from m in list
-                                 where m.Name == "0000 test"
-                                 select m).AsQueryable().FirstOrDefault();
-
-            // verify initial value:
-            Assert.AreEqual("SaveEditedRecipeWithDescriptionChange Pre-test", recipeVM.Description);
-
-            // now edit it
-            vm.ID = recipeVM.ID;
-            vm.Name = "0000 test Edited";
-            vm.Description = "SaveEditedRecipeWithDescriptionChange Post-test";
-
-            ActionResult ar2 = controller3.PostEdit(vm);
-            ViewResult view2 = controller4.Index();
-            List<Recipe> list2 = (List<Recipe>)view2.Model;
-            Recipe recipe2 = (from m in list2
-                                where m.Name == "0000 test Edited"
-                                select m).AsQueryable().FirstOrDefault();
-
-            // Assert
-            Assert.AreEqual("0000 test Edited", recipe2.Name);
-            Assert.AreEqual("SaveEditedRecipeWithDescriptionChange Post-test", recipe2.Description);
-        }
-
-        [TestMethod]
-        [TestCategory("Edit")]
-        public void SaveTheCreationDateOnRecipeCreationWithNoParameterCtor()
-        {
-            // Arrange
-            DateTime CreationDate = DateTime.Now;
-
-            // Act
-            Recipe recipe = new Recipe();
-
-            // Assert
-            Assert.AreEqual(CreationDate.Date, recipe.CreationDate.Date);
-        }
-
-
-        [TestMethod]
-        [TestCategory("Edit")]
-        public void SaveTheCreationDateOnRecipeCreationWithDateTimeParameter()
-        {
-            // Arrange
-            DateTime CreationDate = new DateTime(2010, 1, 1);
-
-            // Act
-            Recipe recipe = new Recipe(CreationDate);
-
-            // Assert
-            Assert.AreEqual(CreationDate, recipe.CreationDate);
-        }
-
-        
-         
-
-        [Ignore]
-        [TestMethod]
-        [TestCategory("Edit")]
-        public void SaveTheCreationDateBetweenPostedEdits()
-        {
-            // Arrange
-            DateTime CreationDate = new DateTime(2010, 1, 1);
-            Recipe recipeVM = new Recipe(CreationDate)
-            {
-                Name = "001 Test "
-            };
-
-            TestRepository<Recipe> repoRecipe = new TestRepository<Recipe>(); ;
-            RecipesController controllerEdit = new RecipesController(repoRecipe);
-            RecipesController controllerView = new RecipesController(repoRecipe);
-            RecipesController controllerDelete = new RecipesController(repoRecipe);
-
-            // Act
-            controllerEdit.PostEdit(recipeVM);
-            ViewResult view = controllerView.Index();
-            List<Recipe> list = (List<Recipe>)view.Model;
-            recipeVM = (from m in list
-                        where m.Name == "001 Test "
-                        select m).AsQueryable().FirstOrDefault();
-
-            DateTime shouldBeSameDate = recipeVM.CreationDate;
-
-            // Assert
-            Assert.AreEqual(CreationDate, shouldBeSameDate);
-
-        }
-
-        [Ignore]
-        [TestMethod]
-        [TestCategory("Edit")]
-        public void UpdateTheModificationDateBetweenPostedEdits()
-        {
-            // Arrange 
-            RecipesController controllerPost = new RecipesController(Repo);
-            RecipesController controllerPost1 = new RecipesController(Repo);
-            RecipesController controllerView = new RecipesController(Repo);
-            RecipesController controllerView1 = new RecipesController(Repo);
-            RecipesController controllerDelete = new RecipesController(Repo);
-
-            Recipe vm = new Recipe
-            {
-                Name = "002 Test Mod"
-            };
-            DateTime CreationDate = vm.CreationDate;
-            DateTime mod = vm.ModifiedDate;
-
-            // Act
-            controllerPost.PostEdit(vm);
-
-            ViewResult view = controllerView.Index();
-            List<Recipe> list = (List<Recipe>)view.Model;
-            Recipe vm2 = (from m in list
-                            where m.Name == "002 Test Mod"
-                            select m).AsQueryable().FirstOrDefault();
-
-
-            vm.Description = "I've been edited to delay a bit";
-
-            controllerPost1.PostEdit(vm2);
-
-
-            ViewResult view1 = controllerView.Index();
-            list = (List<Recipe>)view1.Model;
-            Recipe vm3 = (from m in list
-                            where m.Name == "002 Test Mod"
-                            select m).AsQueryable().FirstOrDefault();
-
-            DateTime shouldBeSameDate = vm3.CreationDate;
-            DateTime shouldBeLaterDate = vm3.ModifiedDate;
-
-            // Assert
-            Assert.AreEqual(CreationDate, shouldBeSameDate);
-            Assert.AreNotEqual(mod, shouldBeLaterDate);
-
-        }
-
-        [Ignore]
+        // [Ignore]
         [TestMethod]
         public void SaveAllPropertiesInBaseEntity()
         {
@@ -307,13 +148,14 @@ namespace IntegrationTests
             Recipe vm = new Recipe
             {
                 Name = "___test387",
-                Description = "test387 description"
+                Description = "test387 description",
+                ID=774
             };
 
             // Act
             controllerPost.PostEdit(vm);
             ViewResult view1 = controllerView.Index();
-            List<Recipe> list = (List<Recipe>)view1.Model;
+            List<Recipe> list =(List<Recipe>)(((ListEntity<Recipe>)view1.Model).ListT);
             Recipe recipeVM = (from m in list
                                  where m.Name == "___test387"
                                  select m).AsQueryable().FirstOrDefault();
@@ -324,16 +166,15 @@ namespace IntegrationTests
             Assert.AreEqual(vm.ModifiedDate.Day, recipeVM.ModifiedDate.Day);
             Assert.AreEqual(vm.AddedByUser, recipeVM.AddedByUser);
             Assert.AreEqual(vm.ModifiedByUser, recipeVM.ModifiedByUser);
-
+            // return View(UIViewType.Details.ToString(), vm).WithWarning("Something is wrong with the data!");
         }
 
-        [Ignore]
+        // [Ignore]
         [TestMethod]
         [TestCategory("Attach-Detach")]
         public void AttachAnExistingIngredientToAnExistingRecipe()
         {
-            // Arrange
-
+            // Arrange 
             TestRepository<Recipe> repoRecipe = new TestRepository<Recipe>();
             TestRepository<Ingredient> repoIngredient = new TestRepository<Ingredient>();
             RecipesController controller = new RecipesController(repoRecipe);
@@ -376,7 +217,7 @@ namespace IntegrationTests
             Assert.IsNotNull(ingredient2);
         }
 
-        [Ignore]
+        // [Ignore]
         [TestMethod]
         [TestCategory("Attach-Detach")]
         public void ReturnIndexViewWithWarningWhenAttachingExistIngredientToNonExistingRecipe()
@@ -404,7 +245,7 @@ namespace IntegrationTests
             Assert.AreEqual(UIViewType.Index.ToString(), routeValues.ElementAt(0).ToString());
         }
 
-        [Ignore]
+        // [Ignore]
         [TestMethod]
         [TestCategory("Attach-Detach")]
         public void ReturnRecipeEditViewWithWarningMessageWhenAttachingNonExistingIngredientToExistingRrecipe()
@@ -420,13 +261,13 @@ namespace IntegrationTests
 
             // Assert 
             Assert.AreEqual("alert-warning", adr.AlertClass);
-            Assert.AreEqual("Please choose a(n) Ingredient", adr.Message);
+            Assert.AreEqual("Recipe was not found", adr.Message);
             Assert.AreEqual(3, routeValues.Count);
             Assert.AreEqual(UIViewType.Details.ToString(), routeValues.ElementAt(2).ToString());
             Assert.AreEqual(UIViewType.Edit.ToString(), routeValues.ElementAt(1).ToString());
         }
 
-        [Ignore]
+        // [Ignore]
         [TestMethod]
         [TestCategory("Attach-Detach")]
         public void ReturnIndexViewWithWarningWhenAttachingNonExistIngredientToNonExistingRecipe()
@@ -448,7 +289,7 @@ namespace IntegrationTests
             Assert.AreEqual(UIViewType.Index.ToString(), routeValues.ElementAt(0).ToString());
         }
 
-        [Ignore]
+         [Ignore]
         [TestMethod]
         [TestCategory("Attach-Detach")]
         public void ReturnRecipeEditViewWithSuccessMessageWhenDetachingExistingIngredientFromExistingRecipe()
@@ -478,7 +319,7 @@ namespace IntegrationTests
             Assert.AreEqual(UIViewType.Details.ToString(), routeValues.ElementAt(2).ToString());
         }
 
-        [Ignore]
+        // [Ignore]
         [TestMethod]
         [TestCategory("Attach-Detach")]
         public void ReturnIndexViewWithWarningWhenDetachingExistingIngredientAttachedToNonExistingRecipe()
@@ -502,7 +343,7 @@ namespace IntegrationTests
             Assert.AreEqual(UIViewType.Index.ToString(), routeValues.ElementAt(0).ToString());
         }
 
-        [Ignore]
+        // [Ignore]
         [TestMethod]
         [TestCategory("Attach-Detach")]
         public void ReturnRecipeIndexViewWithWarningWhenDetachingExistingingredientNotAttachedToAnExistingRecipe()
@@ -526,7 +367,7 @@ namespace IntegrationTests
                 Assert.AreEqual(UIViewType.Index.ToString(), routeValues.ElementAt(0).ToString()); 
         }
 
-        [Ignore]
+        // [Ignore]
         [TestMethod]
         [TestCategory("Attach-Detach")]
         public void ReturnRecipeEditViewWithWarningMessageWhenDetachingNonExistingIngredientAttachedToExistingRecipe()
@@ -543,13 +384,13 @@ namespace IntegrationTests
 
             // Assert 
                 Assert.AreEqual("alert-warning", adr.AlertClass);
-                Assert.AreEqual("Please choose a(n) Ingredient", adr.Message);
+                Assert.AreEqual("Recipe was not found", adr.Message);
                 Assert.AreEqual(3, routeValues.Count);
                 Assert.AreEqual(UIViewType.Details.ToString(), routeValues.ElementAt(2).ToString());
                 Assert.AreEqual(UIViewType.Edit.ToString(), routeValues.ElementAt(1).ToString()); 
         }
 
-        [Ignore]
+        // [Ignore]
         [TestMethod]
         [TestCategory("Attach-Detach")]
         public void ReturnIndexViewWithWarningMessageWhenDetachingNonExistingIngredientAttachedToANonExistingRecipe()

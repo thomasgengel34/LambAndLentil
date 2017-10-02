@@ -1,15 +1,9 @@
-﻿using AutoMapper;
-using LambAndLentil.Domain.Abstract;
-using LambAndLentil.Domain.Concrete;
-using LambAndLentil.Domain.Entities;
+﻿using LambAndLentil.Domain.Entities;
 using LambAndLentil.UI;
 using LambAndLentil.UI.Controllers;
 using LambAndLentil.UI.Infrastructure.Alerts;
-using LambAndLentil.UI.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -17,8 +11,9 @@ namespace LambAndLentil.Test.BasicControllerTests
 {
     [TestClass]
     [TestCategory("PersonsController")]
-    public class PersonsController_Test_Should_Misc: PersonsController_Test_Should  
-    { 
+    [TestCategory("Misc")]
+    public class PersonsController_Test_Should_Misc : PersonsController_Test_Should
+    {
         [TestMethod]
         public void InheritsFromBaseControllerCorrectly()
         {
@@ -357,7 +352,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         [Ignore]   // brought in Ingredient edit methods instead of using this
         [TestMethod]
         [TestCategory("Edit")]
-        public void  EditPerson()
+        public void EditPerson()
         {
             // Arrange
             var controller2 = new PersonsController(Repo);
@@ -380,52 +375,74 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.AreEqual("Old Name 2", p2.Name);
         }
 
-   
+
         [TestMethod]
-        public void  EditPersonsFullName()
+        public void PostEditPersonsFullName()
         {
             // Arrange
-            Person person = new Person { ID = 1000, FirstName = "Jon", LastName = "Johns"};
-                Repo.Add(person);
+            Person person = new Person { ID = 1000, FirstName = "Jon", LastName = "Johns", Description = "PostEditPersonsFullName" };
+            Repo.Add(person);
 
             // Act
             person.FirstName = "Reynard";
             person.LastName = "Finkelstein";
-             Repo.Add(person);
+            Controller.PostEdit(person);
+            Repo.Add(person);
             Person newPerson = Repo.GetById(1000);
             //Assert
             Assert.AreEqual("Reynard Finkelstein", person.Name);
         }
 
         [TestMethod]
-        public void EditFirstName()
+        public void PostEditFirstName()
         {
-            Assert.Fail();
+            // Arrange
+            Person person = new Person { ID = 1001, FirstName = "Jon", LastName = "Johns", Description = "PostEditPersonsFirstName" };
+            Repo.Add(person);
+
+            // Act
+            person.FirstName = "Reynard"; 
+            Controller.PostEdit(person);
+            Repo.Add(person);
+            Person newPerson = Repo.GetById(1000);
+            //Assert
+            Assert.AreEqual("Reynard Johns", person.Name);
         }
+  
 
         [TestMethod]
-        public void EditLastName()
+        public void PostEditLastName()
         {
-            Assert.Fail();
+            // Arrange
+            Person person = new Person { ID = 1001, FirstName = "Jon", LastName = "Johns", Description = "PostEditPersonsLastName" };
+            Repo.Add(person);
+
+            // Act
+            person.LastName = "Luc";
+            Controller.PostEdit(person);
+            Repo.Add(person);
+            Person newPerson = Repo.GetById(1000);
+            //Assert
+            Assert.AreEqual("Jon Luc", person.Name);
         }
 
-        [Ignore]   // look into why this is not working
+       // [Ignore]   // look into why this is not working
         [TestMethod]
         [TestCategory("Edit")]
         public void CanEditPerson2()
         {
             // Arrange
-            Person menuVM = new Person
+            Person person = new Person
             {
                 ID = 1,
                 Name = "test PersonControllerTest.CanEditPerson",
                 Description = "test PersonControllerTest.CanEditPerson"
             };
-            Repo.Save(menuVM);
+            Repo.Save(person);
 
             // Act 
-            menuVM.Name = "Name has been changed";
-
+            person.Name = "Name has been changed";
+            Repo.Save(person);
             ViewResult view1 = (ViewResult)Controller.Edit(1);
 
             var returnedPerson = (Person)(view1.Model);
@@ -434,8 +451,8 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Assert 
             Assert.IsNotNull(view1);
             Assert.AreEqual("Name has been changed", returnedPerson.Name);
-            //Assert.AreEqual(menuVM.Description, returnedPersonlist.Description);
-            //Assert.AreEqual(menuVM.CreationDate, returnedPersonlist.CreationDate);
+            //Assert.AreEqual(person.Description, returnedPersonlist.Description);
+            //Assert.AreEqual(person.CreationDate, returnedPersonlist.CreationDate);
         }
 
         [TestMethod]
@@ -467,7 +484,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             ListEntity<Person> list2 = (ListEntity<Person>)view2.Model;
             Person vm3 = (from m in list2.ListT
                           where m.ID == 7777
-                            select m).AsQueryable().FirstOrDefault();
+                          select m).AsQueryable().FirstOrDefault();
 
             // Assert
             Assert.AreEqual("0000 test Edited", vm3.ModifiedByUser);
@@ -481,17 +498,17 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void CanPostEditPerson()
         {
             // Arrange
-            Person menuVM = new Person
+            Person person = new Person
             {
                 ID = 1,
                 Name = "test PersonControllerTest.CanEditPerson",
                 Description = "test PersonControllerTest.CanEditPerson"
             };
-            Repo.Add(menuVM);
+            Repo.Add(person);
 
             // Act 
-            menuVM.Name = "Name has been changed";
-
+            person.Name = "Name has been changed";
+            Repo.Add(person);
             ViewResult view1 = (ViewResult)Controller.Edit(1);
 
             Person returnedPersonlist = Repo.GetById(1);
@@ -499,12 +516,12 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Assert 
             Assert.IsNotNull(view1);
             Assert.AreEqual("Name has been changed", returnedPersonlist.Name);
-            Assert.AreEqual(menuVM.Description, returnedPersonlist.Description);
-            Assert.AreEqual(menuVM.CreationDate, returnedPersonlist.CreationDate);
+            Assert.AreEqual(person.Description, returnedPersonlist.Description);
+            Assert.AreEqual(person.CreationDate, returnedPersonlist.CreationDate);
         }
 
 
-     
+
         [TestMethod]
         [TestCategory("Edit")]
         public void CannotEditNonexistentPerson()
@@ -532,7 +549,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         }
 
 
-      
+
 
 
         [Ignore]
@@ -569,6 +586,6 @@ namespace LambAndLentil.Test.BasicControllerTests
             //  Assert.Fail();
             Assert.AreEqual("LambAndLentil.UI.Controllers.PersonsController", PersonsController_Test_Should.Controller.ToString());
         }
-         
+
     }
 }

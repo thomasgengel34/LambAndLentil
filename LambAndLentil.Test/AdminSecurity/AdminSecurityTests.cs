@@ -46,5 +46,131 @@ namespace LambAndLentil.Test.AdminSecurity
             // Assert   
             Assert.Fail();   // need to finish writing this
         }
+
+        [TestMethod]
+        public void AuthorizedUserCanSeeUnRestrictedPage()
+        {
+            // Arrange
+
+
+
+            // Act
+
+
+            // Assert   
+            Assert.Fail();   // need to finish writing this
+        }
+
+        [TestMethod]
+        public void AuthorizedUserCanSeeRestrictedPage()
+        {
+            // Arrange
+
+
+
+            // Act
+
+
+            // Assert   
+            Assert.Fail();   // need to finish writing this
+        }
+
+        [TestMethod]
+        public void UnAuthorizedUserCannotSeeRestrictedPage()
+        {
+            // Arrange
+
+
+
+            // Act
+
+
+            // Assert   
+            Assert.Fail();   // need to finish writing this
+        }
+
+        [TestMethod]
+        public void UnAuthorizedUserCanSeeUnRestrictedPage()
+        {
+            // Arrange
+
+
+
+            // Act
+
+
+            // Assert   
+            Assert.Fail();   // need to finish writing this
+        }
+
+        [TestMethod]
+        public void AnonymousUserCanSeeUnRestrictedPage()
+        {
+            // Arrange
+
+
+
+            // Act
+
+
+            // Assert   
+            Assert.Fail();   // need to finish writing this
+        }
+
+        [TestMethod]
+        public void AnonymousUserCannotSeenRestrictedPage()
+        {
+            // Arrange
+
+
+
+            // Act
+
+
+            // Assert   
+            Assert.Fail();   // need to finish writing this
+        }
+
+        [TestMethod]
+        public void AnonymousUserCannotSeenAdminPage()
+        {
+            // Arrange
+
+
+
+            // Act
+
+
+            // Assert   
+            Assert.Fail();   // need to finish writing this
+        }
+
+        [TestMethod]
+        public void UnauthorizedUserCannotSeenAdminPage()
+        {
+            // Arrange
+
+
+
+            // Act
+
+
+            // Assert   
+            Assert.Fail();   // need to finish writing this
+        }
+
+        [TestMethod]
+        public void AdminCanSeeAdminPage()
+        {
+            // Arrange
+
+
+
+            // Act
+
+
+            // Assert   
+            Assert.Fail();   // need to finish writing this
+        }
     }
 }

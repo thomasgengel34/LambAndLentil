@@ -98,6 +98,7 @@ namespace LambAndLentil.Domain.Concrete
                     {
                         Ingredient ingredient = child as Ingredient;
                         recipe.Ingredients.Add(ingredient);
+                        Add(recipe as T);
                     }
                     else
                     {

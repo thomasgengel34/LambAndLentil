@@ -73,7 +73,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdminSecurity\AdminSecurityTests.cs" />
-    <Compile Include="AdminSecurity\ManagerControllerTests.cs" />
+    <Compile Include="AdminSecurity\ManagerControllerTest_Security_Should.cs" />
     <Compile Include="AdminSecurity\ErrorLogging.cs" />
     <Compile Include="BasicControllerTests\AccountControllerTest.cs" />
     <Compile Include="BasicControllerTests\HomeControllerTest.cs" />
@@ -133,7 +133,7 @@
     <Compile Include="BasicControllerTests\RecipesControllerTest_FilterShould.cs" />
     <Compile Include="BasicControllerTests\IngredientsController_Index_Test.cs" />
     <Compile Include="BasicControllerTests\IngredientsController_Test_Should.cs" />
-    <Compile Include="BasicControllerTests\ManageControllerTest.cs" />
+    <Compile Include="BasicControllerTests\ManageControllerTest_Should.cs" />
     <Compile Include="BasicControllerTests\MenusController_Test_Should.cs" />
     <Compile Include="BasicControllerTests\NavControllerTest.cs" />
     <Compile Include="BasicControllerTests\PersonsController_Test_Should .cs" />

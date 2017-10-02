@@ -3,9 +3,11 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace LambAndLentil.Test.BasicControllerTests
 {
+    [TestCategory("PersonsController")]
+    [TestCategory("DeleteConfirmed")]
     [Ignore]
     [TestClass]
-    public class PersonsController_DeleteConfirmed_Should
+    public class PersonsController_DeleteConfirmed_Should:PersonsController_Test_Should
     {
         [TestMethod]
         public void ReturnIndexWithWarningWhenIDIsNotFound()

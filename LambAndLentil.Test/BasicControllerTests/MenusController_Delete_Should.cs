@@ -3,6 +3,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace LambAndLentil.Test.BasicControllerTests
 {
+    [TestCategory("MenusController")]
+    [TestCategory("Delete")]
     [TestClass]
     public class MenusController_Delete_Should 
     {

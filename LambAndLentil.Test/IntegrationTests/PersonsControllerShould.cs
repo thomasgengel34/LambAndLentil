@@ -52,12 +52,12 @@ namespace LambAndLentil.Test.BasicControllerTests
 
             // Assert 
             Assert.AreEqual(vr.ViewName, UIViewType.Details.ToString());
-            Assert.AreEqual(" ", modelName);
+            Assert.AreEqual("Newly Created", modelName);
         }
 
        
 
-        [Ignore]
+      //  [Ignore]
         [TestMethod]
         public void SaveAValidPerson()
         {
@@ -77,11 +77,8 @@ namespace LambAndLentil.Test.BasicControllerTests
 
             // Assert 
             Assert.AreEqual("alert-success", adr.AlertClass);
-            Assert.AreEqual(4, routeValues.Count);
-            Assert.AreEqual(UIControllerType.Persons.ToString(), routeValues.ElementAt(0).ToString());
-            Assert.AreEqual(UIViewType.BaseIndex.ToString(), routeValues.ElementAt(1).ToString());
-            Assert.AreEqual("Persons", routeValues.ElementAt(2).ToString());
-            Assert.AreEqual(1.ToString(), routeValues.ElementAt(3).ToString());
+            Assert.AreEqual(1, routeValues.Count); 
+            Assert.AreEqual(UIViewType.BaseIndex.ToString(), routeValues.ElementAt(0).ToString()); 
         }
 
         [Ignore]

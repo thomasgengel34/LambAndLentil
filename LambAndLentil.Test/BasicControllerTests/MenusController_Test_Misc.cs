@@ -361,23 +361,23 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.AreEqual("Test2 has been deleted", adr.Message);
         }
 
-        [Ignore]   // look into why this is not working
+         
         [TestMethod]
         [TestCategory("Edit")]
         public void CanEditMenu()
         {
             // Arrange
-            Menu menuVM = new Menu
+            Menu menu  = new Menu
             {
                 ID = 1,
                 Name = "test MenuControllerTest.CanEditMenu",
                 Description = "test MenuControllerTest.CanEditMenu"
             };
-            Repo.Save(menuVM);
+            Repo.Save(menu );
 
             // Act 
-            menuVM.Name = "Name has been changed";
-
+            menu.Name = "Name has been changed";
+            Repo.Save(menu);
             ViewResult view1 = (ViewResult)Controller.Edit(1);
 
             var returnedMenu = (Menu)(view1.Model);
@@ -386,8 +386,8 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Assert 
             Assert.IsNotNull(view1);
             Assert.AreEqual("Name has been changed", returnedMenu.Name);
-            //Assert.AreEqual(menuVM.Description, returnedMenulist.Description);
-            //Assert.AreEqual(menuVM.CreationDate, returnedMenulist.CreationDate);
+            //Assert.AreEqual(menu.Description, returnedMenulist.Description);
+            //Assert.AreEqual(menu.CreationDate, returnedMenulist.CreationDate);
         }
 
         [TestMethod]
@@ -427,22 +427,23 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         }
 
-        [Ignore]  // look into why this is not working
+         //[Ignore]  look into why this is not working
         [TestMethod]
         [TestCategory("Edit")]
         public void CanPostEditMenu()
         {
             // Arrange
-            Menu menuVM = new Menu
+            Menu menu = new Menu
             {
                 ID = 1,
                 Name = "test MenuControllerTest.CanEditMenu",
                 Description = "test MenuControllerTest.CanEditMenu"
             };
-            Repo.Add(menuVM);
+            Repo.Add(menu);
 
             // Act 
-            menuVM.Name = "Name has been changed";
+            menu.Name = "Name has been changed";
+            Repo.Add(menu);
 
             ViewResult view1 = (ViewResult)Controller.Edit(1);
 
@@ -451,12 +452,12 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Assert 
             Assert.IsNotNull(view1);
             Assert.AreEqual("Name has been changed", returnedMenulist.Name);
-            Assert.AreEqual(menuVM.Description, returnedMenulist.Description);
-            Assert.AreEqual(menuVM.CreationDate, returnedMenulist.CreationDate);
+            Assert.AreEqual(menu.Description, returnedMenulist.Description);
+            Assert.AreEqual(menu.CreationDate, returnedMenulist.CreationDate);
         }
 
 
-        [Ignore]
+      
         [TestMethod]
         [TestCategory("Edit")]
         public void CannotEditNonexistentMenu()
@@ -530,6 +531,22 @@ namespace LambAndLentil.Test.BasicControllerTests
             //  Assert.Fail();
             Assert.AreEqual("LambAndLentil.UI.Controllers.MenusController", MenusController_Test_Should.Controller.ToString());
         }
-         
+
+
+        private class FakeRepository : TestRepository<Menu> { }
+
+
+        [TestMethod]
+        [ExpectedException(typeof(Exception), "Fake Repostory")]
+        public void ReturnsErrorWithUnknownRepository()
+        {
+            // Arrange
+            FakeRepository fakeRepo = new FakeRepository();
+            MenusController fcontroller = new MenusController(fakeRepo);
+            // Act
+            ActionResult ar = fcontroller.BaseAttach(fakeRepo, int.MaxValue, new Ingredient());
+            // Assert
+
+        }
     }
 }

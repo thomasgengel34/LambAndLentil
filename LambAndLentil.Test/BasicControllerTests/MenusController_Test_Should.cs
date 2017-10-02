@@ -26,7 +26,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         public static MapperConfiguration AutoMapperConfig { get; set; }
         protected static ListEntity<Menu> ListEntity { get; set; }
         protected static MenusController Controller { get; set; }
-        protected static Menu menuVM;
+        protected static Menu menu;
 
         public MenusController_Test_Should()
         {
@@ -34,8 +34,8 @@ namespace LambAndLentil.Test.BasicControllerTests
             Repo = new TestRepository<Menu>();
             ListEntity = new ListEntity<Menu>();
             Controller = SetUpController(Repo);
-            menuVM = new Menu { ID = 1, Description = "MenusController_Test_Should" };
-            Repo.Save(menuVM);
+            menu = new Menu { ID = 1, Description = "MenusController_Test_Should" };
+            Repo.Save(menu);
         }
 
         protected internal MenusController SetUpController(IRepository<Menu> repo)

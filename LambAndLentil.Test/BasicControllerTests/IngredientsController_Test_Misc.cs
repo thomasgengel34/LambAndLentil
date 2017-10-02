@@ -1,16 +1,11 @@
-﻿using AutoMapper;
-using LambAndLentil.Domain.Abstract;
-using LambAndLentil.Domain.Concrete;
+﻿using LambAndLentil.Domain.Concrete;
 using LambAndLentil.Domain.Entities;
-using LambAndLentil.Tests.Infrastructure;
 using LambAndLentil.UI.Controllers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+using System.Web.Mvc;
 
-namespace LambAndLentil.Test.BasicControllerTests 
+namespace LambAndLentil.Test.BasicControllerTests
 {
 
     [TestClass]
@@ -83,7 +78,21 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Assert 
            Assert.AreEqual("LambAndLentil.UI.Controllers.IngredientsController", IngredientsController_Test_Should.controller.ToString()); 
         }
-         
-      
+
+        private class FakeRepository : TestRepository<Ingredient> { }
+
+
+        [TestMethod]
+        [ExpectedException(typeof(Exception), "Fake Repostory")]
+        public void ReturnsErrorWithUnknownRepository()
+        {
+            // Arrange
+            FakeRepository fakeRepo = new FakeRepository();
+            IngredientsController fcontroller = new IngredientsController(fakeRepo);
+            // Act
+            ActionResult ar = fcontroller.BaseAttach(fakeRepo, int.MaxValue, new Ingredient());
+            // Assert
+
+        }
     }
 }

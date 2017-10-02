@@ -1,1 +1,1 @@
-{"ID":1,"Recipe":null,"IngredientsList":null,"Name":"Egg","Description":"Fresh","CreationDate":"2017-09-25T09:44:25.0042401-05:00","ModifiedDate":"2017-09-25T09:44:25.0042401-05:00","AddedByUser":"PFW\\Poncho","ModifiedByUser":"PFW\\Poncho"}
+{"ID":1,"Recipe":null,"IngredientsList":null,"Name":"Egg","Description":"Fresh","CreationDate":"2017-10-02T14:33:14.5244756-05:00","ModifiedDate":"2017-10-02T14:33:14.5244756-05:00","AddedByUser":"PFW\\Poncho","ModifiedByUser":"PFW\\Poncho"}

@@ -19,9 +19,9 @@ namespace LambAndLentil.Test.BasicControllerTests
 
     [TestClass]
     [TestCategory("ShoppingListsController")]
-    public class ShoppingListsController_Test_Should_Misc:ShoppingListsController_Test_Should
+    public class ShoppingListsController_Test_Should_Misc : ShoppingListsController_Test_Should
     {
-        
+
 
         [TestMethod]
         public void IsPublic()
@@ -57,152 +57,9 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.IsNotNull(DoesDisposeExist);
         }
 
-        [TestMethod]
-        [TestCategory("Index")]
-        public void Index()
-        {
-            // Arrange
+     
 
-
-            // Act
-            ViewResult result = Controller.Index(1) as ViewResult;
-
-
-            // Assert
-            Assert.IsNotNull(result);
-
-        }
-
-        [Ignore]
-        [TestMethod]
-        [TestCategory("Index")]
-        public void ContainsAllShoppingLists()
-        {
-            // Arrange
-
-            // Act
-            ViewResult view1 = Controller.Index(1);
-
-            int count1 = ((ListEntity<ShoppingList>)(view1.Model)).ListT.Count();
-
-            ViewResult view2 = Controller.Index(2);
-
-            int count2 = ((ListEntity<ShoppingList>)(view2.Model)).ListT.Count();
-
-            int count = count1 + count2;
-
-            // Assert
-            Assert.IsNotNull(view1);
-            Assert.IsNotNull(view2);
-            Assert.AreEqual(5, count1);
-            Assert.AreEqual(0, count2);
-            Assert.AreEqual(5, count);
-            Assert.AreEqual("Index", view1.ViewName);
-            Assert.AreEqual("Index", view2.ViewName);
-        }
-
-        [Ignore]
-        [TestMethod]
-        [TestCategory("Index")]
-        public void FirstPageIsCorrect()
-        {
-            // Arrange 
-            ListEntity<ShoppingList> list = new ListEntity<ShoppingList>();
-            Controller.PageSize = 8;
-
-            // Act
-            ViewResult view1 = Controller.Index(1);
-            int count1 = ((ListEntity<ShoppingList>)(view1.Model)).ListT.Count();
-
-            // Assert
-            Assert.IsNotNull(view1);
-            Assert.AreEqual(5, count1);
-            Assert.AreEqual("Index", view1.ViewName);
-
-            Assert.AreEqual("ShoppingListsController_Index_Test P1", ((ListEntity<ShoppingList>)(view1.Model)).ListT.FirstOrDefault().Name);
-            Assert.AreEqual("ShoppingListsController_Index_Test P2", ((ListEntity<ShoppingList>)(view1.Model)).ListT.Skip(1).FirstOrDefault().Name);
-            Assert.AreEqual("ShoppingListsController_Index_Test P3", ((ListEntity<ShoppingList>)(view1.Model)).ListT.Skip(2).FirstOrDefault().Name);
-        }
-
-        [Ignore]
-        [TestMethod]
-        [TestCategory("Index")]
-        // currently we only have one page here
-        public void ShoppingListsCtr_Index_SecondPageIsCorrect()
-        {
-
-        }
-
-        [Ignore]
-        [TestMethod]
-        [TestCategory("Index")]
-        public void CanSendPaginationViewModel()
-        {
-
-            // Arrange
-            
-
-            // Act 
-            ListEntity<ShoppingList> resultT = (ListEntity<ShoppingList>)((ViewResult)Controller.Index(2)).Model;
-
-
-            // Assert 
-            PagingInfo pageInfoT = resultT.PagingInfo;
-            Assert.AreEqual(2, pageInfoT.CurrentPage);
-            Assert.AreEqual(8, pageInfoT.ItemsPerPage);
-            Assert.AreEqual(5, pageInfoT.TotalItems);
-            Assert.AreEqual(1, pageInfoT.TotalPages);
-        }
-
-        [Ignore]
-        [TestMethod]
-        [TestCategory("Index")]
-        public void PagingInfoIsCorrect()
-        {
-            // Arrange 
-
-            // Action
-            int totalItems = ((ListEntity<ShoppingList>)((ViewResult)Controller.Index()).Model).PagingInfo.TotalItems;
-            int currentPage = ((ListEntity<ShoppingList>)((ViewResult)Controller.Index()).Model).PagingInfo.CurrentPage;
-            int itemsPerPage = ((ListEntity<ShoppingList>)((ViewResult)Controller.Index()).Model).PagingInfo.ItemsPerPage;
-            int totalPages = ((ListEntity<ShoppingList>)((ViewResult)Controller.Index()).Model).PagingInfo.TotalPages;
-
-
-
-            // Assert
-            Assert.AreEqual(5, totalItems);
-            Assert.AreEqual(1, currentPage);
-            Assert.AreEqual(8, itemsPerPage);
-            Assert.AreEqual(1, totalPages);
-        }
-
-        [TestMethod]
-        [TestCategory("Index")]
-        public void CanPaginate()
-        {
-            // Arrange
-
-            // Act
-            var result = (ListEntity<ShoppingList>)(Controller.Index(1)).Model;
-
-            // Assert 
-            Assert.IsTrue(result.ListT.Count() == 5);
-            Assert.AreEqual("ShoppingListsController_Index_Test P1", result.ListT.FirstOrDefault().Name);
-            Assert.AreEqual("ShoppingListsController_Index_Test P4", result.ListT.Skip(3).FirstOrDefault().Name);
-        }
-
-        [TestMethod]
-        [TestCategory("Create")]
-        public void Create()
-        {
-            // Arrange 
-            ViewResult view = Controller.Create(UIViewType.Edit);
-
-
-            // Assert
-            Assert.IsNotNull(view);
-            Assert.AreEqual("Details", view.ViewName);
-        }
+      
 
         [TestMethod]
         [TestCategory("Remove")]
@@ -284,152 +141,8 @@ namespace LambAndLentil.Test.BasicControllerTests
         }
 
 
-        [Ignore]   // not working, not done, not sure it's worth pursuing or abandoning
         [TestMethod]
-        [TestCategory("Edit")]
-        public void CanEditShoppingList()
-        {
-            // Arrange 
-            ShoppingListsController controller2 = new ShoppingListsController(Repo);
-
-            // Act  
-            ViewResult view1 = (ViewResult)Controller.Edit(int.MaxValue);
-            ShoppingList p1 = (ShoppingList)view1.Model;
-            ViewResult view2 = (ViewResult)Controller.Edit(int.MaxValue - 1);
-            ShoppingList p2 = (ShoppingList)view2.Model;
-            ViewResult view3 = (ViewResult)Controller.Edit(int.MaxValue - 2);
-            ShoppingList p3 = (ShoppingList)view3.Model;
-
-            // Assert 
-            Assert.IsNotNull(view1);
-
-        }
-
-
-        [Ignore]
-        [TestMethod]
-        [TestCategory("Edit")]
-        public void  CannotEditNonexistentShoppingList()
-        {
-            // Arrange
-            
-            // Act
-            ShoppingList result = (ShoppingList)((ViewResult)Controller.Edit(8)).ViewData.Model;
-            // Assert
-            Assert.IsNull(result);
-        }
-
-
-        [Ignore]   // look into why this is not working
-        [TestMethod]
-        [TestCategory("Edit")]
-        public void CanEditShoppingListXXX()
-        {
-            // Arrange
-            ShoppingList menuVM = new ShoppingList
-            {
-                ID = 1,
-                Name = "test ShoppingListControllerTest.CanEditShoppingList",
-                Description = "test ShoppingListControllerTest.CanEditShoppingList"
-            };
-            Repo.Save(menuVM);
-
-            // Act 
-            menuVM.Name = "Name has been changed";
-
-            ViewResult view1 = (ViewResult)Controller.Edit(1);
-
-            var returnedShoppingList = (ShoppingList)(view1.Model);
-
-
-            // Assert 
-            Assert.IsNotNull(view1);
-            Assert.AreEqual("Name has been changed", returnedShoppingList.Name);
-            //Assert.AreEqual(menuVM.Description, returnedShoppingListlist.Description);
-            //Assert.AreEqual(menuVM.CreationDate, returnedShoppingListlist.CreationDate);
-        }
-
-        [TestMethod]
-        [TestCategory("Edit")]
-        public void SaveEditedShoppingList()
-        {
-            // Arrange
-            ShoppingListsController indexController = new ShoppingListsController(Repo);
-            ShoppingListsController controller2 = new ShoppingListsController(Repo);
-            ShoppingListsController controller3 = new ShoppingListsController(Repo);
-
-
-            ShoppingList vm = new ShoppingList
-            {
-                Name = "0000 test",
-                ID = int.MaxValue - 100,
-                Description = "test ShoppingListsControllerShould.SaveEditedShoppingList"
-            };
-
-            // Act 
-            ActionResult ar1 = Controller.PostEdit(vm);
-
-
-            // now edit it
-            vm.Name = "0000 test Edited";
-            vm.ID = 7777;
-            ActionResult ar2 = controller2.PostEdit(vm);
-            ViewResult view2 = controller3.Index();
-            ListEntity<ShoppingList> list2 = (ListEntity<ShoppingList>)view2.Model;
-            ShoppingList vm3 = (from m in list2.ListT
-                                where m.Name == "0000 test Edited"
-                                  select m).AsQueryable().FirstOrDefault();
-
-            // Assert
-            Assert.AreEqual("0000 test Edited", vm3.Name);
-            Assert.AreEqual(7777, vm3.ID);
-
-        }
-
-        [Ignore]  // look into why this is not working
-        [TestMethod]
-        [TestCategory("Edit")]
-        public void CanPostEditShoppingList()
-        {
-            // Arrange
-            ShoppingList menuVM = new ShoppingList
-            {
-                ID = 1,
-                Name = "test ShoppingListControllerTest.CanEditShoppingList",
-                Description = "test ShoppingListControllerTest.CanEditShoppingList"
-            };
-            Repo.Add(menuVM);
-
-            // Act 
-            menuVM.Name = "Name has been changed";
-
-            ViewResult view1 = (ViewResult)Controller.Edit(1);
-
-            ShoppingList returnedShoppingListlist = Repo.GetById(1);
-
-            // Assert 
-            Assert.IsNotNull(view1);
-            Assert.AreEqual("Name has been changed", returnedShoppingListlist.Name);
-            Assert.AreEqual(menuVM.Description, returnedShoppingListlist.Description);
-            Assert.AreEqual(menuVM.CreationDate, returnedShoppingListlist.CreationDate);
-        }
-
-
-        [Ignore]
-        [TestMethod]
-        [TestCategory("Edit")]
-        public void XxxCannotEditNonexistentShoppingList()
-        {
-            // Arrange
-
-            // Act
-            ShoppingList result = (ShoppingList)((ViewResult)Controller.Edit(8)).ViewData.Model;
-            // Assert
-            Assert.IsNull(result);
-        }
-
-        [TestMethod]
-        public void  CreateReturnsNonNull()
+        public void CreateReturnsNonNull()
         {
             // Arrange 
 
@@ -487,6 +200,6 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Assert
             //  Assert.Fail();
             Assert.AreEqual("LambAndLentil.UI.Controllers.ShoppingListsController", Controller.ToString());
-        } 
+        }
     }
 }

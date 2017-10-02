@@ -7,6 +7,7 @@ using LambAndLentil.UI.Controllers;
 using LambAndLentil.UI.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 
@@ -58,84 +59,149 @@ namespace LambAndLentil.Test.JSONTests
             // Assert
             Assert.Fail();
         }
-        [Ignore]
+
         [TestMethod]
         public void SaveOneMenu()
         {
             // Arrange
-            IRepository< Menu> Repo = new JSONRepository<  Menu>();
-            Menu menuVM = new Menu
+            IRepository<Menu> Repo = new TestRepository<Menu>();
+            Menu menu = new Menu
             {
-                Name = "SaveOneMenu Test ",
+                ID = 1405,
+                Name = "SaveOneMenuTest ",
                 ModifiedDate = new DateTime(1990, 12, 12),
                 CreationDate = new DateTime(2003, 1, 2)
             };
             string file = "";
             // Act
-            try
-            {
-                Repo.Add(menuVM);
-                file = @"../../../\LambAndLentil.Domain\App_Data\JSON\Menu\" + menuVM.Name + ".txt";
-                StreamReader sr = new StreamReader(file);
-                string theFile = "";
-                string input;
-                while ((input = sr.ReadLine()) != null)
-                {
-                    theFile += input;
-                }
-                sr.Close();
 
-                // Assert
-                string text = "{\"MealType\":0,\"DayOfWeek\":0,\"Diners\":0,\"ID\":0,\"Name\":\"SaveOneMenu Test \",\"Description\":\"not yet described\",\"CreationDate\":\"2003-01-02T00:00:00\",\"ModifiedDate\":\"1990-12-12T00:00:00\",\"AddedByUser\":\"PFW\\\\Poncho\",\"ModifiedByUser\":\"PFW\\\\Poncho\",\"Recipes\":null,\"Ingredients\":null,\"Menus\":null,\"Plans\":null,\"ShoppingLists\":null,\"Persons\":null}";
-                string textNoLineBreaks = Regex.Replace(text, @"\r\n?|\n", "");
+            Repo.Add(menu);
+            file = @"../../../\LambAndLentil.Test\App_Data\JSON\Menu\" + menu.ID + ".txt";
+            StreamReader sr = new StreamReader(file);
+            string theFile = "";
+            string input;
+            while ((input = sr.ReadLine()) != null)
+            {
+                theFile += input;
+            }
+            sr.Close();
+
+            // Assert
+            string text =  "{\"ID\":1405,\"MealType\":0,\"DayOfWeek\":0,\"Diners\":0,\"Ingredients\":[],\"Recipes\":[],\"Name\":\"SaveOneMenuTest \",\"Description\":\"not yet described\",\"CreationDate\":\"2003-01-02T00:00:00\",\"ModifiedDate\":\"1990-12-12T00:00:00\",\"AddedByUser\":\"PFW\\\\Poncho\",\"ModifiedByUser\":\"PFW\\\\Poncho\"}";
+/* "{\"MealType\":0,\"DayOfWeek\":0,\"Diners\":0,\"ID\":0,\"Name\":\"SaveOneMenu Test \",\"Description\":\"not yet described\",\"CreationDate\":\"2003-01-02T00:00:00\",\"ModifiedDate\":\"1990-12-12T00:00:00\",\"AddedByUser\":\"PFW\\\\Poncho\",\"ModifiedByUser\":\"PFW\\\\Poncho\",\"Recipes\":null,\"Ingredients\":null,\"Menus\":null,\"Plans\":null,\"ShoppingLists\":null,\"Persons\":null}";*/
+
+    string textNoLineBreaks = Regex.Replace(text, @"\r\n?|\n", "");
                 string theFileNoLineBreaks = Regex.Replace(theFile, @"\r\n?|\n", "");
                 Assert.AreEqual(textNoLineBreaks, theFileNoLineBreaks);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-            finally
-            {
-                // TODO: cleanup
-                File.Delete(file);
-            }
+            
         }
-        [Ignore]
+        
         [TestMethod]
         public void SaveOnePlan()
         {
             // Arrange
-
+            IRepository<Plan> Repo = new TestRepository<Plan>();
+            Plan menu = new Plan
+            {
+                ID = 1405,
+                Name = "SaveOnePlanTest ",
+                ModifiedDate = new DateTime(1990, 12, 12),
+                CreationDate = new DateTime(2003, 1, 2)
+            };
+            string file = "";
             // Act
 
+            Repo.Add(menu);
+            file = @"../../../\LambAndLentil.Test\App_Data\JSON\Plan\" + menu.ID + ".txt";
+            StreamReader sr = new StreamReader(file);
+            string theFile = "";
+            string input;
+            while ((input = sr.ReadLine()) != null)
+            {
+                theFile += input;
+            }
+            sr.Close();
 
             // Assert
-            Assert.Fail();
+            string text = "{\"ID\":1405,\"Ingredients\":[],\"Recipes\":[],\"Menus\":[],\"Name\":\"SaveOnePlanTest \",\"Description\":\"not yet described\",\"CreationDate\":\"2003-01-02T00:00:00\",\"ModifiedDate\":\"1990-12-12T00:00:00\",\"AddedByUser\":\"PFW\\\\Poncho\",\"ModifiedByUser\":\"PFW\\\\Poncho\"}";
+         
+
+            string textNoLineBreaks = Regex.Replace(text, @"\r\n?|\n", "");
+            string theFileNoLineBreaks = Regex.Replace(theFile, @"\r\n?|\n", "");
+            Assert.AreEqual(textNoLineBreaks, theFileNoLineBreaks);
+
         }
-        [Ignore]
+        
         [TestMethod]
         public void SaveOneShoppingList()
         {
             // Arrange
-
+            IRepository<ShoppingList> Repo = new TestRepository<ShoppingList>();
+            ShoppingList menu = new ShoppingList
+            {
+                ID = 1405,
+                Name = "SaveOneShoppingListTest ",
+                ModifiedDate = new DateTime(1990, 12, 12),
+                CreationDate = new DateTime(2003, 1, 2)
+            };
+            string file = "";
             // Act
 
+            Repo.Add(menu);
+            file = @"../../../\LambAndLentil.Test\App_Data\JSON\ShoppingList\" + menu.ID + ".txt";
+            StreamReader sr = new StreamReader(file);
+            string theFile = "";
+            string input;
+            while ((input = sr.ReadLine()) != null)
+            {
+                theFile += input;
+            }
+            sr.Close();
 
             // Assert
-            Assert.Fail();
+            string text = "{\"Recipes\":[],\"Ingredients\":[],\"Menus\":[],\"Plans\":[],\"ID\":1405,\"Date\":\"0001-01-01T00:00:00\",\"Author\":null,\"Name\":\"SaveOneShoppingListTest \",\"Description\":\"not yet described\",\"CreationDate\":\"2003-01-02T00:00:00\",\"ModifiedDate\":\"1990-12-12T00:00:00\",\"AddedByUser\":\"PFW\\\\Poncho\",\"ModifiedByUser\":\"PFW\\\\Poncho\"}";
+
+
+            string textNoLineBreaks = Regex.Replace(text, @"\r\n?|\n", "");
+            string theFileNoLineBreaks = Regex.Replace(theFile, @"\r\n?|\n", "");
+            Assert.AreEqual(textNoLineBreaks, theFileNoLineBreaks);
+
         }
-        [Ignore]
+        
         [TestMethod]
         public void SaveOnePerson()
         {
             // Arrange
-
+            IRepository<Person> Repo = new TestRepository<Person>();
+            Person menu = new Person
+            {
+                ID = 1405,
+                Name = "SaveOnePersonTest ",
+                ModifiedDate = new DateTime(1990, 12, 12),
+                CreationDate = new DateTime(2003, 1, 2)
+            };
+            string file = "";
             // Act
 
+            Repo.Add(menu);
+            file = @"../../../\LambAndLentil.Test\App_Data\JSON\Person\" + menu.ID + ".txt";
+            StreamReader sr = new StreamReader(file);
+            string theFile = "";
+            string input;
+            while ((input = sr.ReadLine()) != null)
+            {
+                theFile += input;
+            }
+            sr.Close();
 
             // Assert
-            Assert.Fail();
+            string text = "{\"ID\":1405,\"FirstName\":\"Newly\",\"LastName\":\"Created\",\"Weight\":0.0,\"MinCalories\":0,\"MaxCalories\":0,\"NoGarlic\":false,\"Recipes\":[],\"Ingredients\":[],\"Menus\":[],\"Plans\":[],\"ShoppingLists\":[],\"Name\":\"SaveOnePersonTest \",\"Description\":\"not yet described\",\"CreationDate\":\"2003-01-02T00:00:00\",\"ModifiedDate\":\"1990-12-12T00:00:00\",\"AddedByUser\":\"PFW\\\\Poncho\",\"ModifiedByUser\":\"PFW\\\\Poncho\"}";
+
+
+            string textNoLineBreaks = Regex.Replace(text, @"\r\n?|\n", "");
+            string theFileNoLineBreaks = Regex.Replace(theFile, @"\r\n?|\n", "");
+            Assert.AreEqual(textNoLineBreaks, theFileNoLineBreaks);
+
         }
 
         [TestMethod]
@@ -261,6 +327,16 @@ namespace LambAndLentil.Test.JSONTests
             Assert.Fail();
         }
 
+        [ClassCleanup()]
+        public static void ClassCleanup()
+        {
+            string path = @"C:\Dev\TGE\LambAndLentil\LambAndLentil.Test\App_Data\JSON\";
+            IEnumerable<string> files = Directory.EnumerateFiles(path);
 
+            foreach (var file in files)
+            {
+                File.Delete(file);
+            }
+        }
     }
 }
