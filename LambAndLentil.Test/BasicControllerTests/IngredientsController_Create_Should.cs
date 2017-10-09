@@ -16,7 +16,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange
 
             // Act
-            ViewResult result = controller.Create(UIViewType.Create) as ViewResult;
+            ViewResult result = Controller.Create(UIViewType.Create) as ViewResult;
 
             // Assert
             Assert.IsNotNull(result);
@@ -26,7 +26,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void Create()
         {
             // Arrange 
-            ViewResult view = controller.Create(UIViewType.Edit);
+            ViewResult view = Controller.Create(UIViewType.Edit);
 
 
             // Assert

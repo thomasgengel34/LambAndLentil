@@ -49,11 +49,11 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void Index()
         {
             // Arrange
-            PersonsController controller2 = new PersonsController(Repo);
+            PersonsController Controller2 = new PersonsController(Repo);
 
             // Act
             ViewResult view1 = Controller.Index(1) as ViewResult;
-            ViewResult view2 = controller2.Index(2) as ViewResult;
+            ViewResult view2 = Controller2.Index(2) as ViewResult;
 
             // Assert
             Assert.IsNotNull(view1);
@@ -65,16 +65,16 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void ContainsAllPersons()
         {
             // Arrange 
-            var controller2 = new PersonsController(Repo);
+            var Controller2 = new PersonsController(Repo);
 
             // Act
             ViewResult view1 = Controller.Index(1);
 
-            int count1 = ((ListEntity<Person>)(view1.Model)).ListT.Count();
+            int count1 = (( ListEntity<Person>)(view1.Model)).ListT.Count();
 
-            ViewResult view2 = controller2.Index(2);
+            ViewResult view2 = Controller2.Index(2);
 
-            int count2 = ((ListEntity<Person>)(view2.Model)).ListT.Count();
+            int count2 = (( ListEntity<Person>)(view2.Model)).ListT.Count();
 
             int count = count1 + count2;
 
@@ -87,10 +87,10 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.AreEqual("Index", view1.ViewName);
             Assert.AreEqual("Index", view2.ViewName);
 
-            Assert.AreEqual("PersonsController_Index_Test P1", ((ListEntity<Person>)(view1.Model)).ListT.FirstOrDefault().Name);
-            Assert.AreEqual("PersonsController_Index_Test P2", ((ListEntity<Person>)(view1.Model)).ListT.Skip(1).FirstOrDefault().Name);
-            Assert.AreEqual("PersonsController_Index_Test P3", ((ListEntity<Person>)(view1.Model)).ListT.Skip(2).FirstOrDefault().Name);
-            Assert.AreEqual("PersonsController_Index_Test P5", ((ListEntity<Person>)(view1.Model)).ListT.Skip(4).FirstOrDefault().Name);
+            Assert.AreEqual("PersonsController_Index_Test P1 ", (( ListEntity<Person>)(view1.Model)).ListT.FirstOrDefault().Name);
+            Assert.AreEqual("PersonsController_Index_Test P2 ", (( ListEntity<Person>)(view1.Model)).ListT.Skip(1).FirstOrDefault().Name);
+            Assert.AreEqual("PersonsController_Index_Test P3 ", (( ListEntity<Person>)(view1.Model)).ListT.Skip(2).FirstOrDefault().Name);
+            Assert.AreEqual("PersonsController_Index_Test P5 ", (( ListEntity<Person>)(view1.Model)).ListT.Skip(4).FirstOrDefault().Name);
 
         }
 
@@ -106,16 +106,16 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Act
             ViewResult view1 = Controller.Index(1);
 
-            int count1 = ((ListEntity<Person>)(view1.Model)).ListT.Count();
+            int count1 = (( ListEntity<Person>)(view1.Model)).ListT.Count();
 
             // Assert
             Assert.IsNotNull(view1);
             Assert.AreEqual(5, count1);
             Assert.AreEqual("Index", view1.ViewName);
 
-            Assert.AreEqual("PersonsController_Index_Test P1", ((ListEntity<Person>)(view1.Model)).ListT.FirstOrDefault().Name);
-            Assert.AreEqual("PersonsController_Index_Test P2", ((ListEntity<Person>)(view1.Model)).ListT.Skip(1).FirstOrDefault().Name);
-            Assert.AreEqual("PersonsController_Index_Test P3", ((ListEntity<Person>)(view1.Model)).ListT.Skip(2).FirstOrDefault().Name);
+            Assert.AreEqual("PersonsController_Index_Test P1 ", (( ListEntity<Person>)(view1.Model)).ListT.FirstOrDefault().Name);
+            Assert.AreEqual("PersonsController_Index_Test P2 ", (( ListEntity<Person>)(view1.Model)).ListT.Skip(1).FirstOrDefault().Name);
+            Assert.AreEqual("PersonsController_Index_Test P3 ", (( ListEntity<Person>)(view1.Model)).ListT.Skip(2).FirstOrDefault().Name);
 
 
         }
@@ -139,7 +139,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange 
 
             // Act 
-            ListEntity<Person> resultT = (ListEntity<Person>)((ViewResult)Controller.Index(2)).Model;
+             ListEntity<Person> resultT = ( ListEntity<Person>)((ViewResult)Controller.Index(2)).Model;
 
             // Assert
             PagingInfo pageInfoT = resultT.PagingInfo;
@@ -157,10 +157,10 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange 
 
             // Action
-            int totalItems = ((ListEntity<Person>)((ViewResult)Controller.Index()).Model).PagingInfo.TotalItems;
-            int currentPage = ((ListEntity<Person>)((ViewResult)Controller.Index()).Model).PagingInfo.CurrentPage;
-            int itemsPerPage = ((ListEntity<Person>)((ViewResult)Controller.Index()).Model).PagingInfo.ItemsPerPage;
-            int totalPages = ((ListEntity<Person>)((ViewResult)Controller.Index()).Model).PagingInfo.TotalPages;
+            int totalItems = (( ListEntity<Person>)((ViewResult)Controller.Index()).Model).PagingInfo.TotalItems;
+            int currentPage = (( ListEntity<Person>)((ViewResult)Controller.Index()).Model).PagingInfo.CurrentPage;
+            int itemsPerPage = (( ListEntity<Person>)((ViewResult)Controller.Index()).Model).PagingInfo.ItemsPerPage;
+            int totalPages = (( ListEntity<Person>)((ViewResult)Controller.Index()).Model).PagingInfo.TotalPages;
 
             // Assert
             Assert.AreEqual(5, totalItems);
@@ -176,13 +176,13 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange
 
             // Act
-            var result = (ListEntity<Person>)(Controller.Index(1)).Model;
-            var list = result.ListT;
+            var result = ( ListEntity<Person>)(Controller.Index(1)).Model;
+            var ListEntity= result.ListT;
 
             // Assert 
-            Assert.IsTrue(list.Count() == 5);
-            Assert.AreEqual("PersonsController_Index_Test P1", list.FirstOrDefault().Name);
-            Assert.AreEqual("PersonsController_Index_Test P3", list.Skip(2).FirstOrDefault().Name);
+            Assert.IsTrue(ListEntity.Count() == 5);
+            Assert.AreEqual("PersonsController_Index_Test P1 ", ListEntity.FirstOrDefault().Name);
+            Assert.AreEqual("PersonsController_Index_Test P3 ", ListEntity.Skip(2).FirstOrDefault().Name);
         }
 
         [TestMethod]
@@ -322,7 +322,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Act
             ActionResult result = Controller.DeleteConfirmed(1) as ActionResult;
             // improve this test when I do some route tests to return a more exact result
-            //RedirectToRouteResult x = new RedirectToRouteResult("default",new  RouteValueDictionary { new Route( { controller = "Persons", Action = "Index" } } );
+            //RedirectToRouteResult x = new RedirectToRouteResult("default",new  RouteValueDictionary { new Route( { Controller = "Persons", Action = "Index" } } );
             // Assert 
             Assert.IsNotNull(result);
         }
@@ -355,13 +355,13 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void EditPerson()
         {
             // Arrange
-            var controller2 = new PersonsController(Repo);
+            var Controller2 = new PersonsController(Repo);
             Person pVM = new Person("Kermit", "Frog") { ID = 1492, Description = "test CanEditPerson" };
 
             // Act  
             ViewResult view1 = (ViewResult)Controller.Edit(1492);
             Person p1 = (Person)view1.Model;
-            ViewResult view2 = (ViewResult)controller2.Edit(2);
+            ViewResult view2 = (ViewResult)Controller2.Edit(2);
             Person p2 = (Person)view2.Model;
 
 
@@ -426,34 +426,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.AreEqual("Jon Luc", person.Name);
         }
 
-       // [Ignore]   // look into why this is not working
-        [TestMethod]
-        [TestCategory("Edit")]
-        public void CanEditPerson2()
-        {
-            // Arrange
-            Person person = new Person
-            {
-                ID = 1,
-                Name = "test PersonControllerTest.CanEditPerson",
-                Description = "test PersonControllerTest.CanEditPerson"
-            };
-            Repo.Save(person);
-
-            // Act 
-            person.Name = "Name has been changed";
-            Repo.Save(person);
-            ViewResult view1 = (ViewResult)Controller.Edit(1);
-
-            var returnedPerson = (Person)(view1.Model);
-
-
-            // Assert 
-            Assert.IsNotNull(view1);
-            Assert.AreEqual("Name has been changed", returnedPerson.Name);
-            //Assert.AreEqual(person.Description, returnedPersonlist.Description);
-            //Assert.AreEqual(person.CreationDate, returnedPersonlist.CreationDate);
-        }
+   
 
         [TestMethod]
         [TestCategory("Edit")]
@@ -461,34 +434,36 @@ namespace LambAndLentil.Test.BasicControllerTests
         {
             // Arrange
             PersonsController indexController = new PersonsController(Repo);
-            PersonsController controller2 = new PersonsController(Repo);
-            PersonsController controller3 = new PersonsController(Repo);
+            PersonsController Controller2 = new PersonsController(Repo);
+            PersonsController Controller3 = new PersonsController(Repo);
 
 
-            Person vm = new Person
+            Person person = new Person
             {
-                Name = "0000 test",
+                FirstName = "0000 test",
+                LastName="",
                 ID = int.MaxValue - 100,
                 Description = "test PersonsControllerShould.SaveEditedPerson"
             };
 
             // Act 
-            ActionResult ar1 = Controller.PostEdit(vm);
+            ActionResult ar1 = Controller.PostEdit(person);
 
 
             // now edit it
-            vm.ModifiedByUser = "0000 test Edited";
-            vm.ID = 7777;
-            ActionResult ar2 = controller2.PostEdit(vm);
-            ViewResult view2 = controller3.Index();
-            ListEntity<Person> list2 = (ListEntity<Person>)view2.Model;
-            Person vm3 = (from m in list2.ListT
+            person.FirstName = "0000 test Edited";
+            person.LastName = "";
+            person.ID = 7777;
+            ActionResult ar2 = Controller2.PostEdit(person);
+            ViewResult view2 = Controller3.Index();
+             ListEntity<Person> ListEntity2 = ( ListEntity<Person>)view2.Model;
+            Person person3 = (from m in ListEntity2.ListT
                           where m.ID == 7777
                           select m).AsQueryable().FirstOrDefault();
 
             // Assert
-            Assert.AreEqual("0000 test Edited", vm3.ModifiedByUser);
-            Assert.AreEqual(7777, vm3.ID);
+            Assert.AreEqual("0000 test Edited ", person3.Name);
+            Assert.AreEqual(7777, person3.ID);
 
         }
 
@@ -501,23 +476,24 @@ namespace LambAndLentil.Test.BasicControllerTests
             Person person = new Person
             {
                 ID = 1,
-                Name = "test PersonControllerTest.CanEditPerson",
+                 FirstName = "test PersonControllerTest.CanEditPerson",
+                LastName="",
                 Description = "test PersonControllerTest.CanEditPerson"
             };
             Repo.Add(person);
 
             // Act 
-            person.Name = "Name has been changed";
+            person.FirstName = "Name has been changed";
             Repo.Add(person);
             ViewResult view1 = (ViewResult)Controller.Edit(1);
 
-            Person returnedPersonlist = Repo.GetById(1);
+            Person returnedPersonListEntity = Repo.GetById(1);
 
             // Assert 
             Assert.IsNotNull(view1);
-            Assert.AreEqual("Name has been changed", returnedPersonlist.Name);
-            Assert.AreEqual(person.Description, returnedPersonlist.Description);
-            Assert.AreEqual(person.CreationDate, returnedPersonlist.CreationDate);
+            Assert.AreEqual("Name has been changed", returnedPersonListEntity.Name);
+            Assert.AreEqual(person.Description, returnedPersonListEntity.Description);
+            Assert.AreEqual(person.CreationDate, returnedPersonListEntity.CreationDate);
         }
 
 

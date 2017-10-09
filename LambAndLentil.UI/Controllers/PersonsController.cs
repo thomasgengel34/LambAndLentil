@@ -66,7 +66,7 @@ namespace LambAndLentil.UI.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult PostEdit([Bind(Include = "ID,FirstName,LastName, Name, Description, Weight,  MinCalories, MaxCalories, NoGarlic, CreationDate, ModifiedDate,  AddedByUser, ModifiedByUser")] Person person)
         {
-            person.Name = String.Concat(person.FirstName, " ", person.LastName);
+          //  person.Name = String.Concat(person.FirstName, " ", person.LastName);
 
             return BasePostEdit(Repo, person);
 

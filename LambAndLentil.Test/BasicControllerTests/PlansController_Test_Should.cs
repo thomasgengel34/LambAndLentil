@@ -17,22 +17,22 @@ namespace LambAndLentil.Test.BasicControllerTests
     public class PlansController_Test_Should
     {
 
-        protected static IRepository<Plan> Repo { get; set; }
-        protected static MapperConfiguration AutoMapperConfig { get; set; }
-        protected static ListEntity<Plan> list;
-        protected static PlansController Controller { get; set; }
+        internal static IRepository<Plan> Repo { get; set; }
+        internal static MapperConfiguration AutoMapperConfig { get; set; }
+        internal static  ListEntity<Plan> ListEntity;
+        internal static PlansController Controller { get; set; }
 
         public PlansController_Test_Should()
         {
             AutoMapperConfigForTests.InitializeMap();
             Repo = new TestRepository<Plan>();
-            list = new ListEntity<Plan>();
+            ListEntity= new  ListEntity<Plan>();
             Controller = SetUpController(Repo);
         }
 
        internal PlansController SetUpController(IRepository<Plan> Repo)
         {
-            list.ListT  = new List<Plan> {
+            ListEntity.ListT  = new List<Plan> {
                 new Plan{ID = int.MaxValue, Name = "PlansController_Index_Test P1" ,AddedByUser="John Doe" ,ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue, ModifiedDate=DateTime.MaxValue.AddYears(-10)},
                 new Plan{ID = int.MaxValue-1, Name = "PlansController_Index_Test P2",  AddedByUser="Sally Doe",  ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(20), ModifiedDate=DateTime.MaxValue.AddYears(-20)},
                 new Plan{ID = int.MaxValue-2, Name = "PlansController_Index_Test P3",  AddedByUser="Sue Doe", ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(30), ModifiedDate=DateTime.MaxValue.AddYears(-30)},
@@ -40,7 +40,7 @@ namespace LambAndLentil.Test.BasicControllerTests
                 new Plan{ID = int.MaxValue-4, Name = "PlansController_Index_Test P5",  AddedByUser="John Doe",  ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(50), ModifiedDate=DateTime.MaxValue.AddYears(-100)}
             };
 
-            foreach (Plan plan in list.ListT )
+            foreach (Plan plan in ListEntity.ListT )
             {
                 Repo.Add(plan);
             }

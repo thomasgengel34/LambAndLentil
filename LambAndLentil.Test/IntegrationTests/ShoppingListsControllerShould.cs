@@ -23,13 +23,13 @@ namespace LambAndLentil.Test.BasicControllerTests
     {
 
         static IRepository<ShoppingList> Repo;
-        static ShoppingListsController controller;
+        static ShoppingListsController Controller;
         static ShoppingList vm;
 
         public ShoppingListsControllerShould()
         {
             Repo = new TestRepository<ShoppingList>();
-            controller = new ShoppingListsController(Repo);
+            Controller = new ShoppingListsController(Repo);
             vm = new ShoppingList
             {
                 ID = 400,
@@ -44,7 +44,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange
 
             // Act
-            ViewResult vr = controller.Create(UIViewType.Create);
+            ViewResult vr = Controller.Create(UIViewType.Create);
             ShoppingList vm = (ShoppingList)vr.Model;
             string modelName = vm.Name;
 
@@ -58,13 +58,13 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void SaveAValidShoppingList()
         {
             // Arrange 
-            ShoppingListsController controller = new ShoppingListsController(Repo);
+            ShoppingListsController Controller = new ShoppingListsController(Repo);
             ShoppingList vm = new ShoppingList
             {
                 Name = "test"
             };
             // Act
-            AlertDecoratorResult adr = (AlertDecoratorResult)controller.PostEdit(vm);
+            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.PostEdit(vm);
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
 
             var routeValues = rtrr.RouteValues.Values;
@@ -84,21 +84,21 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void SaveEditedShoppingListWithNameChange()
         {
             // Arrange 
-            ShoppingListsController controller1 = new ShoppingListsController(Repo);
-            ShoppingListsController controller2 = new ShoppingListsController(Repo);
-            ShoppingListsController controller3 = new ShoppingListsController(Repo);
-            ShoppingListsController controller4 = new ShoppingListsController(Repo);
-            ShoppingListsController controller5 = new ShoppingListsController(Repo);
+            ShoppingListsController Controller1 = new ShoppingListsController(Repo);
+            ShoppingListsController Controller2 = new ShoppingListsController(Repo);
+            ShoppingListsController Controller3 = new ShoppingListsController(Repo);
+            ShoppingListsController Controller4 = new ShoppingListsController(Repo);
+            ShoppingListsController Controller5 = new ShoppingListsController(Repo);
             ShoppingList vm = new ShoppingList
             {
                 Name = "0000 test"
             };
 
             // Act 
-            ActionResult ar1 = controller1.PostEdit(vm);
-            ViewResult view1 = controller2.Index();
-            IEnumerable<ShoppingList> list = (IEnumerable<ShoppingList>)view1.Model;
-            var result = (from m in list
+            ActionResult ar1 = Controller1.PostEdit(vm);
+            ViewResult view1 = Controller2.Index();
+            IEnumerable<ShoppingList> ListEntity= (IEnumerable<ShoppingList>)view1.Model;
+            var result = (from m in ListEntity
                           where m.Name == "0000 test"
                           select m).AsQueryable();
 
@@ -111,10 +111,10 @@ namespace LambAndLentil.Test.BasicControllerTests
             // now edit it
             vm.Name = "0000 test Edited";
             vm.ID = item.ID;
-            ActionResult ar2 = controller3.PostEdit(vm);
-            ViewResult view2 = controller4.Index();
-            List<ShoppingList> list2 = (List<ShoppingList>)view2.Model;
-            ShoppingList result2 = (from m in list2
+            ActionResult ar2 = Controller3.PostEdit(vm);
+            ViewResult view2 = Controller4.Index();
+            List<ShoppingList> ListEntity2 = (List<ShoppingList>)view2.Model;
+            ShoppingList result2 = (from m in ListEntity2
                                       where m.Name == "0000 test Edited"
                                       select m).AsQueryable().FirstOrDefault();
 
@@ -133,11 +133,11 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void SaveEditedShoppingListWithDescriptionChange()
         {
             // Arrange 
-            ShoppingListsController controller1 = new ShoppingListsController(Repo);
-            ShoppingListsController controller2 = new ShoppingListsController(Repo);
-            ShoppingListsController controller3 = new ShoppingListsController(Repo);
-            ShoppingListsController controller4 = new ShoppingListsController(Repo);
-            ShoppingListsController controller5 = new ShoppingListsController(Repo);
+            ShoppingListsController Controller1 = new ShoppingListsController(Repo);
+            ShoppingListsController Controller2 = new ShoppingListsController(Repo);
+            ShoppingListsController Controller3 = new ShoppingListsController(Repo);
+            ShoppingListsController Controller4 = new ShoppingListsController(Repo);
+            ShoppingListsController Controller5 = new ShoppingListsController(Repo);
             ShoppingList vm = new ShoppingList
             {
                 Name = "0000 test",
@@ -146,10 +146,10 @@ namespace LambAndLentil.Test.BasicControllerTests
 
 
             // Act 
-            ActionResult ar1 = controller1.PostEdit(vm);
-            ViewResult view1 = controller2.Index();
-            List<ShoppingList> list = (List<ShoppingList>)view1.Model;
-            ShoppingList shoppingListVM = (from m in list
+            ActionResult ar1 = Controller1.PostEdit(vm);
+            ViewResult view1 = Controller2.Index();
+            List<ShoppingList> ListEntity= (List<ShoppingList>)view1.Model;
+            ShoppingList shoppingListVM = (from m in ListEntity
                                              where m.Name == "0000 test"
                                              select m).AsQueryable().FirstOrDefault();
 
@@ -162,10 +162,10 @@ namespace LambAndLentil.Test.BasicControllerTests
             vm.Name = "0000 test Edited";
             vm.Description = "SaveEditedShoppingListWithDescriptionChange Post-test";
 
-            ActionResult ar2 = controller3.PostEdit(vm);
-            ViewResult view2 = controller4.Index();
-            List<ShoppingList> list2 = (List<ShoppingList>)view2.Model;
-            var result2 = (from m in list2
+            ActionResult ar2 = Controller3.PostEdit(vm);
+            ViewResult view2 = Controller4.Index();
+            List<ShoppingList> ListEntity2 = (List<ShoppingList>)view2.Model;
+            var result2 = (from m in ListEntity2
                            where m.Name == "0000 test Edited"
                            select m).AsQueryable();
 
@@ -186,7 +186,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Repo.Add(item);
 
             //Act
-            controller.DeleteConfirmed(item.ID);
+            Controller.DeleteConfirmed(item.ID);
             var deletedItem = (from m in Repo.GetAll()
                                where m.ID == item.ID
                                select m).AsQueryable();
@@ -208,15 +208,15 @@ namespace LambAndLentil.Test.BasicControllerTests
             };
 
             JSONRepository<ShoppingList> Repo = new JSONRepository<ShoppingList>(); ;
-            //ShoppingListsController controllerEdit = new ShoppingListsController(Repo);
-            //ShoppingListsController controllerView = new ShoppingListsController(Repo);
-            //ShoppingListsController controllerDelete = new ShoppingListsController(Repo);
+            //ShoppingListsController ControllerEdit = new ShoppingListsController(Repo);
+            //ShoppingListsController ControllerView = new ShoppingListsController(Repo);
+            //ShoppingListsController ControllerDelete = new ShoppingListsController(Repo);
 
             // Act
-            //controllerEdit.PostEdit(shoppingListVM);
-            //ViewResult view = controllerView.Index();
-            //ShoppingList list = (ShoppingList)view.Model;
-           // var result = (from m in list.ShoppingLists
+            //ControllerEdit.PostEdit(shoppingListVM);
+            //ViewResult view = ControllerView.Index();
+            //ShoppingList ListEntity= (ShoppingList)view.Model;
+           // var result = (from m in ListEntity.ShoppingLists
             //              where m.Name == "001 Test "
            //               select m).AsQueryable();
 
@@ -236,11 +236,11 @@ namespace LambAndLentil.Test.BasicControllerTests
         {
             // Arrange
             JSONRepository<ShoppingList> Repo = new JSONRepository<ShoppingList>();
-            //ShoppingListsController controllerPost = new ShoppingListsController(Repo);
-            //ShoppingListsController controllerPost1 = new ShoppingListsController(Repo);
-            //ShoppingListsController controllerView = new ShoppingListsController(Repo);
-            //ShoppingListsController controllerView1 = new ShoppingListsController(Repo);
-            //ShoppingListsController controllerDelete = new ShoppingListsController(Repo);
+            //ShoppingListsController ControllerPost = new ShoppingListsController(Repo);
+            //ShoppingListsController ControllerPost1 = new ShoppingListsController(Repo);
+            //ShoppingListsController ControllerView = new ShoppingListsController(Repo);
+            //ShoppingListsController ControllerView1 = new ShoppingListsController(Repo);
+            //ShoppingListsController ControllerDelete = new ShoppingListsController(Repo);
 
             ShoppingList vm = new ShoppingList
             {
@@ -250,9 +250,9 @@ namespace LambAndLentil.Test.BasicControllerTests
             DateTime mod = vm.ModifiedDate;
 
             // Act
-          //  controllerPost.PostEdit(vm);
+          //  ControllerPost.PostEdit(vm);
 
-         //   ViewResult view = controllerView.Index();
+         //   ViewResult view = ControllerView.Index();
         //    ShoppingList vm2 = (ShoppingList)view.Model;
             //var result = (from m in vm2.ShoppingLists
             //              where m.Name == "002 Test Mod"
@@ -260,12 +260,12 @@ namespace LambAndLentil.Test.BasicControllerTests
 
             //vm2.Description = "I've been edited to delay a bit";
 
-            //controllerPost1.PostEdit(vm2);
+            //ControllerPost1.PostEdit(vm2);
 
 
-            //ViewResult view1 = controllerView.Index();
-            //ShoppingList list = (ShoppingList)view1.Model;
-            //var result1 = (from m in list.ShoppingLists
+            //ViewResult view1 = ControllerView.Index();
+            //ShoppingList ListEntity= (ShoppingList)view1.Model;
+            //var result1 = (from m in ListEntity.ShoppingLists
             //               where m.Name == "002 Test Mod"
             //               select m).AsQueryable();
 
@@ -286,7 +286,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             
             vm.ID = int.MaxValue;
             vm.Description = description;
-            controller.PostEdit(vm);
+            Controller.PostEdit(vm);
 
             ShoppingList result =  (from m in Repo.GetAll()
                                   where m.Description == vm.Description
@@ -301,13 +301,13 @@ namespace LambAndLentil.Test.BasicControllerTests
         {
             // Arrange 
             JSONRepository<Ingredient> repoIngredient = new TestRepository< Ingredient>();
-            ShoppingListsController controller = new ShoppingListsController(Repo );
+            ShoppingListsController Controller = new ShoppingListsController(Repo );
 
             ShoppingList  slVM = GetShoppingList(Repo,  "test AttachAnExistingIngredientToAnExistingShoppingList");
             Ingredient ingredient = new Ingredient { ID = 500, Description="test AttachAnExistingIngredientToAnExistingShoppingList" };
             repoIngredient.Add(ingredient);
             // Act
-            controller.AttachIngredient(slVM.ID, ingredient);
+            Controller.AttachIngredient(slVM.ID, ingredient);
             ShoppingList returnedShoppingList = (from m in Repo.GetAll()
                                                  where m.Description == slVM.Description
                                                  select m).FirstOrDefault();

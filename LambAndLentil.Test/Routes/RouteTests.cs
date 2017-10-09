@@ -33,7 +33,7 @@ namespace LambAndLentil.Tests.Routes
             return mockContext.Object;
         }
 
-        private void TestRouteMatch(string url, string controller, string action,
+        private void TestRouteMatch(string url, string Controller, string action,
              object routeProperties = null, string httpMethod = "GET")
         {
 
@@ -45,13 +45,13 @@ namespace LambAndLentil.Tests.Routes
                 = routes.GetRouteData(CreateHttpContext(url, httpMethod));
             // Assert
             Assert.IsNotNull(result);
-            Assert.IsTrue(TestIncomingRouteResult(result, controller,
+            Assert.IsTrue(TestIncomingRouteResult(result, Controller,
                 action, routeProperties));
         }
 
 
         private bool TestIncomingRouteResult(RouteData routeResult,
-            string controller, string action, object propertySet = null)
+            string Controller, string action, object propertySet = null)
         {
 
             Func<object, object, bool> valCompare = (v1, v2) =>
@@ -60,7 +60,7 @@ namespace LambAndLentil.Tests.Routes
                     .Compare(v1, v2) == 0;
             };
 
-            bool result = valCompare(routeResult.Values["controller"], controller)
+            bool result = valCompare(routeResult.Values["Controller"], Controller)
                 && valCompare(routeResult.Values["action"], action);
 
             if (propertySet != null)

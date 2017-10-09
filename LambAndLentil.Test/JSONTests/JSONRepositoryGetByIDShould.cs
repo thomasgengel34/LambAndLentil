@@ -39,12 +39,12 @@ namespace LambAndLentil.Test.JSONTests
             Repo.Add(vm);
 
             // Act
-            Ingredient returnedlist = Repo.GetById(vm.ID);
+            Ingredient returnedListEntity = Repo.GetById(vm.ID);
 
             //Assert
-            Assert.AreEqual(vm.ID, returnedlist.ID);
-            Assert.AreEqual(vm.Name, returnedlist.Name);
-            Assert.AreEqual(vm.Description, returnedlist.Description);
+            Assert.AreEqual(vm.ID, returnedListEntity.ID);
+            Assert.AreEqual(vm.Name, returnedListEntity.Name);
+            Assert.AreEqual(vm.Description, returnedListEntity.Description);
         }
          
 

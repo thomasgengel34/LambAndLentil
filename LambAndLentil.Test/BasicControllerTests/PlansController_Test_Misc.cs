@@ -76,11 +76,11 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Act
             ViewResult view1 = Controller.Index(1);
 
-            int count1 = ((ListEntity<Plan>)(view1.Model)).ListT.Count();
+            int count1 = (( ListEntity<Plan>)(view1.Model)).ListT.Count();
 
             ViewResult view2 = Controller.Index(2);
 
-            int count2 = ((ListEntity<Plan>)(view2.Model)).ListT.Count();
+            int count2 = (( ListEntity<Plan>)(view2.Model)).ListT.Count();
 
             int count = count1 + count2;
 
@@ -93,10 +93,10 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.AreEqual("Index", view1.ViewName);
             Assert.AreEqual("Index", view2.ViewName);
 
-            //Assert.AreEqual("P1", ((ListEntity<Plan,Plan>)(view1.Model)).ListEntityTVM.FirstOrDefault().Name);
-            //Assert.AreEqual("P2", ((ListEntity<Plan,Plan>)(view1.Model)).ListEntityTVM.Skip(1).FirstOrDefault().Name);
-            //Assert.AreEqual("P3", ((ListEntity<Plan,Plan>)(view1.Model)).ListEntityTVM.Skip(2).FirstOrDefault().Name);
-            //Assert.AreEqual("P5", ((ListEntity<Plan,Plan>)(view2.Model)).ListEntityTVM.FirstOrDefault().Name);
+            //Assert.AreEqual("P1", (( ListEntity<Plan,Plan>)(view1.Model)). ListEntityTVM.FirstOrDefault().Name);
+            //Assert.AreEqual("P2", (( ListEntity<Plan,Plan>)(view1.Model)). ListEntityTVM.Skip(1).FirstOrDefault().Name);
+            //Assert.AreEqual("P3", (( ListEntity<Plan,Plan>)(view1.Model)). ListEntityTVM.Skip(2).FirstOrDefault().Name);
+            //Assert.AreEqual("P5", (( ListEntity<Plan,Plan>)(view2.Model)). ListEntityTVM.FirstOrDefault().Name);
 
         }
 
@@ -107,13 +107,13 @@ namespace LambAndLentil.Test.BasicControllerTests
         {
             // Arrange
 
-            ListEntity<Plan> illist = new ListEntity<Plan>();
+             ListEntity<Plan> ilListEntity = new  ListEntity<Plan>();
             Controller.PageSize = 8;
 
             // Act
             ViewResult view1 = Controller.Index(1);
 
-            int count1 = ((ListEntity<Plan>)(view1.Model)).ListT.Count();
+            int count1 = (( ListEntity<Plan>)(view1.Model)).ListT.Count();
 
 
 
@@ -122,9 +122,9 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.AreEqual(5, count1);
             Assert.AreEqual("Index", view1.ViewName);
 
-            Assert.AreEqual("PlansController_Index_Test P1", ((ListEntity<Plan>)(view1.Model)).ListT.FirstOrDefault().Name);
-            Assert.AreEqual("PlansController_Index_Test P2", ((ListEntity<Plan>)(view1.Model)).ListT.Skip(1).FirstOrDefault().Name);
-            Assert.AreEqual("PlansController_Index_Test P3", ((ListEntity<Plan>)(view1.Model)).ListT.Skip(2).FirstOrDefault().Name);
+            Assert.AreEqual("PlansController_Index_Test P1", (( ListEntity<Plan>)(view1.Model)).ListT.FirstOrDefault().Name);
+            Assert.AreEqual("PlansController_Index_Test P2", (( ListEntity<Plan>)(view1.Model)).ListT.Skip(1).FirstOrDefault().Name);
+            Assert.AreEqual("PlansController_Index_Test P3", (( ListEntity<Plan>)(view1.Model)).ListT.Skip(2).FirstOrDefault().Name);
 
 
         }
@@ -133,7 +133,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestMethod]
         [TestCategory("Index")]
         // currently we only have one page here
-        public void ListEntityTVMCtr_Index_SecondPageIsCorrect()
+        public void  ListEntityTVMCtr_Index_SecondPageIsCorrect()
         {
 
         }
@@ -148,7 +148,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
             // Act
 
-            ListEntity<Plan> resultT = (ListEntity<Plan>)((ViewResult)Controller.Index(2)).Model;
+             ListEntity<Plan> resultT = ( ListEntity<Plan>)((ViewResult)Controller.Index(2)).Model;
 
 
             // Assert
@@ -170,10 +170,10 @@ namespace LambAndLentil.Test.BasicControllerTests
 
 
             // Action
-            int totalItems = ((ListEntity<Plan>)((ViewResult)Controller.Index()).Model).PagingInfo.TotalItems;
-            int currentPage = ((ListEntity<Plan>)((ViewResult)Controller.Index()).Model).PagingInfo.CurrentPage;
-            int itemsPerPage = ((ListEntity<Plan>)((ViewResult)Controller.Index()).Model).PagingInfo.ItemsPerPage;
-            int totalPages = ((ListEntity<Plan>)((ViewResult)Controller.Index()).Model).PagingInfo.TotalPages;
+            int totalItems = (( ListEntity<Plan>)((ViewResult)Controller.Index()).Model).PagingInfo.TotalItems;
+            int currentPage = (( ListEntity<Plan>)((ViewResult)Controller.Index()).Model).PagingInfo.CurrentPage;
+            int itemsPerPage = (( ListEntity<Plan>)((ViewResult)Controller.Index()).Model).PagingInfo.ItemsPerPage;
+            int totalPages = (( ListEntity<Plan>)((ViewResult)Controller.Index()).Model).PagingInfo.TotalPages;
 
 
 
@@ -191,7 +191,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange 
 
             // Act
-            var result = (ListEntity<Plan>)(Controller.Index(1)).Model; 
+            var result = ( ListEntity<Plan>)(Controller.Index(1)).Model; 
 
             // Assert 
             Assert.IsTrue(result.ListT.Count() == 5);
@@ -348,7 +348,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Act
             ActionResult result = Controller.DeleteConfirmed(int.MaxValue) as ActionResult;
             // improve this test when I do some route tests to return a more exact result
-            //RedirectToRouteResult x = new RedirectToRouteResult("default",new  RouteValueDictionary { new Route( { controller = "ListEntityTVM", Action = "Index" } } );
+            //RedirectToRouteResult x = new RedirectToRouteResult("default",new  RouteValueDictionary { new Route( { Controller = " ListEntityTVM", Action = "Index" } } );
             // Assert 
             Assert.IsNotNull(result);
             Assert.AreEqual(count - 1, Repo.Count());
@@ -416,7 +416,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         }
 
         [TestMethod]
-        public void ListEntityTVMCtr_CreateReturnsNonNull()
+        public void  ListEntityTVMCtr_CreateReturnsNonNull()
         {
             // Arrange
 
@@ -495,9 +495,9 @@ namespace LambAndLentil.Test.BasicControllerTests
         {
             // Arrange
             FakeRepository fakeRepo = new FakeRepository();
-            PlansController fcontroller = new PlansController(fakeRepo);
+            PlansController fController = new PlansController(fakeRepo);
             // Act
-            ActionResult ar = fcontroller.BaseAttach(fakeRepo, int.MaxValue, new Ingredient());
+            ActionResult ar = fController.BaseAttach(fakeRepo, int.MaxValue, new Ingredient());
             // Assert
 
         }

@@ -20,13 +20,13 @@ namespace LambAndLentil.Test.BasicControllerTests
     public class PlansControllerShould
     {
         static IRepository<Plan> Repo;
-        static PlansController controller;
+        static PlansController Controller;
         static Plan planVM;
 
         public PlansControllerShould()
         {
             Repo = new TestRepository<Plan>();
-            controller = new PlansController(Repo);
+            Controller = new PlansController(Repo);
             planVM = new Plan
             {
                 ID = 1000,
@@ -40,7 +40,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange 
 
             // Act
-            ViewResult vr = controller.Create(UIViewType.Create);
+            ViewResult vr = Controller.Create(UIViewType.Create);
             Plan vm = (Plan)vr.Model;
             string modelName = vm.Name;
 
@@ -56,7 +56,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange  
 
             // Act
-            AlertDecoratorResult adr = (AlertDecoratorResult)controller.PostEdit(planVM);
+            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.PostEdit(planVM);
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
 
             var routeValues = rtrr.RouteValues.Values;
@@ -76,21 +76,21 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void SaveEditedPlanWithNameChange()
         {
             // Arrange 
-            PlansController controller1 = new PlansController(Repo);
-            PlansController controller2 = new PlansController(Repo);
-            PlansController controller3 = new PlansController(Repo);
-            PlansController controller4 = new PlansController(Repo);
-            PlansController controller5 = new PlansController(Repo);
+            PlansController Controller1 = new PlansController(Repo);
+            PlansController Controller2 = new PlansController(Repo);
+            PlansController Controller3 = new PlansController(Repo);
+            PlansController Controller4 = new PlansController(Repo);
+            PlansController Controller5 = new PlansController(Repo);
             Plan vm = new Plan
             {
                 Name = "0000 test"
             };
 
             // Act 
-            ActionResult ar1 = controller1.PostEdit(vm);
-            ViewResult view1 = controller2.Index();
-            List<Plan> list = (List<Plan>)view1.Model;
-            Plan item = (from m in list
+            ActionResult ar1 = Controller1.PostEdit(vm);
+            ViewResult view1 = Controller2.Index();
+            List<Plan> ListEntity= (List<Plan>)view1.Model;
+            Plan item = (from m in ListEntity
                            where m.Name == "0000 test"
                            select m).AsQueryable().First();
 
@@ -101,10 +101,10 @@ namespace LambAndLentil.Test.BasicControllerTests
             // now edit it
             vm.Name = "0000 test Edited";
             vm.ID = item.ID;
-            ActionResult ar2 = controller3.PostEdit(vm);
-            ViewResult view2 = controller4.Index();
-            List<Plan> list2 = (List<Plan>)view2.Model;
-            Plan planVM2 = (from m in list2
+            ActionResult ar2 = Controller3.PostEdit(vm);
+            ViewResult view2 = Controller4.Index();
+            List<Plan> ListEntity2 = (List<Plan>)view2.Model;
+            Plan planVM2 = (from m in ListEntity2
                               where m.Name == "0000 test Edited"
                               select m).AsQueryable().First();
 
@@ -118,11 +118,11 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void SaveEditedPlanWithDescriptionChange()
         {
             // Arrange 
-            PlansController controller1 = new PlansController(Repo);
-            PlansController controller2 = new PlansController(Repo);
-            PlansController controller3 = new PlansController(Repo);
-            PlansController controller4 = new PlansController(Repo);
-            PlansController controller5 = new PlansController(Repo);
+            PlansController Controller1 = new PlansController(Repo);
+            PlansController Controller2 = new PlansController(Repo);
+            PlansController Controller3 = new PlansController(Repo);
+            PlansController Controller4 = new PlansController(Repo);
+            PlansController Controller5 = new PlansController(Repo);
             Plan vm = new Plan
             {
                 Name = "0000 test",
@@ -131,10 +131,10 @@ namespace LambAndLentil.Test.BasicControllerTests
 
 
             // Act 
-            ActionResult ar1 = controller1.PostEdit(vm);
-            ViewResult view1 = controller2.Index();
-            List<Plan> list = (List<Plan>)view1.Model;
-            Plan planVM = (from m in list
+            ActionResult ar1 = Controller1.PostEdit(vm);
+            ViewResult view1 = Controller2.Index();
+            List<Plan> ListEntity= (List<Plan>)view1.Model;
+            Plan planVM = (from m in ListEntity
                              where m.Name == "0000 test"
                              select m).AsQueryable().FirstOrDefault();
 
@@ -148,10 +148,10 @@ namespace LambAndLentil.Test.BasicControllerTests
             planVM.Name = "0000 test Edited";
             planVM.Description = "SaveEditedPlanWithDescriptionChange Post-test";
 
-            ActionResult ar2 = controller3.PostEdit(vm);
-            ViewResult view2 = controller4.Index();
-            List<Plan> list2 = (List<Plan>)view2.Model;
-            planVM = (from m in list2
+            ActionResult ar2 = Controller3.PostEdit(vm);
+            ViewResult view2 = Controller4.Index();
+            List<Plan> ListEntity2 = (List<Plan>)view2.Model;
+            planVM = (from m in ListEntity2
                            where m.Name == "0000 test Edited"
                            select m).AsQueryable().FirstOrDefault(); 
 
@@ -168,7 +168,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange 
            
             //Act
-            controller.DeleteConfirmed(planVM.ID);
+            Controller.DeleteConfirmed(planVM.ID);
             var deletedItem = (from m in Repo.GetAll()
                                where m.Description == planVM.Description
                                select m).AsQueryable();
@@ -190,15 +190,15 @@ namespace LambAndLentil.Test.BasicControllerTests
             };
 
 
-            PlansController controllerEdit = new PlansController(Repo);
-            PlansController controllerView = new PlansController(Repo);
-            PlansController controllerDelete = new PlansController(Repo);
+            PlansController ControllerEdit = new PlansController(Repo);
+            PlansController ControllerView = new PlansController(Repo);
+            PlansController ControllerDelete = new PlansController(Repo);
 
             // Act
-            controllerEdit.PostEdit(planVM);
-            ViewResult view = controllerView.Index();
-            List<Plan> list = (List<Plan>)view.Model;
-            planVM = (from m in list
+            ControllerEdit.PostEdit(planVM);
+            ViewResult view = ControllerView.Index();
+            List<Plan> ListEntity= (List<Plan>)view.Model;
+            planVM = (from m in ListEntity
                           where m.Name == "001 Test "
                           select m).AsQueryable().First();
            
@@ -216,9 +216,9 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void UpdateTheModificationDateBetweenPostedEdits()
         {
             // Arrange 
-            PlansController controllerPost = new PlansController(Repo);
-            PlansController controllerView = new PlansController(Repo);
-            PlansController controllerDelete = new PlansController(Repo);
+            PlansController ControllerPost = new PlansController(Repo);
+            PlansController ControllerView = new PlansController(Repo);
+            PlansController ControllerDelete = new PlansController(Repo);
 
             Plan planVM = new Plan
             {
@@ -228,10 +228,10 @@ namespace LambAndLentil.Test.BasicControllerTests
             DateTime mod = planVM.ModifiedDate;
 
             // Act
-            controllerPost.PostEdit(planVM);
-            ViewResult view = controllerView.Index();
-            List<Plan> list = (List<Plan>)view.Model;
-            planVM = (from m in list
+            ControllerPost.PostEdit(planVM);
+            ViewResult view = ControllerView.Index();
+            List<Plan> ListEntity= (List<Plan>)view.Model;
+            planVM = (from m in ListEntity
                           where m.Name == "002 Test Mod"
                           select m).AsQueryable().First();
 
@@ -245,15 +245,14 @@ namespace LambAndLentil.Test.BasicControllerTests
              
         }
 
-        [Ignore]
-        [TestMethod]
+               [TestMethod]
         [TestCategory("Attach-Detach")]
         public void AttachAnExistingIngredientToAnExistingPlan()
         {
             // Arrange
             
            IRepository<Ingredient> repoIngredient = new TestRepository<Ingredient>();
-            PlansController controller = new PlansController(Repo);
+            PlansController Controller = new PlansController(Repo);
 
             planVM.Description = "test AttachAnExistingIngredientToAnExistingPlan";
             Ingredient ingredient = new Ingredient
@@ -261,9 +260,10 @@ namespace LambAndLentil.Test.BasicControllerTests
                 ID = 100,
                 Description = "test AttachAnExistingIngredientToAnExistingPlan"
             };
-
+            Repo.Update(planVM, planVM.ID);
+            repoIngredient.Save(ingredient);
             // Act
-            controller.AttachIngredient(planVM.ID, ingredient );
+            Controller.AttachIngredient(planVM.ID, ingredient );
             Plan returnedPlan = (from m in Repo.GetAll()
                                  where m.Description == planVM.Description
                                  select m).FirstOrDefault(); 

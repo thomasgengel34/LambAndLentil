@@ -71,11 +71,11 @@ namespace IntegrationTests
         {
             // Arrange
             JSONRepository<Menu> Repo = new JSONRepository<Menu>(); ;
-            MenusController controller1 = new MenusController(Repo);
-            MenusController controller2 = new MenusController(Repo);
-            MenusController controller3 = new MenusController(Repo);
-            MenusController controller4 = new MenusController(Repo);
-            MenusController controller5 = new MenusController(Repo);
+            MenusController Controller1 = new MenusController(Repo);
+            MenusController Controller2 = new MenusController(Repo);
+            MenusController Controller3 = new MenusController(Repo);
+            MenusController Controller4 = new MenusController(Repo);
+            MenusController Controller5 = new MenusController(Repo);
             Menu vm = new Menu
             {
                 Name = "0000 test",
@@ -83,10 +83,10 @@ namespace IntegrationTests
             };
 
             // Act 
-            ActionResult ar1 = controller1.PostEdit(vm);
-            ViewResult view1 = controller2.Index();
-            List<Menu> list =  (List<Menu>)((ListEntity<Menu>)view1.Model).ListT;
-            var menu = (from m in list
+            ActionResult ar1 = Controller1.PostEdit(vm);
+            ViewResult view1 = Controller2.Index();
+            List<Menu> ListEntity=  (List<Menu>)(( ListEntity<Menu>)view1.Model).ListT;
+            var menu = (from m in ListEntity
                           where m.Name == "0000 test"
                           select m).FirstOrDefault();
 
@@ -97,10 +97,10 @@ namespace IntegrationTests
             // now edit it
             vm.Name = "0000 test Edited";
             vm.ID = menu.ID;
-            ActionResult ar2 = controller3.PostEdit(vm);
-            ViewResult view2 = controller4.Index();
-            List<Menu> list2 = (List<Menu>)((ListEntity<Menu>)view2.Model).ListT;
-            Menu menu2 = (from m in list2
+            ActionResult ar2 = Controller3.PostEdit(vm);
+            ViewResult view2 = Controller4.Index();
+            List<Menu> ListEntity2 = (List<Menu>)(( ListEntity<Menu>)view2.Model).ListT;
+            Menu menu2 = (from m in ListEntity2
                             where m.Name == "0000 test Edited"
                             select m).AsQueryable().FirstOrDefault();
 
@@ -117,10 +117,10 @@ namespace IntegrationTests
         {
             // Arrange
 
-            MenusController controller1 = new MenusController(Repo);
-            MenusController controller2 = new MenusController(Repo);
-            MenusController controller3 = new MenusController(Repo);
-            MenusController controller4 = new MenusController(Repo);
+            MenusController Controller1 = new MenusController(Repo);
+            MenusController Controller2 = new MenusController(Repo);
+            MenusController Controller3 = new MenusController(Repo);
+            MenusController Controller4 = new MenusController(Repo);
             Menu vm = new Menu
             {
                 Name = "0000 test",
@@ -128,10 +128,10 @@ namespace IntegrationTests
             };
 
             // Act 
-            ActionResult ar1 = controller1.PostEdit(vm);
-            ViewResult view1 = controller2.Index();
-            List<Menu> list = (List<Menu>)((ListEntity<Menu>)view1.Model).ListT;
-            Menu menu = (from m in list
+            ActionResult ar1 = Controller1.PostEdit(vm);
+            ViewResult view1 = Controller2.Index();
+            List<Menu> ListEntity= (List<Menu>)(( ListEntity<Menu>)view1.Model).ListT;
+            Menu menu = (from m in ListEntity
                            where m.Name == "0000 test"
                            select m).AsQueryable().FirstOrDefault();
 
@@ -142,10 +142,10 @@ namespace IntegrationTests
             vm.Name = "0000 test Edited";
             vm.DayOfWeek = DayOfWeek.Friday;
 
-            ActionResult ar2 = controller3.PostEdit(vm);
-            ViewResult view2 = controller4.Index();
-            List<Menu> list2 = (List<Menu>)((ListEntity<Menu>)view2.Model).ListT;
-             menu = (from m in list2
+            ActionResult ar2 = Controller3.PostEdit(vm);
+            ViewResult view2 = Controller4.Index();
+            List<Menu> ListEntity2 = (List<Menu>)(( ListEntity<Menu>)view2.Model).ListT;
+             menu = (from m in ListEntity2
                              where m.Name == "0000 test Edited"
                              select m).AsQueryable().FirstOrDefault();
 
@@ -162,11 +162,11 @@ namespace IntegrationTests
         {
             // Arrange
 
-            MenusController controller1 = new MenusController(Repo);
-            MenusController controller2 = new MenusController(Repo);
-            MenusController controller3 = new MenusController(Repo);
-            MenusController controller4 = new MenusController(Repo);
-            MenusController controller5 = new MenusController(Repo);
+            MenusController Controller1 = new MenusController(Repo);
+            MenusController Controller2 = new MenusController(Repo);
+            MenusController Controller3 = new MenusController(Repo);
+            MenusController Controller4 = new MenusController(Repo);
+            MenusController Controller5 = new MenusController(Repo);
             Menu vm = new Menu
             {
                 Name = "0000 test",
@@ -175,10 +175,10 @@ namespace IntegrationTests
             };
 
             // Act 
-            ActionResult ar1 = controller1.PostEdit(vm);
-            ViewResult view1 = controller2.Index();
-            List<Menu> list = (List<Menu>)((ListEntity<Menu>)view1.Model).ListT;
-            Menu menu = (from m in list
+            ActionResult ar1 = Controller1.PostEdit(vm);
+            ViewResult view1 = Controller2.Index();
+            List<Menu> ListEntity= (List<Menu>)(( ListEntity<Menu>)view1.Model).ListT;
+            Menu menu = (from m in ListEntity
                              where m.Name == "0000 test"
                              select m).AsQueryable().FirstOrDefault();
 
@@ -193,10 +193,10 @@ namespace IntegrationTests
             vm.Name = "0000 test Edited";
             vm.Description = "SaveEditedMenuWithDescriptionChange Post-test";
 
-            ActionResult ar2 = controller3.PostEdit(vm);
-            ViewResult view2 = controller4.Index();
-            List<Menu> list2 = (List<Menu>)((ListEntity<Menu>)view2.Model).ListT;
-            menu = (from m in list2
+            ActionResult ar2 = Controller3.PostEdit(vm);
+            ViewResult view2 = Controller4.Index();
+            List<Menu> ListEntity2 = (List<Menu>)(( ListEntity<Menu>)view2.Model).ListT;
+            menu = (from m in ListEntity2
                       where m.Name == "0000 test Edited"
                       select m).AsQueryable().FirstOrDefault();
 
@@ -267,15 +267,15 @@ namespace IntegrationTests
             };
 
 
-            MenusController controllerEdit = new MenusController(Repo);
-            MenusController controllerView = new MenusController(Repo);
-            MenusController controllerDelete = new MenusController(Repo);
+            MenusController ControllerEdit = new MenusController(Repo);
+            MenusController ControllerView = new MenusController(Repo);
+            MenusController ControllerDelete = new MenusController(Repo);
 
             // Act
-            controllerEdit.PostEdit(vm);
-            ViewResult view = controllerView.Index();
-            List<Menu> list = (List<Menu>)((ListEntity<Menu>)view.Model).ListT;
-            Menu menu = (from m in list
+            ControllerEdit.PostEdit(vm);
+            ViewResult view = ControllerView.Index();
+            List<Menu> ListEntity= (List<Menu>)(( ListEntity<Menu>)view.Model).ListT;
+            Menu menu = (from m in ListEntity
                              where m.Name == "001 Test "
                              select m).AsQueryable().FirstOrDefault(); 
 
@@ -291,10 +291,10 @@ namespace IntegrationTests
         public void UpdateTheModificationDateBetweenPostedEdits()
         {
             // Arrange 
-            MenusController controllerPost = new MenusController(Repo);
-            MenusController controllerPost1 = new MenusController(Repo);
-            MenusController controllerView = new MenusController(Repo);
-            MenusController controllerDelete = new MenusController(Repo);
+            MenusController ControllerPost = new MenusController(Repo);
+            MenusController ControllerPost1 = new MenusController(Repo);
+            MenusController ControllerView = new MenusController(Repo);
+            MenusController ControllerDelete = new MenusController(Repo);
 
             Menu vm = new Menu
             {
@@ -305,20 +305,20 @@ namespace IntegrationTests
             DateTime mod = vm.ModifiedDate;
 
             // Act
-            controllerPost.PostEdit(vm);
-            ViewResult view = controllerView.Index();
-            List<Menu> list = (List<Menu>)((ListEntity<Menu>)view.Model).ListT;
-            Menu menu = (from m in list
+            ControllerPost.PostEdit(vm);
+            ViewResult view = ControllerView.Index();
+            List<Menu> ListEntity= (List<Menu>)(( ListEntity<Menu>)view.Model).ListT;
+            Menu menu = (from m in ListEntity
                           where m.Name == "002 Test Mod"
                           select m).AsQueryable().FirstOrDefault();
              
 
             menu.Description = "I've been edited to delay a bit";
-            controllerPost1.PostEdit(menu);
+            ControllerPost1.PostEdit(menu);
 
-            ViewResult view1 = controllerView.Index();
-            list = (List<Menu>)((ListEntity<Menu>)view1.Model).ListT;
-            menu = (from m in list
+            ViewResult view1 = ControllerView.Index();
+            ListEntity= (List<Menu>)(( ListEntity<Menu>)view1.Model).ListT;
+            menu = (from m in ListEntity
                            where m.Name == "002 Test Mod"
                            select m).AsQueryable().FirstOrDefault();
         
@@ -339,9 +339,9 @@ namespace IntegrationTests
         //{
         //    // Arrange 
         //    IRepository<Recipe> repoRecipe = new TestRepository<Recipe>();
-        //    MenusController controllerAttach = new MenusController(Repo);
-        //    RecipesController controllerAttachI = new RecipesController(repoRecipe);
-        //    MenusController controllerCleanup = new MenusController(Repo);
+        //    MenusController ControllerAttach = new MenusController(Repo);
+        //    RecipesController ControllerAttachI = new RecipesController(repoRecipe);
+        //    MenusController ControllerCleanup = new MenusController(Repo);
 
 
         //    Menu menu = new Menu() { ID = 100, Description = "test AttachAnExistingRecipeToAnExistingMenu" };
@@ -350,7 +350,7 @@ namespace IntegrationTests
         //    Recipe recipeVM = new Recipe() { ID = 101, Description = "test AttachAnExistingRecipeToAnExistingMenu" };
         //    repoRecipe.Add(recipeVM);
         //    // Act
-        //    var x = controllerAttach.AttachRecipe(menu.ID, recipeVM );
+        //    var x = ControllerAttach.AttachRecipe(menu.ID, recipeVM );
 
         //    // Assert 
         //    Assert.AreEqual(1, menu.Recipes.Count());

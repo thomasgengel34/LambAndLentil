@@ -21,13 +21,13 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange
         
             // Act 
-            controller.PageSize = 4;
+            Controller.PageSize = 4;
 
             var type = typeof(IngredientsController);
             var DoesDisposeExist = type.GetMethod("Dispose");
 
             // Assert  
-            Assert.AreEqual(4, controller.PageSize);
+            Assert.AreEqual(4, Controller.PageSize);
         }
 
 
@@ -39,7 +39,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange
            
             // Act 
-            controller.PageSize = 4;
+            Controller.PageSize = 4;
 
             var type = typeof(IngredientsController);
             var DoesDisposeExist = type.GetMethod("Dispose");
@@ -55,7 +55,7 @@ namespace LambAndLentil.Test.BasicControllerTests
          
 
             // Act
-            Type type = controller.GetType();
+            Type type = Controller.GetType();
             bool isPublic = type.IsPublic;
 
             // Assert 
@@ -76,7 +76,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
 
             // Assert 
-           Assert.AreEqual("LambAndLentil.UI.Controllers.IngredientsController", IngredientsController_Test_Should.controller.ToString()); 
+           Assert.AreEqual("LambAndLentil.UI.Controllers.IngredientsController", IngredientsController_Test_Should.Controller.ToString()); 
         }
 
         private class FakeRepository : TestRepository<Ingredient> { }
@@ -88,9 +88,9 @@ namespace LambAndLentil.Test.BasicControllerTests
         {
             // Arrange
             FakeRepository fakeRepo = new FakeRepository();
-            IngredientsController fcontroller = new IngredientsController(fakeRepo);
+            IngredientsController fController = new IngredientsController(fakeRepo);
             // Act
-            ActionResult ar = fcontroller.BaseAttach(fakeRepo, int.MaxValue, new Ingredient());
+            ActionResult ar = fController.BaseAttach(fakeRepo, int.MaxValue, new Ingredient());
             // Assert
 
         }

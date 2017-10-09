@@ -12,12 +12,12 @@ namespace LambAndLentil.Domain.Test.Entities
     public class IngredientClassShould
     {
         static Ingredient Ingredient { get; set; }
-        static List<string> list;
+        static List<string> ListEntity;
 
         public IngredientClassShould()
         {
             Ingredient = new Ingredient();
-            list = new List<string>();
+            ListEntity= new List<string>();
         }
 
 

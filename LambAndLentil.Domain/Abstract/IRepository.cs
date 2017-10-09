@@ -42,7 +42,7 @@ namespace LambAndLentil.Domain.Abstract
         void Remove(T entity); 
       
 
-        void Update(T entity, int key);
+        void Update(T entity, int? key);
         
 
         void Save(T entity); 

@@ -12,12 +12,12 @@ namespace LambAndLentil.Domain.Test.Entities
     public class MenuClassShould
     {
         static Menu Menu { get; set; }
-        static List<string> list;
+        static List<string> ListEntity;
 
         public MenuClassShould()
         {
            Menu = new Menu();
-            list = new List <string>();
+            ListEntity= new List <string>();
         }
 
         [TestMethod]

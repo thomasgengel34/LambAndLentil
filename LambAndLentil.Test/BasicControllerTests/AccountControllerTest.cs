@@ -67,9 +67,9 @@ namespace LambAndLentil.Tests.Controllers
 
         #region PrivateMethods  
 
-        private async Task<ViewResult> GetActionResult(AccountController controller, LoginViewModel model, string returnUrl )
+        private async Task<ViewResult> GetActionResult(AccountController Controller, LoginViewModel model, string returnUrl )
         {
-            Task<ActionResult> task = controller.Login(model, returnUrl);
+            Task<ActionResult> task = Controller.Login(model, returnUrl);
              ViewResult result = await task as ViewResult;
             return result; 
         }

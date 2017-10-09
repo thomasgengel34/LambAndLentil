@@ -27,7 +27,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange
 
             // Act 
-            AlertDecoratorResult adr = (AlertDecoratorResult)controller.Details(400, UIViewType.Delete);
+            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.Details(400, UIViewType.Delete);
             RedirectToRouteResult rdr = (RedirectToRouteResult)adr.InnerResult;
 
             // Assert
@@ -44,7 +44,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange
 
             // Act
-            ViewResult view = (ViewResult)controller.Details(int.MaxValue, UIViewType.Delete);
+            ViewResult view = (ViewResult)Controller.Details(int.MaxValue, UIViewType.Delete);
 
 
             // Assert
@@ -61,11 +61,11 @@ namespace LambAndLentil.Test.BasicControllerTests
           // Arrange
             int count = Repo.Count();
             //Act
-            controller.Details(int.MaxValue, UIViewType.DeleteConfirmed);
-            Ingredient ingredient = Repo.GetById(int.MaxValue);
+            Controller.Details(int.MaxValue, UIViewType.DeleteConfirmed);
+            Ingredient item = Repo.GetById(int.MaxValue);
             //Assert
             Assert.AreEqual(count - 1, Repo.Count());
-            Assert.IsNull(ingredient);
+            Assert.IsNull(item);
             //   Assert.Fail();  // make sure the correct item was deleted before removing this line 
         }
 
@@ -76,7 +76,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange
 
             // Act
-            ActionResult ar=controller.Details(4000, UIViewType.DeleteConfirmed);
+            ActionResult ar=Controller.Details(4000, UIViewType.DeleteConfirmed);
             AlertDecoratorResult adr = (AlertDecoratorResult)ar; 
             RedirectToRouteResult rdr = (RedirectToRouteResult)adr.InnerResult;
 
@@ -89,7 +89,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestMethod]
         public void ReturnDeleteConfirmedWithActionMethodDeleteConfirmedWithBadID()
         {
-            ActionResult ar = controller.Details(-1, UIViewType.DeleteConfirmed);
+            ActionResult ar = Controller.Details(-1, UIViewType.DeleteConfirmed);
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             RedirectToRouteResult rdr = (RedirectToRouteResult)adr.InnerResult;
 
@@ -106,7 +106,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
 
             // Act
-            ActionResult ar = controller.Details(int.MaxValue);
+            ActionResult ar = Controller.Details(int.MaxValue);
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             ViewResult view = (ViewResult)adr.InnerResult;
 
@@ -123,7 +123,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange
 
             // Act 
-            ViewResult view = (ViewResult)controller.Details(1, UIViewType.About); 
+            ViewResult view = (ViewResult)Controller.Details(1, UIViewType.About); 
 
             // Assert
             Assert.AreEqual(UIViewType.Index, view.Model);
@@ -136,9 +136,9 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void DetailsIngredientIDTooHighViewNotNull()
         {  // not sure what the desired behavior is yet
            // Arrange
-            IngredientsController controller = SetUpController(Repo);
+         //   IngredientsController Controller = SetUpController(Repo);
             //  AutoMapperConfigForTests.AMConfigForTests();
-            ActionResult view = controller.Details(4000);
+            ActionResult view = Controller.Details(4000);
             AlertDecoratorResult adr = (AlertDecoratorResult)view;
             // Assert
             Assert.IsNotNull(view);
@@ -160,9 +160,9 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void DetailsIngredientIDTooHighAlertClassCorrect()
         {   // not sure what the desired behavior is yet
             // Arrange
-            IngredientsController controller = SetUpController(Repo);
+          //  IngredientsController Controller = SetUpController(Repo);
             //  AutoMapperConfigForTests.AMConfigForTests();
-            ActionResult view = controller.Details(4000);
+            ActionResult view = Controller.Details(4000);
             AlertDecoratorResult adr = (AlertDecoratorResult)view;
             // Assert  
             Assert.AreEqual("alert-danger", adr.AlertClass);
@@ -205,11 +205,10 @@ namespace LambAndLentil.Test.BasicControllerTests
         {
             // I am not sure how I want this to operate.  Wait until UI is set up and see then.
             // Arrange
-            IngredientsController controller = SetUpController(Repo);
-            //  AutoMapperConfigForTests.AMConfigForTests(); 
+           
 
             // Act
-            ViewResult result = controller.Details(int.MaxValue) as ViewResult;
+            ViewResult result = Controller.Details(int.MaxValue) as ViewResult;
 
             // Assert
             Assert.IsNotNull(result);
@@ -223,7 +222,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
 
             // Act
-            ViewResult view = controller.Details(0) as ViewResult;
+            ViewResult view = Controller.Details(0) as ViewResult;
             AlertDecoratorResult adr = (AlertDecoratorResult)view;
 
             // Assert
@@ -238,7 +237,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
 
             // Act
-            ActionResult ar = controller.Details(0);
+            ActionResult ar = Controller.Details(0);
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
 
             // Assert 
@@ -250,13 +249,13 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void DetailsIngredientIDIsZeroAlertClassIsCorrect()
         {
             // Arrange
-            IngredientsController controller = new IngredientsController(Repo);
-            Ingredient ingredient = new Ingredient { ID = 0 };
-            Repo.Save(ingredient);
+            IngredientsController Controller = new IngredientsController(Repo);
+            Ingredient item = new Ingredient { ID = 0 };
+            Repo.Save(item);
 
 
             // Act
-            ActionResult ar = controller.Details(0);
+            ActionResult ar = Controller.Details(0);
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
 
             // Assert  
@@ -268,13 +267,13 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void DetailsIngredientIDIsZeroReturnModelIsCorrect()
         {
             // Arrange
-            IngredientsController controller = new IngredientsController(Repo);
-            Ingredient ingredient = new Ingredient { ID = 0 };
-            Repo.Save(ingredient);
+            IngredientsController Controller = new IngredientsController(Repo);
+            Ingredient item = new Ingredient { ID = 0 };
+            Repo.Save(item);
 
 
             // Act
-            ActionResult ar = controller.Details(0);
+            ActionResult ar = Controller.Details(0);
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
 
             // Assert    
@@ -288,11 +287,11 @@ namespace LambAndLentil.Test.BasicControllerTests
         {
             // Arrange
 
-            Ingredient ingredient = new Ingredient { ID = -1 };
-            Repo.Save(ingredient);
+            Ingredient item = new Ingredient { ID = -1 };
+            Repo.Save(item);
 
             // Act
-            ActionResult view = controller.Details(-1);
+            ActionResult view = Controller.Details(-1);
             AlertDecoratorResult adr = (AlertDecoratorResult)view;
 
             // Assert
@@ -305,11 +304,11 @@ namespace LambAndLentil.Test.BasicControllerTests
         {
             // Arrange
 
-            ingredient.ID = -500;
-            Repo.Save(ingredient);
+            item.ID = -500;
+            Repo.Save(item);
 
             // Act
-            ActionResult ar = controller.Details(-500);
+            ActionResult ar = Controller.Details(-500);
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
 
             // Assert   adr.InnerResult).RouteValues.Values.ElementAt(1).ToString());
@@ -323,16 +322,16 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void NotBeSuccessfulWithInvalidIngredientID_IngredientIDIsNegative_AlertClassCorrect()
         {
             // Arrange
-            IngredientsController controller = new IngredientsController(Repo);
-            Ingredient ingredient = new Ingredient
+            IngredientsController Controller = new IngredientsController(Repo);
+            Ingredient item = new Ingredient
             {
                 ID = -1,
                 Name = "Details_IngredientIDIsNegative_AlertClassCorrect"
             };
-            Repo.Save(ingredient);
+            Repo.Save(item);
 
             // Act
-            ActionResult view = controller.Details(-1);
+            ActionResult view = Controller.Details(-1);
             AlertDecoratorResult adr = (AlertDecoratorResult)view;
 
             // Assert  
@@ -348,7 +347,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange
 
             // Act
-            ActionResult ar = controller.Details(int.MaxValue, UIViewType.Edit);
+            ActionResult ar = Controller.Details(int.MaxValue, UIViewType.Edit);
             ViewResult vr = (ViewResult)ar;
             int returnedID = ((Ingredient)(vr.Model)).ID;
 
@@ -367,7 +366,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange 
 
             // Act
-            AlertDecoratorResult adr = (AlertDecoratorResult)controller.Details(8000, UIViewType.Edit);
+            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.Details(8000, UIViewType.Edit);
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
 
             // Assert

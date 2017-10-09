@@ -10,11 +10,11 @@ namespace LambAndLentil.Test.AdminSecurity
     [TestClass]
     public class AdminSecurityTests
     {
-        static AccountController controller;
+        static AccountController Controller;
 
         public AdminSecurityTests()
         {
-            controller = new AccountController();
+            Controller = new AccountController();
         }
 
 
@@ -26,7 +26,7 @@ namespace LambAndLentil.Test.AdminSecurity
 
 
             // Act
-            ActionResult ar = controller.Login("user");
+            ActionResult ar = Controller.Login("user");
 
             // Assert
             Assert.Fail();   // need to finish writing this

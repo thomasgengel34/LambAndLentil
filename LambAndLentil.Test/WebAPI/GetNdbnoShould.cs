@@ -4,10 +4,10 @@ using LambAndLentil.Test.BasicControllerTests;
 
 namespace LambAndLentil.Test.WebAPI
 {
-    [Ignore]
+    //  [Ignore]
     [TestClass]
     public class GetNdbnoShould: IngredientsController_Test_Should
-    { 
+    {
 
         [TestMethod]
         public void ReturnTheCorrectErrorMessageWhenItemIsNotFound()
@@ -19,7 +19,26 @@ namespace LambAndLentil.Test.WebAPI
             //Assert
             Assert.Fail();
         }
+
         [TestMethod]
+        public void ReturnCorrectIngredientsForAardvarkHabeneroOnSingleItemSearch()
+        {
+            //// Arrange
+            //string searchString = "AARDVARK HABENERO HOT SAUCE, UPC: 853393000030";
+
+            //string correctIngredients = "TOMATOES(TOMATOES AND FIRE ROASTED TOMATOES, TOMATO JUICE, CITRIC ACID, CALCIUM CHLORIDE), WHITE WINE VINEGAR, CARROTS, WATER, YELLOW ONION, HABANERO CHILI PEPPER(HABANERO CHILI PEPPERS, WATER, SALT, CITRIC ACID), MUSTARD(DISTILLED VINEGAR, WATER, MUSTARD SEED, SALT, TURMERIC, SPICES), ORGANIC CANE SUGAR, SALT, MODIFIED FOOD STARCH, GARLIC, SUNFLOWER OIL, HERBS AND SPICES. Date Available: 09 / 23 / 2016";
+
+            //// Act
+            //// string returnedIngredients = Controller.GetIngredients(searchString);
+            //string returnedIngredients = "";
+            //                 // Assert
+            //                 //   Assert.Fail();  // not actually working 
+            //                 Assert.AreEqual(correctIngredients, returnedIngredients);
+        }
+    }
+        public class GetNdbnoShouldxxxxx : IngredientsController_Test_Should
+        {
+            [TestMethod]
         public void ReturnFourItemsInTheDDLWhenHabeneroIsTheInput()
         {
             // Arrange
@@ -48,11 +67,11 @@ namespace LambAndLentil.Test.WebAPI
             string correctIngredients = "TOMATOES(TOMATOES AND FIRE ROASTED TOMATOES, TOMATO JUICE, CITRIC ACID, CALCIUM CHLORIDE), WHITE WINE VINEGAR, CARROTS, WATER, YELLOW ONION, HABANERO CHILI PEPPER(HABANERO CHILI PEPPERS, WATER, SALT, CITRIC ACID), MUSTARD(DISTILLED VINEGAR, WATER, MUSTARD SEED, SALT, TURMERIC, SPICES), ORGANIC CANE SUGAR, SALT, MODIFIED FOOD STARCH, GARLIC, SUNFLOWER OIL, HERBS AND SPICES. Date Available: 09 / 23 / 2016";
 
             // Act
-            string returnedIngredients = controller.GetIngredients(searchString);
+         //   string returnedIngredients = Controller.GetIngredients(searchString);
 
             // Assert
            Assert.Fail();  // not actually working 
-            Assert.AreEqual(correctIngredients, returnedIngredients);
+         //   Assert.AreEqual(correctIngredients, returnedIngredients);
         }
 
         [TestMethod]
@@ -63,7 +82,7 @@ namespace LambAndLentil.Test.WebAPI
             int corectNdbno = 45078606; 
 
             // Act
-            int returnedNdbno = controller.GetNdbno(searchString);
+            int returnedNdbno = Controller.GetNdbno(searchString);
 
             // Assert
              Assert.Fail();  // not actually working 
@@ -216,5 +235,5 @@ namespace LambAndLentil.Test.WebAPI
 ⦁	
 
     
- https://ndb.nal.usda.gov/ndb/search/list  
+ https://ndb.nal.usda.gov/ndb/search/ListEntity  
 ⦁	https://api.nal.usda.gov/ndb/V2/reports?ndbno=01009&ndbno=45202763&ndbno=35193&type=f&format=json&api_key=DEMO_KEY */

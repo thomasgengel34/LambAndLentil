@@ -298,7 +298,7 @@ namespace LambAndLentil.Test.IntegrationTests
 
 
         /// <summary>
-        ///  shoppinglist/menu/recipe/ingredient: ingredient added
+        ///  shoppingListEntity/menu/recipe/ingredient: ingredient added
         /// </summary>
         [TestMethod]
         public void ChangeShoppingListMenuRecipeWhenIngredientIsAdded()
@@ -307,7 +307,7 @@ namespace LambAndLentil.Test.IntegrationTests
         }
 
         /// <summary>
-        ///  shoppinglist/menu/recipe/ingredient: ingredient changed
+        ///  shoppingListEntity/menu/recipe/ingredient: ingredient changed
         /// </summary>
        // [TestMethod]
         //public void ChangeShoppingListMenuRecipeWhenIngredientIsChanged()
@@ -362,7 +362,7 @@ namespace LambAndLentil.Test.IntegrationTests
         // }
 
         /// <summary>
-        ///  shoppinglist/menu/recipe/ingredient: ingredient deleted
+        ///  shoppingListEntity/menu/recipe/ingredient: ingredient deleted
         /// </summary>
         [TestMethod]
         public void ChangeShoppingListMenuRecipeWhenIngredientIsDeleted()
@@ -371,7 +371,7 @@ namespace LambAndLentil.Test.IntegrationTests
         }
 
         /// <summary>
-        ///  shoppinglist/menu/recipe/ingredient: ingredient removed
+        ///  shoppingListEntity/menu/recipe/ingredient: ingredient removed
         /// </summary>
         [TestMethod]
         public void ChangeShoppingListMenuRecipeWhenIngredientIsRemoved()
@@ -643,7 +643,7 @@ namespace LambAndLentil.Test.IntegrationTests
 
         //  TODO:          
 
-        // also some adds: shopping list changes because an ingredient was added to a recipe, etc.
+        // also some adds: shoppingList Entitychanges because an ingredient was added to a recipe, etc.
         // there should be two separate methods for when an ingredient is deleted, and when it is detached. Deleted means it is no longer in the database. Detached means it was deliberately removed in a child. The word 'removed' should be changed to 'detached'.   I am not sure that when I start coding that there will be any difference. 
 
         [TestMethod]

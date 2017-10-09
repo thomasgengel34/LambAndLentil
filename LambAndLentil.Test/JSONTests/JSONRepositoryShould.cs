@@ -30,7 +30,7 @@ namespace LambAndLentil.Test.JSONTests
         {
             // Arrange
             IRepository< Ingredient> Repo = new TestRepository< Ingredient>();
-            //IngredientsController<Ingredient,Ingredient> controller = new IngredientsController<Ingredient,Ingredient>(Repo);
+            //IngredientsController<Ingredient,Ingredient> Controller = new IngredientsController<Ingredient,Ingredient>(Repo);
             Ingredient ingredient = new Ingredient
             {
                 ID = int.MaxValue,
@@ -176,7 +176,8 @@ namespace LambAndLentil.Test.JSONTests
             Person menu = new Person
             {
                 ID = 1405,
-                Name = "SaveOnePersonTest ",
+                FirstName = "SaveOnePersonTest ",
+                LastName="",
                 ModifiedDate = new DateTime(1990, 12, 12),
                 CreationDate = new DateTime(2003, 1, 2)
             };
@@ -195,7 +196,7 @@ namespace LambAndLentil.Test.JSONTests
             sr.Close();
 
             // Assert
-            string text = "{\"ID\":1405,\"FirstName\":\"Newly\",\"LastName\":\"Created\",\"Weight\":0.0,\"MinCalories\":0,\"MaxCalories\":0,\"NoGarlic\":false,\"Recipes\":[],\"Ingredients\":[],\"Menus\":[],\"Plans\":[],\"ShoppingLists\":[],\"Name\":\"SaveOnePersonTest \",\"Description\":\"not yet described\",\"CreationDate\":\"2003-01-02T00:00:00\",\"ModifiedDate\":\"1990-12-12T00:00:00\",\"AddedByUser\":\"PFW\\\\Poncho\",\"ModifiedByUser\":\"PFW\\\\Poncho\"}";
+            string text = "{\"ID\":1405,\"FirstName\":\"SaveOnePersonTest \",\"LastName\":\"\",\"FullName\":\"Newly Created\",\"Weight\":0.0,\"MinCalories\":0,\"MaxCalories\":0,\"NoGarlic\":false,\"Recipes\":[],\"Ingredients\":[],\"Menus\":[],\"Plans\":[],\"ShoppingLists\":[],\"Name\":\"Newly Created\",\"Description\":\"not yet described\",\"CreationDate\":\"2003-01-02T00:00:00\",\"ModifiedDate\":\"1990-12-12T00:00:00\",\"AddedByUser\":\"PFW\\\\Poncho\",\"ModifiedByUser\":\"PFW\\\\Poncho\"}";
 
 
             string textNoLineBreaks = Regex.Replace(text, @"\r\n?|\n", "");

@@ -15,14 +15,14 @@ namespace LambAndLentil.Test.BasicControllerTests
     [TestCategory("RecipesController")]
     public class RecipesController_Test_Should
     { 
-        protected static IRepository<Recipe> Repo { get; set; } 
-        protected static RecipesController Controller { get; set; }
-        protected ListEntity<Recipe> ListEntity { get; set; }
+        public static IRepository<Recipe> Repo { get; set; } 
+        public static RecipesController Controller { get; set; }
+        public  ListEntity<Recipe>  ListEntity { get; set; }
 
         public RecipesController_Test_Should()
         { 
             Repo = new TestRepository<Recipe>();
-            ListEntity = new ListEntity<Recipe>();
+             ListEntity = new  ListEntity<Recipe>();
             Controller = SetUpController(Repo);
          
         }
@@ -34,7 +34,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         protected RecipesController SetUpController(IRepository<Recipe> Repo)
         {
 
-            ListEntity.ListT = new List<Recipe> {
+             ListEntity.ListT = new List<Recipe> {
                 new Recipe {ID = int.MaxValue, Name = "RecipesController_Index_Test P1" ,AddedByUser="John Doe" ,ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue, ModifiedDate=DateTime.MaxValue.AddYears(-10)},
                 new Recipe {ID = int.MaxValue-1, Name = "RecipesController_Index_Test P2",  AddedByUser="Sally Doe",  ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(20), ModifiedDate=DateTime.MaxValue.AddYears(-20)},
                 new Recipe {ID = int.MaxValue-2, Name = "RecipesController_Index_Test P3",  AddedByUser="Sue Doe", ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(30), ModifiedDate=DateTime.MaxValue.AddYears(-30)},
@@ -42,7 +42,7 @@ namespace LambAndLentil.Test.BasicControllerTests
                 new Recipe {ID = int.MaxValue-4, Name = "RecipesController_Index_Test P5",  AddedByUser="John Doe",  ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(50), ModifiedDate=DateTime.MaxValue.AddYears(-100)}
             };
 
-            foreach (Recipe recipe in ListEntity.ListT)
+            foreach (Recipe recipe in  ListEntity.ListT)
             {
                 Repo.Add(recipe);
             }

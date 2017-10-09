@@ -30,7 +30,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange
 
             // Act
-            AlertDecoratorResult adr= (AlertDecoratorResult)controller.Delete(50000);
+            AlertDecoratorResult adr= (AlertDecoratorResult)Controller.Delete(50000);
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
             // Assert
         //    Assert.Fail();
@@ -47,8 +47,8 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange
 
             // Act
-         //   AlertDecoratorResult adr= (AlertDecoratorResult)controller.Delete(int.MaxValue);
-             ViewResult vr  = (ViewResult)controller.Delete(int.MaxValue);
+         //   AlertDecoratorResult adr= (AlertDecoratorResult)Controller.Delete(int.MaxValue);
+             ViewResult vr  = (ViewResult)Controller.Delete(int.MaxValue);
           // = (ViewResult)adr.InnerResult;
             // Assert
             //  Assert.Fail();

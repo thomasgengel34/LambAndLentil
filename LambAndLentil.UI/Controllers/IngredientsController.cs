@@ -14,15 +14,7 @@ namespace LambAndLentil.UI.Controllers
             Repo=repository;
         }
 
-        public string GetIngredients(string searchString)
-        {
-            return "TOMATOES(TOMATOES AND FIRE ROASTED TOMATOES, TOMATO JUICE, CITRIC ACID, CALCIUM CHLORIDE), WHITE WINE VINEGAR, CARROTS, WATER, YELLOW ONION, HABANERO CHILI PEPPER(HABANERO CHILI PEPPERS, WATER, SALT, CITRIC ACID), MUSTARD(DISTILLED VINEGAR, WATER, MUSTARD SEED, SALT, TURMERIC, SPICES), ORGANIC CANE SUGAR, SALT, MODIFIED FOOD STARCH, GARLIC, SUNFLOWER OIL, HERBS AND SPICES. Date Available: 09 / 23 / 2016";
-        }
-
-        public int GetNdbno(string searchString)
-        {
-           return 45078606;
-        }
+      
     }
 
     public class IngredientsGenericController< T> : BaseController<Ingredient>
@@ -39,7 +31,17 @@ namespace LambAndLentil.UI.Controllers
         {
             return BaseIndex(Repo,  page); 
         }
-    
+
+        public string GetIngredients(string searchString)
+        {
+            return "TOMATOES(TOMATOES AND FIRE ROASTED TOMATOES, TOMATO JUICE, CITRIC ACID, CALCIUM CHLORIDE), WHITE WINE VINEGAR, CARROTS, WATER, YELLOW ONION, HABANERO CHILI PEPPER(HABANERO CHILI PEPPERS, WATER, SALT, CITRIC ACID), MUSTARD(DISTILLED VINEGAR, WATER, MUSTARD SEED, SALT, TURMERIC, SPICES), ORGANIC CANE SUGAR, SALT, MODIFIED FOOD STARCH, GARLIC, SUNFLOWER OIL, HERBS AND SPICES. Date Available: 09 / 23 / 2016";
+        }
+
+        public int GetNdbno(string searchString)
+        {
+            return 45078606;
+        }
+
         public ActionResult Details(int id = 1, UIViewType actionMethod = UIViewType.Details)
         {
             return BaseDetails(Repo, UIControllerType.Ingredients, id,actionMethod);
@@ -64,7 +66,7 @@ namespace LambAndLentil.UI.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult PostEdit([Bind(Include = "ID, Name, Description, CreationDate, ModifiedDate,  IngredientsList")]  Ingredient ingredient)
+        public ActionResult PostEdit([Bind(Include = "ID, Name, Description, CreationDate,  IngredientsList")]  Ingredient ingredient)
         {
             return BasePostEdit(Repo,  ingredient);
         }

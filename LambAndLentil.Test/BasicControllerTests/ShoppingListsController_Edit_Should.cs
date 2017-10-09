@@ -30,7 +30,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void CanEditShoppingList()
         {
             // Arrange 
-            ShoppingListsController controller2 = new ShoppingListsController(Repo);
+            ShoppingListsController Controller2 = new ShoppingListsController(Repo);
 
             // Act  
             ViewResult view1 = (ViewResult)Controller.Edit(int.MaxValue);
@@ -85,8 +85,8 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Assert 
             Assert.IsNotNull(view1);
             Assert.AreEqual("Name has been changed", returnedShoppingList.Name);
-            //Assert.AreEqual(menu.Description, returnedShoppingListlist.Description);
-            //Assert.AreEqual(menu.CreationDate, returnedShoppingListlist.CreationDate);
+            //Assert.AreEqual(menu.Description, returnedShoppingListListEntity.Description);
+            //Assert.AreEqual(menu.CreationDate, returnedShoppingListListEntity.CreationDate);
         }
 
         [TestMethod]
@@ -95,8 +95,8 @@ namespace LambAndLentil.Test.BasicControllerTests
         {
             // Arrange
             ShoppingListsController indexController = new ShoppingListsController(Repo);
-            ShoppingListsController controller2 = new ShoppingListsController(Repo);
-            ShoppingListsController controller3 = new ShoppingListsController(Repo);
+            ShoppingListsController Controller2 = new ShoppingListsController(Repo);
+            ShoppingListsController Controller3 = new ShoppingListsController(Repo);
 
 
             ShoppingList vm = new ShoppingList
@@ -113,10 +113,10 @@ namespace LambAndLentil.Test.BasicControllerTests
             // now edit it
             vm.Name = "0000 test Edited";
             vm.ID = 7777;
-            ActionResult ar2 = controller2.PostEdit(vm);
-            ViewResult view2 = controller3.Index();
-            ListEntity<ShoppingList> list2 = (ListEntity<ShoppingList>)view2.Model;
-            ShoppingList vm3 = (from m in list2.ListT  
+            ActionResult ar2 = Controller2.PostEdit(vm);
+            ViewResult view2 = Controller3.Index();
+             ListEntity<ShoppingList> ListEntity2 = ( ListEntity<ShoppingList>)view2.Model;
+            ShoppingList vm3 = (from m in ListEntity2.ListT  
                                 where m.Name == "0000 test Edited"
                                 select m).AsQueryable().FirstOrDefault();
 
@@ -145,13 +145,13 @@ namespace LambAndLentil.Test.BasicControllerTests
             Repo.Add(shoppingList);
             ViewResult view1 = (ViewResult)Controller.Edit(1);
 
-            ShoppingList returnedShoppingListlist = Repo.GetById(1);
+            ShoppingList returnedShoppingListListEntity = Repo.GetById(1);
 
             // Assert 
             Assert.IsNotNull(view1);
-            Assert.AreEqual("Name has been changed", returnedShoppingListlist.Name);
-            Assert.AreEqual(shoppingList.Description, returnedShoppingListlist.Description);
-            Assert.AreEqual(shoppingList.CreationDate, returnedShoppingListlist.CreationDate);
+            Assert.AreEqual("Name has been changed", returnedShoppingListListEntity.Name);
+            Assert.AreEqual(shoppingList.Description, returnedShoppingListListEntity.Description);
+            Assert.AreEqual(shoppingList.CreationDate, returnedShoppingListListEntity.CreationDate);
         }
 
 

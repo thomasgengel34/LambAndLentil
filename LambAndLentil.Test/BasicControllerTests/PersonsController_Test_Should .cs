@@ -21,32 +21,32 @@ namespace LambAndLentil.Test.BasicControllerTests
     {
         protected static IRepository<Person> Repo { get; set; }
         protected static MapperConfiguration AutoMapperConfig { get; set; }
-       protected static ListEntity<Person> list;
+       protected static  ListEntity<Person> ListEntity;
         protected static PersonsController Controller { get; set; }
 
         public PersonsController_Test_Should()
         {
             Repo = new TestRepository<Person>();
-            list = new ListEntity<Person>();
+            ListEntity= new  ListEntity<Person>();
             Controller = SetUpController(Repo);
         }
 
-        internal PersonsController SetUpController(IRepository<Person> Repo)
+        public PersonsController SetUpController(IRepository<Person> repo)
         {
-            list.ListT= new List <Person> {
-                new Person{ID = int.MaxValue, Name = "PersonsController_Index_Test P1" ,AddedByUser="John Doe" ,ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue, ModifiedDate=DateTime.MaxValue.AddYears(-10)},
-                new Person{ID = int.MaxValue-1, Name = "PersonsController_Index_Test P2",  AddedByUser="Sally Doe",  ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(20), ModifiedDate=DateTime.MaxValue.AddYears(-20)},
-                new Person{ID = int.MaxValue-2, Name = "PersonsController_Index_Test P3",  AddedByUser="Sue Doe", ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(30), ModifiedDate=DateTime.MaxValue.AddYears(-30)},
-                new Person{ID = int.MaxValue-3, Name = "PersonsController_Index_Test P4",  AddedByUser="Kyle Doe" ,ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(40), ModifiedDate=DateTime.MaxValue.AddYears(-10)},
-                new Person{ID = int.MaxValue-4, Name = "PersonsController_Index_Test P5",  AddedByUser="John Doe",  ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(50), ModifiedDate=DateTime.MaxValue.AddYears(-100)}
-            } ;
+            ListEntity.ListT = new List<Person> {
+                        new Person{ID = int.MaxValue, FirstName = "PersonsController_Index_Test P1" , LastName="", AddedByUser="John Doe" ,ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue, ModifiedDate=DateTime.MaxValue.AddYears(-10)},
+                        new Person{ID = int.MaxValue-1, FirstName = "PersonsController_Index_Test P2",  LastName="",AddedByUser="Sally Doe",  ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(20), ModifiedDate=DateTime.MaxValue.AddYears(-20)},
+                        new Person{ID = int.MaxValue-2, FirstName = "PersonsController_Index_Test P3", LastName="", AddedByUser="Sue Doe", ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(30), ModifiedDate=DateTime.MaxValue.AddYears(-30)},
+                        new Person{ID = int.MaxValue-3, FirstName = "PersonsController_Index_Test P4", LastName="", AddedByUser="Kyle Doe" ,ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(40), ModifiedDate=DateTime.MaxValue.AddYears(-10)},
+                        new Person{ID = int.MaxValue-4, FirstName = "PersonsController_Index_Test P5", LastName="", AddedByUser="John Doe",  ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(50), ModifiedDate=DateTime.MaxValue.AddYears(-100)}
+                    }.AsQueryable();
 
-            foreach (Person person in list.ListT )
+            foreach (Person ingredient in ListEntity.ListT)
             {
-                Repo.Add(person);
+                Repo.Update(ingredient, ingredient.ID);
             }
 
-            Controller = new PersonsController(Repo)
+            PersonsController Controller = new PersonsController(Repo)
             {
                 PageSize = 3
             };
@@ -54,7 +54,6 @@ namespace LambAndLentil.Test.BasicControllerTests
             return Controller;
         }
 
-        
 
         [TestCleanup()]
         public void TestCleanup()

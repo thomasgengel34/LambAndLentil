@@ -20,26 +20,28 @@ namespace LambAndLentil.Domain.Entities
             ShoppingLists = new List<ShoppingList>();
             FirstName = "Newly";
             LastName = "Created";
-            Name = String.Concat( FirstName, " ", LastName);
+            FullName = GetName(FirstName, LastName);
+            Name = FullName;
         }
 
         public Person(string firstName, string lastName):base()
         {
             FirstName = firstName;
             LastName = lastName;
-            Name = String.Concat(FirstName, " ", LastName);
+            FullName =GetName(FirstName,  LastName);
+            Name = FullName;
         }
 
         public Person(DateTime creationDate) : base(creationDate)
         {
             CreationDate = creationDate;
-         //   Name = String.Concat(FirstName, " ", LastName);
+            FullName = GetName(FirstName, LastName);
         }
 
         public int ID { get; set; }
         public string FirstName { get; set; }
-        public string LastName { get; set; } 
-
+        public string LastName { get; set; }
+        public  string FullName { get;  set; }
         public decimal Weight { get; set; }
 
 
@@ -53,5 +55,10 @@ namespace LambAndLentil.Domain.Entities
         public List<Menu> Menus { get; set; }
         public List<Plan> Plans { get; set; }
         public List<ShoppingList> ShoppingLists { get; set; }
+
+        public  string GetName(string FirstName, string LastName)
+        {
+            return FullName = String.Concat(FirstName, " ", LastName);
+        }
     }
 }

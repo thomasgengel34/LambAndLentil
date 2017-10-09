@@ -19,7 +19,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
     [TestClass]
     [TestCategory("ShoppingListsController")]
-    public class ShoppingListsController_Test_Should_Misc : ShoppingListsController_Test_Should
+    public class ShoppingListsController_Test_Misc : ShoppingListsController_Test_Should
     {
 
 
@@ -112,7 +112,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             ActionResult result = Controller.DeleteConfirmed(int.MaxValue) as ActionResult;
             int newCount = Repo.Count();
             // TODO: improve this test when I do some route tests to return a more exact result
-            //RedirectToRouteResult x = new RedirectToRouteResult("default",new  RouteValueDictionary { new Route( { controller = "ShoppingLists", Action = "Index" } } );
+            //RedirectToRouteResult x = new RedirectToRouteResult("default",new  RouteValueDictionary { new Route( { Controller = "ShoppingLists", Action = "Index" } } );
             //TODO: check message
 
             // Assert 
@@ -124,12 +124,12 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestCategory("Remove")]
         public void CanRemoveValidShoppingList()
         {
-            // Arrange - create an shoppingListEntity
-            ShoppingList shoppingListEntityVM = new ShoppingList { ID = 2, Name = "Test2" };
-            Repo.Add(shoppingListEntityVM);
+            // Arrange - create an shoppingList
+            ShoppingList shoppingListEntity = new ShoppingList { ID = 2, Name = "Test2" };
+            Repo.Add(shoppingListEntity);
 
-            // Act - delete the shoppingListEntity
-            ActionResult result = Controller.DeleteConfirmed(shoppingListEntityVM.ID);
+            // Act - delete the shoppingList Entity
+            ActionResult result = Controller.DeleteConfirmed(shoppingListEntity.ID);
 
             AlertDecoratorResult adr = (AlertDecoratorResult)result;
 

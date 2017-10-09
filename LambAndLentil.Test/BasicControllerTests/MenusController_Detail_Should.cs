@@ -16,13 +16,13 @@ namespace LambAndLentil.Test.BasicControllerTests
     public class MenusController_Detail_Should:MenusController_Test_Should
     {
          
-        //static ListEntity<Menu>ListEntity;  
+        //static  ListEntity<Menu> ListEntity;  
         //static Menu menu;
 
         public MenusController_Detail_Should()
         {
             //AutoMapperConfigForTests.InitializeMap();
-            //ListEntity = new ListEntity<Menu>();
+            // ListEntity = new  ListEntity<Menu>();
             //Repo = new TestRepository<Menu>();
             //Controller = SetUpController(Repo);
             //menu = new Menu();

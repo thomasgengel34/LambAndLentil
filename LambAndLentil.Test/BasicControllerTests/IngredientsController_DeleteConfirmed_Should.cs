@@ -18,7 +18,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange
 
             // Act
-            AlertDecoratorResult adr = (AlertDecoratorResult)controller.DeleteConfirmed(8000);
+            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.DeleteConfirmed(8000);
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
             
             // Assert
@@ -35,11 +35,11 @@ namespace LambAndLentil.Test.BasicControllerTests
           
 
             // Act
-            AlertDecoratorResult adr = (AlertDecoratorResult)controller.DeleteConfirmed(ingredient.ID);
+            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.DeleteConfirmed(item.ID);
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
 
             // Assert
-            Assert.AreEqual(ingredient.Name+ " has been deleted", adr.Message);
+            Assert.AreEqual(item.Name+ " has been deleted", adr.Message);
             Assert.AreEqual("alert-success", adr.AlertClass);
             Assert.AreEqual(1, rtrr.RouteValues.Count, 1);
             Assert.AreEqual("BaseIndex", rtrr.RouteValues.Values.ElementAt(0).ToString());
@@ -52,7 +52,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             int initialCount = Repo.Count();
 
             // Act
-            controller.DeleteConfirmed(int.MaxValue);
+            Controller.DeleteConfirmed(int.MaxValue);
             int finalCount = Repo.Count();
             object shouldBeNull = Repo.GetById(int.MaxValue);
 

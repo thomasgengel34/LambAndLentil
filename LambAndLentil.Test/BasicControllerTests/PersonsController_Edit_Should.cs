@@ -30,24 +30,25 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void SaveEditedPersonWithDescriptionChange()
         {
             // Arrange 
-            PersonsController controller1 = new PersonsController(Repo);
-            PersonsController controller2 = new PersonsController(Repo);
-            PersonsController controller3 = new PersonsController(Repo);
-            PersonsController controller4 = new PersonsController(Repo);
-            PersonsController controller5 = new PersonsController(Repo);
+            PersonsController Controller1 = new PersonsController(Repo);
+            PersonsController Controller2 = new PersonsController(Repo);
+            PersonsController Controller3 = new PersonsController(Repo);
+            PersonsController Controller4 = new PersonsController(Repo);
+            PersonsController Controller5 = new PersonsController(Repo);
             Person vm = new Person
             {
-                Name = "0000 test",
+                FirstName = "0000 test",
+                LastName="",
                 Description = "SaveEditedPersonWithDescriptionChange Pre-test",
                 ID = 4000
             };
 
 
             // Act 
-            ActionResult ar1 = controller1.PostEdit(vm);
-            ViewResult view1 = controller2.Index();
-            List<Person> list = (List<Person>)(((ListEntity<Person>)view1.Model).ListT);
-            Person recipeVM = (from m in list
+            ActionResult ar1 = Controller1.PostEdit(vm);
+            ViewResult view1 = Controller2.Index();
+            List<Person> ListEntity= (List<Person>)((( ListEntity<Person>)view1.Model).ListT);
+            Person recipeVM = (from m in ListEntity
                                where m.Name == "0000 test"
                                select m).AsQueryable().FirstOrDefault();
 
@@ -56,13 +57,14 @@ namespace LambAndLentil.Test.BasicControllerTests
 
             // now edit it
             vm.ID = recipeVM.ID;
-            vm.Name = "0000 test Edited";
+            vm.FirstName = "0000 test Edited";
+            vm.LastName = "";
             vm.Description = "SaveEditedPersonWithDescriptionChange Post-test";
 
-            ActionResult ar2 = controller3.PostEdit(vm);
-            ViewResult view2 = controller4.Index();
-            List<Person> list2 = (List<Person>)(((ListEntity<Person>)view2.Model).ListT);
-            Person recipe2 = (from m in list2
+            ActionResult ar2 = Controller3.PostEdit(vm);
+            ViewResult view2 = Controller4.Index();
+            List<Person> ListEntity2 = (List<Person>)((( ListEntity<Person>)view2.Model).ListT);
+            Person recipe2 = (from m in ListEntity2
                               where m.Name == "0000 test Edited"
                               select m).AsQueryable().FirstOrDefault();
 
@@ -112,20 +114,21 @@ namespace LambAndLentil.Test.BasicControllerTests
             DateTime CreationDate = new DateTime(2010, 1, 1);
             Person person = new Person(CreationDate)
             {
-                Name = "test SaveTheCreationDateBetweenPostedEdits",
+                FirstName = "test SaveTheCreationDateBetweenPostedEdits",
+                LastName = "",
                 ID = 5000
             };
 
             TestRepository<Person> repoPerson = new TestRepository<Person>(); ;
-            PersonsController controllerEdit = new PersonsController(repoPerson);
-            PersonsController controllerView = new PersonsController(repoPerson);
-            PersonsController controllerDelete = new PersonsController(repoPerson);
+            PersonsController ControllerEdit = new PersonsController(repoPerson);
+            PersonsController ControllerView = new PersonsController(repoPerson);
+            PersonsController ControllerDelete = new PersonsController(repoPerson);
 
             // Act
-            controllerEdit.PostEdit(person);
-            ViewResult view = controllerView.Index();
-            List<Person> list = (List<Person>)(((ListEntity<Person>)view.Model).ListT);
-           person = (from m in list
+            ControllerEdit.PostEdit(person);
+            ViewResult view = ControllerView.Index();
+            List<Person> ListEntity= (List<Person>)((( ListEntity<Person>)view.Model).ListT);
+           person = (from m in ListEntity
                         where m.ID == 5000
                      select m).AsQueryable().FirstOrDefault();
 
@@ -142,15 +145,16 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void UpdateTheModificationDateBetweenPostedEdits()
         {
             // Arrange 
-            PersonsController controllerPost = new PersonsController(Repo);
-            PersonsController controllerPost1 = new PersonsController(Repo);
-            PersonsController controllerView = new PersonsController(Repo);
-            PersonsController controllerView1 = new PersonsController(Repo);
-            PersonsController controllerDelete = new PersonsController(Repo);
+            PersonsController ControllerPost = new PersonsController(Repo);
+            PersonsController ControllerPost1 = new PersonsController(Repo);
+            PersonsController ControllerView = new PersonsController(Repo);
+            PersonsController ControllerView1 = new PersonsController(Repo);
+            PersonsController ControllerDelete = new PersonsController(Repo);
 
             Person vm = new Person
             {
-                Name = "Test UpdateTheModificationDateBetweenPostedEdits",
+                FirstName = "Test UpdateTheModificationDateBetweenPostedEdits",
+                LastName="",
                 ID = 6000,
                 Description = "Unchanged"
             };
@@ -158,23 +162,23 @@ namespace LambAndLentil.Test.BasicControllerTests
             DateTime mod = vm.ModifiedDate;
 
             // Act
-            controllerPost.PostEdit(vm);
+            ControllerPost.PostEdit(vm);
 
-            ViewResult view = controllerView.Index();
-            List<Person> list = (List<Person>)(((ListEntity<Person>)view.Model).ListT);
-            Person vm2 = (from m in list
+            ViewResult view = ControllerView.Index();
+            List<Person> ListEntity= (List<Person>)((( ListEntity<Person>)view.Model).ListT);
+            Person vm2 = (from m in ListEntity
                           where m.ID == 6000
                           select m).AsQueryable().FirstOrDefault();
 
 
             vm.Description = "I've been edited to delay a bit";
 
-            controllerPost1.PostEdit(vm2);
+            ControllerPost1.PostEdit(vm2);
 
 
-            ViewResult view1 = controllerView.Index();
-            list = (List<Person>)(((ListEntity<Person>)view1.Model).ListT);
-            Person vm3 = (from m in list
+            ViewResult view1 = ControllerView.Index();
+            ListEntity= (List<Person>)((( ListEntity<Person>)view1.Model).ListT);
+            Person vm3 = (from m in ListEntity
                           where m.ID == 6000
                           select m).AsQueryable().FirstOrDefault();
 

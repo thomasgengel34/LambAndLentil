@@ -11,16 +11,16 @@ using LambAndLentil.Domain.Entities;
 namespace LambAndLentil.Test.BasicControllerTests
 {
     [TestClass]
-    public class BaseController_Should
+    public class BaseController_Should:BaseControllerTest<Ingredient>
     {
         static IRepository<Ingredient> Repo;
-        static IngredientsController controller;
+        static IngredientsController Controller;
         private class FakeRepository : TestRepository<Ingredient> { }
 
         public BaseController_Should()
         {
-            Repo = new TestRepository<Ingredient>();
-            controller = new IngredientsController_Index_Test().SetUpIngredientsController(Repo);
+            //Repo = new TestRepository<Ingredient>();
+           // Controller = new IngredientsController_Test_Should().SetUpController(Repo);
         }
 
         [TestMethod]
@@ -29,7 +29,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange
 
             // Act
-            ActionResult result = controller.GuardId(Repo, UI.UIControllerType.Ingredients,2);
+            ActionResult result = Controller.GuardId(Repo, UI.UIControllerType.Ingredients,2);
 
             // Assert
             Assert.IsNull(result);
@@ -41,7 +41,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange
 
             // Act
-            ActionResult result = controller.GuardId(Repo, UI.UIControllerType.Ingredients, int.MaxValue);
+            ActionResult result = Controller.GuardId(Repo, UI.UIControllerType.Ingredients, int.MaxValue);
 
             // Assert
             Assert.AreEqual(typeof(EmptyResult), result.GetType());
@@ -55,7 +55,7 @@ namespace LambAndLentil.Test.BasicControllerTests
              
             // Act
             var property = Type.GetType("LambAndLentil.UI.Controllers.IngredientsController, LambAndLentil.UI").GetProperty("ClassName");
-            var list = Type.GetType("LambAndLentil.UI.Controllers.IngredientsController, LambAndLentil.UI").GetProperties();
+            var ListEntity= Type.GetType("LambAndLentil.UI.Controllers.IngredientsController, LambAndLentil.UI").GetProperties();
             var zz = property.DeclaringType.Attributes;
             // Assert 
             Assert.AreEqual("ClassName", property.Name);
@@ -87,9 +87,9 @@ namespace LambAndLentil.Test.BasicControllerTests
         {
             // Arrange
             FakeRepository fakeRepo = new FakeRepository();
-            IngredientsController fcontroller = new IngredientsController(fakeRepo);
+            IngredientsController fController = new IngredientsController(fakeRepo);
             // Act
-            ActionResult ar = fcontroller.BaseAttach(fakeRepo, int.MaxValue, new Ingredient());
+            ActionResult ar = fController.BaseAttach(fakeRepo, int.MaxValue, new Ingredient());
             // Assert
 
         }

@@ -15,6 +15,8 @@ using System.IO;
 using System.Linq;
 using System.Web.Mvc;
 using LambAndLentil.Tests.Infrastructure;
+using System.Security.Principal;
+using LambAndLentil.Test.BasicControllerTests;
 
 namespace LambAndLentil.Test.Infrastructure
 {
@@ -22,44 +24,13 @@ namespace LambAndLentil.Test.Infrastructure
     // switching to WebApi methods, but something will be needed
     [TestCategory("Integration")]
     [TestCategory("IngredientsController")]
-    public class IngredientsControllerShould
-    {
-        static IRepository<Ingredient> Repo;
-        static IngredientsController controller;
-        static ListEntity<Ingredient> list;
-        public static MapperConfiguration AutoMapperConfig  { get; set; }
-
+    public class IngredientsControllerShould:IngredientsController_Test_Should
+    { 
         public IngredientsControllerShould()
-        {
-            AutoMapperConfigForTests.InitializeMap();
-            Repo = new TestRepository<Ingredient>();
-            list = new ListEntity<Ingredient>();
-            controller =  SetUpIngredientsController(Repo);
+        { 
         }
 
-
-        public IngredientsController SetUpIngredientsController(IRepository<Ingredient> repo)
-        {
-            list.ListT = new List<Ingredient> {
-                new Ingredient {ID = int.MaxValue, Name = "IngredientsController_Index_Test P1" ,AddedByUser="John Doe" ,ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue, ModifiedDate=DateTime.MaxValue.AddYears(-10)},
-                new Ingredient {ID = int.MaxValue-1, Name = "IngredientsController_Index_Test P2",  AddedByUser="Sally Doe",  ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(20), ModifiedDate=DateTime.MaxValue.AddYears(-20)},
-                new Ingredient {ID = int.MaxValue-2, Name = "IngredientsController_Index_Test P3",  AddedByUser="Sue Doe", ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(30), ModifiedDate=DateTime.MaxValue.AddYears(-30)},
-                new Ingredient {ID = int.MaxValue-3, Name = "IngredientsController_Index_Test P4",  AddedByUser="Kyle Doe" ,ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(40), ModifiedDate=DateTime.MaxValue.AddYears(-10)},
-                new Ingredient {ID = int.MaxValue-4, Name = "IngredientsController_Index_Test P5",  AddedByUser="John Doe",  ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(50), ModifiedDate=DateTime.MaxValue.AddYears(-100)}
-            }.AsQueryable();
-
-            foreach (Ingredient item in list.ListT)
-            {
-                Repo.Add(item);
-            }
-
-            IngredientsController controller = new IngredientsController(Repo)
-            {
-                PageSize = 3
-            };
-
-            return controller;
-        }
+         
 
 
         [TestMethod]
@@ -69,7 +40,7 @@ namespace LambAndLentil.Test.Infrastructure
             // Arrange
 
             // Act
-            ViewResult vr = controller.Create(UIViewType.Create);
+            ViewResult vr = Controller.Create(UIViewType.Create);
             string modelName = ((Ingredient)vr.Model).Name;
             // Assert 
             Assert.AreEqual(vr.ViewName, UIViewType.Details.ToString());
@@ -88,7 +59,7 @@ namespace LambAndLentil.Test.Infrastructure
             };
 
             // Act
-            AlertDecoratorResult adr = (AlertDecoratorResult)controller.PostEdit(vm);
+            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.PostEdit(vm);
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
 
             var routeValues = rtrr.RouteValues.Values;
@@ -107,8 +78,8 @@ namespace LambAndLentil.Test.Infrastructure
         {
             // Arrange
             IngredientsController indexController = new IngredientsController(Repo);
-            IngredientsController controller2 = new IngredientsController(Repo);
-            IngredientsController controller3 = new IngredientsController(Repo);
+            IngredientsController Controller2 = new IngredientsController(Repo);
+            IngredientsController Controller3 = new IngredientsController(Repo);
 
 
             Ingredient vm = new Ingredient
@@ -119,18 +90,18 @@ namespace LambAndLentil.Test.Infrastructure
             };
 
             // Act 
-            ActionResult ar1 = controller.PostEdit(vm);
+            ActionResult ar1 = Controller.PostEdit(vm);
 
 
             // now edit it
             vm.Name = "0000 test Edited";
             vm.ID = 7777;
-            ActionResult ar2 = controller2.PostEdit(vm);
-            ViewResult view2 = controller3.Index();
-            List<Ingredient> list2 = (List<Ingredient>)((ListEntity<Ingredient>)view2.Model).ListT;
-            Ingredient vm3 = (from m in list2 
-                                where m.Name == "0000 test Edited"
-                                select m).AsQueryable().FirstOrDefault();
+            ActionResult ar2 = Controller2.PostEdit(vm);
+            ViewResult view2 = Controller3.Index();
+            List<Ingredient> ListEntity2 = (List<Ingredient>)(( ListEntity<Ingredient>)view2.Model).ListT;
+            Ingredient vm3 = (from m in ListEntity2
+                              where m.Name == "0000 test Edited"
+                              select m).AsQueryable().FirstOrDefault();
 
             // Assert
             Assert.AreEqual("0000 test Edited", vm3.Name);
@@ -143,11 +114,11 @@ namespace LambAndLentil.Test.Infrastructure
         //public void ActuallyDeleteAnIngredientFromTheDatabase()
         //{
         //    // Arrange   
-        //    controller = new IngredientsController_Index_Test().SetUpIngredientsController(Repo);
+        //    Controller = new IngredientsController_Index_Test().SetUpIngredientsController(Repo);
         //    Ingredient item = Repo.GetById(int.MaxValue);
         //    int countInRepo = Repo.Count();
         //    //Act
-        //    controller.DeleteConfirmed(item.ID);
+        //    Controller.DeleteConfirmed(item.ID);
         //    int count = Repo.Count();
 
         //    //Assert
@@ -209,16 +180,16 @@ namespace LambAndLentil.Test.Infrastructure
             };
 
 
-            IngredientsController controllerEdit = new IngredientsController(Repo);
-            IngredientsController controllerView = new IngredientsController(Repo);
-            IngredientsController controllerDelete = new IngredientsController(Repo);
+            IngredientsController ControllerEdit = new IngredientsController(Repo);
+            IngredientsController ControllerView = new IngredientsController(Repo);
+            IngredientsController ControllerDelete = new IngredientsController(Repo);
 
             // Act
-            controllerEdit.PostEdit(ingredient);
-            ViewResult view = controllerView.Index();
-            List<Ingredient> list = (List<Ingredient>)((ListEntity<Ingredient>)view.Model).ListT;  
-            Ingredient returnedlist = Repo.GetById(ingredient.ID);
-            DateTime shouldBeSameDate = returnedlist.CreationDate;
+            ControllerEdit.PostEdit(ingredient);
+            ViewResult view = ControllerView.Index();
+            List<Ingredient> ListEntity= (List<Ingredient>)(( ListEntity<Ingredient>)view.Model).ListT;
+            Ingredient returnedListEntity = Repo.GetById(ingredient.ID);
+            DateTime shouldBeSameDate = returnedListEntity.CreationDate;
 
             // Assert
             Assert.AreEqual(CreationDate, shouldBeSameDate);
@@ -232,8 +203,8 @@ namespace LambAndLentil.Test.Infrastructure
         public void UpdateTheModificationDateBetweenPostedEdits()
         {
             // Arrange 
-            IngredientsController controllerPost = new IngredientsController(Repo);
-            IngredientsController controllerPost1 = new IngredientsController(Repo);
+            IngredientsController ControllerPost = new IngredientsController(Repo);
+            IngredientsController ControllerPost1 = new IngredientsController(Repo);
             Ingredient vm = new Ingredient
             {
                 ID = int.MaxValue - 300,
@@ -244,11 +215,11 @@ namespace LambAndLentil.Test.Infrastructure
             DateTime mod = vm.ModifiedDate;
 
             // Act
-            controllerPost.PostEdit(vm);
+            ControllerPost.PostEdit(vm);
 
             vm.Description += "I've been edited to delay a bit";
 
-            controllerPost1.PostEdit(vm);
+            ControllerPost1.PostEdit(vm);
 
             Ingredient returnedVM = Repo.GetById(vm.ID);
 
@@ -268,7 +239,7 @@ namespace LambAndLentil.Test.Infrastructure
             Assert.Fail();
         }
 
-         
+
 
         [TestMethod]
         [TestCategory("Edit")]
@@ -277,12 +248,12 @@ namespace LambAndLentil.Test.Infrastructure
             // Arrange
 
             // Act 
-         AlertDecoratorResult adr =(AlertDecoratorResult)controller.Edit(1000);
+            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.Edit(1000);
             RedirectToRouteResult rdr = (RedirectToRouteResult)adr.InnerResult;
-          
+
             // Assert  
-         Assert.AreEqual(UIViewType.Index.ToString(), rdr.RouteValues.ElementAt(0).Value.ToString());
-             Assert.AreEqual("Ingredient was not found", adr.Message);
+            Assert.AreEqual(UIViewType.Index.ToString(), rdr.RouteValues.ElementAt(0).Value.ToString());
+            Assert.AreEqual("Ingredient was not found", adr.Message);
             Assert.AreEqual("alert-warning", adr.AlertClass);
         }
 
@@ -454,7 +425,7 @@ namespace LambAndLentil.Test.Infrastructure
             Assert.Fail();
         }
 
-        [Ignore]
+        
         [TestCategory("BaseEntiity Property")]
         [TestMethod]
         public void HaveAddedByUserBoundInCreateActionMethod()
@@ -462,9 +433,10 @@ namespace LambAndLentil.Test.Infrastructure
             // Arrange
 
             // Act
-
+            Ingredient ingredient = new Ingredient();
+            string addedByUser = WindowsIdentity.GetCurrent().Name;
             // Assert
-            Assert.Fail();
+            Assert.AreEqual(addedByUser, ingredient.AddedByUser);
         }
 
         [Ignore]

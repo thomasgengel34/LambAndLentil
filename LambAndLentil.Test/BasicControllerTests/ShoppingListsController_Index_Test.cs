@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Principal;
 using System.Web.Mvc;
 
 namespace LambAndLentil.Test.BasicControllerTests
@@ -19,18 +20,7 @@ namespace LambAndLentil.Test.BasicControllerTests
     [TestCategory("ShoppingListsController")]
     public class ShoppingListsController_Index_Test:ShoppingListsController_Test_Should
     {
-        public static MapperConfiguration AutoMapperConfig { get; set; }
-        static ListEntity<ShoppingList> list;
-        static IRepository<ShoppingList> Repo;
-        static ShoppingListsController controller;
-
-        public ShoppingListsController_Index_Test()
-        {
-            AutoMapperConfigForTests.InitializeMap();
-           list = new ListEntity<ShoppingList>();
-            Repo = new TestRepository<ShoppingList>();
-            controller = SetUpShoppingListsController(Repo);
-        }
+          
 
 
 
@@ -42,8 +32,8 @@ namespace LambAndLentil.Test.BasicControllerTests
 
 
             // Act
-            ViewResult result = controller.Index(1) as ViewResult;
-            ViewResult result1 = controller.Index(2) as ViewResult;
+            ViewResult result = Controller.Index(1) as ViewResult;
+            ViewResult result1 = Controller.Index(2) as ViewResult;
 
             // Assert
 
@@ -60,8 +50,8 @@ namespace LambAndLentil.Test.BasicControllerTests
 
 
             // Act
-            ViewResult result = controller.Index(1) as ViewResult;
-            ViewResult result1 = controller.Index(2) as ViewResult;
+            ViewResult result = Controller.Index(1) as ViewResult;
+            ViewResult result1 = Controller.Index(2) as ViewResult;
 
             // Assert 
             Assert.IsNotNull(result1);
@@ -74,13 +64,13 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange 
 
             // Act
-            ViewResult view1 = controller.Index(1);
+            ViewResult view1 = Controller.Index(1);
 
-            int count1 = ((ListEntity<ShoppingList>)(view1.Model)).ListT.Count();
+            int count1 = (( ListEntity<ShoppingList>)(view1.Model)).ListT.Count();
 
-            ViewResult view2 = controller.Index(2);
+            ViewResult view2 = Controller.Index(2);
 
-            int count2 = ((ListEntity<ShoppingList>)(view2.Model)).ListT.Count();
+            int count2 = (( ListEntity<ShoppingList>)(view2.Model)).ListT.Count();
 
             int count = count1 + count2;
 
@@ -95,8 +85,8 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange 
 
             // Act
-            list = (ListEntity<ShoppingList>)(controller.Index(1)).Model;
-            ShoppingList[] ingrArray1 = list.ListT.ToArray();
+             ListEntity = ( ListEntity<ShoppingList>)(Controller.Index(1)).Model;
+            ShoppingList[] ingrArray1 =  ListEntity.ListT.ToArray();
             int count1 = ingrArray1.Count();
 
             // Assert 
@@ -108,17 +98,17 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void ContainsAllShoppingListsView2Count0()
         {
             // Arrange 
-            list = (ListEntity<ShoppingList>)(controller.Index(1)).Model;
-            ShoppingList[] ingrArray1 = list.ListT.ToArray();
+             ListEntity = ( ListEntity<ShoppingList>)(Controller.Index(1)).Model;
+            ShoppingList[] ingrArray1 =  ListEntity.ListT.ToArray();
 
             // Act
-            ViewResult view1 = controller.Index(1);
+            ViewResult view1 = Controller.Index(1);
 
-            int count1 = ((ListEntity<ShoppingList>)(view1.Model)).ListT.Count();
+            int count1 = (( ListEntity<ShoppingList>)(view1.Model)).ListT.Count();
 
-            ViewResult view2 = controller.Index(2);
+            ViewResult view2 = Controller.Index(2);
 
-            int count2 = ((ListEntity<ShoppingList>)(view2.Model)).ListT.Count();
+            int count2 = (( ListEntity<ShoppingList>)(view2.Model)).ListT.Count();
 
             int count = count1 + count2;
 
@@ -134,7 +124,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange  
 
             // Act
-            ViewResult view = controller.Index(1);
+            ViewResult view = Controller.Index(1);
 
 
             // Assert    
@@ -146,17 +136,17 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void ContainsAllShoppingListsView2NameIsIndex()
         {
             // Arrange 
-            list = (ListEntity<ShoppingList>)(controller.Index(1)).Model;
-            ShoppingList[] ingrArray1 = list.ListT.ToArray();
+             ListEntity = ( ListEntity<ShoppingList>)(Controller.Index(1)).Model;
+            ShoppingList[] ingrArray1 =  ListEntity.ListT.ToArray();
 
             // Act
-            ViewResult view1 = controller.Index(1);
+            ViewResult view1 = Controller.Index(1);
 
-            int count1 = ((ListEntity<ShoppingList>)(view1.Model)).ListT.Count();
+            int count1 = (( ListEntity<ShoppingList>)(view1.Model)).ListT.Count();
 
-            ViewResult view2 = controller.Index(2);
+            ViewResult view2 = Controller.Index(2);
 
-            int count2 = ((ListEntity<ShoppingList>)(view2.Model)).ListT.Count();
+            int count2 = (( ListEntity<ShoppingList>)(view2.Model)).ListT.Count();
 
             int count = count1 + count2;
 
@@ -169,14 +159,14 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void FirstPageIsNotNull()
         {
             // Arrange 
-            list = (ListEntity<ShoppingList>)(controller.Index(1)).Model;
-            ShoppingList[] ingrArray1 = list.ListT.ToArray();
-            controller.PageSize = 8;
+             ListEntity = ( ListEntity<ShoppingList>)(Controller.Index(1)).Model;
+            ShoppingList[] ingrArray1 =  ListEntity.ListT.ToArray();
+            Controller.PageSize = 8;
 
             // Act
-            ViewResult view1 = controller.Index(1);
+            ViewResult view1 = Controller.Index(1);
 
-            int count1 = ((ListEntity<ShoppingList>)(view1.Model)).ListT.Count();
+            int count1 = (( ListEntity<ShoppingList>)(view1.Model)).ListT.Count();
 
             // Assert
             Assert.IsNotNull(view1);
@@ -188,13 +178,13 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void FirstPageIsCorrectCountIsFive()
         {
             // Arrange 
-            list = (ListEntity<ShoppingList>)(controller.Index(1)).Model;
-            ShoppingList[] ingrArray1 = list.ListT.ToArray();
-            controller.PageSize = 8;
+             ListEntity = ( ListEntity<ShoppingList>)(Controller.Index(1)).Model;
+            ShoppingList[] ingrArray1 =  ListEntity.ListT.ToArray();
+            Controller.PageSize = 8;
 
             // Act
-            ViewResult view1 = controller.Index(1);
-            int count1 = ((ListEntity<ShoppingList>)(view1.Model)).ListT.Count();
+            ViewResult view1 = Controller.Index(1);
+            int count1 = (( ListEntity<ShoppingList>)(view1.Model)).ListT.Count();
 
             // Assert 
             Assert.AreEqual(5, count1);
@@ -205,14 +195,14 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void FirstPageNameIsIndex()
         {
             // Arrange 
-           list = (ListEntity<ShoppingList>)(controller.Index(1)).Model;
-            ShoppingList[] ingrArray1 = list.ListT.ToArray();
-            controller.PageSize = 8;
+            ListEntity = ( ListEntity<ShoppingList>)(Controller.Index(1)).Model;
+            ShoppingList[] ingrArray1 =  ListEntity.ListT.ToArray();
+            Controller.PageSize = 8;
 
             // Act
-            ViewResult view1 = controller.Index(1);
+            ViewResult view1 = Controller.Index(1);
 
-            int count1 = ((ListEntity<ShoppingList>)(view1.Model)).ListT.Count();
+            int count1 = (( ListEntity<ShoppingList>)(view1.Model)).ListT.Count();
 
             // Assert  
             Assert.AreEqual("Index", view1.ViewName);
@@ -225,17 +215,17 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void FirstItemNameIsCorrect()
         {
             // Arrange 
-            list = (ListEntity<ShoppingList>)(controller.Index(1)).Model;
-            ShoppingList[] ingrArray1 = list.ListT.ToArray();
-            controller.PageSize = 8;
+             ListEntity = ( ListEntity<ShoppingList>)(Controller.Index(1)).Model;
+            ShoppingList[] ingrArray1 =  ListEntity.ListT.ToArray();
+            Controller.PageSize = 8;
 
             // Act
-            ViewResult view1 = controller.Index(1);
+            ViewResult view1 = Controller.Index(1);
 
-            int count1 = ((ListEntity<ShoppingList>)(view1.Model)).ListT.Count();
+            int count1 = (( ListEntity<ShoppingList>)(view1.Model)).ListT.Count();
 
             // Assert   
-            Assert.AreEqual("ShoppingListsController_Index_Test P1", ((ListEntity<ShoppingList>)(view1.Model)).ListT.FirstOrDefault().Name);
+            Assert.AreEqual("ShoppingListsController_Index_Test P1", (( ListEntity<ShoppingList>)(view1.Model)).ListT.FirstOrDefault().Name);
         }
 
 
@@ -245,15 +235,15 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void FirstShoppingListAddedByUserIsCorrect()
         {
             // Arrange 
-            list = (ListEntity<ShoppingList>)(controller.Index(1)).Model;
-            ShoppingList[] ingrArray1 = list.ListT.ToArray();
-            controller.PageSize = 8;
+             ListEntity = ( ListEntity<ShoppingList>)(Controller.Index(1)).Model;
+            ShoppingList[] ingrArray1 =  ListEntity.ListT.ToArray();
+            Controller.PageSize = 8;
 
             // Act
-            ViewResult view1 = controller.Index(1);
+            ViewResult view1 = Controller.Index(1);
 
             // Assert   
-            Assert.AreEqual("John Doe", ((ListEntity<ShoppingList>)(view1.Model)).ListT.FirstOrDefault().AddedByUser);
+            Assert.AreEqual("John Doe", (( ListEntity<ShoppingList>)(view1.Model)).ListT.FirstOrDefault().AddedByUser);
         }
 
         [TestMethod]
@@ -261,15 +251,15 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void FirstModifiedByUserIsCorrect()
         {
             // Arrange 
-            list = (ListEntity<ShoppingList>)(controller.Index(1)).Model;
-            ShoppingList[] ingrArray1 = list.ListT.ToArray();
-            controller.PageSize = 8;
+             ListEntity = ( ListEntity<ShoppingList>)(Controller.Index(1)).Model;
+            ShoppingList[] ingrArray1 =  ListEntity.ListT.ToArray();
+            Controller.PageSize = 8;
 
             // Act
-            ViewResult view1 = controller.Index(1);
-
+            ViewResult view1 = Controller.Index(1);
+            string userName = WindowsIdentity.GetCurrent().Name;
             // Assert   
-            Assert.AreEqual("Richard Roe", ((ListEntity<ShoppingList>)(view1.Model)).ListT.FirstOrDefault().ModifiedByUser);
+            Assert.AreEqual(userName, (( ListEntity<ShoppingList>)(view1.Model)).ListT.FirstOrDefault().ModifiedByUser);
         }
 
         [TestMethod]
@@ -277,15 +267,15 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void FirstCreationDateIsCorrect()
         {
             // Arrange 
-            list = (ListEntity<ShoppingList>)(controller.Index(1)).Model;
-            ShoppingList[] ingrArray1 = list.ListT.ToArray();
-            controller.PageSize = 8;
+             ListEntity = ( ListEntity<ShoppingList>)(Controller.Index(1)).Model;
+            ShoppingList[] ingrArray1 =  ListEntity.ListT.ToArray();
+            Controller.PageSize = 8;
 
             // Act
-            ViewResult view1 = controller.Index(1);
+            ViewResult view1 = Controller.Index(1);
 
             // Assert   
-            Assert.AreEqual(DateTime.MinValue, ((ListEntity<ShoppingList>)(view1.Model)).ListT.FirstOrDefault().CreationDate);
+            Assert.AreEqual(DateTime.MinValue, (( ListEntity<ShoppingList>)(view1.Model)).ListT.FirstOrDefault().CreationDate);
         }
 
         [TestMethod]
@@ -293,15 +283,15 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void Index_FirstModifiedDateIsCorrect()
         {
             // Arrange 
-            list = (ListEntity<ShoppingList>)(controller.Index(1)).Model;
-            ShoppingList[] ingrArray1 = list.ListT.ToArray();
-            controller.PageSize = 8;
+             ListEntity = ( ListEntity<ShoppingList>)(Controller.Index(1)).Model;
+            ShoppingList[] ingrArray1 =  ListEntity.ListT.ToArray();
+            Controller.PageSize = 8;
 
             // Act
-            ViewResult view1 = controller.Index(1);
+            ViewResult view1 = Controller.Index(1);
 
             // Assert   
-            Assert.AreEqual(DateTime.MaxValue.AddYears(-10), ((ListEntity<ShoppingList>)(view1.Model)).ListT.FirstOrDefault().ModifiedDate);
+            Assert.AreEqual(DateTime.MaxValue.AddYears(-10), (( ListEntity<ShoppingList>)(view1.Model)).ListT.FirstOrDefault().ModifiedDate);
         }
 
 
@@ -311,17 +301,17 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void SecondItemNameIsCorrect()
         {
             // Arrange 
-            list = (ListEntity<ShoppingList>)(controller.Index(1)).Model;
-            ShoppingList[] ingrArray1 = list.ListT.ToArray();
-            controller.PageSize = 8;
+             ListEntity = ( ListEntity<ShoppingList>)(Controller.Index(1)).Model;
+            ShoppingList[] ingrArray1 =  ListEntity.ListT.ToArray();
+            Controller.PageSize = 8;
 
             // Act
-            ViewResult view1 = controller.Index(1);
+            ViewResult view1 = Controller.Index(1);
 
-            int count1 = ((ListEntity<ShoppingList>)(view1.Model)).ListT.Count();
+            int count1 = (( ListEntity<ShoppingList>)(view1.Model)).ListT.Count();
 
             // Assert   
-            Assert.AreEqual("ShoppingListsController_Index_Test P2", ((ListEntity<ShoppingList>)(view1.Model)).ListT.Skip(1).FirstOrDefault().Name);
+            Assert.AreEqual("ShoppingListsController_Index_Test P2", (( ListEntity<ShoppingList>)(view1.Model)).ListT.Skip(1).FirstOrDefault().Name);
         }
 
 
@@ -330,17 +320,17 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void ThirdItemNameIsCorrect()
         {
             // Arrange 
-            list = (ListEntity<ShoppingList>)(controller.Index(1)).Model;
-            ShoppingList[] ingrArray1 = list.ListT.ToArray();
-            controller.PageSize = 8;
+             ListEntity = ( ListEntity<ShoppingList>)(Controller.Index(1)).Model;
+            ShoppingList[] ingrArray1 =  ListEntity.ListT.ToArray();
+            Controller.PageSize = 8;
 
             // Act
-            ViewResult view1 = controller.Index(1);
+            ViewResult view1 = Controller.Index(1);
 
-            int count1 = ((ListEntity<ShoppingList>)(view1.Model)).ListT.Count();
+            int count1 = (( ListEntity<ShoppingList>)(view1.Model)).ListT.Count();
 
             // Assert   
-            Assert.AreEqual("ShoppingListsController_Index_Test P3", ((ListEntity<ShoppingList>)(view1.Model)).ListT.Skip(2).FirstOrDefault().Name);
+            Assert.AreEqual("ShoppingListsController_Index_Test P3", (( ListEntity<ShoppingList>)(view1.Model)).ListT.Skip(2).FirstOrDefault().Name);
         }
 
 
@@ -363,7 +353,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
 
             // Act
-            var result = (ListEntity<ShoppingList>)(controller.Index(1)).Model;
+            var result = ( ListEntity<ShoppingList>)(Controller.Index(1)).Model;
 
             // Assert 
             Assert.IsTrue(result.ListT.Count() == 5);
@@ -378,7 +368,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
 
             // Act
-            var result = (ListEntity<ShoppingList>)(controller.Index(1)).Model;
+            var result = ( ListEntity<ShoppingList>)(Controller.Index(1)).Model;
             ShoppingList[] ingrArray1 = result.ListT.ToArray();
 
             // Assert  
@@ -393,7 +383,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange 
 
             // Act
-            var result = (ListEntity<ShoppingList>)(controller.Index(1)).Model;
+            var result = ( ListEntity<ShoppingList>)(Controller.Index(1)).Model;
             ShoppingList[] ingrArray1 = result.ListT.ToArray();
 
             // Assert  
@@ -408,7 +398,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange 
 
             // Act 
-            ListEntity<ShoppingList> resultT = (ListEntity<ShoppingList>)((ViewResult)controller.Index(2)).Model;
+             ListEntity<ShoppingList> resultT = ( ListEntity<ShoppingList>)((ViewResult)Controller.Index(2)).Model;
             PagingInfo pageInfoT = resultT.PagingInfo;
 
             // Assert  
@@ -423,7 +413,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
 
             // Act 
-            ListEntity<ShoppingList> resultT = (ListEntity<ShoppingList>)((ViewResult)controller.Index(2)).Model;
+             ListEntity<ShoppingList> resultT = ( ListEntity<ShoppingList>)((ViewResult)Controller.Index(2)).Model;
             PagingInfo pageInfoT = resultT.PagingInfo;
 
             // Assert   
@@ -437,9 +427,9 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange 
 
             // Act 
-            ListEntity<ShoppingList> resultT = (ListEntity<ShoppingList>)((ViewResult)controller.Index(2)).Model;
+             ListEntity<ShoppingList> resultT = ( ListEntity<ShoppingList>)((ViewResult)Controller.Index(2)).Model;
             PagingInfo pageInfoT = resultT.PagingInfo;
-            //   PagingInfo pageInfoT =list.PagingInfo;
+            //   PagingInfo pageInfoT = ListEntity.PagingInfo;
 
             // Assert 
             Assert.AreEqual(5, pageInfoT.TotalItems);
@@ -454,7 +444,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
 
             // Act 
-            ListEntity<ShoppingList> resultT = (ListEntity<ShoppingList>)((ViewResult)controller.Index(2)).Model;
+             ListEntity<ShoppingList> resultT = ( ListEntity<ShoppingList>)((ViewResult)Controller.Index(2)).Model;
             PagingInfo pageInfoT = resultT.PagingInfo;
 
             // Assert 
@@ -462,28 +452,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         }
 
 
-        public ShoppingListsController SetUpShoppingListsController(IRepository<ShoppingList> repo)
-        {
-            list.ListT = new List<ShoppingList> {
-                        new ShoppingList{ID = int.MaxValue, Name = "ShoppingListsController_Index_Test P1" ,AddedByUser="John Doe" ,ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue, ModifiedDate=DateTime.MaxValue.AddYears(-10)},
-                        new ShoppingList{ID = int.MaxValue-1, Name = "ShoppingListsController_Index_Test P2",  AddedByUser="Sally Doe",  ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(20), ModifiedDate=DateTime.MaxValue.AddYears(-20)},
-                        new ShoppingList{ID = int.MaxValue-2, Name = "ShoppingListsController_Index_Test P3",  AddedByUser="Sue Doe", ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(30), ModifiedDate=DateTime.MaxValue.AddYears(-30)},
-                        new ShoppingList{ID = int.MaxValue-3, Name = "ShoppingListsController_Index_Test P4",  AddedByUser="Kyle Doe" ,ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(40), ModifiedDate=DateTime.MaxValue.AddYears(-10)},
-                        new ShoppingList{ID = int.MaxValue-4, Name = "ShoppingListsController_Index_Test P5",  AddedByUser="John Doe",  ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(50), ModifiedDate=DateTime.MaxValue.AddYears(-100)}
-                    }.AsQueryable();
-
-            foreach (ShoppingList ingredient in list.ListT)
-            {
-                Repo.Add(ingredient);
-            }
-
-            ShoppingListsController controller = new ShoppingListsController(Repo)
-            {
-                PageSize = 3
-            };
-
-            return controller;
-        }
+ 
 
 
         [Ignore]
@@ -517,13 +486,13 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange
 
             // Act
-            ViewResult view1 = controller.Index(1);
+            ViewResult view1 = Controller.Index(1);
 
-            int count1 = ((ListEntity<ShoppingList>)(view1.Model)).ListT.Count();
+            int count1 = (( ListEntity<ShoppingList>)(view1.Model)).ListT.Count();
 
-            ViewResult view2 = controller.Index(2);
+            ViewResult view2 = Controller.Index(2);
 
-            int count2 = ((ListEntity<ShoppingList>)(view2.Model)).ListT.Count();
+            int count2 = (( ListEntity<ShoppingList>)(view2.Model)).ListT.Count();
 
             int count = count1 + count2;
 
@@ -543,21 +512,21 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void FirstPageIsCorrect()
         {
             // Arrange 
-            ListEntity<ShoppingList> list = new ListEntity<ShoppingList>();
-            controller.PageSize = 8;
+             ListEntity<ShoppingList>  ListEntity = new  ListEntity<ShoppingList>();
+            Controller.PageSize = 8;
 
             // Act
-            ViewResult view1 = controller.Index(1);
-            int count1 = ((ListEntity<ShoppingList>)(view1.Model)).ListT.Count();
+            ViewResult view1 = Controller.Index(1);
+            int count1 = (( ListEntity<ShoppingList>)(view1.Model)).ListT.Count();
 
             // Assert
             Assert.IsNotNull(view1);
             Assert.AreEqual(5, count1);
             Assert.AreEqual("Index", view1.ViewName);
 
-            Assert.AreEqual("ShoppingListsController_Index_Test P1", ((ListEntity<ShoppingList>)(view1.Model)).ListT.FirstOrDefault().Name);
-            Assert.AreEqual("ShoppingListsController_Index_Test P2", ((ListEntity<ShoppingList>)(view1.Model)).ListT.Skip(1).FirstOrDefault().Name);
-            Assert.AreEqual("ShoppingListsController_Index_Test P3", ((ListEntity<ShoppingList>)(view1.Model)).ListT.Skip(2).FirstOrDefault().Name);
+            Assert.AreEqual("ShoppingListsController_Index_Test P1", (( ListEntity<ShoppingList>)(view1.Model)).ListT.FirstOrDefault().Name);
+            Assert.AreEqual("ShoppingListsController_Index_Test P2", (( ListEntity<ShoppingList>)(view1.Model)).ListT.Skip(1).FirstOrDefault().Name);
+            Assert.AreEqual("ShoppingListsController_Index_Test P3", (( ListEntity<ShoppingList>)(view1.Model)).ListT.Skip(2).FirstOrDefault().Name);
         }
 
         // [Ignore]
@@ -579,7 +548,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
 
             // Act 
-            ListEntity<ShoppingList> resultT = (ListEntity<ShoppingList>)((ViewResult)controller.Index(2)).Model;
+             ListEntity<ShoppingList> resultT = ( ListEntity<ShoppingList>)((ViewResult)Controller.Index(2)).Model;
 
 
             // Assert 
@@ -598,10 +567,10 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange 
 
             // Action
-            int totalItems = ((ListEntity<ShoppingList>)((ViewResult)controller.Index()).Model).PagingInfo.TotalItems;
-            int currentPage = ((ListEntity<ShoppingList>)((ViewResult)controller.Index()).Model).PagingInfo.CurrentPage;
-            int itemsPerPage = ((ListEntity<ShoppingList>)((ViewResult)controller.Index()).Model).PagingInfo.ItemsPerPage;
-            int totalPages = ((ListEntity<ShoppingList>)((ViewResult)controller.Index()).Model).PagingInfo.TotalPages;
+            int totalItems = (( ListEntity<ShoppingList>)((ViewResult)Controller.Index()).Model).PagingInfo.TotalItems;
+            int currentPage = (( ListEntity<ShoppingList>)((ViewResult)Controller.Index()).Model).PagingInfo.CurrentPage;
+            int itemsPerPage = (( ListEntity<ShoppingList>)((ViewResult)Controller.Index()).Model).PagingInfo.ItemsPerPage;
+            int totalPages = (( ListEntity<ShoppingList>)((ViewResult)Controller.Index()).Model).PagingInfo.TotalPages;
 
 
 
@@ -619,32 +588,12 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange
 
             // Act
-            var result = (ListEntity<ShoppingList>)(controller.Index(1)).Model;
+            var result = ( ListEntity<ShoppingList>)(Controller.Index(1)).Model;
 
             // Assert 
             Assert.IsTrue(result.ListT.Count() == 5);
             Assert.AreEqual("ShoppingListsController_Index_Test P1", result.ListT.FirstOrDefault().Name);
             Assert.AreEqual("ShoppingListsController_Index_Test P4", result.ListT.Skip(3).FirstOrDefault().Name);
-        }
-
-
-        [TestCleanup()]
-        public void TestCleanup()
-        {
-            ClassCleanup();
-        }
-
-        [ClassCleanup()]
-        public static void ClassCleanup()
-        {
-            string path = @"C:\Dev\TGE\LambAndLentil\LambAndLentil.Test\App_Data\JSON\ShoppingList\";
-        
-            IEnumerable<string> files = Directory.EnumerateFiles(path);
-
-            foreach (var file in files)
-            {
-                File.Delete(file);
-            }
-        }
+        } 
     }
 }

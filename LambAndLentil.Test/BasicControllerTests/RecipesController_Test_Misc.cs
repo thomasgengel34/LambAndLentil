@@ -18,7 +18,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 {
     [TestClass]
     [TestCategory("RecipesController")]
-    public class RecipesController_Test_Miscellaneous:RecipesController_Test_Should
+    public class RecipesController_Test_Misc:RecipesController_Test_Should
     {
     
          
@@ -40,7 +40,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         protected RecipesController SetUpController(IRepository<Recipe> Repo)
         {
 
-            ListEntity.ListT = new List<Recipe> {
+             ListEntity.ListT = new List<Recipe> {
                 new Recipe {ID = int.MaxValue, Name = "RecipesController_Index_Test P1" ,AddedByUser="John Doe" ,ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue, ModifiedDate=DateTime.MaxValue.AddYears(-10)},
                 new Recipe {ID = int.MaxValue-1, Name = "RecipesController_Index_Test P2",  AddedByUser="Sally Doe",  ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(20), ModifiedDate=DateTime.MaxValue.AddYears(-20)},
                 new Recipe {ID = int.MaxValue-2, Name = "RecipesController_Index_Test P3",  AddedByUser="Sue Doe", ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(30), ModifiedDate=DateTime.MaxValue.AddYears(-30)},
@@ -48,7 +48,7 @@ namespace LambAndLentil.Test.BasicControllerTests
                 new Recipe {ID = int.MaxValue-4, Name = "RecipesController_Index_Test P5",  AddedByUser="John Doe",  ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(50), ModifiedDate=DateTime.MaxValue.AddYears(-100)}
             };
 
-            foreach (Recipe recipe in ListEntity.ListT)
+            foreach (Recipe recipe in  ListEntity.ListT)
             {
                 Repo.Add(recipe);
             }
@@ -104,11 +104,11 @@ namespace LambAndLentil.Test.BasicControllerTests
             ViewResult view1 = Controller.Index(1);
 
 
-            int count1 = ((ListEntity<Recipe>)view1.Model).ListT.Count();
+            int count1 = (( ListEntity<Recipe>)view1.Model).ListT.Count();
 
             ViewResult view2 = Controller.Index(2);
 
-            int count2 = ((ListEntity<Recipe>)view2.Model).ListT.Count();
+            int count2 = (( ListEntity<Recipe>)view2.Model).ListT.Count();
 
             int count = count1 + count2;
 
@@ -131,7 +131,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
             // Act
 
-            ListEntity<Recipe> resultT = (ListEntity<Recipe>)((ViewResult)Controller.Index(2)).Model;
+             ListEntity<Recipe> resultT = ( ListEntity<Recipe>)((ViewResult)Controller.Index(2)).Model;
 
 
             // Assert
@@ -155,7 +155,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Act
             ViewResult view1 = Controller.Index(1);
 
-            int count1 = ((ListEntity<Recipe>)(view1.Model)).ListT.Count();
+            int count1 = (( ListEntity<Recipe>)(view1.Model)).ListT.Count();
 
 
 
@@ -164,9 +164,9 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.AreEqual(5, count1);
             Assert.AreEqual("Index", view1.ViewName);
 
-            Assert.AreEqual("RecipesController_Index_Test P1", ((ListEntity<Recipe>)(view1.Model)).ListT.FirstOrDefault().Name);
-            Assert.AreEqual("RecipesController_Index_Test P2", ((ListEntity<Recipe>)(view1.Model)).ListT.Skip(1).FirstOrDefault().Name);
-            Assert.AreEqual("RecipesController_Index_Test P3", ((ListEntity<Recipe>)(view1.Model)).ListT.Skip(2).FirstOrDefault().Name);
+            Assert.AreEqual("RecipesController_Index_Test P1", (( ListEntity<Recipe>)(view1.Model)).ListT.FirstOrDefault().Name);
+            Assert.AreEqual("RecipesController_Index_Test P2", (( ListEntity<Recipe>)(view1.Model)).ListT.Skip(1).FirstOrDefault().Name);
+            Assert.AreEqual("RecipesController_Index_Test P3", (( ListEntity<Recipe>)(view1.Model)).ListT.Skip(2).FirstOrDefault().Name);
 
 
         }
@@ -178,10 +178,10 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange 
 
             // Action
-            int totalItems = ((ListEntity<Recipe>)((ViewResult)Controller.Index()).Model).PagingInfo.TotalItems;
-            int currentPage = ((ListEntity<Recipe>)((ViewResult)Controller.Index()).Model).PagingInfo.CurrentPage;
-            int itemsPerPage = ((ListEntity<Recipe>)((ViewResult)Controller.Index()).Model).PagingInfo.ItemsPerPage;
-            int totalPages = ((ListEntity<Recipe>)((ViewResult)Controller.Index()).Model).PagingInfo.TotalPages;
+            int totalItems = (( ListEntity<Recipe>)((ViewResult)Controller.Index()).Model).PagingInfo.TotalItems;
+            int currentPage = (( ListEntity<Recipe>)((ViewResult)Controller.Index()).Model).PagingInfo.CurrentPage;
+            int itemsPerPage = (( ListEntity<Recipe>)((ViewResult)Controller.Index()).Model).PagingInfo.ItemsPerPage;
+            int totalPages = (( ListEntity<Recipe>)((ViewResult)Controller.Index()).Model).PagingInfo.TotalPages;
 
 
 
@@ -208,7 +208,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
 
             // Act
-            var result = (ListEntity<Recipe>)(Controller.Index(1)).Model;
+            var result = ( ListEntity<Recipe>)(Controller.Index(1)).Model;
 
             // Assert 
             Assert.IsTrue(result.ListT.Count() == 5);
@@ -281,7 +281,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Act
             ActionResult result = Controller.DeleteConfirmed(int.MaxValue) as ActionResult;
             // improve this test when I do some route tests to return a more exact result
-            //RedirectToRouteResult x = new RedirectToRouteResult("default",new  RouteValueDictionary { new Route( { controller = "Recipes", Action = "Index" } } );
+            //RedirectToRouteResult x = new RedirectToRouteResult("default",new  RouteValueDictionary { new Route( { Controller = "Recipes", Action = "Index" } } );
             // Assert 
             Assert.IsNotNull(result);
         }
@@ -295,11 +295,11 @@ namespace LambAndLentil.Test.BasicControllerTests
             Repo.Add(recipeVM);
             int repoCount = Repo.Count();
 
-            // Arrange - create the controller
-            RecipesController controller = new RecipesController(Repo);
+            // Arrange - create the Controller
+            RecipesController Controller = new RecipesController(Repo);
 
             // Act - delete the recipe
-            ActionResult result = controller.DeleteConfirmed(recipeVM.ID);
+            ActionResult result = Controller.DeleteConfirmed(recipeVM.ID);
 
             AlertDecoratorResult adr = (AlertDecoratorResult)result;
             int newRepoCount = Repo.Count();
@@ -397,9 +397,9 @@ namespace LambAndLentil.Test.BasicControllerTests
         {
             // Arrange
             FakeRepository fakeRepo = new FakeRepository();
-            RecipesController fcontroller = new RecipesController(fakeRepo);
+            RecipesController fController = new RecipesController(fakeRepo);
             // Act
-            ActionResult ar = fcontroller.BaseAttach(fakeRepo, int.MaxValue, new Ingredient());
+            ActionResult ar = fController.BaseAttach(fakeRepo, int.MaxValue, new Ingredient());
             // Assert
 
         }

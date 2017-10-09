@@ -23,13 +23,13 @@ namespace IntegrationTests
     public class RecipesControllerShould
     {
         static IRepository<Recipe> Repo;
-        static RecipesController controller;
+        static RecipesController Controller;
         static Recipe recipeVM;
 
         public RecipesControllerShould()
         {
             Repo = new TestRepository<Recipe>();
-            controller = new RecipesController(Repo);
+            Controller = new RecipesController(Repo);
             recipeVM = new Recipe();
         }
 
@@ -40,7 +40,7 @@ namespace IntegrationTests
             // Arrange 
 
             // Act
-            ViewResult vr = controller.Create(UIViewType.Create);
+            ViewResult vr = Controller.Create(UIViewType.Create);
             Recipe vm = (Recipe)vr.Model;
             string modelName = vm.Name;
 
@@ -58,21 +58,21 @@ namespace IntegrationTests
             Recipe vm = new Recipe
             {
                 Name = "test SaveAValidRecipe",
-                ID = int.MaxValue / 2 
+                ID = int.MaxValue / 2
             };
             // Act
-            AlertDecoratorResult adr = (AlertDecoratorResult)controller.PostEdit(vm);
+            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.PostEdit(vm);
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
 
-          var routeValues = rtrr.RouteValues.Values;
+            var routeValues = rtrr.RouteValues.Values;
 
 
             // Assert 
 
             Assert.AreEqual("alert-success", adr.AlertClass);
             Assert.AreEqual("test SaveAValidRecipe has been saved or modified", adr.Message);
-            Assert.AreEqual(1, routeValues.Count); 
-            Assert.AreEqual(UIViewType.BaseIndex.ToString(), routeValues.ElementAt(0).ToString()); 
+            Assert.AreEqual(1, routeValues.Count);
+            Assert.AreEqual(UIViewType.BaseIndex.ToString(), routeValues.ElementAt(0).ToString());
         }
 
         // [Ignore]
@@ -81,24 +81,24 @@ namespace IntegrationTests
         public void SaveEditedRecipeWithNameChange()
         {
             // Arrange 
-            RecipesController controller1 = new RecipesController(Repo);
-            RecipesController controller2 = new RecipesController(Repo);
-            RecipesController controller3 = new RecipesController(Repo);
-            RecipesController controller4 = new RecipesController(Repo);
-            RecipesController controller5 = new RecipesController(Repo);
+            RecipesController Controller1 = new RecipesController(Repo);
+            RecipesController Controller2 = new RecipesController(Repo);
+            RecipesController Controller3 = new RecipesController(Repo);
+            RecipesController Controller4 = new RecipesController(Repo);
+            RecipesController Controller5 = new RecipesController(Repo);
             Recipe vm = new Recipe
             {
                 Name = "0000 test",
-                ID=1000
+                ID = 1000
             };
 
             // Act 
-            ActionResult ar1 = controller1.PostEdit(vm);
-            ViewResult view1 = controller2.Index();
-            List<Recipe> list = (List<Recipe>)(((ListEntity<Recipe>)view1.Model).ListT);
-            Recipe recipeVM = (from m in list
-                                 where m.Name == "0000 test"
-                                 select m).AsQueryable().FirstOrDefault();
+            ActionResult ar1 = Controller1.PostEdit(vm);
+            ViewResult view1 = Controller2.Index();
+            List<Recipe> ListEntity= (List<Recipe>)((( ListEntity<Recipe>)view1.Model).ListT);
+            Recipe recipeVM = (from m in ListEntity
+                               where m.Name == "0000 test"
+                               select m).AsQueryable().FirstOrDefault();
 
             // verify initial value:
             Assert.AreEqual("0000 test", recipeVM.Name);
@@ -106,19 +106,19 @@ namespace IntegrationTests
             // now edit it
             vm.Name = "0000 test Edited";
             vm.ID = recipeVM.ID;
-            ActionResult ar2 = controller3.PostEdit(vm);
-            ViewResult view2 = controller4.Index();
-            List<Recipe> list2 = (List<Recipe>)(((ListEntity<Recipe>)view2.Model).ListT);
-            Recipe recipe2 = (from m in list2 
-                                where m.Name == "0000 test Edited"
-                                select m).AsQueryable().First();
+            ActionResult ar2 = Controller3.PostEdit(vm);
+            ViewResult view2 = Controller4.Index();
+            List<Recipe> ListEntity2 = (List<Recipe>)((( ListEntity<Recipe>)view2.Model).ListT);
+            Recipe recipe2 = (from m in ListEntity2
+                              where m.Name == "0000 test Edited"
+                              select m).AsQueryable().First();
 
             // Assert
             Assert.AreEqual("0000 test Edited", recipe2.Name);
         }
 
 
-       
+
         [TestMethod]
         [TestCategory("DeleteConfirmed")]
         public void ActuallyDeleteARecipeFromTheDatabase()
@@ -127,7 +127,7 @@ namespace IntegrationTests
 
             recipeVM.Description = "test ActuallyDeleteARecipeFromTheDatabase";
             //Act
-            controller.DeleteConfirmed(recipeVM.ID);
+            Controller.DeleteConfirmed(recipeVM.ID);
             var deletedItem = (from m in Repo.GetAll()
                                where m.Description == recipeVM.Description
                                select m).AsQueryable();
@@ -142,23 +142,23 @@ namespace IntegrationTests
         public void SaveAllPropertiesInBaseEntity()
         {
             // Arrange 
-            RecipesController controllerPost = new RecipesController(Repo);
-            RecipesController controllerView = new RecipesController(Repo);
-            RecipesController controllerDelete = new RecipesController(Repo);
+            RecipesController ControllerPost = new RecipesController(Repo);
+            RecipesController ControllerView = new RecipesController(Repo);
+            RecipesController ControllerDelete = new RecipesController(Repo);
             Recipe vm = new Recipe
             {
                 Name = "___test387",
                 Description = "test387 description",
-                ID=774
+                ID = 774
             };
 
             // Act
-            controllerPost.PostEdit(vm);
-            ViewResult view1 = controllerView.Index();
-            List<Recipe> list =(List<Recipe>)(((ListEntity<Recipe>)view1.Model).ListT);
-            Recipe recipeVM = (from m in list
-                                 where m.Name == "___test387"
-                                 select m).AsQueryable().FirstOrDefault();
+            ControllerPost.PostEdit(vm);
+            ViewResult view1 = ControllerView.Index();
+            List<Recipe> ListEntity= (List<Recipe>)((( ListEntity<Recipe>)view1.Model).ListT);
+            Recipe recipeVM = (from m in ListEntity
+                               where m.Name == "___test387"
+                               select m).AsQueryable().FirstOrDefault();
 
             Assert.AreEqual(vm.Name, recipeVM.Name);
             Assert.AreEqual(vm.Description, recipeVM.Description);
@@ -177,16 +177,19 @@ namespace IntegrationTests
             // Arrange 
             TestRepository<Recipe> repoRecipe = new TestRepository<Recipe>();
             TestRepository<Ingredient> repoIngredient = new TestRepository<Ingredient>();
-            RecipesController controller = new RecipesController(repoRecipe);
+            RecipesController Controller = new RecipesController(repoRecipe);
 
-            Recipe recipeVM = GetRecipe(repoRecipe, "test AttachAnExistingIngredientToAnExistingRecipe");
-            Ingredient ingredient = GetIngredient(repoIngredient, "test AttachAnExistingIngredientToAnExistingRecipe");
+            Recipe recipe = new Recipe { ID = 3000, Description = "test AttachAnExistingIngredientToAnExistingRecipe" };
+            Repo.Add(recipe);
+            Ingredient ingredient = new Ingredient { ID = 3300, Description = "test AttachAnExistingIngredientToAnExistingRecipe" };
+            repoIngredient.Add(ingredient);
+
 
             // Act
-            controller.AttachIngredient(recipeVM.ID, ingredient);
+            Controller.AttachIngredient(recipe.ID, ingredient);
             Recipe returnedRecipe = (from m in repoRecipe.GetAll()
-                                         where m.Description == recipeVM.Description
-                                         select m).FirstOrDefault();
+                                     where m.Description == recipe.Description
+                                     select m).FirstOrDefault();
             // Assert 
             Assert.AreEqual(1, returnedRecipe.Ingredients.Count());
             // how do I know the correct ingredient was added?
@@ -201,16 +204,16 @@ namespace IntegrationTests
             // Arrange
             TestRepository<Recipe> repoRecipe = new TestRepository<Recipe>();
             TestRepository<Ingredient> repoIngredient = new TestRepository<Ingredient>();
-            RecipesController controller = new RecipesController(repoRecipe);
-            RecipesController controllerSubtract = new RecipesController(repoRecipe);
+            RecipesController Controller = new RecipesController(repoRecipe);
+            RecipesController ControllerSubtract = new RecipesController(repoRecipe);
 
             Recipe recipeVM1 = GetRecipe(repoRecipe, "test NotDeleteAnIngredientAfterIngredientIsDetached");
 
 
             Ingredient ingredient2 = GetIngredient(repoIngredient, "test NotDeleteAnIngredientAfterIngredientIsDetached");
-            controller.AttachIngredient(recipeVM1.ID, ingredient2);
+            Controller.AttachIngredient(recipeVM1.ID, ingredient2);
             // Act
-            controllerSubtract.RemoveIngredient(recipeVM1.ID, ingredient2);
+            ControllerSubtract.RemoveIngredient(recipeVM1.ID, ingredient2);
 
 
             // Assert
@@ -225,15 +228,16 @@ namespace IntegrationTests
             // Arrange
             TestRepository<Recipe> repoRecipe = new TestRepository<Recipe>();
             TestRepository<Ingredient> repoIngredient = new TestRepository<Ingredient>();
-            RecipesController controllerAttach = new RecipesController(repoRecipe);
-            RecipesController controllerSubtract = new RecipesController(repoRecipe);
+            RecipesController ControllerAttach = new RecipesController(repoRecipe);
+            RecipesController ControllerSubtract = new RecipesController(repoRecipe);
 
             string description = "test ReturnIndexViewWhenAttachingExistIngredientToNonExistingRecipe";
 
             Ingredient ingredient = GetIngredient(repoIngredient, description);
+            repoIngredient.Add(ingredient);
 
             // Act
-            AlertDecoratorResult adr = (AlertDecoratorResult)controllerAttach.AttachIngredient(-1, ingredient );
+            AlertDecoratorResult adr = (AlertDecoratorResult)ControllerAttach.AttachIngredient(-1, ingredient);
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
             var routeValues = rtrr.RouteValues.Values;
 
@@ -252,10 +256,10 @@ namespace IntegrationTests
         {
             // Arrange
 
-            Recipe recipeVM = GetRecipe(Repo,  "test ReturnRecipeEditViewWithErrorMessageWhenAttachingNonExistingIngredientToExistingRrecipe");
+            Recipe recipeVM = GetRecipe(Repo, "test ReturnRecipeEditViewWithErrorMessageWhenAttachingNonExistingIngredientToExistingRrecipe");
             Ingredient ingredient = null;
             // Act  
-            AlertDecoratorResult adr = (AlertDecoratorResult)controller.AttachIngredient(recipeVM.ID, ingredient);
+            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.AttachIngredient(recipeVM.ID, ingredient);
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
             var routeValues = rtrr.RouteValues.Values;
 
@@ -274,11 +278,11 @@ namespace IntegrationTests
         {
             // Arrange
             TestRepository<Recipe> repoRecipe = new TestRepository<Recipe>();
-            RecipesController controller = new RecipesController(repoRecipe);
+            RecipesController Controller = new RecipesController(repoRecipe);
             Ingredient vm = null;
 
             // Act 
-            AlertDecoratorResult adr = (AlertDecoratorResult)controller.AttachIngredient(-1, vm);
+            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.AttachIngredient(-1, vm);
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
             var routeValues = rtrr.RouteValues.Values;
 
@@ -289,7 +293,7 @@ namespace IntegrationTests
             Assert.AreEqual(UIViewType.Index.ToString(), routeValues.ElementAt(0).ToString());
         }
 
-         [Ignore]
+        [Ignore]
         [TestMethod]
         [TestCategory("Attach-Detach")]
         public void ReturnRecipeEditViewWithSuccessMessageWhenDetachingExistingIngredientFromExistingRecipe()
@@ -298,16 +302,16 @@ namespace IntegrationTests
 
             TestRepository<Ingredient> repoIngredient = new TestRepository<Ingredient>();
 
-            RecipesController controllerAttachIngredient = new RecipesController(Repo);
-            RecipesController controllerRemoveIngredient = new RecipesController(Repo);
+            RecipesController ControllerAttachIngredient = new RecipesController(Repo);
+            RecipesController ControllerRemoveIngredient = new RecipesController(Repo);
 
-            Recipe recipeVM = GetRecipe(Repo,  "test ReturnRecipeEditViewWithSuccessMessageWhenDetachingExistingIngredientFromExistingRecipe");
+            Recipe recipeVM = GetRecipe(Repo, "test ReturnRecipeEditViewWithSuccessMessageWhenDetachingExistingIngredientFromExistingRecipe");
 
             Ingredient ingredient = GetIngredient(repoIngredient, "test ReturnRecipeEditViewWithSuccessMessageWhenDetachingExistingIngredientFromExistingRecipe");
-            controllerAttachIngredient.AttachIngredient(recipeVM.ID, ingredient );
+            ControllerAttachIngredient.AttachIngredient(recipeVM.ID, ingredient);
 
             // Act          
-            AlertDecoratorResult adr = (AlertDecoratorResult)controllerRemoveIngredient.RemoveIngredient(recipeVM.ID, ingredient );
+            AlertDecoratorResult adr = (AlertDecoratorResult)ControllerRemoveIngredient.RemoveIngredient(recipeVM.ID, ingredient);
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
             var routeValues = rtrr.RouteValues.Values;
 
@@ -327,12 +331,12 @@ namespace IntegrationTests
             // Arrange
             TestRepository<Recipe> repoRecipe = new TestRepository<Recipe>();
             TestRepository<Ingredient> repoIngredient = new TestRepository<Ingredient>();
-            RecipesController controllerDetachIngredient = new RecipesController(repoRecipe);
+            RecipesController ControllerDetachIngredient = new RecipesController(repoRecipe);
             string description = "test ReturnIndexViewWithWarningWhenDetachingExistingIngredientAttachedToNoExistingRecipe";
 
             Ingredient ingredient = GetIngredient(repoIngredient, description);
             // Act  
-            AlertDecoratorResult adr = (AlertDecoratorResult)controllerDetachIngredient.RemoveIngredient(-1, ingredient );
+            AlertDecoratorResult adr = (AlertDecoratorResult)ControllerDetachIngredient.RemoveIngredient(-1, ingredient);
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
             var routeValues = rtrr.RouteValues.Values;
 
@@ -349,22 +353,22 @@ namespace IntegrationTests
         public void ReturnRecipeIndexViewWithWarningWhenDetachingExistingingredientNotAttachedToAnExistingRecipe()
         {
             // Arrange
-            
+
             TestRepository<Ingredient> repoIngredient = new TestRepository<Ingredient>();
-            IngredientsController  controllerIngredient = new IngredientsController(repoIngredient);
-            RecipesController controllerDetachIngredient = new RecipesController(Repo);
+            IngredientsController ControllerIngredient = new IngredientsController(repoIngredient);
+            RecipesController ControllerDetachIngredient = new RecipesController(Repo);
             string description = "test ReturnRecipeIndexViewWithWarningWhenDetachingExistingingredientNotAttachedToAnExistingRecipe";
             Ingredient ingredient = GetIngredient(repoIngredient, description);
             // Act 
-            AlertDecoratorResult adr = (AlertDecoratorResult)controllerDetachIngredient.RemoveIngredient(-1, ingredient );
+            AlertDecoratorResult adr = (AlertDecoratorResult)ControllerDetachIngredient.RemoveIngredient(-1, ingredient);
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
             var routeValues = rtrr.RouteValues.Values;
 
             // Assert 
-                Assert.AreEqual("alert-warning", adr.AlertClass);
-                Assert.AreEqual("Recipe was not found", adr.Message);
-                Assert.AreEqual(1, routeValues.Count);
-                Assert.AreEqual(UIViewType.Index.ToString(), routeValues.ElementAt(0).ToString()); 
+            Assert.AreEqual("alert-warning", adr.AlertClass);
+            Assert.AreEqual("Recipe was not found", adr.Message);
+            Assert.AreEqual(1, routeValues.Count);
+            Assert.AreEqual(UIViewType.Index.ToString(), routeValues.ElementAt(0).ToString());
         }
 
         // [Ignore]
@@ -374,20 +378,20 @@ namespace IntegrationTests
         {
             // Arrange
             TestRepository<Recipe> repoRecipe = new TestRepository<Recipe>();
-            RecipesController controllerRecipe = new RecipesController(repoRecipe);
-            RecipesController controllerDetachIngredient = new RecipesController(repoRecipe);
+            RecipesController ControllerRecipe = new RecipesController(repoRecipe);
+            RecipesController ControllerDetachIngredient = new RecipesController(repoRecipe);
             Recipe recipeVM = GetRecipe(repoRecipe, "test ReturnRecipeEditViewWithWarningMessageWhenDetachingNonExistingIngredientAttachedToExistingRecipe");
             // Act 
-            AlertDecoratorResult adr = (AlertDecoratorResult)controllerDetachIngredient.RemoveIngredient(recipeVM.ID, null);
+            AlertDecoratorResult adr = (AlertDecoratorResult)ControllerDetachIngredient.RemoveIngredient(recipeVM.ID, null);
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
             var routeValues = rtrr.RouteValues.Values;
 
             // Assert 
-                Assert.AreEqual("alert-warning", adr.AlertClass);
-                Assert.AreEqual("Recipe was not found", adr.Message);
-                Assert.AreEqual(3, routeValues.Count);
-                Assert.AreEqual(UIViewType.Details.ToString(), routeValues.ElementAt(2).ToString());
-                Assert.AreEqual(UIViewType.Edit.ToString(), routeValues.ElementAt(1).ToString()); 
+            Assert.AreEqual("alert-warning", adr.AlertClass);
+            Assert.AreEqual("Recipe was not found", adr.Message);
+            Assert.AreEqual(3, routeValues.Count);
+            Assert.AreEqual(UIViewType.Details.ToString(), routeValues.ElementAt(2).ToString());
+            Assert.AreEqual(UIViewType.Edit.ToString(), routeValues.ElementAt(1).ToString());
         }
 
         // [Ignore]
@@ -398,50 +402,50 @@ namespace IntegrationTests
             // Arrange 
 
             // Act 
-            AlertDecoratorResult adr = (AlertDecoratorResult)controller.RemoveIngredient(-1, null);
+            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.RemoveIngredient(-1, null);
 
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
             var routeValues = rtrr.RouteValues.Values;
 
             // Assert
-            
-                Assert.AreEqual("alert-warning", adr.AlertClass);
-                Assert.AreEqual("Recipe was not found", adr.Message);
-                Assert.AreEqual(1, routeValues.Count);
-                Assert.AreEqual(UIViewType.Index.ToString(), routeValues.ElementAt(0).ToString());
-            
+
+            Assert.AreEqual("alert-warning", adr.AlertClass);
+            Assert.AreEqual("Recipe was not found", adr.Message);
+            Assert.AreEqual(1, routeValues.Count);
+            Assert.AreEqual(UIViewType.Index.ToString(), routeValues.ElementAt(0).ToString());
+
         }
 
-        internal Ingredient GetIngredient(IRepository<Ingredient> Repo,  string description)
+        internal Ingredient GetIngredient(IRepository<Ingredient> Repo, string description)
         {
-            IngredientsController controller = new IngredientsController(Repo);
+            IngredientsController Controller = new IngredientsController(Repo);
             Ingredient ivm = new Ingredient
             {
                 Description = description,
                 ID = int.MaxValue
             };
-            controller.PostEdit(ivm);
+            Controller.PostEdit(ivm);
 
             Ingredient ingredient = ((from m in Repo.GetAll()
-                                          where m.Description == description
-                                          select m).AsQueryable()).FirstOrDefault();
+                                      where m.Description == description
+                                      select m).AsQueryable()).FirstOrDefault();
             return ingredient;
         }
 
-
-        internal Recipe GetRecipe(IRepository<Recipe> Repo,  string description)
+        // phase out
+        internal Recipe GetRecipe(IRepository<Recipe> Repo, string description)
         {
-            RecipesController controller = new RecipesController(Repo);
+            RecipesController Controller = new RecipesController(Repo);
             Recipe vm = new Recipe
             {
                 Description = description,
                 ID = int.MaxValue
             };
-            controller.PostEdit(vm);
+            Controller.PostEdit(vm);
 
             Recipe recipeVM = ((from m in Repo.GetAll()
-                                  where m.Description == description
-                                  select m).AsQueryable()).FirstOrDefault();
+                                where m.Description == description
+                                select m).AsQueryable()).FirstOrDefault();
             return recipeVM;
         }
 

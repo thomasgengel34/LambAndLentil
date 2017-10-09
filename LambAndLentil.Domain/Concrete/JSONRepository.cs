@@ -1,4 +1,4 @@
-﻿ using LambAndLentil.Domain.Abstract;
+﻿using LambAndLentil.Domain.Abstract;
 using LambAndLentil.Domain.Entities;
 using Newtonsoft.Json;
 using System;
@@ -6,11 +6,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Security.Principal;
 
 namespace LambAndLentil.Domain.Concrete
 {
     public class JSONRepository<T> : IRepository<T>
-        where T :  BaseEntity,IEntity
+        where T : BaseEntity, IEntity
     {
         // T should be an incoming entity. It cannot be a view model.  LambAndLentil.Domain only deals with Domain, does not have a dependency on UI and cannot,should not, will not. I can get away with this as is because the ViewModels are identical to the Entities. If that changes, this will have to change.
 
@@ -24,11 +25,11 @@ namespace LambAndLentil.Domain.Concrete
             char[] charsToTrim = { 'V', 'M' };
             Folder = typeof(T).ToString().Split('.').Last().Split('+').Last().TrimEnd(charsToTrim);
             //className = typeof(T).ToString().TrimEnd(charsToTrim);
-            className =Folder;
+            className = Folder;
             //   E = Type.GetType(className, true);
             // TODO: get relative path to work.  The first line works in testing but not in running it.
             // fullPath = @"../../../\LambAndLentil.Domain\App_Data\JSON\" + folder + "\\";
-            FullPath = @" C:\Dev\TGE\LambAndLentil\LambAndLentil.Domain\App_Data\JSON\" + Folder + "\\"; 
+            FullPath = @" C:\Dev\TGE\LambAndLentil\LambAndLentil.Domain\App_Data\JSON\" + Folder + "\\";
         }
 
 
@@ -47,6 +48,7 @@ namespace LambAndLentil.Domain.Concrete
         public void Add(T entity)
         {
             // using the ID allows spaces in the name
+            entity.ModifiedByUser = WindowsIdentity.GetCurrent().Name;
             using (StreamWriter file = File.CreateText(FullPath + entity.ID + ".txt"))
             {
                 JsonSerializer serializer = new JsonSerializer();
@@ -79,13 +81,13 @@ namespace LambAndLentil.Domain.Concrete
 
             char[] charsToTrim = { 'V', 'M' };
             string childName = typeof(TChild).ToString().Split('.').Last().Split('+').Last().TrimEnd(charsToTrim);
-            
+
 
             T parent = JsonConvert.DeserializeObject<T>(File.ReadAllText(String.Concat(FullPath, parentID, ".txt")));
-           
+
             if (parent != null && child != null)
             {
-                if (className== "Ingredient")
+                if (className == "Ingredient")
                 {
                     // cannot attach a child
                     // do nothing
@@ -107,14 +109,14 @@ namespace LambAndLentil.Domain.Concrete
                 }
                 else if (className == "Menu")   // can  attach an Ingredient or recipe
                 {
-                    Menu  menu = JsonConvert.DeserializeObject<Menu>(File.ReadAllText
+                    Menu menu = JsonConvert.DeserializeObject<Menu>(File.ReadAllText
                         (String.Concat(FullPath, parentID, ".txt")));
 
                     if (childName == "Ingredient")
                     {
                         if (menu.Ingredients == null)
                         {
-                           menu.Ingredients = new List<Ingredient>();
+                            menu.Ingredients = new List<Ingredient>();
                         }
                         menu.Ingredients.Add(child as Ingredient);
                         IEntity menu1 = menu;
@@ -199,8 +201,8 @@ namespace LambAndLentil.Domain.Concrete
                     {
                         person.ShoppingLists.Add(child as ShoppingList);
                     }
-                } 
-            } 
+                }
+            }
         }
 
         public int Count()
@@ -240,7 +242,7 @@ namespace LambAndLentil.Domain.Concrete
         {
             throw new NotImplementedException();
         }
-         
+
         public void Remove(T t)
         {
             File.Delete(String.Concat(FullPath, t.ID, ".txt"));
@@ -253,9 +255,24 @@ namespace LambAndLentil.Domain.Concrete
         }
 
 
-        public void Update(T entity, int key)
-        {
-            entity.ModifiedDate = DateTime.Now;
+        public void Update(T entity, int? key)
+        { 
+            T oldEntity = GetById(entity.ID);
+            if (oldEntity != null)
+            {
+                entity.CreationDate = oldEntity.CreationDate;
+                entity.AddedByUser = oldEntity.AddedByUser;
+                entity.ModifiedDate = DateTime.Now;
+                entity.ModifiedByUser = WindowsIdentity.GetCurrent().Name;
+            }
+            if (typeof(T)==typeof(Person))
+            {
+                Person person = entity as Person;
+                person.FullName = person.GetName(person.FirstName, person.LastName);
+                person.Name = person.FullName;
+                entity =  person as T; 
+            }
+
             Add(entity);
         }
 

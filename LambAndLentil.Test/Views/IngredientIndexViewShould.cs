@@ -17,13 +17,13 @@ namespace LambAndLentil.Test.Views
     public class IngredientIndexViewShould
     {
         private IRepository<Ingredient> Repo;
-        private IngredientsController controller;
+        private IngredientsController Controller;
         public static MapperConfiguration AutoMapperConfig { get; set; }
         public IngredientIndexViewShould()
         {
             AutoMapperConfigForTests.InitializeMap();
             Repo = new TestRepository<Ingredient>(); 
-            controller = new IngredientsController(Repo); 
+            Controller = new IngredientsController(Repo); 
         }
 
         [TestMethod]
@@ -34,8 +34,8 @@ namespace LambAndLentil.Test.Views
             //
 
             // Act
-            ViewResult view = controller.Index(1);
-            string foo = controller.PartialViewToString("Index", view.Model);
+            ViewResult view = Controller.Index(1);
+            string foo = Controller.PartialViewToString("Index", view.Model);
 
             // Assert
             Assert.Fail();
@@ -332,14 +332,14 @@ namespace LambAndLentil.Test.Views
  }
     public static class PartialViewToStringHelper {
         // https://www.red-gate.com/simple-talk/dotnet/asp-net/advanced-uses-razor-views-asp-net-mvc/
-        public static string PartialViewToString(this Controller controller, string name, object model)
+        public static string PartialViewToString(this Controller Controller, string name, object model)
         {
-            controller.ViewData.Model = model;
-            var result = ViewEngines.Engines.FindPartialView(controller.ControllerContext, name);
+            Controller.ViewData.Model = model;
+            var result = ViewEngines.Engines.FindPartialView(Controller.ControllerContext, name);
 
             var writer = new StringWriter();
-            var viewCtx = new ViewContext(controller.ControllerContext, result.View,
-               controller.ViewData, controller.TempData, writer);
+            var viewCtx = new ViewContext(Controller.ControllerContext, result.View,
+               Controller.ViewData, Controller.TempData, writer);
             result.View.Render(viewCtx, writer);
             return writer.GetStringBuilder().ToString();
         }

@@ -66,19 +66,19 @@ namespace LambAndLentil.Test.BasicControllerTests
         {
             // Arrange   
             int repoCount = Repo.Count();
-            MenusController controller2 = new MenusController(Repo);
+            MenusController Controller2 = new MenusController(Repo);
 
             // Act
             ViewResult view1 = Controller.Index(1);
 
-            int count1 = ((ListEntity<Menu>)(view1.Model)).ListT.Count();
-            var firstName = ((ListEntity<Menu>)(view1.Model)).ListT.FirstOrDefault().Name;
-            var secondName = ((ListEntity<Menu>)(view1.Model)).ListT.Skip(1).FirstOrDefault().Name;
-            var thirdName = ((ListEntity<Menu>)(view1.Model)).ListT.Skip(2).FirstOrDefault().Name;
-            var fifthName = ((ListEntity<Menu>)(view1.Model)).ListT.Skip(4).FirstOrDefault().Name;
+            int count1 = (( ListEntity<Menu>)(view1.Model)).ListT.Count();
+            var firstName = (( ListEntity<Menu>)(view1.Model)).ListT.FirstOrDefault().Name;
+            var secondName = (( ListEntity<Menu>)(view1.Model)).ListT.Skip(1).FirstOrDefault().Name;
+            var thirdName = (( ListEntity<Menu>)(view1.Model)).ListT.Skip(2).FirstOrDefault().Name;
+            var fifthName = (( ListEntity<Menu>)(view1.Model)).ListT.Skip(4).FirstOrDefault().Name;
 
-            ViewResult view2 = controller2.Index(2);
-            int count2 = ((ListEntity<Menu>)(view2.Model)).ListT.Count();
+            ViewResult view2 = Controller2.Index(2);
+            int count2 = (( ListEntity<Menu>)(view2.Model)).ListT.Count();
 
             int count = count1 + count2;
 
@@ -108,12 +108,12 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Act
             ViewResult view = Controller.Index(1);
 
-            int count = ((ListEntity<Menu>)(view.Model)).ListT.Count();
-            var firstName = ((ListEntity<Menu>)(view.Model)).ListT.FirstOrDefault().Name;
-            var secondName = ((ListEntity<Menu>)(view.Model)).ListT.Skip(1).FirstOrDefault().Name;
-            var thirdName = ((ListEntity<Menu>)(view.Model)).ListT.Skip(2).FirstOrDefault().Name;
-            var fourthName = ((ListEntity<Menu>)(view.Model)).ListT.Skip(3).FirstOrDefault().Name;
-            var fifthName = ((ListEntity<Menu>)(view.Model)).ListT.Skip(4).FirstOrDefault().Name;
+            int count = (( ListEntity<Menu>)(view.Model)).ListT.Count();
+            var firstName = (( ListEntity<Menu>)(view.Model)).ListT.FirstOrDefault().Name;
+            var secondName = (( ListEntity<Menu>)(view.Model)).ListT.Skip(1).FirstOrDefault().Name;
+            var thirdName = (( ListEntity<Menu>)(view.Model)).ListT.Skip(2).FirstOrDefault().Name;
+            var fourthName = (( ListEntity<Menu>)(view.Model)).ListT.Skip(3).FirstOrDefault().Name;
+            var fifthName = (( ListEntity<Menu>)(view.Model)).ListT.Skip(4).FirstOrDefault().Name;
 
 
             // Assert
@@ -147,7 +147,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             int count = Repo.Count();
 
             // Act 
-            ListEntity<Menu> resultT = (ListEntity<Menu>)((ViewResult)Controller.Index(1)).Model;
+             ListEntity<Menu> resultT = ( ListEntity<Menu>)((ViewResult)Controller.Index(1)).Model;
 
 
             // Assert 
@@ -168,10 +168,10 @@ namespace LambAndLentil.Test.BasicControllerTests
 
 
             // Action
-            int totalItems = ((ListEntity<Menu>)((ViewResult)Controller.Index()).Model).PagingInfo.TotalItems;
-            int currentPage = ((ListEntity<Menu>)((ViewResult)Controller.Index()).Model).PagingInfo.CurrentPage;
-            int itemsPerPage = ((ListEntity<Menu>)((ViewResult)Controller.Index()).Model).PagingInfo.ItemsPerPage;
-            int totalPages = ((ListEntity<Menu>)((ViewResult)Controller.Index()).Model).PagingInfo.TotalPages;
+            int totalItems = (( ListEntity<Menu>)((ViewResult)Controller.Index()).Model).PagingInfo.TotalItems;
+            int currentPage = (( ListEntity<Menu>)((ViewResult)Controller.Index()).Model).PagingInfo.CurrentPage;
+            int itemsPerPage = (( ListEntity<Menu>)((ViewResult)Controller.Index()).Model).PagingInfo.ItemsPerPage;
+            int totalPages = (( ListEntity<Menu>)((ViewResult)Controller.Index()).Model).PagingInfo.TotalPages;
 
             // Assert
             Assert.AreEqual(count, totalItems);
@@ -187,7 +187,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange 
             int repoCount = Repo.Count();
             // Act
-            var result = (ListEntity<Menu>)(Controller.Index(1)).Model;
+            var result = ( ListEntity<Menu>)(Controller.Index(1)).Model;
 
             // Assert
 
@@ -221,7 +221,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange 
 
             // Act 
-            ActionResult ar = Controller.Details(ListEntity.ListT.FirstOrDefault().ID);
+            ActionResult ar = Controller.Details( ListEntity.ListT.FirstOrDefault().ID);
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             ViewResult view = (ViewResult)adr.InnerResult;
 
@@ -300,7 +300,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
 
             // Act 
-            ActionResult ar = Controller.Details(ListEntity.ListT.FirstOrDefault().ID);
+            ActionResult ar = Controller.Details( ListEntity.ListT.FirstOrDefault().ID);
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             ViewResult view = (ViewResult)adr.InnerResult;
 
@@ -335,9 +335,9 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange
 
             // Act
-            ActionResult result = Controller.DeleteConfirmed(ListEntity.ListT.FirstOrDefault().ID) as ActionResult;
+            ActionResult result = Controller.DeleteConfirmed( ListEntity.ListT.FirstOrDefault().ID) as ActionResult;
             // improve this test when I do some more route tests to return a more exact result
-            //RedirectToRouteResult x = new RedirectToRouteResult("default",new  RouteValueDictionary { new Route( { controller = "Menus", Action = "Index" } } );
+            //RedirectToRouteResult x = new RedirectToRouteResult("default",new  RouteValueDictionary { new Route( { Controller = "Menus", Action = "Index" } } );
             // Assert 
             Assert.IsNotNull(result);
         }
@@ -386,8 +386,8 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Assert 
             Assert.IsNotNull(view1);
             Assert.AreEqual("Name has been changed", returnedMenu.Name);
-            //Assert.AreEqual(menu.Description, returnedMenulist.Description);
-            //Assert.AreEqual(menu.CreationDate, returnedMenulist.CreationDate);
+            //Assert.AreEqual(menu.Description, returnedMenuListEntity.Description);
+            //Assert.AreEqual(menu.CreationDate, returnedMenuListEntity.CreationDate);
         }
 
         [TestMethod]
@@ -396,8 +396,8 @@ namespace LambAndLentil.Test.BasicControllerTests
         {
             // Arrange
             MenusController indexController = new MenusController(Repo);
-            MenusController controller2 = new MenusController(Repo);
-            MenusController controller3 = new MenusController(Repo);
+            MenusController Controller2 = new MenusController(Repo);
+            MenusController Controller3 = new MenusController(Repo);
 
 
             Menu vm = new Menu
@@ -414,10 +414,10 @@ namespace LambAndLentil.Test.BasicControllerTests
             // now edit it
             vm.Name = "0000 test Edited";
             vm.ID = 7777;
-            ActionResult ar2 = controller2.PostEdit(vm);
-            ViewResult view2 = controller3.Index();
-            ListEntity<Menu> list2 = (ListEntity<Menu>)view2.Model;
-            Menu vm3 = (from m in list2.ListT
+            ActionResult ar2 = Controller2.PostEdit(vm);
+            ViewResult view2 = Controller3.Index();
+             ListEntity<Menu> ListEntity2 = ( ListEntity<Menu>)view2.Model;
+            Menu vm3 = (from m in ListEntity2.ListT
                         where m.Name == "0000 test Edited"
                           select m).AsQueryable().FirstOrDefault();
 
@@ -447,13 +447,13 @@ namespace LambAndLentil.Test.BasicControllerTests
 
             ViewResult view1 = (ViewResult)Controller.Edit(1);
 
-            Menu returnedMenulist = Repo.GetById(1);
+            Menu returnedMenuListEntity = Repo.GetById(1);
 
             // Assert 
             Assert.IsNotNull(view1);
-            Assert.AreEqual("Name has been changed", returnedMenulist.Name);
-            Assert.AreEqual(menu.Description, returnedMenulist.Description);
-            Assert.AreEqual(menu.CreationDate, returnedMenulist.CreationDate);
+            Assert.AreEqual("Name has been changed", returnedMenuListEntity.Name);
+            Assert.AreEqual(menu.Description, returnedMenuListEntity.Description);
+            Assert.AreEqual(menu.CreationDate, returnedMenuListEntity.CreationDate);
         }
 
 
@@ -542,9 +542,9 @@ namespace LambAndLentil.Test.BasicControllerTests
         {
             // Arrange
             FakeRepository fakeRepo = new FakeRepository();
-            MenusController fcontroller = new MenusController(fakeRepo);
+            MenusController fController = new MenusController(fakeRepo);
             // Act
-            ActionResult ar = fcontroller.BaseAttach(fakeRepo, int.MaxValue, new Ingredient());
+            ActionResult ar = fController.BaseAttach(fakeRepo, int.MaxValue, new Ingredient());
             // Assert
 
         }
