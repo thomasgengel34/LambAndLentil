@@ -10,12 +10,12 @@ using LambAndLentil.UI.Models;
 
 namespace LambAndLentil.UI.Infrastructure
 {
-    public class RepoWrapper<T>
+ /*   public class RepoWrapper<T>
         where T : BaseEntity, IEntity
     {
         public static MapperConfiguration AutoMapperConfig { get; set; } 
         static string Folder { get; set; } 
-        static string className;
+       static string className;
         static IRepository<T> BaseRepo;
         
         public RepoWrapper(IRepository<T> baseRepo )
@@ -48,5 +48,5 @@ namespace LambAndLentil.UI.Infrastructure
 
         }
 
-    }
+    }*/
 }

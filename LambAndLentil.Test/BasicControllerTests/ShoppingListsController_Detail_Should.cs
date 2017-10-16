@@ -20,18 +20,13 @@ namespace LambAndLentil.Test.BasicControllerTests
     [TestCategory("ShoppingListsController")]
     [TestCategory("Details")]
     public class ShoppingListsController_Detail_Should:ShoppingListsController_Test_Should
-    {
-         
-        static  ListEntity<ShoppingList> ListEntity; 
-        static ShoppingListsController Controller;
-        static ShoppingList ingredient;
+    { 
+       
+        
 
         public ShoppingListsController_Detail_Should()
-        {
-            AutoMapperConfigForTests.InitializeMap();
-            ListEntity= new  ListEntity<ShoppingList>(); 
-            Controller = SetUpController(Repo);
-            ingredient = new ShoppingList();
+        { 
+             
         }
          
         [TestMethod]
@@ -76,10 +71,10 @@ namespace LambAndLentil.Test.BasicControllerTests
             int count = Repo.Count();
             //Act
             Controller.Details(int.MaxValue, UIViewType.DeleteConfirmed);
-            ShoppingList ingredient = Repo.GetById(int.MaxValue);
+            ShoppingList shoppingList = Repo.GetById(int.MaxValue);
             //Assert
             Assert.AreEqual(count - 1, Repo.Count());
-            Assert.IsNull(ingredient);
+            Assert.IsNull(shoppingList);
             //   Assert.Fail();  // make sure the correct item was deleted before removing this line 
         }
 
@@ -149,9 +144,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestCategory("Details")]
         public void DetailsIngredientIDTooHighViewNotNull()
         {  // not sure what the desired behavior is yet
-           // Arrange
-            ShoppingListsController Controller = SetUpController(Repo);
-            //  AutoMapperConfigForTests.AMConfigForTests();
+           // Arrange 
             ActionResult view = Controller.Details(4000);
             AlertDecoratorResult adr = (AlertDecoratorResult)view;
             // Assert
@@ -173,9 +166,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestCategory("Details")]
         public void DetailsIngredientIDTooHighAlertClassCorrect()
         {   // not sure what the desired behavior is yet
-            // Arrange
-            ShoppingListsController Controller = SetUpController(Repo);
-            //  AutoMapperConfigForTests.AMConfigForTests();
+            // Arrange 
             ActionResult view = Controller.Details(4000);
             AlertDecoratorResult adr = (AlertDecoratorResult)view;
             // Assert  
@@ -219,9 +210,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         {
             // I am not sure how I want this to operate.  Wait until UI is set up and see then.
             // Arrange
-            ShoppingListsController Controller = SetUpController(Repo);
-            //  AutoMapperConfigForTests.AMConfigForTests(); 
-
+           
             // Act
             ViewResult result = Controller.Details(int.MaxValue) as ViewResult;
 
@@ -265,8 +254,8 @@ namespace LambAndLentil.Test.BasicControllerTests
         {
             // Arrange
             ShoppingListsController Controller = new ShoppingListsController(Repo);
-            ShoppingList ingredient = new ShoppingList { ID = 0 };
-            Repo.Save(ingredient);
+            ShoppingList shoppingList = new ShoppingList { ID = 0 };
+            Repo.Save(shoppingList);
 
 
             // Act
@@ -283,8 +272,8 @@ namespace LambAndLentil.Test.BasicControllerTests
         {
             // Arrange
             ShoppingListsController Controller = new ShoppingListsController(Repo);
-            ShoppingList ingredient = new ShoppingList { ID = 0 };
-            Repo.Save(ingredient);
+            ShoppingList shoppingList = new ShoppingList { ID = 0 };
+            Repo.Save(shoppingList);
 
 
             // Act
@@ -319,8 +308,8 @@ namespace LambAndLentil.Test.BasicControllerTests
         {
             // Arrange
 
-            ingredient.ID = -500;
-            Repo.Save(ingredient);
+           ShoppingList.ID = -500;
+            Repo.Save(ShoppingList);
 
             // Act
             ActionResult ar = Controller.Details(-500);
@@ -338,12 +327,12 @@ namespace LambAndLentil.Test.BasicControllerTests
         {
             // Arrange
             ShoppingListsController Controller = new ShoppingListsController(Repo);
-            ShoppingList ingredient = new ShoppingList
+            ShoppingList shoppingList = new ShoppingList
             {
                 ID = -1,
                 Name = "Details_IngredientIDIsNegative_AlertClassCorrect"
             };
-            Repo.Save(ingredient);
+            Repo.Save(shoppingList);
 
             // Act
             ActionResult view = Controller.Details(-1);

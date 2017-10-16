@@ -17,7 +17,7 @@ namespace LambAndLentil.UI.Controllers
             Repo = repository;
         }
 
-        public static IRepository<Plan> Repo { get; private set; }
+       // public static IRepository<Plan> Repo { get; private set; }
     }
 
 
@@ -95,6 +95,17 @@ namespace LambAndLentil.UI.Controllers
         public ActionResult DetachIngredient(int? planID, Ingredient ingredient)
         {
             return BaseAttach< Ingredient>(Repo,planID, ingredient, AttachOrDetach.Detach);
+        }
+
+        public ActionResult AttachRecipe(int? planID, Recipe recipe)
+        {
+            return BaseAttach<Recipe>(Repo, planID, recipe);
+        }
+
+
+        public ActionResult DetachRecipe(int? planID, Recipe recipe)
+        {
+            return BaseAttach<Recipe>(Repo, planID, recipe, AttachOrDetach.Detach);
         }
     }
 }

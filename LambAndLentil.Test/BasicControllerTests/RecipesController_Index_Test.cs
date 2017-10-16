@@ -94,7 +94,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             int count1 = ingrArray1.Count();
 
             // Assert 
-            Assert.AreEqual(5, count1);
+            Assert.AreEqual(6, count1);
         }
 
         [TestMethod]
@@ -191,7 +191,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             int count1 = (( ListEntity<Recipe>)(view1.Model)).ListT.Count();
 
             // Assert 
-            Assert.AreEqual(5, count1);
+            Assert.AreEqual(6, count1);
         }
 
         [TestMethod]
@@ -229,7 +229,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             int count1 = (( ListEntity<Recipe>)(view1.Model)).ListT.Count();
 
             // Assert   
-            Assert.AreEqual("RecipesController_Index_Test P1", (( ListEntity<Recipe>)(view1.Model)).ListT.FirstOrDefault().Name);
+            Assert.AreEqual("LambAndLentil.Domain.Entities.Recipe ControllerTest1", (( ListEntity<Recipe>)(view1.Model)).ListT.FirstOrDefault().Name);
         }
 
 
@@ -315,7 +315,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             int count1 = (( ListEntity<Recipe>)(view1.Model)).ListT.Count();
 
             // Assert   
-            Assert.AreEqual("RecipesController_Index_Test P2", (( ListEntity<Recipe>)(view1.Model)).ListT.Skip(1).FirstOrDefault().Name);
+            Assert.AreEqual("LambAndLentil.Domain.Entities.Recipe ControllerTest2", (( ListEntity<Recipe>)(view1.Model)).ListT.Skip(1).FirstOrDefault().Name);
         }
 
 
@@ -334,7 +334,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             int count1 = (( ListEntity<Recipe>)(view1.Model)).ListT.Count();
 
             // Assert   
-            Assert.AreEqual("RecipesController_Index_Test P3", (( ListEntity<Recipe>)(view1.Model)).ListT.Skip(2).FirstOrDefault().Name);
+            Assert.AreEqual("LambAndLentil.Domain.Entities.Recipe ControllerTest3", (( ListEntity<Recipe>)(view1.Model)).ListT.Skip(2).FirstOrDefault().Name);
         }
 
 
@@ -360,7 +360,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             var result = ( ListEntity<Recipe>)(Controller.Index(1)).Model;
 
             // Assert 
-            Assert.IsTrue(result.ListT.Count() == 5);
+            Assert.IsTrue(result.ListT.Count() == 6);
         }
 
         [Ignore]
@@ -436,7 +436,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             //   PagingInfo pageInfoT = ListEntity.PagingInfo;
 
             // Assert 
-            Assert.AreEqual(5, pageInfoT.TotalItems);
+            Assert.AreEqual(6, pageInfoT.TotalItems);
         }
 
         [Ignore]
@@ -478,23 +478,6 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.Fail();
         }
 
-        [TestCleanup()]
-        public void TestCleanup()
-        {
-            ClassCleanup();
-        }
-
-        [ClassCleanup()]
-        public static void ClassCleanup()
-        {
-            string path = @"C:\Dev\TGE\LambAndLentil\LambAndLentil.Test\App_Data\JSON\Recipe\";
-        
-            IEnumerable<string> files = Directory.EnumerateFiles(path);
-
-            foreach (var file in files)
-            {
-                File.Delete(file);
-            }
-        }
+      
     }
 }

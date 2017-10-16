@@ -15,17 +15,10 @@ namespace LambAndLentil.Test.BasicControllerTests
     [TestCategory("Details")]
     public class MenusController_Detail_Should:MenusController_Test_Should
     {
-         
-        //static  ListEntity<Menu> ListEntity;  
-        //static Menu menu;
+          
 
         public MenusController_Detail_Should()
-        {
-            //AutoMapperConfigForTests.InitializeMap();
-            // ListEntity = new  ListEntity<Menu>();
-            //Repo = new TestRepository<Menu>();
-            //Controller = SetUpController(Repo);
-            //menu = new Menu();
+        { 
         }
          
         [TestMethod]
@@ -143,9 +136,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestCategory("Details")]
         public void DetailsMenuIDTooHighViewNotNull()
         {  // not sure what the desired behavior is yet
-           // Arrange
-            MenusController Controller = SetUpController(Repo);
-            //  AutoMapperConfigForTests.AMConfigForTests();
+           // Arrange 
             ActionResult view = Controller.Details(4000);
             AlertDecoratorResult adr = (AlertDecoratorResult)view;
             // Assert
@@ -167,9 +158,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestCategory("Details")]
         public void DetailsMenuIDTooHighAlertClassCorrect()
         {   // not sure what the desired behavior is yet
-            // Arrange
-            MenusController Controller = SetUpController(Repo);
-            //  AutoMapperConfigForTests.AMConfigForTests();
+            // Arrange 
             ActionResult view = Controller.Details(4000);
             AlertDecoratorResult adr = (AlertDecoratorResult)view;
             // Assert  
@@ -213,9 +202,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         {
             // I am not sure how I want this to operate.  Wait until UI is set up and see then.
             // Arrange
-            MenusController Controller = SetUpController(Repo);
-            //  AutoMapperConfigForTests.AMConfigForTests(); 
-
+          
             // Act
             ViewResult result = Controller.Details(int.MaxValue) as ViewResult;
 
@@ -313,8 +300,8 @@ namespace LambAndLentil.Test.BasicControllerTests
         {
             // Arrange
 
-            menu.ID = -500;
-            Repo.Save(menu);
+            Menu.ID = -500;
+            Repo.Save(Menu);
 
             // Act
             ActionResult ar = Controller.Details(-500);

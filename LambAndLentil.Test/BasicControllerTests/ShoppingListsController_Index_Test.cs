@@ -90,7 +90,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             int count1 = ingrArray1.Count();
 
             // Assert 
-            Assert.AreEqual(5, count1);
+            Assert.AreEqual(6, count1);
         }
 
         [TestMethod]
@@ -175,7 +175,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [TestMethod]
         [TestCategory("Index")]
-        public void FirstPageIsCorrectCountIsFive()
+        public void FirstPageIsCorrectCountIsSix()
         {
             // Arrange 
              ListEntity = ( ListEntity<ShoppingList>)(Controller.Index(1)).Model;
@@ -187,7 +187,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             int count1 = (( ListEntity<ShoppingList>)(view1.Model)).ListT.Count();
 
             // Assert 
-            Assert.AreEqual(5, count1);
+            Assert.AreEqual(6, count1);
         }
 
         [TestMethod]
@@ -225,7 +225,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             int count1 = (( ListEntity<ShoppingList>)(view1.Model)).ListT.Count();
 
             // Assert   
-            Assert.AreEqual("ShoppingListsController_Index_Test P1", (( ListEntity<ShoppingList>)(view1.Model)).ListT.FirstOrDefault().Name);
+            Assert.AreEqual("LambAndLentil.Domain.Entities.ShoppingList ControllerTest1", (( ListEntity<ShoppingList>)(view1.Model)).ListT.FirstOrDefault().Name);
         }
 
 
@@ -311,7 +311,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             int count1 = (( ListEntity<ShoppingList>)(view1.Model)).ListT.Count();
 
             // Assert   
-            Assert.AreEqual("ShoppingListsController_Index_Test P2", (( ListEntity<ShoppingList>)(view1.Model)).ListT.Skip(1).FirstOrDefault().Name);
+            Assert.AreEqual("LambAndLentil.Domain.Entities.ShoppingList ControllerTest2", (( ListEntity<ShoppingList>)(view1.Model)).ListT.Skip(1).FirstOrDefault().Name);
         }
 
 
@@ -330,7 +330,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             int count1 = (( ListEntity<ShoppingList>)(view1.Model)).ListT.Count();
 
             // Assert   
-            Assert.AreEqual("ShoppingListsController_Index_Test P3", (( ListEntity<ShoppingList>)(view1.Model)).ListT.Skip(2).FirstOrDefault().Name);
+            Assert.AreEqual("LambAndLentil.Domain.Entities.ShoppingList ControllerTest3", (( ListEntity<ShoppingList>)(view1.Model)).ListT.Skip(2).FirstOrDefault().Name);
         }
 
 
@@ -356,7 +356,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             var result = ( ListEntity<ShoppingList>)(Controller.Index(1)).Model;
 
             // Assert 
-            Assert.IsTrue(result.ListT.Count() == 5);
+            Assert.AreEqual(6,result.ListT.Count());
         }
 
         // [Ignore]
@@ -372,7 +372,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             ShoppingList[] ingrArray1 = result.ListT.ToArray();
 
             // Assert  
-            Assert.AreEqual("ShoppingListsController_Index_Test P1", ingrArray1[0].Name);
+            Assert.AreEqual("LambAndLentil.Domain.Entities.ShoppingList ControllerTest1", ingrArray1[0].Name);
         }
 
         // [Ignore]
@@ -387,7 +387,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             ShoppingList[] ingrArray1 = result.ListT.ToArray();
 
             // Assert  
-            Assert.AreEqual("ShoppingListsController_Index_Test P3", ingrArray1[2].Name);
+            Assert.AreEqual("LambAndLentil.Domain.Entities.ShoppingList ControllerTest3", ingrArray1[2].Name);
         }
 
 
@@ -432,7 +432,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             //   PagingInfo pageInfoT = ListEntity.PagingInfo;
 
             // Assert 
-            Assert.AreEqual(5, pageInfoT.TotalItems);
+            Assert.AreEqual(6, pageInfoT.TotalItems);
         }
 
         // [Ignore]
@@ -499,9 +499,9 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Assert
             Assert.IsNotNull(view1);
             Assert.IsNotNull(view2);
-            Assert.AreEqual(5, count1);
+            Assert.AreEqual(6, count1);
             Assert.AreEqual(0, count2);
-            Assert.AreEqual(5, count);
+            Assert.AreEqual(6, count);
             Assert.AreEqual("Index", view1.ViewName);
             Assert.AreEqual("Index", view2.ViewName);
         }
@@ -521,12 +521,12 @@ namespace LambAndLentil.Test.BasicControllerTests
 
             // Assert
             Assert.IsNotNull(view1);
-            Assert.AreEqual(5, count1);
+            Assert.AreEqual(6, count1);
             Assert.AreEqual("Index", view1.ViewName);
 
-            Assert.AreEqual("ShoppingListsController_Index_Test P1", (( ListEntity<ShoppingList>)(view1.Model)).ListT.FirstOrDefault().Name);
-            Assert.AreEqual("ShoppingListsController_Index_Test P2", (( ListEntity<ShoppingList>)(view1.Model)).ListT.Skip(1).FirstOrDefault().Name);
-            Assert.AreEqual("ShoppingListsController_Index_Test P3", (( ListEntity<ShoppingList>)(view1.Model)).ListT.Skip(2).FirstOrDefault().Name);
+            Assert.AreEqual("LambAndLentil.Domain.Entities.ShoppingList ControllerTest1", (( ListEntity<ShoppingList>)(view1.Model)).ListT.FirstOrDefault().Name);
+            Assert.AreEqual("LambAndLentil.Domain.Entities.ShoppingList ControllerTest2", (( ListEntity<ShoppingList>)(view1.Model)).ListT.Skip(1).FirstOrDefault().Name);
+            Assert.AreEqual("LambAndLentil.Domain.Entities.ShoppingList ControllerTest3", (( ListEntity<ShoppingList>)(view1.Model)).ListT.Skip(2).FirstOrDefault().Name);
         }
 
         // [Ignore]
@@ -555,7 +555,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             PagingInfo pageInfoT = resultT.PagingInfo;
             Assert.AreEqual(2, pageInfoT.CurrentPage);
             Assert.AreEqual(8, pageInfoT.ItemsPerPage);
-            Assert.AreEqual(5, pageInfoT.TotalItems);
+            Assert.AreEqual(6, pageInfoT.TotalItems);
             Assert.AreEqual(1, pageInfoT.TotalPages);
         }
 
@@ -575,7 +575,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
 
             // Assert
-            Assert.AreEqual(5, totalItems);
+            Assert.AreEqual(6, totalItems);
             Assert.AreEqual(1, currentPage);
             Assert.AreEqual(8, itemsPerPage);
             Assert.AreEqual(1, totalPages);
@@ -591,9 +591,9 @@ namespace LambAndLentil.Test.BasicControllerTests
             var result = ( ListEntity<ShoppingList>)(Controller.Index(1)).Model;
 
             // Assert 
-            Assert.IsTrue(result.ListT.Count() == 5);
-            Assert.AreEqual("ShoppingListsController_Index_Test P1", result.ListT.FirstOrDefault().Name);
-            Assert.AreEqual("ShoppingListsController_Index_Test P4", result.ListT.Skip(3).FirstOrDefault().Name);
+            Assert.AreEqual(6,result.ListT.Count());
+            Assert.AreEqual("LambAndLentil.Domain.Entities.ShoppingList ControllerTest1", result.ListT.FirstOrDefault().Name);
+            Assert.AreEqual("LambAndLentil.Domain.Entities.ShoppingList ControllerTest4", result.ListT.Skip(3).FirstOrDefault().Name);
         } 
     }
 }

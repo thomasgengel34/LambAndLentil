@@ -15,17 +15,11 @@ namespace LambAndLentil.Test.BasicControllerTests
     [TestCategory("Details")]
     public class RecipesController_Detail_Should:RecipesController_Test_Should
     {
-         
-        static  ListEntity<Recipe> ListEntity; 
-        static RecipesController Controller;
-        static Recipe ingredient;
+        static Recipe recipe;
 
         public RecipesController_Detail_Should()
-        {
-            AutoMapperConfigForTests.InitializeMap();
-            ListEntity= new  ListEntity<Recipe>(); 
-            Controller = SetUpController(Repo);
-            ingredient = new Recipe();
+        { 
+           recipe = new Recipe();
         }
          
         [TestMethod]
@@ -144,8 +138,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void DetailsIngredientIDTooHighViewNotNull()
         {  // not sure what the desired behavior is yet
            // Arrange
-            RecipesController Controller = SetUpController(Repo);
-            //  AutoMapperConfigForTests.AMConfigForTests();
+            
             ActionResult view = Controller.Details(4000);
             AlertDecoratorResult adr = (AlertDecoratorResult)view;
             // Assert
@@ -168,8 +161,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void DetailsIngredientIDTooHighAlertClassCorrect()
         {   // not sure what the desired behavior is yet
             // Arrange
-            RecipesController Controller = SetUpController(Repo);
-            //  AutoMapperConfigForTests.AMConfigForTests();
+          
             ActionResult view = Controller.Details(4000);
             AlertDecoratorResult adr = (AlertDecoratorResult)view;
             // Assert  
@@ -213,9 +205,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         {
             // I am not sure how I want this to operate.  Wait until UI is set up and see then.
             // Arrange
-            RecipesController Controller = SetUpController(Repo);
-            //  AutoMapperConfigForTests.AMConfigForTests(); 
-
+         
             // Act
             ViewResult result = Controller.Details(int.MaxValue) as ViewResult;
 
@@ -313,8 +303,8 @@ namespace LambAndLentil.Test.BasicControllerTests
         {
             // Arrange
 
-            ingredient.ID = -500;
-            Repo.Save(ingredient);
+           recipe.ID = -500;
+            Repo.Save(recipe);
 
             // Act
             ActionResult ar = Controller.Details(-500);

@@ -135,6 +135,7 @@ namespace LambAndLentil.Domain.Concrete
                     if (childName == "Ingredient")
                     {
                         plan.Ingredients.Add(child as Ingredient);
+
                     }
                     else if (childName == "Recipe")
                     {
@@ -149,6 +150,7 @@ namespace LambAndLentil.Domain.Concrete
 
                         plan.Menus.Add(child as Menu);
                     }
+                    Update(plan as T, plan.ID);
                 }
                 else if (className == "ShoppingList")   // can  attach an Ingredient or recipe or menu or plan
                 {
@@ -171,6 +173,7 @@ namespace LambAndLentil.Domain.Concrete
                     {
                         shoppingList.Plans.Add(child as Plan);
                     }
+                    Update(shoppingList as T, shoppingList.ID);
                 }
                 else if (className == "Person")
                 {
@@ -201,7 +204,9 @@ namespace LambAndLentil.Domain.Concrete
                     {
                         person.ShoppingLists.Add(child as ShoppingList);
                     }
+                    Update(person as T, person.ID);
                 }
+            
             }
         }
 
@@ -216,7 +221,130 @@ namespace LambAndLentil.Domain.Concrete
         public void DetachAnIndependentChild<TChild>(int parentID, TChild child)
             where TChild : BaseEntity, IEntity
         {
-            throw new NotImplementedException();
+            char[] charsToTrim = { 'V', 'M' };
+            string childName = typeof(TChild).ToString().Split('.').Last().Split('+').Last().TrimEnd(charsToTrim);
+            T parent = JsonConvert.DeserializeObject<T>(File.ReadAllText(String.Concat(FullPath, parentID, ".txt")));
+
+            if (parent != null && child != null)
+            {
+                if (className == "Ingredient")
+                {
+                    // cannot attach a child
+                    // do nothing
+                    // TODO: think about returning an error message. But user should not be given the chance to do this, so, aside from messing with the query string, how is this possible?  Make sure this is a POST request so no one can mess with the query string and get here. 
+                }
+                if (className == "Recipe")   // can only attach an Ingredient   
+                {
+                    Recipe recipe = JsonConvert.DeserializeObject<Recipe>(File.ReadAllText(String.Concat(FullPath, parentID, ".txt")));
+                    if (childName == "Ingredient")
+                    {
+                        Ingredient ingredient = child as Ingredient;
+                        recipe.Ingredients.Remove(ingredient);
+                        Remove(recipe as T);
+                    }
+                    else
+                    {
+                        // see notes above.  How did we get here? Try to and figure out how to block it. 
+                    }
+                }
+                else if (className == "Menu")   // can  attach an Ingredient or recipe
+                {
+                    Menu menu = JsonConvert.DeserializeObject<Menu>(File.ReadAllText
+                        (String.Concat(FullPath, parentID, ".txt")));
+
+                    if (childName == "Ingredient")
+                    {
+                        if (menu.Ingredients == null)
+                        {
+                            menu.Ingredients = new List<Ingredient>();
+                        }
+                        menu.Ingredients.Remove(child as Ingredient);
+                        IEntity menu1 = menu;
+                        Remove((T)menu1);
+                    }
+                    else if (childName == "Recipe")
+                    {
+                        menu.Recipes.Remove(child as Recipe);
+                    }
+                }
+                else if (className == "Plan")   // can  attach an Ingredient or recipe or menu
+                {
+                    Plan plan = JsonConvert.DeserializeObject<Plan>(File.ReadAllText
+                        (String.Concat(FullPath, parentID, ".txt")));
+
+                    if (childName == "Ingredient")
+                    {
+                        plan.Ingredients.Remove(child as Ingredient);
+
+                    }
+                    else if (childName == "Recipe")
+                    {
+                        plan.Recipes.Remove(child as Recipe);
+                    }
+                    else if (childName == "Menu")
+                    {
+                        if (plan.Menus == null)
+                        {
+                            plan.Menus = new List<Menu>();
+                        }
+
+                        plan.Menus.Remove(child as Menu);
+                    }
+                    Update(plan as T, plan.ID);
+                }
+                else if (className == "ShoppingList")   // can  attach an Ingredient or recipe or menu or plan
+                {
+                    ShoppingList shoppingList = JsonConvert.DeserializeObject<ShoppingList>(File.ReadAllText
+                        (String.Concat(FullPath, parentID, ".txt")));
+
+                    if (childName == "Ingredient")
+                    {
+                        shoppingList.Ingredients.Remove(child as Ingredient);
+                    }
+                    else if (childName == "Recipe")
+                    {
+                        shoppingList.Recipes.Remove(child as Recipe);
+                    }
+                    else if (childName == "Menu")
+                    {
+                        shoppingList.Menus.Remove(child as Menu);
+                    }
+                    else if (childName == "Plan")
+                    {
+                        shoppingList.Plans.Remove(child as Plan);
+                    }
+                }
+                else if (className == "Person")
+                {
+                    Person person = JsonConvert.DeserializeObject<Person>(File.ReadAllText
+                        (String.Concat(FullPath, parentID, ".txt")));
+
+                    if (childName == "Ingredient")
+                    {
+                        if (person.Ingredients == null)
+                        {
+                            person.Ingredients = new List<Ingredient>();
+                        }
+                        person.Ingredients.Remove(child as Ingredient);
+                    }
+                    else if (childName == "Recipe")
+                    {
+                        person.Recipes.Remove(child as Recipe);
+                    }
+                    else if (childName == "Menu")
+                    {
+                        person.Menus.Remove(child as Menu);
+                    }
+                    else if (childName == "Plan")
+                    {
+                        person.Plans.Remove(child as Plan);
+                    }
+                    else if (childName == "ShoppingList")
+                    {
+                        person.ShoppingLists.Remove(child as ShoppingList);
+                    }
+                }
+            }
         }
 
         public T GetById(int id)
@@ -256,7 +384,7 @@ namespace LambAndLentil.Domain.Concrete
 
 
         public void Update(T entity, int? key)
-        { 
+        {
             T oldEntity = GetById(entity.ID);
             if (oldEntity != null)
             {
@@ -265,12 +393,12 @@ namespace LambAndLentil.Domain.Concrete
                 entity.ModifiedDate = DateTime.Now;
                 entity.ModifiedByUser = WindowsIdentity.GetCurrent().Name;
             }
-            if (typeof(T)==typeof(Person))
+            if (typeof(T) == typeof(Person))
             {
                 Person person = entity as Person;
                 person.FullName = person.GetName(person.FirstName, person.LastName);
                 person.Name = person.FullName;
-                entity =  person as T; 
+                entity = person as T;
             }
 
             Add(entity);
@@ -289,6 +417,6 @@ namespace LambAndLentil.Domain.Concrete
                 list.Add(entity);
             }
             return list;
-        }
+        } 
     }
 }

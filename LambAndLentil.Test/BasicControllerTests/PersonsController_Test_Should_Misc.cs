@@ -81,16 +81,16 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Assert
             Assert.IsNotNull(view1);
             Assert.IsNotNull(view2);
-            Assert.AreEqual(5, count1);
+            Assert.AreEqual(6, count1);
             Assert.AreEqual(0, count2);
-            Assert.AreEqual(5, count);
+            Assert.AreEqual(6, count);
             Assert.AreEqual("Index", view1.ViewName);
             Assert.AreEqual("Index", view2.ViewName);
 
-            Assert.AreEqual("PersonsController_Index_Test P1 ", (( ListEntity<Person>)(view1.Model)).ListT.FirstOrDefault().Name);
-            Assert.AreEqual("PersonsController_Index_Test P2 ", (( ListEntity<Person>)(view1.Model)).ListT.Skip(1).FirstOrDefault().Name);
-            Assert.AreEqual("PersonsController_Index_Test P3 ", (( ListEntity<Person>)(view1.Model)).ListT.Skip(2).FirstOrDefault().Name);
-            Assert.AreEqual("PersonsController_Index_Test P5 ", (( ListEntity<Person>)(view1.Model)).ListT.Skip(4).FirstOrDefault().Name);
+            Assert.AreEqual("LambAndLentil.Domain.Entities.Person ControllerTest1", (( ListEntity<Person>)(view1.Model)).ListT.FirstOrDefault().Name);
+            Assert.AreEqual("LambAndLentil.Domain.Entities.Person ControllerTest2", (( ListEntity<Person>)(view1.Model)).ListT.Skip(1).FirstOrDefault().Name);
+            Assert.AreEqual("LambAndLentil.Domain.Entities.Person ControllerTest3", (( ListEntity<Person>)(view1.Model)).ListT.Skip(2).FirstOrDefault().Name);
+            Assert.AreEqual("LambAndLentil.Domain.Entities.Person ControllerTest5", (( ListEntity<Person>)(view1.Model)).ListT.Skip(4).FirstOrDefault().Name);
 
         }
 
@@ -110,12 +110,12 @@ namespace LambAndLentil.Test.BasicControllerTests
 
             // Assert
             Assert.IsNotNull(view1);
-            Assert.AreEqual(5, count1);
+            Assert.AreEqual(6, count1);
             Assert.AreEqual("Index", view1.ViewName);
 
-            Assert.AreEqual("PersonsController_Index_Test P1 ", (( ListEntity<Person>)(view1.Model)).ListT.FirstOrDefault().Name);
-            Assert.AreEqual("PersonsController_Index_Test P2 ", (( ListEntity<Person>)(view1.Model)).ListT.Skip(1).FirstOrDefault().Name);
-            Assert.AreEqual("PersonsController_Index_Test P3 ", (( ListEntity<Person>)(view1.Model)).ListT.Skip(2).FirstOrDefault().Name);
+            Assert.AreEqual("LambAndLentil.Domain.Entities.Person ControllerTest1", (( ListEntity<Person>)(view1.Model)).ListT.FirstOrDefault().Name);
+            Assert.AreEqual("LambAndLentil.Domain.Entities.Person ControllerTest2", (( ListEntity<Person>)(view1.Model)).ListT.Skip(1).FirstOrDefault().Name);
+            Assert.AreEqual("LambAndLentil.Domain.Entities.Person ControllerTest3", (( ListEntity<Person>)(view1.Model)).ListT.Skip(2).FirstOrDefault().Name);
 
 
         }
@@ -145,7 +145,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             PagingInfo pageInfoT = resultT.PagingInfo;
             Assert.AreEqual(2, pageInfoT.CurrentPage);
             Assert.AreEqual(8, pageInfoT.ItemsPerPage);
-            Assert.AreEqual(5, pageInfoT.TotalItems);
+            Assert.AreEqual(6, pageInfoT.TotalItems);
             Assert.AreEqual(1, pageInfoT.TotalPages);
         }
 
@@ -163,7 +163,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             int totalPages = (( ListEntity<Person>)((ViewResult)Controller.Index()).Model).PagingInfo.TotalPages;
 
             // Assert
-            Assert.AreEqual(5, totalItems);
+            Assert.AreEqual(6, totalItems);
             Assert.AreEqual(1, currentPage);
             Assert.AreEqual(8, itemsPerPage);
             Assert.AreEqual(1, totalPages);
@@ -180,9 +180,9 @@ namespace LambAndLentil.Test.BasicControllerTests
             var ListEntity= result.ListT;
 
             // Assert 
-            Assert.IsTrue(ListEntity.Count() == 5);
-            Assert.AreEqual("PersonsController_Index_Test P1 ", ListEntity.FirstOrDefault().Name);
-            Assert.AreEqual("PersonsController_Index_Test P3 ", ListEntity.Skip(2).FirstOrDefault().Name);
+            Assert.AreEqual(6,ListEntity.Count());
+            Assert.AreEqual("LambAndLentil.Domain.Entities.Person ControllerTest1", ListEntity.FirstOrDefault().Name);
+            Assert.AreEqual("LambAndLentil.Domain.Entities.Person ControllerTest3", ListEntity.Skip(2).FirstOrDefault().Name);
         }
 
         [TestMethod]
@@ -563,5 +563,341 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.AreEqual("LambAndLentil.UI.Controllers.PersonsController", PersonsController_Test_Should.Controller.ToString());
         }
 
+
+        [Ignore]
+        [TestMethod]
+        public void ShouldEditName()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void DoesNotEditID()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void ShouldEditDescription()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void DoesNotEditCreationDate()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void DoesNotEditAddedByUser()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void CannotAlterModifiedByUserByHand()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void CannotAlterModifiedDateByHand()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void ShouldAddIngredientToIngredients()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void ShouldRemoveIngredientFromIngredients()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void ShouldAddRecipeToRecipesList()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void ShouldRemoveRecipeFromRecipesList()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void ShouldAddMenuToMenusList()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void ShouldRemoveMenuFromMenusList()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void ShouldAddPlanToPlansList()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void ShouldRemovePlanFromPlansList()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void ShouldEditIngredientsList()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void ShouldEditFirstName()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void ShouldChangeFullNameOnEditingFirstName()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void ShouldEditLastName()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void ShouldChangeFullNameOnEditingLastName()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void ShouldEditFullName()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void ShouldNullOutFirstAndLastNameWhenNameIsChanged()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+        // not sure which of these is to change and which not to be used in Person
+        [Ignore]
+        [TestMethod]
+        public void ShouldNullOutFirstAndLastNameWhenFullNameIsChanged()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+       public void ShouldEditMaxCalories()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        public void ShouldEditMinCalories()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        public void ShouldEditWeight()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        public void WeightCannotBeLessThanZero()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        public void WeightCannotBeMoreThanOneThousand()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        public void CanEditNoGarlic()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
     }
 }

@@ -13,14 +13,13 @@ namespace LambAndLentil.Test.BasicControllerTests
     [TestClass]
     public class BaseController_Should:BaseControllerTest<Ingredient>
     {
-        static IRepository<Ingredient> Repo;
+         
         static IngredientsController Controller;
         private class FakeRepository : TestRepository<Ingredient> { }
 
         public BaseController_Should()
-        {
-            //Repo = new TestRepository<Ingredient>();
-           // Controller = new IngredientsController_Test_Should().SetUpController(Repo);
+        { 
+           Controller = new IngredientsController(Repo);
         }
 
         [TestMethod]

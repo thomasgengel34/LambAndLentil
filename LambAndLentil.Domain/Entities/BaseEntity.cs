@@ -22,7 +22,7 @@ namespace LambAndLentil.Domain.Entities
         public DateTime ModifiedDate { get; set; }
         public string AddedByUser { get; set; }
         public string ModifiedByUser { get; set; }
-
+        public string IngredientsList { get; set; }
 
 
         public BaseEntity()
@@ -62,14 +62,14 @@ namespace LambAndLentil.Domain.Entities
                       .OrderBy(p => p.Name)
                       .Skip((page - 1) * PageSize)
                       .Take(PageSize);
-            List<T> listVM = new List<T>();
+            List<T> list = new List<T>();
             foreach (var item in result)
             {
 
-                listVM.Add(item);
+                list.Add(item);
             }
 
-            return listVM;
+            return list;
         }
 
 

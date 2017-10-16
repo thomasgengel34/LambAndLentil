@@ -133,5 +133,33 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.AreEqual("Edit", rdr.RouteValues.ElementAt(1).Value.ToString());
             Assert.AreEqual("Details", rdr.RouteValues.ElementAt(2).Value.ToString());
         }
+
+        [Ignore]
+        [TestMethod]
+        public void SuccessfullyAttachIngredientChild()
+        {
+
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void SuccessfullyDetachIngredientChild()
+        {
+
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void SuccessfullyAttachRecipeChild()
+        {
+
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void SuccessfullyDetachRecipeChild()
+        {
+
+        }
     }
 }

@@ -187,17 +187,6 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.Fail();
         }
 
-        [ClassCleanup()]
-        public static void ClassCleanup()
-        {
-            string path = @"C:\Dev\TGE\LambAndLentil\LambAndLentil.Test\App_Data\JSON\Plan\";
-
-            IEnumerable<string> files = Directory.EnumerateFiles(path);
-
-            foreach (var file in files)
-            {
-                File.Delete(file);
-            }
-        }
+         
     }
 } 

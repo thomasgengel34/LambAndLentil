@@ -9,14 +9,14 @@ using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Web.Mvc;
-using System.Collections.Generic; 
+using System.Collections.Generic;
 
 namespace LambAndLentil.UI.Controllers
 {
     public abstract class BaseController<T> : Controller
             where T : BaseEntity, IEntity, new()
     {
-        public    string ClassName { get; private set; } 
+        public string ClassName { get; private set; }
 
         public int PageSize { get; set; }
 
@@ -39,9 +39,9 @@ namespace LambAndLentil.UI.Controllers
 
             //    Repo = (IRepository<T>)r;
             //}
-           Repo = repository;
+            Repo = repository;
             MvcApplication.InitializeMap();  // needed for testing. really??
-            ClassName = new RepositoryHelperMethods().GetClassName<T>();  
+            ClassName = new RepositoryHelperMethods().GetClassName<T>();
         }
 
 
@@ -177,15 +177,15 @@ namespace LambAndLentil.UI.Controllers
 
         public ActionResult BasePostEdit(IRepository<T> Repo, T vm)
         {
-             T item =  vm;
+            T item = vm;
             // new ingredient - saves double writing the Create Post method
             bool isValid = IsModelValid(vm);
-             
+
             if (isValid)
             {
-                if (vm.ID == 0  )
+                if (vm.ID == 0)
                 {
-                    item = new T(); 
+                    item = new T();
                 }
                 Repo.Update(item, item.ID);
                 return RedirectToAction(UIViewType.BaseIndex.ToString()).WithSuccess(string.Format($"{vm.Name} has been saved or modified"));
@@ -230,8 +230,8 @@ namespace LambAndLentil.UI.Controllers
         }
 
         public ActionResult BaseAttach<TChild>(IRepository<T> Repo, int? parentID, TChild child, AttachOrDetach attachOrDetach = AttachOrDetach.Attach)
-         where TChild : Ingredient 
-        // where TChild : BaseVM, IEntity // todo: expand
+        //where TChild : Ingredient 
+        where TChild : BaseEntity, IEntity // todo: expand
         {
             // conditions guard against people trying thngs out manually  
 
@@ -251,18 +251,15 @@ namespace LambAndLentil.UI.Controllers
             {
                 throw new Exception("I have no idea what repository that is, but I do not like it.");
             }
-            
-            char[] charsToTrim = { 'V', 'M' }; 
+
+            char[] charsToTrim = { 'V', 'M' };
             string entity = typeof(T).ToString().Split('.').Last();
-            string childEntity = typeof(TChild).ToString().Split('.').Last().TrimEnd(charsToTrim); 
+            string childEntity = typeof(TChild).ToString().Split('.').Last().TrimEnd(charsToTrim);
             ViewBag.listOfChildren = childRepository.GetAll();
 
-            Ingredient ingredientChild;
+            Ingredient ingredientChild = child as Ingredient;
+            Recipe recipeChild = child as Recipe;
 
-            //if (typeof(T)==typeof(Ingredient))
-            //{
-            ingredientChild= Mapper.Map<Ingredient,Ingredient>(child);
-            //}
 
 
             if (parentID == null)
@@ -295,22 +292,32 @@ namespace LambAndLentil.UI.Controllers
                         return RedirectToAction(UIViewType.Details.ToString(), new { id = parentID, actionMethod = UIViewType.Edit }).WithWarning("Please choose a(n) " + childEntity);
                     }
                     else
-                    { 
-                        //string childClassName;  // obtain this
-                        //Type z = Type.GetType(childClassName);
-                        var childEntity1 = Mapper.Map<Ingredient, Ingredient >(child);  // expand
-
+                    {
 
                         if (attachOrDetach == AttachOrDetach.Detach)
                         {
+                            if (typeof(TChild) == typeof(Ingredient))
+                            {
+                                Repo.DetachAnIndependentChild<Ingredient>(parent.ID, ingredientChild);
+                            }
+                            else if (typeof(TChild) == typeof(Recipe))
+                            {
+                                Repo.DetachAnIndependentChild<Recipe>(parent.ID, recipeChild);
+                            }
 
-                            Repo.DetachAnIndependentChild<Ingredient>(parent.ID, ingredientChild);
-                            return RedirectToAction(UIViewType.Details.ToString(), new { id = parentID, actionMethod = UIViewType.Edit }).WithSuccess(childEntity  + " was Successfully Detached!");
+                            return RedirectToAction(UIViewType.Details.ToString(), new { id = parentID, actionMethod = UIViewType.Edit }).WithSuccess(childEntity + " was Successfully Detached!");
                         }
                         else
                         {
-                            Repo.AttachAnIndependentChild<Ingredient>(parent.ID, ingredientChild);
-                            return RedirectToAction(UIViewType.Details.ToString(), new { id = parentID, actionMethod = UIViewType.Edit }).WithSuccess(childEntity  + " was Successfully Attached!");
+                            if (typeof(TChild) == typeof(Ingredient))
+                            {
+                                Repo.AttachAnIndependentChild<Ingredient>(parent.ID, ingredientChild);
+                            }
+                            else if (typeof(TChild) == typeof(Recipe))
+                            {
+                                Repo.AttachAnIndependentChild<Recipe>(parent.ID, recipeChild);
+                            }
+                            return RedirectToAction(UIViewType.Details.ToString(), new { id = parentID, actionMethod = UIViewType.Edit }).WithSuccess(childEntity + " was Successfully Attached!");
                         }
                     }
                 }
@@ -324,7 +331,7 @@ namespace LambAndLentil.UI.Controllers
             return ControllerExtensions.RedirectToAction(this, action);
         }
 
-       public ActionResult GuardId(IRepository<T> Repo, UIControllerType tController, int id)
+        public ActionResult GuardId(IRepository<T> Repo, UIControllerType tController, int id)
         {
             T item = Repo.GetById(id);
 

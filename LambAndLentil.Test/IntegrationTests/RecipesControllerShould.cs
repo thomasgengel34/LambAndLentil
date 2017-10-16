@@ -13,6 +13,7 @@ using System.IO;
 using System.Linq;
 using System.Web.Mvc;
 using LambAndLentil.Tests.Controllers;
+using LambAndLentil.Test.BasicControllerTests;
 
 namespace IntegrationTests
 {
@@ -20,17 +21,12 @@ namespace IntegrationTests
     [TestClass]
     [TestCategory("Integration")]
     [TestCategory("RecipesController")]
-    public class RecipesControllerShould
-    {
-        static IRepository<Recipe> Repo;
-        static RecipesController Controller;
-        static Recipe recipeVM;
+    public class RecipesControllerShould: RecipesController_Test_Should
+    {  
 
         public RecipesControllerShould()
-        {
-            Repo = new TestRepository<Recipe>();
-            Controller = new RecipesController(Repo);
-            recipeVM = new Recipe();
+        { 
+            Recipe = new Recipe();
         }
 
 
@@ -96,25 +92,25 @@ namespace IntegrationTests
             ActionResult ar1 = Controller1.PostEdit(vm);
             ViewResult view1 = Controller2.Index();
             List<Recipe> ListEntity= (List<Recipe>)((( ListEntity<Recipe>)view1.Model).ListT);
-            Recipe recipeVM = (from m in ListEntity
+            Recipe Recipe = (from m in ListEntity
                                where m.Name == "0000 test"
                                select m).AsQueryable().FirstOrDefault();
 
             // verify initial value:
-            Assert.AreEqual("0000 test", recipeVM.Name);
+            Assert.AreEqual("0000 test", Recipe.Name);
 
             // now edit it
             vm.Name = "0000 test Edited";
-            vm.ID = recipeVM.ID;
+            vm.ID = Recipe.ID;
             ActionResult ar2 = Controller3.PostEdit(vm);
             ViewResult view2 = Controller4.Index();
             List<Recipe> ListEntity2 = (List<Recipe>)((( ListEntity<Recipe>)view2.Model).ListT);
-            Recipe recipe2 = (from m in ListEntity2
+            Recipe Recipe2 = (from m in ListEntity2
                               where m.Name == "0000 test Edited"
                               select m).AsQueryable().First();
 
             // Assert
-            Assert.AreEqual("0000 test Edited", recipe2.Name);
+            Assert.AreEqual("0000 test Edited", Recipe2.Name);
         }
 
 
@@ -125,11 +121,11 @@ namespace IntegrationTests
         {
             // Arrange
 
-            recipeVM.Description = "test ActuallyDeleteARecipeFromTheDatabase";
+           Recipe.Description = "test ActuallyDeleteARecipeFromTheDatabase";
             //Act
-            Controller.DeleteConfirmed(recipeVM.ID);
+            Controller.DeleteConfirmed(Recipe.ID);
             var deletedItem = (from m in Repo.GetAll()
-                               where m.Description == recipeVM.Description
+                               where m.Description == Recipe.Description
                                select m).AsQueryable();
 
             //Assert
@@ -156,16 +152,16 @@ namespace IntegrationTests
             ControllerPost.PostEdit(vm);
             ViewResult view1 = ControllerView.Index();
             List<Recipe> ListEntity= (List<Recipe>)((( ListEntity<Recipe>)view1.Model).ListT);
-            Recipe recipeVM = (from m in ListEntity
+            Recipe Recipe = (from m in ListEntity
                                where m.Name == "___test387"
                                select m).AsQueryable().FirstOrDefault();
 
-            Assert.AreEqual(vm.Name, recipeVM.Name);
-            Assert.AreEqual(vm.Description, recipeVM.Description);
-            Assert.AreEqual(vm.CreationDate.Day, recipeVM.CreationDate.Day);
-            Assert.AreEqual(vm.ModifiedDate.Day, recipeVM.ModifiedDate.Day);
-            Assert.AreEqual(vm.AddedByUser, recipeVM.AddedByUser);
-            Assert.AreEqual(vm.ModifiedByUser, recipeVM.ModifiedByUser);
+            Assert.AreEqual(vm.Name, Recipe.Name);
+            Assert.AreEqual(vm.Description, Recipe.Description);
+            Assert.AreEqual(vm.CreationDate.Day, Recipe.CreationDate.Day);
+            Assert.AreEqual(vm.ModifiedDate.Day, Recipe.ModifiedDate.Day);
+            Assert.AreEqual(vm.AddedByUser, Recipe.AddedByUser);
+            Assert.AreEqual(vm.ModifiedByUser, Recipe.ModifiedByUser);
             // return View(UIViewType.Details.ToString(), vm).WithWarning("Something is wrong with the data!");
         }
 
@@ -179,16 +175,16 @@ namespace IntegrationTests
             TestRepository<Ingredient> repoIngredient = new TestRepository<Ingredient>();
             RecipesController Controller = new RecipesController(repoRecipe);
 
-            Recipe recipe = new Recipe { ID = 3000, Description = "test AttachAnExistingIngredientToAnExistingRecipe" };
-            Repo.Add(recipe);
+            Recipe Recipe = new Recipe { ID = 3000, Description = "test AttachAnExistingIngredientToAnExistingRecipe" };
+            Repo.Add(Recipe);
             Ingredient ingredient = new Ingredient { ID = 3300, Description = "test AttachAnExistingIngredientToAnExistingRecipe" };
             repoIngredient.Add(ingredient);
 
 
             // Act
-            Controller.AttachIngredient(recipe.ID, ingredient);
+            Controller.AttachIngredient(Recipe.ID, ingredient);
             Recipe returnedRecipe = (from m in repoRecipe.GetAll()
-                                     where m.Description == recipe.Description
+                                     where m.Description == Recipe.Description
                                      select m).FirstOrDefault();
             // Assert 
             Assert.AreEqual(1, returnedRecipe.Ingredients.Count());
@@ -207,13 +203,13 @@ namespace IntegrationTests
             RecipesController Controller = new RecipesController(repoRecipe);
             RecipesController ControllerSubtract = new RecipesController(repoRecipe);
 
-            Recipe recipeVM1 = GetRecipe(repoRecipe, "test NotDeleteAnIngredientAfterIngredientIsDetached");
+            Recipe Recipe1 = GetRecipe(repoRecipe, "test NotDeleteAnIngredientAfterIngredientIsDetached");
 
 
             Ingredient ingredient2 = GetIngredient(repoIngredient, "test NotDeleteAnIngredientAfterIngredientIsDetached");
-            Controller.AttachIngredient(recipeVM1.ID, ingredient2);
+            Controller.AttachIngredient(Recipe1.ID, ingredient2);
             // Act
-            ControllerSubtract.RemoveIngredient(recipeVM1.ID, ingredient2);
+            ControllerSubtract.RemoveIngredient(Recipe1.ID, ingredient2);
 
 
             // Assert
@@ -252,14 +248,14 @@ namespace IntegrationTests
         // [Ignore]
         [TestMethod]
         [TestCategory("Attach-Detach")]
-        public void ReturnRecipeEditViewWithWarningMessageWhenAttachingNonExistingIngredientToExistingRrecipe()
+        public void ReturnRecipeEditViewWithWarningMessageWhenAttachingNonExistingIngredientToExistingRRecipe()
         {
             // Arrange
 
-            Recipe recipeVM = GetRecipe(Repo, "test ReturnRecipeEditViewWithErrorMessageWhenAttachingNonExistingIngredientToExistingRrecipe");
+            Recipe Recipe = GetRecipe(Repo, "test ReturnRecipeEditViewWithErrorMessageWhenAttachingNonExistingIngredientToExistingRRecipe");
             Ingredient ingredient = null;
             // Act  
-            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.AttachIngredient(recipeVM.ID, ingredient);
+            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.AttachIngredient(Recipe.ID, ingredient);
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
             var routeValues = rtrr.RouteValues.Values;
 
@@ -305,13 +301,13 @@ namespace IntegrationTests
             RecipesController ControllerAttachIngredient = new RecipesController(Repo);
             RecipesController ControllerRemoveIngredient = new RecipesController(Repo);
 
-            Recipe recipeVM = GetRecipe(Repo, "test ReturnRecipeEditViewWithSuccessMessageWhenDetachingExistingIngredientFromExistingRecipe");
+            Recipe Recipe = GetRecipe(Repo, "test ReturnRecipeEditViewWithSuccessMessageWhenDetachingExistingIngredientFromExistingRecipe");
 
             Ingredient ingredient = GetIngredient(repoIngredient, "test ReturnRecipeEditViewWithSuccessMessageWhenDetachingExistingIngredientFromExistingRecipe");
-            ControllerAttachIngredient.AttachIngredient(recipeVM.ID, ingredient);
+            ControllerAttachIngredient.AttachIngredient(Recipe.ID, ingredient);
 
             // Act          
-            AlertDecoratorResult adr = (AlertDecoratorResult)ControllerRemoveIngredient.RemoveIngredient(recipeVM.ID, ingredient);
+            AlertDecoratorResult adr = (AlertDecoratorResult)ControllerRemoveIngredient.RemoveIngredient(Recipe.ID, ingredient);
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
             var routeValues = rtrr.RouteValues.Values;
 
@@ -380,9 +376,9 @@ namespace IntegrationTests
             TestRepository<Recipe> repoRecipe = new TestRepository<Recipe>();
             RecipesController ControllerRecipe = new RecipesController(repoRecipe);
             RecipesController ControllerDetachIngredient = new RecipesController(repoRecipe);
-            Recipe recipeVM = GetRecipe(repoRecipe, "test ReturnRecipeEditViewWithWarningMessageWhenDetachingNonExistingIngredientAttachedToExistingRecipe");
+            Recipe Recipe = GetRecipe(repoRecipe, "test ReturnRecipeEditViewWithWarningMessageWhenDetachingNonExistingIngredientAttachedToExistingRecipe");
             // Act 
-            AlertDecoratorResult adr = (AlertDecoratorResult)ControllerDetachIngredient.RemoveIngredient(recipeVM.ID, null);
+            AlertDecoratorResult adr = (AlertDecoratorResult)ControllerDetachIngredient.RemoveIngredient(Recipe.ID, null);
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
             var routeValues = rtrr.RouteValues.Values;
 
@@ -443,23 +439,11 @@ namespace IntegrationTests
             };
             Controller.PostEdit(vm);
 
-            Recipe recipeVM = ((from m in Repo.GetAll()
+            Recipe Recipe = ((from m in Repo.GetAll()
                                 where m.Description == description
                                 select m).AsQueryable()).FirstOrDefault();
-            return recipeVM;
+            return Recipe;
         }
-
-        [ClassCleanup()]
-        public static void ClassCleanup()
-        {
-            string path = @"C:\Dev\TGE\LambAndLentil\LambAndLentil.Test\App_Data\JSON\Recipe\";
-
-            IEnumerable<string> files = Directory.EnumerateFiles(path);
-
-            foreach (var file in files)
-            {
-                File.Delete(file);
-            }
-        }
+         
     }
 }

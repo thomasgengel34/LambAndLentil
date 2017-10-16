@@ -14,8 +14,22 @@ namespace LambAndLentil.Test.BasicControllerTests
     public class IngredientsController_Attach_Should : IngredientsController_Test_Should
     {
 
-         // Ingredient cannot attach an ingredient.
-        
-        
+        // Ingredient cannot attach an ingredient.
+        // this is to change
+        [Ignore]
+        [TestMethod]
+        public void SuccessfullyAttachIngredientChild()
+        {
+
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void SuccessfullyDetachIngredientChild()
+        {
+
+        }
+
+
     }
 }

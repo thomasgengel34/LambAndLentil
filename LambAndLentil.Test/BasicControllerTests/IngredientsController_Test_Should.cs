@@ -1,51 +1,31 @@
-﻿//using AutoMapper;
-using LambAndLentil.Domain.Abstract;
-using LambAndLentil.Domain.Concrete;
-using LambAndLentil.Domain.Entities;
-using LambAndLentil.Tests.Infrastructure;
+﻿using LambAndLentil.Domain.Entities;
 using LambAndLentil.UI.Controllers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 
 namespace LambAndLentil.Test.BasicControllerTests
 {
 
     [TestClass]
     [TestCategory(" IngredientsController")]
-    public class IngredientsController_Test_Should:BaseControllerTest<Ingredient>
-    { 
-        public static IngredientsController Controller; 
+    public class IngredientsController_Test_Should : BaseControllerTest<Ingredient>
+    {
+        protected static IngredientsController Controller;
+        protected static Ingredient BasicIngredient { get; set; }
 
-        public IngredientsController_Test_Should()
-        {   
-            ListEntity.ListT=SetUpRepository();
-            Controller.PageSize = 3;
-        }
-    
-
-        [TestCleanup()]
-        public void TestCleanup()
-        {
-            ClassCleanup();
-        }
-
-
-
-        [ClassCleanup()]
-        public static void ClassCleanup()
-        {
-            string path = @"C:\Dev\TGE\LambAndLentil\LambAndLentil.Test\App_Data\JSON\Ingredient\";
-            IEnumerable<string> files = Directory.EnumerateFiles(path);
-
-            foreach (var file in files)
+       protected IngredientsController_Test_Should()
+        { 
+            Controller = new IngredientsController(Repo)
             {
-                File.Delete(file);
-            }
+                PageSize = 3
+            };
+            BasicIngredient = new Ingredient
+            {
+                ID = 1,
+                Recipe = new Recipe(),
+                IngredientsList = "IngredientsController_Test_Should : BaseControllerTest<Ingredient> BasicIngredients IngredientsList" 
+            };
         }
 
-
+       
     }
 }

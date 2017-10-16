@@ -68,7 +68,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         }
 
         [TestMethod] 
-        public void ContainsAllPlansView1Count5()
+        public void ContainsAllPlansView1Count6()
         {
             // Arrange 
 
@@ -78,7 +78,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             int count1 = ingrArray1.Count();
 
             // Assert 
-            Assert.AreEqual(5, count1);
+            Assert.AreEqual(6, count1);
         }
 
         [TestMethod]
@@ -175,7 +175,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             int count1 = (( ListEntity<Plan>)(view1.Model)).ListT.Count();
 
             // Assert 
-            Assert.AreEqual(5, count1);
+            Assert.AreEqual(6, count1);
         }
 
         [TestMethod]
@@ -213,7 +213,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             int count1 = (( ListEntity<Plan>)(view1.Model)).ListT.Count();
 
             // Assert   
-            Assert.AreEqual("PlansController_Index_Test P1", (( ListEntity<Plan>)(view1.Model)).ListT.FirstOrDefault().Name);
+            Assert.AreEqual("LambAndLentil.Domain.Entities.Plan ControllerTest1", (( ListEntity<Plan>)(view1.Model)).ListT.FirstOrDefault().Name);
         }
 
 
@@ -301,7 +301,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             int count1 = (( ListEntity<Plan>)(view1.Model)).ListT.Count();
 
             // Assert   
-            Assert.AreEqual("PlansController_Index_Test P2", (( ListEntity<Plan>)(view1.Model)).ListT.Skip(1).FirstOrDefault().Name);
+            Assert.AreEqual("LambAndLentil.Domain.Entities.Plan ControllerTest2", (( ListEntity<Plan>)(view1.Model)).ListT.Skip(1).FirstOrDefault().Name);
         }
 
 
@@ -320,7 +320,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             int count1 = (( ListEntity<Plan>)(view1.Model)).ListT.Count();
 
             // Assert   
-            Assert.AreEqual("PlansController_Index_Test P3", (( ListEntity<Plan>)(view1.Model)).ListT.Skip(2).FirstOrDefault().Name);
+            Assert.AreEqual("LambAndLentil.Domain.Entities.Plan ControllerTest3", (( ListEntity<Plan>)(view1.Model)).ListT.Skip(2).FirstOrDefault().Name);
         }
 
 
@@ -346,7 +346,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             var result = ( ListEntity<Plan>)(Controller.Index(1)).Model;
 
             // Assert 
-            Assert.IsTrue(result.ListT.Count() == 5);
+            Assert.IsTrue(result.ListT.Count() == 6);
         }
 
         [Ignore]
@@ -422,7 +422,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             //   PagingInfo pageInfoT =ListEntity.PagingInfo;
 
             // Assert 
-            Assert.AreEqual(5, pageInfoT.TotalItems);
+            Assert.AreEqual(6, pageInfoT.TotalItems);
         }
 
         [Ignore]

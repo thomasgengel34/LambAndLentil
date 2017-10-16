@@ -89,10 +89,10 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Act 
             ActionResult ar1 = Controller1.PostEdit(vm);
             ViewResult view1 = Controller2.Index();
-            List<Plan> ListEntity= (List<Plan>)view1.Model;
+            List<Plan> ListEntity = (List<Plan>)view1.Model;
             Plan item = (from m in ListEntity
-                           where m.Name == "0000 test"
-                           select m).AsQueryable().First();
+                         where m.Name == "0000 test"
+                         select m).AsQueryable().First();
 
 
             // verify initial value:
@@ -105,8 +105,8 @@ namespace LambAndLentil.Test.BasicControllerTests
             ViewResult view2 = Controller4.Index();
             List<Plan> ListEntity2 = (List<Plan>)view2.Model;
             Plan planVM2 = (from m in ListEntity2
-                              where m.Name == "0000 test Edited"
-                              select m).AsQueryable().First();
+                            where m.Name == "0000 test Edited"
+                            select m).AsQueryable().First();
 
             // Assert
             Assert.AreEqual("0000 test Edited", planVM2.Name);
@@ -133,10 +133,10 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Act 
             ActionResult ar1 = Controller1.PostEdit(vm);
             ViewResult view1 = Controller2.Index();
-            List<Plan> ListEntity= (List<Plan>)view1.Model;
+            List<Plan> ListEntity = (List<Plan>)view1.Model;
             Plan planVM = (from m in ListEntity
-                             where m.Name == "0000 test"
-                             select m).AsQueryable().FirstOrDefault();
+                           where m.Name == "0000 test"
+                           select m).AsQueryable().FirstOrDefault();
 
             // verify initial value:
             Assert.AreEqual("SaveEditedPlanWithDescriptionChange Pre-test", planVM.Description);
@@ -152,21 +152,21 @@ namespace LambAndLentil.Test.BasicControllerTests
             ViewResult view2 = Controller4.Index();
             List<Plan> ListEntity2 = (List<Plan>)view2.Model;
             planVM = (from m in ListEntity2
-                           where m.Name == "0000 test Edited"
-                           select m).AsQueryable().FirstOrDefault(); 
+                      where m.Name == "0000 test Edited"
+                      select m).AsQueryable().FirstOrDefault();
 
             // Assert
             Assert.AreEqual("0000 test Edited", planVM.Name);
             Assert.AreEqual("SaveEditedPlanWithDescriptionChange Post-test", planVM.Description);
         }
 
-        
+
         [TestMethod]
         [TestCategory("DeleteConfirmed")]
         public void ActuallyDeleteAPlanFromTheDatabase()
         {
             // Arrange 
-           
+
             //Act
             Controller.DeleteConfirmed(planVM.ID);
             var deletedItem = (from m in Repo.GetAll()
@@ -197,17 +197,17 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Act
             ControllerEdit.PostEdit(planVM);
             ViewResult view = ControllerView.Index();
-            List<Plan> ListEntity= (List<Plan>)view.Model;
+            List<Plan> ListEntity = (List<Plan>)view.Model;
             planVM = (from m in ListEntity
-                          where m.Name == "001 Test "
-                          select m).AsQueryable().First();
-           
+                      where m.Name == "001 Test "
+                      select m).AsQueryable().First();
+
 
             DateTime shouldBeSameDate = planVM.CreationDate;
-           
-                // Assert
-                Assert.AreEqual(CreationDate, shouldBeSameDate);
-            
+
+            // Assert
+            Assert.AreEqual(CreationDate, shouldBeSameDate);
+
         }
 
         [Ignore]
@@ -230,28 +230,28 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Act
             ControllerPost.PostEdit(planVM);
             ViewResult view = ControllerView.Index();
-            List<Plan> ListEntity= (List<Plan>)view.Model;
+            List<Plan> ListEntity = (List<Plan>)view.Model;
             planVM = (from m in ListEntity
-                          where m.Name == "002 Test Mod"
-                          select m).AsQueryable().First();
+                      where m.Name == "002 Test Mod"
+                      select m).AsQueryable().First();
 
-            
+
             DateTime shouldBeSameDate = planVM.CreationDate;
             DateTime shouldBeLaterDate = planVM.ModifiedDate;
-             
-                // Assert
-                Assert.AreEqual(CreationDate, shouldBeSameDate);
-                Assert.AreNotEqual(mod, shouldBeLaterDate);
-             
+
+            // Assert
+            Assert.AreEqual(CreationDate, shouldBeSameDate);
+            Assert.AreNotEqual(mod, shouldBeLaterDate);
+
         }
 
-               [TestMethod]
+        [TestMethod]
         [TestCategory("Attach-Detach")]
         public void AttachAnExistingIngredientToAnExistingPlan()
         {
             // Arrange
-            
-           IRepository<Ingredient> repoIngredient = new TestRepository<Ingredient>();
+
+            IRepository<Ingredient> repoIngredient = new TestRepository<Ingredient>();
             PlansController Controller = new PlansController(Repo);
 
             planVM.Description = "test AttachAnExistingIngredientToAnExistingPlan";
@@ -263,15 +263,44 @@ namespace LambAndLentil.Test.BasicControllerTests
             Repo.Update(planVM, planVM.ID);
             repoIngredient.Save(ingredient);
             // Act
-            Controller.AttachIngredient(planVM.ID, ingredient );
+            Controller.AttachIngredient(planVM.ID, ingredient);
             Plan returnedPlan = (from m in Repo.GetAll()
                                  where m.Description == planVM.Description
-                                 select m).FirstOrDefault(); 
+                                 select m).FirstOrDefault();
 
             // Assert 
             Assert.AreEqual(1, returnedPlan.Ingredients.Count());
             // how do I know the correct ingredient was added?
-            Assert.AreEqual(ingredient.ID, returnedPlan.Ingredients.First().ID); 
+            Assert.AreEqual(ingredient.ID, returnedPlan.Ingredients.First().ID);
+        }
+
+        [TestMethod]
+        [TestCategory("Attach-Detach")]
+        public void AttachAnExistingRecipeToAnExistingPlan()
+        {
+            // Arrange
+
+            IRepository<Recipe> repoRecipe = new TestRepository<Recipe>();
+            PlansController Controller = new PlansController(Repo);
+
+            planVM.Description = "test AttachAnExistingRecipeToAnExistingPlan";
+            Recipe recipe = new Recipe
+            {
+                ID = 100,
+                Description = "test AttachAnExistingRecipeToAnExistingPlan"
+            };
+            Repo.Update(planVM, planVM.ID);
+            repoRecipe.Save(recipe);
+            // Act
+            Controller.AttachRecipe(planVM.ID, recipe);
+            Plan returnedPlan = (from m in Repo.GetAll()
+                                 where m.Description == planVM.Description
+                                 select m).FirstOrDefault();
+
+            // Assert 
+            Assert.AreEqual(1, returnedPlan.Recipes.Count());
+            // how do I know the correct recipe was added?
+            Assert.AreEqual(recipe.ID, returnedPlan.Recipes.First().ID);
         }
 
         [Ignore]
@@ -282,7 +311,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.Fail();
         }
 
- [Ignore]
+        [Ignore]
         [TestMethod]
         [TestCategory("Attach-Detach")]
         public void ReturnIndexViewWithWarningMessageWhenDetachingNonExistingIngredientAttachedToANonExistingPlan()

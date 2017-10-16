@@ -20,7 +20,7 @@ namespace LambAndLentil.Domain.Entities
         {
             CreationDate = creationDate;
         }
-        public string IngredientsList { get; set; }
+         
 
     }
 }

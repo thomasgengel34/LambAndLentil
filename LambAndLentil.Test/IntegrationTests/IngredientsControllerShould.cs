@@ -635,25 +635,6 @@ namespace LambAndLentil.Test.Infrastructure
 
             // Assert
             Assert.Fail();
-        }
-
-        [TestCleanup]
-        public void TestCleanup()
-        {
-            ClassCleanup();
-        }
-
-        [ClassCleanup()]
-        public static void ClassCleanup()
-        {
-            string path = @"C:\Dev\TGE\LambAndLentil\LambAndLentil.Test\App_Data\JSON\Ingredient\";
-
-            IEnumerable<string> files = Directory.EnumerateFiles(path);
-
-            foreach (var file in files)
-            {
-                File.Delete(file);
-            }
-        }
+        }  
     }
 }

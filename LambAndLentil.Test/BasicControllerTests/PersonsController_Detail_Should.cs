@@ -16,16 +16,10 @@ namespace LambAndLentil.Test.BasicControllerTests
     [TestCategory("Details")]
     public class PersonsController_Detail_Should:PersonsController_Test_Should
     { 
-        //static PersonsController Controller;
-        static Person person;
+        
 
         public PersonsController_Detail_Should()
-        {
-            AutoMapperConfigForTests.InitializeMap();
-            ListEntity= new  ListEntity<Person>();
-            Repo = new TestRepository<Person>();
-            Controller = SetUpController(Repo);
-            person = new Person();
+        { 
         }
          
         [TestMethod]
@@ -143,9 +137,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestCategory("Details")]
         public void DetailsPersonIDTooHighViewNotNull()
         {  // not sure what the desired behavior is yet
-           // Arrange
-            PersonsController Controller = SetUpController(Repo);
-            //  AutoMapperConfigForTests.AMConfigForTests();
+           // Arrange            
             ActionResult view = Controller.Details(4000);
             AlertDecoratorResult adr = (AlertDecoratorResult)view;
             // Assert
@@ -167,9 +159,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestCategory("Details")]
         public void DetailsPersonIDTooHighAlertClassCorrect()
         {   // not sure what the desired behavior is yet
-            // Arrange
-            PersonsController Controller = SetUpController(Repo);
-            //  AutoMapperConfigForTests.AMConfigForTests();
+            // Arrange 
             ActionResult view = Controller.Details(4000);
             AlertDecoratorResult adr = (AlertDecoratorResult)view;
             // Assert  
@@ -212,9 +202,8 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void DetailsPersonIDPastIntLimit()
         {
             // I am not sure how I want this to operate.  Wait until UI is set up and see then.
-            // Arrange
-            PersonsController Controller = SetUpController(Repo);
-            //  AutoMapperConfigForTests.AMConfigForTests(); 
+
+            // Arrange 
 
             // Act
             ViewResult result = Controller.Details(int.MaxValue) as ViewResult;
@@ -313,8 +302,8 @@ namespace LambAndLentil.Test.BasicControllerTests
         {
             // Arrange
 
-            person.ID = -500;
-            Repo.Save(person);
+            Person.ID = -500;
+            Repo.Save(Person);
 
             // Act
             ActionResult ar = Controller.Details(-500);

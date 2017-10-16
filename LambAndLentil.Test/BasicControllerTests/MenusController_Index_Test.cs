@@ -20,13 +20,7 @@ namespace LambAndLentil.Test.BasicControllerTests
     [TestCategory("Index")]
     public class MenusController_Index_Test:MenusController_Test_Should
     { 
-        static  ListEntity<Menu> ListEntity; 
-
-        //public MenusController_Index_Test()
-        //{ 
-        //}
-
-
+       
 
         [TestMethod]
         [TestCategory("Index")]
@@ -227,7 +221,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             int count1 = (( ListEntity<Menu>)(view1.Model)).ListT.Count();
 
             // Assert   
-            Assert.AreEqual("MenusController_Index_Test P1", (( ListEntity<Menu>)(view1.Model)).ListT.FirstOrDefault().Name);
+            Assert.AreEqual("LambAndLentil.Domain.Entities.Menu ControllerTest1", (( ListEntity<Menu>)(view1.Model)).ListT.FirstOrDefault().Name);
         }
 
 
@@ -313,7 +307,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             int count1 = (( ListEntity<Menu>)(view1.Model)).ListT.Count();
 
             // Assert   
-            Assert.AreEqual("MenusController_Index_Test P2", (( ListEntity<Menu>)(view1.Model)).ListT.Skip(1).FirstOrDefault().Name);
+            Assert.AreEqual("LambAndLentil.Domain.Entities.Menu ControllerTest2", (( ListEntity<Menu>)(view1.Model)).ListT.Skip(1).FirstOrDefault().Name);
         }
 
 
@@ -332,7 +326,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             int count1 = (( ListEntity<Menu>)(view1.Model)).ListT.Count();
 
             // Assert   
-            Assert.AreEqual("MenusController_Index_Test P3", (( ListEntity<Menu>)(view1.Model)).ListT.Skip(2).FirstOrDefault().Name);
+            Assert.AreEqual("LambAndLentil.Domain.Entities.Menu ControllerTest3", (( ListEntity<Menu>)(view1.Model)).ListT.Skip(2).FirstOrDefault().Name);
         }
 
 

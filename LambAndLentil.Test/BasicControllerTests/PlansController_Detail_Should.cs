@@ -16,15 +16,10 @@ namespace LambAndLentil.Test.BasicControllerTests
     [TestCategory("Details")]
     public class PlansController_Detail_Should:PlansController_Test_Should
     { 
-        static Plan plan;
+        
 
         public PlansController_Detail_Should()
-        {
-            AutoMapperConfigForTests.InitializeMap();
-            ListEntity= new  ListEntity<Plan>();
-            Repo = new TestRepository<Plan>();
-            Controller = SetUpController(Repo);
-            plan = new Plan();
+        { 
         }
          
         [TestMethod]
@@ -142,9 +137,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestCategory("Details")]
         public void DetailsPlanIDTooHighViewNotNull()
         {  // not sure what the desired behavior is yet
-           // Arrange
-            PlansController Controller = SetUpController(Repo);
-            //  AutoMapperConfigForTests.AMConfigForTests();
+           // Arrange 
             ActionResult view = Controller.Details(4000);
             AlertDecoratorResult adr = (AlertDecoratorResult)view;
             // Assert
@@ -166,9 +159,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestCategory("Details")]
         public void DetailsPlanIDTooHighAlertClassCorrect()
         {   // not sure what the desired behavior is yet
-            // Arrange
-            PlansController Controller = SetUpController(Repo);
-            //  AutoMapperConfigForTests.AMConfigForTests();
+            // Arrange 
             ActionResult view = Controller.Details(4000);
             AlertDecoratorResult adr = (AlertDecoratorResult)view;
             // Assert  
@@ -211,9 +202,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void DetailsPlanIDPastIntLimit()
         {
             // I am not sure how I want this to operate.  Wait until UI is set up and see then.
-            // Arrange
-            PlansController Controller = SetUpController(Repo);
-            //  AutoMapperConfigForTests.AMConfigForTests(); 
+            // Arrange 
 
             // Act
             ViewResult result = Controller.Details(int.MaxValue) as ViewResult;
@@ -312,8 +301,8 @@ namespace LambAndLentil.Test.BasicControllerTests
         {
             // Arrange
 
-            plan.ID = -500;
-            Repo.Save(plan);
+            Plan.ID = -500;
+            Repo.Save(Plan);
 
             // Act
             ActionResult ar = Controller.Details(-500);

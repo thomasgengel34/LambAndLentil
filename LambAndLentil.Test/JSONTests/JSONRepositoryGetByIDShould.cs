@@ -1,8 +1,7 @@
-﻿using AutoMapper;
+﻿//using AutoMapper;
 using LambAndLentil.Domain.Concrete;
 using LambAndLentil.Domain.Entities;
 using LambAndLentil.Tests.Infrastructure;
-using LambAndLentil.UI.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -13,60 +12,50 @@ namespace LambAndLentil.Test.JSONTests
     [TestClass]
     public class JSONRepositoryGetByIDShould
     {
-        public static MapperConfiguration AutoMapperConfig { get; set; }
-        static string path = @"../../../\LambAndLentil.Domain\App_Data\JSON\TestJSONRepositoryGetByID\";
+       // public static MapperConfiguration AutoMapperConfig { get; set; }
+        static string path = @"../../../\LambAndLentil.Test\App_Data\JSON\TestJSONRepositoryGetByID\";
 
-        private static JSONRepository<Ingredient> Repo { get; set; }
+        private static TestRepository<Ingredient> Repo { get; set; }
 
 
         public JSONRepositoryGetByIDShould()
         {
             AutoMapperConfigForTests.InitializeMap();
-            Repo = new JSONRepository<Ingredient>();
+            Repo = new TestRepository<Ingredient>();
             Directory.CreateDirectory(path);
         }
-        [Ignore]
+       
         [TestMethod]
         public void ReturnCorrectEntityForAValidIngredientID()
         {
             // Arrange
-            Ingredient vm = new Ingredient()
+            Ingredient ingredient = new Ingredient()
             {
                 ID = int.MaxValue,
                 Name = "test ReturnCorrectEntityForAValidIngredientID Name",
                 Description = "test ReturnCorrectEntityForAValidIngredientID Description"
             };
-            Repo.Add(vm);
+            Repo.Add(ingredient);
 
             // Act
-            Ingredient returnedListEntity = Repo.GetById(vm.ID);
+            Ingredient returnedListEntity = Repo.GetById(ingredient.ID);
 
             //Assert
-            Assert.AreEqual(vm.ID, returnedListEntity.ID);
-            Assert.AreEqual(vm.Name, returnedListEntity.Name);
-            Assert.AreEqual(vm.Description, returnedListEntity.Description);
+            Assert.AreEqual(ingredient.ID, returnedListEntity.ID);
+            Assert.AreEqual(ingredient.Name, returnedListEntity.Name);
+            Assert.AreEqual(ingredient.Description, returnedListEntity.Description);
         }
          
 
         [ClassCleanup()]
         public static void ClassCleanup()
-        {
-            try
-            {
+        { 
                 IEnumerable<string> files = Directory.EnumerateFiles(path);
                 foreach (string file in files)
                 {
                     File.Delete(file);
                 }
-                Directory.Delete(path);
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-
-        }
-
+                Directory.Delete(path); 
+        } 
     }
 }

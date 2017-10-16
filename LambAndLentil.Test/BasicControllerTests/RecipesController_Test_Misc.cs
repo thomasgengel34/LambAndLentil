@@ -115,9 +115,9 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Assert
             Assert.IsNotNull(view1);
             Assert.IsNotNull(view2);
-            Assert.AreEqual(5, count1);
+            Assert.AreEqual(6, count1);
             Assert.AreEqual(0, count2);
-            Assert.AreEqual(5, count);
+            Assert.AreEqual(6, count);
             Assert.AreEqual("Index", view1.ViewName);
             Assert.AreEqual("Index", view2.ViewName);
 
@@ -161,12 +161,12 @@ namespace LambAndLentil.Test.BasicControllerTests
 
             // Assert
             Assert.IsNotNull(view1);
-            Assert.AreEqual(5, count1);
+            Assert.AreEqual(6, count1);
             Assert.AreEqual("Index", view1.ViewName);
 
-            Assert.AreEqual("RecipesController_Index_Test P1", (( ListEntity<Recipe>)(view1.Model)).ListT.FirstOrDefault().Name);
-            Assert.AreEqual("RecipesController_Index_Test P2", (( ListEntity<Recipe>)(view1.Model)).ListT.Skip(1).FirstOrDefault().Name);
-            Assert.AreEqual("RecipesController_Index_Test P3", (( ListEntity<Recipe>)(view1.Model)).ListT.Skip(2).FirstOrDefault().Name);
+            Assert.AreEqual("LambAndLentil.Domain.Entities.Recipe ControllerTest1", (( ListEntity<Recipe>)(view1.Model)).ListT.FirstOrDefault().Name);
+            Assert.AreEqual("LambAndLentil.Domain.Entities.Recipe ControllerTest2", (( ListEntity<Recipe>)(view1.Model)).ListT.Skip(1).FirstOrDefault().Name);
+            Assert.AreEqual("LambAndLentil.Domain.Entities.Recipe ControllerTest3", (( ListEntity<Recipe>)(view1.Model)).ListT.Skip(2).FirstOrDefault().Name);
 
 
         }
@@ -186,7 +186,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
 
             // Assert
-            Assert.AreEqual(5, totalItems);
+            Assert.AreEqual(6, totalItems);
             Assert.AreEqual(1, currentPage);
             Assert.AreEqual(8, itemsPerPage);
             Assert.AreEqual(1, totalPages);
@@ -211,9 +211,9 @@ namespace LambAndLentil.Test.BasicControllerTests
             var result = ( ListEntity<Recipe>)(Controller.Index(1)).Model;
 
             // Assert 
-            Assert.IsTrue(result.ListT.Count() == 5);
-            Assert.AreEqual("RecipesController_Index_Test P1", result.ListT.First().Name);
-            Assert.AreEqual("RecipesController_Index_Test P3", result.ListT.Skip(2).First().Name);
+            Assert.IsTrue(result.ListT.Count() == 6);
+            Assert.AreEqual("LambAndLentil.Domain.Entities.Recipe ControllerTest1", result.ListT.First().Name);
+            Assert.AreEqual("LambAndLentil.Domain.Entities.Recipe ControllerTest3", result.ListT.Skip(2).First().Name);
         }
 
        
@@ -402,6 +402,175 @@ namespace LambAndLentil.Test.BasicControllerTests
             ActionResult ar = fController.BaseAttach(fakeRepo, int.MaxValue, new Ingredient());
             // Assert
 
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void ShouldEditName()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void DoesNotEditID()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void ShouldEditDescription()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void DoesNotEditCreationDate()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void DoesNotEditAddedByUser()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void CannotAlterModifiedByUserByHand()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void CannotAlterModifiedDateByHand()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void ShouldAddIngredientToIngredientsList()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void ShouldRemoveIngredientFromIngredientsList()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void ShouldEditIngredientsList()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+
+        [Ignore]
+        [TestMethod]
+        public void ShouldEditServings()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void ShouldEditMealType()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void ShouldEditCalories()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void ShouldCalsFromFat()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
         }
     }
 }

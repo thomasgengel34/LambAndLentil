@@ -114,5 +114,75 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Assert
             Assert.Fail();
         }
+
+        [Ignore]
+        [TestMethod]
+        public void SuccessfullyAttachIngredientChild()
+        {
+
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void SuccessfullyDetachIngredientChild()
+        {
+
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void SuccessfullyAttachRecipeChild()
+        {
+
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void SuccessfullyDetachRecipeChild()
+        {
+
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void SuccessfullyAttachMenuChild()
+        {
+
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void SuccessfullyDetachMenuChild()
+        {
+
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void SuccessfullyAttachPlanChild()
+        {
+
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void SuccessfullyDetachPlanChild()
+        {
+
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void SuccessfullyAttachShoppingListChild()
+        {
+
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void SuccessfullyDetachShoppingListChild()
+        {
+
+        }
     }
 }

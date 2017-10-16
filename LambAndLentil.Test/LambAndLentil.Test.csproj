@@ -152,6 +152,7 @@
     <Compile Include="BasicControllerTests\IngredientsController_Create_Should.cs" />
     <Compile Include="BasicControllerTests\IngredientsController_IngredientsGenericController_Should.cs" />
     <Compile Include="BasicControllerTests\BaseController_Should.cs" />
+    <Compile Include="BasicControllerTests\BasicControllerTest_Misc.cs" />
     <Compile Include="ControllerSecurity\PersonsEditShouldAllow.cs" />
     <Compile Include="ControllerSecurity\PersonsPostEditShouldAllow.cs" />
     <Compile Include="ControllerSecurity\PersonsDetailShouldAllow.cs" />

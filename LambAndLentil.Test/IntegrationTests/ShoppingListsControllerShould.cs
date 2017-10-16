@@ -294,14 +294,14 @@ namespace LambAndLentil.Test.BasicControllerTests
             return result;
         }
 
-        [Ignore]
+       
         [TestMethod]
         [TestCategory("Attach-Detach")]
         public void AttachAnExistingIngredientToAnExistingShoppingList()
         {
             // Arrange 
             JSONRepository<Ingredient> repoIngredient = new TestRepository< Ingredient>();
-            ShoppingListsController Controller = new ShoppingListsController(Repo );
+            //ShoppingListsController Controller = new ShoppingListsController(Repo );
 
             ShoppingList  slVM = GetShoppingList(Repo,  "test AttachAnExistingIngredientToAnExistingShoppingList");
             Ingredient ingredient = new Ingredient { ID = 500, Description="test AttachAnExistingIngredientToAnExistingShoppingList" };
@@ -390,6 +390,130 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestCategory("Attach-Detach")]
         public void ReturnShoppingListIndexViewWithWarningWhenDetachingExistingingredientNotAttachedToAnExistingShoppingList()
         {
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void CreateAPrintableShoppingList()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void EditAPrintableShoppingList()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void DisplayAPrintableShoppingList()
+        {
+
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+
+        [Ignore]
+        [TestMethod]
+        public void DeleteAPrintableShoppingList()
+        { 
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void DownloadAPrintableShoppingList()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+        [Ignore]
+        [TestMethod]
+        public void CreateACheckableShoppingList()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void EditACheckableShoppingList()
+        {             
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void DisplayACheckableShoppingList()
+        {
+           
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+
+        [Ignore]
+        [TestMethod]
+        public void DeleteACheckableShoppingList()
+        {
+             
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void DownloadACheckableShoppingList()
+        {  
+            // Arrange
+
+            // Act
+
+            // Assert
             Assert.Fail();
         }
 

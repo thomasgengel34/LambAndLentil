@@ -387,12 +387,19 @@ namespace IntegrationTests
 
         }
 
-        [Ignore]
         [TestMethod]
         [TestCategory("Attach-Detach")]
         public void NotDeleteAnIngredientAfterIngredientIsDetachedFromMenu()
         {
-            Assert.Fail();
+            // Arrange  
+            Ingredient ingredient = new Ingredient { ID = int.MaxValue - 100, Description = "test NotDeleteAnIngredientAfterIngredientIsDetachedFromMenu" };
+
+            // Act
+            Controller.AttachIngredient(Menu.ID, ingredient);
+            Controller.DetachIngredient(Menu.ID, ingredient);
+
+            // Assert
+            Assert.IsNotNull(ingredient);
         }
 
         [Ignore]
@@ -458,8 +465,6 @@ namespace IntegrationTests
         {
             Assert.Fail();
         }
-
-        [ClassCleanup()]
-        public static void ClassCleanup() => MenusController_Test_Should.ClassCleanup();
+         
     }
 }

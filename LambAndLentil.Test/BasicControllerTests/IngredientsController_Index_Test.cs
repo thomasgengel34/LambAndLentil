@@ -216,7 +216,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             int count1 = (( ListEntity<Ingredient>)(view1.Model)).ListT.Count();
 
             // Assert   
-            Assert.AreEqual("IngredientsControllerTest1", (( ListEntity<Ingredient>)(view1.Model)).ListT.FirstOrDefault().Name);
+            Assert.AreEqual("LambAndLentil.Domain.Entities.Ingredient ControllerTest1", (( ListEntity<Ingredient>)(view1.Model)).ListT.FirstOrDefault().Name);
         }
 
 
@@ -297,7 +297,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             int count1 = (( ListEntity<Ingredient>)(view1.Model)).ListT.Count();
 
             // Assert   
-            Assert.AreEqual("IngredientsControllerTest2", (( ListEntity<Ingredient>)(view1.Model)).ListT.Skip(1).FirstOrDefault().Name);
+            Assert.AreEqual("LambAndLentil.Domain.Entities.Ingredient ControllerTest2", (( ListEntity<Ingredient>)(view1.Model)).ListT.Skip(1).FirstOrDefault().Name);
         }
 
 
@@ -315,7 +315,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             int count1 = (( ListEntity<Ingredient>)(view1.Model)).ListT.Count();
 
             // Assert   
-            Assert.AreEqual("IngredientsControllerTest3", (( ListEntity<Ingredient>)(view1.Model)).ListT.Skip(2).FirstOrDefault().Name);
+            Assert.AreEqual("LambAndLentil.Domain.Entities.Ingredient ControllerTest3", (( ListEntity<Ingredient>)(view1.Model)).ListT.Skip(2).FirstOrDefault().Name);
         }
 
 
@@ -353,7 +353,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Ingredient[] ingrArray1 = result.ListT.ToArray();
 
             // Assert  
-            Assert.AreEqual("IngredientsControllerTest1", ingrArray1[0].Name);
+            Assert.AreEqual("LambAndLentil.Domain.Entities.Ingredient ControllerTest1", ingrArray1[0].Name);
         }
 
        
@@ -367,7 +367,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Ingredient[] ingrArray1 = result.ListT.ToArray();
 
             // Assert  
-            Assert.AreEqual("IngredientsControllerTest3", ingrArray1[2].Name);
+            Assert.AreEqual("LambAndLentil.Domain.Entities.Ingredient ControllerTest3", ingrArray1[2].Name);
         }
 
 
