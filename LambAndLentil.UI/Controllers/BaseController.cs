@@ -26,19 +26,7 @@ namespace LambAndLentil.UI.Controllers
         public static IRepository<Menu> MenuRepo { get; set; }
 
         public BaseController(IRepository<T> repository)
-        {
-            //if ( repository.GetType() ==typeof(TestRepository<Ingredient>))
-            //{
-            //    TestRepository<Ingredient> r = new TestRepository<Ingredient>();
-
-            //    Repo =  r ;
-            //}
-            //else if (repository.GetType() == typeof(TestRepository<Menu>))
-            //{
-            //    TestRepository<Menu> r = new TestRepository<Menu>();
-
-            //    Repo = (IRepository<T>)r;
-            //}
+        { 
             Repo = repository;
             MvcApplication.InitializeMap();  // needed for testing. really??
             ClassName = new RepositoryHelperMethods().GetClassName<T>();
@@ -102,27 +90,31 @@ namespace LambAndLentil.UI.Controllers
             }
             else if (actionMethod == UIViewType.Edit)
             {
-
-                result = GuardId(Repo, uIController, id);
-                T item;
-                if (result != null)
-                {
-                    item = Repo.GetById(id);
-                }
-                else
-                {
-                    return (ViewResult)RedirectToAction(UIViewType.Index.ToString()).WithWarning(ClassName + " was not found");
-                }
-                if (result is EmptyResult)
-                {
-                    return View(UIViewType.Details.ToString(), item);
-                }
-                return result as ViewResult;
+                return BaseEdit(Repo, uIController, id, out result);
             }
             else
             {
                 return View(UIViewType.Index);
             }
+        }
+
+        private ActionResult BaseEdit(IRepository<T> Repo, UIControllerType uIController, int id, out ActionResult result)
+        {
+            result = GuardId(Repo, uIController, id);
+            T item;
+            if (result != null)
+            {
+                item = Repo.GetById(id);
+            }
+            else
+            {
+                return (ViewResult)RedirectToAction(UIViewType.Index.ToString()).WithWarning(ClassName + " was not found");
+            }
+            if (result is EmptyResult)
+            {
+                return View(UIViewType.Details.ToString(), item);
+            }
+            return result as ViewResult;
         }
 
         private bool IsModelValid(T item)
@@ -225,7 +217,7 @@ namespace LambAndLentil.UI.Controllers
             {
                 Repo.Remove(item);
                 ViewBag.ActionMethod = UIViewType.Delete.ToString();  // needed? evaluate when View is written 
-                return RedirectToAction(UIViewType.BaseIndex.ToString()).WithSuccess(string.Format("{0} has been deleted", item.Name));
+                return RedirectToAction(UIViewType.BaseIndex.ToString()).WithSuccess(string.Format($"{item.Name} has been deleted"));
             }
         }
 
@@ -343,57 +335,6 @@ namespace LambAndLentil.UI.Controllers
             {
                 return new EmptyResult();
             }
-        }
-
-
-
-
-        //protected SelectList GetList<T>(IRepository<T> repo) 
-        //    where T : BaseEntity, IEntity
-        //    where TVM:BaseVM, IEntity
-        //{
-        //    var result = from m in Repo.GetAll()
-        //                 orderby m.Name
-        //                 select new SelectListItem
-        //                 {
-        //                     Text = m.Name,
-        //                     Value = m.ID.ToString()
-        //                 };
-        //    SelectList list = null;
-        //    if (result.Count() == 0)
-        //    {
-        //        List<string> item = new List<string>();
-        //        item.Add("Nothing was found");
-        //        list = new SelectList(item);
-        //    }
-        //    else
-        //    {
-        //        list = new SelectList(result, "Value", "Text", result.First());
-        //    }
-        //    return list;
-        //}
-
-
-        //protected IEntity Get<T>(IRepository<T> Repo,  int id)
-        //     where T : BaseEntity, IEntity
-        //    where TVM : BaseVM, IEntity
-        //{
-        //    IEntity result = null;
-
-        //    if (typeof(T) == typeof(Ingredient))
-        //    {
-        //        result = (from m in Repo.GetAll()
-        //                  where m.ID == id
-        //                  select m).FirstOrDefault();
-        //    }
-        //    return result;
-        //}
-
-        //protected override void Dispose(bool disposing)
-        //{
-        //    base.Dispose(disposing);
-        //}
-
-
+        } 
     }
 }

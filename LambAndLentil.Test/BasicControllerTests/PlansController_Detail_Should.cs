@@ -6,6 +6,7 @@ using LambAndLentil.UI;
 using LambAndLentil.UI.Controllers;
 using LambAndLentil.UI.Infrastructure.Alerts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -358,6 +359,95 @@ namespace LambAndLentil.Test.BasicControllerTests
 
             // Assert
             Assert.Fail();
+        }
+
+        [TestMethod]
+        [TestCategory("Details")]
+        public void RecipeIDIsNegative()
+        {
+            // Arrange
+
+            // AutoMapperConfigForTests.AMConfigForTests();
+            AutoMapperConfigForTests.InitializeMap();
+
+
+            // Act
+            ViewResult view = Controller.Details(0) as ViewResult;
+            AlertDecoratorResult adr = (AlertDecoratorResult)view;
+
+            // Assert
+            Assert.IsNotNull(view);
+            Assert.AreEqual("No Plan was found with that id.", adr.Message);
+            Assert.AreEqual("alert-danger", adr.AlertClass);
+            Assert.AreEqual(UIViewType.BaseIndex.ToString(), ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(0).ToString());
+        }
+
+        [TestMethod]
+        [TestCategory("Details")]
+        public void WorksWithValidPlanID()
+        {
+            // Arrange  
+
+            // Act
+            ActionResult ar = Controller.Details(int.MaxValue);
+            AlertDecoratorResult adr = (AlertDecoratorResult)ar;
+            ViewResult view = (ViewResult)adr.InnerResult;
+
+            // Assert 
+            Assert.IsNotNull(view);
+            Assert.AreEqual("Details", view.ViewName);
+            Assert.IsInstanceOfType(view.Model, typeof(Plan));
+            Assert.IsTrue(true);
+        }
+
+        [TestMethod]
+        [TestCategory("Details")]
+        public void RecipeIDTooHigh()
+        {
+            // Arrange 
+            AutoMapperConfigForTests.InitializeMap();
+            ActionResult view = Controller.Details(4000);
+            AlertDecoratorResult adr = (AlertDecoratorResult)view;
+            // Assert
+            Assert.IsNotNull(view);
+            Assert.AreEqual("No Plan was found with that id.", adr.Message);
+            Assert.AreEqual("alert-danger", adr.AlertClass);
+            Assert.AreEqual(UIViewType.BaseIndex.ToString(), ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(0).ToString());
+        }
+
+        [TestMethod]
+        [TestCategory("Details")]
+        public void RecipeIDPastIntLimit()
+        {
+            // Arrange
+
+            AutoMapperConfigForTests.InitializeMap();
+
+
+            // Act
+            ViewResult result = Controller.Details(Int16.MaxValue + 1) as ViewResult;
+
+            // Assert
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
+        [TestCategory("Details")]
+        public void RecipeIDIsZero()
+        {
+            // Arrange 
+            AutoMapperConfigForTests.InitializeMap();
+
+
+            // Act
+            ViewResult view = Controller.Details(0) as ViewResult;
+            AlertDecoratorResult adr = (AlertDecoratorResult)view;
+
+            // Assert
+            Assert.IsNotNull(view);
+            Assert.AreEqual("No Plan was found with that id.", adr.Message);
+            Assert.AreEqual("alert-danger", adr.AlertClass);
+            Assert.AreEqual(UIViewType.BaseIndex.ToString(), ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(0).ToString());
         }
         // the following are not really testable.  I am keeping them to remind me of that.
         //[TestMethod]

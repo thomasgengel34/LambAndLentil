@@ -61,5 +61,32 @@ namespace LambAndLentil.Test.BasicControllerTests
             //Assert.AreEqual(person.Description, returnedPersonListEntity.Description);
             //Assert.AreEqual(person.CreationDate, returnedPersonListEntity.CreationDate);
         }
+
+        [Ignore]
+        [TestMethod]
+        public void NotSaveLogicallyInvalidModel()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void NotSaveModelFlaggedInvalidByDataAnnotation()
+        {  // see https://msdn.microsoft.com/en-us/library/cc668224(v=vs.98).aspx
+
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+
+        }
     }
-}
+} 

@@ -5,6 +5,7 @@ using LambAndLentil.UI;
 using LambAndLentil.UI.Controllers;
 using LambAndLentil.UI.Infrastructure.Alerts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -357,6 +358,90 @@ namespace LambAndLentil.Test.BasicControllerTests
 
             // Assert
             Assert.Fail();
+        }
+
+
+        [TestMethod]
+        [TestCategory("Details")]
+        public void DetailsRecipeIDIsNegative()
+        {
+            // Arrange
+
+            // Act
+            ViewResult view = Controller.Details(0) as ViewResult;
+            AlertDecoratorResult adr = (AlertDecoratorResult)view;
+
+            // Assert
+            Assert.IsNotNull(view);
+            Assert.AreEqual("No Menu was found with that id.", adr.Message);
+            Assert.AreEqual("alert-danger", adr.AlertClass);
+            Assert.AreEqual(UIViewType.BaseIndex.ToString(), ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(0).ToString());
+
+        }
+
+
+        [TestMethod]
+        [TestCategory("Details")]
+        public void DetailsWorksWithValidRecipeID()
+        {
+            // Arrange 
+
+            // Act 
+            ActionResult ar = Controller.Details(ListEntity.ListT.FirstOrDefault().ID);
+            AlertDecoratorResult adr = (AlertDecoratorResult)ar;
+            ViewResult view = (ViewResult)adr.InnerResult;
+
+            // Assert
+            Assert.IsNotNull(ar);
+            Assert.AreEqual("Details", view.ViewName);
+            Assert.IsInstanceOfType(view.Model, typeof(Menu));
+        }
+
+        [TestMethod]
+        [TestCategory("Details")]
+        public void DetailsRecipeIDTooHigh()
+        {
+            // Arrange
+
+            ActionResult view = Controller.Details(4000);
+            AlertDecoratorResult adr = (AlertDecoratorResult)view;
+
+            // Assert
+            Assert.IsNotNull(view);
+            Assert.AreEqual("No Menu was found with that id.", adr.Message);
+            Assert.AreEqual("alert-danger", adr.AlertClass);
+            Assert.AreEqual(UIViewType.BaseIndex.ToString(), ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(0).ToString());
+
+        }
+
+        [TestMethod]
+        [TestCategory("Details")]
+        public void DetailsRecipeIDPastIntLimit()
+        {
+            // Arrange
+
+            // Act
+            ViewResult result = Controller.Details(Int16.MaxValue + 1) as ViewResult;
+
+            // Assert
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
+        [TestCategory("Details")]
+        public void DetailsRecipeIDIsZero()
+        {
+            // Arrange
+
+            // Act
+            ViewResult view = Controller.Details(0) as ViewResult;
+            AlertDecoratorResult adr = (AlertDecoratorResult)view;
+
+            // Assert
+            Assert.IsNotNull(view);
+            Assert.AreEqual("No Menu was found with that id.", adr.Message);
+            Assert.AreEqual("alert-danger", adr.AlertClass);
+            Assert.AreEqual(UIViewType.BaseIndex.ToString(), ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(0).ToString());
         }
         // the following are not really testable.  I am keeping them to remind me of that.
         //[TestMethod]

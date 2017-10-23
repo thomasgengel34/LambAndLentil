@@ -11,6 +11,8 @@ namespace LambAndLentil.Test.BasicControllerTests
     {
         protected static IngredientsController Controller;
         protected static Ingredient BasicIngredient { get; set; }
+        protected static Ingredient Ingredient { get; set; }
+         
 
        protected IngredientsController_Test_Should()
         { 
@@ -25,7 +27,6 @@ namespace LambAndLentil.Test.BasicControllerTests
                 IngredientsList = "IngredientsController_Test_Should : BaseControllerTest<Ingredient> BasicIngredients IngredientsList" 
             };
         }
-
        
     }
 }

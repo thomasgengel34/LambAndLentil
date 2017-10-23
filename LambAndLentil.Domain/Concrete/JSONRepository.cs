@@ -206,7 +206,7 @@ namespace LambAndLentil.Domain.Concrete
                     }
                     Update(person as T, person.ID);
                 }
-            
+
             }
         }
 
@@ -396,8 +396,16 @@ namespace LambAndLentil.Domain.Concrete
             if (typeof(T) == typeof(Person))
             {
                 Person person = entity as Person;
-                person.FullName = person.GetName(person.FirstName, person.LastName);
-                person.Name = person.FullName;
+                if (entity.Name != oldEntity.Name)
+                {
+                    person.FirstName = "";
+                    person.LastName = ""; 
+                }
+                else
+                { 
+                    person.FullName = person.GetName(person.FirstName, person.LastName);
+                  }
+                person.Name = person.FullName; 
                 entity = person as T;
             }
 
@@ -417,6 +425,6 @@ namespace LambAndLentil.Domain.Concrete
                 list.Add(entity);
             }
             return list;
-        } 
+        }
     }
 }

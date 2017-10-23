@@ -10,9 +10,12 @@ namespace LambAndLentil.Domain.Entities
     {
         public ListOMatic list { get; set; }
 
+       
+
         public class ListOMatic
         {
             public ItemOMatic[] item { get; set; }
+            public int total { get; set; }
 
             public class ItemOMatic
             {
@@ -46,3 +49,26 @@ namespace LambAndLentil.Domain.Entities
     }
 } 
  */
+
+/*
+ {
+"list": {
+    "q": "Orange",
+    "sr": "28",
+    "ds": "Standard Reference",
+    "start": 0,
+    "end": 1,
+    "total": 61,
+    "group": "",
+    "sort": "r",
+    "item": [
+        {
+            "offset": 0,
+            "group": "Sweets",
+            "name": "Sherbet, orange",
+            "ndbno": "19097",
+            "ds": "SR"
+        }
+    ]
+}
+}*/

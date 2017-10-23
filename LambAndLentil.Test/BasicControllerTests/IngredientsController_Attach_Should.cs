@@ -20,16 +20,24 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestMethod]
         public void SuccessfullyAttachIngredientChild()
         {
+            // Arrange
+           
+            // Act
 
+            // Assert
+            Assert.Fail();
         }
 
         [Ignore]
         [TestMethod]
         public void SuccessfullyDetachIngredientChild()
         {
+            // Arrange
 
-        }
+            // Act
 
-
+            // Assert
+            Assert.Fail();
+        } 
     }
 }

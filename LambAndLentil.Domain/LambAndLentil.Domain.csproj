@@ -78,6 +78,7 @@
     <Compile Include="Entities\ShoppingList.cs" />
     <Compile Include="Entities\UsdaFood.cs" />
     <Compile Include="Entities\UsdaSingleItemSearch.cs" />
+    <Compile Include="Entities\UsdaWebApiDataSource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

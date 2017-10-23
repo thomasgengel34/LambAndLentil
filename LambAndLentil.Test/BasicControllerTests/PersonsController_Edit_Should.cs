@@ -190,5 +190,117 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.AreNotEqual(mod, shouldBeLaterDate);
 
         }
+
+
+        [Ignore]   // brought in Ingredient edit methods instead of using this
+        [TestMethod]
+        [TestCategory("Edit")]
+        public void EditPerson()
+        {
+            // Arrange
+            var Controller2 = new PersonsController(Repo);
+            Person pVM = new Person("Kermit", "Frog") { ID = 1492, Description = "test CanEditPerson" };
+
+            // Act  
+            ViewResult view1 = (ViewResult)Controller.Edit(1492);
+            Person p1 = (Person)view1.Model;
+            ViewResult view2 = (ViewResult)Controller2.Edit(2);
+            Person p2 = (Person)view2.Model;
+
+
+
+            // Assert 
+            Assert.IsNotNull(view1);
+            Assert.AreEqual(1, p1.ID);
+            Assert.AreEqual(2, p2.ID);
+
+            Assert.AreEqual("First edited", p1.Name);
+            Assert.AreEqual("Old Name 2", p2.Name);
+        }
+
+
+
+        [TestMethod]
+        [TestCategory("Edit")]
+        public void SaveEditedPerson()
+        {
+            // Arrange
+            PersonsController indexController = new PersonsController(Repo);
+            PersonsController Controller2 = new PersonsController(Repo);
+            PersonsController Controller3 = new PersonsController(Repo);
+
+
+            Person person = new Person
+            {
+                FirstName = "0000 test",
+                LastName = "",
+                ID = int.MaxValue - 100,
+                Description = "test PersonsControllerShould.SaveEditedPerson"
+            };
+
+            // Act 
+            ActionResult ar1 = Controller.PostEdit(person);
+
+
+            // now edit it
+            person.FirstName = "0000 test Edited";
+            person.LastName = "";
+            person.ID = 7777;
+            ActionResult ar2 = Controller2.PostEdit(person);
+            ViewResult view2 = Controller3.Index();
+            ListEntity<Person> ListEntity2 = (ListEntity<Person>)view2.Model;
+            Person person3 = (from m in ListEntity2.ListT
+                              where m.ID == 7777
+                              select m).AsQueryable().FirstOrDefault();
+
+            // Assert
+            Assert.AreEqual("0000 test Edited ", person3.Name);
+            Assert.AreEqual(7777, person3.ID);
+
+        }
+
+        [Ignore]  // look into why this is not working
+        [TestMethod]
+        [TestCategory("Edit")]
+        public void CanPostEditPerson()
+        {
+            // Arrange
+            Person person = new Person
+            {
+                ID = 1,
+                FirstName = "test PersonControllerTest.CanEditPerson",
+                LastName = "",
+                Description = "test PersonControllerTest.CanEditPerson"
+            };
+            Repo.Add(person);
+
+            // Act 
+            person.FirstName = "Name has been changed";
+            Repo.Add(person);
+            ViewResult view1 = (ViewResult)Controller.Edit(1);
+
+            Person returnedPersonListEntity = Repo.GetById(1);
+
+            // Assert 
+            Assert.IsNotNull(view1);
+            Assert.AreEqual("Name has been changed", returnedPersonListEntity.Name);
+            Assert.AreEqual(person.Description, returnedPersonListEntity.Description);
+            Assert.AreEqual(person.CreationDate, returnedPersonListEntity.CreationDate);
+        }
+
+
+
+        [TestMethod]
+        [TestCategory("Edit")]
+        public void CannotEditNonexistentPerson()
+        {
+            // Arrange
+
+            // Act
+            Person result = (Person)((ViewResult)Controller.Edit(8)).ViewData.Model;
+            // Assert
+            Assert.IsNull(result);
+        }
+
     }
 }

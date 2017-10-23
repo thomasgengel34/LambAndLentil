@@ -78,13 +78,17 @@
     <Compile Include="BasicControllerTests\AccountControllerTest.cs" />
     <Compile Include="BasicControllerTests\BaseControllerTest.cs" />
     <Compile Include="BasicControllerTests\HomeControllerTest.cs" />
+    <Compile Include="BasicControllerTests\IngredientsController_ClassPropertyChanges.cs" />
     <Compile Include="BasicControllerTests\IngredientsController_GetIngredients_Test.cs" />
+    <Compile Include="BasicControllerTests\MenusController_Test_ClassPropertyChanges.cs" />
+    <Compile Include="BasicControllerTests\NonFoodItemsCan.cs" />
+    <Compile Include="BasicControllerTests\PersonsController_Test_Misc_ClassPropertyChanges.cs" />
     <Compile Include="BasicControllerTests\PlansController_Index_Test.cs" />
     <Compile Include="BasicControllerTests\PersonsController_Index_Test.cs" />
     <Compile Include="BasicControllerTests\MenusController_Index_Test.cs" />
     <Compile Include="BasicControllerTests\IngredientsController_Test_Misc.cs" />
     <Compile Include="BasicControllerTests\MenusController_Test_Misc.cs" />
-    <Compile Include="BasicControllerTests\PersonsController_Test_Should_Misc.cs" />
+    <Compile Include="BasicControllerTests\PersonsController_Test_Misc.cs" />
     <Compile Include="BasicControllerTests\PlansController_Attach_Should.cs" />
     <Compile Include="BasicControllerTests\PersonsController_Attach_Should.cs" />
     <Compile Include="BasicControllerTests\MenusController_Attach_Should.cs" />
@@ -106,7 +110,9 @@
     <Compile Include="BasicControllerTests\PlansController_PostEdit_Should.cs" />
     <Compile Include="BasicControllerTests\PersonsController_PostEdit_Should.cs" />
     <Compile Include="BasicControllerTests\MenusController_PostEdit_Should.cs" />
+    <Compile Include="BasicControllerTests\PlansController_Test_ClassPropertyChanges.cs" />
     <Compile Include="BasicControllerTests\PlansController_Test_Misc.cs" />
+    <Compile Include="BasicControllerTests\RecipesController_Test_ClassPropertyChanges.cs" />
     <Compile Include="BasicControllerTests\RecipesController_Test_Misc.cs" />
     <Compile Include="BasicControllerTests\ShoppingListsController_Attach_Should.cs" />
     <Compile Include="BasicControllerTests\RecipesController_Attach_Should.cs" />
@@ -152,7 +158,8 @@
     <Compile Include="BasicControllerTests\IngredientsController_Create_Should.cs" />
     <Compile Include="BasicControllerTests\IngredientsController_IngredientsGenericController_Should.cs" />
     <Compile Include="BasicControllerTests\BaseController_Should.cs" />
-    <Compile Include="BasicControllerTests\BasicControllerTest_Misc.cs" />
+    <Compile Include="BasicControllerTests\BasicControllerTest_ClassPropertyChanges.cs" />
+    <Compile Include="BasicControllerTests\ShoppingListsController_Test_ClassProperties.cs" />
     <Compile Include="ControllerSecurity\PersonsEditShouldAllow.cs" />
     <Compile Include="ControllerSecurity\PersonsPostEditShouldAllow.cs" />
     <Compile Include="ControllerSecurity\PersonsDetailShouldAllow.cs" />
@@ -257,7 +264,12 @@
     <Compile Include="Views\HomeAboutViewShould.cs" />
     <Compile Include="Views\IngredientEditViewShould.cs" />
     <Compile Include="Views\RecipeEditViewShouldHaveWebApiSearchForIngredientsBy.cs" />
-    <Compile Include="WebAPI\GetNdbnoShould.cs" />
+    <Compile Include="WebAPI\GetNutrientReportsOnIndividualFoodsShould.cs" />
+    <Compile Include="WebAPI\GetListsOfFoodsNutrientsOrFoodGroupsShould.cs" />
+    <Compile Include="WebAPI\GetNutrientReportsForAllFoodsShould.cs" />
+    <Compile Include="WebAPI\GetFoodsBySearchingUsingFreeTextToLocateFoodsInTheDatabase.cs" />
+    <Compile Include="WebAPI\GetNutrientReportForFoodGroupsShould.cs" />
+    <Compile Include="WebAPI\GetNutrientReportForIndividualFood.cs" />
     <Compile Include="WebAPI\WebApiShouldSearchForIngredientsBy.cs" />
     <Compile Include="WebAPI\WebApiShould.cs" />
   </ItemGroup>

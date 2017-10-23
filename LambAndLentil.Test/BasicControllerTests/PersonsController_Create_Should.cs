@@ -33,6 +33,6 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Assert
             Assert.IsNotNull(view);
             Assert.AreEqual("Details", view.ViewName);
-        }
+        } 
     }
 }

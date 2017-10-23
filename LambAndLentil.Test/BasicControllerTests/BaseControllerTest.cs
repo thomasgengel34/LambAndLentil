@@ -8,9 +8,8 @@ using System.IO;
 using System.Linq;
 
 namespace LambAndLentil.Test.BasicControllerTests
-{
-    [TestClass]
-    public class BaseControllerTest<T>
+{ 
+      public class BaseControllerTest<T>
         where T : BaseEntity, IEntity, new()
     {
         public static IRepository<T> Repo { get; set; } 

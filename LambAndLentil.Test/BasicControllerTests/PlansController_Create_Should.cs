@@ -1,5 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Web.Mvc;
+using LambAndLentil.UI;
 
 namespace LambAndLentil.Test.BasicControllerTests
 {
@@ -9,8 +11,17 @@ namespace LambAndLentil.Test.BasicControllerTests
     public class PlansController_Create_Should:PlansController_Test_Should
     {
         [TestMethod]
-        public void TestMethod1()
+        [TestCategory("Create")]
+        public void Create()
         {
+            // Arrange
+
+            ViewResult view = Controller.Create(UIViewType.Edit);
+
+
+            // Assert
+            Assert.IsNotNull(view);
+            Assert.AreEqual("Details", view.ViewName);
         }
     }
 }

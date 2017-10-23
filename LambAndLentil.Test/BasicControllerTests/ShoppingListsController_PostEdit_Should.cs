@@ -55,5 +55,59 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.AreEqual("Details", view.ViewName);
              
         }
+
+        [TestMethod]
+        [TestCategory("Edit")]
+        public void CanPostEditShoppingList()
+        {
+            // Arrange
+            ShoppingList shoppingList = new ShoppingList
+            {
+                ID = 1,
+                Name = "test ShoppingListControllerTest.CanEditShoppingList",
+                Description = "test ShoppingListControllerTest.CanEditShoppingList"
+            };
+            Repo.Add(shoppingList);
+
+            // Act 
+            shoppingList.Name = "Name has been changed";
+            Repo.Add(shoppingList);
+            ViewResult view1 = (ViewResult)Controller.Edit(1);
+
+            ShoppingList returnedShoppingListListEntity = Repo.GetById(1);
+
+            // Assert 
+            Assert.IsNotNull(view1);
+            Assert.AreEqual("Name has been changed", returnedShoppingListListEntity.Name);
+            Assert.AreEqual(shoppingList.Description, returnedShoppingListListEntity.Description);
+            Assert.AreEqual(shoppingList.CreationDate, returnedShoppingListListEntity.CreationDate);
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void NotSaveLogicallyInvalidModel()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void NotSaveModelFlaggedInvalidByDataAnnotation()
+        {  // see https://msdn.microsoft.com/en-us/library/cc668224(v=vs.98).aspx
+
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+
+        }
     }
-}
+} 

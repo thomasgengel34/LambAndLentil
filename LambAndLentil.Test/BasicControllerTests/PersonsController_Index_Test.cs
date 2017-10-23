@@ -15,24 +15,23 @@ namespace LambAndLentil.Test.BasicControllerTests
     [TestCategory("PersonsController")]
     [TestCategory("Index")]
     public class PersonsController_Index_Test:PersonsController_Test_Should
-    { 
-         
-
-        [TestMethod]
-        [TestCategory("Index")]
+    {
+        [TestMethod] 
         public void Index()
         {
             // Arrange
-
+            PersonsController Controller2 = new PersonsController(Repo);
 
             // Act
-            ViewResult result = Controller.Index(1) as ViewResult;
-            ViewResult result1 = Controller.Index(2) as ViewResult;
+            ViewResult view1 = Controller.Index(1) as ViewResult;
+            ViewResult view2 = Controller2.Index(2) as ViewResult;
 
             // Assert
-
-            Assert.IsNotNull(result);
+            Assert.IsNotNull(view1);
+            Assert.IsNotNull(view2);
         }
+
+       
 
         [TestMethod]
         [TestCategory("Index")]
@@ -351,7 +350,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.AreEqual(6,result.ListT.Count());
         }
 
-        [Ignore]
+        
         [TestMethod]
         [TestCategory("Index")]
         public void CanPaginate_ArrayFirstItemNameIsCorrect()
@@ -360,11 +359,11 @@ namespace LambAndLentil.Test.BasicControllerTests
 
 
             // Act
-            var result = ( ListEntity<Person>)(Controller.Index(1)).Model;
+            var result = (ListEntity<Person>)(Controller.Index(1)).Model;
             Person[] ingrArray1 = result.ListT.ToArray();
 
             // Assert  
-            Assert.AreEqual("PersonsController_Index_Test P1", ingrArray1[0].Name);
+            Assert.AreEqual("LambAndLentil.Domain.Entities.Person ControllerTest1", ingrArray1[0].Name);
         }
 
         [Ignore]
@@ -466,6 +465,123 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void WhenAFlagHasBeenRemovedFromOnePersonStillThereForSecondFlaggedPerson()
         {
             Assert.Fail();
-        } 
+        }
+
+      
+
+        [TestMethod]
+        [TestCategory("Index")]
+        public void ContainsAllPersons()
+        {
+            // Arrange 
+            var Controller2 = new PersonsController(Repo);
+
+            // Act
+            ViewResult view1 = Controller.Index(1);
+
+            int count1 = ((ListEntity<Person>)(view1.Model)).ListT.Count();
+
+            ViewResult view2 = Controller2.Index(2);
+
+            int count2 = ((ListEntity<Person>)(view2.Model)).ListT.Count();
+
+            int count = count1 + count2;
+
+            // Assert
+            Assert.IsNotNull(view1);
+            Assert.IsNotNull(view2);
+            Assert.AreEqual(6, count1);
+            Assert.AreEqual(0, count2);
+            Assert.AreEqual(6, count);
+            Assert.AreEqual("Index", view1.ViewName);
+            Assert.AreEqual("Index", view2.ViewName);
+
+            Assert.AreEqual("LambAndLentil.Domain.Entities.Person ControllerTest1", ((ListEntity<Person>)(view1.Model)).ListT.FirstOrDefault().Name);
+            Assert.AreEqual("LambAndLentil.Domain.Entities.Person ControllerTest2", ((ListEntity<Person>)(view1.Model)).ListT.Skip(1).FirstOrDefault().Name);
+            Assert.AreEqual("LambAndLentil.Domain.Entities.Person ControllerTest3", ((ListEntity<Person>)(view1.Model)).ListT.Skip(2).FirstOrDefault().Name);
+            Assert.AreEqual("LambAndLentil.Domain.Entities.Person ControllerTest5", ((ListEntity<Person>)(view1.Model)).ListT.Skip(4).FirstOrDefault().Name);
+
+        }
+
+
+        [TestMethod]
+        [TestCategory("Index")]
+        public void FirstPageIsCorrect()
+        {
+            // Arrange 
+            Controller.PageSize = 8;
+
+
+            // Act
+            ViewResult view1 = Controller.Index(1);
+
+            int count1 = ((ListEntity<Person>)(view1.Model)).ListT.Count();
+
+            // Assert
+            Assert.IsNotNull(view1);
+            Assert.AreEqual(6, count1);
+            Assert.AreEqual("Index", view1.ViewName);
+
+            Assert.AreEqual("LambAndLentil.Domain.Entities.Person ControllerTest1", ((ListEntity<Person>)(view1.Model)).ListT.FirstOrDefault().Name);
+            Assert.AreEqual("LambAndLentil.Domain.Entities.Person ControllerTest2", ((ListEntity<Person>)(view1.Model)).ListT.Skip(1).FirstOrDefault().Name);
+            Assert.AreEqual("LambAndLentil.Domain.Entities.Person ControllerTest3", ((ListEntity<Person>)(view1.Model)).ListT.Skip(2).FirstOrDefault().Name);
+
+
+        }
+
+       
+
+        [TestMethod]
+        [TestCategory("Index")]
+        public void Index_CanSendPaginationViewModel()
+        {
+            // Arrange 
+
+            // Act 
+            ListEntity<Person> resultT = (ListEntity<Person>)((ViewResult)Controller.Index(2)).Model;
+
+            // Assert
+            PagingInfo pageInfoT = resultT.PagingInfo;
+            Assert.AreEqual(2, pageInfoT.CurrentPage);
+            Assert.AreEqual(8, pageInfoT.ItemsPerPage);
+            Assert.AreEqual(6, pageInfoT.TotalItems);
+            Assert.AreEqual(1, pageInfoT.TotalPages);
+        }
+
+
+        [TestMethod]
+        [TestCategory("Index")]
+        public void PagingInfoIsCorrect()
+        {
+            // Arrange 
+
+            // Action
+            int totalItems = ((ListEntity<Person>)((ViewResult)Controller.Index()).Model).PagingInfo.TotalItems;
+            int currentPage = ((ListEntity<Person>)((ViewResult)Controller.Index()).Model).PagingInfo.CurrentPage;
+            int itemsPerPage = ((ListEntity<Person>)((ViewResult)Controller.Index()).Model).PagingInfo.ItemsPerPage;
+            int totalPages = ((ListEntity<Person>)((ViewResult)Controller.Index()).Model).PagingInfo.TotalPages;
+
+            // Assert
+            Assert.AreEqual(6, totalItems);
+            Assert.AreEqual(1, currentPage);
+            Assert.AreEqual(8, itemsPerPage);
+            Assert.AreEqual(1, totalPages);
+        }
+
+        [TestMethod]
+        [TestCategory("Index")]
+        public void CanPaginate()
+        {
+            // Arrange
+
+            // Act
+            var result = (ListEntity<Person>)(Controller.Index(1)).Model;
+            var ListEntity = result.ListT;
+
+            // Assert 
+            Assert.AreEqual(6, ListEntity.Count());
+            Assert.AreEqual("LambAndLentil.Domain.Entities.Person ControllerTest1", ListEntity.FirstOrDefault().Name);
+            Assert.AreEqual("LambAndLentil.Domain.Entities.Person ControllerTest3", ListEntity.Skip(2).FirstOrDefault().Name);
+        }
     }
 }

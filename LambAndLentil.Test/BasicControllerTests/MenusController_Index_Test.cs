@@ -37,6 +37,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
             Assert.IsNotNull(result);
         }
+       
 
         [TestMethod]
         [TestCategory("Index")]
@@ -354,7 +355,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.IsTrue(result.ListT.Count() ==6);
         }
 
-        [Ignore]
+        
         [TestMethod]
         [TestCategory("Index")]
         public void CanPaginate_ArrayFirstItemNameIsCorrect()
@@ -367,7 +368,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Menu[] ingrArray1 = result.ListT.ToArray();
 
             // Assert  
-            Assert.AreEqual("MenusController_Index_Test P1", ingrArray1[0].Name);
+            Assert.AreEqual("LambAndLentil.Domain.Entities.Menu ControllerTest1", ingrArray1[0].Name);
         }
 
         [Ignore]
@@ -467,6 +468,144 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.Fail();
         }
 
-        
+
+      
+
+        [TestMethod]
+        [TestCategory("Index")]
+        public void IndexContainsAllMenus()
+        {
+            // Arrange   
+            int repoCount = Repo.Count();
+            MenusController Controller2 = new MenusController(Repo);
+
+            // Act
+            ViewResult view1 = Controller.Index(1);
+
+            int count1 = ((ListEntity<Menu>)(view1.Model)).ListT.Count();
+            var firstName = ((ListEntity<Menu>)(view1.Model)).ListT.FirstOrDefault().Name;
+            var secondName = ((ListEntity<Menu>)(view1.Model)).ListT.Skip(1).FirstOrDefault().Name;
+            var thirdName = ((ListEntity<Menu>)(view1.Model)).ListT.Skip(2).FirstOrDefault().Name;
+            var fifthName = ((ListEntity<Menu>)(view1.Model)).ListT.Skip(4).FirstOrDefault().Name;
+
+            ViewResult view2 = Controller2.Index(2);
+            int count2 = ((ListEntity<Menu>)(view2.Model)).ListT.Count();
+
+            int count = count1 + count2;
+
+            // Assert
+            Assert.IsNotNull(view1);
+            Assert.IsNotNull(view2);
+            Assert.AreEqual(6, count1);
+            Assert.AreEqual(0, count2);
+            Assert.AreEqual(repoCount, count);
+            Assert.AreEqual("Index", view1.ViewName);
+            Assert.AreEqual("Index", view2.ViewName);
+            Assert.AreEqual("LambAndLentil.Domain.Entities.Menu ControllerTest1", firstName);
+            Assert.AreEqual("LambAndLentil.Domain.Entities.Menu ControllerTest2", secondName);
+            Assert.AreEqual("LambAndLentil.Domain.Entities.Menu ControllerTest3", thirdName);
+            Assert.AreEqual("LambAndLentil.Domain.Entities.Menu ControllerTest5", fifthName);
+
+        }
+
+
+        [TestMethod]
+        [TestCategory("Index")]
+        public void Index_FirstPageIsCorrect()
+        {
+            // Arrange    
+            int repoCount = Repo.Count();
+
+            // Act
+            ViewResult view = Controller.Index(1);
+
+            int count = ((ListEntity<Menu>)(view.Model)).ListT.Count();
+            var firstName = ((ListEntity<Menu>)(view.Model)).ListT.FirstOrDefault().Name;
+            var secondName = ((ListEntity<Menu>)(view.Model)).ListT.Skip(1).FirstOrDefault().Name;
+            var thirdName = ((ListEntity<Menu>)(view.Model)).ListT.Skip(2).FirstOrDefault().Name;
+            var fourthName = ((ListEntity<Menu>)(view.Model)).ListT.Skip(3).FirstOrDefault().Name;
+            var fifthName = ((ListEntity<Menu>)(view.Model)).ListT.Skip(4).FirstOrDefault().Name;
+
+
+            // Assert
+            Assert.IsNotNull(view);
+            Assert.AreEqual(repoCount, count);
+            Assert.AreEqual("Index", view.ViewName);
+            Assert.AreEqual("LambAndLentil.Domain.Entities.Menu ControllerTest1", firstName);
+            Assert.AreEqual("LambAndLentil.Domain.Entities.Menu ControllerTest2", secondName);
+            Assert.AreEqual("LambAndLentil.Domain.Entities.Menu ControllerTest3", thirdName);
+            Assert.AreEqual("LambAndLentil.Domain.Entities.Menu ControllerTest4", fourthName);
+            Assert.AreEqual("LambAndLentil.Domain.Entities.Menu ControllerTest5", fifthName);
+
+        }
+
+        [Ignore]
+        [TestMethod]
+        [TestCategory("Index")]
+        // currently we only have one page here
+        public void Index_SecondPageIsCorrect()
+        {
+
+
+        }
+
+        [TestMethod]
+        [TestCategory("Index")]
+        public void Index_CanSendPaginationViewModel()
+        {
+
+            // Arrange
+            int count = Repo.Count();
+
+            // Act 
+            ListEntity<Menu> resultT = (ListEntity<Menu>)((ViewResult)Controller.Index(1)).Model;
+
+
+            // Assert 
+            PagingInfo pageInfoT = resultT.PagingInfo;
+            Assert.AreEqual(1, pageInfoT.CurrentPage);
+            Assert.AreEqual(8, pageInfoT.ItemsPerPage);
+            Assert.AreEqual(count, pageInfoT.TotalItems);
+            Assert.AreEqual(1, pageInfoT.TotalPages);
+        }
+
+
+        [TestMethod]
+        [TestCategory("Index")]
+        public void Index_PagingInfoIsCorrect()
+        {
+            // Arrange
+            int count = Repo.Count();
+
+
+            // Action
+            int totalItems = ((ListEntity<Menu>)((ViewResult)Controller.Index()).Model).PagingInfo.TotalItems;
+            int currentPage = ((ListEntity<Menu>)((ViewResult)Controller.Index()).Model).PagingInfo.CurrentPage;
+            int itemsPerPage = ((ListEntity<Menu>)((ViewResult)Controller.Index()).Model).PagingInfo.ItemsPerPage;
+            int totalPages = ((ListEntity<Menu>)((ViewResult)Controller.Index()).Model).PagingInfo.TotalPages;
+
+            // Assert
+            Assert.AreEqual(count, totalItems);
+            Assert.AreEqual(1, currentPage);
+            Assert.AreEqual(8, itemsPerPage);
+            Assert.AreEqual(1, totalPages);
+        }
+
+        [TestMethod]
+        [TestCategory("Index")]
+        public void CanPaginate()
+        {
+            // Arrange 
+            int repoCount = Repo.Count();
+            // Act
+            var result = (ListEntity<Menu>)(Controller.Index(1)).Model;
+
+            // Assert
+
+            Assert.AreEqual(repoCount, result.ListT.Count());
+            Assert.AreEqual("LambAndLentil.Domain.Entities.Menu ControllerTest1", result.ListT.FirstOrDefault().Name);
+            Assert.AreEqual("LambAndLentil.Domain.Entities.Menu ControllerTest4", result.ListT.Skip(3).FirstOrDefault().Name);
+        }
+
     }
 }

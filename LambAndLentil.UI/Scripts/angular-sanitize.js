@@ -394,7 +394,7 @@ function $SanitizeProvider() {
         }
         nextNode = getNonDescendant('nextSibling', node);
         if (!nextNode) {
-          while (nextNode == null) {
+          while (nextNode === null) {
             node = getNonDescendant('parentNode', node);
             if (node === inertBodyElement) break;
             nextNode = getNonDescendant('nextSibling', node);
@@ -489,7 +489,7 @@ function $SanitizeProvider() {
           out('>');
         }
         // eslint-disable-next-line eqeqeq
-        if (tag == ignoreCurrentElement) {
+        if (tag === ignoreCurrentElement) {
           ignoreCurrentElement = false;
         }
       },
@@ -695,7 +695,7 @@ angular.module('ngSanitize').filter('linky', ['$sanitize', function($sanitize) {
   var isString = angular.isString;
 
   return function(text, target, attributes) {
-    if (text == null || text === '') return text;
+    if (text === null || text === '') return text;
     if (!isString(text)) throw linkyMinErr('notstring', 'Expected string but received: {0}', text);
 
     var attributesFn =

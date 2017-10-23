@@ -4,32 +4,53 @@ using LambAndLentil.Domain.Entities;
 
 namespace LambAndLentil.Test.BasicControllerTests
 {
-    [Ignore]
+
     [TestClass]
-    public class BasicControllerTest_Misc:BaseControllerTest<Ingredient>
+    [TestCategory("Class Property Changes")]
+    public class BasicControllerTest_ClassPropertyChanges : IngredientsController_Test_Should
     {
+        public Ingredient ingredient { get; set; }
+        public Ingredient returnedIngredient { get; set; }
+
+        public BasicControllerTest_ClassPropertyChanges()
+        {
+            ingredient = new Ingredient { ID = 1000, Name = "Original Name" };
+            Repo.Save(ingredient);
+        }
+
         [TestMethod]
         public void ShouldEditName()
         {
-            // Arrange
+            // Arrange 
+
 
             // Act
+            ingredient.Name = "Changed";
+            Controller.PostEdit(ingredient);
+            returnedIngredient = Repo.GetById(1000);
 
             // Assert
-            Assert.Fail();
+            Assert.AreEqual("Changed", returnedIngredient.Name);
         }
 
+       
         [TestMethod]
-        public void DoesNotEditID()
-        {
+        public void EditID()
+        {  // this actually creates a copy.  
             // Arrange
 
             // Act
+            ingredient.ID = 42;
+            Controller.PostEdit(ingredient);
+            Ingredient returnedIngredient = Repo.GetById(42);
+            Ingredient originalIngredient = Repo.GetById(1000);
 
             // Assert
-            Assert.Fail();
+            Assert.AreEqual(42, returnedIngredient.ID);
+            Assert.IsNotNull(originalIngredient);
         }
 
+        [Ignore]
         [TestMethod]
         public void ShouldEditDescription()
         {
@@ -41,6 +62,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.Fail();
         }
 
+        [Ignore]
         [TestMethod]
         public void DoesNotEditCreationDate()
         {
@@ -52,6 +74,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.Fail();
         }
 
+        [Ignore]
         [TestMethod]
         public void DoesNotEditAddedByUser()
         {
@@ -63,6 +86,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.Fail();
         }
 
+        [Ignore]
         [TestMethod]
         public void CannotAlterModifiedByUserByHand()
         {
@@ -74,6 +98,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.Fail();
         }
 
+        [Ignore]
         [TestMethod]
         public void CannotAlterModifiedDateByHand()
         {

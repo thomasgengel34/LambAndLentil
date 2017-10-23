@@ -118,6 +118,33 @@ namespace LambAndLentil.Test.BasicControllerTests
             Ingredient returnedIngredient = Repo.GetById(1000);
             // Assert
             Assert.AreNotEqual(modifiedDate, returnedIngredient.ModifiedDate);
-        } 
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void NotSaveLogicallyInvalidModel()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void NotSaveModelFlaggedInvalidByDataAnnotation()
+        {  // see https://msdn.microsoft.com/en-us/library/cc668224(v=vs.98).aspx
+
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+
+        }
     }
 }

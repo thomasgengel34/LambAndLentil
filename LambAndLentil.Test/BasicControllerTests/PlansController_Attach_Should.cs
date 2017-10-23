@@ -9,11 +9,11 @@ using System.Web.Mvc;
 namespace LambAndLentil.Test.BasicControllerTests
 {
     [TestCategory("PlansController")]
-    [TestCategory("Attach")] 
-    [Ignore]
+    [TestCategory("Attach")]  
     [TestClass]
     public class PlansController_Attach_Should:PlansController_Test_Should
     {
+        [Ignore]
         [TestMethod]
         public void ReturnsErrorWithUnknownRepository()
         {
@@ -25,6 +25,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.Fail();
         }
 
+        [Ignore]
         [TestMethod]
         public void ReturnsIndexWithWarningWithUnknownParentID()
         {
@@ -36,6 +37,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.Fail();
         }
 
+        [Ignore]
         [TestMethod]
         public void ReturnsIndexWithWarningWithNullParent()
         {
@@ -47,6 +49,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.Fail();
         }
 
+        [Ignore]
         [TestMethod]
         public void ReturnsDetailWithWarningWithUnknownChildID()
         {
@@ -58,6 +61,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.Fail();
         }
 
+        [Ignore]
         [TestMethod]
         public void ReturnsDetailWithWarningWithNullChild()
         {
@@ -99,6 +103,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.AreEqual("Details", rdr.RouteValues.ElementAt(2).Value.ToString());
         }
 
+        [Ignore]
         [TestMethod]
         public void ReturnsDetailWhenDetachingWithSuccessWithValidParentandValidChild()
         {
@@ -114,14 +119,24 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestMethod]
         public void SuccessfullyAttachIngredientChild()
         {
+            // Arrange
 
+            // Act
+
+            // Assert
+            Assert.Fail();
         }
 
         [Ignore]
         [TestMethod]
         public void SuccessfullyDetachIngredientChild()
         {
+            // Arrange
 
+            // Act
+
+            // Assert
+            Assert.Fail();
         }
 
         [Ignore]
@@ -135,21 +150,36 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestMethod]
         public void SuccessfullyDetachRecipeChild()
         {
+            // Arrange
 
+            // Act
+
+            // Assert
+            Assert.Fail();
         }
 
         [Ignore]
         [TestMethod]
         public void SuccessfullyAttachMenuChild()
         {
+            // Arrange
 
+            // Act
+
+            // Assert
+            Assert.Fail();
         }
 
         [Ignore]
         [TestMethod]
         public void SuccessfullyDetachMenuChild()
         {
+            // Arrange
 
+            // Act
+
+            // Assert
+            Assert.Fail();
         }
     }
 }
