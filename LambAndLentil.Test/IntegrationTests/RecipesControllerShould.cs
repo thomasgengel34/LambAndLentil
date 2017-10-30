@@ -393,7 +393,7 @@ namespace IntegrationTests
         // [Ignore]
         [TestMethod]
         [TestCategory("Attach-Detach")]
-        public void ReturnIndexViewWithWarningMessageWhenDetachingNonExistingIngredientAttachedToANonExistingRecipe()
+        public void ReturnIndexViewWithWarningWhenDetachingNonExistingIngredientAttachedToANonExistingRecipe()
         {
             // Arrange 
 

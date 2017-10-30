@@ -128,11 +128,11 @@ namespace LambAndLentil.UI.Controllers
         public ViewResult BaseCreate(UIViewType actionMethod)
         {
             ViewBag.ActionMethod = UIViewType.Create;
-            T vm = new T
+            T item = new T
             {
                 CreationDate = DateTime.Now
             };
-            return View(UIViewType.Details.ToString(), vm);
+            return View(UIViewType.Details.ToString(), item);
         }
 
         //public ActionResult BaseEdit(IRepository<T> Repo,  UIControllerType uIControllerType, int id = 1, UIViewType actionMethod = UIViewType.Edit)
@@ -323,7 +323,7 @@ namespace LambAndLentil.UI.Controllers
             return ControllerExtensions.RedirectToAction(this, action);
         }
 
-        public ActionResult GuardId(IRepository<T> Repo, UIControllerType tController, int id)
+      public ActionResult GuardId(IRepository<T> Repo, UIControllerType tController, int id)
         {
             T item = Repo.GetById(id);
 
@@ -335,6 +335,14 @@ namespace LambAndLentil.UI.Controllers
             {
                 return new EmptyResult();
             }
-        } 
+        }
+
+        public void BaseAddIngredientToIngredientsList(IRepository<T> repo, UIControllerType tController, int id, string addedIngredient)
+        {
+            ActionResult result = GuardId(Repo, tController, id);
+            T item = Repo.GetById(id);
+            item.IngredientsList += String.Concat(", ", addedIngredient);
+            Repo.Update(item, item.ID);
+        }
     }
 }

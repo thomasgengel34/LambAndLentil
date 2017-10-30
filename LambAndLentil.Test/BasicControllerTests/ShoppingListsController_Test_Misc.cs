@@ -56,7 +56,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [TestMethod]
         [TestCategory("Remove")]
-        public void RemoveAFoundShoppingList()
+        public void DetachAFoundShoppingList()
         {   // does not actually remove, just sets up to remove it.
             // TODO: verify "Are you sure you want to delete this?" message shows up.
             // Arrange
@@ -77,7 +77,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [TestMethod]
         [TestCategory("Remove")]
-        public void RemoveAnInvalidShoppingList()
+        public void DetachAnInvalidShoppingList()
         {
             // Arrange 
 
@@ -95,8 +95,8 @@ namespace LambAndLentil.Test.BasicControllerTests
         }
 
         [TestMethod]
-        [TestCategory("Remove")]
-        public void RemoveConfirmed()
+        [TestCategory("Detach")]
+        public void DetachConfirmed()
         {
             // Arrange
             int count = Repo.Count();
@@ -114,8 +114,8 @@ namespace LambAndLentil.Test.BasicControllerTests
         }
 
         [TestMethod]
-        [TestCategory("Remove")]
-        public void CanRemoveValidShoppingList()
+        [TestCategory("Detach")]
+        public void CanDetachValidShoppingList()
         {
             // Arrange - create an shoppingList
             ShoppingList shoppingListEntity = new ShoppingList { ID = 2, Name = "Test2" };

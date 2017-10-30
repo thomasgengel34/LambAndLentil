@@ -105,18 +105,9 @@ namespace LambAndLentil.UI.Controllers
             return BaseAttach< Ingredient>(Repo,menuID, ingredient, AttachOrDetach.Detach);
         }
 
-        // probably not needed
-        //private Menu GetMenu()
-        //{
-        //    Menu recipe = (Menu)Session["Menu"];
-        //    if (recipe == null)
-        //    {
-        //        recipe = new Menu();
-        //        Session["Menu"] = recipe;
-        //    }
-        //    return recipe;
-        //}
-
-
+        public void AddIngredientToIngredientsList(int id = 1, string addedIngredient = "")
+        {
+            BaseAddIngredientToIngredientsList(Repo, UIControllerType.Recipes, id, addedIngredient);
+        }
     }
 }

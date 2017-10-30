@@ -17,9 +17,7 @@ namespace LambAndLentil.UI.Controllers
         public IngredientsController(IRepository<Ingredient> repository) : base(repository)
         {
             Repo = repository;
-        }
-
-
+        } 
     }
 
     public class IngredientsGenericController<T> : BaseController<Ingredient>
@@ -200,15 +198,18 @@ namespace LambAndLentil.UI.Controllers
             return BaseDeleteConfirmed(Repo, UIControllerType.Ingredients, id);
         }
 
-        // cannot attach or detach an ingredient: changing
-        public ActionResult AttachIngredient(int? recipeID, Ingredient ingredient)
+
+
+
+       
+        public ActionResult AttachIngredient(int? ingredientID, Ingredient ingredient)
         {
-            return BaseAttach<Ingredient>(Repo, recipeID, ingredient);
+            return BaseAttach<Ingredient>(Repo, ingredientID, ingredient);
         }
 
-        public ActionResult RemoveIngredient(int? recipeID, Ingredient ingredient)
+        public ActionResult DetachIngredient(int? ingredientID, Ingredient ingredient)
         {
-            return BaseAttach<Ingredient>(Repo, recipeID, ingredient, AttachOrDetach.Detach);
+            return BaseAttach<Ingredient>(Repo,  ingredientID, ingredient, AttachOrDetach.Detach);
         }
 
         public async Task<int?> GetNdbnoFromSearchStringAsync(string searchString, string dataSource = "")
@@ -248,8 +249,8 @@ namespace LambAndLentil.UI.Controllers
                 return -1;
             }
         }
-         
-        public async Task<IEnumerable<string>> GetIngredientNamesAsync(string searchString, string dataSource = "", int max=100, int offset=0  )
+
+        public async Task<IEnumerable<string>> GetIngredientNamesAsync(string searchString, string dataSource = "", int max = 100, int offset = 0)
         {
             if (searchString.Length > 43)
             {
@@ -261,7 +262,7 @@ namespace LambAndLentil.UI.Controllers
             {
 
                 string http = "https://api.nal.usda.gov/ndb/search/?format=json&q=";
-                string apiKey = "&+max="+max+"offset="+offset+"&" + dataSource + "&api_key=";
+                string apiKey = "&+max=" + max + "offset=" + offset + "&" + dataSource + "&api_key=";
                 string key = "sFtfcrVdSOKA4ip3Z1MlylQmdj5Uw3JoIIWlbeQm";
                 string foodsUrl = String.Concat(http, searchString, apiKey, key);
                 Client.BaseAddress = new Uri(foodsUrl);
@@ -292,7 +293,7 @@ namespace LambAndLentil.UI.Controllers
         }
 
 
-        public async Task<long> GetIngredientCountAsync(string searchString, string dataSource = "", long max = Int64.MaxValue, int offset = 0, string foodGroup="")
+        public async Task<long> GetIngredientCountAsync(string searchString, string dataSource = "", long max = Int64.MaxValue, int offset = 0, string foodGroup = "")
         {
             if (searchString.Length > 43)
             {
@@ -304,8 +305,8 @@ namespace LambAndLentil.UI.Controllers
             {
 
                 string http = "https://api.nal.usda.gov/ndb/search/?format=json&q=";
-                
-                string apiKey = String.Concat("&+max=",max,"offset=",offset , "&ds=" , dataSource,"&fg=", foodGroup,  "&api_key=");
+
+                string apiKey = String.Concat("&+max=", max, "offset=", offset, "&ds=", dataSource, "&fg=", foodGroup, "&api_key=");
                 string key = "sFtfcrVdSOKA4ip3Z1MlylQmdj5Uw3JoIIWlbeQm";
                 string foodsUrl = String.Concat(http, searchString, apiKey, key);
                 Client.BaseAddress = new Uri(foodsUrl);
@@ -325,10 +326,18 @@ namespace LambAndLentil.UI.Controllers
                 return total;
 
             }
+
             catch (Exception ex)
             {
                 return -1;
             }
         }
+
+        public void AddIngredientToIngredientsList(int id = 1, string addedIngredient = "")
+        {
+            BaseAddIngredientToIngredientsList(Repo, UIControllerType.Recipes, id, addedIngredient);
+        }
+
+        
     }
 }

@@ -1,4 +1,5 @@
-﻿using System; 
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LambAndLentil.Domain.Entities
@@ -8,12 +9,12 @@ namespace LambAndLentil.Domain.Entities
     {
         public int ID { get; set; }
 
-        public virtual Recipe Recipe { get; set; }
+       public Recipe Recipe { get; set; }
          
 
         public Ingredient() : base()
         {
-
+           
         }
 
         public Ingredient(DateTime creationDate) : this()

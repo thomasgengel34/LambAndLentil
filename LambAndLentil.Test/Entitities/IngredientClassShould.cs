@@ -78,20 +78,7 @@ namespace LambAndLentil.Domain.Test.Entities
             Assert.AreEqual("6/26/1977", ingredient.CreationDate.ToShortDateString());
         }
 
-        [TestCategory("Class Child Test")]
-        [TestMethod]
-        public void NotBeAbleToHaveIngredientsChild()
-        {
-            // Arrange
-
-
-            // Act
-            PropertyInfo[] props = Ingredient.GetType().GetProperties();
-            var result =  props.Where(p=>p.Name == "Ingredients");
-
-            // Assert
-            Assert.AreEqual(0, result.Count());
-        }
+     
 
         [TestCategory("Class Child Test")]
         [TestMethod]

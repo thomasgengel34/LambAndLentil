@@ -81,7 +81,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             int count1 = ingrArray1.Count();
 
             // Assert 
-            Assert.AreEqual(6, count1);
+            Assert.AreEqual(7, count1);
         }
 
         [TestMethod]
@@ -178,7 +178,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             int count1 = (( ListEntity<Person>)(view1.Model)).ListT.Count();
 
             // Assert 
-            Assert.AreEqual(6, count1);
+            Assert.AreEqual(7, count1);
         }
 
         [TestMethod]
@@ -347,7 +347,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             var result = ( ListEntity<Person>)(Controller.Index(1)).Model;
 
             // Assert 
-            Assert.AreEqual(6,result.ListT.Count());
+            Assert.AreEqual(7,result.ListT.Count());
         }
 
         
@@ -423,7 +423,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             //   PagingInfo pageInfoT =ListEntity.PagingInfo;
 
             // Assert 
-            Assert.AreEqual(6, pageInfoT.TotalItems);
+            Assert.AreEqual(7, pageInfoT.TotalItems);
         }
 
         [Ignore]
@@ -490,9 +490,9 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Assert
             Assert.IsNotNull(view1);
             Assert.IsNotNull(view2);
-            Assert.AreEqual(6, count1);
+            Assert.AreEqual(7, count1);
             Assert.AreEqual(0, count2);
-            Assert.AreEqual(6, count);
+            Assert.AreEqual(7, count);
             Assert.AreEqual("Index", view1.ViewName);
             Assert.AreEqual("Index", view2.ViewName);
 
@@ -519,7 +519,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
             // Assert
             Assert.IsNotNull(view1);
-            Assert.AreEqual(6, count1);
+            Assert.AreEqual(7, count1);
             Assert.AreEqual("Index", view1.ViewName);
 
             Assert.AreEqual("LambAndLentil.Domain.Entities.Person ControllerTest1", ((ListEntity<Person>)(view1.Model)).ListT.FirstOrDefault().Name);
@@ -544,7 +544,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             PagingInfo pageInfoT = resultT.PagingInfo;
             Assert.AreEqual(2, pageInfoT.CurrentPage);
             Assert.AreEqual(8, pageInfoT.ItemsPerPage);
-            Assert.AreEqual(6, pageInfoT.TotalItems);
+            Assert.AreEqual(7, pageInfoT.TotalItems);
             Assert.AreEqual(1, pageInfoT.TotalPages);
         }
 
@@ -562,7 +562,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             int totalPages = ((ListEntity<Person>)((ViewResult)Controller.Index()).Model).PagingInfo.TotalPages;
 
             // Assert
-            Assert.AreEqual(6, totalItems);
+            Assert.AreEqual(7, totalItems);
             Assert.AreEqual(1, currentPage);
             Assert.AreEqual(8, itemsPerPage);
             Assert.AreEqual(1, totalPages);
@@ -579,7 +579,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             var ListEntity = result.ListT;
 
             // Assert 
-            Assert.AreEqual(6, ListEntity.Count());
+            Assert.AreEqual(7, ListEntity.Count());
             Assert.AreEqual("LambAndLentil.Domain.Entities.Person ControllerTest1", ListEntity.FirstOrDefault().Name);
             Assert.AreEqual("LambAndLentil.Domain.Entities.Person ControllerTest3", ListEntity.Skip(2).FirstOrDefault().Name);
         }

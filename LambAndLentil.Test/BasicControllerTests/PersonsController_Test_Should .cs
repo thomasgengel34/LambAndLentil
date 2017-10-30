@@ -22,6 +22,7 @@ namespace LambAndLentil.Test.BasicControllerTests
          
        internal static PersonsController Controller { get; set; }
         internal static Person Person { get; set; }
+         internal static Person ReturnedPerson { get; set; }
 
         public PersonsController_Test_Should()
         {
@@ -47,6 +48,7 @@ namespace LambAndLentil.Test.BasicControllerTests
                 Weight=150,
                 NoGarlic=false
             };
+            Repo.Save(Person);
         } 
     }
 }

@@ -87,7 +87,7 @@ namespace LambAndLentil.Test.JSONTests
             sr.Close();
 
             // Assert
-            string text = "{\"ID\":1405,\"MealType\":0,\"DayOfWeek\":0,\"Diners\":0,\"Ingredients\":[],\"Recipes\":[],\"Name\":\"SaveOneMenuTest \",\"Description\":\"not yet described\",\"CreationDate\":\"2003-01-02T00:00:00\",\"ModifiedDate\":\"1990-12-12T00:00:00\",\"AddedByUser\":\"PFW\\\\Poncho\",\"ModifiedByUser\":\"PFW\\\\Poncho\",\"IngredientsList\":null}";
+            string text = "{\"ID\":1405,\"MealType\":0,\"DayOfWeek\":0,\"Diners\":0,\"Recipes\":[],\"Name\":\"SaveOneMenuTest \",\"Description\":\"not yet described\",\"CreationDate\":\"2003-01-02T00:00:00\",\"ModifiedDate\":\"1990-12-12T00:00:00\",\"AddedByUser\":\"PFW\\\\Poncho\",\"ModifiedByUser\":\"PFW\\\\Poncho\",\"IngredientsList\":null,\"Ingredients\":[]}";
 /* "{\"MealType\":0,\"DayOfWeek\":0,\"Diners\":0,\"ID\":0,\"Name\":\"SaveOneMenu Test \",\"Description\":\"not yet described\",\"CreationDate\":\"2003-01-02T00:00:00\",\"ModifiedDate\":\"1990-12-12T00:00:00\",\"AddedByUser\":\"PFW\\\\Poncho\",\"ModifiedByUser\":\"PFW\\\\Poncho\",\"Recipes\":null,\"Ingredients\":null,\"Menus\":null,\"Plans\":null,\"ShoppingLists\":null,\"Persons\":null}";*/
 
     string textNoLineBreaks = Regex.Replace(text, @"\r\n?|\n", "");
@@ -123,7 +123,7 @@ namespace LambAndLentil.Test.JSONTests
             sr.Close();
 
             // Assert
-            string text = "{\"ID\":1405,\"Ingredients\":[],\"Recipes\":[],\"Menus\":[],\"Name\":\"SaveOnePlanTest \",\"Description\":\"not yet described\",\"CreationDate\":\"2003-01-02T00:00:00\",\"ModifiedDate\":\"1990-12-12T00:00:00\",\"AddedByUser\":\"PFW\\\\Poncho\",\"ModifiedByUser\":\"PFW\\\\Poncho\",\"IngredientsList\":null}";
+            string text = "{\"ID\":1405,\"Recipes\":[],\"Menus\":[],\"Name\":\"SaveOnePlanTest \",\"Description\":\"not yet described\",\"CreationDate\":\"2003-01-02T00:00:00\",\"ModifiedDate\":\"1990-12-12T00:00:00\",\"AddedByUser\":\"PFW\\\\Poncho\",\"ModifiedByUser\":\"PFW\\\\Poncho\",\"IngredientsList\":null,\"Ingredients\":[]}";
          
 
             string textNoLineBreaks = Regex.Replace(text, @"\r\n?|\n", "");
@@ -159,7 +159,7 @@ namespace LambAndLentil.Test.JSONTests
             sr.Close();
 
             // Assert
-            string text = "{\"Recipes\":[],\"Ingredients\":[],\"Menus\":[],\"Plans\":[],\"ID\":1405,\"Date\":\"0001-01-01T00:00:00\",\"Author\":null,\"Name\":\"SaveOneShoppingListTest \",\"Description\":\"not yet described\",\"CreationDate\":\"2003-01-02T00:00:00\",\"ModifiedDate\":\"1990-12-12T00:00:00\",\"AddedByUser\":\"PFW\\\\Poncho\",\"ModifiedByUser\":\"PFW\\\\Poncho\",\"IngredientsList\":null}";
+            string text = "{\"Recipes\":[],\"Menus\":[],\"Plans\":[],\"ID\":1405,\"Date\":\"0001-01-01T00:00:00\",\"Author\":null,\"Name\":\"SaveOneShoppingListTest \",\"Description\":\"not yet described\",\"CreationDate\":\"2003-01-02T00:00:00\",\"ModifiedDate\":\"1990-12-12T00:00:00\",\"AddedByUser\":\"PFW\\\\Poncho\",\"ModifiedByUser\":\"PFW\\\\Poncho\",\"IngredientsList\":null,\"Ingredients\":[]}";
 
 
             string textNoLineBreaks = Regex.Replace(text, @"\r\n?|\n", "");
@@ -196,7 +196,7 @@ namespace LambAndLentil.Test.JSONTests
             sr.Close();
 
             // Assert
-            string text = "{\"ID\":1405,\"FirstName\":\"SaveOnePersonTest \",\"LastName\":\"\",\"FullName\":\"Newly Created\",\"Weight\":0.0,\"MinCalories\":0,\"MaxCalories\":0,\"NoGarlic\":false,\"Recipes\":[],\"Ingredients\":[],\"Menus\":[],\"Plans\":[],\"ShoppingLists\":[],\"Name\":\"Newly Created\",\"Description\":\"not yet described\",\"CreationDate\":\"2003-01-02T00:00:00\",\"ModifiedDate\":\"1990-12-12T00:00:00\",\"AddedByUser\":\"PFW\\\\Poncho\",\"ModifiedByUser\":\"PFW\\\\Poncho\",\"IngredientsList\":null}";
+            string text = "{\"ID\":1405,\"FirstName\":\"SaveOnePersonTest \",\"LastName\":\"\",\"FullName\":\"Newly Created\",\"Weight\":0.0,\"MinCalories\":0,\"MaxCalories\":0,\"NoGarlic\":false,\"Recipes\":[],\"Menus\":[],\"Plans\":[],\"ShoppingLists\":[],\"Name\":\"Newly Created\",\"Description\":\"not yet described\",\"CreationDate\":\"2003-01-02T00:00:00\",\"ModifiedDate\":\"1990-12-12T00:00:00\",\"AddedByUser\":\"PFW\\\\Poncho\",\"ModifiedByUser\":\"PFW\\\\Poncho\",\"IngredientsList\":null,\"Ingredients\":[]}";
 
 
             string textNoLineBreaks = Regex.Replace(text, @"\r\n?|\n", "");

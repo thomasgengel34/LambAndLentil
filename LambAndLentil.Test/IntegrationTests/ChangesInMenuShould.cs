@@ -17,6 +17,11 @@ namespace LambAndLentil.Test.IntegrationTests
         [TestMethod]
         public void ChangeShoppingListPlanWhenMenuAdded()
         {
+            // Arrange
+
+            // Act
+
+            // Assert
             Assert.Fail();
         }
 
@@ -26,6 +31,11 @@ namespace LambAndLentil.Test.IntegrationTests
         [TestMethod]
         public void ChangeShoppingListPlanWhenMenuModified()
         {
+            // Arrange
+
+            // Act
+
+            // Assert
             Assert.Fail();
         }
 
@@ -35,6 +45,11 @@ namespace LambAndLentil.Test.IntegrationTests
         [TestMethod]
         public void ChangeShoppingListPlanWhenMenuRemoved()
         {
+            // Arrange
+
+            // Act
+
+            // Assert
             Assert.Fail();
         }
 
@@ -44,6 +59,11 @@ namespace LambAndLentil.Test.IntegrationTests
         [TestMethod]
         public void ChangeShoppingListMenuAdded()
         {
+            // Arrange
+
+            // Act
+
+            // Assert
             Assert.Fail();
         }
 
@@ -53,6 +73,11 @@ namespace LambAndLentil.Test.IntegrationTests
         [TestMethod]
         public void ChangeShoppingListWhenMenuModified()
         {
+            // Arrange
+
+            // Act
+
+            // Assert
             Assert.Fail();
         }
 
@@ -62,6 +87,11 @@ namespace LambAndLentil.Test.IntegrationTests
         [TestMethod]
         public void ChangeShoppingListWhenMenuRemoved()
         {
+            // Arrange
+
+            // Act
+
+            // Assert
             Assert.Fail();
         }
 
@@ -71,6 +101,11 @@ namespace LambAndLentil.Test.IntegrationTests
         [TestMethod]
         public void ChangeShoppingListPlanAdded()
         {
+            // Arrange
+
+            // Act
+
+            // Assert
             Assert.Fail();
         }
 

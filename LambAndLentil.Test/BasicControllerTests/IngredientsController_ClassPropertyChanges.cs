@@ -1,5 +1,10 @@
 ﻿using LambAndLentil.Domain.Entities;
+using LambAndLentil.UI;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Collections.Generic;
+using LambAndLentil.Domain.Abstract;
+using LambAndLentil.UI.Controllers;
 
 namespace LambAndLentil.Test.BasicControllerTests
 {
@@ -8,12 +13,13 @@ namespace LambAndLentil.Test.BasicControllerTests
     [TestCategory("Edit")]
     public class IngredientsController_ClassPropertyChanges: IngredientsController_Test_Should
     {
-        public Ingredient ReturnedIngredient { get; set; }
+        public Ingredient  Entity{ get; set; }
+        public Ingredient ReturnedEntity{ get; set; }
 
         public IngredientsController_ClassPropertyChanges()
         {
-            Ingredient = new Ingredient { ID = 1000, Name = "Original Name" };
-            Repo.Save(Ingredient); 
+            Entity = new Ingredient { ID = 1000, Name = "Original Name",Ingredients=new List<Ingredient>() };
+            Repo.Save(Entity); 
         }
 
         [TestMethod]
@@ -22,12 +28,12 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange
 
             // Act
-            Ingredient.Name = "Name is changed";
-            Controller.PostEdit(Ingredient);
-            ReturnedIngredient = Repo.GetById(1000);
+            Entity.Name = "Name is changed";
+            Controller.PostEdit(Entity);
+            ReturnedEntity= Repo.GetById(1000);
 
             // Assert
-            Assert.AreEqual("Name is changed", ReturnedIngredient.Name);
+            Assert.AreEqual("Name is changed", ReturnedEntity.Name);
         }
 
         [TestMethod]
@@ -36,109 +42,138 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange
 
             // Act
-            Ingredient.ID = 42;
-            Controller.PostEdit(Ingredient);
-            Ingredient returnedIngredient = Repo.GetById(42);
-            Ingredient originalIngredient = Repo.GetById(1000);
+            Entity.ID = 42;
+            Controller.PostEdit(Entity);
+             ReturnedEntity = Repo.GetById(42);
+              Entity = Repo.GetById(1000);
 
             // Assert
-            Assert.AreEqual(42, returnedIngredient.ID);
-            Assert.IsNotNull(originalIngredient);
+            Assert.AreEqual(42, ReturnedEntity.ID);
+            Assert.IsNotNull( Entity);
         }
 
-        [Ignore]
         [TestMethod]
         public void ShouldEditDescription()
         {
             // Arrange
+            string changedDescription = "Description has changed";
 
             // Act
+            Entity.Description = changedDescription;
+            Controller.PostEdit(Entity);
+            ReturnedEntity = Repo.GetById(Entity.ID);
 
             // Assert
-            Assert.Fail();
+            Assert.AreNotEqual(changedDescription, ReturnedEntity.AddedByUser);
         }
 
-        [Ignore]
         [TestMethod]
         public void DoesNotEditCreationDate()
         {
             // Arrange
+            DateTime dateTime = new DateTime(1776, 7, 4);
+            Controller.PostEdit(Entity);
 
-            // Act
+            // Act 
+            Entity.CreationDate = dateTime;
+            Controller.PostEdit(Entity);
+            ReturnedEntity = Repo.GetById(Entity.ID);
 
             // Assert
-            Assert.Fail();
+            Assert.AreNotEqual(dateTime.Year, ReturnedEntity.CreationDate.Year);
         }
 
-        [Ignore]
         [TestMethod]
         public void DoesNotEditAddedByUser()
         {
             // Arrange
+            string user = "Abraham Lincoln";
 
             // Act
+            Entity.AddedByUser = user;
+
+            Controller.PostEdit(Entity);
+            ReturnedEntity = Repo.GetById(Entity.ID);
 
             // Assert
-            Assert.Fail();
+            Assert.AreNotEqual(user, ReturnedEntity.AddedByUser);
         }
-        [Ignore]
+
         [TestMethod]
         public void CannotAlterModifiedByUserByHand()
         {
             // Arrange
-
+            string user = "Abraham Lincoln";
             // Act
+            Entity.ModifiedByUser = user ;
+            Controller.PostEdit(Entity);
+            ReturnedEntity= Repo.GetById(Entity.ID);
 
             // Assert
-            Assert.Fail();
+            Assert.AreNotEqual(user, ReturnedEntity.ModifiedByUser);
         }
 
-        [Ignore]
         [TestMethod]
         public void CannotAlterModifiedDateByHand()
         {
             // Arrange
+            DateTime dateTime = new DateTime(1776, 7, 4);
+            Entity.ModifiedDate = dateTime;
 
-            // Act
+            // Act 
+            Controller.PostEdit(Entity);
+            ReturnedEntity= Repo.GetById(Entity.ID);
 
             // Assert
-            Assert.Fail();
+            Assert.AreNotEqual(dateTime.Year, ReturnedEntity.ModifiedDate.Year);
+        }
+         
+        [TestMethod]
+        public void ShouldEditUserGeneratedIngredientsList()
+        {
+            // Arrange
+            Entity.IngredientsList = "Edited";
+
+            // Act
+            Controller.PostEdit(Entity);
+            ReturnedEntity = Repo.GetById(Entity.ID);
+
+            // Assert
+            Assert.AreEqual("Edited", ReturnedEntity.IngredientsList);
         }
 
         [Ignore]
         [TestMethod]
-        public void ShouldAddRecipeToList()
+        public void ShouldNotEditWebAPIGeneratedIngredientsList()
         {
             // Arrange
 
-            // Act
+            // Act 
 
             // Assert
             Assert.Fail();
         }
 
-        [Ignore]
         [TestMethod]
-        public void ShouldRemoveRecipeFromList()
+        public void ShouldAddIngredientToIngredients()
         {
             // Arrange
+            int initialCount = Entity.Ingredients.Count;
 
             // Act
+            Entity.Ingredients.Add(new Ingredient() { ID = 134, Name = "ShouldAddIngredientToIngredients" });
+            Controller.PostEdit(Entity);
+            ReturnedEntity = Repo.GetById(Entity.ID);
 
             // Assert
-            Assert.Fail();
+            Assert.AreEqual(initialCount + 1, Entity.Ingredients.Count);
+            Assert.AreEqual("ShouldAddIngredientToIngredients", Entity.Ingredients[initialCount].Name);
         }
 
-        [Ignore]
         [TestMethod]
-        public void ShouldEditIngredientsList()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
-            Assert.Fail();
-        }
+        public void ShouldAddIngredientToIngredientsList()
+        { 
+             BaseShouldAddIngredientToIngredientsList(Repo, Entity, ReturnedEntity, Controller, UIControllerType.Ingredients);
+        } 
     }
 }

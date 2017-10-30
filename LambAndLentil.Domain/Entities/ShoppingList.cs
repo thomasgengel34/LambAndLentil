@@ -25,8 +25,7 @@ namespace LambAndLentil.Domain.Entities
         }
          
    
-        public   List<Recipe> Recipes { get; set; }
-        public List<Ingredient> Ingredients { get; set; }
+        public   List<Recipe> Recipes { get; set; } 
         public  List<Menu> Menus { get; set; }
         public   List<Plan> Plans { get; set; } 
 

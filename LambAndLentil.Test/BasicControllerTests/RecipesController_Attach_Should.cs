@@ -8,11 +8,12 @@ using System.Web.Mvc;
 
 namespace LambAndLentil.Test.BasicControllerTests
 {
-    [Ignore]
+  
     [TestCategory("RecipesController")]
     [TestClass]
     public class RecipesController_Attach_Should:RecipesController_Test_Should
     {
+        [Ignore]
         [TestMethod]
         public void ReturnsErrorWithUnknownRepository()
         {
@@ -24,6 +25,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.Fail();
         }
 
+        [Ignore]
         [TestMethod]
         public void ReturnsIndexWithWarningWithUnknownParentID()
         {
@@ -35,6 +37,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.Fail();
         }
 
+        [Ignore]
         [TestMethod]
         public void ReturnsIndexWithWarningWithNullParent()
         {
@@ -46,6 +49,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.Fail();
         }
 
+        [Ignore]
         [TestMethod]
         public void ReturnsDetailWithWarningWithUnknownChildID()
         {
@@ -57,6 +61,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.Fail();
         }
 
+        [Ignore]
         [TestMethod]
         public void ReturnsDetailWithWarningWithNullChild()
         {
@@ -68,6 +73,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.Fail();
         }
 
+        [Ignore]
         [TestMethod]
         public void ReturnsDetailWhenAttachingWithSuccessWithValidParentandValidChild()
         {
@@ -98,6 +104,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.AreEqual("Details", rdr.RouteValues.ElementAt(2).Value.ToString());
         }
 
+        [Ignore]
         [TestMethod]
         public void ReturnsDetailWhenDetachingWithSuccessWithValidParentandValidChild()
         {
@@ -109,14 +116,24 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.Fail();
         }
 
-        [Ignore]
+        
         [TestMethod]
         public void SuccessfullyAttachIngredientChild()
         {
+            // Arrange
+            Ingredient child = new Ingredient() { ID = 3000, Name = "SuccessfullyAttachIngredientChild" };
+            TestRepository<Ingredient> IngredientRepo = new TestRepository<Ingredient>();
+            IngredientRepo.Save(child);
 
+            // Act
+            Controller.AttachIngredient(Recipe.ID, child);
+            ReturnedRecipe = Repo.GetById(Recipe.ID);
+            // Assert
+            //  Assert.AreEqual("Default", Ingredient.Ingredients.Last().Name);
+            Assert.AreEqual("SuccessfullyAttachIngredientChild", ReturnedRecipe.Ingredients.Last().Name);
         }
 
-        [Ignore]
+      
         [TestMethod]
         public void SuccessfullyDetachIngredientChild()
         {

@@ -12,6 +12,7 @@ namespace LambAndLentil.Test.BasicControllerTests
     {
         internal static PlansController Controller { get; set; }
         internal static Plan Plan { get; set; }
+        internal static Plan ReturnedPlan { get; set; }
 
         public PlansController_Test_Should()
         {
@@ -27,6 +28,7 @@ namespace LambAndLentil.Test.BasicControllerTests
                 Recipes = new List<Recipe>(),
                 Menus = new List<Menu>()
             };
+            Repo.Save(Plan);
         }
     }
 }

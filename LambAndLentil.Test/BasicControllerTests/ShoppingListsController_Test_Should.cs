@@ -13,6 +13,7 @@ namespace LambAndLentil.Test.BasicControllerTests
     {
         internal static ShoppingListsController Controller { get; set; }
         internal static ShoppingList ShoppingList { get; set; }
+        internal static ShoppingList ReturnedShoppingList { get; set; }
 
         public ShoppingListsController_Test_Should()
         {
@@ -31,6 +32,7 @@ namespace LambAndLentil.Test.BasicControllerTests
                 Menus = new List<Menu>(),
                 Plans = new List<Plan>(),
             };
+            Repo.Save(ShoppingList);
         } 
     }
 }

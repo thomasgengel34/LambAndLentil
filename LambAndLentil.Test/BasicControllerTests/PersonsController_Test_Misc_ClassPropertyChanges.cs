@@ -1,11 +1,6 @@
 ﻿using LambAndLentil.Domain.Entities;
-using LambAndLentil.UI;
-using LambAndLentil.UI.Controllers;
-using LambAndLentil.UI.Infrastructure.Alerts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Linq;
-using System.Web.Mvc;
 
 namespace LambAndLentil.Test.BasicControllerTests
 {
@@ -14,30 +9,36 @@ namespace LambAndLentil.Test.BasicControllerTests
     [TestCategory("Misc")]
     public class PersonsController_ClassPropertyChanges : PersonsController_Test_Should
     {
-        public Person ReturnedPerson { get; set; }
+        public Person Entity { get; set; }
+        public Person ReturnedEntity { get; set; }
 
         public PersonsController_ClassPropertyChanges()
         {
-            Person = new Person { ID = 1000, Name = "Original Name" };
-            Repo.Save(Person);
+           Entity = new Person {
+               ID = 1000,
+               Name = "Original Name",
+               Description = "Description has changed" 
+        };
+
+            Repo.Save(Entity);
         }
 
         [TestMethod]
         public void ShouldEditFirstNameOnlyAndFullNameIsChangedButLastNameIsNot()
         {
             // Arrange
-            Person.FirstName = "Changed";
+            Entity.FirstName = "Changed";
 
             // Act 
-            Controller.PostEdit(Person);
-            ReturnedPerson = Repo.GetById(1000);
+            Controller.PostEdit(Entity);
+            ReturnedEntity = Repo.GetById(1000);
 
             // Assert
-            Assert.AreEqual("Changed Created", ReturnedPerson.Name);
+            Assert.AreEqual("Changed Created", ReturnedEntity.Name);
             // Name should always be fed from and equal to FullName
-            Assert.AreEqual("Changed Created", ReturnedPerson.FullName);
-            Assert.AreEqual("Changed", ReturnedPerson.FirstName);
-            Assert.AreEqual("Created", ReturnedPerson.LastName);
+            Assert.AreEqual("Changed Created", ReturnedEntity.FullName);
+            Assert.AreEqual("Changed", ReturnedEntity.FirstName);
+            Assert.AreEqual("Created", ReturnedEntity.LastName);
 
         }
 
@@ -45,18 +46,18 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void ShouldEditLastNameOnlyAndFullNameIsChangedBuFirstNameIsNot()
         {
             // Arrange
-            Person.LastName = "Altered";
+            Entity.LastName = "Altered";
 
             // Act
-            Controller.PostEdit(Person);
-            ReturnedPerson = Repo.GetById(1000);
+            Controller.PostEdit(Entity);
+            ReturnedEntity = Repo.GetById(1000);
 
             // Assert
-            Assert.AreEqual("Newly Altered", ReturnedPerson.Name);
+            Assert.AreEqual("Newly Altered", ReturnedEntity.Name);
             // Name should always be fed from and equal to FullName
-            Assert.AreEqual("Newly Altered", ReturnedPerson.FullName);
-            Assert.AreEqual("Newly", ReturnedPerson.FirstName);
-            Assert.AreEqual("Altered", ReturnedPerson.LastName);
+            Assert.AreEqual("Newly Altered", ReturnedEntity.FullName);
+            Assert.AreEqual("Newly", ReturnedEntity.FirstName);
+            Assert.AreEqual("Altered", ReturnedEntity.LastName);
 
         }
 
@@ -64,19 +65,19 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void ShouldEditFirstAndLastNamesAndFullNameIsChanged()
         {
             // Arrange
-            Person.FirstName = "Changed";
-            Person.LastName = "Altered";
+            Entity.FirstName = "Changed";
+            Entity.LastName = "Altered";
 
             // Act
-            Controller.PostEdit(Person);
-            ReturnedPerson = Repo.GetById(1000);
+            Controller.PostEdit(Entity);
+            ReturnedEntity = Repo.GetById(1000);
 
             // Assert
-            Assert.AreEqual("Changed Altered", ReturnedPerson.Name);
+            Assert.AreEqual("Changed Altered", ReturnedEntity.Name);
             // Name should always be fed from and equal to FullName
-            Assert.AreEqual("Changed Altered", ReturnedPerson.FullName);
-            Assert.AreEqual("Changed", ReturnedPerson.FirstName);
-            Assert.AreEqual("Altered", ReturnedPerson.LastName);
+            Assert.AreEqual("Changed Altered", ReturnedEntity.FullName);
+            Assert.AreEqual("Changed", ReturnedEntity.FirstName);
+            Assert.AreEqual("Altered", ReturnedEntity.LastName);
 
         }
 
@@ -84,126 +85,129 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void ShouldEditNameAndFirstNameAndLastNameChangeToEmptyStrings()
         {
             // Arrange
-            Person.Name = "Changed";
+            Entity.Name = "Changed";
 
             // Act
-            Controller.PostEdit(Person);
-            ReturnedPerson = Repo.GetById(1000);
+            Controller.PostEdit(Entity);
+            ReturnedEntity = Repo.GetById(1000);
 
             // Assert
-            Assert.AreEqual("Changed", ReturnedPerson.Name);
+            Assert.AreEqual("Changed", ReturnedEntity.Name);
             // Name should always be fed from and equal to FullName
-            Assert.AreEqual("Changed", ReturnedPerson.FullName);
-            Assert.AreEqual("", ReturnedPerson.FirstName);
-            Assert.AreEqual("", ReturnedPerson.LastName);
+            Assert.AreEqual("Changed", ReturnedEntity.FullName);
+            Assert.AreEqual("", ReturnedEntity.FirstName);
+            Assert.AreEqual("", ReturnedEntity.LastName);
         }
 
         [TestMethod]
         public void ShouldEditFullNameAndFirstNameAndLastNameChangeToEmptyStrings()
         {
             // Arrange
-            Person.FullName = "Changed";
+            Entity.FullName = "Changed";
 
             // Act
-            Controller.PostEdit(Person);
-            ReturnedPerson = Repo.GetById(1000);
+            Controller.PostEdit(Entity);
+            ReturnedEntity = Repo.GetById(1000);
 
             // Assert
-            Assert.AreEqual("Changed", ReturnedPerson.Name);
+            Assert.AreEqual("Changed", ReturnedEntity.Name);
             // Name should always be fed from and equal to FullName
-            Assert.AreEqual("Changed", ReturnedPerson.FullName);
-            Assert.AreEqual("", ReturnedPerson.FirstName);
-            Assert.AreEqual("", ReturnedPerson.LastName);
+            Assert.AreEqual("Changed", ReturnedEntity.FullName);
+            Assert.AreEqual("", ReturnedEntity.FirstName);
+            Assert.AreEqual("", ReturnedEntity.LastName);
         }
-
-        [TestMethod]
-        public void ShouldNotEditNameDirectly()
-        { 
-            // Arrange
-
-            // Act
-            Person.Name = "Name is changed";
-            Controller.PostEdit(Person);
-            ReturnedPerson = Repo.GetById(1000);
-
-            // Assert
-            Assert.AreEqual("Newly Created", ReturnedPerson.Name);
-        }
-
+         
         [TestMethod]
         public void EditID()
         {  // this actually creates a copy.  
             // Arrange
 
             // Act
-            Person.ID = 42;
-            Controller.PostEdit(Person);
-            Person returnedPerson = Repo.GetById(42);
-            Person originalPerson = Repo.GetById(1000);
+            Entity.ID = 42;
+            Controller.PostEdit(Entity);
+            Person returnedEntity = Repo.GetById(42);
+            Person originalEntity = Repo.GetById(1000);
 
             // Assert
-            Assert.AreEqual(42, returnedPerson.ID);
-            Assert.IsNotNull(originalPerson);
+            Assert.AreEqual(42, returnedEntity.ID);
+            Assert.IsNotNull(originalEntity);
         }
 
-        [Ignore]
         [TestMethod]
         public void ShouldEditDescription()
         {
             // Arrange
+            string changedDescription = "Description has changed";
 
             // Act
+            Entity.Description = changedDescription;
+            Controller.PostEdit(Entity);
+            ReturnedEntity = Repo.GetById(Entity.ID);
 
             // Assert
-            Assert.Fail();
+            Assert.AreNotEqual(changedDescription, ReturnedEntity.AddedByUser);
         }
 
-        [Ignore]
         [TestMethod]
         public void DoesNotEditCreationDate()
         {
             // Arrange
+            DateTime dateTime = new DateTime(1776, 7, 4);
+            Controller.PostEdit(Entity);
 
-            // Act
+            // Act 
+            Entity.CreationDate = dateTime;
+            Controller.PostEdit(Entity);
+            ReturnedEntity = Repo.GetById(Entity.ID);
 
             // Assert
-            Assert.Fail();
+            Assert.AreNotEqual(dateTime.Year, ReturnedEntity.CreationDate.Year);
         }
 
-        [Ignore]
         [TestMethod]
         public void DoesNotEditAddedByUser()
         {
             // Arrange
+            string user = "Abraham Lincoln";
 
             // Act
+            Entity.AddedByUser = user;
+
+            Controller.PostEdit(Entity);
+            ReturnedEntity = Repo.GetById(Entity.ID);
 
             // Assert
-            Assert.Fail();
+            Assert.AreNotEqual(user, ReturnedEntity.AddedByUser);
         }
 
-        [Ignore]
+
         [TestMethod]
         public void CannotAlterModifiedByUserByHand()
         {
             // Arrange
-
+            string user = "Abraham Lincoln";
             // Act
+           Entity.ModifiedByUser = user;
+            Controller.PostEdit(Entity);
+            ReturnedEntity = Repo.GetById(Entity.ID);
 
             // Assert
-            Assert.Fail();
+            Assert.AreNotEqual(user, ReturnedEntity.ModifiedByUser);
         }
 
-        [Ignore]
         [TestMethod]
         public void CannotAlterModifiedDateByHand()
         {
             // Arrange
+            DateTime dateTime = new DateTime(1776, 7, 4);
+            Entity.ModifiedDate = dateTime;
 
-            // Act
+            // Act 
+            Controller.PostEdit(Entity);
+            ReturnedEntity = Repo.GetById(Entity.ID);
 
             // Assert
-            Assert.Fail();
+            Assert.AreNotEqual(dateTime.Year, ReturnedEntity.ModifiedDate.Year);
         }
 
         [Ignore]
@@ -220,7 +224,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [Ignore]
         [TestMethod]
-        public void ShouldRemovePersonFromPersons()
+        public void ShouldDetachPersonFromPersons()
         {
             // Arrange
 
@@ -244,7 +248,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [Ignore]
         [TestMethod]
-        public void ShouldRemoveRecipeFromRecipesList()
+        public void ShouldDetachRecipeFromRecipesList()
         {
             // Arrange
 
@@ -268,7 +272,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [Ignore]
         [TestMethod]
-        public void ShouldRemoveMenuFromMenusList()
+        public void ShouldDetachMenuFromMenusList()
         {
             // Arrange
 
@@ -292,7 +296,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [Ignore]
         [TestMethod]
-        public void ShouldRemovePlanFromPlansList()
+        public void ShouldDetachPlanFromPlansList()
         {
             // Arrange
 

@@ -91,5 +91,10 @@ namespace LambAndLentil.UI.Controllers
         {
             return BaseAttach<Ingredient>(Repo, shoppingListID, ingredient, AttachOrDetach.Detach);
         }
+
+        public void AddIngredientToIngredientsList(int id = 1, string addedIngredient = "")
+        {
+            BaseAddIngredientToIngredientsList(Repo, UIControllerType.Recipes, id, addedIngredient);
+        }
     }
 } 

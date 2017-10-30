@@ -1,11 +1,14 @@
 ﻿using LambAndLentil.Domain.Abstract;
 using LambAndLentil.Domain.Concrete;
 using LambAndLentil.Domain.Entities;
+using LambAndLentil.UI;
+using LambAndLentil.UI.Controllers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Web.Mvc;
 
 namespace LambAndLentil.Test.BasicControllerTests
 { 
@@ -59,6 +62,29 @@ namespace LambAndLentil.Test.BasicControllerTests
             }
             return list;
         }
+
+         
+
+        protected void  BaseShouldAddIngredientToIngredientsList(IRepository<T> Repo,IEntity Entity, IEntity ReturnedEntity, BaseController<T> controller, UIControllerType uIControllerType)
+        {
+            // Arrange
+            string addedIngredient = "added ingredient";
+            string originalIngredientList = Entity.IngredientsList; 
+
+            // Act
+            controller.BaseAddIngredientToIngredientsList(Repo, uIControllerType, Entity.ID, addedIngredient);
+            ReturnedEntity = Repo.GetById(Entity.ID);
+
+            // Assert
+            string listWithAddedIngredient = String.Concat(originalIngredientList, ", ", addedIngredient);
+            Assert.AreEqual(listWithAddedIngredient, ReturnedEntity.IngredientsList);
+        }
+
+        private void BaseShouldAddRecipeToList(IRepository<Ingredient> repo, Ingredient entity, Ingredient returnedEntity, IngredientsController controller, UIControllerType ingredients)
+        {
+            throw new NotImplementedException();
+        }
+
         [TestCleanup]
        public void TestCleanup()
         {

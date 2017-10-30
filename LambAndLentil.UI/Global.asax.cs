@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using AutoMapper;
+using LambAndLentil.UI.Infrastructure;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
-using LambAndLentil.UI.Infrastructure;
-using AutoMapper;
-using LambAndLentil.Domain.Entities;
-using LambAndLentil.UI.Models;
 
 namespace LambAndLentil.UI
 {

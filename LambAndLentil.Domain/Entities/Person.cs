@@ -50,8 +50,7 @@ namespace LambAndLentil.Domain.Entities
         public bool NoGarlic { get; set; }
         //TODO: add all ingredients after I figure out how to economically
          
-        public List<Recipe> Recipes { get; set; }
-        public List<Ingredient> Ingredients { get; set; }
+        public List<Recipe> Recipes { get; set; } 
         public List<Menu> Menus { get; set; }
         public List<Plan> Plans { get; set; }
         public List<ShoppingList> ShoppingLists { get; set; }

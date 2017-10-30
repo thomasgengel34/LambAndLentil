@@ -1,33 +1,35 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using LambAndLentil.Domain.Entities;
+using LambAndLentil.UI;
 
 namespace LambAndLentil.Test.BasicControllerTests
 {
     [TestClass]
-    public class ShoppingListsController_Test_ClassProperties: ShoppingListsController_Test_Should
+    public class ShoppingListsController_Test_ClassProperties : ShoppingListsController_Test_Should
     {
-        public ShoppingList ReturnedShoppingList { get; set; }
+        public ShoppingList Entity { get; set; }
+        public ShoppingList ReturnedEntity { get; set; }
 
         public ShoppingListsController_Test_ClassProperties()
         {
-            ShoppingList = new ShoppingList { ID = 1000, Name = "Original Name" };
-            Repo.Save(ShoppingList);
+            Entity = new ShoppingList { ID = 1000, Name = "Original Name" };
+            Repo.Save(Entity);
         }
-      
-       
+
+
         [TestMethod]
         public void ShouldEditName()
         {
             // Arrange
 
             // Act
-            ShoppingList.Name = "Name is changed";
-            Controller.PostEdit(ShoppingList); 
-            ReturnedShoppingList = Repo.GetById(1000);
+           Entity.Name = "Name is changed";
+            Controller.PostEdit(Entity);
+            ReturnedEntity = Repo.GetById(1000);
 
             // Assert
-            Assert.AreEqual("Name is changed", ReturnedShoppingList.Name); 
+            Assert.AreEqual("Name is changed", ReturnedEntity.Name);
         }
 
         [TestMethod]
@@ -36,91 +38,131 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange
 
             // Act
-            ShoppingList.ID = 42;
-            Controller.PostEdit(ShoppingList);
-            ShoppingList returnedShoppingList = Repo.GetById(42);
-            ShoppingList originalShoppingList = Repo.GetById(1000);
+            Entity.ID = 42;
+            Controller.PostEdit(Entity);
+            ShoppingList returnedEntity = Repo.GetById(42);
+            ShoppingList originalEntity = Repo.GetById(1000);
 
             // Assert
-            Assert.AreEqual(42, returnedShoppingList.ID);
-            Assert.IsNotNull(originalShoppingList);
+            Assert.AreEqual(42, returnedEntity.ID);
+            Assert.IsNotNull(originalEntity);
         }
 
-        [Ignore]
         [TestMethod]
         public void ShouldEditDescription()
         {
             // Arrange
+            string changedDescription = "Description has changed";
 
             // Act
+            Entity.Description = changedDescription;
+            Controller.PostEdit(Entity);
+            ReturnedEntity = Repo.GetById(Entity.ID);
 
             // Assert
-            Assert.Fail();
+            Assert.AreNotEqual(changedDescription, ReturnedEntity.AddedByUser);
         }
 
-        [Ignore]
         [TestMethod]
         public void DoesNotEditCreationDate()
         {
             // Arrange
+            DateTime dateTime = new DateTime(1776, 7, 4);
+            Controller.PostEdit(Entity);
 
-            // Act
+            // Act 
+            Entity.CreationDate = dateTime;
+            Controller.PostEdit(Entity); 
+            ReturnedEntity = Repo.GetById(Entity.ID);
 
             // Assert
-            Assert.Fail();
+            Assert.AreNotEqual(dateTime.Year, ReturnedEntity.CreationDate.Year);
         }
 
-        [Ignore]
         [TestMethod]
         public void DoesNotEditAddedByUser()
         {
             // Arrange
+            string user = "Abraham Lincoln";
 
             // Act
+            Entity.AddedByUser = user;
+
+            Controller.PostEdit(Entity);
+            ReturnedEntity = Repo.GetById(Entity.ID);
 
             // Assert
-            Assert.Fail();
+            Assert.AreNotEqual(user, ReturnedEntity.AddedByUser);
         }
 
-        [Ignore]
         [TestMethod]
         public void CannotAlterModifiedByUserByHand()
         {
             // Arrange
-
+            string user = "Abraham Lincoln";
             // Act
+            Entity.ModifiedByUser = user;
+            Controller.PostEdit(Entity);
+            ReturnedEntity = Repo.GetById(Entity.ID);
 
             // Assert
-            Assert.Fail();
+            Assert.AreNotEqual(user, ReturnedEntity.ModifiedByUser);
         }
 
-        [Ignore]
         [TestMethod]
         public void CannotAlterModifiedDateByHand()
         {
             // Arrange
+            DateTime dateTime = new DateTime(1776, 7, 4);
+            Entity.ModifiedDate = dateTime;
 
-            // Act
+            // Act 
+            Controller.PostEdit(Entity);
+            ReturnedEntity = Repo.GetById(Entity.ID);
 
             // Assert
-            Assert.Fail();
+            Assert.AreNotEqual(dateTime.Year, ReturnedEntity.ModifiedDate.Year);
         }
 
-        [Ignore]
+        [TestMethod]
+        public void ShouldEditIngredientsList()
+        {
+            // Arrange
+            Entity.IngredientsList = "Edited";
+
+            // Act
+            Controller.PostEdit(Entity);
+            ReturnedEntity = Repo.GetById(Entity.ID);
+
+            // Assert
+            Assert.AreEqual("Edited", ReturnedEntity.IngredientsList);
+        }
+
         [TestMethod]
         public void ShouldAddIngredientToIngredients()
         {
             // Arrange
+            int initialCount = Entity.Ingredients.Count;
 
             // Act
+            Entity.Ingredients.Add(new Ingredient() { ID = 134, Name = "ShouldAddIngredientToIngredients" });
+            Controller.PostEdit(Entity);
+            ReturnedEntity = Repo.GetById(Entity.ID);
 
             // Assert
-            Assert.Fail();
+            Assert.AreEqual(initialCount + 1, Entity.Ingredients.Count);
+            Assert.AreEqual("ShouldAddIngredientToIngredients", Entity.Ingredients[initialCount].Name);
+        }
+
+        [TestMethod]
+        public void ShouldAddIngredientToIngredientsList()
+        {
+            BaseShouldAddIngredientToIngredientsList(Repo, Entity, ReturnedEntity, Controller, UIControllerType.ShoppingLists);
         }
 
         [Ignore]
         [TestMethod]
-        public void ShouldRemoveIngredientFromIngredients()
+        public void ShouldDetachIngredientFromIngredients()
         {
             // Arrange
 
@@ -144,7 +186,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [Ignore]
         [TestMethod]
-        public void ShouldRemoveRecipeFromRecipesList()
+        public void ShouldDetachRecipeFromRecipesList()
         {
             // Arrange
 
@@ -169,7 +211,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         [Ignore]
         [TestMethod]
         [TestCategory("Class Property")]
-        public void ShouldRemoveMenuFromMenusList()
+        public void ShouldDetachMenuFromMenusList()
         {
             // Arrange
 
@@ -195,7 +237,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         [Ignore]
         [TestMethod]
         [TestCategory("Class Property")]
-        public void ShouldRemovePlanFromPlansList()
+        public void ShouldDetachPlanFromPlansList()
         {
             // Arrange
 
@@ -205,18 +247,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.Fail();
         }
 
-        [Ignore]
-        [TestMethod]
-        [TestCategory("Class Property")]
-        public void ShouldEditIngredientsList()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
-            Assert.Fail();
-        }
+       
 
         [Ignore]
         [TestMethod]

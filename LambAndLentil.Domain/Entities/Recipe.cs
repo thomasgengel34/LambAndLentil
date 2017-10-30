@@ -22,9 +22,6 @@ namespace LambAndLentil.Domain.Entities
         public decimal Servings { get; set; }
         public MealType MealType { get; set; }
         public int? Calories { get; set; }
-        public short? CalsFromFat { get; set; }
-        public List<Ingredient> Ingredients { get; set; }
-
-
+        public short? CalsFromFat { get; set; }  
     }
 }

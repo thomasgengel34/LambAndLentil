@@ -401,37 +401,87 @@ namespace IntegrationTests
             // Assert
             Assert.IsNotNull(ingredient);
         }
-
-        [Ignore]
+         
         [TestMethod]
         [TestCategory("Attach-Detach")]
-        public void ReturnIndexViewWithWarningMessageWhenDetachingNonExistingIngredientAttachedToANonExistingMenu()
+        public void ReturnIndexViewWithWarningWhenDetachingNonExistingIngredientAttachedToANonExistingMenu()
         {
-            Assert.Fail();
+            // Arrange 
+
+            // Act 
+            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.DetachIngredient(-1, null);
+
+            RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
+            var routeValues = rtrr.RouteValues.Values;
+
+            // Assert
+
+            Assert.AreEqual("alert-warning", adr.AlertClass);
+            Assert.AreEqual("Menu was not found", adr.Message);
+            Assert.AreEqual(1, routeValues.Count);
+            Assert.AreEqual(UIViewType.Index.ToString(), routeValues.ElementAt(0).ToString());
         }
 
-        [Ignore]
+        
         [TestMethod]
         [TestCategory("Attach-Detach")]
         public void ReturnIndexViewWithWarningWhenAttachingExistIngredientToNonExistingMenu()
         {
-            Assert.Fail();
+            // Arrange 
+
+            // Act 
+            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.AttachIngredient(-1, null);
+
+            RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
+            var routeValues = rtrr.RouteValues.Values;
+
+            // Assert
+
+            Assert.AreEqual("alert-warning", adr.AlertClass);
+            Assert.AreEqual("Menu was not found", adr.Message);
+            Assert.AreEqual(1, routeValues.Count);
+            Assert.AreEqual(UIViewType.Index.ToString(), routeValues.ElementAt(0).ToString());
         }
 
-        [Ignore]
+       
         [TestMethod]
         [TestCategory("Attach-Detach")]
         public void ReturnIndexViewWithWarningWhenAttachingNonExistIngredientToNonExistingMenu()
         {
-            Assert.Fail();
+            // Arrange 
+
+            // Act 
+            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.AttachIngredient(-1, null);
+
+            RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
+            var routeValues = rtrr.RouteValues.Values;
+
+            // Assert
+
+            Assert.AreEqual("alert-warning", adr.AlertClass);
+            Assert.AreEqual("Menu was not found", adr.Message);
+            Assert.AreEqual(1, routeValues.Count);
+            Assert.AreEqual(UIViewType.Index.ToString(), routeValues.ElementAt(0).ToString());
         }
 
-        [Ignore]
+       
         [TestMethod]
         [TestCategory("Attach-Detach")]
         public void ReturnIndexViewWithWarningWhenDetachingExistingIngredientAttachedToNonExistingMenu()
         {
-            Assert.Fail();
+            // Arrange 
+
+            // Act 
+            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.DetachIngredient(-1, null);
+
+            RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
+            var routeValues = rtrr.RouteValues.Values;
+
+            // Assert
+            Assert.AreEqual("alert-warning", adr.AlertClass);
+            Assert.AreEqual("Menu was not found", adr.Message);
+            Assert.AreEqual(1, routeValues.Count);
+            Assert.AreEqual(UIViewType.Index.ToString(), routeValues.ElementAt(0).ToString());
         }
 
         [Ignore]

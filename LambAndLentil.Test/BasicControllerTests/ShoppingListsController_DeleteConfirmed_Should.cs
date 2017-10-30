@@ -31,7 +31,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         }
 
         [TestMethod]
-        public void RemoveTheCorrectItemAndNotOtherItemsWhenIDIsFound()
+        public void DetachTheCorrectItemAndNotOtherItemsWhenIDIsFound()
         {
             // Arrange
 

@@ -96,6 +96,11 @@ namespace LambAndLentil.UI.Controllers
         public ActionResult RemoveIngredient(int? personID, Ingredient ingredient)
         {
             return BaseAttach< Ingredient>(Repo, personID, ingredient, AttachOrDetach.Detach);
-        } 
+        }
+
+        public void AddIngredientToIngredientsList(int id = 1, string addedIngredient = "")
+        {
+            BaseAddIngredientToIngredientsList(Repo, UIControllerType.Recipes, id, addedIngredient);
+        }
     }
 }

@@ -46,7 +46,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         }
 
         [TestMethod]
-        public void RemoveTheCorrectItemAndNotOtherItemsWhenIDIsFound()
+        public void DeleteTheCorrectItemAndNotOtherItemsWhenIDIsFound()
         {
             // Arrange
             int initialCount = Repo.Count();

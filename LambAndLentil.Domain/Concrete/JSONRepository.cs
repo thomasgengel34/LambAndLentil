@@ -78,7 +78,6 @@ namespace LambAndLentil.Domain.Concrete
         public void AttachAnIndependentChild<TChild>(int parentID, TChild child)
             where TChild : BaseEntity, IEntity
         {
-
             char[] charsToTrim = { 'V', 'M' };
             string childName = typeof(TChild).ToString().Split('.').Last().Split('+').Last().TrimEnd(charsToTrim);
 
@@ -86,14 +85,13 @@ namespace LambAndLentil.Domain.Concrete
             T parent = JsonConvert.DeserializeObject<T>(File.ReadAllText(String.Concat(FullPath, parentID, ".txt")));
 
             if (parent != null && child != null)
-            {
-                if (className == "Ingredient")
+            { 
+                if (className == "Ingredient")   // can only attach an Ingredient   
                 {
-                    // cannot attach a child
-                    // do nothing
-                    // TODO: think about returning an error message. But user should not be given the chance to do this, so, aside from messing with the query string, how is this possible?  Make sure this is a POST request so no one can mess with the query string and get here. 
+                    parent.Ingredients.Add(child as Ingredient);
+                    Update(parent, parent.ID);
                 }
-                if (className == "Recipe")   // can only attach an Ingredient   
+                else if (className == "Recipe")   // can only attach an Ingredient   
                 {
                     Recipe recipe = JsonConvert.DeserializeObject<Recipe>(File.ReadAllText(String.Concat(FullPath, parentID, ".txt")));
                     if (childName == "Ingredient")
@@ -206,9 +204,11 @@ namespace LambAndLentil.Domain.Concrete
                     }
                     Update(person as T, person.ID);
                 }
-
             }
         }
+
+     
+
 
         public int Count()
         {
@@ -229,6 +229,8 @@ namespace LambAndLentil.Domain.Concrete
             {
                 if (className == "Ingredient")
                 {
+                    Ingredient ingredientChild = child as Ingredient;
+                   parent.Ingredients.Remove(ingredientChild);
                     // cannot attach a child
                     // do nothing
                     // TODO: think about returning an error message. But user should not be given the chance to do this, so, aside from messing with the query string, how is this possible?  Make sure this is a POST request so no one can mess with the query string and get here. 
@@ -384,31 +386,52 @@ namespace LambAndLentil.Domain.Concrete
 
 
         public void Update(T entity, int? key)
-        {
-            T oldEntity = GetById(entity.ID);
-            if (oldEntity != null)
             {
-                entity.CreationDate = oldEntity.CreationDate;
-                entity.AddedByUser = oldEntity.AddedByUser;
-                entity.ModifiedDate = DateTime.Now;
-                entity.ModifiedByUser = WindowsIdentity.GetCurrent().Name;
-            }
-            if (typeof(T) == typeof(Person))
-            {
-                Person person = entity as Person;
-                if (entity.Name != oldEntity.Name)
+                T oldEntity = GetById(entity.ID);
+                if (oldEntity != null)
                 {
-                    person.FirstName = "";
-                    person.LastName = ""; 
-                }
-                else
-                { 
-                    person.FullName = person.GetName(person.FirstName, person.LastName);
-                  }
-                person.Name = person.FullName; 
-                entity = person as T;
-            }
+                    entity.CreationDate = oldEntity.CreationDate;
+                    entity.AddedByUser = oldEntity.AddedByUser;
+                    entity.ModifiedDate = DateTime.Now;
+                    entity.ModifiedByUser = WindowsIdentity.GetCurrent().Name;
 
+                    if (typeof(T) == typeof(Person))
+                    {
+                        Person person = entity as Person;
+                        Person oldPerson = oldEntity as Person;
+
+                        /* first name changed, last name did not, then name changes, full name changes
+                         * last name changed, first name did not, then name changes, full name changes
+                         * name changes but full name did not, first name ="" and last name ="", fullname=name
+                         * 
+                         * full name changes but name did not, first name ="" and last name ="", name=fullname  */
+                        if (person.Name != oldPerson.Name || person.FullName != oldPerson.FullName)
+                        {
+                            person.FirstName = "";
+                            person.LastName = "";
+
+                            if (person.Name != oldPerson.Name)
+                            {
+                                person.FullName = person.Name;
+                            }
+                            else if (person.FullName != oldPerson.FullName)
+                            {
+                                person.Name = person.FullName;
+                            }
+                        }
+                        else
+                        {
+                            person.FullName = person.GetName(person.FirstName, person.LastName);
+                        }
+                        if (entity.Name != oldEntity.Name)
+                        {
+                            person.FullName = entity.Name;
+                        }
+
+                        person.Name = person.FullName;
+                        entity = person as T;
+                    }
+                } 
             Add(entity);
         }
 

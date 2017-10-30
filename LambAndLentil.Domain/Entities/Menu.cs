@@ -22,8 +22,7 @@ namespace LambAndLentil.Domain.Entities
         public int ID { get; set; }
         public MealType MealType { get; set; }
         public DayOfWeek DayOfWeek { get; set; } 
-        public int Diners { get; set; }
-        public List<Ingredient> Ingredients { get; set; }
+        public int Diners { get; set; } 
         public List<Recipe> Recipes { get;   set; }
     }
 }

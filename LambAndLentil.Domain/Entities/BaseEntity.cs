@@ -23,7 +23,7 @@ namespace LambAndLentil.Domain.Entities
         public string AddedByUser { get; set; }
         public string ModifiedByUser { get; set; }
         public string IngredientsList { get; set; }
-
+        public List<Ingredient> Ingredients { get; set; }
 
         public BaseEntity()
         {
@@ -33,6 +33,7 @@ namespace LambAndLentil.Domain.Entities
             ModifiedDate = DateTime.Now;
             AddedByUser = WindowsIdentity.GetCurrent().Name;
             ModifiedByUser = WindowsIdentity.GetCurrent().Name;
+            Ingredients = new List<Ingredient>();
         }
 
         public BaseEntity(DateTime creationDate) : this()
@@ -47,11 +48,7 @@ namespace LambAndLentil.Domain.Entities
             }
 
         }
-
-
-
-//public int ID { get; set; }
-
+         
 
        public List<T> GetIndexedModel<T>(IRepository<T> repository, int PageSize, int page = 1)
             where T : BaseEntity, IEntity

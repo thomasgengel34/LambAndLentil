@@ -70,6 +70,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
     </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdminSecurity\AdminSecurityTests.cs" />
@@ -241,29 +242,6 @@
     <Compile Include="Routes\RouteTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SeedDomainJSONFiles.cs" />
-    <Compile Include="Views\HomeContactViewShould.cs" />
-    <Compile Include="Views\IngredientListEditViewShould.cs" />
-    <Compile Include="Views\IngredientsIndexViewFilterShould.cs" />
-    <Compile Include="Views\MenuDetailViewShould.cs" />
-    <Compile Include="Views\ShoppingListIndexViewShould .cs" />
-    <Compile Include="Views\PlanIndexViewShould.cs" />
-    <Compile Include="Views\ShoppingListEditViewShould.cs" />
-    <Compile Include="Views\PlanEditViewShould.cs" />
-    <Compile Include="Views\MenuEditViewShould.cs" />
-    <Compile Include="Views\RecipeEditViewShould.cs" />
-    <Compile Include="Views\PersonListEditViewShould.cs" />
-    <Compile Include="Views\IngredientIndexViewShould.cs" />
-    <Compile Include="Views\RecipeDetailViewShould.cs" />
-    <Compile Include="Views\MenuIndexViewShould.cs" />
-    <Compile Include="Views\IngredientDetailViewShould.cs" />
-    <Compile Include="Views\LogonFormInViewShould.cs" />
-    <Compile Include="Views\RegisterViewShould.cs" />
-    <Compile Include="Views\ErrorPagViewShould.cs" />
-    <Compile Include="Views\IngredientDeleteViewShould.cs" />
-    <Compile Include="Views\RecipeIndexViewShould.cs" />
-    <Compile Include="Views\HomeAboutViewShould.cs" />
-    <Compile Include="Views\IngredientEditViewShould.cs" />
-    <Compile Include="Views\RecipeEditViewShouldHaveWebApiSearchForIngredientsBy.cs" />
     <Compile Include="WebAPI\GetNutrientReportsOnIndividualFoodsShould.cs" />
     <Compile Include="WebAPI\GetListsOfFoodsNutrientsOrFoodGroupsShould.cs" />
     <Compile Include="WebAPI\GetNutrientReportsForAllFoodsShould.cs" />

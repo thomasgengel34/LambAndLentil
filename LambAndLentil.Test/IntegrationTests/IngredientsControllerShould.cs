@@ -1,37 +1,26 @@
-using AutoMapper;
-using IntegrationTests;
-using LambAndLentil.Domain.Abstract;
-using LambAndLentil.Domain.Concrete;
 using LambAndLentil.Domain.Entities;
-using LambAndLentil.Tests.Controllers;
+using LambAndLentil.Test.BasicControllerTests;
 using LambAndLentil.UI;
 using LambAndLentil.UI.Controllers;
 using LambAndLentil.UI.Infrastructure.Alerts;
-using LambAndLentil.UI.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Web.Mvc;
-using LambAndLentil.Tests.Infrastructure;
 using System.Security.Principal;
-using LambAndLentil.Test.BasicControllerTests;
+using System.Web.Mvc;
 
 namespace LambAndLentil.Test.Infrastructure
 {
     [TestClass]
-    // switching to WebApi methods, but something will be needed
+    // also using WebApi methods - something will be needed for additional ingredients, such as user entered
     [TestCategory("Integration")]
     [TestCategory("IngredientsController")]
-    public class IngredientsControllerShould:IngredientsController_Test_Should
-    { 
+    public class IngredientsControllerShould : IngredientsController_Test_Should
+    {
         public IngredientsControllerShould()
-        { 
+        {
         }
-
-         
-
 
         [TestMethod]
         [TestCategory("Create")]
@@ -82,7 +71,7 @@ namespace LambAndLentil.Test.Infrastructure
             IngredientsController Controller3 = new IngredientsController(Repo);
 
 
-            Ingredient vm = new Ingredient
+            Ingredient = new Ingredient
             {
                 Name = "0000 test",
                 ID = int.MaxValue - 100,
@@ -90,22 +79,22 @@ namespace LambAndLentil.Test.Infrastructure
             };
 
             // Act 
-            ActionResult ar1 = Controller.PostEdit(vm);
+            ActionResult ar1 = Controller.PostEdit(Ingredient);
 
 
             // now edit it
-            vm.Name = "0000 test Edited";
-            vm.ID = 7777;
-            ActionResult ar2 = Controller2.PostEdit(vm);
+            Ingredient.Name = "0000 test Edited";
+            Ingredient.ID = 7777;
+            ActionResult ar2 = Controller2.PostEdit(Ingredient);
             ViewResult view2 = Controller3.Index();
-            List<Ingredient> ListEntity2 = (List<Ingredient>)(( ListEntity<Ingredient>)view2.Model).ListT;
-            Ingredient vm3 = (from m in ListEntity2
-                              where m.Name == "0000 test Edited"
-                              select m).AsQueryable().FirstOrDefault();
+            List<Ingredient> ListEntity2 = (List<Ingredient>)((ListEntity<Ingredient>)view2.Model).ListT;
+            ReturnedIngredient = (from m in ListEntity2
+                                  where m.Name == "0000 test Edited"
+                                  select m).AsQueryable().FirstOrDefault();
 
             // Assert
-            Assert.AreEqual("0000 test Edited", vm3.Name);
-            Assert.AreEqual(7777, vm3.ID);
+            Assert.AreEqual("0000 test Edited", ReturnedIngredient.Name);
+            Assert.AreEqual(7777, ReturnedIngredient.ID);
 
         }
 
@@ -187,7 +176,7 @@ namespace LambAndLentil.Test.Infrastructure
             // Act
             ControllerEdit.PostEdit(ingredient);
             ViewResult view = ControllerView.Index();
-            List<Ingredient> ListEntity= (List<Ingredient>)(( ListEntity<Ingredient>)view.Model).ListT;
+            List<Ingredient> ListEntity = (List<Ingredient>)((ListEntity<Ingredient>)view.Model).ListT;
             Ingredient returnedListEntity = Repo.GetById(ingredient.ID);
             DateTime shouldBeSameDate = returnedListEntity.CreationDate;
 
@@ -197,7 +186,6 @@ namespace LambAndLentil.Test.Infrastructure
 
         }
 
-        [Ignore]
         [TestMethod]
         [TestCategory("Edit")]
         public void UpdateTheModificationDateBetweenPostedEdits()
@@ -205,26 +193,26 @@ namespace LambAndLentil.Test.Infrastructure
             // Arrange 
             IngredientsController ControllerPost = new IngredientsController(Repo);
             IngredientsController ControllerPost1 = new IngredientsController(Repo);
-            Ingredient vm = new Ingredient
+            Ingredient = new Ingredient
             {
                 ID = int.MaxValue - 300,
                 Name = "002 Test Mod",
                 Description = "test IngredientsControllerShould.UpdateTheModificationDateBetweenPostedEdits"
             };
-            DateTime CreationDate = vm.CreationDate;
-            DateTime mod = vm.ModifiedDate;
+            DateTime CreationDate = Ingredient.CreationDate;
+            DateTime mod = Ingredient.ModifiedDate;
 
             // Act
-            ControllerPost.PostEdit(vm);
+            ControllerPost.PostEdit(Ingredient);
 
-            vm.Description += "I've been edited to delay a bit";
+            Ingredient.Description += "I've been edited to delay a bit";
 
-            ControllerPost1.PostEdit(vm);
+            ControllerPost1.PostEdit(Ingredient);
 
-            Ingredient returnedVM = Repo.GetById(vm.ID);
+            ReturnedIngredient = Repo.GetById(Ingredient.ID);
 
-            DateTime shouldBeSameDate = returnedVM.CreationDate;
-            DateTime shouldBeLaterDate = returnedVM.ModifiedDate;
+            DateTime shouldBeSameDate = ReturnedIngredient.CreationDate;
+            DateTime shouldBeLaterDate = ReturnedIngredient.ModifiedDate;
 
             // Assert
             Assert.AreEqual(CreationDate, shouldBeSameDate);
@@ -232,14 +220,35 @@ namespace LambAndLentil.Test.Infrastructure
 
         }
 
-        [Ignore]
+
         [TestMethod]
         public void NotCreateASecondElementOnEditingOneElement()
         {
-            Assert.Fail();
+            // Arrange
+            int initialCount = Repo.Count();
+
+            // Act 
+            Ingredient.Name = "Changed";
+            Controller.Edit(Ingredient.ID);
+
+            // Assert
+            Assert.AreEqual(initialCount, Repo.Count());
         }
 
 
+        [TestMethod]
+        public void NotCreateASecondElementOnPostEditingOneElement()
+        {
+            // Arrange
+            int initialCount = Repo.Count();
+
+            // Act 
+            Ingredient.Name = "Changed";
+            Controller.PostEdit(Ingredient);
+
+            // Assert
+            Assert.AreEqual(initialCount, Repo.Count());
+        }
 
         [TestMethod]
         [TestCategory("Edit")]
@@ -257,384 +266,104 @@ namespace LambAndLentil.Test.Infrastructure
             Assert.AreEqual("alert-warning", adr.AlertClass);
         }
 
-        [Ignore]
+
         [TestMethod]
-        public void HaveIDBoundInCreateActionMethod()
+        public void NotChangeIDInPostEditActionMethod()
         {
             //Arrange
-
-            // Act
-
-            // Assert
-            Assert.Fail();
-        }
-
-        [Ignore]
-        [TestMethod]
-        public void HaveIDBoundInPostEditActionMethod()
-        {
-            //Arrange
+            int originalID = Ingredient.ID;
+            Ingredient.ID = 7000;
 
             //Act
+            Controller.PostEdit(Ingredient);
+            ReturnedIngredient = Repo.GetById(7000);
+            Ingredient OriginalIngredient = Repo.GetById(originalID);
 
             // Assert
-            Assert.Fail();
+            Assert.AreEqual(originalID, OriginalIngredient.ID);
+            Assert.AreEqual(7000, ReturnedIngredient.ID);
         }
 
-        [Ignore]
-        [TestCategory("BaseEntiity Property")]
-        [TestMethod]
-        public void HaveNameBoundInCreateActionMethod()
-        {
-            // Arrange
 
-            // Act
-
-            // Assert
-            Assert.Fail();
-        }
-
-        [Ignore]
         [TestCategory("BaseEntiity Property")]
         [TestMethod]
         public void HaveNameBoundInPostEditActionMethod()
         {
-            // Arrange
+            //Arrange 
+            Ingredient.Name ="Changed";
 
-            // Act
+            //Act
+            Controller.PostEdit(Ingredient);
+            ReturnedIngredient = Repo.GetById(Ingredient.ID); 
 
-            // Assert
-            Assert.Fail();
+            // Assert 
+            Assert.AreEqual(Ingredient.Name, ReturnedIngredient.Name);
         }
-
-
-        [Ignore]
-        [TestCategory("BaseEntiity Property")]
-        [TestMethod]
-        public void HaveDescriptionBoundInCreateActionMethod()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
-            Assert.Fail();
-        }
-
-        [Ignore]
+         
+         
         [TestCategory("BaseEntiity Property")]
         [TestMethod]
         public void HaveDescriptionBoundInPostEditActionMethod()
         {
-            // Arrange
+            //Arrange 
+            Ingredient.Description = "Changed";
 
-            // Act
+            //Act
+            Controller.PostEdit(Ingredient);
+            ReturnedIngredient = Repo.GetById(Ingredient.ID);
 
-            // Assert
-            Assert.Fail();
+            // Assert 
+            Assert.AreEqual(Ingredient.Description, ReturnedIngredient.Description);
         }
-
-        [Ignore]
-        [TestCategory("BaseEntiity Property")]
-        [TestMethod]
-        public void HaveRecipeBoundInCreateActionMethod()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
-            Assert.Fail();
-        }
-
-        [Ignore]
+          
         [TestCategory("BaseEntiity Property")]
         [TestMethod]
         public void HaveRecipeBoundInPostEditActionMethod()
         {
-            // Arrange
+             //Arrange 
+            Ingredient.Recipe = new Recipe() { ID = 10000, Name = "Changed" };
 
-            // Act
+            //Act
+            Controller.PostEdit(Ingredient);
+            ReturnedIngredient = Repo.GetById(Ingredient.ID);
 
-            // Assert
-            Assert.Fail();
+            // Assert 
+            Assert.AreEqual("Changed", ReturnedIngredient.Recipe.Name);
         }
-
-        [Ignore]
-        [TestCategory("BaseEntiity Property")]
-        [TestMethod]
-        public void HaveCreationDateBoundInCreateActionMethod()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
-            Assert.Fail();
-        }
-
-        [Ignore]
-        [TestCategory("BaseEntiity Property")]
-        [TestMethod]
-        public void HaveCreationDateBoundInPostEditActionMethod()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
-            Assert.Fail();
-        }
-
-        [Ignore]
-        [TestCategory("BaseEntiity Property")]
-        [TestMethod]
-        public void HaveModifiedDateBoundInCreateActionMethod()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
-            Assert.Fail();
-        }
-
-        [Ignore]
-        [TestCategory("BaseEntiity Property")]
-        [TestMethod]
-        public void HaveModifiedDateBoundInPostEditActionMethod()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
-            Assert.Fail();
-        }
-
-        [Ignore]
-        [TestCategory("BaseEntiity Property")]
-        [TestMethod]
-        public void HaveAddedByUserBoundInPostEditActionMethod()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
-            Assert.Fail();
-        }
-
-        
-        [TestCategory("BaseEntiity Property")]
-        [TestMethod]
-        public void HaveAddedByUserBoundInCreateActionMethod()
-        {
-            // Arrange
-
-            // Act
-            Ingredient ingredient = new Ingredient();
-            string addedByUser = WindowsIdentity.GetCurrent().Name;
-            // Assert
-            Assert.AreEqual(addedByUser, ingredient.AddedByUser);
-        }
-
-        [Ignore]
-        [TestCategory("BaseEntiity Property")]
-        [TestMethod]
-        public void HaveModifiedByUserBoundInPostEditActionMethod()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
-            Assert.Fail();
-        }
-
-        [Ignore]
-        [TestCategory("BaseEntiity Property")]
-        [TestMethod]
-        public void HaveModifiedByUserBoundInCreateActionMethod()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
-            Assert.Fail();
-        }
-
-        [Ignore]
-        [TestCategory("BaseEntiity Property")]
-        [TestMethod]
-        public void HaveRecipesBoundInPostEditActionMethod()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
-            Assert.Fail();
-        }
-
-        [Ignore]
-        [TestCategory("BaseEntiity Property")]
-        [TestMethod]
-        public void HaveRecipesBoundInCreateActionMethod()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
-            Assert.Fail();
-        }
-
-
-        [Ignore]
+               
         [TestCategory("BaseEntiity Property")]
         [TestMethod]
         public void HaveIngredientsBoundInPostEditActionMethod()
         {
-            // Arrange
+            //Arrange 
+            Ingredient.Ingredients = new List<Ingredient> {
+                new Ingredient { Name = "Changed" },
+                new Ingredient { Name = "Changed 2" },
+                new Ingredient { Name = "Changed Up" }
+            };
 
-            // Act
+            //Act
+            Controller.PostEdit(Ingredient);
+            ReturnedIngredient = Repo.GetById(Ingredient.ID);
 
-            // Assert
-            Assert.Fail();
+            // Assert 
+            Assert.AreEqual("Changed", ReturnedIngredient.Ingredients.First().Name);
+            Assert.AreEqual("Changed Up", ReturnedIngredient.Ingredients.Last().Name);
         }
-
-        [Ignore]
-        [TestCategory("BaseEntiity Property")]
-        [TestMethod]
-        public void HaveIngredientsBoundInCreateActionMethod()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
-            Assert.Fail();
-        }
-
-        [Ignore]
+         
+         
         [TestMethod]
         public void HaveIngredientsListBoundInPostEditActionMethod()
         {
-            // Arrange
+            //Arrange 
+            Ingredient.IngredientsList =  "Changed"  ;
 
-            // Act
+            //Act
+            Controller.PostEdit(Ingredient);
+            ReturnedIngredient = Repo.GetById(Ingredient.ID);
 
-            // Assert
-            Assert.Fail();
-        }
-
-
-        [Ignore]
-        [TestCategory("BaseEntiity Property")]
-        [TestMethod]
-        public void HaveMenusBoundInCreateActionMethod()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
-            Assert.Fail();
-        }
-
-        [Ignore]
-        [TestCategory("BaseEntiity Property")]
-        [TestMethod]
-        public void HaveMenusBoundInPostEditActionMethod()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
-            Assert.Fail();
-        }
-
-
-        [Ignore]
-        [TestCategory("BaseEntiity Property")]
-        [TestMethod]
-        public void HavePlansBoundInCreateActionMethod()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
-            Assert.Fail();
-        }
-
-        [Ignore]
-        [TestCategory("BaseEntiity Property")]
-        [TestMethod]
-        public void HavePlansBoundInPostEditActionMethod()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
-            Assert.Fail();
-        }
-
-
-        [Ignore]
-        [TestCategory("BaseEntiity Property")]
-        [TestMethod]
-        public void HaveShoppingListsBoundInCreateActionMethod()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
-            Assert.Fail();
-        }
-
-        [Ignore]
-        [TestCategory("BaseEntiity Property")]
-        [TestMethod]
-        public void HaveShoppingListsBoundInPostEditActionMethod()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
-            Assert.Fail();
-        }
-
-        [Ignore]
-        [TestCategory("BaseEntiity Property")]
-        [TestMethod]
-        public void HavePersonsBoundInCreateActionMethod()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
-            Assert.Fail();
-        }
-
-        [Ignore]
-        [TestCategory("BaseEntiity Property")]
-        [TestMethod]
-        public void HavePersonsBoundInPostEditActionMethod()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
-            Assert.Fail();
-        }  
+            // Assert 
+            Assert.AreEqual("Changed", ReturnedIngredient.IngredientsList);
+        } 
     }
 }

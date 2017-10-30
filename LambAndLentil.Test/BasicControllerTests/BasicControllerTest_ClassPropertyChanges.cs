@@ -9,13 +9,13 @@ namespace LambAndLentil.Test.BasicControllerTests
     [TestCategory("Class Property Changes")]
     public class BasicControllerTest_ClassPropertyChanges : IngredientsController_Test_Should
     {
-        public Ingredient ingredient { get; set; }
-        public Ingredient returnedIngredient { get; set; }
+        public Ingredient Entity { get; set; }
+        public Ingredient ReturnedEntity { get; set; }
 
         public BasicControllerTest_ClassPropertyChanges()
         {
-            ingredient = new Ingredient { ID = 1000, Name = "Original Name" };
-            Repo.Save(ingredient);
+            Entity = new Ingredient { ID = 1000, Name = "Original Name" };
+            Repo.Save(Entity);
         }
 
         [TestMethod]
@@ -25,12 +25,12 @@ namespace LambAndLentil.Test.BasicControllerTests
 
 
             // Act
-            ingredient.Name = "Changed";
-            Controller.PostEdit(ingredient);
-            returnedIngredient = Repo.GetById(1000);
+            Entity.Name = "Changed";
+            Controller.PostEdit(Entity);
+            ReturnedEntity = Repo.GetById(1000);
 
             // Assert
-            Assert.AreEqual("Changed", returnedIngredient.Name);
+            Assert.AreEqual("Changed", ReturnedEntity.Name);
         }
 
        
@@ -40,74 +40,94 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange
 
             // Act
-            ingredient.ID = 42;
-            Controller.PostEdit(ingredient);
-            Ingredient returnedIngredient = Repo.GetById(42);
+            Entity.ID = 42;
+            Controller.PostEdit(Entity);
+            Ingredient ReturnedEntity = Repo.GetById(42);
             Ingredient originalIngredient = Repo.GetById(1000);
 
             // Assert
-            Assert.AreEqual(42, returnedIngredient.ID);
+            Assert.AreEqual(42, ReturnedEntity.ID);
             Assert.IsNotNull(originalIngredient);
         }
 
-        [Ignore]
         [TestMethod]
         public void ShouldEditDescription()
         {
             // Arrange
+            string changedDescription = "Description has changed";
 
             // Act
+            Entity.Description = changedDescription;
+            Controller.PostEdit(Entity);
+            ReturnedEntity = Repo.GetById(Entity.ID);
 
             // Assert
-            Assert.Fail();
+            Assert.AreNotEqual(changedDescription, ReturnedEntity.AddedByUser);
         }
 
-        [Ignore]
         [TestMethod]
         public void DoesNotEditCreationDate()
         {
             // Arrange
+            DateTime dateTime = new DateTime(1776, 7, 4);
+            Controller.PostEdit(Entity);
 
-            // Act
+            // Act 
+            Entity.CreationDate = dateTime;
+            Controller.PostEdit(Entity);
+            ReturnedEntity = Repo.GetById(Entity.ID);
 
             // Assert
-            Assert.Fail();
+            Assert.AreNotEqual(dateTime.Year, ReturnedEntity.CreationDate.Year);
         }
 
-        [Ignore]
+
         [TestMethod]
         public void DoesNotEditAddedByUser()
         {
             // Arrange
+            string user = "Abraham Lincoln";
 
             // Act
+            Entity.AddedByUser = user;
+
+            Controller.PostEdit(Entity);
+            Ingredient ReturnedIngredient = Repo.GetById(Entity.ID);
 
             // Assert
-            Assert.Fail();
+            Assert.AreNotEqual(user, ReturnedIngredient.AddedByUser);
         }
 
-        [Ignore]
+        
         [TestMethod]
         public void CannotAlterModifiedByUserByHand()
         {
             // Arrange
-
+            string user = "Abraham Lincoln";
+           
             // Act
+            Entity.ModifiedByUser = user;
+         
+            Controller.PostEdit(Entity);
+            Ingredient ReturnedIngredient= Repo.GetById(Entity.ID);
 
             // Assert
-            Assert.Fail();
+            Assert.AreNotEqual(user, ReturnedIngredient.ModifiedByUser);
         }
 
-        [Ignore]
         [TestMethod]
         public void CannotAlterModifiedDateByHand()
         {
             // Arrange
+            DateTime dateTime = new DateTime(1776, 7, 4);
+            Entity.ModifiedDate = dateTime;
 
-            // Act
+            // Act 
+            Controller.PostEdit(Entity);
+            Ingredient ReturnedIngredient = Repo.GetById(Entity.ID);
 
             // Assert
-            Assert.Fail();
+            Assert.AreNotEqual(dateTime.Year, ReturnedIngredient.ModifiedDate.Year);
         }
     }
 }

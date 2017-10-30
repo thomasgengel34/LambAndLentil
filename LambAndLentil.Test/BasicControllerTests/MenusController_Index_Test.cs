@@ -451,6 +451,11 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestMethod]
         public void FlagAnMenuFlaggedInAPerson()
         {
+            // Arrange
+
+            // Act
+
+            // Assert
             Assert.Fail();
         }
 
@@ -458,6 +463,11 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestMethod]
         public void FlagAnMenuFlaggedInTwoPersons()
         {
+            // Arrange
+
+            // Act
+
+            // Assert
             Assert.Fail();
         }
 
@@ -465,6 +475,11 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestMethod]
         public void WhenAFlagHasBeenRemovedFromOnePersonStillThereForSecondFlaggedPerson()
         {
+            // Arrange
+
+            // Act
+
+            // Assert
             Assert.Fail();
         }
 

@@ -6,38 +6,43 @@ using LambAndLentil.Domain.Concrete;
 using System.Web.Mvc;
 using LambAndLentil.Domain.Entities;
 using LambAndLentil.UI.Controllers;
+using System.Linq;
 
 namespace LambAndLentil.Test.BasicControllerTests
 {
-    [Ignore]
+    
     [TestClass]
     public class IngredientsController_Attach_Should : IngredientsController_Test_Should
-    {
-
-        // Ingredient cannot attach an ingredient.
-        // this is to change
-        [Ignore]
+    {  
         [TestMethod]
+        [TestCategory("Attach-Detach")]
         public void SuccessfullyAttachIngredientChild()
         {
             // Arrange
-           
+            Ingredient child = new Ingredient() { ID = 3000, Name = "SuccessfullyAttachIngredientChild" };
+            Repo.Save(child);
+
             // Act
-
+            Controller.AttachIngredient(Ingredient.ID, child);
+            ReturnedIngredient=Repo.GetById(Ingredient.ID);
             // Assert
-            Assert.Fail();
+           //  Assert.AreEqual("Default", Ingredient.Ingredients.Last().Name);
+             Assert.AreEqual("SuccessfullyAttachIngredientChild", ReturnedIngredient.Ingredients.Last().Name);
         }
-
-        [Ignore]
+         
         [TestMethod]
         public void SuccessfullyDetachIngredientChild()
         {
             // Arrange
-
+            Ingredient child = new Ingredient() { ID = 3500, Name = "SuccessfullyAttachAndDetachhIngredientChild" };
+            Repo.Save(child);
+            Controller.AttachIngredient(Ingredient.ID, child);
             // Act
-
+            Controller.DetachIngredient(Ingredient.ID, child);
+            ReturnedIngredient = Repo.GetById(Ingredient.ID);
             // Assert
-            Assert.Fail();
+            //  Assert.AreEqual("Default", Ingredient.Ingredients.Last().Name);
+            Assert.AreEqual("SuccessfullySuccessfullyAttachAndDetachhIngredientChildIngredientChild", ReturnedIngredient.Ingredients.Last().Name);
         } 
     }
 }

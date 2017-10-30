@@ -224,39 +224,23 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestCategory("Edit")]
         public void SaveEditedPerson()
         {
-            // Arrange
-            PersonsController indexController = new PersonsController(Repo);
+            // Arrange 
             PersonsController Controller2 = new PersonsController(Repo);
             PersonsController Controller3 = new PersonsController(Repo);
+             
 
-
-            Person person = new Person
-            {
-                FirstName = "0000 test",
-                LastName = "",
-                ID = int.MaxValue - 100,
-                Description = "test PersonsControllerShould.SaveEditedPerson"
-            };
-
-            // Act 
-            ActionResult ar1 = Controller.PostEdit(person);
-
-
-            // now edit it
-            person.FirstName = "0000 test Edited";
-            person.LastName = "";
-            person.ID = 7777;
-            ActionResult ar2 = Controller2.PostEdit(person);
+            // Act  
+            Person.FirstName = "SaveEditedPersonTest";
+            Person.LastName = ""; 
+            ActionResult ar2 = Controller2.PostEdit(Person);
             ViewResult view2 = Controller3.Index();
             ListEntity<Person> ListEntity2 = (ListEntity<Person>)view2.Model;
             Person person3 = (from m in ListEntity2.ListT
-                              where m.ID == 7777
+                              where m.ID == Person.ID
                               select m).AsQueryable().FirstOrDefault();
 
             // Assert
-            Assert.AreEqual("0000 test Edited ", person3.Name);
-            Assert.AreEqual(7777, person3.ID);
-
+            Assert.AreEqual("SaveEditedPersonTest ", person3.Name); 
         }
 
         [Ignore]  // look into why this is not working

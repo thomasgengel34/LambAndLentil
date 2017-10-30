@@ -12,6 +12,7 @@ namespace LambAndLentil.Test.BasicControllerTests
     { 
         internal static MenusController Controller { get; set; }
         internal static Menu Menu { get; set; }
+        public Menu ReturnedMenu { get; set; }
 
         public MenusController_Test_Should()
         {
@@ -19,6 +20,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             { 
                 PageSize = 3 
             };
+
             Menu = new Menu()
             {
                 ID = 1234567,
@@ -28,6 +30,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Diners=4,
             Ingredients=new List<Ingredient>(),
             Recipes= new List<Recipe>()};
+            Repo.Save(Menu);
         }
     }
 }

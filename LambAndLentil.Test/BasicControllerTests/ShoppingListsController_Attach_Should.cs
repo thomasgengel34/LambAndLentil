@@ -113,16 +113,25 @@ namespace LambAndLentil.Test.BasicControllerTests
 
             // Assert
             Assert.Fail();
-        }
-
-        [Ignore]
+        } 
+       
         [TestMethod]
         public void SuccessfullyAttachIngredientChild()
         {
+            // Arrange
+            Ingredient child = new Ingredient() { ID = 3000, Name = "SuccessfullyAttachIngredientChild" };
+            TestRepository<Ingredient> IngredientRepo = new TestRepository<Ingredient>();
+            IngredientRepo.Save(child);
 
+            // Act
+            Controller.AttachIngredient(ShoppingList.ID, child);
+            ReturnedShoppingList = Repo.GetById(ShoppingList.ID);
+            // Assert
+            //  Assert.AreEqual("Default", Ingredient.Ingredients.Last().Name);
+            Assert.AreEqual("SuccessfullyAttachIngredientChild", ReturnedShoppingList.Ingredients.Last().Name);
         }
 
-        [Ignore]
+        
         [TestMethod]
         public void SuccessfullyDetachIngredientChild()
         {

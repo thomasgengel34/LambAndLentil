@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web.Mvc;
 using System.Web;
 using LambAndLentil.UI.Infrastructure.Alerts;
+using System;
 
 namespace LambAndLentil.UI.Controllers
 {
@@ -14,7 +15,9 @@ namespace LambAndLentil.UI.Controllers
         public RecipesController(IRepository<Recipe> repository) : base(repository)
         {
             Repo = repository;
-        } 
+        }
+
+     
     }
 
     public class RecipesGenericController<T > : BaseController<Recipe>
@@ -30,7 +33,15 @@ namespace LambAndLentil.UI.Controllers
         {
             return BaseIndex(Repo, page);
         }
-         
+
+
+        public void AddIngredientToIngredientsList(int id=1, string addedIngredient="")
+        {
+             BaseAddIngredientToIngredientsList(Repo, UIControllerType.Recipes, id, addedIngredient);
+        }
+
+       
+
 
 
         // GET: Recipes/Details/5
@@ -88,8 +99,6 @@ namespace LambAndLentil.UI.Controllers
         public ActionResult RemoveIngredient(int? recipeID, Ingredient ingredient)
         {
             return BaseAttach<Ingredient>(Repo, recipeID, ingredient, AttachOrDetach.Detach);
-        }
-
-         
+        } 
     }
 }

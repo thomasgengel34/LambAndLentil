@@ -1,6 +1,7 @@
 ﻿using LambAndLentil.Domain.Abstract;
 using LambAndLentil.Domain.Concrete;
 using LambAndLentil.Domain.Entities;
+using LambAndLentil.UI;
 using LambAndLentil.UI.Controllers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -16,6 +17,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         protected static RecipesController Controller { get; set; }
         protected static Recipe Recipe { get; set; }
+        protected static Recipe ReturnedRecipe { get; set; }
 
         public RecipesController_Test_Should()
         {
@@ -40,8 +42,7 @@ namespace LambAndLentil.Test.BasicControllerTests
                     new Ingredient{Name="Pepper"}
                 }
             };
-        }
-
-    
+            Repo.Save(Recipe);
+        } 
     }
 }
