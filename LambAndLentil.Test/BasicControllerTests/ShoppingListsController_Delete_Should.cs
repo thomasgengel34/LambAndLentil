@@ -30,16 +30,10 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.Fail();
         }
 
-        [Ignore]
         [TestMethod]
-        public void ReturnIDetailsWhenIDIstFound()
+        public void ReturnDetailsWhenIDIsFound()
         {
-            // Arrange
-
-            // Act
-
-            // Assert
-            Assert.Fail();
+            BaseReturnDetailsWhenIDIsFound(Controller);
         }
     }
 }

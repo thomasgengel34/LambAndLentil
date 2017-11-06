@@ -51,7 +51,7 @@ namespace LambAndLentil.Tests.Controllers
             HomeController Controller = new HomeController();
 
             // Act
-            ViewResult result = Controller.Index() as ViewResult;
+            ViewResult result = Controller.Index as ViewResult;
 
             // Assert
             Assert.IsNotNull(result);

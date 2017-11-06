@@ -1,4 +1,5 @@
 ﻿
+using LambAndLentil.Domain.Abstract;
 using LambAndLentil.Domain.Concrete;
 using LambAndLentil.Domain.Entities;
 using LambAndLentil.UI.Controllers;
@@ -13,9 +14,9 @@ namespace LambAndLentil.Test.BasicControllerTests
     [TestCategory("PersonsController")]
     [TestCategory("Edit")]
     [TestClass]
-    public class PersonsController_Edit_Should:PersonsController_Test_Should
+    public class PersonsController_Edit_Should : PersonsController_Test_Should
     {
-        
+
         [Ignore]
         [TestMethod]
         public void CorrectPersonsAreBoundInEdit()
@@ -38,7 +39,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Person vm = new Person
             {
                 FirstName = "0000 test",
-                LastName="",
+                LastName = "",
                 Description = "SaveEditedPersonWithDescriptionChange Pre-test",
                 ID = 4000
             };
@@ -47,7 +48,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Act 
             ActionResult ar1 = Controller1.PostEdit(vm);
             ViewResult view1 = Controller2.Index();
-            List<Person> ListEntity= (List<Person>)((( ListEntity<Person>)view1.Model).ListT);
+            List<Person> ListEntity = (List<Person>)(((ListEntity<Person>)view1.Model).ListT);
             Person recipeVM = (from m in ListEntity
                                where m.Name == "0000 test"
                                select m).AsQueryable().FirstOrDefault();
@@ -63,7 +64,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
             ActionResult ar2 = Controller3.PostEdit(vm);
             ViewResult view2 = Controller4.Index();
-            List<Person> ListEntity2 = (List<Person>)((( ListEntity<Person>)view2.Model).ListT);
+            List<Person> ListEntity2 = (List<Person>)(((ListEntity<Person>)view2.Model).ListT);
             Person recipe2 = (from m in ListEntity2
                               where m.Name == "0000 test Edited"
                               select m).AsQueryable().FirstOrDefault();
@@ -127,10 +128,10 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Act
             ControllerEdit.PostEdit(person);
             ViewResult view = ControllerView.Index();
-            List<Person> ListEntity= (List<Person>)((( ListEntity<Person>)view.Model).ListT);
-           person = (from m in ListEntity
-                        where m.ID == 5000
-                     select m).AsQueryable().FirstOrDefault();
+            List<Person> ListEntity = (List<Person>)(((ListEntity<Person>)view.Model).ListT);
+            person = (from m in ListEntity
+                      where m.ID == 5000
+                      select m).AsQueryable().FirstOrDefault();
 
             DateTime shouldBeSameDate = person.CreationDate;
 
@@ -139,56 +140,18 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         }
 
-        // [Ignore]
+
+
+
+
         [TestMethod]
         [TestCategory("Edit")]
         public void UpdateTheModificationDateBetweenPostedEdits()
         {
-            // Arrange 
-            PersonsController ControllerPost = new PersonsController(Repo);
-            PersonsController ControllerPost1 = new PersonsController(Repo);
-            PersonsController ControllerView = new PersonsController(Repo);
-            PersonsController ControllerView1 = new PersonsController(Repo);
-            PersonsController ControllerDelete = new PersonsController(Repo);
-
-            Person vm = new Person
-            {
-                FirstName = "Test UpdateTheModificationDateBetweenPostedEdits",
-                LastName="",
-                ID = 6000,
-                Description = "Unchanged"
-            };
-            DateTime CreationDate = vm.CreationDate;
-            DateTime mod = vm.ModifiedDate;
-
-            // Act
-            ControllerPost.PostEdit(vm);
-
-            ViewResult view = ControllerView.Index();
-            List<Person> ListEntity= (List<Person>)((( ListEntity<Person>)view.Model).ListT);
-            Person vm2 = (from m in ListEntity
-                          where m.ID == 6000
-                          select m).AsQueryable().FirstOrDefault();
-
-
-            vm.Description = "I've been edited to delay a bit";
-
-            ControllerPost1.PostEdit(vm2);
-
-
-            ViewResult view1 = ControllerView.Index();
-            ListEntity= (List<Person>)((( ListEntity<Person>)view1.Model).ListT);
-            Person vm3 = (from m in ListEntity
-                          where m.ID == 6000
-                          select m).AsQueryable().FirstOrDefault();
-
-            DateTime shouldBeSameDate = vm3.CreationDate;
-            DateTime shouldBeLaterDate = vm3.ModifiedDate;
-
-            // Assert
-            Assert.AreEqual(CreationDate, shouldBeSameDate);
-            Assert.AreNotEqual(mod, shouldBeLaterDate);
-
+            Person.Name = "Test UpdateTheModificationDateBetweenPostedEdits";
+            Person.ID = 6000;
+            Repo.Save(Person);
+            BaseUpdateTheModificationDateBetweenPostedEdits(Repo, Controller, Person);
         }
 
 
@@ -227,11 +190,11 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange 
             PersonsController Controller2 = new PersonsController(Repo);
             PersonsController Controller3 = new PersonsController(Repo);
-             
+
 
             // Act  
             Person.FirstName = "SaveEditedPersonTest";
-            Person.LastName = ""; 
+            Person.LastName = "";
             ActionResult ar2 = Controller2.PostEdit(Person);
             ViewResult view2 = Controller3.Index();
             ListEntity<Person> ListEntity2 = (ListEntity<Person>)view2.Model;
@@ -240,7 +203,7 @@ namespace LambAndLentil.Test.BasicControllerTests
                               select m).AsQueryable().FirstOrDefault();
 
             // Assert
-            Assert.AreEqual("SaveEditedPersonTest ", person3.Name); 
+            Assert.AreEqual("SaveEditedPersonTest ", person3.Name);
         }
 
         [Ignore]  // look into why this is not working

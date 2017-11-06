@@ -36,7 +36,7 @@ namespace LambAndLentil.Test.Infrastructure
            var prop = kernel.Get<Ingredient>();   // this would be fine for a test for standard bindings
            var m  = kernel.GetAll<IModelMetadataFilter>().First().GetType();  
            
-            Assert.AreEqual(typeof(LambAndLentil.UI.Infrastructure.ModelMetaData.Filters.LabelConventionFilter),  m); 
+            Assert.AreEqual(typeof( LabelConventionFilter),  m); 
 
         }
 
@@ -54,7 +54,7 @@ namespace LambAndLentil.Test.Infrastructure
           
             var m2 = kernel.GetAll<IModelMetadataFilter>().Skip(1).First().GetType(); 
            
-            Assert.AreEqual(typeof(LambAndLentil.UI.Infrastructure.ModelMetaData.Filters.ReadOnlyTemplateSelectorFilter), m2);
+            Assert.AreEqual(typeof(ReadOnlyTemplateSelectorFilter), m2);
           
         }
 
@@ -73,7 +73,7 @@ namespace LambAndLentil.Test.Infrastructure
             
             var m = kernel.GetAll<IModelMetadataFilter>().Last().GetType();
  
-            Assert.AreEqual(typeof(LambAndLentil.UI.Infrastructure.ModelMetaData.Filters.WatermarkConventionFilter), m); 
+            Assert.AreEqual(typeof(WatermarkConventionFilter), m); 
         }
 
         [TestMethod]

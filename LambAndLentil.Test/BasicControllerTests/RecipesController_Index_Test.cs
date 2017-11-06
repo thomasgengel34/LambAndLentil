@@ -3,6 +3,7 @@ using LambAndLentil.Domain.Abstract;
 using LambAndLentil.Domain.Concrete;
 using LambAndLentil.Domain.Entities;
 using LambAndLentil.Tests.Infrastructure;
+using LambAndLentil.UI;
 using LambAndLentil.UI.Controllers;
 using LambAndLentil.UI.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -87,14 +88,15 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void ContainsAllRecipesView1Count5()
         {
             // Arrange 
+            int count = Repo.Count();
 
             // Act
-             ListEntity = ( ListEntity<Recipe>)(Controller.Index(1)).Model;
+            ListEntity = ( ListEntity<Recipe>)(Controller.Index(1)).Model;
             Recipe[] ingrArray1 =  ListEntity.ListT.ToArray();
             int count1 = ingrArray1.Count();
 
             // Assert 
-            Assert.AreEqual(6, count1);
+            Assert.AreEqual(count, count1);
         }
 
         [TestMethod]
@@ -176,23 +178,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.IsNotNull(view1);
 
         }
-
-        [TestMethod]
-        [TestCategory("Index")]
-        public void FirstPageIsCorrectCountIsFive()
-        {
-            // Arrange 
-             ListEntity = ( ListEntity<Recipe>)(Controller.Index(1)).Model;
-            Recipe[] ingrArray1 =  ListEntity.ListT.ToArray();
-            Controller.PageSize = 8;
-
-            // Act
-            ViewResult view1 = Controller.Index(1);
-            int count1 = (( ListEntity<Recipe>)(view1.Model)).ListT.Count();
-
-            // Assert 
-            Assert.AreEqual(6, count1);
-        }
+         
 
         [TestMethod]
         [TestCategory("Index")]
@@ -349,18 +335,10 @@ namespace LambAndLentil.Test.BasicControllerTests
 
 
 
-        [TestMethod]
-        [TestCategory("Index")]
-        public void RecipesCtr_IndexCanPaginate_ArrayLengthIsCorrect()
+        [TestMethod] 
+        public void  CanPaginateArrayLengthIsCorrect()
         {
-            // Arrange
-
-
-            // Act
-            var result = ( ListEntity<Recipe>)(Controller.Index(1)).Model;
-
-            // Assert 
-            Assert.IsTrue(result.ListT.Count() == 6);
+            BaseCanPaginateArrayLengthIsCorrect(Repo, Controller);
         }
 
      
@@ -428,15 +406,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestCategory("Index")]
         public void CanSendPaginationViewModel_TotalItemsCorrect()
         {
-            // Arrange 
-
-            // Act 
-             ListEntity<Recipe> resultT = ( ListEntity<Recipe>)((ViewResult)Controller.Index(2)).Model;
-            PagingInfo pageInfoT = resultT.PagingInfo;
-            //   PagingInfo pageInfoT = ListEntity.PagingInfo;
-
-            // Assert 
-            Assert.AreEqual(6, pageInfoT.TotalItems);
+            BaseCanSendPaginationViewModel_TotalItemsCorrect(Repo, Controller, UIControllerType.Recipes);
         }
 
         [Ignore]
@@ -444,15 +414,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestCategory("Index")]
         public void RecipesCtr_Index_CanSendPaginationViewModel_TotalPagesCorrect()
         {
-            // Arrange
-
-
-            // Act 
-             ListEntity<Recipe> resultT = ( ListEntity<Recipe>)((ViewResult)Controller.Index(2)).Model;
-            PagingInfo pageInfoT = resultT.PagingInfo;
-
-            // Assert 
-            Assert.AreEqual(1, pageInfoT.TotalPages);
+            BaseCanSendPaginationViewModel_TotalItemsCorrect(Repo, Controller, UIControllerType.Recipes);
         }
 
 
@@ -483,6 +445,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void ShowAllRecipesonIndex()
         {
             // Arrange
+            int repoCount = Repo.Count();
 
             // Act
             ViewResult view1 = Controller.Index(1);
@@ -499,9 +462,9 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Assert
             Assert.IsNotNull(view1);
             Assert.IsNotNull(view2);
-            Assert.AreEqual(6, count1);
+            Assert.AreEqual(repoCount, count1);
             Assert.AreEqual(0, count2);
-            Assert.AreEqual(6, count);
+            Assert.AreEqual(repoCount, count);
             Assert.AreEqual("Index", view1.ViewName);
             Assert.AreEqual("Index", view2.ViewName);
 
@@ -531,48 +494,15 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestMethod]
         public void  FirstPageIsCorrect()
         {
-
-            // Arrange 
-            Controller.PageSize = 8;
-
-            // Act
-            ViewResult view1 = Controller.Index(1);
-
-            int count1 = ((ListEntity<Recipe>)(view1.Model)).ListT.Count();
-
-
-
-            // Assert
-            Assert.IsNotNull(view1);
-            Assert.AreEqual(6, count1);
-            Assert.AreEqual("Index", view1.ViewName);
-
-            Assert.AreEqual("LambAndLentil.Domain.Entities.Recipe ControllerTest1", ((ListEntity<Recipe>)(view1.Model)).ListT.FirstOrDefault().Name);
-            Assert.AreEqual("LambAndLentil.Domain.Entities.Recipe ControllerTest2", ((ListEntity<Recipe>)(view1.Model)).ListT.Skip(1).FirstOrDefault().Name);
-            Assert.AreEqual("LambAndLentil.Domain.Entities.Recipe ControllerTest3", ((ListEntity<Recipe>)(view1.Model)).ListT.Skip(2).FirstOrDefault().Name);
-
-
+            BaseFirstPageIsCorrect(Repo, Controller, UIControllerType.Recipes); 
         }
 
-        
+      
+
         [TestMethod]
         public void  PagingInfoIsCorrect()
         {
-            // Arrange 
-
-            // Action
-            int totalItems = ((ListEntity<Recipe>)((ViewResult)Controller.Index()).Model).PagingInfo.TotalItems;
-            int currentPage = ((ListEntity<Recipe>)((ViewResult)Controller.Index()).Model).PagingInfo.CurrentPage;
-            int itemsPerPage = ((ListEntity<Recipe>)((ViewResult)Controller.Index()).Model).PagingInfo.ItemsPerPage;
-            int totalPages = ((ListEntity<Recipe>)((ViewResult)Controller.Index()).Model).PagingInfo.TotalPages;
-
-
-
-            // Assert
-            Assert.AreEqual(6, totalItems);
-            Assert.AreEqual(1, currentPage);
-            Assert.AreEqual(8, itemsPerPage);
-            Assert.AreEqual(1, totalPages);
+            BasePagingInfoIsCorrect(Repo, Controller, UIControllerType.Recipes);
         }
 
         [Ignore]
@@ -588,13 +518,13 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void  CanPaginate()
         {
             // Arrange
-
+            int count = Repo.Count();
 
             // Act
             var result = (ListEntity<Recipe>)(Controller.Index(1)).Model;
 
             // Assert 
-            Assert.IsTrue(result.ListT.Count() == 6);
+            Assert.AreEqual(count, result.ListT.Count());
             Assert.AreEqual("LambAndLentil.Domain.Entities.Recipe ControllerTest1", result.ListT.First().Name);
             Assert.AreEqual("LambAndLentil.Domain.Entities.Recipe ControllerTest3", result.ListT.Skip(2).First().Name);
         }

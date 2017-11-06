@@ -17,18 +17,14 @@ namespace LambAndLentil.UI.Controllers
             where T : BaseEntity, IEntity, new()
     {
         public string ClassName { get; private set; }
-
         public int PageSize { get; set; }
-
         public static IRepository<T> Repo { get; set; }
-
         public static IRepository<Ingredient> IngredientRepo { get; set; }
         public static IRepository<Menu> MenuRepo { get; set; }
 
         public BaseController(IRepository<T> repository)
-        { 
-            Repo = repository;
-            MvcApplication.InitializeMap();  // needed for testing. really??
+        {
+            Repo = repository; 
             ClassName = new RepositoryHelperMethods().GetClassName<T>();
         }
 
@@ -41,7 +37,6 @@ namespace LambAndLentil.UI.Controllers
             PageSize = 8;
             ListEntity<T> model = new ListEntity<T>
             {
-                // model.Entities = (IEnumerable<TVM>)BaseVM.GetIndexedModel<T>(PageSize, page);
                 ListT = new BaseEntity().GetIndexedModel<T>(Repo, PageSize, page),
                 PagingInfo = new BaseEntity().PagingFunction<T>(Repo, page, PageSize)
             };
@@ -49,79 +44,58 @@ namespace LambAndLentil.UI.Controllers
         }
 
         public ActionResult BaseDetails(IRepository<T> Repo, UIControllerType uIController, int id = 1, UIViewType actionMethod = UIViewType.Details)
-        {
-            ActionResult result;
+        { 
             ViewBag.Title = actionMethod.ToString();
-            if (actionMethod == UIViewType.Delete)
+            switch (actionMethod)
             {
-                return BaseDelete(Repo, uIController, id);
-            }
-            else if (actionMethod == UIViewType.DeleteConfirmed)
-            {
-                return BaseDeleteConfirmed(Repo, uIController, id);
-            }
-            else if (actionMethod == UIViewType.Details)
-            {
-                result = GuardId(Repo, uIController, id);
-
-                if (result == null)
-                {
-                    return RedirectToAction(UIViewType.BaseIndex.ToString()).WithError("No " + ClassName + " was found with that id.");
-                }
-                else
-                {
-                    T item = Repo.GetById(id);
-                    bool IsValid = IsModelValid(item);
-
-                    if (IsValid)
+                case UIViewType.Delete: return BaseDelete(Repo, uIController, id);
+                case UIViewType.DeleteConfirmed: return BaseDeleteConfirmed(Repo, uIController, id);
+                case UIViewType.Details:
                     {
-                        return View(UIViewType.Details.ToString(), item).WithSuccess("Here it is!");
+                        T item = Repo.GetById(id);
+                        if (item == null)
+                        {
+                            return RedirectToAction(UIViewType.BaseIndex.ToString()).WithError("No " + ClassName + " was found with that id.");
+                        }
+                        else
+                        {
+                            bool IsValid = IsModelValid(item);
+
+                            if (IsValid)
+                            {
+                                return View(UIViewType.Details.ToString(), item).WithSuccess("Here it is!");
+                            }
+                            else
+                            {
+                                return View(UIViewType.Details.ToString(), item).WithError("Something is wrong with the data!");
+                            }
+                        }
                     }
-                    else
+                case UIViewType.Edit: return BaseEdit(Repo, uIController, id );
+                case UIViewType.PostEdit:
                     {
-                        return View(UIViewType.Details.ToString(), item).WithError("Something is wrong with the data!");
+                        T item = Repo.GetById(id);
+                        return BasePostEdit(Repo, item);
                     }
-                }
-            }
-            else if (actionMethod == UIViewType.Delete)
-            {
-                T item = Repo.GetById(id);
-                return View(UIViewType.Details.ToString(), item).WithSuccess("Here it is!");   // not exactly what we want!   Need a button with an Are You SURE you want to delete this?
-            }
-            else if (actionMethod == UIViewType.Edit)
-            {
-                return BaseEdit(Repo, uIController, id, out result);
-            }
-            else
-            {
-                return View(UIViewType.Index);
+                default: return View(UIViewType.Index);
             }
         }
 
-        private ActionResult BaseEdit(IRepository<T> Repo, UIControllerType uIController, int id, out ActionResult result)
-        {
-            result = GuardId(Repo, uIController, id);
-            T item;
-            if (result != null)
-            {
-                item = Repo.GetById(id);
-            }
-            else
+        private ActionResult BaseEdit(IRepository<T> Repo, UIControllerType uIController, int id )
+        { 
+            T item = Repo.GetById(id);
+            if (item == null)
             {
                 return (ViewResult)RedirectToAction(UIViewType.Index.ToString()).WithWarning(ClassName + " was not found");
             }
-            if (result is EmptyResult)
+            else
             {
                 return View(UIViewType.Details.ToString(), item);
-            }
-            return result as ViewResult;
+            } 
         }
 
         private bool IsModelValid(T item)
-        {
-            // TODO: implement
-            // intended as a second line of defense. JSON errors should be caught in the Repo methods.  This should catch logical errors in the model and mimic EF's model validation protocol(s)
-            //
+        { 
             return new ModelValidation().IsModelValid<T>(item);
         }
 
@@ -135,42 +109,11 @@ namespace LambAndLentil.UI.Controllers
             return View(UIViewType.Details.ToString(), item);
         }
 
-        //public ActionResult BaseEdit(IRepository<T> Repo,  UIControllerType uIControllerType, int id = 1, UIViewType actionMethod = UIViewType.Edit)
-        //{
-        //    return BaseDetails(Repo,  uIControllerType, 1, UIViewType.Edit);
-        //ActionResult result = new EmptyResult();
-        //if (actionMethod == UIViewType.Delete)
-        //{
-        //    result = BaseDelete(Repo,  UIControllerType.Ingredients, id = 1, UIViewType.Details);
 
-        //}
-        //else
-        //{
-        //    if (id != 0)
-        //    {
-        //        result = GuardId(Repo,  uIControllerType, id);
-        //    }
-        //    T  item;
-        //    if (result != null)
-        //    {
-        //        item = Repo.GetById(id);
-        //    }
-        //    else
-        //    {
-        //        return (ViewResult)RedirectToAction(UIViewType.Index.ToString()).WithWarning(className + " was not found");
-        //    }
-        //    if (result is EmptyResult)
-        //    {
-        //        return View(UIViewType.Details.ToString(), item);
-        //    }
-        //}
-        //return result as ViewResult;
-        //   }
 
         public ActionResult BasePostEdit(IRepository<T> Repo, T vm)
         {
-            T item = vm;
-            // new ingredient - saves double writing the Create Post method
+            T item = vm; 
             bool isValid = IsModelValid(vm);
 
             if (isValid)
@@ -190,24 +133,20 @@ namespace LambAndLentil.UI.Controllers
 
 
         public ActionResult BaseDelete(IRepository<T> Repo, UIControllerType uiControllerType, int id = 1, UIViewType actionMethod = UIViewType.Delete)
-        {
-            ActionResult result = GuardId(Repo, uiControllerType, id);
-            ViewBag.ActionMethod = UIViewType.Delete;
-            T item;
-            if (result == null)
+        { 
+            T item= Repo.GetById(id);
+            if (item== null)
             {
                 return (ViewResult)RedirectToAction(UIViewType.Index.ToString()).WithWarning(ClassName + " was not found");
             }
             else
-            {
-                item = Repo.GetById(id);
-                return View(UIViewType.Details.ToString(), item);
+            { 
+                return View(UIViewType.Details.ToString(), item).WithSuccess("Here it is!");   // not exactly what we want! TODO: in view,   Need a button with an Are You SURE you want to delete this?
             }
         }
 
         public ActionResult BaseDeleteConfirmed(IRepository<T> Repo, UIControllerType controllerType, int id)
-        {
-            ActionResult result = GuardId(Repo, controllerType, id);
+        { 
             T item = Repo.GetById(id);
             if (item == null)
             {
@@ -215,43 +154,20 @@ namespace LambAndLentil.UI.Controllers
             }
             else
             {
-                Repo.Remove(item);
-                ViewBag.ActionMethod = UIViewType.Delete.ToString();  // needed? evaluate when View is written 
+                Repo.Remove(item); 
                 return RedirectToAction(UIViewType.BaseIndex.ToString()).WithSuccess(string.Format($"{item.Name} has been deleted"));
             }
         }
 
-        public ActionResult BaseAttach<TChild>(IRepository<T> Repo, int? parentID, TChild child, AttachOrDetach attachOrDetach = AttachOrDetach.Attach)
-        //where TChild : Ingredient 
+        public ActionResult BaseAttach<TChild>(IRepository<T> Repo, int? parentID, TChild child, AttachOrDetach attachOrDetach = AttachOrDetach.Attach, int orderNumber=0) 
         where TChild : BaseEntity, IEntity // todo: expand
         {
-            // conditions guard against people trying thngs out manually  
-
-            // child repository needs to be same generic class as parent repository
-            // do it simply for now
-            IRepository<TChild> childRepository;
-            Type t = Repo.GetType();
-            if (t == typeof(TestRepository<T>))
-            {
-                childRepository = new TestRepository<TChild>();
-            }
-            else if (t == typeof(JSONRepository<T>))
-            {
-                childRepository = new JSONRepository<TChild>();
-            }
-            else
-            {
-                throw new Exception("I have no idea what repository that is, but I do not like it.");
-            }
+            IRepository<TChild> childRepository = GuardRepository<TChild>(Repo);
 
             char[] charsToTrim = { 'V', 'M' };
             string entity = typeof(T).ToString().Split('.').Last();
             string childEntity = typeof(TChild).ToString().Split('.').Last().TrimEnd(charsToTrim);
             ViewBag.listOfChildren = childRepository.GetAll();
-
-            Ingredient ingredientChild = child as Ingredient;
-            Recipe recipeChild = child as Recipe;
-
 
 
             if (parentID == null)
@@ -261,12 +177,7 @@ namespace LambAndLentil.UI.Controllers
             else
             {
                 int parentNonNullID = (int)parentID;
-
-
                 T parent = Repo.GetById(parentNonNullID);
-                // T parentFromDB =Repo.GetById(parentNonNullID);
-                //T  parent = Mapper.Map<BaseVM, T >(parentFromDB);
-
                 if (parent == null)
                 {
                     // TODO: log error - this could be a developer problem
@@ -290,11 +201,11 @@ namespace LambAndLentil.UI.Controllers
                         {
                             if (typeof(TChild) == typeof(Ingredient))
                             {
-                                Repo.DetachAnIndependentChild<Ingredient>(parent.ID, ingredientChild);
+                                Repo.DetachAnIndependentChild<Ingredient>(parent.ID, child as Ingredient, 0);
                             }
                             else if (typeof(TChild) == typeof(Recipe))
                             {
-                                Repo.DetachAnIndependentChild<Recipe>(parent.ID, recipeChild);
+                                Repo.DetachAnIndependentChild<Recipe>(parent.ID, child as Recipe,0);
                             }
 
                             return RedirectToAction(UIViewType.Details.ToString(), new { id = parentID, actionMethod = UIViewType.Edit }).WithSuccess(childEntity + " was Successfully Detached!");
@@ -303,11 +214,11 @@ namespace LambAndLentil.UI.Controllers
                         {
                             if (typeof(TChild) == typeof(Ingredient))
                             {
-                                Repo.AttachAnIndependentChild<Ingredient>(parent.ID, ingredientChild);
+                                Repo.AttachAnIndependentChild<Ingredient>(parent.ID, child as Ingredient,0);
                             }
                             else if (typeof(TChild) == typeof(Recipe))
                             {
-                                Repo.AttachAnIndependentChild<Recipe>(parent.ID, recipeChild);
+                                Repo.AttachAnIndependentChild<Recipe>(parent.ID, child as Recipe,0);
                             }
                             return RedirectToAction(UIViewType.Details.ToString(), new { id = parentID, actionMethod = UIViewType.Edit }).WithSuccess(childEntity + " was Successfully Attached!");
                         }
@@ -316,33 +227,35 @@ namespace LambAndLentil.UI.Controllers
             }
         }
 
-        // needed??
-        protected ActionResult RedirectToAction<TController>(Expression<Action<TController>> action)
-            where TController : Controller
-        {
-            return ControllerExtensions.RedirectToAction(this, action);
-        }
-
-      public ActionResult GuardId(IRepository<T> Repo, UIControllerType tController, int id)
-        {
-            T item = Repo.GetById(id);
-
-            if (item == null)
+        private static IRepository<TChild> GuardRepository<TChild>(IRepository<T> Repo) where TChild : BaseEntity, IEntity
+        { 
+            IRepository<TChild> childRepository;
+            Type t = Repo.GetType();
+            if (t == typeof(TestRepository<T>))
             {
-                return null;
+                childRepository = new TestRepository<TChild>();
+            }
+            else if (t == typeof(JSONRepository<T>))
+            {
+                childRepository = new JSONRepository<TChild>();
             }
             else
             {
-                return new EmptyResult();
+                throw new Exception("I have no idea what repository that is, but I do not like it.");
             }
+            return childRepository;
         }
-
+         
         public void BaseAddIngredientToIngredientsList(IRepository<T> repo, UIControllerType tController, int id, string addedIngredient)
         {
-            ActionResult result = GuardId(Repo, tController, id);
             T item = Repo.GetById(id);
-            item.IngredientsList += String.Concat(", ", addedIngredient);
-            Repo.Update(item, item.ID);
+
+            if (item != null)
+            {
+                item.IngredientsList += String.Concat(", ", addedIngredient);
+                Repo.Update(item, item.ID);
+            }
+
         }
     }
 }

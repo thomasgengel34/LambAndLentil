@@ -1,10 +1,12 @@
 ﻿using LambAndLentil.Domain.Abstract;
 using LambAndLentil.Domain.Concrete;
 using LambAndLentil.Domain.Entities;
+using LambAndLentil.UI;
 using LambAndLentil.UI.Infrastructure.Alerts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 using System.Web.Mvc;
+using LambAndLentil.UI.Controllers;
 
 namespace LambAndLentil.Test.BasicControllerTests
 {
@@ -132,12 +134,52 @@ namespace LambAndLentil.Test.BasicControllerTests
             //  Assert.AreEqual("Default", Ingredient.Ingredients.Last().Name);
             Assert.AreEqual("SuccessfullyAttachIngredientChild", ReturnedRecipe.Ingredients.Last().Name);
         }
-
-      
-        [TestMethod]
-        public void SuccessfullyDetachIngredientChild()
+         
+        [TestMethod] 
+        [TestCategory("Attach-Detach")]
+        public void SuccessfullyDetachFirstIngredientChild()
         {
+            IGenericController<Recipe> DetachController = new RecipesController(Repo);
+            BaseSuccessfullyDetachIngredientChild(Repo, Controller, DetachController, UIControllerType.ShoppingLists, 0);
+        }
 
+        [Ignore]
+        [TestMethod]
+        [TestCategory("Attach-Detach")]
+        public void DetachARangeOfIngredientChildren()
+        { // RemoveRange
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        [TestCategory("Attach-Detach")]
+        public void DetachTheLastIngredientChild()
+        { // RemoveAt
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        [TestCategory("Attach-Detach")]
+        public void DetachAllIngredientChildren()
+        { // RemoveAll
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
         }
     }
 }

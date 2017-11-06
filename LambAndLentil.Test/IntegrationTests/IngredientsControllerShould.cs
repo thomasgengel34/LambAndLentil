@@ -190,34 +190,10 @@ namespace LambAndLentil.Test.Infrastructure
         [TestCategory("Edit")]
         public void UpdateTheModificationDateBetweenPostedEdits()
         {
-            // Arrange 
-            IngredientsController ControllerPost = new IngredientsController(Repo);
-            IngredientsController ControllerPost1 = new IngredientsController(Repo);
-            Ingredient = new Ingredient
-            {
-                ID = int.MaxValue - 300,
-                Name = "002 Test Mod",
-                Description = "test IngredientsControllerShould.UpdateTheModificationDateBetweenPostedEdits"
-            };
-            DateTime CreationDate = Ingredient.CreationDate;
-            DateTime mod = Ingredient.ModifiedDate;
-
-            // Act
-            ControllerPost.PostEdit(Ingredient);
-
-            Ingredient.Description += "I've been edited to delay a bit";
-
-            ControllerPost1.PostEdit(Ingredient);
-
-            ReturnedIngredient = Repo.GetById(Ingredient.ID);
-
-            DateTime shouldBeSameDate = ReturnedIngredient.CreationDate;
-            DateTime shouldBeLaterDate = ReturnedIngredient.ModifiedDate;
-
-            // Assert
-            Assert.AreEqual(CreationDate, shouldBeSameDate);
-            Assert.AreNotEqual(mod, shouldBeLaterDate);
-
+            Ingredient.Name = "Test UpdateTheModificationDateBetweenPostedEdits";
+            Ingredient.ID = 6000;
+            Repo.Save(Ingredient);
+            BaseUpdateTheModificationDateBetweenPostedEdits(Repo, Controller, Ingredient);
         }
 
 

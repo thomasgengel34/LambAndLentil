@@ -19,18 +19,16 @@ namespace LambAndLentil.Test.BasicControllerTests
     [TestClass]
     [TestCategory("Integration")]
     [TestCategory("ShoppingListsController")]
-    public class ShoppingListsControllerShould
-    {
-
-        static IRepository<ShoppingList> Repo;
+    public class ShoppingListsControllerShould : BaseControllerTest<ShoppingList>
+    { 
         static ShoppingListsController Controller;
-        static ShoppingList vm;
+        static ShoppingList ShoppingList;
 
         public ShoppingListsControllerShould()
         {
             Repo = new TestRepository<ShoppingList>();
             Controller = new ShoppingListsController(Repo);
-            vm = new ShoppingList
+            ShoppingList = new ShoppingList
             {
                 ID = 400,
                 Name = "ShoppingListsControllerShould"
@@ -45,8 +43,8 @@ namespace LambAndLentil.Test.BasicControllerTests
 
             // Act
             ViewResult vr = Controller.Create(UIViewType.Create);
-            ShoppingList vm = (ShoppingList)vr.Model;
-            string modelName = vm.Name;
+            ShoppingList ShoppingList = (ShoppingList)vr.Model;
+            string modelName = ShoppingList.Name;
 
             // Assert 
             Assert.AreEqual(vr.ViewName, UIViewType.Details.ToString());
@@ -59,12 +57,12 @@ namespace LambAndLentil.Test.BasicControllerTests
         {
             // Arrange 
             ShoppingListsController Controller = new ShoppingListsController(Repo);
-            ShoppingList vm = new ShoppingList
+            ShoppingList ShoppingList = new ShoppingList
             {
                 Name = "test"
             };
             // Act
-            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.PostEdit(vm);
+            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.PostEdit(ShoppingList);
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
 
             var routeValues = rtrr.RouteValues.Values;
@@ -89,15 +87,15 @@ namespace LambAndLentil.Test.BasicControllerTests
             ShoppingListsController Controller3 = new ShoppingListsController(Repo);
             ShoppingListsController Controller4 = new ShoppingListsController(Repo);
             ShoppingListsController Controller5 = new ShoppingListsController(Repo);
-            ShoppingList vm = new ShoppingList
+            ShoppingList ShoppingList = new ShoppingList
             {
                 Name = "0000 test"
             };
 
             // Act 
-            ActionResult ar1 = Controller1.PostEdit(vm);
+            ActionResult ar1 = Controller1.PostEdit(ShoppingList);
             ViewResult view1 = Controller2.Index();
-            IEnumerable<ShoppingList> ListEntity= (IEnumerable<ShoppingList>)view1.Model;
+            IEnumerable<ShoppingList> ListEntity = (IEnumerable<ShoppingList>)view1.Model;
             var result = (from m in ListEntity
                           where m.Name == "0000 test"
                           select m).AsQueryable();
@@ -109,14 +107,14 @@ namespace LambAndLentil.Test.BasicControllerTests
 
 
             // now edit it
-            vm.Name = "0000 test Edited";
-            vm.ID = item.ID;
-            ActionResult ar2 = Controller3.PostEdit(vm);
+            ShoppingList.Name = "0000 test Edited";
+            ShoppingList.ID = item.ID;
+            ActionResult ar2 = Controller3.PostEdit(ShoppingList);
             ViewResult view2 = Controller4.Index();
             List<ShoppingList> ListEntity2 = (List<ShoppingList>)view2.Model;
             ShoppingList result2 = (from m in ListEntity2
-                                      where m.Name == "0000 test Edited"
-                                      select m).AsQueryable().FirstOrDefault();
+                                    where m.Name == "0000 test Edited"
+                                    select m).AsQueryable().FirstOrDefault();
 
 
 
@@ -138,7 +136,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             ShoppingListsController Controller3 = new ShoppingListsController(Repo);
             ShoppingListsController Controller4 = new ShoppingListsController(Repo);
             ShoppingListsController Controller5 = new ShoppingListsController(Repo);
-            ShoppingList vm = new ShoppingList
+            ShoppingList ShoppingList = new ShoppingList
             {
                 Name = "0000 test",
                 Description = "SaveEditedShoppingListWithDescriptionChange Pre-test"
@@ -146,23 +144,23 @@ namespace LambAndLentil.Test.BasicControllerTests
 
 
             // Act 
-            ActionResult ar1 = Controller1.PostEdit(vm);
+            ActionResult ar1 = Controller1.PostEdit(ShoppingList);
             ViewResult view1 = Controller2.Index();
-            List<ShoppingList> ListEntity= (List<ShoppingList>)view1.Model;
+            List<ShoppingList> ListEntity = (List<ShoppingList>)view1.Model;
             ShoppingList shoppingListVM = (from m in ListEntity
-                                             where m.Name == "0000 test"
-                                             select m).AsQueryable().FirstOrDefault();
+                                           where m.Name == "0000 test"
+                                           select m).AsQueryable().FirstOrDefault();
 
             // verify initial value:
             Assert.AreEqual("SaveEditedShoppingListWithDescriptionChange Pre-test", shoppingListVM.Description);
 
 
             // now edit it
-            vm.ID = shoppingListVM.ID;
-            vm.Name = "0000 test Edited";
-            vm.Description = "SaveEditedShoppingListWithDescriptionChange Post-test";
+            ShoppingList.ID = shoppingListVM.ID;
+            ShoppingList.Name = "0000 test Edited";
+            ShoppingList.Description = "SaveEditedShoppingListWithDescriptionChange Post-test";
 
-            ActionResult ar2 = Controller3.PostEdit(vm);
+            ActionResult ar2 = Controller3.PostEdit(ShoppingList);
             ViewResult view2 = Controller4.Index();
             List<ShoppingList> ListEntity2 = (List<ShoppingList>)view2.Model;
             var result2 = (from m in ListEntity2
@@ -181,8 +179,8 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void ActuallyDeleteAShoppingListFromTheDatabase()
         {
             // Arrange  
-               ShoppingList item = new ShoppingList { ID = 1, Description = "test ActuallyDeleteAShoppingListFromTheDatabase" };
-        
+            ShoppingList item = new ShoppingList { ID = 1, Description = "test ActuallyDeleteAShoppingListFromTheDatabase" };
+
             Repo.Add(item);
 
             //Act
@@ -216,95 +214,53 @@ namespace LambAndLentil.Test.BasicControllerTests
             //ControllerEdit.PostEdit(shoppingListVM);
             //ViewResult view = ControllerView.Index();
             //ShoppingList ListEntity= (ShoppingList)view.Model;
-           // var result = (from m in ListEntity.ShoppingLists
+            // var result = (from m in ListEntity.ShoppingLists
             //              where m.Name == "001 Test "
-           //               select m).AsQueryable();
+            //               select m).AsQueryable();
 
-           // ShoppingList shoppingList = result.FirstOrDefault();
+            // ShoppingList shoppingList = result.FirstOrDefault();
 
-           // DateTime shouldBeSameDate = shoppingList.CreationDate;
-           
-                // Assert
+            // DateTime shouldBeSameDate = shoppingList.CreationDate;
+
+            // Assert
             //    Assert.AreEqual(CreationDate, shouldBeSameDate);
-            
+
         }
 
-        [Ignore]
         [TestMethod]
         [TestCategory("Edit")]
         public void UpdateTheModificationDateBetweenPostedEdits()
         {
-            // Arrange
-            JSONRepository<ShoppingList> Repo = new JSONRepository<ShoppingList>();
-            //ShoppingListsController ControllerPost = new ShoppingListsController(Repo);
-            //ShoppingListsController ControllerPost1 = new ShoppingListsController(Repo);
-            //ShoppingListsController ControllerView = new ShoppingListsController(Repo);
-            //ShoppingListsController ControllerView1 = new ShoppingListsController(Repo);
-            //ShoppingListsController ControllerDelete = new ShoppingListsController(Repo);
-
-            ShoppingList vm = new ShoppingList
-            {
-                Name = "002 Test Mod"
-            };
-            DateTime CreationDate = vm.CreationDate;
-            DateTime mod = vm.ModifiedDate;
-
-            // Act
-          //  ControllerPost.PostEdit(vm);
-
-         //   ViewResult view = ControllerView.Index();
-        //    ShoppingList vm2 = (ShoppingList)view.Model;
-            //var result = (from m in vm2.ShoppingLists
-            //              where m.Name == "002 Test Mod"
-            //              select m).AsQueryable();
-
-            //vm2.Description = "I've been edited to delay a bit";
-
-            //ControllerPost1.PostEdit(vm2);
-
-
-            //ViewResult view1 = ControllerView.Index();
-            //ShoppingList ListEntity= (ShoppingList)view1.Model;
-            //var result1 = (from m in ListEntity.ShoppingLists
-            //               where m.Name == "002 Test Mod"
-            //               select m).AsQueryable();
-
-            //ShoppingList item = result1.FirstOrDefault();
-
-            //DateTime shouldBeSameDate = item.CreationDate;
-            //DateTime shouldBeLaterDate = item.ModifiedDate;
-
-             
-            //    // Assert
-            //    Assert.AreEqual(CreationDate, shouldBeSameDate);
-            //    Assert.AreNotEqual(mod, shouldBeLaterDate);
-        
+            ShoppingList.Name = "Test UpdateTheModificationDateBetweenPostedEdits";
+            ShoppingList.ID = 6000;
+            Repo.Save(ShoppingList);
+            BaseUpdateTheModificationDateBetweenPostedEdits(Repo, Controller, ShoppingList);
         }
 
-        internal ShoppingList GetShoppingList(IRepository<ShoppingList> Repo,  string description)
-        { 
-            
-            vm.ID = int.MaxValue;
-            vm.Description = description;
-            Controller.PostEdit(vm);
+        internal ShoppingList GetShoppingList(IRepository<ShoppingList> Repo, string description)
+        {
 
-            ShoppingList result =  (from m in Repo.GetAll()
-                                  where m.Description == vm.Description
-                                  select m).AsQueryable().FirstOrDefault();
+            ShoppingList.ID = int.MaxValue;
+            ShoppingList.Description = description;
+            Controller.PostEdit(ShoppingList);
+
+            ShoppingList result = (from m in Repo.GetAll()
+                                   where m.Description == ShoppingList.Description
+                                   select m).AsQueryable().FirstOrDefault();
             return result;
         }
 
-       
+
         [TestMethod]
         [TestCategory("Attach-Detach")]
         public void AttachAnExistingIngredientToAnExistingShoppingList()
         {
             // Arrange 
-            JSONRepository<Ingredient> repoIngredient = new TestRepository< Ingredient>();
+            JSONRepository<Ingredient> repoIngredient = new TestRepository<Ingredient>();
             //ShoppingListsController Controller = new ShoppingListsController(Repo );
 
-            ShoppingList  slVM = GetShoppingList(Repo,  "test AttachAnExistingIngredientToAnExistingShoppingList");
-            Ingredient ingredient = new Ingredient { ID = 500, Description="test AttachAnExistingIngredientToAnExistingShoppingList" };
+            ShoppingList slVM = GetShoppingList(Repo, "test AttachAnExistingIngredientToAnExistingShoppingList");
+            Ingredient ingredient = new Ingredient { ID = 500, Description = "test AttachAnExistingIngredientToAnExistingShoppingList" };
             repoIngredient.Add(ingredient);
             // Act
             Controller.AttachIngredient(slVM.ID, ingredient);
@@ -318,7 +274,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.AreEqual(1, returnedShoppingList.Ingredients.Count());
             // how do I know the correct ingredient was added?
             Assert.AreEqual(ingredient.ID, returnedShoppingList.Ingredients.First().ID);
-             
+
         }
 
         [Ignore]
@@ -434,7 +390,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         [Ignore]
         [TestMethod]
         public void DeleteAPrintableShoppingList()
-        { 
+        {
             // Arrange
 
             // Act
@@ -469,7 +425,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         [Ignore]
         [TestMethod]
         public void EditACheckableShoppingList()
-        {             
+        {
             // Arrange
 
             // Act
@@ -482,7 +438,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestMethod]
         public void DisplayACheckableShoppingList()
         {
-           
+
             // Arrange
 
             // Act
@@ -496,7 +452,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestMethod]
         public void DeleteACheckableShoppingList()
         {
-             
+
             // Arrange
 
             // Act
@@ -508,20 +464,13 @@ namespace LambAndLentil.Test.BasicControllerTests
         [Ignore]
         [TestMethod]
         public void DownloadACheckableShoppingList()
-        {  
+        {
             // Arrange
 
             // Act
 
             // Assert
             Assert.Fail();
-        }
-
-        [ClassCleanup()]
-        public static void ClassCleanup()
-        {
-            ShoppingListsController_Test_Should.ClassCleanup();
-
         }
     }
 }

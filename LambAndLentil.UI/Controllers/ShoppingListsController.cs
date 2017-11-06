@@ -17,7 +17,7 @@ namespace LambAndLentil.UI.Controllers
         }
     }
 
-    public class ShoppingListsGenericController<T> : BaseController<ShoppingList>
+    public class ShoppingListsGenericController<T> : BaseController<ShoppingList>,IGenericController<T>
           where T : ShoppingList
     {
         public ShoppingListsGenericController(IRepository<ShoppingList> repository) : base(repository)
@@ -61,9 +61,9 @@ namespace LambAndLentil.UI.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult PostEdit([Bind(Include = "ID,Name,Description, Author, CreationDate, ModifiedDate,  AddedByUser, ModifiedByUser")] ShoppingList shoppingListVM)
+        public ActionResult PostEdit([Bind(Include = "ID,Name,Description, Author, CreationDate, ModifiedDate,  AddedByUser, ModifiedByUser")] T t)
         {
-            return BasePostEdit(Repo,  shoppingListVM);
+            return BasePostEdit(Repo,  t);
         }
 
         // GET: ShoppingList/Delete/5
@@ -81,15 +81,15 @@ namespace LambAndLentil.UI.Controllers
             return BaseDeleteConfirmed(Repo,  UIControllerType.ShoppingLists, id);
         }
 
-        public ActionResult AttachIngredient(int? shoppingListID, Ingredient ingredient)
+        public ActionResult AttachIngredient(int? shoppingListID, Ingredient ingredient, int orderNumber=0)
         {
-            return BaseAttach<Ingredient>(Repo, shoppingListID, ingredient);
+            return BaseAttach<Ingredient>(Repo, shoppingListID, ingredient, AttachOrDetach.Attach, orderNumber);
         }
 
 
-        public ActionResult DetachIngredient(int? shoppingListID, Ingredient ingredient)
+        public ActionResult DetachIngredient(int? shoppingListID, Ingredient ingredient, int orderNumber = 0)
         {
-            return BaseAttach<Ingredient>(Repo, shoppingListID, ingredient, AttachOrDetach.Detach);
+            return BaseAttach<Ingredient>(Repo, shoppingListID, ingredient, AttachOrDetach.Detach, orderNumber);
         }
 
         public void AddIngredientToIngredientsList(int id = 1, string addedIngredient = "")

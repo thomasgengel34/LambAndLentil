@@ -19,7 +19,7 @@ namespace LambAndLentil.UI.Controllers
     }
 
 
-    public class PersonsGenericController<T> : BaseController<Person> 
+    public class PersonsGenericController<T> : BaseController<Person> ,IGenericController<T>
         where T: Person, new()
         //where Person :  BaseEntity,  IEntity
         //  where Person : BaseVM, IEntity, new()
@@ -64,19 +64,19 @@ namespace LambAndLentil.UI.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult PostEdit([Bind(Include = "ID,FirstName,LastName, Name, Description, Weight,  MinCalories, MaxCalories, NoGarlic, CreationDate, ModifiedDate,  AddedByUser, ModifiedByUser")] Person person)
+        public ActionResult PostEdit([Bind(Include = "ID,FirstName,LastName, Name, Description, Weight,  MinCalories, MaxCalories, NoGarlic, CreationDate, ModifiedDate,  AddedByUser, ModifiedByUser")] T t)
         {
-          //  person.Name = String.Concat(person.FirstName, " ", person.LastName);
+          
 
-            return BasePostEdit(Repo, person);
+            return BasePostEdit(Repo, t);
 
         }
 
 
         // GET: Persons/Delete/5
         [ActionName("Delete")]
-        public ActionResult Delete(int id = 1)
-        {
+        public ActionResult Delete(int id = 1, UIViewType actionMethod = UIViewType.Delete)
+        { 
             return BaseDelete(Repo,  UIControllerType.Persons, id);
         }
 
@@ -88,12 +88,12 @@ namespace LambAndLentil.UI.Controllers
             return BaseDeleteConfirmed(Repo, UIControllerType.Persons, id);
         }
 
-        public ActionResult AttachIngredient(int? personID, Ingredient ingredient)
+        public ActionResult AttachIngredient(int? personID, Ingredient ingredient, int orderNumber=0)
           {
             return BaseAttach< Ingredient>(Repo, personID, ingredient);
         }
 
-        public ActionResult RemoveIngredient(int? personID, Ingredient ingredient)
+        public ActionResult DetachIngredient(int? personID, Ingredient ingredient, int orderNumber = 0)
         {
             return BaseAttach< Ingredient>(Repo, personID, ingredient, AttachOrDetach.Detach);
         }

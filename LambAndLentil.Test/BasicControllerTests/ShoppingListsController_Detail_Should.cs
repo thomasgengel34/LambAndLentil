@@ -48,19 +48,8 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [TestMethod]
         public void ReturnDeleteWithActionMethodDeleteWithEmptyResult()
-        { //  Details view  with success  "Here it is!"
-
-            // Arrange
-
-            // Act
-            ViewResult view = (ViewResult)Controller.Details(int.MaxValue, UIViewType.Delete);
-
-
-            // Assert
-            Assert.IsNotNull(view);
-            Assert.AreEqual("Details", view.ViewName);
-            Assert.IsInstanceOfType(view.Model, typeof(ShoppingList));
-            // no message
+        {
+            BaseReturnDeleteWithActionMethodDeleteWithEmptyResult(Controller);
         }
 
 
@@ -366,6 +355,13 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Assert
             Assert.Fail();
         }
+
+        [TestMethod]
+        public void DeleteAFoundIngredient()
+        {
+            BaseDeleteAFoundEntity(Controller);
+        }
+
         // the following are not really testable.  I am keeping them to remind me of that.
         //[TestMethod]
         //public void ShoppingListsCtr_DetailsIngredientIDIsNotANumber() { }

@@ -75,7 +75,14 @@ namespace LambAndLentil.Domain.Concrete
             }
         }
 
-        public void AttachAnIndependentChild<TChild>(int parentID, TChild child)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TChild"></typeparam>
+        /// <param name="parentID"></param>
+        /// <param name="child"></param>
+        /// <param name="orderNumber">zero-based index in list currently used only in Detach version</param>
+        public void AttachAnIndependentChild<TChild>(int parentID, TChild child, int orderNumber = 0)
             where TChild : BaseEntity, IEntity
         {
             char[] charsToTrim = { 'V', 'M' };
@@ -85,7 +92,7 @@ namespace LambAndLentil.Domain.Concrete
             T parent = JsonConvert.DeserializeObject<T>(File.ReadAllText(String.Concat(FullPath, parentID, ".txt")));
 
             if (parent != null && child != null)
-            { 
+            {
                 if (className == "Ingredient")   // can only attach an Ingredient   
                 {
                     parent.Ingredients.Add(child as Ingredient);
@@ -207,7 +214,7 @@ namespace LambAndLentil.Domain.Concrete
             }
         }
 
-     
+
 
 
         public int Count()
@@ -218,7 +225,14 @@ namespace LambAndLentil.Domain.Concrete
             return fileCount;
         }
 
-        public void DetachAnIndependentChild<TChild>(int parentID, TChild child)
+        /// <summary>
+        /// Detach a child that can exist on its own without the parent entity
+        /// </summary>
+        /// <typeparam name="TChild">the child that is attached</typeparam>
+        /// <param name="parentID">ID of the parent</param>
+        /// <param name="child">actual entity to be detached</param>
+        /// <param name="orderNumber">zero-based index on the list of children</param>
+        public void DetachAnIndependentChild<TChild>(int parentID, TChild child, int orderNumber = 0)
             where TChild : BaseEntity, IEntity
         {
             char[] charsToTrim = { 'V', 'M' };
@@ -230,24 +244,22 @@ namespace LambAndLentil.Domain.Concrete
                 if (className == "Ingredient")
                 {
                     Ingredient ingredientChild = child as Ingredient;
-                   parent.Ingredients.Remove(ingredientChild);
-                    // cannot attach a child
-                    // do nothing
-                    // TODO: think about returning an error message. But user should not be given the chance to do this, so, aside from messing with the query string, how is this possible?  Make sure this is a POST request so no one can mess with the query string and get here. 
+                    //    bool successfulRemoval = parent.Ingredients.Remove(ingredientChild); 
+                    parent.Ingredients.RemoveAt(orderNumber);
+                    Update(parent as T, parent.ID);
                 }
                 if (className == "Recipe")   // can only attach an Ingredient   
                 {
                     Recipe recipe = JsonConvert.DeserializeObject<Recipe>(File.ReadAllText(String.Concat(FullPath, parentID, ".txt")));
                     if (childName == "Ingredient")
                     {
-                        Ingredient ingredient = child as Ingredient;
-                        recipe.Ingredients.Remove(ingredient);
-                        Remove(recipe as T);
+                        recipe.Ingredients.RemoveAt(orderNumber);
                     }
                     else
                     {
                         // see notes above.  How did we get here? Try to and figure out how to block it. 
                     }
+                    Update(recipe as T, parent.ID);
                 }
                 else if (className == "Menu")   // can  attach an Ingredient or recipe
                 {
@@ -255,19 +267,14 @@ namespace LambAndLentil.Domain.Concrete
                         (String.Concat(FullPath, parentID, ".txt")));
 
                     if (childName == "Ingredient")
-                    {
-                        if (menu.Ingredients == null)
-                        {
-                            menu.Ingredients = new List<Ingredient>();
-                        }
-                        menu.Ingredients.Remove(child as Ingredient);
-                        IEntity menu1 = menu;
-                        Remove((T)menu1);
+                    { 
+                        menu.Ingredients.RemoveAt(orderNumber); 
                     }
                     else if (childName == "Recipe")
                     {
                         menu.Recipes.Remove(child as Recipe);
                     }
+                    Update(menu as T, parent.ID);
                 }
                 else if (className == "Plan")   // can  attach an Ingredient or recipe or menu
                 {
@@ -276,8 +283,7 @@ namespace LambAndLentil.Domain.Concrete
 
                     if (childName == "Ingredient")
                     {
-                        plan.Ingredients.Remove(child as Ingredient);
-
+                        plan.Ingredients.RemoveAt(orderNumber);
                     }
                     else if (childName == "Recipe")
                     {
@@ -285,14 +291,10 @@ namespace LambAndLentil.Domain.Concrete
                     }
                     else if (childName == "Menu")
                     {
-                        if (plan.Menus == null)
-                        {
-                            plan.Menus = new List<Menu>();
-                        }
-
-                        plan.Menus.Remove(child as Menu);
+                         parent.Ingredients.RemoveAt(orderNumber);
+                        Update(parent as T, parent.ID);
                     }
-                    Update(plan as T, plan.ID);
+                    Update(plan as T, parent.ID);
                 }
                 else if (className == "ShoppingList")   // can  attach an Ingredient or recipe or menu or plan
                 {
@@ -300,8 +302,8 @@ namespace LambAndLentil.Domain.Concrete
                         (String.Concat(FullPath, parentID, ".txt")));
 
                     if (childName == "Ingredient")
-                    {
-                        shoppingList.Ingredients.Remove(child as Ingredient);
+                    { 
+                        shoppingList.Ingredients.RemoveAt(orderNumber);
                     }
                     else if (childName == "Recipe")
                     {
@@ -315,6 +317,7 @@ namespace LambAndLentil.Domain.Concrete
                     {
                         shoppingList.Plans.Remove(child as Plan);
                     }
+                    Update(shoppingList as T, parent.ID);
                 }
                 else if (className == "Person")
                 {
@@ -323,11 +326,8 @@ namespace LambAndLentil.Domain.Concrete
 
                     if (childName == "Ingredient")
                     {
-                        if (person.Ingredients == null)
-                        {
-                            person.Ingredients = new List<Ingredient>();
-                        }
-                        person.Ingredients.Remove(child as Ingredient);
+                        parent.Ingredients.RemoveAt(orderNumber);
+                        Update(parent as T, parent.ID);
                     }
                     else if (childName == "Recipe")
                     {
@@ -345,6 +345,7 @@ namespace LambAndLentil.Domain.Concrete
                     {
                         person.ShoppingLists.Remove(child as ShoppingList);
                     }
+                    Update(parent as T, parent.ID);
                 }
             }
         }
@@ -386,52 +387,51 @@ namespace LambAndLentil.Domain.Concrete
 
 
         public void Update(T entity, int? key)
+        {
+            T oldEntity = GetById(entity.ID);
+            if (oldEntity != null)
             {
-                T oldEntity = GetById(entity.ID);
-                if (oldEntity != null)
+                entity.CreationDate = oldEntity.CreationDate;
+                entity.AddedByUser = oldEntity.AddedByUser;
+                entity.ModifiedDate = DateTime.Now;
+                entity.ModifiedByUser = WindowsIdentity.GetCurrent().Name;
+
+                if (typeof(T) == typeof(Person))
                 {
-                    entity.CreationDate = oldEntity.CreationDate;
-                    entity.AddedByUser = oldEntity.AddedByUser;
-                    entity.ModifiedDate = DateTime.Now;
-                    entity.ModifiedByUser = WindowsIdentity.GetCurrent().Name;
+                    Person person = entity as Person;
+                    Person oldPerson = oldEntity as Person;
 
-                    if (typeof(T) == typeof(Person))
+                    /* first name changed, last name did not, then name changes, full name changes
+                     * last name changed, first name did not, then name changes, full name changes
+                     * name changes but full name did not, first name ="" and last name ="", fullname=name
+                     * 
+                     * full name changes but name did not, first name ="" and last name ="", name=fullname  */
+                    if (person.Name != oldPerson.Name || person.FullName != oldPerson.FullName)
                     {
-                        Person person = entity as Person;
-                        Person oldPerson = oldEntity as Person;
+                        person.FirstName = "";
+                        person.LastName = "";
 
-                        /* first name changed, last name did not, then name changes, full name changes
-                         * last name changed, first name did not, then name changes, full name changes
-                         * name changes but full name did not, first name ="" and last name ="", fullname=name
-                         * 
-                         * full name changes but name did not, first name ="" and last name ="", name=fullname  */
-                        if (person.Name != oldPerson.Name || person.FullName != oldPerson.FullName)
+                        if (person.Name != oldPerson.Name)
                         {
-                            person.FirstName = "";
-                            person.LastName = "";
-
-                            if (person.Name != oldPerson.Name)
-                            {
-                                person.FullName = person.Name;
-                            }
-                            else if (person.FullName != oldPerson.FullName)
-                            {
-                                person.Name = person.FullName;
-                            }
+                            person.FullName = person.Name;
                         }
-                        else
+                        else if (person.FullName != oldPerson.FullName)
                         {
-                            person.FullName = person.GetName(person.FirstName, person.LastName);
+                            person.Name = person.FullName;
                         }
-                        if (entity.Name != oldEntity.Name)
-                        {
-                            person.FullName = entity.Name;
-                        }
-
-                        person.Name = person.FullName;
-                        entity = person as T;
                     }
-                } 
+                    else
+                    {
+                        person.FullName = person.GetName(person.FirstName, person.LastName);
+                    }
+                    if (entity.Name != oldEntity.Name)
+                    {
+                        person.FullName = entity.Name;
+                    }
+
+                    entity.Name = person.FullName; 
+                }
+            }
             Add(entity);
         }
 

@@ -3,6 +3,7 @@ using LambAndLentil.Domain.Abstract;
 using LambAndLentil.Domain.Concrete;
 using LambAndLentil.Domain.Entities;
 using LambAndLentil.Tests.Infrastructure;
+using LambAndLentil.UI;
 using LambAndLentil.UI.Controllers;
 using LambAndLentil.UI.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -167,20 +168,11 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         }
 
-        [TestMethod] 
-        public void FirstPageIsCorrectCountIsSix()
+        [TestMethod]
+        [TestCategory("Index")]
+        public void FirstPageIsCorrect()
         {
-            // Arrange 
-            ListEntity= ( ListEntity<Ingredient>)(Controller.Index(1)).Model;
-            Ingredient[] ingrArray1 = ListEntity.ListT.ToArray();
-            Controller.PageSize = 8;
-
-            // Act
-            ViewResult view1 = Controller.Index(1);
-            int count1 = (( ListEntity<Ingredient>)(view1.Model)).ListT.Count();
-
-            // Assert 
-            Assert.AreEqual(6, count1);
+            BaseFirstPageIsCorrect(Repo, Controller, UIControllerType.Ingredients);
         }
 
         [TestMethod] 
@@ -330,16 +322,9 @@ namespace LambAndLentil.Test.BasicControllerTests
 
 
         [TestMethod] 
-        public void CanPaginate_ArrayLengthIsCorrect()
+        public void CanPaginateArrayLengthIsCorrect()
         {
-            // Arrange
-
-
-            // Act
-            var result = ( ListEntity<Ingredient>)(Controller.Index(1)).Model;
-
-            // Assert 
-            Assert.IsTrue(result.ListT.Count() == 6);
+            BaseCanPaginateArrayLengthIsCorrect(Repo, Controller);
         }
 
       
@@ -401,15 +386,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestMethod] 
         public void CanSendPaginationViewModel_TotalItemsCorrect()
         {
-            // Arrange 
-
-            // Act 
-             ListEntity<Ingredient> resultT = ( ListEntity<Ingredient>)((ViewResult)Controller.Index(2)).Model;
-            PagingInfo pageInfoT = resultT.PagingInfo;
-            //   PagingInfo pageInfoT =ListEntity.PagingInfo;
-
-            // Assert 
-            Assert.AreEqual(6, pageInfoT.TotalItems);
+            BaseCanSendPaginationViewModel_TotalItemsCorrect(Repo, Controller, UIControllerType.Ingredients);
         }
 
         [TestMethod] 

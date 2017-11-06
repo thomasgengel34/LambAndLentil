@@ -55,9 +55,9 @@ namespace LambAndLentil.Test.BasicControllerTests
       
 
         [TestMethod]
-        [TestCategory("Remove")]
-        public void DetachAFoundShoppingList()
-        {   // does not actually remove, just sets up to remove it.
+        [TestCategory("Attach-Detach")]
+        public void SuccessfullyDeleteAFoundShoppingList()
+        {   // does not actually detach, just sets up to remove it.
             // TODO: verify "Are you sure you want to delete this?" message shows up.
             // Arrange
             int count = Repo.Count();

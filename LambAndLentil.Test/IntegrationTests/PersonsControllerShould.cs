@@ -19,17 +19,16 @@ namespace LambAndLentil.Test.BasicControllerTests
     [TestClass]
     [TestCategory("Integration")]
     [TestCategory("PersonController")]
-    public class PersonsControllerShould
-    {
-        static IRepository<Person> Repo;
+    public class PersonsControllerShould : BaseControllerTest<Person>
+    { 
         static PersonsController Controller;
-        static Person personVM;
+        static Person Person;
 
         public PersonsControllerShould()
         {
             Repo = new TestRepository<Person>();
             Controller = new PersonsController(Repo);
-            personVM = new Person
+            Person = new Person
             {
                 ID = 1000,
                 Description = "test PersonControllerShould"
@@ -188,7 +187,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             //Act
             Controller.DeleteConfirmed(person.ID);
             var deletedItem = (from m in Repo.GetAll()
-                               where m.Description == personVM.Name
+                               where m.Description == Person.Name
                                select m).AsQueryable();
 
             //Assert
@@ -201,7 +200,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         {
             // Arrange
             DateTime CreationDate = new DateTime(2010, 1, 1);
-            Person personVM = new Person(CreationDate)
+            Person Person = new Person(CreationDate)
             {
                 Description = "001 Test ",
                 ID = 37
@@ -211,7 +210,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             PersonsController ControllerDelete = new PersonsController(Repo);
 
             // Act
-            ControllerEdit.PostEdit(personVM);
+            ControllerEdit.PostEdit(Person);
             ViewResult view = ControllerView.Index();
             List<Person> ListEntity= (List<Person>)view.Model;
             var result = (from m in ListEntity
@@ -227,57 +226,15 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.AreEqual(CreationDate, shouldBeSameDate);
         }
 
-        [Ignore]
+        
         [TestMethod]
         [TestCategory("Edit")]
         public void UpdateTheModificationDateBetweenPostedEdits()
         {
-            // Arrange 
-            PersonsController ControllerPost = new PersonsController(Repo);
-            PersonsController ControllerPost1 = new PersonsController(Repo);
-            PersonsController ControllerView = new PersonsController(Repo);
-            PersonsController ControllerView1 = new PersonsController(Repo);
-            PersonsController ControllerDelete = new PersonsController(Repo);
-
-            Person vm = new Person
-            {
-                FirstName = "002 Test Mod",
-                LastName="",
-                Description = "Test.UpdateModDate"
-            };
-            DateTime CreationDate = vm.CreationDate;
-            DateTime mod = vm.ModifiedDate;
-
-            // Act
-            ControllerPost.PostEdit(vm);
-            ViewResult view = ControllerView.Index();
-            List<Person> ListEntity= (List<Person>)view.Model;
-            var result = (from m in ListEntity
-                          where m.Description == "Test.UpdateModDate"
-                          select m).AsQueryable().FirstOrDefault();
-
-            Person person = Mapper.Map<Person>(result);
-
-
-            person.Description = "I've been edited to delay a bit";
-
-            ControllerPost1.PostEdit(person);
-
-
-            ViewResult view1 = ControllerView.Index();
-            ListEntity= (List<Person>)view1.Model;
-            var result1 = (from m in ListEntity
-                           where m.Description == "I've been edited to delay a bit"
-                           select m).AsQueryable().FirstOrDefault();
-
-            person = Mapper.Map<Person>(result1);
-
-            DateTime shouldBeSameDate = person.CreationDate;
-            DateTime shouldBeLaterDate = person.ModifiedDate;
-
-            // Assert
-            Assert.AreEqual(CreationDate, shouldBeSameDate);
-            Assert.AreNotEqual(mod, shouldBeLaterDate);
+            Person.Name = "Test UpdateTheModificationDateBetweenPostedEdits";
+            Person.ID = 6000;
+            Repo.Save(Person);
+            BaseUpdateTheModificationDateBetweenPostedEdits(Repo, Controller, Person);
         }
 
         internal Person GetPerson(IRepository<Person> Repo,  string description)
@@ -290,16 +247,10 @@ namespace LambAndLentil.Test.BasicControllerTests
             };
             Controller.PostEdit(vm);
 
-            Person personVM = ((from m in Repo.GetAll()
+            Person Person = ((from m in Repo.GetAll()
                                   where m.Description == description
                                   select m).AsQueryable()).FirstOrDefault();
-            return personVM;
-        }
-
-        [ClassCleanup()]
-        public static void ClassCleanup()
-        {
-            PersonsController_Test_Should.ClassCleanup();
-        }
+            return Person;
+        } 
     }
 }

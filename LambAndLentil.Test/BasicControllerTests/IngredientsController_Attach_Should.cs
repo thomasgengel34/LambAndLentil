@@ -7,13 +7,14 @@ using System.Web.Mvc;
 using LambAndLentil.Domain.Entities;
 using LambAndLentil.UI.Controllers;
 using System.Linq;
+using LambAndLentil.UI;
 
 namespace LambAndLentil.Test.BasicControllerTests
 {
-    
+
     [TestClass]
     public class IngredientsController_Attach_Should : IngredientsController_Test_Should
-    {  
+    {
         [TestMethod]
         [TestCategory("Attach-Detach")]
         public void SuccessfullyAttachIngredientChild()
@@ -24,25 +25,57 @@ namespace LambAndLentil.Test.BasicControllerTests
 
             // Act
             Controller.AttachIngredient(Ingredient.ID, child);
-            ReturnedIngredient=Repo.GetById(Ingredient.ID);
-            // Assert
-           //  Assert.AreEqual("Default", Ingredient.Ingredients.Last().Name);
-             Assert.AreEqual("SuccessfullyAttachIngredientChild", ReturnedIngredient.Ingredients.Last().Name);
-        }
-         
-        [TestMethod]
-        public void SuccessfullyDetachIngredientChild()
-        {
-            // Arrange
-            Ingredient child = new Ingredient() { ID = 3500, Name = "SuccessfullyAttachAndDetachhIngredientChild" };
-            Repo.Save(child);
-            Controller.AttachIngredient(Ingredient.ID, child);
-            // Act
-            Controller.DetachIngredient(Ingredient.ID, child);
             ReturnedIngredient = Repo.GetById(Ingredient.ID);
             // Assert
             //  Assert.AreEqual("Default", Ingredient.Ingredients.Last().Name);
-            Assert.AreEqual("SuccessfullySuccessfullyAttachAndDetachhIngredientChildIngredientChild", ReturnedIngredient.Ingredients.Last().Name);
-        } 
+            Assert.AreEqual("SuccessfullyAttachIngredientChild", ReturnedIngredient.Ingredients.Last().Name);
+        }
+
+        [TestMethod]
+        [TestCategory("Attach-Detach")]
+        public void SuccessfullyDetachFirstIngredientChild()
+        {
+            IGenericController<Ingredient> DetachController = new IngredientsController(Repo);
+            BaseSuccessfullyDetachIngredientChild(Repo,  Controller, DetachController, UIControllerType.ShoppingLists,0);
+        }
+
+        [Ignore]
+        [TestMethod]
+        [TestCategory("Attach-Detach")]
+        public void DetachARangeOfIngredientChildren()
+        { // RemoveRange
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        [TestCategory("Attach-Detach")]
+        public void DetachTheLastIngredientChild()
+        { // RemoveAt
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        [TestCategory("Attach-Detach")]
+        public void DetachAllIngredientChildren()
+        { // RemoveAll
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
     }
 }

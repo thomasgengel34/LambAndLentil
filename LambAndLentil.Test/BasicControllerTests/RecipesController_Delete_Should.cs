@@ -36,16 +36,10 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.Fail();
         }
 
-        [Ignore]
         [TestMethod]
-        public void ReturnIDetailsWhenIDIstFound()
+        public void ReturnDetailsWhenIDIsFound()
         {
-            // Arrange
-
-            // Act
-
-            // Assert
-            Assert.Fail();
+            BaseReturnDetailsWhenIDIsFound(Controller);
         }
 
 
@@ -57,17 +51,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestCategory("Delete")]
         public void DeleteAFoundRecipe()
         {
-            // Arrange
-
-
-            // Act 
-            var view = Controller.Delete(int.MaxValue - 1) as ViewResult;
-
-            // Assert
-            Assert.IsNotNull(view);
-            Assert.AreEqual(UIViewType.Details.ToString(), view.ViewName);
-
-
+            BaseDeleteAFoundEntity(Controller);
         }
 
         [TestMethod]

@@ -11,7 +11,7 @@ namespace LambAndLentil.Test.BasicControllerTests
     [TestCategory("PersonsController")]
     [TestCategory("Delete")]
     [TestClass]
-    public class PersonsController_Delete_Should:PersonsController_Test_Should
+    public class PersonsController_Delete_Should : PersonsController_Test_Should
     {
         public PersonsController_Delete_Should()
         {
@@ -54,15 +54,13 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestCategory("Delete")]
         public void DeleteAFoundPerson()
         {
-            // Arrange 
+            BaseDeleteAFoundEntity(Controller);
+        }
 
-            // Act  
-            ActionResult ar = Controller.Delete(int.MaxValue - 1);
-            string viewName = ((ViewResult)ar).ViewName;
-
-            // Assert
-            Assert.IsNotNull(ar);
-            Assert.AreEqual(UIViewType.Details.ToString(), viewName);
+        [TestMethod]
+        public void ReturnDetailsWhenIDIsFound()
+        {
+            BaseReturnDetailsWhenIDIsFound(Controller);
         }
 
 

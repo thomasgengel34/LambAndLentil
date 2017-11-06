@@ -19,13 +19,13 @@ namespace IntegrationTests
     [TestClass]
     [TestCategory("Integration")]
     [TestCategory("MenusController")]
-    public class MenusControllerShould:MenusController_Test_Should 
-    {  
+    public class MenusControllerShould : MenusController_Test_Should
+    {
         public MenusControllerShould()
         {
-              
+
         }
-         
+
 
         [TestMethod]
         public void CreateAnMenu()
@@ -85,10 +85,10 @@ namespace IntegrationTests
             // Act 
             ActionResult ar1 = Controller1.PostEdit(vm);
             ViewResult view1 = Controller2.Index();
-            List<Menu> ListEntity=  (List<Menu>)(( ListEntity<Menu>)view1.Model).ListT;
+            List<Menu> ListEntity = (List<Menu>)((ListEntity<Menu>)view1.Model).ListT;
             var menu = (from m in ListEntity
-                          where m.Name == "0000 test"
-                          select m).FirstOrDefault();
+                        where m.Name == "0000 test"
+                        select m).FirstOrDefault();
 
 
             // verify initial value:
@@ -99,10 +99,10 @@ namespace IntegrationTests
             vm.ID = menu.ID;
             ActionResult ar2 = Controller3.PostEdit(vm);
             ViewResult view2 = Controller4.Index();
-            List<Menu> ListEntity2 = (List<Menu>)(( ListEntity<Menu>)view2.Model).ListT;
+            List<Menu> ListEntity2 = (List<Menu>)((ListEntity<Menu>)view2.Model).ListT;
             Menu menu2 = (from m in ListEntity2
-                            where m.Name == "0000 test Edited"
-                            select m).AsQueryable().FirstOrDefault();
+                          where m.Name == "0000 test Edited"
+                          select m).AsQueryable().FirstOrDefault();
 
             // Assert
             Assert.AreEqual("0000 test Edited", menu2.Name);
@@ -130,10 +130,10 @@ namespace IntegrationTests
             // Act 
             ActionResult ar1 = Controller1.PostEdit(vm);
             ViewResult view1 = Controller2.Index();
-            List<Menu> ListEntity= (List<Menu>)(( ListEntity<Menu>)view1.Model).ListT;
+            List<Menu> ListEntity = (List<Menu>)((ListEntity<Menu>)view1.Model).ListT;
             Menu menu = (from m in ListEntity
-                           where m.Name == "0000 test"
-                           select m).AsQueryable().FirstOrDefault();
+                         where m.Name == "0000 test"
+                         select m).AsQueryable().FirstOrDefault();
 
             // verify initial value:
             Assert.AreEqual("0000 test", menu.Name);
@@ -144,10 +144,10 @@ namespace IntegrationTests
 
             ActionResult ar2 = Controller3.PostEdit(vm);
             ViewResult view2 = Controller4.Index();
-            List<Menu> ListEntity2 = (List<Menu>)(( ListEntity<Menu>)view2.Model).ListT;
-             menu = (from m in ListEntity2
-                             where m.Name == "0000 test Edited"
-                             select m).AsQueryable().FirstOrDefault();
+            List<Menu> ListEntity2 = (List<Menu>)((ListEntity<Menu>)view2.Model).ListT;
+            menu = (from m in ListEntity2
+                    where m.Name == "0000 test Edited"
+                    select m).AsQueryable().FirstOrDefault();
 
             // Assert
             Assert.AreEqual("0000 test Edited", menu.Name);
@@ -177,10 +177,10 @@ namespace IntegrationTests
             // Act 
             ActionResult ar1 = Controller1.PostEdit(vm);
             ViewResult view1 = Controller2.Index();
-            List<Menu> ListEntity= (List<Menu>)(( ListEntity<Menu>)view1.Model).ListT;
+            List<Menu> ListEntity = (List<Menu>)((ListEntity<Menu>)view1.Model).ListT;
             Menu menu = (from m in ListEntity
-                             where m.Name == "0000 test"
-                             select m).AsQueryable().FirstOrDefault();
+                         where m.Name == "0000 test"
+                         select m).AsQueryable().FirstOrDefault();
 
 
 
@@ -195,10 +195,10 @@ namespace IntegrationTests
 
             ActionResult ar2 = Controller3.PostEdit(vm);
             ViewResult view2 = Controller4.Index();
-            List<Menu> ListEntity2 = (List<Menu>)(( ListEntity<Menu>)view2.Model).ListT;
+            List<Menu> ListEntity2 = (List<Menu>)((ListEntity<Menu>)view2.Model).ListT;
             menu = (from m in ListEntity2
-                      where m.Name == "0000 test Edited"
-                      select m).AsQueryable().FirstOrDefault();
+                    where m.Name == "0000 test Edited"
+                    select m).AsQueryable().FirstOrDefault();
 
 
             // Assert
@@ -207,8 +207,8 @@ namespace IntegrationTests
 
         }
 
-       
-         [TestMethod]
+
+        [TestMethod]
         [TestCategory("Edit")]
         public void SaveTheCreationDateOnMenuCreationWithNoParameterCtor()
         {
@@ -221,7 +221,7 @@ namespace IntegrationTests
             // Assert
             Assert.AreEqual(CreationDate.Date, menu.CreationDate.Date);
         }
-          
+
 
         [TestMethod]
         [TestCategory("Edit")]
@@ -237,7 +237,7 @@ namespace IntegrationTests
             Assert.AreEqual(CreationDate, menu.CreationDate);
         }
 
-       
+
 
         [TestMethod]
         [TestCategory("Edit")]
@@ -274,10 +274,10 @@ namespace IntegrationTests
             // Act
             ControllerEdit.PostEdit(vm);
             ViewResult view = ControllerView.Index();
-            List<Menu> ListEntity= (List<Menu>)(( ListEntity<Menu>)view.Model).ListT;
+            List<Menu> ListEntity = (List<Menu>)((ListEntity<Menu>)view.Model).ListT;
             Menu menu = (from m in ListEntity
-                             where m.Name == "001 Test "
-                             select m).AsQueryable().FirstOrDefault(); 
+                         where m.Name == "001 Test "
+                         select m).AsQueryable().FirstOrDefault();
 
             DateTime shouldBeSameDate = menu.CreationDate;
 
@@ -290,46 +290,10 @@ namespace IntegrationTests
         [TestCategory("Edit")]
         public void UpdateTheModificationDateBetweenPostedEdits()
         {
-            // Arrange 
-            MenusController ControllerPost = new MenusController(Repo);
-            MenusController ControllerPost1 = new MenusController(Repo);
-            MenusController ControllerView = new MenusController(Repo);
-            MenusController ControllerDelete = new MenusController(Repo);
-
-            Menu vm = new Menu
-            {
-                Name = "002 Test Mod",
-                ID = 1234567
-            };
-            DateTime CreationDate = vm.CreationDate;
-            DateTime mod = vm.ModifiedDate;
-
-            // Act
-            ControllerPost.PostEdit(vm);
-            ViewResult view = ControllerView.Index();
-            List<Menu> ListEntity= (List<Menu>)(( ListEntity<Menu>)view.Model).ListT;
-            Menu menu = (from m in ListEntity
-                          where m.Name == "002 Test Mod"
-                          select m).AsQueryable().FirstOrDefault();
-             
-
-            menu.Description = "I've been edited to delay a bit";
-            ControllerPost1.PostEdit(menu);
-
-            ViewResult view1 = ControllerView.Index();
-            ListEntity= (List<Menu>)(( ListEntity<Menu>)view1.Model).ListT;
-            menu = (from m in ListEntity
-                           where m.Name == "002 Test Mod"
-                           select m).AsQueryable().FirstOrDefault();
-        
-
-            DateTime shouldBeSameDate = menu.CreationDate;
-            DateTime shouldBeLaterDate = menu.ModifiedDate;
-          
-                // Assert
-                Assert.AreEqual(CreationDate, shouldBeSameDate);
-                Assert.AreNotEqual(mod, shouldBeLaterDate);
-            
+            Menu.Name = "Test UpdateTheModificationDateBetweenPostedEdits";
+            Menu.ID = 6000;
+            Repo.Save(Menu);
+            BaseUpdateTheModificationDateBetweenPostedEdits(Repo, Controller, Menu);
         }
 
         //[Ignore]
@@ -361,21 +325,21 @@ namespace IntegrationTests
         //}
 
 
-  
+
         [TestMethod]
         [TestCategory("Attach-Detach")]
         public void AttachAnExistingIngredientToAnExistingMenu()
         {
             // Arrange 
-            TestRepository<Ingredient> repoIngredient = new TestRepository<  Ingredient>(); 
+            TestRepository<Ingredient> repoIngredient = new TestRepository<Ingredient>();
 
             Menu menu = new Menu { ID = int.MaxValue - 100, Description = "test AttachAnExistingIngredientToAnExistingMenu" };
-             Ingredient ingredient = new Ingredient { ID = int.MaxValue - 100, Description = "test AttachAnExistingIngredientToAnExistingMenu" };
+            Ingredient ingredient = new Ingredient { ID = int.MaxValue - 100, Description = "test AttachAnExistingIngredientToAnExistingMenu" };
             Repo.Add(menu);
             repoIngredient.Add(ingredient);
 
             // Act
-           Controller.AttachIngredient(menu.ID, ingredient );
+            Controller.AttachIngredient(menu.ID, ingredient);
             Menu returnedMenu = (from m in Repo.GetAll()
                                  where m.Description == menu.Description
                                  select m).FirstOrDefault();
@@ -401,7 +365,7 @@ namespace IntegrationTests
             // Assert
             Assert.IsNotNull(ingredient);
         }
-         
+
         [TestMethod]
         [TestCategory("Attach-Detach")]
         public void ReturnIndexViewWithWarningWhenDetachingNonExistingIngredientAttachedToANonExistingMenu()
@@ -422,7 +386,7 @@ namespace IntegrationTests
             Assert.AreEqual(UIViewType.Index.ToString(), routeValues.ElementAt(0).ToString());
         }
 
-        
+
         [TestMethod]
         [TestCategory("Attach-Detach")]
         public void ReturnIndexViewWithWarningWhenAttachingExistIngredientToNonExistingMenu()
@@ -443,7 +407,7 @@ namespace IntegrationTests
             Assert.AreEqual(UIViewType.Index.ToString(), routeValues.ElementAt(0).ToString());
         }
 
-       
+
         [TestMethod]
         [TestCategory("Attach-Detach")]
         public void ReturnIndexViewWithWarningWhenAttachingNonExistIngredientToNonExistingMenu()
@@ -464,7 +428,7 @@ namespace IntegrationTests
             Assert.AreEqual(UIViewType.Index.ToString(), routeValues.ElementAt(0).ToString());
         }
 
-       
+
         [TestMethod]
         [TestCategory("Attach-Detach")]
         public void ReturnIndexViewWithWarningWhenDetachingExistingIngredientAttachedToNonExistingMenu()
@@ -515,6 +479,6 @@ namespace IntegrationTests
         {
             Assert.Fail();
         }
-         
+
     }
 }

@@ -20,7 +20,7 @@ namespace LambAndLentil.UI.Controllers
      
     }
 
-    public class RecipesGenericController<T > : BaseController<Recipe>
+    public class RecipesGenericController<T > : BaseController<Recipe>, IGenericController<T>
           where T: Recipe  
     {
         public RecipesGenericController(IRepository<Recipe> repository) : base(repository)
@@ -71,9 +71,9 @@ namespace LambAndLentil.UI.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult PostEdit([Bind(Include = "ID,Name,Description,Servings,MealType,Calories,CalsFromFat,CreationDate, ModifiedDate,AddedByUser, ModifiedByUser ")] Recipe recipeVM)
+        public ActionResult PostEdit([Bind(Include = "ID,Name,Description,Servings,MealType,Calories,CalsFromFat,CreationDate, ModifiedDate,AddedByUser, ModifiedByUser ")] T t)
         {
-            return BasePostEdit(Repo, recipeVM);
+            return BasePostEdit(Repo, t);
         }
 
         // GET: Recipes/Delete/5
@@ -91,12 +91,12 @@ namespace LambAndLentil.UI.Controllers
             return BaseDeleteConfirmed(Repo, UIControllerType.Recipes, id);
         }
 
-        public ActionResult AttachIngredient(int? recipeID, Ingredient ingredient )
+        public ActionResult AttachIngredient(int? recipeID, Ingredient ingredient, int orderNumber = 0)
         {
             return BaseAttach<Ingredient>(Repo,recipeID, ingredient );
         }
 
-        public ActionResult RemoveIngredient(int? recipeID, Ingredient ingredient)
+        public ActionResult DetachIngredient(int? recipeID, Ingredient ingredient, int orderNumber = 0)
         {
             return BaseAttach<Ingredient>(Repo, recipeID, ingredient, AttachOrDetach.Detach);
         } 

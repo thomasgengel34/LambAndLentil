@@ -22,29 +22,29 @@ namespace LambAndLentil.Test.BasicControllerTests
            Controller = new IngredientsController(Repo);
         }
 
-        [TestMethod]
-        public void ReturnNullWhenItemIsNotInRepoForGuardID()
-        {
-            // Arrange
+        //[TestMethod]
+        //public void ReturnNullWhenItemIsNotInRepoForGuardID()
+        //{
+        //    // Arrange
 
-            // Act
-            ActionResult result = Controller.GuardId(Repo, UI.UIControllerType.Ingredients,2);
+        //    // Act
+        //    ActionResult result = Controller.GuardId(Repo,  2);
 
-            // Assert
-            Assert.IsNull(result);
-        }
+        //    // Assert
+        //    Assert.IsNull(result);
+        //}
 
-        [TestMethod]
-        public void ReturnEmptyResultWhenItemIsInRepoForGuardID()
-        {
-            // Arrange
+        //[TestMethod]
+        //public void ReturnEmptyResultWhenItemIsInRepoForGuardID()
+        //{
+        //    // Arrange
 
-            // Act
-            ActionResult result = Controller.GuardId(Repo, UI.UIControllerType.Ingredients, int.MaxValue);
+        //    // Act
+        //    ActionResult result = Controller.GuardId(Repo,   int.MaxValue);
 
-            // Assert
-            Assert.AreEqual(typeof(EmptyResult), result.GetType());
-        }
+        //    // Assert
+        //    Assert.AreEqual(typeof(EmptyResult), result.GetType());
+        //}
 
         [TestMethod]
         public void HavePublicReadOnlyStringClassNameProperty()

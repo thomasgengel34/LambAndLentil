@@ -17,17 +17,16 @@ namespace LambAndLentil.Test.BasicControllerTests
     [TestClass]
     [TestCategory("Integration")]
     [TestCategory("PlansController")]
-    public class PlansControllerShould
-    {
-        static IRepository<Plan> Repo;
+    public class PlansControllerShould:BaseControllerTest<Plan>
+    { 
         static PlansController Controller;
-        static Plan planVM;
+        static Plan Plan;
 
         public PlansControllerShould()
         {
             Repo = new TestRepository<Plan>();
             Controller = new PlansController(Repo);
-            planVM = new Plan
+            Plan = new Plan
             {
                 ID = 1000,
                 Description = "test PlanControllerShould"
@@ -56,7 +55,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange  
 
             // Act
-            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.PostEdit(planVM);
+            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.PostEdit(Plan);
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
 
             var routeValues = rtrr.RouteValues.Values;
@@ -104,12 +103,12 @@ namespace LambAndLentil.Test.BasicControllerTests
             ActionResult ar2 = Controller3.PostEdit(vm);
             ViewResult view2 = Controller4.Index();
             List<Plan> ListEntity2 = (List<Plan>)view2.Model;
-            Plan planVM2 = (from m in ListEntity2
+            Plan Plan2 = (from m in ListEntity2
                             where m.Name == "0000 test Edited"
                             select m).AsQueryable().First();
 
             // Assert
-            Assert.AreEqual("0000 test Edited", planVM2.Name);
+            Assert.AreEqual("0000 test Edited", Plan2.Name);
         }
 
         [Ignore]
@@ -134,30 +133,30 @@ namespace LambAndLentil.Test.BasicControllerTests
             ActionResult ar1 = Controller1.PostEdit(vm);
             ViewResult view1 = Controller2.Index();
             List<Plan> ListEntity = (List<Plan>)view1.Model;
-            Plan planVM = (from m in ListEntity
+            Plan Plan = (from m in ListEntity
                            where m.Name == "0000 test"
                            select m).AsQueryable().FirstOrDefault();
 
             // verify initial value:
-            Assert.AreEqual("SaveEditedPlanWithDescriptionChange Pre-test", planVM.Description);
+            Assert.AreEqual("SaveEditedPlanWithDescriptionChange Pre-test", Plan.Description);
 
 
 
             // now edit it
 
-            planVM.Name = "0000 test Edited";
-            planVM.Description = "SaveEditedPlanWithDescriptionChange Post-test";
+            Plan.Name = "0000 test Edited";
+            Plan.Description = "SaveEditedPlanWithDescriptionChange Post-test";
 
             ActionResult ar2 = Controller3.PostEdit(vm);
             ViewResult view2 = Controller4.Index();
             List<Plan> ListEntity2 = (List<Plan>)view2.Model;
-            planVM = (from m in ListEntity2
+            Plan = (from m in ListEntity2
                       where m.Name == "0000 test Edited"
                       select m).AsQueryable().FirstOrDefault();
 
             // Assert
-            Assert.AreEqual("0000 test Edited", planVM.Name);
-            Assert.AreEqual("SaveEditedPlanWithDescriptionChange Post-test", planVM.Description);
+            Assert.AreEqual("0000 test Edited", Plan.Name);
+            Assert.AreEqual("SaveEditedPlanWithDescriptionChange Post-test", Plan.Description);
         }
 
 
@@ -168,9 +167,9 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange 
 
             //Act
-            Controller.DeleteConfirmed(planVM.ID);
+            Controller.DeleteConfirmed(Plan.ID);
             var deletedItem = (from m in Repo.GetAll()
-                               where m.Description == planVM.Description
+                               where m.Description == Plan.Description
                                select m).AsQueryable();
 
             //Assert
@@ -184,7 +183,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         {
             // Arrange
             DateTime CreationDate = new DateTime(2010, 1, 1);
-            Plan planVM = new Plan(CreationDate)
+            Plan Plan = new Plan(CreationDate)
             {
                 Name = "001 Test "
             };
@@ -195,54 +194,30 @@ namespace LambAndLentil.Test.BasicControllerTests
             PlansController ControllerDelete = new PlansController(Repo);
 
             // Act
-            ControllerEdit.PostEdit(planVM);
+            ControllerEdit.PostEdit(Plan);
             ViewResult view = ControllerView.Index();
             List<Plan> ListEntity = (List<Plan>)view.Model;
-            planVM = (from m in ListEntity
+            Plan = (from m in ListEntity
                       where m.Name == "001 Test "
                       select m).AsQueryable().First();
 
 
-            DateTime shouldBeSameDate = planVM.CreationDate;
+            DateTime shouldBeSameDate = Plan.CreationDate;
 
             // Assert
             Assert.AreEqual(CreationDate, shouldBeSameDate);
 
         }
 
-        [Ignore]
+        
         [TestMethod]
         [TestCategory("Edit")]
         public void UpdateTheModificationDateBetweenPostedEdits()
         {
-            // Arrange 
-            PlansController ControllerPost = new PlansController(Repo);
-            PlansController ControllerView = new PlansController(Repo);
-            PlansController ControllerDelete = new PlansController(Repo);
-
-            Plan planVM = new Plan
-            {
-                Name = "002 Test Mod"
-            };
-            DateTime CreationDate = planVM.CreationDate;
-            DateTime mod = planVM.ModifiedDate;
-
-            // Act
-            ControllerPost.PostEdit(planVM);
-            ViewResult view = ControllerView.Index();
-            List<Plan> ListEntity = (List<Plan>)view.Model;
-            planVM = (from m in ListEntity
-                      where m.Name == "002 Test Mod"
-                      select m).AsQueryable().First();
-
-
-            DateTime shouldBeSameDate = planVM.CreationDate;
-            DateTime shouldBeLaterDate = planVM.ModifiedDate;
-
-            // Assert
-            Assert.AreEqual(CreationDate, shouldBeSameDate);
-            Assert.AreNotEqual(mod, shouldBeLaterDate);
-
+            Plan.Name = "Test UpdateTheModificationDateBetweenPostedEdits";
+            Plan.ID = 6000;
+            Repo.Save(Plan);
+            BaseUpdateTheModificationDateBetweenPostedEdits(Repo, Controller, Plan);
         }
 
         [TestMethod]
@@ -254,18 +229,18 @@ namespace LambAndLentil.Test.BasicControllerTests
             IRepository<Ingredient> repoIngredient = new TestRepository<Ingredient>();
             PlansController Controller = new PlansController(Repo);
 
-            planVM.Description = "test AttachAnExistingIngredientToAnExistingPlan";
+            Plan.Description = "test AttachAnExistingIngredientToAnExistingPlan";
             Ingredient ingredient = new Ingredient
             {
                 ID = 100,
                 Description = "test AttachAnExistingIngredientToAnExistingPlan"
             };
-            Repo.Update(planVM, planVM.ID);
+            Repo.Update(Plan, Plan.ID);
             repoIngredient.Save(ingredient);
             // Act
-            Controller.AttachIngredient(planVM.ID, ingredient);
+            Controller.AttachIngredient(Plan.ID, ingredient);
             Plan returnedPlan = (from m in Repo.GetAll()
-                                 where m.Description == planVM.Description
+                                 where m.Description == Plan.Description
                                  select m).FirstOrDefault();
 
             // Assert 
@@ -283,18 +258,18 @@ namespace LambAndLentil.Test.BasicControllerTests
             IRepository<Recipe> repoRecipe = new TestRepository<Recipe>();
             PlansController Controller = new PlansController(Repo);
 
-            planVM.Description = "test AttachAnExistingRecipeToAnExistingPlan";
+            Plan.Description = "test AttachAnExistingRecipeToAnExistingPlan";
             Recipe recipe = new Recipe
             {
                 ID = 100,
                 Description = "test AttachAnExistingRecipeToAnExistingPlan"
             };
-            Repo.Update(planVM, planVM.ID);
+            Repo.Update(Plan, Plan.ID);
             repoRecipe.Save(recipe);
             // Act
-            Controller.AttachRecipe(planVM.ID, recipe);
+            Controller.AttachRecipe(Plan.ID, recipe);
             Plan returnedPlan = (from m in Repo.GetAll()
-                                 where m.Description == planVM.Description
+                                 where m.Description == Plan.Description
                                  select m).FirstOrDefault();
 
             // Assert 
@@ -373,12 +348,6 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void ReturnPlanIndexViewWithWarningWhenDetachingExistingingredientNotAttachedToAnExistingPlan()
         {
             Assert.Fail();
-        }
-
-        [ClassCleanup()]
-        public static void ClassCleanup()
-        {
-            PlansController_Test_Should.ClassCleanup();
-        }
+        } 
     }
 }

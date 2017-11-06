@@ -53,21 +53,14 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestCategory("Delete")]
         public void DeleteAFoundMenu()
         {
-            // Arrange
-
-
-            // Act 
-            ActionResult ar = Controller.Details(ListEntity.ListT.FirstOrDefault().ID);
-            AlertDecoratorResult adr = (AlertDecoratorResult)ar;
-            ViewResult view = (ViewResult)adr.InnerResult;
-
-
-            // Assert
-            Assert.IsNotNull(view);
-            Assert.AreEqual(UIViewType.Details.ToString(), view.ViewName);
+            BaseDeleteAFoundEntity(Controller);
         }
 
-
+        [TestMethod]
+        public void ReturnDetailsWhenIDIsFound()
+        {
+            BaseReturnDetailsWhenIDIsFound(Controller);
+        }
 
         [TestMethod]
         [TestCategory("Delete")]

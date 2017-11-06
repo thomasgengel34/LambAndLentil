@@ -6,6 +6,8 @@ using LambAndLentil.Domain.Concrete;
 using System.Web.Mvc;
 using LambAndLentil.UI.Infrastructure.Alerts;
 using System.Linq;
+using LambAndLentil.UI;
+using LambAndLentil.UI.Controllers;
 
 namespace LambAndLentil.Test.BasicControllerTests
 {
@@ -131,14 +133,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             //  Assert.AreEqual("Default", Ingredient.Ingredients.Last().Name);
             Assert.AreEqual("SuccessfullyAttachIngredientChild", ReturnedPerson.Ingredients.Last().Name);
         }
-
-       
-        [TestMethod]
-        public void SuccessfullyDetachIngredientChild()
-        {
-
-        }
-
+          
         [Ignore]
         [TestMethod]
         public void SuccessfullyAttachRecipeChild()
@@ -193,6 +188,53 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void SuccessfullyDetachShoppingListChild()
         {
 
+        }
+         
+        [TestMethod]
+        [TestCategory("Attach-Detach")]
+        public void SuccessfullyDetachFirstIngredientChild()
+        {
+            IGenericController<Person> DetachController = new PersonsController(Repo);
+            BaseSuccessfullyDetachIngredientChild(Repo, Controller, DetachController, UIControllerType.ShoppingLists, 0); 
+        }
+
+        [Ignore]
+        [TestMethod]
+        [TestCategory("Attach-Detach")]
+        public void DetachARangeOfIngredientChildren()
+        { // RemoveRange
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        [TestCategory("Attach-Detach")]
+        public void DetachTheLastIngredientChild()
+        { // RemoveAt
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        [TestCategory("Attach-Detach")]
+        public void DetachAllIngredientChildren()
+        { // RemoveAll
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
         }
     }
 }

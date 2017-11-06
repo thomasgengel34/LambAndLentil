@@ -3,6 +3,7 @@ using LambAndLentil.Domain.Abstract;
 using LambAndLentil.Domain.Concrete;
 using LambAndLentil.Domain.Entities;
 using LambAndLentil.Tests.Infrastructure;
+using LambAndLentil.UI;
 using LambAndLentil.UI.Controllers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -18,9 +19,9 @@ namespace LambAndLentil.Test.BasicControllerTests
     [TestClass]
     [TestCategory("MenusController")]
     [TestCategory("Index")]
-    public class MenusController_Index_Test:MenusController_Test_Should
-    { 
-       
+    public class MenusController_Index_Test : MenusController_Test_Should
+    {
+
 
         [TestMethod]
         [TestCategory("Index")]
@@ -37,7 +38,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
             Assert.IsNotNull(result);
         }
-       
+
 
         [TestMethod]
         [TestCategory("Index")]
@@ -63,11 +64,11 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Act
             ViewResult view1 = Controller.Index(1);
 
-            int count1 = (( ListEntity<Menu>)(view1.Model)).ListT.Count();
+            int count1 = ((ListEntity<Menu>)(view1.Model)).ListT.Count();
 
             ViewResult view2 = Controller.Index(2);
 
-            int count2 = (( ListEntity<Menu>)(view2.Model)).ListT.Count();
+            int count2 = ((ListEntity<Menu>)(view2.Model)).ListT.Count();
 
             int count = count1 + count2;
 
@@ -80,14 +81,15 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void ContainsAllMenusView1Count6()
         {
             // Arrange 
+            int count = Repo.Count();
 
             // Act
-            ListEntity= ( ListEntity<Menu>)(Controller.Index(1)).Model;
+            ListEntity = (ListEntity<Menu>)(Controller.Index(1)).Model;
             Menu[] ingrArray1 = ListEntity.ListT.ToArray();
             int count1 = ingrArray1.Count();
 
             // Assert 
-            Assert.AreEqual(6, count1);
+            Assert.AreEqual(count, count1);
         }
 
         [TestMethod]
@@ -95,17 +97,17 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void ContainsAllMenusView2Count0()
         {
             // Arrange 
-            ListEntity= ( ListEntity<Menu>)(Controller.Index(1)).Model;
+            ListEntity = (ListEntity<Menu>)(Controller.Index(1)).Model;
             Menu[] ingrArray1 = ListEntity.ListT.ToArray();
 
             // Act
             ViewResult view1 = Controller.Index(1);
 
-            int count1 = (( ListEntity<Menu>)(view1.Model)).ListT.Count();
+            int count1 = ((ListEntity<Menu>)(view1.Model)).ListT.Count();
 
             ViewResult view2 = Controller.Index(2);
 
-            int count2 = (( ListEntity<Menu>)(view2.Model)).ListT.Count();
+            int count2 = ((ListEntity<Menu>)(view2.Model)).ListT.Count();
 
             int count = count1 + count2;
 
@@ -133,17 +135,17 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void ContainsAllMenusView2NameIsIndex()
         {
             // Arrange 
-            ListEntity= ( ListEntity<Menu>)(Controller.Index(1)).Model;
+            ListEntity = (ListEntity<Menu>)(Controller.Index(1)).Model;
             Menu[] ingrArray1 = ListEntity.ListT.ToArray();
 
             // Act
             ViewResult view1 = Controller.Index(1);
 
-            int count1 = (( ListEntity<Menu>)(view1.Model)).ListT.Count();
+            int count1 = ((ListEntity<Menu>)(view1.Model)).ListT.Count();
 
             ViewResult view2 = Controller.Index(2);
 
-            int count2 = (( ListEntity<Menu>)(view2.Model)).ListT.Count();
+            int count2 = ((ListEntity<Menu>)(view2.Model)).ListT.Count();
 
             int count = count1 + count2;
 
@@ -156,50 +158,35 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void FirstPageIsNotNull()
         {
             // Arrange 
-            ListEntity= ( ListEntity<Menu>)(Controller.Index(1)).Model;
+            ListEntity = (ListEntity<Menu>)(Controller.Index(1)).Model;
             Menu[] ingrArray1 = ListEntity.ListT.ToArray();
             Controller.PageSize = 8;
 
             // Act
             ViewResult view1 = Controller.Index(1);
 
-            int count1 = (( ListEntity<Menu>)(view1.Model)).ListT.Count();
+            int count1 = ((ListEntity<Menu>)(view1.Model)).ListT.Count();
 
             // Assert
             Assert.IsNotNull(view1);
 
         }
 
-        [TestMethod]
-        [TestCategory("Index")]
-        public void FirstPageIsCorrectCountIsSix()
-        {
-            // Arrange 
-            ListEntity= ( ListEntity<Menu>)(Controller.Index(1)).Model;
-            Menu[] ingrArray1 = ListEntity.ListT.ToArray();
-            Controller.PageSize = 8;
-
-            // Act
-            ViewResult view1 = Controller.Index(1);
-            int count1 = (( ListEntity<Menu>)(view1.Model)).ListT.Count();
-
-            // Assert 
-            Assert.AreEqual(6, count1);
-        }
+       
 
         [TestMethod]
         [TestCategory("Index")]
         public void FirstPageNameIsIndex()
         {
             // Arrange 
-            ListEntity= ( ListEntity<Menu>)(Controller.Index(1)).Model;
+            ListEntity = (ListEntity<Menu>)(Controller.Index(1)).Model;
             Menu[] ingrArray1 = ListEntity.ListT.ToArray();
             Controller.PageSize = 8;
 
             // Act
             ViewResult view1 = Controller.Index(1);
 
-            int count1 = (( ListEntity<Menu>)(view1.Model)).ListT.Count();
+            int count1 = ((ListEntity<Menu>)(view1.Model)).ListT.Count();
 
             // Assert  
             Assert.AreEqual("Index", view1.ViewName);
@@ -212,17 +199,17 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void FirstItemNameIsCorrect()
         {
             // Arrange 
-            ListEntity= ( ListEntity<Menu>)(Controller.Index(1)).Model;
+            ListEntity = (ListEntity<Menu>)(Controller.Index(1)).Model;
             Menu[] ingrArray1 = ListEntity.ListT.ToArray();
             Controller.PageSize = 8;
 
             // Act
             ViewResult view1 = Controller.Index(1);
 
-            int count1 = (( ListEntity<Menu>)(view1.Model)).ListT.Count();
+            int count1 = ((ListEntity<Menu>)(view1.Model)).ListT.Count();
 
             // Assert   
-            Assert.AreEqual("LambAndLentil.Domain.Entities.Menu ControllerTest1", (( ListEntity<Menu>)(view1.Model)).ListT.FirstOrDefault().Name);
+            Assert.AreEqual("LambAndLentil.Domain.Entities.Menu ControllerTest1", ((ListEntity<Menu>)(view1.Model)).ListT.FirstOrDefault().Name);
         }
 
 
@@ -232,7 +219,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void FirstMenuAddedByUserIsCorrect()
         {
             // Arrange 
-            ListEntity= ( ListEntity<Menu>)(Controller.Index(1)).Model;
+            ListEntity = (ListEntity<Menu>)(Controller.Index(1)).Model;
             Menu[] ingrArray1 = ListEntity.ListT.ToArray();
             Controller.PageSize = 8;
 
@@ -240,7 +227,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             ViewResult view1 = Controller.Index(1);
 
             // Assert   
-            Assert.AreEqual("John Doe", (( ListEntity<Menu>)(view1.Model)).ListT.FirstOrDefault().AddedByUser);
+            Assert.AreEqual("John Doe", ((ListEntity<Menu>)(view1.Model)).ListT.FirstOrDefault().AddedByUser);
         }
 
         [TestMethod]
@@ -248,7 +235,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void FirstModifiedByUserIsCorrect()
         {
             // Arrange 
-            ListEntity= ( ListEntity<Menu>)(Controller.Index(1)).Model;
+            ListEntity = (ListEntity<Menu>)(Controller.Index(1)).Model;
             Menu[] ingrArray1 = ListEntity.ListT.ToArray();
             Controller.PageSize = 8;
 
@@ -256,7 +243,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             ViewResult view1 = Controller.Index(1);
             string userName = WindowsIdentity.GetCurrent().Name;
             // Assert   
-            Assert.AreEqual(userName, (( ListEntity<Menu>)(view1.Model)).ListT.FirstOrDefault().ModifiedByUser);
+            Assert.AreEqual(userName, ((ListEntity<Menu>)(view1.Model)).ListT.FirstOrDefault().ModifiedByUser);
         }
 
         [TestMethod]
@@ -264,7 +251,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void FirstCreationDateIsCorrect()
         {
             // Arrange 
-            ListEntity= ( ListEntity<Menu>)(Controller.Index(1)).Model;
+            ListEntity = (ListEntity<Menu>)(Controller.Index(1)).Model;
             Menu[] ingrArray1 = ListEntity.ListT.ToArray();
             Controller.PageSize = 8;
 
@@ -272,7 +259,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             ViewResult view1 = Controller.Index(1);
 
             // Assert   
-            Assert.AreEqual(DateTime.MinValue, (( ListEntity<Menu>)(view1.Model)).ListT.FirstOrDefault().CreationDate);
+            Assert.AreEqual(DateTime.MinValue, ((ListEntity<Menu>)(view1.Model)).ListT.FirstOrDefault().CreationDate);
         }
 
         [TestMethod]
@@ -280,7 +267,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void Index_FirstModifiedDateIsCorrect()
         {
             // Arrange 
-            ListEntity= ( ListEntity<Menu>)(Controller.Index(1)).Model;
+            ListEntity = (ListEntity<Menu>)(Controller.Index(1)).Model;
             Menu[] ingrArray1 = ListEntity.ListT.ToArray();
             Controller.PageSize = 8;
 
@@ -288,7 +275,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             ViewResult view1 = Controller.Index(1);
 
             // Assert   
-            Assert.AreEqual(DateTime.MaxValue.AddYears(-10), (( ListEntity<Menu>)(view1.Model)).ListT.FirstOrDefault().ModifiedDate);
+            Assert.AreEqual(DateTime.MaxValue.AddYears(-10), ((ListEntity<Menu>)(view1.Model)).ListT.FirstOrDefault().ModifiedDate);
         }
 
 
@@ -298,17 +285,17 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void SecondItemNameIsCorrect()
         {
             // Arrange 
-            ListEntity= ( ListEntity<Menu>)(Controller.Index(1)).Model;
+            ListEntity = (ListEntity<Menu>)(Controller.Index(1)).Model;
             Menu[] ingrArray1 = ListEntity.ListT.ToArray();
             Controller.PageSize = 8;
 
             // Act
             ViewResult view1 = Controller.Index(1);
 
-            int count1 = (( ListEntity<Menu>)(view1.Model)).ListT.Count();
+            int count1 = ((ListEntity<Menu>)(view1.Model)).ListT.Count();
 
             // Assert   
-            Assert.AreEqual("LambAndLentil.Domain.Entities.Menu ControllerTest2", (( ListEntity<Menu>)(view1.Model)).ListT.Skip(1).FirstOrDefault().Name);
+            Assert.AreEqual("LambAndLentil.Domain.Entities.Menu ControllerTest2", ((ListEntity<Menu>)(view1.Model)).ListT.Skip(1).FirstOrDefault().Name);
         }
 
 
@@ -317,17 +304,17 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void ThirdItemNameIsCorrect()
         {
             // Arrange 
-            ListEntity= ( ListEntity<Menu>)(Controller.Index(1)).Model;
+            ListEntity = (ListEntity<Menu>)(Controller.Index(1)).Model;
             Menu[] ingrArray1 = ListEntity.ListT.ToArray();
             Controller.PageSize = 8;
 
             // Act
             ViewResult view1 = Controller.Index(1);
 
-            int count1 = (( ListEntity<Menu>)(view1.Model)).ListT.Count();
+            int count1 = ((ListEntity<Menu>)(view1.Model)).ListT.Count();
 
             // Assert   
-            Assert.AreEqual("LambAndLentil.Domain.Entities.Menu ControllerTest3", (( ListEntity<Menu>)(view1.Model)).ListT.Skip(2).FirstOrDefault().Name);
+            Assert.AreEqual("LambAndLentil.Domain.Entities.Menu ControllerTest3", ((ListEntity<Menu>)(view1.Model)).ListT.Skip(2).FirstOrDefault().Name);
         }
 
 
@@ -342,20 +329,13 @@ namespace LambAndLentil.Test.BasicControllerTests
 
 
 
-        [TestMethod] 
-        public void  CanPaginate_ArrayLengthIsCorrect()
+        [TestMethod]
+        public void CanPaginateArrayLengthIsCorrect()
         {
-            // Arrange
-
-
-            // Act
-            var result = ( ListEntity<Menu>)(Controller.Index(1)).Model;
-
-            // Assert 
-            Assert.IsTrue(result.ListT.Count() ==6);
+            BaseCanPaginateArrayLengthIsCorrect(Repo, Controller);
         }
 
-        
+
         [TestMethod]
         [TestCategory("Index")]
         public void CanPaginate_ArrayFirstItemNameIsCorrect()
@@ -364,7 +344,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
 
             // Act
-            var result = ( ListEntity<Menu>)(Controller.Index(1)).Model;
+            var result = (ListEntity<Menu>)(Controller.Index(1)).Model;
             Menu[] ingrArray1 = result.ListT.ToArray();
 
             // Assert  
@@ -379,7 +359,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange 
 
             // Act
-            var result = ( ListEntity<Menu>)(Controller.Index(1)).Model;
+            var result = (ListEntity<Menu>)(Controller.Index(1)).Model;
             Menu[] ingrArray1 = result.ListT.ToArray();
 
             // Assert  
@@ -394,7 +374,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange 
 
             // Act 
-             ListEntity<Menu> resultT = ( ListEntity<Menu>)((ViewResult)Controller.Index(2)).Model;
+            ListEntity<Menu> resultT = (ListEntity<Menu>)((ViewResult)Controller.Index(2)).Model;
             PagingInfo pageInfoT = resultT.PagingInfo;
 
             // Assert  
@@ -409,7 +389,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
 
             // Act 
-             ListEntity<Menu> resultT = ( ListEntity<Menu>)((ViewResult)Controller.Index(2)).Model;
+            ListEntity<Menu> resultT = (ListEntity<Menu>)((ViewResult)Controller.Index(2)).Model;
             PagingInfo pageInfoT = resultT.PagingInfo;
 
             // Assert   
@@ -420,15 +400,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestCategory("Index")]
         public void CanSendPaginationViewModel_TotalItemsCorrect()
         {
-            // Arrange 
-
-            // Act 
-             ListEntity<Menu> resultT = ( ListEntity<Menu>)((ViewResult)Controller.Index(2)).Model;
-            PagingInfo pageInfoT = resultT.PagingInfo;
-            //   PagingInfo pageInfoT =ListEntity.PagingInfo;
-
-            // Assert 
-            Assert.AreEqual(6, pageInfoT.TotalItems);
+            BaseCanSendPaginationViewModel_TotalItemsCorrect(Repo, Controller, UIControllerType.Menus);
         }
 
         [Ignore]
@@ -440,13 +412,13 @@ namespace LambAndLentil.Test.BasicControllerTests
 
 
             // Act 
-             ListEntity<Menu> resultT = ( ListEntity<Menu>)((ViewResult)Controller.Index(2)).Model;
+            ListEntity<Menu> resultT = (ListEntity<Menu>)((ViewResult)Controller.Index(2)).Model;
             PagingInfo pageInfoT = resultT.PagingInfo;
 
             // Assert 
             Assert.AreEqual(1, pageInfoT.TotalPages);
         }
-         
+
         [Ignore]
         [TestMethod]
         public void FlagAnMenuFlaggedInAPerson()
@@ -484,11 +456,11 @@ namespace LambAndLentil.Test.BasicControllerTests
         }
 
 
-      
+
 
         [TestMethod]
         [TestCategory("Index")]
-        public void IndexContainsAllMenus()
+        public void  ContainsAllMenus()
         {
             // Arrange   
             int repoCount = Repo.Count();
@@ -511,7 +483,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Assert
             Assert.IsNotNull(view1);
             Assert.IsNotNull(view2);
-            Assert.AreEqual(6, count1);
+            Assert.AreEqual(repoCount, count1);
             Assert.AreEqual(0, count2);
             Assert.AreEqual(repoCount, count);
             Assert.AreEqual("Index", view1.ViewName);
@@ -526,32 +498,9 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [TestMethod]
         [TestCategory("Index")]
-        public void Index_FirstPageIsCorrect()
+        public void  FirstPageIsCorrect()
         {
-            // Arrange    
-            int repoCount = Repo.Count();
-
-            // Act
-            ViewResult view = Controller.Index(1);
-
-            int count = ((ListEntity<Menu>)(view.Model)).ListT.Count();
-            var firstName = ((ListEntity<Menu>)(view.Model)).ListT.FirstOrDefault().Name;
-            var secondName = ((ListEntity<Menu>)(view.Model)).ListT.Skip(1).FirstOrDefault().Name;
-            var thirdName = ((ListEntity<Menu>)(view.Model)).ListT.Skip(2).FirstOrDefault().Name;
-            var fourthName = ((ListEntity<Menu>)(view.Model)).ListT.Skip(3).FirstOrDefault().Name;
-            var fifthName = ((ListEntity<Menu>)(view.Model)).ListT.Skip(4).FirstOrDefault().Name;
-
-
-            // Assert
-            Assert.IsNotNull(view);
-            Assert.AreEqual(repoCount, count);
-            Assert.AreEqual("Index", view.ViewName);
-            Assert.AreEqual("LambAndLentil.Domain.Entities.Menu ControllerTest1", firstName);
-            Assert.AreEqual("LambAndLentil.Domain.Entities.Menu ControllerTest2", secondName);
-            Assert.AreEqual("LambAndLentil.Domain.Entities.Menu ControllerTest3", thirdName);
-            Assert.AreEqual("LambAndLentil.Domain.Entities.Menu ControllerTest4", fourthName);
-            Assert.AreEqual("LambAndLentil.Domain.Entities.Menu ControllerTest5", fifthName);
-
+            BaseFirstPageIsCorrect(Repo, Controller, UIControllerType.ShoppingLists); 
         }
 
         [Ignore]
@@ -587,23 +536,24 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [TestMethod]
         [TestCategory("Index")]
-        public void Index_PagingInfoIsCorrect()
+        public void  PagingInfoIsCorrect()
         {
-            // Arrange
-            int count = Repo.Count();
+            BasePagingInfoIsCorrect(Repo, Controller, UIControllerType.Recipes);
+            //// Arrange
+            //int count = Repo.Count();
 
 
-            // Action
-            int totalItems = ((ListEntity<Menu>)((ViewResult)Controller.Index()).Model).PagingInfo.TotalItems;
-            int currentPage = ((ListEntity<Menu>)((ViewResult)Controller.Index()).Model).PagingInfo.CurrentPage;
-            int itemsPerPage = ((ListEntity<Menu>)((ViewResult)Controller.Index()).Model).PagingInfo.ItemsPerPage;
-            int totalPages = ((ListEntity<Menu>)((ViewResult)Controller.Index()).Model).PagingInfo.TotalPages;
+            //// Action
+            //int totalItems = ((ListEntity<Menu>)((ViewResult)Controller.Index()).Model).PagingInfo.TotalItems;
+            //int currentPage = ((ListEntity<Menu>)((ViewResult)Controller.Index()).Model).PagingInfo.CurrentPage;
+            //int itemsPerPage = ((ListEntity<Menu>)((ViewResult)Controller.Index()).Model).PagingInfo.ItemsPerPage;
+            //int totalPages = ((ListEntity<Menu>)((ViewResult)Controller.Index()).Model).PagingInfo.TotalPages;
 
-            // Assert
-            Assert.AreEqual(count, totalItems);
-            Assert.AreEqual(1, currentPage);
-            Assert.AreEqual(8, itemsPerPage);
-            Assert.AreEqual(1, totalPages);
+            //// Assert
+            //Assert.AreEqual(count, totalItems);
+            //Assert.AreEqual(1, currentPage);
+            //Assert.AreEqual(8, itemsPerPage);
+            //Assert.AreEqual(1, totalPages);
         }
 
         [TestMethod]

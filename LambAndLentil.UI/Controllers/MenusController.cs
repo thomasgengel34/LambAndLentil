@@ -19,7 +19,7 @@ namespace LambAndLentil.UI.Controllers
         }
     }
 
-    public class MenusGenericController<Menu> : BaseController<Menu> 
+    public class MenusGenericController<Menu> : BaseController<Menu>, IGenericController<Menu>
             where Menu : BaseEntity, IEntity, new()
     {
         public MenusGenericController(IRepository<Menu> repository) : base(repository)
@@ -60,9 +60,9 @@ namespace LambAndLentil.UI.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult PostEdit([Bind(Include = "ID,Name, DayOfWeek, Description,CreationDate, ModifiedDate,  AddedByUser, ModifiedByUser, MealType,Diners, Recipes, Ingredients")] Menu menuVM)
+        public ActionResult PostEdit([Bind(Include = "ID,Name, DayOfWeek, Description,CreationDate, ModifiedDate,  AddedByUser, ModifiedByUser, MealType,Diners, Recipes, Ingredients")] Menu t)
         {
-            return BasePostEdit(Repo, menuVM);
+            return BasePostEdit(Repo, t);
         }
 
         // GET: Menus/Delete/5
@@ -94,13 +94,13 @@ namespace LambAndLentil.UI.Controllers
         //    return BaseAttach<Recipe>(Repo, menuID, recipeVM, AttachOrDetach.Detach);
         //}
 
-        public ActionResult AttachIngredient(int? menuID, Ingredient ingredient)
+        public ActionResult AttachIngredient(int? menuID, Ingredient ingredient, int orderNumber = 0)
         {
-            return BaseAttach<Ingredient>(Repo,menuID, ingredient);
+            return BaseAttach<Ingredient>(Repo,menuID, ingredient, AttachOrDetach.Attach,  orderNumber);
         }
 
 
-        public ActionResult DetachIngredient(int? menuID, Ingredient ingredient)
+        public ActionResult DetachIngredient(int? menuID, Ingredient ingredient, int orderNumber = 0)
         {
             return BaseAttach< Ingredient>(Repo,menuID, ingredient, AttachOrDetach.Detach);
         }

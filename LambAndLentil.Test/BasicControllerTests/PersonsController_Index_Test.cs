@@ -1,5 +1,6 @@
 ﻿using LambAndLentil.Domain.Abstract;
 using LambAndLentil.Domain.Entities;
+using LambAndLentil.UI;
 using LambAndLentil.UI.Controllers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -163,23 +164,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.IsNotNull(view1);
 
         }
-
-        [TestMethod]
-        [TestCategory("Index")]
-        public void FirstPageIsCorrectCountIsFive()
-        {
-            // Arrange 
-            ListEntity= ( ListEntity<Person>)(Controller.Index(1)).Model;
-            Person[] ingrArray1 = ListEntity.ListT.ToArray();
-            Controller.PageSize = 8;
-
-            // Act
-            ViewResult view1 = Controller.Index(1);
-            int count1 = (( ListEntity<Person>)(view1.Model)).ListT.Count();
-
-            // Assert 
-            Assert.AreEqual(7, count1);
-        }
+         
 
         [TestMethod]
         [TestCategory("Index")]
@@ -336,18 +321,10 @@ namespace LambAndLentil.Test.BasicControllerTests
 
 
 
-        [TestMethod]
-        [TestCategory("Index")]
-        public void PersonsCtr_IndexCanPaginate_ArrayLengthIsCorrect()
+        [TestMethod] 
+        public void  CanPaginateArrayLengthIsCorrect()
         {
-            // Arrange
-
-
-            // Act
-            var result = ( ListEntity<Person>)(Controller.Index(1)).Model;
-
-            // Assert 
-            Assert.AreEqual(7,result.ListT.Count());
+            BaseCanPaginateArrayLengthIsCorrect(Repo, Controller);
         }
 
         
@@ -398,7 +375,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [TestMethod]
         [TestCategory("Index")]
-        public void PersonsCtr_Index_CanSendPaginationViewModel_ItemsPerPageCorrect()
+        public void  CanSendPaginationViewModel_ItemsPerPageCorrect()
         {
             // Arrange
 
@@ -415,15 +392,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestCategory("Index")]
         public void CanSendPaginationViewModel_TotalItemsCorrect()
         {
-            // Arrange 
-
-            // Act 
-             ListEntity<Person> resultT = ( ListEntity<Person>)((ViewResult)Controller.Index(2)).Model;
-            PagingInfo pageInfoT = resultT.PagingInfo;
-            //   PagingInfo pageInfoT =ListEntity.PagingInfo;
-
-            // Assert 
-            Assert.AreEqual(7, pageInfoT.TotalItems);
+            BaseCanSendPaginationViewModel_TotalItemsCorrect(Repo, Controller, UIControllerType.Persons);
         }
 
         [Ignore]
@@ -442,8 +411,8 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.AreEqual(1, pageInfoT.TotalPages);
         }
 
+        
 
-       
 
 
         [Ignore]
@@ -553,19 +522,20 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestCategory("Index")]
         public void PagingInfoIsCorrect()
         {
-            // Arrange 
+            BasePagingInfoIsCorrect(Repo, Controller, UIControllerType.Recipes);
+            //// Arrange 
 
-            // Action
-            int totalItems = ((ListEntity<Person>)((ViewResult)Controller.Index()).Model).PagingInfo.TotalItems;
-            int currentPage = ((ListEntity<Person>)((ViewResult)Controller.Index()).Model).PagingInfo.CurrentPage;
-            int itemsPerPage = ((ListEntity<Person>)((ViewResult)Controller.Index()).Model).PagingInfo.ItemsPerPage;
-            int totalPages = ((ListEntity<Person>)((ViewResult)Controller.Index()).Model).PagingInfo.TotalPages;
+            //// Action
+            //int totalItems = ((ListEntity<Person>)((ViewResult)Controller.Index()).Model).PagingInfo.TotalItems;
+            //int currentPage = ((ListEntity<Person>)((ViewResult)Controller.Index()).Model).PagingInfo.CurrentPage;
+            //int itemsPerPage = ((ListEntity<Person>)((ViewResult)Controller.Index()).Model).PagingInfo.ItemsPerPage;
+            //int totalPages = ((ListEntity<Person>)((ViewResult)Controller.Index()).Model).PagingInfo.TotalPages;
 
-            // Assert
-            Assert.AreEqual(7, totalItems);
-            Assert.AreEqual(1, currentPage);
-            Assert.AreEqual(8, itemsPerPage);
-            Assert.AreEqual(1, totalPages);
+            //// Assert
+            //Assert.AreEqual(7, totalItems);
+            //Assert.AreEqual(1, currentPage);
+            //Assert.AreEqual(8, itemsPerPage);
+            //Assert.AreEqual(1, totalPages);
         }
 
         [TestMethod]

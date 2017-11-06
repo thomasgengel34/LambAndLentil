@@ -1,5 +1,6 @@
 ﻿ 
 using LambAndLentil.Domain.Entities;
+using LambAndLentil.UI;
 using LambAndLentil.UI.Infrastructure.Alerts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
@@ -42,20 +43,15 @@ namespace LambAndLentil.Test.BasicControllerTests
 
 
         [TestMethod]
-        public void ReturnDetailsWhenIDIstFound()
+        public void ReturnDetailsWhenIDIsFound()
         {
-            // Arrange
-
-            // Act
-         //   AlertDecoratorResult adr= (AlertDecoratorResult)Controller.Delete(int.MaxValue);
-             ViewResult vr  = (ViewResult)Controller.Delete(int.MaxValue);
-          // = (ViewResult)adr.InnerResult;
-            // Assert
-            //  Assert.Fail();
-            Assert.AreEqual("Details", vr.ViewName);
-            //Assert.AreEqual("Here it is!", adr.Message);
-            Assert.AreEqual(int.MaxValue,  ((Ingredient)vr.Model).ID);
-                //  return View(UIViewType.Details.ToString(), item).WithSuccess("Here it is!"); 
+            BaseReturnDetailsWhenIDIsFound(Controller);
         }
+
+        [TestMethod] 
+        public void DeleteAFoundIngredient()
+        {
+            BaseDeleteAFoundEntity(Controller);
+        } 
     }
 }

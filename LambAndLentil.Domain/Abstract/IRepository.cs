@@ -24,34 +24,19 @@ namespace LambAndLentil.Domain.Abstract
         IQueryable Person { get; }
         IQueryable ShoppingList { get; }
 
-        T  GetById(int id);
-      
+        T  GetById(int id); 
+        int Count(); 
+        IEnumerable<T> GetAll(); 
+        IEnumerable<T> Query(Expression<Func<T , bool>> filter); 
+        void Add(T entity); 
+        void Remove(T entity);  
+        void Update(T entity, int? key); 
+        void Save(T entity);  
 
-        int Count();
-
-        IEnumerable<T> GetAll();
-       
-
-        IEnumerable<T> Query(Expression<Func<T , bool>> filter);
-       
-
-        void Add(T entity);
-
-       
-
-        void Remove(T entity); 
-      
-
-        void Update(T entity, int? key);
-        
-
-        void Save(T entity); 
-       
-
-        void AttachAnIndependentChild<TChild>(int parentID, TChild child) 
+        void AttachAnIndependentChild<TChild>(int parentID, TChild child, int orderNumber) 
             where TChild : BaseEntity, IEntity;
 
-        void DetachAnIndependentChild<TChild>(int parentID, TChild child) 
+        void DetachAnIndependentChild<TChild>(int parentID, TChild child, int orderNumber) 
             where TChild : BaseEntity, IEntity;
     }
 }

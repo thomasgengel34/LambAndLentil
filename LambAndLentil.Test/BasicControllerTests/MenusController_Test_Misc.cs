@@ -22,8 +22,7 @@ namespace LambAndLentil.Test.BasicControllerTests
     [TestCategory("MenusController")]
     public class MenusController_Test_Misc: MenusController_Test_Should
     {
-        public Menu ReturnedMenu { get; set; }
-
+       
         public MenusController_Test_Misc()
         {
             Menu = new Menu { ID = 1000, Name = "Original Name" };

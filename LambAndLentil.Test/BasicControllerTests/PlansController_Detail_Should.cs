@@ -42,19 +42,8 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [TestMethod]
         public void ReturnDeleteWithActionMethodDeleteWithEmptyResult()
-        { //  Details view  with success  "Here it is!"
-
-            // Arrange
-
-            // Act
-            ViewResult view = (ViewResult)Controller.Details(int.MaxValue, UIViewType.Delete);
-
-
-            // Assert
-            Assert.IsNotNull(view);
-            Assert.AreEqual("Details", view.ViewName);
-            Assert.IsInstanceOfType(view.Model, typeof(Plan));
-            // no message
+        {
+            BaseReturnDeleteWithActionMethodDeleteWithEmptyResult(Controller);
         }
 
 

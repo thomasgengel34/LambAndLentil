@@ -6,6 +6,8 @@ using System.Linq;
 using LambAndLentil.Domain.Entities;
 using LambAndLentil.Domain.Abstract;
 using LambAndLentil.Domain.Concrete;
+using LambAndLentil.UI;
+using LambAndLentil.UI.Controllers;
 
 namespace LambAndLentil.Test.BasicControllerTests
 {
@@ -133,9 +135,10 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         
         [TestMethod]
-        public void SuccessfullyDetachIngredientChild()
+        public void SuccessfullyDetachFirstIngredientChild()
         {
-
+            IGenericController<ShoppingList> DetachController = new ShoppingListsController(Repo);
+            BaseSuccessfullyDetachIngredientChild(Repo, Controller, DetachController,UIControllerType.ShoppingLists);
         }
 
         [Ignore]
@@ -178,6 +181,45 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void SuccessfullyDetachPlanChild()
         {
 
+        }
+         
+        [Ignore]
+        [TestMethod]
+        [TestCategory("Attach-Detach")]
+        public void DetachARangeOfIngredientChildren()
+        { // RemoveRange
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        [TestCategory("Attach-Detach")]
+        public void DetachTheLastIngredientChild()
+        { // RemoveAt
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        [TestCategory("Attach-Detach")]
+        public void DetachAllIngredientChildren()
+        { // RemoveAll
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Fail();
         }
     }
 }
