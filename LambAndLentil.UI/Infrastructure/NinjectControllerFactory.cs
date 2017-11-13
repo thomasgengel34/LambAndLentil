@@ -1,13 +1,11 @@
-﻿using LambAndLentil.Domain.Abstract;
-using LambAndLentil.Domain.Concrete;
-using LambAndLentil.Domain.Entities;
-using LambAndLentil.UI.Controllers;
-using LambAndLentil.UI.Infrastructure.ModelMetaData;
-using LambAndLentil.UI.Models;
-using Ninject;
-using System;
+﻿using System;
 using System.Web.Mvc;
 using System.Web.Routing;
+using LambAndLentil.Domain.Abstract;
+using LambAndLentil.Domain.Concrete;
+using LambAndLentil.Domain.Entities;
+using LambAndLentil.UI.Infrastructure.ModelMetaData;
+using Ninject;
 
 namespace LambAndLentil.UI.Infrastructure
 {
@@ -27,10 +25,8 @@ namespace LambAndLentil.UI.Infrastructure
         }
 
         private void AddBindings()
-        {
-            //ninjectKernel.Bind<IRepository>().To<JSONRepository>();
-            ninjectKernel.Bind<IRepository<Ingredient >>().To<JSONRepository<Ingredient >>();
-
+        { 
+            ninjectKernel.Bind<IRepository<Ingredient >>().To<JSONRepository<Ingredient >>(); 
             ninjectKernel.Bind<IRepository< Recipe >>().To<JSONRepository< Recipe>>();
             ninjectKernel.Bind<IRepository< Menu >>().To<JSONRepository< Menu >>();
             ninjectKernel.Bind<IRepository< Plan >>().To<JSONRepository< Plan >>();

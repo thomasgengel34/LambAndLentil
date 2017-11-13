@@ -22,8 +22,7 @@ namespace LambAndLentil.Domain.Entities
         public DateTime ModifiedDate { get; set; }
         public string AddedByUser { get; set; }
         public string ModifiedByUser { get; set; }
-        public string IngredientsList { get; set; }
-        public List<Ingredient> Ingredients { get; set; }
+        public string IngredientsList { get; set; } 
 
         public BaseEntity()
         {
@@ -32,8 +31,7 @@ namespace LambAndLentil.Domain.Entities
             CreationDate = DateTime.Now;
             ModifiedDate = DateTime.Now;
             AddedByUser = WindowsIdentity.GetCurrent().Name;
-            ModifiedByUser = WindowsIdentity.GetCurrent().Name;
-            Ingredients = new List<Ingredient>();
+            ModifiedByUser = WindowsIdentity.GetCurrent().Name; 
         }
 
         public BaseEntity(DateTime creationDate) : this()

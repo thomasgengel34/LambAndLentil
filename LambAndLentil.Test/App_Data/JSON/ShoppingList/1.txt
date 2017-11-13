@@ -1,0 +1,1 @@
+{"Recipes":[],"Menus":[],"Plans":[],"ID":1,"Date":"0001-01-01T00:00:00","Author":null,"ShoppingLists":[],"Persons":[],"Name":"Name from BasicController_Test","Description":"BasicController_Test","CreationDate":"2001-02-02T00:00:00","ModifiedDate":"2017-11-13T10:36:39.9473568-06:00","AddedByUser":"PFW\\Poncho","ModifiedByUser":"PFW\\Poncho","IngredientsList":null,"Ingredients":[]}

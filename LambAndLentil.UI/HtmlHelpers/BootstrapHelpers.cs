@@ -16,16 +16,6 @@ namespace LambAndLentil.UI.Helpers
 			{
 				@class = "col-md-2 control-label"
 			});
-		}
-
-		public static IHtmlString BootstrapLabel(
-				this HtmlHelper helper,
-				string propertyName)
-		{
-			return helper.Label(propertyName, new
-			{
-				//@class = "col-md-2 control-label"
-			});
-		}
+		} 
 	}
 }

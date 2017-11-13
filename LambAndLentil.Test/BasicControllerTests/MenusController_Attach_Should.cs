@@ -8,6 +8,7 @@ using LambAndLentil.UI.Infrastructure.Alerts;
 using System.Linq;
 using LambAndLentil.UI;
 using LambAndLentil.UI.Controllers;
+using System.Collections.Generic;
 
 namespace LambAndLentil.Test.BasicControllerTests
 {
@@ -15,65 +16,15 @@ namespace LambAndLentil.Test.BasicControllerTests
     [TestClass]
     public class MenusController_Attach_Should:MenusController_Test_Should
     {
-        [Ignore]
+         
         [TestMethod]
-        public void ReturnsErrorWithUnknownRepository()
-        {
-            // Arrange
+        public void ReturnsIndexWithWarningWithNullParent() => BaseReturnsIndexWithWarningWithNullParent(Repo, Controller);
 
-            // Act
-
-            // Assert
-            Assert.Fail();
-        }
-
-        [Ignore]
         [TestMethod]
-        public void ReturnsIndexWithWarningWithUnknownParentID()
-        {
-            // Arrange
+        public void ReturnsDetailWithWarningWithUnknownChildID() => BaseReturnsDetailWithWarningWithUnknownChildID(Menu, Repo, Controller);
 
-            // Act
-
-            // Assert
-            Assert.Fail();
-        }
-
-        [Ignore]
         [TestMethod]
-        public void ReturnsIndexWithWarningWithNullParent()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
-            Assert.Fail();
-        }
-
-        [Ignore]
-        [TestMethod]
-        public void ReturnsDetailWithWarningWithUnknownChildID()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
-            Assert.Fail();
-        }
-
-        [Ignore]
-        [TestMethod]
-        public void ReturnsDetailWithWarningWithNullChild()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
-            Assert.Fail();
-        }
+        public void ReturnsDetailWithWarningIfAttachingNullChild() => BaseReturnsDetailWithWarningIfAttachingNullChild(Menu, Repo, Controller);
 
         [TestMethod]
         public void ReturnsDetailWhenAttachingWithSuccessWithValidParentandValidChild()
@@ -105,36 +56,8 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.AreEqual("Details", rdr.RouteValues.ElementAt(2).Value.ToString()); 
         }
 
-        [Ignore]   // note yet implemented
-        [TestMethod]
-        public void ReturnsDetailWhenDetachingWithSuccessWithValidParentandValidChild()
-        { 
-            // Arrange
-            Menu menu = new Menu
-            {
-                ID = int.MaxValue,
-                Description = "test ReturnsDetailWhenDetachingWithSuccessWithValidParentandValidChild"
-            };
-            IRepository<Menu> mRepo = new TestRepository<Menu>();
-            mRepo.Add(menu);
-            Ingredient ingredient = new Ingredient
-            {
-                ID = 1493,
-                Description = "test ReturnsDetailWhenDetachingWithSuccessWithValidParentandValidChild"
-            };
-
-            // Act
-            ActionResult ar = Controller.DetachIngredient(int.MaxValue, ingredient);
-            AlertDecoratorResult adr = (AlertDecoratorResult)ar;
-            RedirectToRouteResult rdr = (RedirectToRouteResult)adr.InnerResult;
-
-            //Assert
-            Assert.AreEqual("alert-success", adr.AlertClass);
-            Assert.AreEqual("Ingredient was Successfully Dettached!", adr.Message);
-            Assert.AreEqual(int.MaxValue, rdr.RouteValues.ElementAt(0).Value);
-            Assert.AreEqual("Edit", rdr.RouteValues.ElementAt(1).Value.ToString());
-            Assert.AreEqual("Details", rdr.RouteValues.ElementAt(2).Value.ToString());
-        }
+          
+        
 
        
         [TestMethod]
@@ -161,51 +84,57 @@ namespace LambAndLentil.Test.BasicControllerTests
             BaseSuccessfullyDetachIngredientChild(Repo, Controller, DetachController, UIControllerType.ShoppingLists);
         }
 
-        [Ignore]
+        
         [TestMethod]
         public void SuccessfullyAttachRecipeChild()
         {
-
+             BaseSuccessfullyAttachRecipeChild(Menu,Controller);
         }
-         
 
-        [Ignore]
+      
+
+
+
         [TestMethod]
         [TestCategory("Attach-Detach")]
-        public void DetachARangeOfIngredientChildren()
-        { // RemoveRange
-            // Arrange
+        public void DetachASetOfIngredientChildren()
+        {
+            // Arrange 
+            Menu.Ingredients.Add(new Ingredient { ID = 4005, Name = "Butter" });
+            Menu.Ingredients.Add(new Ingredient { ID = 4006, Name = "Cayenne Pepper" });
+            Menu.Ingredients.Add(new Ingredient { ID = 4007, Name = "Cheese" });
+            Menu.Ingredients.Add(new Ingredient { ID = 4008, Name = "Chopped Green Pepper" });
+            Repo.Save(Menu);
+            int initialIngredientCount = Menu.Ingredients.Count();
 
             // Act
+            var setToSelect = new HashSet<int> { 4006, 4008 };
+            List<Ingredient> selected = Menu.Ingredients.Where(t => setToSelect.Contains(t.ID)).ToList();
+            Controller.DetachAllIngredients(Menu.ID, selected);
+            Menu returnedMenu = Repo.GetById(Menu.ID);
 
             // Assert
-            Assert.Fail();
+            Assert.AreEqual(initialIngredientCount - 2, returnedMenu.Ingredients.Count());
         }
 
-        [Ignore]
         [TestMethod]
-        [TestCategory("Attach-Detach")]
         public void DetachTheLastIngredientChild()
-        { // RemoveAt
-            // Arrange
-
-            // Act
-
-            // Assert
-            Assert.Fail();
+        {
+            BaseDetachTheLastIngredientChild(Repo, Controller, Menu);
         }
 
-        [Ignore]
         [TestMethod]
         [TestCategory("Attach-Detach")]
         public void DetachAllIngredientChildren()
-        { // RemoveAll
-            // Arrange
-
-            // Act
-
-            // Assert
-            Assert.Fail();
+        {
+            BaseDetachAllIngredientChildren(Repo, Controller, Menu);
         }
+
+        [TestMethod]
+        public void ReturnsIndexWithWarningWithUnknownParentID() =>
+            BaseReturnsIndexWithWarningWithUnknownParentID(Repo, Controller); 
+
+        [TestMethod]
+        public void ReturnsDetailWhenDetachingWithSuccessWithValidParentandValidIngredientChild() => BaseReturnsDetailWhenDetachingWithSuccessWithValidParentandValidIngredientChild(Repo, Controller, Menu.ID);
     }
 }

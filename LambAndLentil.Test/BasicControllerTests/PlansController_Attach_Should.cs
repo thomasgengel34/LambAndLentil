@@ -7,6 +7,7 @@ using System.Linq;
 using System.Web.Mvc;
 using LambAndLentil.UI.Controllers;
 using LambAndLentil.UI;
+using System.Collections.Generic;
 
 namespace LambAndLentil.Test.BasicControllerTests
 {
@@ -14,66 +15,21 @@ namespace LambAndLentil.Test.BasicControllerTests
     [TestCategory("Attach")]  
     [TestClass]
     public class PlansController_Attach_Should:PlansController_Test_Should
-    {
-        [Ignore]
-        [TestMethod]
-        public void ReturnsErrorWithUnknownRepository()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
-            Assert.Fail();
-        }
-
-        [Ignore]
+    { 
         [TestMethod]
         public void ReturnsIndexWithWarningWithUnknownParentID()
         {
-            // Arrange
-
-            // Act
-
-            // Assert
-            Assert.Fail();
+            BaseReturnsIndexWithWarningWithUnknownParentID(Repo, Controller);
         }
 
-        [Ignore]
         [TestMethod]
-        public void ReturnsIndexWithWarningWithNullParent()
-        {
-            // Arrange
+        public void ReturnsIndexWithWarningWithNullParent() => BaseReturnsIndexWithWarningWithNullParent(Repo, Controller);
 
-            // Act
-
-            // Assert
-            Assert.Fail();
-        }
-
-        [Ignore]
         [TestMethod]
-        public void ReturnsDetailWithWarningWithUnknownChildID()
-        {
-            // Arrange
+        public void ReturnsDetailWithWarningWithUnknownChildID() => BaseReturnsDetailWithWarningWithUnknownChildID(Plan, Repo, Controller);
 
-            // Act
-
-            // Assert
-            Assert.Fail();
-        }
-
-        [Ignore]
         [TestMethod]
-        public void ReturnsDetailWithWarningWithNullChild()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
-            Assert.Fail();
-        }
+        public void ReturnsDetailWithWarningIfAttachingNullChild() => BaseReturnsDetailWithWarningIfAttachingNullChild(Plan, Repo, Controller);
 
         [TestMethod]
         public void ReturnsDetailWhenAttachingWithSuccessWithValidParentandValidChild()
@@ -141,50 +97,46 @@ namespace LambAndLentil.Test.BasicControllerTests
             BaseSuccessfullyDetachIngredientChild(Repo, Controller, DetachController, UIControllerType.Plans, 0); 
         }
 
-        [Ignore]
         [TestMethod]
         [TestCategory("Attach-Detach")]
-        public void DetachARangeOfIngredientChildren()
-        { // RemoveRange
-            // Arrange
+        public void DetachASetOfIngredientChildren()
+        {
+            // Arrange 
+            Plan.Ingredients.Add(new Ingredient { ID = 4005, Name = "Butter" });
+            Plan.Ingredients.Add(new Ingredient { ID = 4006, Name = "Cayenne Pepper" });
+            Plan.Ingredients.Add(new Ingredient { ID = 4007, Name = "Cheese" });
+            Plan.Ingredients.Add(new Ingredient { ID = 4008, Name = "Chopped Green Pepper" });
+            Repo.Save(Plan);
+            int initialIngredientCount = Plan.Ingredients.Count();
 
             // Act
+            var setToSelect = new HashSet<int> { 4006, 4008 };
+            List<Ingredient> selected = Plan.Ingredients.Where(t => setToSelect.Contains(t.ID)).ToList();
+            Controller.DetachAllIngredients(Plan.ID, selected);
+            Plan returnedPlan = Repo.GetById(Plan.ID);
 
             // Assert
-            Assert.Fail();
+            Assert.AreEqual(initialIngredientCount - 2, returnedPlan.Ingredients.Count());
         }
 
-        [Ignore]
         [TestMethod]
-        [TestCategory("Attach-Detach")]
         public void DetachTheLastIngredientChild()
-        { // RemoveAt
-            // Arrange
-
-            // Act
-
-            // Assert
-            Assert.Fail();
+        {
+            BaseDetachTheLastIngredientChild(Repo, Controller, Plan);
         }
 
-        [Ignore]
-        [TestMethod]
-        [TestCategory("Attach-Detach")]
+        [TestMethod] 
         public void DetachAllIngredientChildren()
-        { // RemoveAll
-            // Arrange
-
-            // Act
-
-            // Assert
-            Assert.Fail();
+        {
+            BaseDetachAllIngredientChildren(Repo, Controller, Plan);
         }
 
-        [Ignore]
+
+
         [TestMethod]
         public void SuccessfullyAttachRecipeChild()
         {
-
+            BaseSuccessfullyAttachRecipeChild(Plan, Controller);
         }
 
         [Ignore]
@@ -222,5 +174,8 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Assert
             Assert.Fail();
         }
+
+        [TestMethod]
+        public void ReturnsDetailWhenDetachingWithSuccessWithValidParentandValidIngredientChild() => BaseReturnsDetailWhenDetachingWithSuccessWithValidParentandValidIngredientChild(Repo, Controller, Plan.ID);
     }
 }

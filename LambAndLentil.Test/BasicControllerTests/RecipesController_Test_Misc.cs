@@ -161,21 +161,6 @@ namespace LambAndLentil.Test.BasicControllerTests
             //  Assert.Fail();
             Assert.AreEqual("LambAndLentil.UI.Controllers.RecipesController", RecipesController_Test_Should.Controller.ToString());
         }
-
-        private class FakeRepository : TestRepository<Recipe> { }
-
-
-        [TestMethod]
-        [ExpectedException(typeof(Exception), "Fake Repostory")]
-        public void ReturnsErrorWithUnknownRepository()
-        {
-            // Arrange
-            FakeRepository fakeRepo = new FakeRepository();
-            RecipesController fController = new RecipesController(fakeRepo);
-            // Act
-            ActionResult ar = fController.BaseAttach(fakeRepo, int.MaxValue, new Ingredient());
-            // Assert
-
-        } 
+        
     }
 }

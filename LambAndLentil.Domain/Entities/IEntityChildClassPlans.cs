@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace LambAndLentil.Domain.Entities
 {
-    public interface ICanAttachAndDetachRecipes
-    {
+   public interface IEntityChildClassPlans:IEntity
+    { 
+         List<Plan> Plans { get; set; } 
     }
 }

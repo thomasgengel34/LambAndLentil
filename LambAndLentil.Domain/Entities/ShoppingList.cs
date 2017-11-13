@@ -8,7 +8,7 @@ using System.Web;
 namespace LambAndLentil.Domain.Entities 
 {
     [Table("SHOPPINGLIST.ShoppingList")]
-    public class ShoppingList : BaseEntity, IEntity, IShoppingList
+    public class ShoppingList : BaseEntity, IEntityChildClasses, IShoppingList
     {
         public ShoppingList():base()
         {
@@ -25,14 +25,15 @@ namespace LambAndLentil.Domain.Entities
         }
          
    
-        public   List<Recipe> Recipes { get; set; } 
-        public  List<Menu> Menus { get; set; }
-        public   List<Plan> Plans { get; set; } 
+        public new  List<Recipe> Recipes { get; set; } 
+        public new List<Menu> Menus { get; set; }
+        public  new  List<Plan> Plans { get; set; } 
 
         public int ID { get; set; }
         public DateTime Date { get; set; } 
         public string Author { get; set; }
 
-     
+        private new List<ShoppingList> ShoppingLists { get; set; }
+        private new List<Person> Persons { get; set; }
     }
 }

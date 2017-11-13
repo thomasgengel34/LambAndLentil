@@ -13,9 +13,7 @@ namespace LambAndLentil.Test.BasicControllerTests
     [TestCategory("MenusController")]
     public class MenusController_ClassPropertyChanges : MenusController_Test_Should
     {
-         
-        private class FakeRepository : TestRepository<Menu> { }
-
+          
         public Menu Entity { get; set; }
         public Menu ReturnedEntity { get; set; }
 
@@ -25,18 +23,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Repo.Save(Entity);
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(Exception), "Fake Repostory")]
-        public void ReturnsErrorWithUnknownRepository()
-        {
-            // Arrange
-            FakeRepository fakeRepo = new FakeRepository();
-            MenusController fController = new MenusController(fakeRepo);
-            // Act
-            ActionResult ar = fController.BaseAttach(fakeRepo, int.MaxValue, new Ingredient());
-            // Assert
-
-        }
+       
 
         [TestMethod]
         public void ShouldEditName()

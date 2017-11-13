@@ -8,6 +8,7 @@ using LambAndLentil.Domain.Entities;
 using LambAndLentil.UI.Controllers;
 using System.Linq;
 using LambAndLentil.UI;
+using System.Collections.Generic;
 
 namespace LambAndLentil.Test.BasicControllerTests
 {
@@ -36,46 +37,59 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void SuccessfullyDetachFirstIngredientChild()
         {
             IGenericController<Ingredient> DetachController = new IngredientsController(Repo);
-            BaseSuccessfullyDetachIngredientChild(Repo,  Controller, DetachController, UIControllerType.ShoppingLists,0);
+            BaseSuccessfullyDetachIngredientChild(Repo, Controller, DetachController, UIControllerType.ShoppingLists, 0);
         }
 
-        [Ignore]
+
         [TestMethod]
         [TestCategory("Attach-Detach")]
-        public void DetachARangeOfIngredientChildren()
-        { // RemoveRange
-            // Arrange
+        public void DetachASetOfIngredientChildren()
+        {
+            // Arrange 
+            Ingredient.Ingredients.Add(new Ingredient { ID = 4005, Name = "Butter" });
+            Ingredient.Ingredients.Add(new Ingredient { ID = 4006, Name = "Cayenne Pepper" });
+            Ingredient.Ingredients.Add(new Ingredient { ID = 4007, Name = "Cheese" });
+            Ingredient.Ingredients.Add(new Ingredient { ID = 4008, Name = "Chopped Green Pepper" });
+            Repo.Save(Ingredient);
+            int initialIngredientCount = Ingredient.Ingredients.Count();
 
             // Act
+            var setToSelect = new HashSet<int> { 4006, 4008 };
+            List<Ingredient> selected = Ingredient.Ingredients.Where(t => setToSelect.Contains(t.ID)).ToList();
+            Controller.DetachAllIngredients(Ingredient.ID, selected);
+            Ingredient returnedIngredient = Repo.GetById(Ingredient.ID);
 
             // Assert
-            Assert.Fail();
+            Assert.AreEqual(initialIngredientCount - 2, returnedIngredient.Ingredients.Count());
         }
 
-        [Ignore]
-        [TestMethod]
-        [TestCategory("Attach-Detach")]
+
+        
+
+
+        [TestMethod] 
         public void DetachTheLastIngredientChild()
-        { // RemoveAt
-            // Arrange
-
-            // Act
-
-            // Assert
-            Assert.Fail();
+        {
+            BaseDetachTheLastIngredientChild(Repo, Controller,Ingredient);
         }
 
-        [Ignore]
+        [TestMethod] 
+        public void DetachAllIngredientChildren() => BaseDetachAllIngredientChildren(Repo, Controller, Ingredient);
+
         [TestMethod]
-        [TestCategory("Attach-Detach")]
-        public void DetachAllIngredientChildren()
-        { // RemoveAll
-            // Arrange
+        public void ReturnsIndexWithWarningWithUnknownParentID() =>
+            BaseReturnsIndexWithWarningWithUnknownParentID(Repo, Controller);
 
-            // Act
+        [TestMethod]
+        public void ReturnsIndexWithWarningWithNullParent() => BaseReturnsIndexWithWarningWithNullParent(Repo, Controller);
 
-            // Assert
-            Assert.Fail();
-        }
+        [TestMethod]
+        public void ReturnsDetailWithWarningIfAttachingNullChild() => BaseReturnsDetailWithWarningIfAttachingNullChild(Ingredient, Repo, Controller);
+
+        [TestMethod]
+        public void ReturnsDetailWithWarningWithUnknownChildID() => BaseReturnsDetailWithWarningWithUnknownChildID(Ingredient, Repo, Controller);
+
+        [TestMethod]
+        public void ReturnsDetailWhenDetachingWithSuccessWithValidParentandValidIngredientChild() => BaseReturnsDetailWhenDetachingWithSuccessWithValidParentandValidIngredientChild(Repo, Controller,Ingredient.ID); 
     }
 }

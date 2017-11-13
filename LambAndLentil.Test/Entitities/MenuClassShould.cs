@@ -175,5 +175,19 @@ namespace LambAndLentil.Domain.Test.Entities
             // Assert
             Assert.AreEqual(0, result.Count());
         }
+
+        [Ignore]
+        [TestMethod]
+        public void RequireIngredientChildrenToHaveUniqueIDs()
+        {
+            Assert.Fail();
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void RequireRecipeChildrenToHaveUniqueIDs()
+        {
+            Assert.Fail();
+        }
     }
 }

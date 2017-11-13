@@ -1,31 +1,16 @@
-﻿using LambAndLentil.Domain.Abstract;
+﻿using System;
+using System.Collections.Generic;
+using System.Web.Mvc;
+using LambAndLentil.Domain.Abstract;
 using LambAndLentil.Domain.Entities;
 using LambAndLentil.UI.Models;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-using LambAndLentil.UI.Infrastructure.Alerts;
-using System;
-using LambAndLentil.Domain.Concrete;
 
 namespace LambAndLentil.UI.Controllers
 {
-    public class MenusController : MenusGenericController<Menu>
-       
-    {
-        public MenusController(IRepository<Menu> repository) : base(repository)
-        {
-            Repo = repository;
-        }
-    }
-
-    public class MenusGenericController<Menu> : BaseController<Menu>, IGenericController<Menu>
+    public class MenusGenericController<Menu> : BaseController<Menu>, IGenericController<Menu> 
             where Menu : BaseEntity, IEntity, new()
     {
-        public MenusGenericController(IRepository<Menu> repository) : base(repository)
-        {
-            Repo = repository;
-        }
+        public MenusGenericController(IRepository<Menu> repository) : base(repository) => Repo = repository;
 
         // GET: Menus
         public ViewResult Index(int page = 1)
@@ -84,16 +69,14 @@ namespace LambAndLentil.UI.Controllers
         }
 
 
-        //public ActionResult AttachRecipe(int? menuID, Recipe recipeVM)
-        //{
-        //    return   BaseAttach< Recipe>(Repo,menuID, recipeVM);
-        //}
-
-        //public ActionResult DetachRecipe(int? menuID, Recipe recipeVM)
-        //{
-        //    return BaseAttach<Recipe>(Repo, menuID, recipeVM, AttachOrDetach.Detach);
-        //}
-
+        public ActionResult AttachRecipe(int? menuID, Recipe recipe, int orderNumber)=> 
+            BaseAttach<Recipe>(Repo, menuID, recipe); 
+       
+        public ActionResult DetachRecipe(int? menuID, Recipe recipe )
+        {
+            return BaseAttach<Recipe>(Repo, menuID, recipe , AttachOrDetach.Detach);
+        }
+ public ActionResult DetachRecipe(int? recipeID, Recipe recipe, int orderNumber = 0) => throw new NotImplementedException();
         public ActionResult AttachIngredient(int? menuID, Ingredient ingredient, int orderNumber = 0)
         {
             return BaseAttach<Ingredient>(Repo,menuID, ingredient, AttachOrDetach.Attach,  orderNumber);
@@ -109,5 +92,12 @@ namespace LambAndLentil.UI.Controllers
         {
             BaseAddIngredientToIngredientsList(Repo, UIControllerType.Recipes, id, addedIngredient);
         }
+
+        public void DetachAllIngredients(int ID) => BaseDetachAllIngredientChildren(Repo, ID);
+
+        public void DetachAllIngredients(int ID, List<Ingredient> selected) => 
+            
+            BaseDetachAllIngredientChildren(Repo, ID, selected);
+        public ActionResult AttachRecipe(int iD, Recipe recipe) => throw new NotImplementedException();
     }
 }

@@ -3,12 +3,10 @@ using System.Collections.Generic;
 
 namespace LambAndLentil.Domain.Entities
 {
-    public interface IMenu:IEntity
+    public interface IMenu:IEntityChildClasses
     {
         DayOfWeek DayOfWeek { get; set; }
-        int Diners { get; set; } 
-        List<Ingredient> Ingredients { get; set; }
-        MealType MealType { get; set; }
-        List<Recipe> Recipes { get; }
+        int Diners { get; set; }  
+        MealType MealType { get; set; } 
     }
 }

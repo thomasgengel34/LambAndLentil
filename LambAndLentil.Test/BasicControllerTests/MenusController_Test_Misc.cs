@@ -100,21 +100,9 @@ namespace LambAndLentil.Test.BasicControllerTests
         }
 
 
-        private class FakeRepository : TestRepository<Menu> { }
+      
 
-
-        [TestMethod]
-        [ExpectedException(typeof(Exception), "Fake Repostory")]
-        public void ReturnsErrorWithUnknownRepository()
-        {
-            // Arrange
-            FakeRepository fakeRepo = new FakeRepository();
-            MenusController fController = new MenusController(fakeRepo);
-            // Act
-            ActionResult ar = fController.BaseAttach(fakeRepo, int.MaxValue, new Ingredient());
-            // Assert
-
-        }
+      
 
         [TestMethod]
         public void ShouldEditName()

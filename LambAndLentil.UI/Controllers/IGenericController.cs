@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.Collections.Generic;
+using System.Web.Mvc;
 using LambAndLentil.Domain.Entities;
 
 namespace LambAndLentil.UI.Controllers
@@ -18,5 +19,10 @@ namespace LambAndLentil.UI.Controllers
         ActionResult PostEdit([Bind(Include = "ID, Name, Description, CreationDate,  IngredientsList")] T t);
 
          int PageSize { get; set; }
+
+        void DetachAllIngredients(int ID);
+        void DetachAllIngredients(int ID, List<Ingredient> selected);
+        ActionResult AttachRecipe(int? recipeID, Recipe recipe, int orderNumber = 0);
+        ActionResult DetachRecipe(int? recipeID, Recipe child, int orderNumber=0);
     }
 }

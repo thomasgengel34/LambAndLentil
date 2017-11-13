@@ -1,12 +1,7 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using LambAndLentil.UI.Controllers;
-using LambAndLentil.Domain.Abstract;
-using LambAndLentil.UI.Models;
-using LambAndLentil.Domain.Concrete;
-using LambAndLentil.Tests.Controllers;
-using System.Web.Mvc;
 using LambAndLentil.Domain.Entities;
+using LambAndLentil.UI.Controllers;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace LambAndLentil.Test.BasicControllerTests
 {
@@ -15,36 +10,10 @@ namespace LambAndLentil.Test.BasicControllerTests
     {
          
         static IngredientsController Controller;
-        private class FakeRepository : TestRepository<Ingredient> { }
 
-        public BaseController_Should()
-        { 
-           Controller = new IngredientsController(Repo);
-        }
+        public BaseController_Should() => Controller = new IngredientsController(Repo);
 
-        //[TestMethod]
-        //public void ReturnNullWhenItemIsNotInRepoForGuardID()
-        //{
-        //    // Arrange
 
-        //    // Act
-        //    ActionResult result = Controller.GuardId(Repo,  2);
-
-        //    // Assert
-        //    Assert.IsNull(result);
-        //}
-
-        //[TestMethod]
-        //public void ReturnEmptyResultWhenItemIsInRepoForGuardID()
-        //{
-        //    // Arrange
-
-        //    // Act
-        //    ActionResult result = Controller.GuardId(Repo,   int.MaxValue);
-
-        //    // Assert
-        //    Assert.AreEqual(typeof(EmptyResult), result.GetType());
-        //}
 
         [TestMethod]
         public void HavePublicReadOnlyStringClassNameProperty()
@@ -77,20 +46,6 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Assert  
             Assert.AreEqual("PageSize", name);
             Assert.AreEqual("Int32",propertyType.Name);
-        }
-
-
-        [TestMethod]
-        [ExpectedException(typeof(Exception), "Fake Repostory")]
-        public void ReturnsErrorWithUnknownRepositoryOnAttach()
-        {
-            // Arrange
-            FakeRepository fakeRepo = new FakeRepository();
-            IngredientsController fController = new IngredientsController(fakeRepo);
-            // Act
-            ActionResult ar = fController.BaseAttach(fakeRepo, int.MaxValue, new Ingredient());
-            // Assert
-
-        }
+        } 
     }
 }

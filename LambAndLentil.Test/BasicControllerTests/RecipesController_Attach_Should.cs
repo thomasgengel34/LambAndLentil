@@ -7,73 +7,33 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 using System.Web.Mvc;
 using LambAndLentil.UI.Controllers;
+using System.Collections.Generic;
+using System;
+using System.Linq.Expressions;
 
 namespace LambAndLentil.Test.BasicControllerTests
 {
-  
+
     [TestCategory("RecipesController")]
     [TestClass]
-    public class RecipesController_Attach_Should:RecipesController_Test_Should
+    public class RecipesController_Attach_Should : RecipesController_Test_Should
     {
-        [Ignore]
-        [TestMethod]
-        public void ReturnsErrorWithUnknownRepository()
-        {
-            // Arrange
 
-            // Act
-
-            // Assert
-            Assert.Fail();
-        }
-
-        [Ignore]
         [TestMethod]
         public void ReturnsIndexWithWarningWithUnknownParentID()
         {
-            // Arrange
-
-            // Act
-
-            // Assert
-            Assert.Fail();
+            BaseReturnsIndexWithWarningWithUnknownParentID(Repo, Controller);
         }
 
-        [Ignore]
         [TestMethod]
-        public void ReturnsIndexWithWarningWithNullParent()
-        {
-            // Arrange
+        public void ReturnsIndexWithWarningWithNullParent() => BaseReturnsIndexWithWarningWithNullParent(Repo, Controller);
 
-            // Act
-
-            // Assert
-            Assert.Fail();
-        }
-
-        [Ignore]
+        
         [TestMethod]
-        public void ReturnsDetailWithWarningWithUnknownChildID()
-        {
-            // Arrange
+        public void ReturnsDetailWithWarningWithUnknownChildID() => BaseReturnsDetailWithWarningWithUnknownChildID(Recipe, Repo, Controller);
 
-            // Act
-
-            // Assert
-            Assert.Fail();
-        }
-
-        [Ignore]
         [TestMethod]
-        public void ReturnsDetailWithWarningWithNullChild()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
-            Assert.Fail();
-        }
+        public void ReturnsDetailWithWarningIfAttachingNullChild() => BaseReturnsDetailWithWarningIfAttachingNullChild(Recipe, Repo, Controller);
 
         [Ignore]
         [TestMethod]
@@ -118,7 +78,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.Fail();
         }
 
-        
+
         [TestMethod]
         public void SuccessfullyAttachIngredientChild()
         {
@@ -134,8 +94,8 @@ namespace LambAndLentil.Test.BasicControllerTests
             //  Assert.AreEqual("Default", Ingredient.Ingredients.Last().Name);
             Assert.AreEqual("SuccessfullyAttachIngredientChild", ReturnedRecipe.Ingredients.Last().Name);
         }
-         
-        [TestMethod] 
+
+        [TestMethod]
         [TestCategory("Attach-Detach")]
         public void SuccessfullyDetachFirstIngredientChild()
         {
@@ -143,43 +103,53 @@ namespace LambAndLentil.Test.BasicControllerTests
             BaseSuccessfullyDetachIngredientChild(Repo, Controller, DetachController, UIControllerType.ShoppingLists, 0);
         }
 
-        [Ignore]
         [TestMethod]
         [TestCategory("Attach-Detach")]
-        public void DetachARangeOfIngredientChildren()
-        { // RemoveRange
-            // Arrange
+        public void DetachASetOfIngredientChildren()
+        { // RemoveAll
+          // Arrange
+
+            Recipe.Ingredients.Add(new Ingredient { ID = 4005, Name = "Butter" });
+            Recipe.Ingredients.Add(new Ingredient { ID = 4006, Name = "Cayenne Pepper" });
+            Recipe.Ingredients.Add(new Ingredient { ID = 4007, Name = "Cheese" });
+            Recipe.Ingredients.Add(new Ingredient { ID = 4008, Name = "Chopped Green Pepper" });
+            Repo.Save(Recipe);
+            int initialIngredientCount = Recipe.Ingredients.Count();
 
             // Act
+            var setToSelect = new HashSet<int> { 4000, 4001, 4006, 4008 };
 
+            List<Ingredient> selected = Recipe.Ingredients.Where(t => setToSelect.Contains(t.ID)).ToList();
+
+            Controller.DetachAllIngredients(Recipe.ID, selected);
+            Recipe returnedRecipe = Repo.GetById(Recipe.ID);
             // Assert
-            Assert.Fail();
+            Assert.AreEqual(initialIngredientCount - 4, returnedRecipe.Ingredients.Count());
         }
 
-        [Ignore]
+
         [TestMethod]
         [TestCategory("Attach-Detach")]
+        public void DetachASetOfIngredientChildrenSimplyIgnoresANonExistentIngredientIfItIsInTheSet()
+        {
+            BaseDetachASetOfIngredientChildrenSimplyIgnoresANonExistentIngredientIfItIsInTheSet<Recipe>(Repo, Controller);
+        }
+
+
+        [TestMethod]
         public void DetachTheLastIngredientChild()
-        { // RemoveAt
-            // Arrange
-
-            // Act
-
-            // Assert
-            Assert.Fail();
+        {
+            BaseDetachTheLastIngredientChild(Repo, Controller, Recipe);
         }
 
-        [Ignore]
         [TestMethod]
         [TestCategory("Attach-Detach")]
         public void DetachAllIngredientChildren()
-        { // RemoveAll
-            // Arrange
-
-            // Act
-
-            // Assert
-            Assert.Fail();
+        {
+            BaseDetachAllIngredientChildren(Repo, Controller, Recipe);
         }
+
+        [TestMethod]
+        public void ReturnsDetailWhenDetachingWithSuccessWithValidParentandValidIngredientChild() => BaseReturnsDetailWhenDetachingWithSuccessWithValidParentandValidIngredientChild(Repo, Controller, Recipe.ID);
     }
 }

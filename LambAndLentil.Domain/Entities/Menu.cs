@@ -5,7 +5,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace LambAndLentil.Domain.Entities
 {
     [Table("MENU.Menu")]
-    public class Menu : BaseEntity, IEntity, IMenu
+    public class Menu : BaseEntity, IEntityChildClassIngredients, IEntityChildClassRecipes
+
     {
 
         public Menu() : base()
@@ -14,15 +15,16 @@ namespace LambAndLentil.Domain.Entities
             Recipes = new List<Recipe>(); 
         }
 
-        public Menu(DateTime creationDate) : base(creationDate)
-        {
-            CreationDate = creationDate;
-        }
+        public Menu(DateTime creationDate) : base(creationDate) => CreationDate = creationDate;
 
         public int ID { get; set; }
         public MealType MealType { get; set; }
         public DayOfWeek DayOfWeek { get; set; } 
-        public int Diners { get; set; } 
-        public List<Recipe> Recipes { get;   set; }
+        public int Diners { get; set; }
+
+        private new List<Menu> Menus { get; set; }
+        private new List<Plan> Plans { get; set; }
+        private new List<ShoppingList> ShoppingLists { get; set; }
+        private new List<Person> Persons { get; set; }
     }
 }

@@ -8,6 +8,7 @@ using LambAndLentil.Domain.Abstract;
 using LambAndLentil.Domain.Concrete;
 using LambAndLentil.UI;
 using LambAndLentil.UI.Controllers;
+using System.Collections.Generic;
 
 namespace LambAndLentil.Test.BasicControllerTests
 {
@@ -15,66 +16,19 @@ namespace LambAndLentil.Test.BasicControllerTests
     [TestClass]
     public class ShoppingListsController_Attach_Should:ShoppingListsController_Test_Should
     {
-        [Ignore]
+         
+
         [TestMethod]
-        public void ReturnsErrorWithUnknownRepository()
-        {
-            // Arrange
+        public void ReturnsIndexWithWarningWithNullParent() => BaseReturnsIndexWithWarningWithNullParent(Repo, Controller);
 
-            // Act
-
-            // Assert
-            Assert.Fail();
-        }
-
-        [Ignore]
         [TestMethod]
-        public void ReturnsIndexWithWarningWithUnknownParentID()
-        {
-            // Arrange
+        public void ReturnsIndexWithWarningWithUnknownParentID() => 
+            BaseReturnsIndexWithWarningWithUnknownParentID(Repo, Controller); 
 
-            // Act
-
-            // Assert
-            Assert.Fail();
-        }
-
-        [Ignore]
+        
         [TestMethod]
-        public void ReturnsIndexWithWarningWithNullParent()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
-            Assert.Fail();
-        }
-
-        [Ignore]
-        [TestMethod]
-        public void ReturnsDetailWithWarningWithUnknownChildID()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
-            Assert.Fail();
-        }
-
-        [Ignore]
-        [TestMethod]
-        public void ReturnsDetailWithWarningWithNullChild()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
-            Assert.Fail();
-        }
-
+        public void ReturnsDetailWithWarningIfAttachingNullChild()  => BaseReturnsDetailWithWarningIfAttachingNullChild(ShoppingList, Repo, Controller);
+       
         [TestMethod]
         public void ReturnsDetailWhenAttachingWithSuccessWithValidParentandValidChild()
         {
@@ -137,22 +91,23 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestMethod]
         public void SuccessfullyDetachFirstIngredientChild()
         {
-            IGenericController<ShoppingList> DetachController = new ShoppingListsController(Repo);
+           IGenericController<ShoppingList> DetachController = new ShoppingListsController(Repo);
             BaseSuccessfullyDetachIngredientChild(Repo, Controller, DetachController,UIControllerType.ShoppingLists);
         }
 
-        [Ignore]
         [TestMethod]
         public void SuccessfullyAttachRecipeChild()
         {
-
+            BaseSuccessfullyAttachRecipeChild(ShoppingList, Controller);
+            Assert.Fail();  // this test, at least, is a false pass.  There is the Base Entity Recipe, which is being attached but the other Recipe is being saved. This is probably true for all the attach tests. 
         }
 
-        [Ignore]
+       
         [TestMethod]
         public void SuccessfullyDetachRecipeChild()
         {
-
+            IGenericController<ShoppingList> DetachController = new ShoppingListsController(Repo);
+            BaseSuccessfullyDetachRecipeChild(Repo, Controller, DetachController, UIControllerType.ShoppingLists);
         }
 
         [Ignore]
@@ -182,44 +137,40 @@ namespace LambAndLentil.Test.BasicControllerTests
         {
 
         }
-         
-        [Ignore]
-        [TestMethod]
-        [TestCategory("Attach-Detach")]
-        public void DetachARangeOfIngredientChildren()
-        { // RemoveRange
-            // Arrange
+
+        [TestMethod] 
+        public void DetachASetOfIngredientChildren()
+        {
+            // Arrange 
+            ShoppingList.Ingredients.Add(new Ingredient { ID = 4005, Name = "Butter" });
+            ShoppingList.Ingredients.Add(new Ingredient { ID = 4006, Name = "Cayenne Pepper" });
+            ShoppingList.Ingredients.Add(new Ingredient { ID = 4007, Name = "Cheese" });
+            ShoppingList.Ingredients.Add(new Ingredient { ID = 4008, Name = "Chopped Green Pepper" });
+            Repo.Save(ShoppingList);
+            int initialIngredientCount = ShoppingList.Ingredients.Count();
 
             // Act
+            var setToSelect = new HashSet<int> { 4006, 4008 };
+            List<Ingredient> selected = ShoppingList.Ingredients.Where(t => setToSelect.Contains(t.ID)).ToList();
+            Controller.DetachAllIngredients(ShoppingList.ID, selected);
+            ShoppingList returnedShoppingList = Repo.GetById(ShoppingList.ID);
 
             // Assert
-            Assert.Fail();
+            Assert.AreEqual(initialIngredientCount - 2, returnedShoppingList.Ingredients.Count());
         }
 
-        [Ignore]
         [TestMethod]
-        [TestCategory("Attach-Detach")]
-        public void DetachTheLastIngredientChild()
-        { // RemoveAt
-            // Arrange
+        public void DetachTheLastIngredientChild() =>
+            BaseDetachTheLastIngredientChild(Repo, Controller, ShoppingList); 
 
-            // Act
+        [TestMethod] 
+        public void DetachAllIngredientChildren() =>  BaseDetachAllIngredientChildren(Repo, Controller, ShoppingList); 
 
-            // Assert
-            Assert.Fail();
-        }
-
-        [Ignore]
         [TestMethod]
-        [TestCategory("Attach-Detach")]
-        public void DetachAllIngredientChildren()
-        { // RemoveAll
-            // Arrange
+        public void ReturnsDetailWithWarningWithUnknownChildID() => BaseReturnsDetailWithWarningWithUnknownChildID(ShoppingList, Repo, Controller);
 
-            // Act
+        [TestMethod]
+        public void ReturnsDetailWhenDetachingWithSuccessWithValidParentandValidIngredientChild() => BaseReturnsDetailWhenDetachingWithSuccessWithValidParentandValidIngredientChild(Repo, Controller, ShoppingList.ID);
 
-            // Assert
-            Assert.Fail();
-        }
     }
 }

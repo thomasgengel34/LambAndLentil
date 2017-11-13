@@ -205,34 +205,24 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Assert
             Assert.AreEqual("SaveEditedPersonTest ", person3.Name);
         }
-
-        [Ignore]  // look into why this is not working
+         
         [TestMethod]
         [TestCategory("Edit")]
         public void CanPostEditPerson()
-        {
-            // Arrange
-            Person person = new Person
-            {
-                ID = 1,
-                FirstName = "test PersonControllerTest.CanEditPerson",
-                LastName = "",
-                Description = "test PersonControllerTest.CanEditPerson"
-            };
-            Repo.Add(person);
+        { 
 
             // Act 
-            person.FirstName = "Name has been changed";
-            Repo.Add(person);
-            ViewResult view1 = (ViewResult)Controller.Edit(1);
+            Person.FirstName = "Name has been changed"; 
+            ViewResult view  = (ViewResult)Controller.PostEdit(Person );
 
-            Person returnedPersonListEntity = Repo.GetById(1);
+            Person returnedPersonListEntity = Repo.GetById(Person.ID);
 
             // Assert 
-            Assert.IsNotNull(view1);
-            Assert.AreEqual("Name has been changed", returnedPersonListEntity.Name);
-            Assert.AreEqual(person.Description, returnedPersonListEntity.Description);
-            Assert.AreEqual(person.CreationDate, returnedPersonListEntity.CreationDate);
+            Assert.IsNotNull(view);
+            Assert.AreEqual("Name has been changed", returnedPersonListEntity.FirstName);
+            Assert.AreEqual(Person.Description, returnedPersonListEntity.Description);
+            Assert.AreEqual(Person.CreationDate, returnedPersonListEntity.CreationDate);
+            Assert.AreEqual(Person.ModifiedDate, returnedPersonListEntity.ModifiedDate);
         }
 
 

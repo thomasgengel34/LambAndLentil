@@ -23,7 +23,7 @@ namespace LambAndLentil.UI.Controllers
             repository = repo;
         }
 
-        //public PartialViewResult MakerMenu(string maker=null, string actionMethod="Index")
+        //public PartialViewResult MakerMenu(string maker = null, string actionMethod = "Index")
         //{
         //    IEnumerable<string> makers = repository.Ingredients
         //                                                        .Select(x => x.Maker)

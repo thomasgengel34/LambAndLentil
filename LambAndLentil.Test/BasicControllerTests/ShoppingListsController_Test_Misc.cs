@@ -20,7 +20,7 @@ namespace LambAndLentil.Test.BasicControllerTests
     [TestClass]
     [TestCategory("ShoppingListsController")]
     public class ShoppingListsController_Test_Misc : ShoppingListsController_Test_Should
-    { 
+    {
         [TestMethod]
         public void IsPublic()
         {
@@ -33,10 +33,10 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Assert 
             Assert.AreEqual(isPublic, true);
         }
-         
+
         [TestMethod]
         public void InheritsFromBaseControllerCorrectly()
-        { 
+        {
             // Arrange
 
             // Act 
@@ -50,9 +50,9 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.IsNotNull(DoesDisposeExist);
         }
 
-     
 
-      
+
+
 
         [TestMethod]
         [TestCategory("Attach-Detach")]
@@ -63,14 +63,18 @@ namespace LambAndLentil.Test.BasicControllerTests
             int count = Repo.Count();
 
             // Act 
-            ActionResult ar = Controller.Delete(int.MaxValue);
-            ViewResult view = (ViewResult)ar;
+            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.Delete(int.MaxValue);
+            ViewResult view = (ViewResult)adr.InnerResult;
+
+            string viewName = view.ViewName;
             int newCount = Repo.Count();
+            string message = adr.Message;
 
             // Assert
-            Assert.IsNotNull(view);
-            Assert.AreEqual(UIViewType.Details.ToString(), view.ViewName);
+            Assert.IsNotNull(view); 
+             Assert.AreEqual(UIViewType.Details.ToString(), viewName);
             Assert.AreEqual(count, newCount);
+            Assert.AreEqual("Here it is!", message); 
         }
 
 
@@ -193,6 +197,6 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Assert
             //  Assert.Fail();
             Assert.AreEqual("LambAndLentil.UI.Controllers.ShoppingListsController", Controller.ToString());
-        } 
+        }
     }
 }

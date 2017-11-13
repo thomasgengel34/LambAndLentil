@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 namespace LambAndLentil.Domain.Entities
 {
     [Table("PERSON.Person")]
-    public class Person:BaseEntity,IEntity
+    public class Person : BaseEntity, IEntityChildClasses
     {
-        public Person():base()
+        public Person() : base()
         {
             Ingredients = new List<Ingredient>();
             Recipes = new List<Recipe>();
@@ -24,11 +24,11 @@ namespace LambAndLentil.Domain.Entities
             Name = FullName;
         }
 
-        public Person(string firstName, string lastName):base()
+        public Person(string firstName, string lastName) : base()
         {
             FirstName = firstName;
             LastName = lastName;
-            FullName =GetName(FirstName,  LastName);
+            FullName = GetName(FirstName, LastName);
             Name = FullName;
         }
 
@@ -41,7 +41,7 @@ namespace LambAndLentil.Domain.Entities
         public int ID { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public  string FullName { get;  set; }
+        public string FullName { get; set; }
         public decimal Weight { get; set; }
 
 
@@ -49,13 +49,12 @@ namespace LambAndLentil.Domain.Entities
         public int MaxCalories { get; set; }
         public bool NoGarlic { get; set; }
         //TODO: add all ingredients after I figure out how to economically
-         
-        public List<Recipe> Recipes { get; set; } 
-        public List<Menu> Menus { get; set; }
-        public List<Plan> Plans { get; set; }
-        public List<ShoppingList> ShoppingLists { get; set; }
 
-        public  string GetName(string FirstName, string LastName)
+
+       
+        private new List<Person> Persons { get; set; }
+
+        public string GetName(string FirstName, string LastName)
         {
             return FullName = String.Concat(FirstName, " ", LastName);
         }

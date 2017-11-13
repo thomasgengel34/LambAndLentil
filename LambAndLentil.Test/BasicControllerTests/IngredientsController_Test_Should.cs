@@ -25,7 +25,6 @@ namespace LambAndLentil.Test.BasicControllerTests
             Ingredient = new Ingredient
             {
                 ID = 1,
-                Recipe = new Recipe(),
                 IngredientsList = "IngredientsController_Test_Should : BaseControllerTest<Ingredient> BasicIngredients IngredientsList",
                 Ingredients = new List<Ingredient>()
             };

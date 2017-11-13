@@ -292,20 +292,7 @@ namespace LambAndLentil.Test.Infrastructure
             Assert.AreEqual(Ingredient.Description, ReturnedIngredient.Description);
         }
           
-        [TestCategory("BaseEntiity Property")]
-        [TestMethod]
-        public void HaveRecipeBoundInPostEditActionMethod()
-        {
-             //Arrange 
-            Ingredient.Recipe = new Recipe() { ID = 10000, Name = "Changed" };
-
-            //Act
-            Controller.PostEdit(Ingredient);
-            ReturnedIngredient = Repo.GetById(Ingredient.ID);
-
-            // Assert 
-            Assert.AreEqual("Changed", ReturnedIngredient.Recipe.Name);
-        }
+        
                
         [TestCategory("BaseEntiity Property")]
         [TestMethod]

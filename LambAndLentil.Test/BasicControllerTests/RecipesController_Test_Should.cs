@@ -37,9 +37,9 @@ namespace LambAndLentil.Test.BasicControllerTests
                 CalsFromFat = 10,
                 Ingredients = new List<Ingredient>
                 {
-                    new Ingredient{Name="Salt"},
-                    new Ingredient{Name="Egg"},
-                    new Ingredient{Name="Pepper"}
+                    new Ingredient{ID=4000, Name="Salt"},
+                    new Ingredient{ID=4001, Name="Egg"},
+                    new Ingredient{ID=4002, Name="Pepper"}
                 }
             };
             Repo.Save(Recipe);

@@ -13,41 +13,28 @@ namespace LambAndLentil.Domain.Concrete
     public class JSONRepository<T> : IRepository<T>
         where T : BaseEntity, IEntity
     {
-        // T should be an incoming entity. It cannot be a view model.  LambAndLentil.Domain only deals with Domain, does not have a dependency on UI and cannot,should not, will not. I can get away with this as is because the ViewModels are identical to the Entities. If that changes, this will have to change.
-
-
-        static string Folder { get; set; }
         protected static string FullPath { get; set; }
         private static string className;
 
         public JSONRepository()
         {
             char[] charsToTrim = { 'V', 'M' };
-            Folder = typeof(T).ToString().Split('.').Last().Split('+').Last().TrimEnd(charsToTrim);
-            //className = typeof(T).ToString().TrimEnd(charsToTrim);
-            className = Folder;
-            //   E = Type.GetType(className, true);
-            // TODO: get relative path to work.  The first line works in testing but not in running it.
-            // fullPath = @"../../../\LambAndLentil.Domain\App_Data\JSON\" + folder + "\\";
-            FullPath = @" C:\Dev\TGE\LambAndLentil\LambAndLentil.Domain\App_Data\JSON\" + Folder + "\\";
+            className = typeof(T).ToString().Split('.').Last().Split('+').Last().TrimEnd(charsToTrim);
+            // className = Folder;
+
+            FullPath = @" C:\Dev\TGE\LambAndLentil\LambAndLentil.Domain\App_Data\JSON\" + className + "\\";
         }
 
 
         public IQueryable Ingredient { get; set; }
-
         public IQueryable Recipe { get; set; }
-
         public IQueryable Menu { get; set; }
-
         public IQueryable Plan { get; set; }
-
         public IQueryable Person { get; set; }
-
         public IQueryable ShoppingList { get; set; }
 
         public void Add(T entity)
         {
-            // using the ID allows spaces in the name
             entity.ModifiedByUser = WindowsIdentity.GetCurrent().Name;
             using (StreamWriter file = File.CreateText(FullPath + entity.ID + ".txt"))
             {
@@ -56,24 +43,6 @@ namespace LambAndLentil.Domain.Concrete
             }
         }
 
-
-
-        /// <summary>
-        /// not yet ready for prime time
-        /// </summary>
-        /// <param name="oldValue">  </param>
-        /// <param name="newValue"></param>
-        private void ReplaceStringInJsonDir(string oldValue, string newValue)
-        {
-
-            IEnumerable<string> files = Directory.EnumerateDirectories(@" C:\Dev\TGE\LambAndLentil\LambAndLentil.Domain\App_Data\JSON\", null, SearchOption.AllDirectories);
-            foreach (string file in files)
-            {
-                string text = File.ReadAllText(file);
-                text = text.Replace(oldValue, newValue);
-                File.WriteAllText(file, text);
-            }
-        }
 
         /// <summary>
         /// 
@@ -87,135 +56,36 @@ namespace LambAndLentil.Domain.Concrete
         {
             char[] charsToTrim = { 'V', 'M' };
             string childName = typeof(TChild).ToString().Split('.').Last().Split('+').Last().TrimEnd(charsToTrim);
-
-
             T parent = JsonConvert.DeserializeObject<T>(File.ReadAllText(String.Concat(FullPath, parentID, ".txt")));
 
             if (parent != null && child != null)
             {
-                if (className == "Ingredient")   // can only attach an Ingredient   
-                {
-                    parent.Ingredients.Add(child as Ingredient);
-                    Update(parent, parent.ID);
-                }
-                else if (className == "Recipe")   // can only attach an Ingredient   
-                {
-                    Recipe recipe = JsonConvert.DeserializeObject<Recipe>(File.ReadAllText(String.Concat(FullPath, parentID, ".txt")));
-                    if (childName == "Ingredient")
-                    {
-                        Ingredient ingredient = child as Ingredient;
-                        recipe.Ingredients.Add(ingredient);
-                        Add(recipe as T);
-                    }
-                    else
-                    {
-                        // see notes above.  How did we get here? Try to and figure out how to block it. 
-                    }
-                }
-                else if (className == "Menu")   // can  attach an Ingredient or recipe
-                {
-                    Menu menu = JsonConvert.DeserializeObject<Menu>(File.ReadAllText
-                        (String.Concat(FullPath, parentID, ".txt")));
+                T entity = JsonConvert.DeserializeObject<T>(File.ReadAllText
+                    (String.Concat(FullPath, parentID, ".txt")));
 
-                    if (childName == "Ingredient")
-                    {
-                        if (menu.Ingredients == null)
-                        {
-                            menu.Ingredients = new List<Ingredient>();
-                        }
-                        menu.Ingredients.Add(child as Ingredient);
-                        IEntity menu1 = menu;
-                        Add((T)menu1);
-                    }
-                    else if (childName == "Recipe")
-                    {
-                        menu.Recipes.Add(child as Recipe);
-                    }
-                }
-                else if (className == "Plan")   // can  attach an Ingredient or recipe or menu
+                switch (childName)
                 {
-                    Plan plan = JsonConvert.DeserializeObject<Plan>(File.ReadAllText
-                        (String.Concat(FullPath, parentID, ".txt")));
-
-                    if (childName == "Ingredient")
-                    {
-                        plan.Ingredients.Add(child as Ingredient);
-
-                    }
-                    else if (childName == "Recipe")
-                    {
-                        plan.Recipes.Add(child as Recipe);
-                    }
-                    else if (childName == "Menu")
-                    {
-                        if (plan.Menus == null)
-                        {
-                            plan.Menus = new List<Menu>();
-                        }
-
-                        plan.Menus.Add(child as Menu);
-                    }
-                    Update(plan as T, plan.ID);
+                    case "Ingredient":
+                        entity.Ingredients.Add(child as Ingredient);
+                        break;
+                    case "Recipe":
+                        entity.Recipes.Add(child as Recipe);
+                        break;
+                    case "Menu":
+                        entity.Menus.Add(child as Menu);
+                        break;
+                    case "Plan":
+                        entity.Plans.Add(child as Plan);
+                        break;
+                    case "ShoppingList":
+                        entity.ShoppingLists.Add(child as ShoppingList);
+                        break;
+                    default:
+                        break;
                 }
-                else if (className == "ShoppingList")   // can  attach an Ingredient or recipe or menu or plan
-                {
-                    ShoppingList shoppingList = JsonConvert.DeserializeObject<ShoppingList>(File.ReadAllText
-                        (String.Concat(FullPath, parentID, ".txt")));
-
-                    if (childName == "Ingredient")
-                    {
-                        shoppingList.Ingredients.Add(child as Ingredient);
-                    }
-                    else if (childName == "Recipe")
-                    {
-                        shoppingList.Recipes.Add(child as Recipe);
-                    }
-                    else if (childName == "Menu")
-                    {
-                        shoppingList.Menus.Add(child as Menu);
-                    }
-                    else if (childName == "Plan")
-                    {
-                        shoppingList.Plans.Add(child as Plan);
-                    }
-                    Update(shoppingList as T, shoppingList.ID);
-                }
-                else if (className == "Person")
-                {
-                    Person person = JsonConvert.DeserializeObject<Person>(File.ReadAllText
-                        (String.Concat(FullPath, parentID, ".txt")));
-
-                    if (childName == "Ingredient")
-                    {
-                        if (person.Ingredients == null)
-                        {
-                            person.Ingredients = new List<Ingredient>();
-                        }
-                        person.Ingredients.Add(child as Ingredient);
-                    }
-                    else if (childName == "Recipe")
-                    {
-                        person.Recipes.Add(child as Recipe);
-                    }
-                    else if (childName == "Menu")
-                    {
-                        person.Menus.Add(child as Menu);
-                    }
-                    else if (childName == "Plan")
-                    {
-                        person.Plans.Add(child as Plan);
-                    }
-                    else if (childName == "ShoppingList")
-                    {
-                        person.ShoppingLists.Add(child as ShoppingList);
-                    }
-                    Update(person as T, person.ID);
-                }
+                Update(entity, entity.ID);
             }
         }
-
-
-
 
         public int Count()
         {
@@ -225,13 +95,7 @@ namespace LambAndLentil.Domain.Concrete
             return fileCount;
         }
 
-        /// <summary>
-        /// Detach a child that can exist on its own without the parent entity
-        /// </summary>
-        /// <typeparam name="TChild">the child that is attached</typeparam>
-        /// <param name="parentID">ID of the parent</param>
-        /// <param name="child">actual entity to be detached</param>
-        /// <param name="orderNumber">zero-based index on the list of children</param>
+
         public void DetachAnIndependentChild<TChild>(int parentID, TChild child, int orderNumber = 0)
             where TChild : BaseEntity, IEntity
         {
@@ -241,112 +105,30 @@ namespace LambAndLentil.Domain.Concrete
 
             if (parent != null && child != null)
             {
-                if (className == "Ingredient")
-                {
-                    Ingredient ingredientChild = child as Ingredient;
-                    //    bool successfulRemoval = parent.Ingredients.Remove(ingredientChild); 
-                    parent.Ingredients.RemoveAt(orderNumber);
-                    Update(parent as T, parent.ID);
-                }
-                if (className == "Recipe")   // can only attach an Ingredient   
-                {
-                    Recipe recipe = JsonConvert.DeserializeObject<Recipe>(File.ReadAllText(String.Concat(FullPath, parentID, ".txt")));
-                    if (childName == "Ingredient")
-                    {
-                        recipe.Ingredients.RemoveAt(orderNumber);
-                    }
-                    else
-                    {
-                        // see notes above.  How did we get here? Try to and figure out how to block it. 
-                    }
-                    Update(recipe as T, parent.ID);
-                }
-                else if (className == "Menu")   // can  attach an Ingredient or recipe
-                {
-                    Menu menu = JsonConvert.DeserializeObject<Menu>(File.ReadAllText
-                        (String.Concat(FullPath, parentID, ".txt")));
+                T entity = JsonConvert.DeserializeObject<T>(File.ReadAllText
+                (String.Concat(FullPath, parentID, ".txt")));
 
-                    if (childName == "Ingredient")
-                    { 
-                        menu.Ingredients.RemoveAt(orderNumber); 
-                    }
-                    else if (childName == "Recipe")
-                    {
-                        menu.Recipes.Remove(child as Recipe);
-                    }
-                    Update(menu as T, parent.ID);
-                }
-                else if (className == "Plan")   // can  attach an Ingredient or recipe or menu
+                switch (childName)
                 {
-                    Plan plan = JsonConvert.DeserializeObject<Plan>(File.ReadAllText
-                        (String.Concat(FullPath, parentID, ".txt")));
-
-                    if (childName == "Ingredient")
-                    {
-                        plan.Ingredients.RemoveAt(orderNumber);
-                    }
-                    else if (childName == "Recipe")
-                    {
-                        plan.Recipes.Remove(child as Recipe);
-                    }
-                    else if (childName == "Menu")
-                    {
-                         parent.Ingredients.RemoveAt(orderNumber);
-                        Update(parent as T, parent.ID);
-                    }
-                    Update(plan as T, parent.ID);
+                    case "Ingredient":
+                        entity.Ingredients.RemoveAt(orderNumber);
+                        break;
+                    case "Recipe":
+                        entity.Recipes.RemoveAt(orderNumber);
+                        break;
+                    case "Menu":
+                        entity.Menus.RemoveAt(orderNumber);
+                        break;
+                    case "Plan":
+                        entity.Plans.RemoveAt(orderNumber);
+                        break;
+                    case "ShoppingList":
+                        entity.ShoppingLists.RemoveAt(orderNumber);
+                        break;
+                    default:
+                        break;
                 }
-                else if (className == "ShoppingList")   // can  attach an Ingredient or recipe or menu or plan
-                {
-                    ShoppingList shoppingList = JsonConvert.DeserializeObject<ShoppingList>(File.ReadAllText
-                        (String.Concat(FullPath, parentID, ".txt")));
-
-                    if (childName == "Ingredient")
-                    { 
-                        shoppingList.Ingredients.RemoveAt(orderNumber);
-                    }
-                    else if (childName == "Recipe")
-                    {
-                        shoppingList.Recipes.Remove(child as Recipe);
-                    }
-                    else if (childName == "Menu")
-                    {
-                        shoppingList.Menus.Remove(child as Menu);
-                    }
-                    else if (childName == "Plan")
-                    {
-                        shoppingList.Plans.Remove(child as Plan);
-                    }
-                    Update(shoppingList as T, parent.ID);
-                }
-                else if (className == "Person")
-                {
-                    Person person = JsonConvert.DeserializeObject<Person>(File.ReadAllText
-                        (String.Concat(FullPath, parentID, ".txt")));
-
-                    if (childName == "Ingredient")
-                    {
-                        parent.Ingredients.RemoveAt(orderNumber);
-                        Update(parent as T, parent.ID);
-                    }
-                    else if (childName == "Recipe")
-                    {
-                        person.Recipes.Remove(child as Recipe);
-                    }
-                    else if (childName == "Menu")
-                    {
-                        person.Menus.Remove(child as Menu);
-                    }
-                    else if (childName == "Plan")
-                    {
-                        person.Plans.Remove(child as Plan);
-                    }
-                    else if (childName == "ShoppingList")
-                    {
-                        person.ShoppingLists.Remove(child as ShoppingList);
-                    }
-                    Update(parent as T, parent.ID);
-                }
+                Update(entity, entity.ID);
             }
         }
 
@@ -429,7 +211,7 @@ namespace LambAndLentil.Domain.Concrete
                         person.FullName = entity.Name;
                     }
 
-                    entity.Name = person.FullName; 
+                    entity.Name = person.FullName;
                 }
             }
             Add(entity);

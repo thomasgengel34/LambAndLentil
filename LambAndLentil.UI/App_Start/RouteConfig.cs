@@ -101,15 +101,7 @@ namespace LambAndLentil.UI
               }
               );
 
-            routes.MapRoute(
-           name: "IngredientsFoo",
-           url: "Ingredients/Foo",
-            defaults: new
-            {
-                Controller = "Ingredients",
-                action = "Foo" 
-            }
-            );
+           
 
             routes.MapRoute("SecondRoute",
                 "Page{page}",
@@ -121,11 +113,7 @@ namespace LambAndLentil.UI
                 },
                 new { page = @"\d+" }
                 );
-
-    //        routes.MapRoute("IngredientListMaker",
-    //            "{category}",
-    //            new {controller="Ingredients",action="ListAsc",page=1}
-    //);
+ 
 
             routes.MapRoute("IngredientListPage",
                 "{category}/ Page{page}",
