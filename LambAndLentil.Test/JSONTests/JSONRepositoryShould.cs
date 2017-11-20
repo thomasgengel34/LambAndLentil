@@ -22,7 +22,7 @@ namespace LambAndLentil.Test.JSONTests
          
         public JSONRepositoryShould()
         {
-            AutoMapperConfigForTests.InitializeMap();
+        //    AutoMapperConfigForTests.InitializeMap();
         }
 
         [TestMethod]

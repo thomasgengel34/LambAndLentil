@@ -26,7 +26,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         public MenusController_Test_Misc()
         {
             Menu = new Menu { ID = 1000, Name = "Original Name" };
-            Repo.Save(Menu);
+            Repo.Save((Menu)Menu);
         }
 
         [TestMethod]
@@ -111,7 +111,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
             // Act
             Menu.Name = "Name is changed";
-            Controller.PostEdit(Menu);
+            Controller.PostEdit((Menu)Menu);
             ReturnedMenu = Repo.GetById(1000);
 
             // Assert

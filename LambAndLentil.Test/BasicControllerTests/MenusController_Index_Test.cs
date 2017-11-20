@@ -464,7 +464,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         {
             // Arrange   
             int repoCount = Repo.Count();
-            MenusController Controller2 = new MenusController(Repo);
+            IGenericController<Menu> Controller2 = new MenusController(Repo);
 
             // Act
             ViewResult view1 = Controller.Index(1);

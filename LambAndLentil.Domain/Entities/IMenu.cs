@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace LambAndLentil.Domain.Entities
 {
-    public interface IMenu:IEntityChildClasses
+    public interface IMenu:IEntityChildClassIngredients, IEntityChildClassRecipes
     {
         DayOfWeek DayOfWeek { get; set; }
         int Diners { get; set; }  

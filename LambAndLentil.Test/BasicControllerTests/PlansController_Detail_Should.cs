@@ -235,10 +235,9 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestCategory("Details")]
         public void DetailsPlanIDIsZeroAlertClassIsCorrect()
         {
-            // Arrange
-            PlansController Controller = new PlansController(Repo);
-            Plan plan = new Plan { ID = 0 };
-            Repo.Save(plan);
+            // Arrange 
+            IPlan plan = new Plan { ID = 0 };
+            Repo.Save((Plan)plan);
 
 
             // Act
@@ -253,10 +252,9 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestCategory("Details")]
         public void DetailsPlanIDIsZeroReturnModelIsCorrect()
         {
-            // Arrange
-            PlansController Controller = new PlansController(Repo);
-            Plan plan = new Plan { ID = 0 };
-            Repo.Save(plan);
+            // Arrange 
+            IPlan plan = new Plan { ID = 0 };
+            Repo.Save((Plan)plan);
 
 
             // Act
@@ -292,7 +290,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange
 
             Plan.ID = -500;
-            Repo.Save(Plan);
+            Repo.Save((Plan)Plan);
 
             // Act
             ActionResult ar = Controller.Details(-500);
@@ -308,14 +306,13 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestCategory("Details")]
         public void NotBeSuccessfulWithInvalidPlanID_PlanIDIsNegative_AlertClassCorrect()
         {
-            // Arrange
-            PlansController Controller = new PlansController(Repo);
-            Plan plan = new Plan
+            // Arrange 
+            IPlan plan = new Plan
             {
                 ID = -1,
                 Name = "Details_PlanIDIsNegative_AlertClassCorrect"
             };
-            Repo.Save(plan);
+            Repo.Save((Plan)plan);
 
             // Act
             ActionResult view = Controller.Details(-1);

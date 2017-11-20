@@ -10,9 +10,8 @@ namespace LambAndLentil.UI.Controllers
 { 
     public class PersonsController : PersonsGenericController<Person>
     {
-        public PersonsController(IRepository<Person> repository) : base(repository)
-        {
-            Repo = repository;
-        } 
+        public PersonsController(IRepository<Person> repository) : base(repository) => Repo = repository;
+
+
     } 
 }

@@ -29,7 +29,7 @@ namespace LambAndLentil.Test.Infrastructure
             // Arrange
 
             // Act
-            ViewResult vr = Controller.Create(UIViewType.Create);
+            ViewResult vr =  Controller.Create(UIViewType.Create);
             string modelName = ((Ingredient)vr.Model).Name;
             // Assert 
             Assert.AreEqual(vr.ViewName, UIViewType.Details.ToString());
@@ -66,9 +66,9 @@ namespace LambAndLentil.Test.Infrastructure
         public void SaveEditedIngredient()
         {
             // Arrange
-            IngredientsController indexController = new IngredientsController(Repo);
-            IngredientsController Controller2 = new IngredientsController(Repo);
-            IngredientsController Controller3 = new IngredientsController(Repo);
+            IGenericController<Ingredient> indexController = new IngredientsController(Repo);
+            IGenericController<Ingredient> Controller2 = new IngredientsController(Repo);
+            IGenericController<Ingredient> Controller3 = new IngredientsController(Repo);
 
 
             Ingredient = new Ingredient
@@ -79,13 +79,13 @@ namespace LambAndLentil.Test.Infrastructure
             };
 
             // Act 
-            ActionResult ar1 = Controller.PostEdit(Ingredient);
+            ActionResult ar1 =  Controller.PostEdit((Ingredient)Ingredient);
 
 
             // now edit it
             Ingredient.Name = "0000 test Edited";
             Ingredient.ID = 7777;
-            ActionResult ar2 = Controller2.PostEdit(Ingredient);
+            ActionResult ar2 = Controller2.PostEdit((Ingredient)Ingredient);
             ViewResult view2 = Controller3.Index();
             List<Ingredient> ListEntity2 = (List<Ingredient>)((ListEntity<Ingredient>)view2.Model).ListT;
             ReturnedIngredient = (from m in ListEntity2
@@ -169,15 +169,15 @@ namespace LambAndLentil.Test.Infrastructure
             };
 
 
-            IngredientsController ControllerEdit = new IngredientsController(Repo);
-            IngredientsController ControllerView = new IngredientsController(Repo);
-            IngredientsController ControllerDelete = new IngredientsController(Repo);
+            IGenericController<Ingredient> ControllerEdit = new IngredientsController(Repo);
+            IGenericController<Ingredient> ControllerView = new IngredientsController(Repo);
+            IGenericController<Ingredient> ControllerDelete = new IngredientsController(Repo);
 
             // Act
             ControllerEdit.PostEdit(ingredient);
             ViewResult view = ControllerView.Index();
             List<Ingredient> ListEntity = (List<Ingredient>)((ListEntity<Ingredient>)view.Model).ListT;
-            Ingredient returnedListEntity = Repo.GetById(ingredient.ID);
+            IIngredient returnedListEntity = Repo.GetById(ingredient.ID);
             DateTime shouldBeSameDate = returnedListEntity.CreationDate;
 
             // Assert
@@ -192,8 +192,8 @@ namespace LambAndLentil.Test.Infrastructure
         {
             Ingredient.Name = "Test UpdateTheModificationDateBetweenPostedEdits";
             Ingredient.ID = 6000;
-            Repo.Save(Ingredient);
-            BaseUpdateTheModificationDateBetweenPostedEdits(Repo, Controller, Ingredient);
+            Repo.Save((Ingredient)Ingredient);
+            BaseUpdateTheModificationDateBetweenPostedEdits(Repo,  Controller,(Ingredient)Ingredient);
         }
 
 
@@ -205,7 +205,7 @@ namespace LambAndLentil.Test.Infrastructure
 
             // Act 
             Ingredient.Name = "Changed";
-            Controller.Edit(Ingredient.ID);
+             Controller.Edit(Ingredient.ID);
 
             // Assert
             Assert.AreEqual(initialCount, Repo.Count());
@@ -220,7 +220,7 @@ namespace LambAndLentil.Test.Infrastructure
 
             // Act 
             Ingredient.Name = "Changed";
-            Controller.PostEdit(Ingredient);
+             Controller.PostEdit((Ingredient)Ingredient);
 
             // Assert
             Assert.AreEqual(initialCount, Repo.Count());
@@ -251,7 +251,7 @@ namespace LambAndLentil.Test.Infrastructure
             Ingredient.ID = 7000;
 
             //Act
-            Controller.PostEdit(Ingredient);
+             Controller.PostEdit((Ingredient)Ingredient);
             ReturnedIngredient = Repo.GetById(7000);
             Ingredient OriginalIngredient = Repo.GetById(originalID);
 
@@ -269,7 +269,7 @@ namespace LambAndLentil.Test.Infrastructure
             Ingredient.Name ="Changed";
 
             //Act
-            Controller.PostEdit(Ingredient);
+             Controller.PostEdit((Ingredient)Ingredient);
             ReturnedIngredient = Repo.GetById(Ingredient.ID); 
 
             // Assert 
@@ -285,7 +285,7 @@ namespace LambAndLentil.Test.Infrastructure
             Ingredient.Description = "Changed";
 
             //Act
-            Controller.PostEdit(Ingredient);
+             Controller.PostEdit((Ingredient)Ingredient);
             ReturnedIngredient = Repo.GetById(Ingredient.ID);
 
             // Assert 
@@ -306,7 +306,7 @@ namespace LambAndLentil.Test.Infrastructure
             };
 
             //Act
-            Controller.PostEdit(Ingredient);
+             Controller.PostEdit((Ingredient)Ingredient);
             ReturnedIngredient = Repo.GetById(Ingredient.ID);
 
             // Assert 
@@ -322,7 +322,7 @@ namespace LambAndLentil.Test.Infrastructure
             Ingredient.IngredientsList =  "Changed"  ;
 
             //Act
-            Controller.PostEdit(Ingredient);
+             Controller.PostEdit((Ingredient)Ingredient);
             ReturnedIngredient = Repo.GetById(Ingredient.ID);
 
             // Assert 

@@ -14,7 +14,7 @@ namespace LambAndLentil.Domain.Abstract
 
 
     public interface IRepository<T >
-    where T : class 
+    where T : class, IEntity
     {
         //  EFDbContext context { get; set; }
         IQueryable Ingredient { get; }

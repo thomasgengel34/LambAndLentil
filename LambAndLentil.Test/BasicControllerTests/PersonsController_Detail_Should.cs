@@ -236,10 +236,9 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestCategory("Details")]
         public void DetailsPersonIDIsZeroAlertClassIsCorrect()
         {
-            // Arrange
-            PersonsController Controller = new PersonsController(Repo);
-            Person person = new Person { ID = 0 };
-            Repo.Save(person);
+            // Arrange 
+            Person.ID = 0  ;
+            Repo.Save((Person)Person);
 
 
             // Act
@@ -254,11 +253,9 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestCategory("Details")]
         public void DetailsPersonIDIsZeroReturnModelIsCorrect()
         {
-            // Arrange
-            PersonsController Controller = new PersonsController(Repo);
-            Person person = new Person { ID = 0 };
-            Repo.Save(person);
-
+            // Arrange 
+            Person.ID = 0;
+            Repo.Save((Person)Person);
 
             // Act
             ActionResult ar = Controller.Details(0);
@@ -275,8 +272,8 @@ namespace LambAndLentil.Test.BasicControllerTests
         {
             // Arrange
 
-            Person person = new Person { ID = -1 };
-            Repo.Save(person);
+            Person.ID = -1;
+            Repo.Save((Person)Person);
 
             // Act
             ActionResult view = Controller.Details(-1);
@@ -293,7 +290,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange
 
             Person.ID = -500;
-            Repo.Save(Person);
+            Repo.Save((Person)Person);
 
             // Act
             ActionResult ar = Controller.Details(-500);
@@ -309,15 +306,11 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestCategory("Details")]
         public void NotBeSuccessfulWithInvalidPersonID_PersonIDIsNegative_AlertClassCorrect()
         {
-            // Arrange
-            PersonsController Controller = new PersonsController(Repo);
-            Person person = new Person
-            {
-                ID = -1,
-                FirstName = "Details_PersonIDIsNegative_AlertClassCorrect",
-                LastName=""
-            };
-            Repo.Save(person);
+            // Arrange 
+            Person.ID = -1;
+            Person.FirstName = "Details_PersonIDIsNegative_AlertClassCorrect";
+            Person.LastName = ""; 
+            Repo.Save((Person)Person);
 
             // Act
             ActionResult view = Controller.Details(-1);

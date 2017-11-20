@@ -106,7 +106,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Plan.Ingredients.Add(new Ingredient { ID = 4006, Name = "Cayenne Pepper" });
             Plan.Ingredients.Add(new Ingredient { ID = 4007, Name = "Cheese" });
             Plan.Ingredients.Add(new Ingredient { ID = 4008, Name = "Chopped Green Pepper" });
-            Repo.Save(Plan);
+            Repo.Save((Plan)Plan);
             int initialIngredientCount = Plan.Ingredients.Count();
 
             // Act
@@ -126,10 +126,8 @@ namespace LambAndLentil.Test.BasicControllerTests
         }
 
         [TestMethod] 
-        public void DetachAllIngredientChildren()
-        {
-            BaseDetachAllIngredientChildren(Repo, Controller, Plan);
-        }
+        public void DetachAllIngredientChildren()=>       
+            BaseDetachAllIngredientChildren(Repo, Controller, Plan); 
 
 
 
@@ -151,16 +149,12 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.Fail();
         }
 
-        [Ignore]
+        
         [TestMethod]
         public void SuccessfullyAttachMenuChild()
         {
-            // Arrange
-
-            // Act
-
-            // Assert
-            Assert.Fail();
+            IGenericController<Plan> DetachController = new PlansController(Repo);
+            BaseSuccessfullyDetachMenuChild(Repo, Controller, DetachController, UIControllerType.Plans);
         }
 
         [Ignore]

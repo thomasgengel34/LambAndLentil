@@ -21,9 +21,22 @@ namespace IntegrationTests
     [TestCategory("MenusController")]
     public class MenusControllerShould : MenusController_Test_Should
     {
+        private static IGenericController<Menu> Controller1, Controller2, Controller3, Controller4, Controller5;
+       
+
         public MenusControllerShould()
         {
-
+            Repo = new JSONRepository<Menu>(); ;
+            Controller1 = new MenusController(Repo);
+            Controller2 = new MenusController(Repo);
+            Controller3 = new MenusController(Repo);
+            Controller4 = new MenusController(Repo);
+            Controller5 = new MenusController(Repo);
+            Menu = new Menu
+            {
+                Name = "0000 test",
+                ID = 33
+            };
         }
 
 
@@ -34,26 +47,26 @@ namespace IntegrationTests
 
             // Act
             ViewResult vr = Controller.Create(UIViewType.Create);
-            Menu vm = (Menu)vr.Model;
-            string modelName = vm.Name;
+            Menu Menu = (Menu)vr.Model;
+            string modelName = Menu.Name;
 
             // Assert 
             Assert.AreEqual(vr.ViewName, UIViewType.Details.ToString());
             Assert.AreEqual(modelName, "Newly Created");
-            Assert.AreEqual(DayOfWeek.Sunday, vm.DayOfWeek);
+            Assert.AreEqual(DayOfWeek.Sunday, Menu.DayOfWeek);
         }
 
         [TestMethod]
         public void SaveAValidMenu()
         {
             // Arrange 
-            Menu vm = new Menu
+            Menu Menu = new Menu
             {
                 Name = "test",
                 ID = 2
             };
             // Act
-            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.PostEdit(vm);
+            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.PostEdit(Menu);
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
 
             var routeValues = rtrr.RouteValues.Values;
@@ -70,20 +83,10 @@ namespace IntegrationTests
         public void SaveEditedMenuWithNameChange()
         {
             // Arrange
-            JSONRepository<Menu> Repo = new JSONRepository<Menu>(); ;
-            MenusController Controller1 = new MenusController(Repo);
-            MenusController Controller2 = new MenusController(Repo);
-            MenusController Controller3 = new MenusController(Repo);
-            MenusController Controller4 = new MenusController(Repo);
-            MenusController Controller5 = new MenusController(Repo);
-            Menu vm = new Menu
-            {
-                Name = "0000 test",
-                ID = 33
-            };
+
 
             // Act 
-            ActionResult ar1 = Controller1.PostEdit(vm);
+            ActionResult ar1 = Controller1.PostEdit((Menu)Menu);
             ViewResult view1 = Controller2.Index();
             List<Menu> ListEntity = (List<Menu>)((ListEntity<Menu>)view1.Model).ListT;
             var menu = (from m in ListEntity
@@ -95,9 +98,9 @@ namespace IntegrationTests
             Assert.AreEqual("0000 test", menu.Name);
 
             // now edit it
-            vm.Name = "0000 test Edited";
-            vm.ID = menu.ID;
-            ActionResult ar2 = Controller3.PostEdit(vm);
+            Menu.Name = "0000 test Edited";
+            Menu.ID = menu.ID;
+            ActionResult ar2 = Controller3.PostEdit((Menu)Menu);
             ViewResult view2 = Controller4.Index();
             List<Menu> ListEntity2 = (List<Menu>)((ListEntity<Menu>)view2.Model).ListT;
             Menu menu2 = (from m in ListEntity2
@@ -115,20 +118,9 @@ namespace IntegrationTests
         [TestCategory("Edit")]
         public void SaveEditedMenuWithNameAndDayOfWeekChange()
         {
-            // Arrange
-
-            MenusController Controller1 = new MenusController(Repo);
-            MenusController Controller2 = new MenusController(Repo);
-            MenusController Controller3 = new MenusController(Repo);
-            MenusController Controller4 = new MenusController(Repo);
-            Menu vm = new Menu
-            {
-                Name = "0000 test",
-                ID = 77777
-            };
 
             // Act 
-            ActionResult ar1 = Controller1.PostEdit(vm);
+            ActionResult ar1 = Controller1.PostEdit((Menu)Menu);
             ViewResult view1 = Controller2.Index();
             List<Menu> ListEntity = (List<Menu>)((ListEntity<Menu>)view1.Model).ListT;
             Menu menu = (from m in ListEntity
@@ -138,11 +130,11 @@ namespace IntegrationTests
             // verify initial value:
             Assert.AreEqual("0000 test", menu.Name);
             // now edit it
-            vm.ID = menu.ID;
-            vm.Name = "0000 test Edited";
-            vm.DayOfWeek = DayOfWeek.Friday;
+            Menu.ID = menu.ID;
+            Menu.Name = "0000 test Edited";
+            Menu.DayOfWeek = DayOfWeek.Friday;
 
-            ActionResult ar2 = Controller3.PostEdit(vm);
+            ActionResult ar2 = Controller3.PostEdit((Menu)Menu);
             ViewResult view2 = Controller4.Index();
             List<Menu> ListEntity2 = (List<Menu>)((ListEntity<Menu>)view2.Model).ListT;
             menu = (from m in ListEntity2
@@ -160,22 +152,13 @@ namespace IntegrationTests
         [TestCategory("Edit")]
         public void SaveEditedMenuWithDescriptionChange()
         {
-            // Arrange
-
-            MenusController Controller1 = new MenusController(Repo);
-            MenusController Controller2 = new MenusController(Repo);
-            MenusController Controller3 = new MenusController(Repo);
-            MenusController Controller4 = new MenusController(Repo);
-            MenusController Controller5 = new MenusController(Repo);
-            Menu vm = new Menu
-            {
-                Name = "0000 test",
-                Description = "SaveEditedMenuWithDescriptionChange Pre-test",
-                ID = int.MaxValue / 2
-            };
+            // Arrange 
+            Menu.Name = "0000 test";
+            Menu.Description = "SaveEditedMenuWithDescriptionChange Pre-test";
+            Menu.ID = int.MaxValue / 2; 
 
             // Act 
-            ActionResult ar1 = Controller1.PostEdit(vm);
+            ActionResult ar1 = Controller1.PostEdit((Menu)Menu);
             ViewResult view1 = Controller2.Index();
             List<Menu> ListEntity = (List<Menu>)((ListEntity<Menu>)view1.Model).ListT;
             Menu menu = (from m in ListEntity
@@ -189,11 +172,11 @@ namespace IntegrationTests
 
 
             // now edit it
-            vm.ID = menu.ID;
-            vm.Name = "0000 test Edited";
-            vm.Description = "SaveEditedMenuWithDescriptionChange Post-test";
+            Menu.ID = menu.ID;
+            Menu.Name = "0000 test Edited";
+            Menu.Description = "SaveEditedMenuWithDescriptionChange Post-test";
 
-            ActionResult ar2 = Controller3.PostEdit(vm);
+            ActionResult ar2 = Controller3.PostEdit((Menu)Menu);
             ViewResult view2 = Controller4.Index();
             List<Menu> ListEntity2 = (List<Menu>)((ListEntity<Menu>)view2.Model).ListT;
             menu = (from m in ListEntity2
@@ -247,10 +230,10 @@ namespace IntegrationTests
             DateTime CreationDate = new DateTime(2010, 1, 1);
 
             // Act
-            Menu vm = new Menu(CreationDate);
+            Menu Menu = new Menu(CreationDate);
 
             // Assert
-            Assert.AreEqual(CreationDate, vm.CreationDate);
+            Assert.AreEqual(CreationDate, Menu.CreationDate);
         }
 
         [TestMethod]
@@ -259,7 +242,7 @@ namespace IntegrationTests
         {
             // Arrange
             DateTime CreationDate = new DateTime(2010, 1, 1);
-            Menu vm = new Menu(CreationDate)
+            Menu Menu = new Menu(CreationDate)
             {
                 Name = "001 Test ",
                 ID = 290,
@@ -267,13 +250,10 @@ namespace IntegrationTests
             };
 
 
-            MenusController ControllerEdit = new MenusController(Repo);
-            MenusController ControllerView = new MenusController(Repo);
-            MenusController ControllerDelete = new MenusController(Repo);
-
+          
             // Act
-            ControllerEdit.PostEdit(vm);
-            ViewResult view = ControllerView.Index();
+            Controller1.PostEdit(Menu);
+            ViewResult view = Controller2.Index();
             List<Menu> ListEntity = (List<Menu>)((ListEntity<Menu>)view.Model).ListT;
             Menu menu = (from m in ListEntity
                          where m.Name == "001 Test "
@@ -292,37 +272,37 @@ namespace IntegrationTests
         {
             Menu.Name = "Test UpdateTheModificationDateBetweenPostedEdits";
             Menu.ID = 6000;
-            Repo.Save(Menu);
-            BaseUpdateTheModificationDateBetweenPostedEdits(Repo, Controller, Menu);
+            Repo.Save((Menu)Menu);
+            BaseUpdateTheModificationDateBetweenPostedEdits(Repo, Controller, (Menu)Menu);
         }
 
-        //[Ignore]
-        //[TestMethod]
-        //[TestCategory("Attach-Detach")]
-        //public void ReturnIndexWithSuccessAttachAnExistingRecipeToAnExistingMenu()
-        //{
-        //    // Arrange 
-        //    IRepository<Recipe> repoRecipe = new TestRepository<Recipe>();
-        //    MenusController ControllerAttach = new MenusController(Repo);
-        //    RecipesController ControllerAttachI = new RecipesController(repoRecipe);
-        //    MenusController ControllerCleanup = new MenusController(Repo);
+        [Ignore]
+        [TestMethod]
+        [TestCategory("Attach-Detach")]
+        public void ReturnIndexWithSuccessAttachAnExistingRecipeToAnExistingMenu()
+        {
+            // Arrange 
+            IRepository<Recipe> repoRecipe = new TestRepository<Recipe>();
+            IGenericController<Menu> ControllerAttach = new MenusController(Repo);
+            IGenericController<Recipe> ControllerAttachI = new RecipesController(repoRecipe);
+            IGenericController<Menu> ControllerCleanup = new MenusController(Repo);
 
 
-        //    Menu menu = new Menu() { ID = 100, Description = "test AttachAnExistingRecipeToAnExistingMenu" };
-        //    Repo.Add(menu);
+            Menu menu = new Menu() { ID = 100, Description = "test AttachAnExistingRecipeToAnExistingMenu" };
+            Repo.Add(menu);
 
-        //    Recipe recipeVM = new Recipe() { ID = 101, Description = "test AttachAnExistingRecipeToAnExistingMenu" };
-        //    repoRecipe.Add(recipeVM);
-        //    // Act
-        //    var x = ControllerAttach.AttachRecipe(menu.ID, recipeVM );
+            Recipe recipeVM = new Recipe() { ID = 101, Description = "test AttachAnExistingRecipeToAnExistingMenu" };
+            repoRecipe.Add(recipeVM);
+            // Act
+            var x = ControllerAttach.AttachRecipe(menu.ID, recipeVM);
 
-        //    // Assert 
-        //    Assert.AreEqual(1, menu.Recipes.Count());
-        //    // how do I know the correct recipe was added?
-        //    Assert.AreEqual(recipeVM.ID, menu.Recipes.First().ID);
+            // Assert 
+            Assert.AreEqual(1, menu.Recipes.Count());
+            // how do I know the correct recipe was added?
+            Assert.AreEqual(recipeVM.ID, menu.Recipes.First().ID);
 
 
-        //}
+        }
 
 
 

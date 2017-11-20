@@ -11,7 +11,7 @@ using System.Security.Principal;
 namespace LambAndLentil.Domain.Concrete
 {
     public class JSONRepository<T> : IRepository<T>
-        where T : BaseEntity, IEntity
+        where T : BaseEntity, IEntity 
     {
         protected static string FullPath { get; set; }
         private static string className;
@@ -52,7 +52,7 @@ namespace LambAndLentil.Domain.Concrete
         /// <param name="child"></param>
         /// <param name="orderNumber">zero-based index in list currently used only in Detach version</param>
         public void AttachAnIndependentChild<TChild>(int parentID, TChild child, int orderNumber = 0)
-            where TChild : BaseEntity, IEntity
+            where TChild : BaseEntity, IEntity 
         {
             char[] charsToTrim = { 'V', 'M' };
             string childName = typeof(TChild).ToString().Split('.').Last().Split('+').Last().TrimEnd(charsToTrim);
@@ -66,19 +66,29 @@ namespace LambAndLentil.Domain.Concrete
                 switch (childName)
                 {
                     case "Ingredient":
-                        entity.Ingredients.Add(child as Ingredient);
+                        IEntityChildClassIngredients item= (IEntityChildClassIngredients)entity;
+                        item.Ingredients.Add(child as Ingredient);
+                        entity = (T)item;
                         break;
                     case "Recipe":
-                        entity.Recipes.Add(child as Recipe);
+                        IEntityChildClassRecipes itemR = (IEntityChildClassRecipes)entity;
+                        itemR.Recipes.Add(child as Recipe);
+                        entity = (T)itemR;
                         break;
                     case "Menu":
-                        entity.Menus.Add(child as Menu);
+                        IEntityChildClassMenus itemM = (IEntityChildClassMenus)entity;
+                        itemM.Menus.Add(child as Menu);
+                        entity = (T)itemM;
                         break;
                     case "Plan":
-                        entity.Plans.Add(child as Plan);
+                        IEntityChildClassPlans itemP = (IEntityChildClassPlans)entity;
+                        itemP.Plans.Add(child as Plan);
+                        entity = (T)itemP;
                         break;
                     case "ShoppingList":
-                        entity.ShoppingLists.Add(child as ShoppingList);
+                        IEntityChildClassShoppingLists itemS = (IEntityChildClassShoppingLists)entity;
+                        itemS.ShoppingLists.Add(child as ShoppingList);
+                        entity = (T)itemS;
                         break;
                     default:
                         break;
@@ -111,19 +121,29 @@ namespace LambAndLentil.Domain.Concrete
                 switch (childName)
                 {
                     case "Ingredient":
-                        entity.Ingredients.RemoveAt(orderNumber);
+                        IEntityChildClassIngredients item = (IEntityChildClassIngredients)entity;
+                        item.Ingredients.RemoveAt(orderNumber);
+                        entity = (T)item; 
                         break;
                     case "Recipe":
-                        entity.Recipes.RemoveAt(orderNumber);
+                        IEntityChildClassRecipes itemR = (IEntityChildClassRecipes)entity;
+                        itemR.Recipes.RemoveAt(orderNumber);
+                        entity = (T)itemR; 
                         break;
                     case "Menu":
-                        entity.Menus.RemoveAt(orderNumber);
+                        IEntityChildClassMenus itemM = (IEntityChildClassMenus)entity;
+                        itemM.Menus.RemoveAt(orderNumber);
+                        entity = (T)itemM; 
                         break;
                     case "Plan":
-                        entity.Plans.RemoveAt(orderNumber);
+                        IEntityChildClassPlans itemP = (IEntityChildClassPlans)entity;
+                        itemP.Plans.RemoveAt(orderNumber);
+                        entity = (T)itemP; 
                         break;
                     case "ShoppingList":
-                        entity.ShoppingLists.RemoveAt(orderNumber);
+                        IEntityChildClassShoppingLists itemS = (IEntityChildClassShoppingLists)entity;
+                        itemS.ShoppingLists.RemoveAt(orderNumber);
+                        entity = (T)itemS; 
                         break;
                     default:
                         break;
@@ -151,21 +171,12 @@ namespace LambAndLentil.Domain.Concrete
             }
         }
 
-        public IEnumerable<T> Query(Expression<Func<T, bool>> filter)
-        {
-            throw new NotImplementedException();
-        }
+        public IEnumerable<T> Query(Expression<Func<T, bool>> filter) => throw new NotImplementedException();
 
-        public void Remove(T t)
-        {
-            File.Delete(String.Concat(FullPath, t.ID, ".txt"));
-        }
+        public void Remove(T t) => File.Delete(String.Concat(FullPath, t.ID, ".txt"));
 
 
-        public void Save(T entity)
-        {
-            Add(entity);
-        }
+        public void Save(T entity) => Add(entity);
 
 
         public void Update(T entity, int? key)

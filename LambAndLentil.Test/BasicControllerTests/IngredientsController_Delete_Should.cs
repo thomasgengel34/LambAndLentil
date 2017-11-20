@@ -1,28 +1,29 @@
-﻿ 
+﻿
 using LambAndLentil.Domain.Entities;
 using LambAndLentil.UI;
 using LambAndLentil.UI.Infrastructure.Alerts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 using System.Web.Mvc;
+using LambAndLentil.UI.Controllers;
+using System;
 
 namespace LambAndLentil.Test.BasicControllerTests
 {
     [TestCategory("IngredientsController")]
-    [TestCategory("Delete")]
+    [TestCategory("")]
     [TestClass]
-    public class IngredientsController_Delete_Should:IngredientsController_Test_Should
+    public class IngredientsController__Should:IngredientsController_Test_Should
     {
-        public IngredientsController_Delete_Should()
+        public IngredientsController__Should()
         {
           
         }
+
         [Ignore]
         [TestMethod]
-        public void AllowUserToConfirmDeleteRequestAndCallConfirmDelete()
-        {
-            Assert.Fail();
-        }
+        public void AllowUserToConfirmRequestAndCallConfirm()=> 
+            Assert.Fail(); 
 
  
         [TestMethod]
@@ -31,7 +32,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange
 
             // Act
-            AlertDecoratorResult adr= (AlertDecoratorResult)Controller.Delete(50000);
+            AlertDecoratorResult adr= (AlertDecoratorResult)Controller.Index(50000);
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
             // Assert
         //    Assert.Fail();
@@ -43,15 +44,11 @@ namespace LambAndLentil.Test.BasicControllerTests
 
 
         [TestMethod]
-        public void ReturnDetailsWhenIDIsFound()
-        {
-            BaseReturnDetailsWhenIDIsFound(Controller);
-        }
+        public void ReturnDetailsWhenIDIsFound() => BaseReturnDetailsWhenIDIsFound(Controller);
 
         [TestMethod] 
-        public void DeleteAFoundIngredient()
-        {
-            BaseDeleteAFoundEntity(Controller);
-        } 
+        public void AFoundIngredient()=> BaseAFoundEntity(Controller); 
+
+        private void BaseAFoundEntity(IGenericController<Ingredient> controller) => throw new NotImplementedException();
     }
 }

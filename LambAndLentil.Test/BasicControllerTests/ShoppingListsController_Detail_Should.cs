@@ -47,10 +47,8 @@ namespace LambAndLentil.Test.BasicControllerTests
         }
 
         [TestMethod]
-        public void ReturnDeleteWithActionMethodDeleteWithEmptyResult()
-        {
-            BaseReturnDeleteWithActionMethodDeleteWithEmptyResult(Controller);
-        }
+        public void ReturnDeleteWithActionMethodDeleteWithEmptyResult() =>
+            BaseReturnDeleteWithActionMethodDeleteWithEmptyResult(Controller); 
 
 
         [TestMethod]
@@ -140,16 +138,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.IsNotNull(view);
         }
 
-
-        [TestMethod]
-        [TestCategory("Details")]
-        public void DetailsIngredientIDTooHighMessageRight()
-        {
-            // max is set by int.MaxValue, so the type controls this. 
-            // Will always be true. Keep test in case I find this is wrong somehow.
-            Assert.IsTrue(true);
-        }
-
+         
 
         [TestMethod]
         [TestCategory("Details")]
@@ -162,35 +151,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.AreEqual("alert-danger", adr.AlertClass);
         }
 
-
-        [TestMethod]
-        [TestCategory("Details")]
-        public void DetailsIngredientIDTooHighCorrectModel()
-        {
-            // max is set by int.MaxValue, so the type controls this. 
-            // Will always be true. Keep test in case I find this is wrong somehow.
-            Assert.IsTrue(true);
-        }
-
-
-        [TestMethod]
-        [TestCategory("Details")]
-        public void DetailsIngredientIDTooHighCorrectController()
-        {
-            // max is set by int.MaxValue, so the type controls this. 
-            // Will always be true. Keep test in case I find this is wrong somehow.
-            Assert.IsTrue(true);
-        }
-
-
-        [TestMethod]
-        [TestCategory("Details")]
-        public void DetailsIngredientIDTooHighCorrectRouteValue()
-        {
-            // max is set by int.MaxValue, so the type controls this. 
-            // Will always be true. Keep test in case I find this is wrong somehow.
-            Assert.IsTrue(true);
-        }
+           
 
 
         [TestMethod]
@@ -241,8 +202,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestCategory("Details")]
         public void DetailsIngredientIDIsZeroAlertClassIsCorrect()
         {
-            // Arrange
-            ShoppingListsController Controller = new ShoppingListsController(Repo);
+            // Arrange 
             ShoppingList shoppingList = new ShoppingList { ID = 0 };
             Repo.Save(shoppingList);
 
@@ -259,8 +219,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestCategory("Details")]
         public void DetailsIngredientIDIsZeroReturnModelIsCorrect()
         {
-            // Arrange
-            ShoppingListsController Controller = new ShoppingListsController(Repo);
+            // Arrange 
             ShoppingList shoppingList = new ShoppingList { ID = 0 };
             Repo.Save(shoppingList);
 
@@ -315,13 +274,10 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void NotBeSuccessfulWithInvalidIngredientID_IngredientIDIsNegative_AlertClassCorrect()
         {
             // Arrange
-            ShoppingListsController Controller = new ShoppingListsController(Repo);
-            ShoppingList shoppingList = new ShoppingList
-            {
-                ID = -1,
-                Name = "Details_IngredientIDIsNegative_AlertClassCorrect"
-            };
-            Repo.Save(shoppingList);
+
+            ShoppingList.ID = -1;
+            ShoppingList.Name = "Details_IngredientIDIsNegative_AlertClassCorrect"; 
+            Repo.Save(ShoppingList);
 
             // Act
             ActionResult view = Controller.Details(-1);
@@ -334,15 +290,13 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [Ignore]
         [TestMethod]
-        public void ReturnDetailsViewActionTypeEdit_ValidID()
-        {
+        public void ReturnDetailsViewActionTypeEdit_ValidID() => 
             // Arrange
 
             // Act
 
             // Assert
-            Assert.Fail();
-        }
+            Assert.Fail(); 
 
         [Ignore]
         [TestMethod]

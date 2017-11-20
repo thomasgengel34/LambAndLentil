@@ -52,7 +52,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             int initialCount = Repo.Count();
 
             // Act
-            Controller.DeleteConfirmed(int.MaxValue);
+             Controller.DeleteConfirmed(int.MaxValue);
             int finalCount = Repo.Count();
             object shouldBeNull = Repo.GetById(int.MaxValue);
 

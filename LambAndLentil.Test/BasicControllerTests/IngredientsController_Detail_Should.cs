@@ -38,10 +38,8 @@ namespace LambAndLentil.Test.BasicControllerTests
         }
 
         [TestMethod]
-        public void ReturnDeleteWithActionMethodDeleteWithEmptyResult()
-        {
-            BaseReturnDeleteWithActionMethodDeleteWithEmptyResult(Controller);
-        }
+        public void ReturnDeleteWithActionMethodDeleteWithEmptyResult()=>
+            BaseReturnDeleteWithActionMethodDeleteWithEmptyResult(Controller); 
 
 
         [TestMethod]
@@ -136,12 +134,10 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [TestMethod]
         [TestCategory("Details")]
-        public void DetailsIngredientIDTooHighMessageRight()
-        {
+        public void DetailsIngredientIDTooHighMessageRight() =>
             // max is set by int.MaxValue, so the type controls this. 
             // Will always be true. Keep test in case I find this is wrong somehow.
             Assert.IsTrue(true);
-        }
 
 
         [TestMethod]
@@ -160,32 +156,26 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [TestMethod]
         [TestCategory("Details")]
-        public void DetailsIngredientIDTooHighCorrectModel()
-        {
+        public void DetailsIngredientIDTooHighCorrectModel() =>
             // max is set by int.MaxValue, so the type controls this. 
             // Will always be true. Keep test in case I find this is wrong somehow.
             Assert.IsTrue(true);
-        }
 
 
         [TestMethod]
         [TestCategory("Details")]
-        public void DetailsIngredientIDTooHighCorrectController()
-        {
+        public void DetailsIngredientIDTooHighCorrectController() =>
             // max is set by int.MaxValue, so the type controls this. 
             // Will always be true. Keep test in case I find this is wrong somehow.
             Assert.IsTrue(true);
-        }
 
 
         [TestMethod]
         [TestCategory("Details")]
-        public void DetailsIngredientIDTooHighCorrectRouteValue()
-        {
+        public void DetailsIngredientIDTooHighCorrectRouteValue() =>
             // max is set by int.MaxValue, so the type controls this. 
             // Will always be true. Keep test in case I find this is wrong somehow.
             Assert.IsTrue(true);
-        }
 
 
         [TestMethod]

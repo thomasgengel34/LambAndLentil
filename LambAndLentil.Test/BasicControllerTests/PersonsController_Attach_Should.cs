@@ -108,25 +108,23 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         }
 
-        [Ignore]
         [TestMethod]
-        public void SuccessfullyAttachMenuChild()
-        {
+        public void SuccessfullyAttachMenuChild() => BaseSuccessfullyAttachMenuChild(Person, Controller);
 
-        }
+
 
         [Ignore]
         [TestMethod]
         public void SuccessfullyDetachMenuChild()
         {
-
+            IGenericController<Person> DetachController = new PersonsController(Repo);
+            BaseSuccessfullyDetachMenuChild(Repo, Controller, DetachController, UIControllerType.Persons);
         }
 
-        [Ignore]
         [TestMethod]
         public void SuccessfullyAttachPlanChild()
         {
-
+            BaseSuccessfullyAttachPlanChild(Person, Controller);
         }
 
         [Ignore]
@@ -167,7 +165,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Person.Ingredients.Add(new Ingredient { ID = 4006, Name = "Cayenne Pepper" });
             Person.Ingredients.Add(new Ingredient { ID = 4007, Name = "Cheese" });
             Person.Ingredients.Add(new Ingredient { ID = 4008, Name = "Chopped Green Pepper" });
-            Repo.Save(Person);
+            Repo.Save((Person)Person);
             int initialIngredientCount = Person.Ingredients.Count();
 
             // Act

@@ -21,7 +21,7 @@ namespace LambAndLentil.Test.BasicControllerTests
     [TestCategory("ShoppingListsController")]
     public class ShoppingListsControllerShould : BaseControllerTest<ShoppingList>
     { 
-        static ShoppingListsController Controller;
+        
         static ShoppingList ShoppingList;
 
         public ShoppingListsControllerShould()

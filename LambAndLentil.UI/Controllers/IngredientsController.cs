@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace LambAndLentil.UI.Controllers
 {
-    public class IngredientsController : IngredientsGenericController<Ingredient>
+    public class IngredientsController : IngredientsGenericController<Ingredient>, IIngredientsControllerAsync
     {
         static HttpClient Client { get; set; }
         static string key   = "sFtfcrVdSOKA4ip3Z1MlylQmdj5Uw3JoIIWlbeQm";

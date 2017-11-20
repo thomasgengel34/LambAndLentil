@@ -8,7 +8,7 @@ using System.Collections.Generic;
 namespace LambAndLentil.Test.WebAPI
 {
     [TestClass]
-    public class GetFoodsBySearchingUsingFreeTextToLocateFoodsInTheDatabase : IngredientsController_Test_Should
+    public class GetFoodsBySearchingUsingFreeTextToLocateFoodsInTheDatabase : IngredientsControllerAsync_Test_Should
     {
         /* Search -- use free text to locate foods in the database
  https://api.nal.usda.gov/ndb/search/?format=json&q=butter&sort=n&max=25&offset=0&api_key=DEMO_KEY 
@@ -22,7 +22,7 @@ namespace LambAndLentil.Test.WebAPI
             string searchString = " 076606619663";
             string correctIngredients = "INGREDIENTS: GREEN ASPARAGUS, WATER, VINEGAR, SUGAR, SALT, MUSTARD SEEDS, BLACK PEPPER, RED HOT PEPPER, GARLIC";
             // Act 
-            string returnedIngredients = await Controller.GetIngredientsFromDescription(searchString);
+            string returnedIngredients = await  AsyncController.GetIngredientsFromDescription(searchString);
 
             // Assert 
             Assert.AreEqual(correctIngredients, returnedIngredients);
@@ -36,7 +36,7 @@ namespace LambAndLentil.Test.WebAPI
             int ndbno = 45078606;
 
             // Act
-            string returnedName = await Controller.GetIngredientNameFromNdbno(ndbno);
+            string returnedName = await  AsyncController.GetIngredientNameFromNdbno(ndbno);
 
             // Assert
             Assert.AreEqual("AARDVARK HABENERO HOT SAUCE, UPC: 853393000030", returnedName);
@@ -51,7 +51,7 @@ namespace LambAndLentil.Test.WebAPI
             string correctIngredients = "TOMATOES (TOMATOES AND FIRE ROASTED TOMATOES, TOMATO JUICE, CITRIC ACID, CALCIUM CHLORIDE), WHITE WINE VINEGAR, CARROTS, WATER, YELLOW ONION, HABANERO CHILI PEPPER (HABANERO CHILI PEPPERS, WATER, SALT, CITRIC ACID), MUSTARD (DISTILLED VINEGAR, WATER, MUSTARD SEED, SALT, TURMERIC, SPICES), ORGANIC CANE SUGAR, SALT, MODIFIED FOOD STARCH, GARLIC, SUNFLOWER OIL, HERBS AND SPICES.";
 
             // Act
-            string returnedIngredients = await Controller.GetIngredientsByNdbno(ndbno);
+            string returnedIngredients = await  AsyncController.GetIngredientsByNdbno(ndbno);
 
             // Assert
             Assert.AreEqual(correctIngredients, returnedIngredients);
@@ -70,7 +70,7 @@ namespace LambAndLentil.Test.WebAPI
 
             // Act
             //   int?  ndbno = await Controller.GetNdbnoFromSearchStringAsync(searchString);
-            string returnedIngredients = await Controller.GetIngredientsFromDescription(searchString);
+            string returnedIngredients = await  AsyncController.GetIngredientsFromDescription(searchString);
 
             // Assert 
             Assert.AreEqual(correctIngredients, returnedIngredients);
@@ -86,7 +86,7 @@ namespace LambAndLentil.Test.WebAPI
             int corectNdbno = 45078606;
 
             // Act 
-            int? ndbno = await Controller.GetNdbnoFromSearchStringAsync(searchString);
+            int? ndbno = await  AsyncController.GetNdbnoFromSearchStringAsync(searchString);
 
             // Assert
             Assert.AreEqual(corectNdbno, ndbno);
@@ -100,7 +100,7 @@ namespace LambAndLentil.Test.WebAPI
             string correctIngredients = "Boiled stew made with water, beef or deer, prepared acorns, dumpling strips, salt, and pepper.";
 
             // Act 
-            string returnedIngredients = await Controller.GetIngredientsFromDescription(searchString);
+            string returnedIngredients = await AsyncController.GetIngredientsFromDescription(searchString);
 
             // Assert 
             Assert.AreEqual(correctIngredients, returnedIngredients);
@@ -114,7 +114,7 @@ namespace LambAndLentil.Test.WebAPI
             int correctNdbno = 45157747;
 
             // Act 
-            int? ndbno = await Controller.GetNdbnoFromSearchStringAsync(searchString);
+            int? ndbno = await  AsyncController.GetNdbnoFromSearchStringAsync(searchString);
 
             // Assert
             Assert.AreEqual(correctNdbno, ndbno);
@@ -131,7 +131,7 @@ namespace LambAndLentil.Test.WebAPI
 
             // Act
             UsdaWebApiDataSource uwads = UsdaWebApiDataSource.StandardReference;
-            string name = await Controller.GetIngredientsFromDescription(searchString, "",uwads);
+            string name = await  AsyncController.GetIngredientsFromDescription(searchString, "", uwads);
 
             //Assert
             Assert.AreEqual(expected, name);
@@ -144,7 +144,7 @@ namespace LambAndLentil.Test.WebAPI
             // Arrange
             string searchString = "Habenero";
             // Act
-           List<string> list = (List<string>)(await Controller.GetIngredientNamesAsync(searchString));
+            List<string> list = (List<string>)(await AsyncController.GetIngredientNamesAsync(searchString));
 
             //Assert
             Assert.AreEqual(4, list.Count);
@@ -172,7 +172,7 @@ namespace LambAndLentil.Test.WebAPI
 
             // Act
             //   int?  ndbno = await Controller.GetNdbnoFromSearchStringAsync(searchString);
-            string returnedIngredients = await Controller.GetIngredientsFromDescription(searchString);
+            string returnedIngredients = await  AsyncController.GetIngredientsFromDescription(searchString);
 
             // Assert 
             Assert.AreEqual(correctIngredients, returnedIngredients);
@@ -187,7 +187,7 @@ namespace LambAndLentil.Test.WebAPI
             string correctIngredients = "PISTACHIOS, GARLIC, HABENERO, SALT & NATURAL SMOKE FLAVOR.";
 
             // Act 
-            string returnedIngredients = await Controller.GetIngredientsFromDescription(searchString);
+            string returnedIngredients = await AsyncController.GetIngredientsFromDescription(searchString);
 
             // Assert 
             Assert.AreEqual(correctIngredients, returnedIngredients);
@@ -202,7 +202,7 @@ namespace LambAndLentil.Test.WebAPI
             string correctIngredients = "INGREDIENTS: GREEN ASPARAGUS, WATER, VINEGAR, SUGAR, SALT, MUSTARD SEEDS, BLACK PEPPER, RED HOT PEPPER, GARLIC";
 
             // Act 
-            string returnedIngredients = await Controller.GetIngredientsFromDescription(searchString);
+            string returnedIngredients = await AsyncController.GetIngredientsFromDescription(searchString);
 
             // Assert 
             Assert.AreEqual(correctIngredients, returnedIngredients);
@@ -220,7 +220,7 @@ namespace LambAndLentil.Test.WebAPI
             string correctIngredients = "ASPARAGUS, HABANERO PEPPERS, WATER, WHITE VINEGAR, WHOLE GARLIC CLOVES, SUNDRIED TOMATOES AND SPICES";
 
             // Act 
-            string returnedIngredients = await Controller.GetIngredientsFromDescription(searchString);
+            string returnedIngredients = await AsyncController.GetIngredientsFromDescription(searchString);
 
             // Assert 
             Assert.AreEqual(correctIngredients, returnedIngredients);
@@ -237,7 +237,7 @@ namespace LambAndLentil.Test.WebAPI
             string correctIngredients = "FRESHLY ROASTED PEANUTS, SUGAR, CONTAINS 2% OR LESS OF: MOLASSES, HYDROGENATED VEGETABLES OILS (RAPESSED, COTTONSEED AND SOYBEAN), DEXTROSE, CORN SYRUP AND SALT.";
 
             // Act 
-            string returnedIngredients = await Controller.GetIngredientsFromDescription(searchString);
+            string returnedIngredients = await AsyncController.GetIngredientsFromDescription(searchString);
 
             // Assert 
             Assert.AreEqual(correctIngredients, returnedIngredients);
@@ -253,7 +253,7 @@ namespace LambAndLentil.Test.WebAPI
             string correctIngredients = "CORN SYRUP, SOY PROTEIN ISOLATE,. CHOCOLATE FLAVORED COATING (WHEY PROTEIN CONCENTRATE, SUGAR, PALM KERNEL POWDER, PALM OIL, NATURAL FLAVOR, SOY LECITHIN, MILKFAT), SOY PROTEIN NUGGETS (SOY PROTEIN ISOLATE, TAPIOCA STARCH, SALT), PEANUT BUTTER FUDGE (CORN SYRUP, INVERT SUGAR, PEANUT BUTTER [PEANUTS, SUGAR, SALT], SUGAR, PALM KERNEL OIL, PEANUT FLOUR, MILK PROTEIN ISOLATE, SOY LECITHIN, SALT, VANILLA EXTRACT, XANTHAN GUM, CARBO SEED GUM, BETA-CAROTENE), FRUCTOSE SYRUP PEANUT FLOUR, PEANUT BUTTER, PEANUTS, CRYSTALLINE FRUCTOSE; LESS THAN 2% OF THE FOLLOWING: GLYCERIN, NATURAL FLAVOR, SALT. VITAMIN AND MINERAL BLEND (CALCIUM PHOSPHATE, ASCORBIC ACID, MAGNESIUM OXIDE, DL-ALPHA-TOCOPHERYL ACETATE, VITAMIN A PALMITATE, NIACINAMIDE, ZINC OXIDE, PYRIDOXINE HYDROCHLORIDE, CALCIUM PANTOTHENATE, RIBOFLAVIN, FERROUS FUMARATE, THIAMINE MONONITRATE, FOLIC ACID, CHROMIUM CHLORIDE, BIOTIN, SODIUM SELENITE MOLYBDATE, CYANOCOBALAMIN).";
 
             // Act 
-            string returnedIngredients = await Controller.GetIngredientsFromDescription(searchString);
+            string returnedIngredients = await AsyncController.GetIngredientsFromDescription(searchString);
 
             // Assert 
             Assert.AreEqual(correctIngredients, returnedIngredients);
@@ -270,7 +270,7 @@ namespace LambAndLentil.Test.WebAPI
             string correctIngredients = "RAW ORGANIC CASHEW BUTTER, RAW ORGANIC ALMOND OIL, RAW ORGANIC POWDER, RAW ORGANIC ELDERBERRY POWDER, RAW ORGANIC AGAVE, RAW ORGANIC VANILLA POWDER, RAW ORGANIC STEVIA AND SEASALT.";
 
             // Act 
-            string returnedIngredients = await Controller.GetIngredientsFromDescription(searchString);
+            string returnedIngredients = await AsyncController.GetIngredientsFromDescription(searchString);
 
             // Assert 
             Assert.AreEqual(correctIngredients, returnedIngredients);
@@ -287,7 +287,7 @@ namespace LambAndLentil.Test.WebAPI
             string correctIngredients = "RAW ";
 
             // Act 
-            string returnedIngredients = await Controller.GetIngredientsFromDescription(searchString);
+            string returnedIngredients = await AsyncController.GetIngredientsFromDescription(searchString);
 
             // Assert 
             Assert.AreEqual(correctIngredients, returnedIngredients);
@@ -303,7 +303,7 @@ namespace LambAndLentil.Test.WebAPI
             string correctIngredients = "TUNA FLAKES, WATER, SOY PROTEIN CONCENTRATE, SOY SAUCE (FERMENTED SOYBEAN, WHEAT, WATER, SALT), SOYBEAN OIL, VINEGAR, BROWN SUGAR, IODIZED SALT, THICKENERS (CORNSTARCH, TAPIOCA), SEASONINGS (GARLIC, BLACK PEPPER,GINGER), MONOSODIUM GLUTAMATE, BAY LEAF AND VITAMIN A.";
 
             // Act 
-            string returnedIngredients = await Controller.GetIngredientsFromDescription(searchString);
+            string returnedIngredients = await AsyncController.GetIngredientsFromDescription(searchString);
 
             // Assert 
             Assert.AreEqual(correctIngredients, returnedIngredients);
@@ -321,7 +321,7 @@ namespace LambAndLentil.Test.WebAPI
             string correctIngredients = "CHUNK LIGHT TUNA, WATER, VEGETABLE BROTH (CONTAINS SOY), SALT.";
 
             // Act 
-            string returnedIngredients = await Controller.GetIngredientsFromDescription(searchString);
+            string returnedIngredients = await AsyncController.GetIngredientsFromDescription(searchString);
 
             // Assert 
             Assert.AreEqual(correctIngredients, returnedIngredients);
@@ -337,7 +337,7 @@ namespace LambAndLentil.Test.WebAPI
             string correctIngredients = "WILD CAUGHT YELLOWFIN TUNA, ONION, CELERY, CARROT, RED BELL PEPPER, CANOLA OIL, PARSLEY, SALT, PEPPER, FILTERED HARDWOOD SMOKE TO PROMOTE COLOR RETENTION.";
 
             // Act 
-            string returnedIngredients = await Controller.GetIngredientsFromDescription(searchString);
+            string returnedIngredients = await AsyncController.GetIngredientsFromDescription(searchString);
 
             // Assert 
             Assert.AreEqual(correctIngredients, returnedIngredients);
@@ -353,7 +353,7 @@ namespace LambAndLentil.Test.WebAPI
             string correctIngredients = "TUNA FLAKES, TOMATO SAUCE (WATER, TOMATO PASTE), POTATOES, SOY PROTEIN CONCENTRATE, SOYBEAN OIL, GREEN PEAS, BROWN SUGAR, BELL PEPPER, SEASONING (ONION, GARLIC, PAPRIKA), IODIZED SALT, SOY SAUCE (FERMENTED SOYBEANS, WHEAT, WATER, SALT), MONOSODIUM GLUTAMATE AND VITAMIN A.";
 
             // Act 
-            string returnedIngredients = await Controller.GetIngredientsFromDescription(searchString);
+            string returnedIngredients = await AsyncController.GetIngredientsFromDescription(searchString);
 
             // Assert 
             Assert.AreEqual(correctIngredients, returnedIngredients);
@@ -370,7 +370,7 @@ namespace LambAndLentil.Test.WebAPI
             string correctIngredients = "WILD CAUGHT YELLOWFIN TUNA, ONION, CELERY, CARROT, RED BELL PEPPER, CANOLA OIL, PARSLEY, SALT, PEPPER, FILTERED HARDWOOD SMOKE TO PROMOTE COLOR RETENTION.";
 
             // Act 
-            string returnedIngredients = await Controller.GetIngredientsFromDescription(searchString);
+            string returnedIngredients = await AsyncController.GetIngredientsFromDescription(searchString);
 
             // Assert 
             Assert.AreEqual(correctIngredients, returnedIngredients);
@@ -390,7 +390,7 @@ namespace LambAndLentil.Test.WebAPI
             string correctIngredients = "Tomatoes (Tomato Puree, Water), Water, Enriched Pasta (Durum Wheat Semolina, Niacin, Ferrous Sulfate, Thiamine Mononitrate [Vitamin B1], Riboflavin [Vitamin B2], Folic Acid), Pepperoni (Pork And Beef, Salt, Contains 2% or Less of: Dextrose, Flavorings, Lactic Acid Starter Culture, Oleoresin Paprika, Sodium Nitrite and BHA, BHT, Citric Acid [to protect flavor]), LESS THAN 2% OF: High Fructose Corn Syrup, Garlic Powder, Onion Powder, Modified Corn Starch, Salt, Spices, Maltodextrin, Citric Acid, Yeast Extract, Sugar, Sea Salt, Potassium Chloride, Flavorings, Ammonium Chloride, Paprika, Lactic Acid.  CONTAINS:  WHEAT";
             string manufacturer = "Conagra";
             // Act 
-            string returnedIngredients = await Controller.GetIngredientsFromDescription(searchString,manufacturer);
+            string returnedIngredients = await AsyncController.GetIngredientsFromDescription(searchString, manufacturer);
 
             // Assert 
             Assert.AreEqual(correctIngredients, returnedIngredients);
@@ -405,7 +405,7 @@ namespace LambAndLentil.Test.WebAPI
             string searchString = "Diet Coke";  //   
             string correctIngredients = "Carbonated Water, Caramel Color, Aspartame, Phosphoric Acid, Natural Flavors, Citric Acid, Caffeine, Potassium Citrate, Phenylketonurics: Contains Phenylalanine, Phenylalanine"; 
             // Act 
-            string returnedIngredients = await Controller.GetIngredientsFromDescription(searchString );
+            string returnedIngredients = await AsyncController.GetIngredientsFromDescription(searchString);
 
             // Assert 
             Assert.AreEqual(correctIngredients, returnedIngredients);

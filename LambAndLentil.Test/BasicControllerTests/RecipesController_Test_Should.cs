@@ -14,8 +14,7 @@ namespace LambAndLentil.Test.BasicControllerTests
     [TestCategory("RecipesController")]
     public class RecipesController_Test_Should : BaseControllerTest<Recipe>
     {
-
-        protected static RecipesController Controller { get; set; }
+         
         protected static Recipe Recipe { get; set; }
         protected static Recipe ReturnedRecipe { get; set; }
 

@@ -9,7 +9,7 @@ namespace LambAndLentil.Test.BasicControllerTests
     public class BaseController_Should:BaseControllerTest<Ingredient>
     {
          
-        static IngredientsController Controller;
+       
 
         public BaseController_Should() => Controller = new IngredientsController(Repo);
 

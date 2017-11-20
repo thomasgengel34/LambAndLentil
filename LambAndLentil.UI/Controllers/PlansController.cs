@@ -6,11 +6,8 @@ namespace LambAndLentil.UI.Controllers
 {
     public class PlansController : PlansGenericController<Plan>
     {
-        public PlansController(IRepository<Plan> repository) : base(repository)
-        {
-            Repo = repository;
-        }
+        public PlansController(IRepository<Plan> repository) : base(repository) => Repo = repository;
 
-       
+
     } 
 }

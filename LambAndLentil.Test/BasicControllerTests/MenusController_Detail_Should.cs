@@ -291,7 +291,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange
 
             Menu.ID = -500;
-            Repo.Save(Menu);
+            Repo.Save((Menu)Menu);
 
             // Act
             ActionResult ar = Controller.Details(-500);

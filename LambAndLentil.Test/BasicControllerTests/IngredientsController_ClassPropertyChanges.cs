@@ -29,7 +29,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
             // Act
             Entity.Name = "Name is changed";
-            Controller.PostEdit(Entity);
+             Controller.PostEdit(Entity);
             ReturnedEntity= Repo.GetById(1000);
 
             // Assert
@@ -76,7 +76,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
             // Act 
             Entity.CreationDate = dateTime;
-            Controller.PostEdit(Entity);
+             Controller.PostEdit(Entity);
             ReturnedEntity = Repo.GetById(Entity.ID);
 
             // Assert
@@ -92,7 +92,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Act
             Entity.AddedByUser = user;
 
-            Controller.PostEdit(Entity);
+             Controller.PostEdit(Entity);
             ReturnedEntity = Repo.GetById(Entity.ID);
 
             // Assert
@@ -106,7 +106,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             string user = "Abraham Lincoln";
             // Act
             Entity.ModifiedByUser = user ;
-            Controller.PostEdit(Entity);
+             Controller.PostEdit(Entity);
             ReturnedEntity= Repo.GetById(Entity.ID);
 
             // Assert
@@ -144,15 +144,13 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [Ignore]
         [TestMethod]
-        public void ShouldNotEditWebAPIGeneratedIngredientsList()
-        {
+        public void ShouldNotEditWebAPIGeneratedIngredientsList() =>
             // Arrange
 
             // Act 
 
             // Assert
             Assert.Fail();
-        }
 
         [TestMethod]
         public void ShouldAddIngredientToIngredients()
@@ -162,7 +160,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
             // Act
             Entity.Ingredients.Add(new Ingredient() { ID = 134, Name = "ShouldAddIngredientToIngredients" });
-            Controller.PostEdit(Entity);
+             Controller.PostEdit(Entity);
             ReturnedEntity = Repo.GetById(Entity.ID);
 
             // Assert
@@ -171,9 +169,6 @@ namespace LambAndLentil.Test.BasicControllerTests
         }
 
         [TestMethod]
-        public void ShouldAddIngredientToIngredientsList()
-        { 
-             BaseShouldAddIngredientToIngredientsList(Repo, Entity, ReturnedEntity, Controller, UIControllerType.Ingredients);
-        } 
+        public void ShouldAddIngredientToIngredientsList() => BaseShouldAddIngredientToIngredientsList(Repo, Entity, ReturnedEntity, Controller, UIControllerType.Ingredients);
     }
 }

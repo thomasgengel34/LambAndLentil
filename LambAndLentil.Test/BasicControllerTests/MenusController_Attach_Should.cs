@@ -104,7 +104,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Menu.Ingredients.Add(new Ingredient { ID = 4006, Name = "Cayenne Pepper" });
             Menu.Ingredients.Add(new Ingredient { ID = 4007, Name = "Cheese" });
             Menu.Ingredients.Add(new Ingredient { ID = 4008, Name = "Chopped Green Pepper" });
-            Repo.Save(Menu);
+            Repo.Save((Menu)Menu);
             int initialIngredientCount = Menu.Ingredients.Count();
 
             // Act

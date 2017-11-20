@@ -69,12 +69,12 @@ namespace LambAndLentil.Domain.Entities
 
 
 
-       public PagingInfo PagingFunction<T>(IRepository<T> repository, int page, int PageSize)
+       public PagingInfo PagingFunction<T>(IRepository<T> repository, int? page, int PageSize)
             where T : BaseEntity, IEntity
         {
             PagingInfo PagingInfo = new PagingInfo
             {
-                CurrentPage = page,
+                CurrentPage = page ?? 1,
                 ItemsPerPage = PageSize
             };
             int totalItems = repository.Count();

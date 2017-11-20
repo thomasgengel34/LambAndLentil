@@ -170,10 +170,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [TestMethod]
         [TestCategory("Index")]
-        public void FirstPageIsCorrect()
-        {
-            BaseFirstPageIsCorrect(Repo, Controller, UIControllerType.Ingredients);
-        }
+        public void FirstPageIsCorrect()=> BaseFirstPageIsCorrect(Repo, Controller, UIControllerType.Ingredients); 
 
         [TestMethod] 
         public void FirstPageNameIsIndex()
@@ -321,13 +318,10 @@ namespace LambAndLentil.Test.BasicControllerTests
 
 
 
-        [TestMethod] 
-        public void CanPaginateArrayLengthIsCorrect()
-        {
-            BaseCanPaginateArrayLengthIsCorrect(Repo, Controller);
-        }
+        [TestMethod]
+        public void CanPaginateArrayLengthIsCorrect() => BaseCanPaginateArrayLengthIsCorrect(Repo, Controller);
 
-      
+
         [TestMethod] 
         public void CanPaginate_ArrayFirstItemNameIsCorrect()
         {
@@ -383,11 +377,8 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.AreEqual(8, pageInfoT.ItemsPerPage);
         }
 
-        [TestMethod] 
-        public void CanSendPaginationViewModel_TotalItemsCorrect()
-        {
-            BaseCanSendPaginationViewModel_TotalItemsCorrect(Repo, Controller, UIControllerType.Ingredients);
-        }
+        [TestMethod]
+        public void CanSendPaginationViewModel_TotalItemsCorrect() => BaseCanSendPaginationViewModel_TotalItemsCorrect(Repo, Controller, UIControllerType.Ingredients);
 
         [TestMethod] 
         public void  CanSendPaginationViewModel_TotalPagesCorrect()
@@ -403,28 +394,19 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.AreEqual(1, pageInfoT.TotalPages);
         }
 
-         
 
 
-        [Ignore]
-        [TestMethod]
-        public void FlagAnIngredientFlaggedInAPerson()
-        {
-            Assert.Fail();
-        }
 
         [Ignore]
         [TestMethod]
-        public void FlagAnIngredientFlaggedInTwoPersons()
-        {
-            Assert.Fail();
-        }
+        public void FlagAnIngredientFlaggedInAPerson() => Assert.Fail();
 
         [Ignore]
         [TestMethod]
-        public void WhenAFlagHasBeenRemovedFromOnePersonStillThereForSecondFlaggedPerson()
-        {
-            Assert.Fail();
-        } 
+        public void FlagAnIngredientFlaggedInTwoPersons() => Assert.Fail();
+
+        [Ignore]
+        [TestMethod]
+        public void WhenAFlagHasBeenRemovedFromOnePersonStillThereForSecondFlaggedPerson() => Assert.Fail();
     }
 }

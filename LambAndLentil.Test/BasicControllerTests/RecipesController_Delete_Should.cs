@@ -19,10 +19,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         }
         [Ignore]
         [TestMethod]
-        public void AllowUserToConfirmDeleteRequestAndCallConfirmDelete()
-        {
-            Assert.Fail();
-        }
+        public void AllowUserToConfirmDeleteRequestAndCallConfirmDelete() => Assert.Fail();
 
         [Ignore]
         [TestMethod]
@@ -94,12 +91,9 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange - create an recipe
             Recipe recipeVM = new Recipe { ID = 2, Name = "Test2" };
             Repo.Add(recipeVM);
-            int repoCount = Repo.Count();
+            int repoCount = Repo.Count(); 
 
-            // Arrange - create the Controller
-            RecipesController Controller = new RecipesController(Repo);
-
-            // Act - delete the recipe
+            // Act 
             ActionResult result = Controller.DeleteConfirmed(recipeVM.ID);
 
             AlertDecoratorResult adr = (AlertDecoratorResult)result;

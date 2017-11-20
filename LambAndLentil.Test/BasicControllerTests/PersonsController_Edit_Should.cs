@@ -31,11 +31,11 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void SaveEditedPersonWithDescriptionChange()
         {
             // Arrange 
-            PersonsController Controller1 = new PersonsController(Repo);
-            PersonsController Controller2 = new PersonsController(Repo);
-            PersonsController Controller3 = new PersonsController(Repo);
-            PersonsController Controller4 = new PersonsController(Repo);
-            PersonsController Controller5 = new PersonsController(Repo);
+            IGenericController<Person> Controller1 = new PersonsController(Repo);
+            IGenericController<Person> Controller2 = new PersonsController(Repo);
+            IGenericController<Person> Controller3 = new PersonsController(Repo);
+            IGenericController<Person> Controller4 = new PersonsController(Repo);
+            IGenericController<Person> Controller5 = new PersonsController(Repo);
             Person vm = new Person
             {
                 FirstName = "0000 test",
@@ -121,9 +121,9 @@ namespace LambAndLentil.Test.BasicControllerTests
             };
 
             TestRepository<Person> repoPerson = new TestRepository<Person>(); ;
-            PersonsController ControllerEdit = new PersonsController(repoPerson);
-            PersonsController ControllerView = new PersonsController(repoPerson);
-            PersonsController ControllerDelete = new PersonsController(repoPerson);
+            IGenericController<Person> ControllerEdit = new PersonsController(repoPerson);
+            IGenericController<Person> ControllerView = new PersonsController(repoPerson);
+            IGenericController<Person> ControllerDelete = new PersonsController(repoPerson);
 
             // Act
             ControllerEdit.PostEdit(person);
@@ -150,8 +150,8 @@ namespace LambAndLentil.Test.BasicControllerTests
         {
             Person.Name = "Test UpdateTheModificationDateBetweenPostedEdits";
             Person.ID = 6000;
-            Repo.Save(Person);
-            BaseUpdateTheModificationDateBetweenPostedEdits(Repo, Controller, Person);
+            Repo.Save((Person)Person);
+            BaseUpdateTheModificationDateBetweenPostedEdits(Repo, Controller, (Person)Person);
         }
 
 
@@ -161,16 +161,14 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void EditPerson()
         {
             // Arrange
-            var Controller2 = new PersonsController(Repo);
+            IGenericController<Person> Controller2 = new PersonsController(Repo);
             Person pVM = new Person("Kermit", "Frog") { ID = 1492, Description = "test CanEditPerson" };
 
             // Act  
             ViewResult view1 = (ViewResult)Controller.Edit(1492);
             Person p1 = (Person)view1.Model;
             ViewResult view2 = (ViewResult)Controller2.Edit(2);
-            Person p2 = (Person)view2.Model;
-
-
+            Person p2 = (Person)view2.Model; 
 
             // Assert 
             Assert.IsNotNull(view1);
@@ -188,14 +186,14 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void SaveEditedPerson()
         {
             // Arrange 
-            PersonsController Controller2 = new PersonsController(Repo);
-            PersonsController Controller3 = new PersonsController(Repo);
+            IGenericController<Person> Controller2 = new PersonsController(Repo);
+            IGenericController<Person> Controller3 = new PersonsController(Repo);
 
 
             // Act  
             Person.FirstName = "SaveEditedPersonTest";
             Person.LastName = "";
-            ActionResult ar2 = Controller2.PostEdit(Person);
+            ActionResult ar2 = Controller2.PostEdit((Person)Person);
             ViewResult view2 = Controller3.Index();
             ListEntity<Person> ListEntity2 = (ListEntity<Person>)view2.Model;
             Person person3 = (from m in ListEntity2.ListT
@@ -213,7 +211,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
             // Act 
             Person.FirstName = "Name has been changed"; 
-            ViewResult view  = (ViewResult)Controller.PostEdit(Person );
+            ViewResult view  = (ViewResult)Controller.PostEdit((Person)Person );
 
             Person returnedPersonListEntity = Repo.GetById(Person.ID);
 

@@ -53,9 +53,9 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void SaveEditedMenu()
         {
             // Arrange
-            MenusController indexController = new MenusController(Repo);
-            MenusController Controller2 = new MenusController(Repo);
-            MenusController Controller3 = new MenusController(Repo);
+            IGenericController<Menu> indexController = new MenusController(Repo);
+            IGenericController<Menu> Controller2 = new MenusController(Repo);
+            IGenericController<Menu> Controller3 = new MenusController(Repo);
 
 
             Menu vm = new Menu

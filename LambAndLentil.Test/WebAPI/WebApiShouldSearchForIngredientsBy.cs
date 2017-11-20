@@ -1,16 +1,15 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System.Threading.Tasks;
 using LambAndLentil.Test.BasicControllerTests;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using LambAndLentil.Domain.Entities;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace LambAndLentil.Test.WebAPI
 {
-   
+
     [TestClass]
-    public class WebApiShouldSearchForIngredientsBy: IngredientsController_Test_Should
+    public class WebApiShouldSearchForIngredientsBy: IngredientsControllerAsync_Test_Should
     {
+     
+
         [TestMethod]
         public async Task BrandedFoodProductsAndFindAtLeast215557Ingredients()
         {
@@ -18,7 +17,7 @@ namespace LambAndLentil.Test.WebAPI
             string searchString = "";   
 
             // Act 
-            long count = await Controller.GetIngredientCountAsync(searchString);
+            long count = await AsyncController.GetIngredientCountAsync(searchString);
 
             //Assert
             Assert.IsTrue(215557<=count);
@@ -64,7 +63,7 @@ namespace LambAndLentil.Test.WebAPI
             string searchString = "";
             string foodGroup = "Baby Foods";
             // Act
-            long count = await Controller.GetIngredientCountAsync(searchString, "", long.MaxValue, 0, foodGroup);
+            long count = await AsyncController.GetIngredientCountAsync(searchString, "", long.MaxValue, 0, foodGroup);
             //Assert
             Assert.IsTrue(368 <= count);
 

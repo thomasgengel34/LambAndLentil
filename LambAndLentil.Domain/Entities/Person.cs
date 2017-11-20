@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace LambAndLentil.Domain.Entities
 {
     [Table("PERSON.Person")]
-    public class Person : BaseEntity, IEntityChildClasses
+    public class Person : BaseEntity, IPerson 
     {
         public Person() : base()
         {
@@ -52,11 +52,12 @@ namespace LambAndLentil.Domain.Entities
 
 
        
-        private new List<Person> Persons { get; set; }
+        public   List<Plan> Plans { get; set; }
+        public List<Ingredient> Ingredients { get; set; }
+        public List<Recipe> Recipes { get; set; }
+        public List<Menu> Menus { get; set; }
+        public List<ShoppingList> ShoppingLists { get; set; }
 
-        public string GetName(string FirstName, string LastName)
-        {
-            return FullName = String.Concat(FirstName, " ", LastName);
-        }
+        public string GetName(string FirstName, string LastName) => FullName = String.Concat(FirstName, " ", LastName);
     }
 }

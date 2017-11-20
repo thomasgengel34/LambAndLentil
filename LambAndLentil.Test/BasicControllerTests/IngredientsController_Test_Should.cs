@@ -11,14 +11,14 @@ namespace LambAndLentil.Test.BasicControllerTests
     [TestCategory(" IngredientsController")]
     public class IngredientsController_Test_Should : BaseControllerTest<Ingredient>
     {
-        protected static IngredientsController Controller; 
-        protected static Ingredient Ingredient { get; set; }
-        protected static Ingredient ReturnedIngredient { get; set; }
+       
+        protected static IIngredient Ingredient { get; set; }
+        protected static IIngredient ReturnedIngredient { get; set; }
 
 
         protected IngredientsController_Test_Should()
         { 
-            Controller = new IngredientsController(Repo)
+             Controller = new IngredientsController(Repo)
             {
                 PageSize = 3
             };

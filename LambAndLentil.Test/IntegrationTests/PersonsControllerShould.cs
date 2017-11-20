@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using LambAndLentil.Domain.Abstract;
 using LambAndLentil.Domain.Concrete;
-using LambAndLentil.Domain.Entities; 
+using LambAndLentil.Domain.Entities;
 using LambAndLentil.Tests.Controllers;
 using LambAndLentil.UI;
 using LambAndLentil.UI.Controllers;
@@ -20,19 +20,26 @@ namespace LambAndLentil.Test.BasicControllerTests
     [TestCategory("Integration")]
     [TestCategory("PersonController")]
     public class PersonsControllerShould : BaseControllerTest<Person>
-    { 
-        static PersonsController Controller;
-        static Person Person;
+    {
+        static IGenericController<Person> Controller1, Controller2, Controller3, Controller4, Controller5;
+        static IPerson Person { get; set; }
 
         public PersonsControllerShould()
         {
-            Repo = new TestRepository<Person>();
-            Controller = new PersonsController(Repo);
             Person = new Person
             {
-                ID = 1000,
-                Description = "test PersonControllerShould"
+                FirstName = "0000",
+                LastName = "test",
+                Description = "test ControllerShould",
+                ID = 1000
             };
+            Repo = new TestRepository<Person>();
+            Controller = new PersonsController(Repo);
+            Controller1 = new PersonsController(Repo);
+            Controller2 = new PersonsController(Repo);
+            Controller3 = new PersonsController(Repo);
+            Controller4 = new PersonsController(Repo);
+            Controller5 = new PersonsController(Repo);
         }
 
 
@@ -44,41 +51,34 @@ namespace LambAndLentil.Test.BasicControllerTests
 
             // Act
             ViewResult vr = Controller.Create(UIViewType.Create);
-            Person vm = (Person)vr.Model;
-            vm.Description = "Test.CreateAPerson";
-            vm.ID = 33;
-            string modelName = vm.Name;
+            Person = (Person)vr.Model;
+            Person.Description = "Test.CreateAPerson";
+            Person.ID = 33;
+            string modelName = Person.Name;
 
             // Assert 
             Assert.AreEqual(vr.ViewName, UIViewType.Details.ToString());
             Assert.AreEqual("Newly Created", modelName);
         }
 
-       
 
-      //  [Ignore]
+
+        //  [Ignore]
         [TestMethod]
         public void SaveAValidPerson()
         {
             // Arrange 
-            Person vm = new Person
-            {
-                FirstName = "test",
-                LastName="",
-                Description = "Test.SaveAValidPerson",
-                ID = 334
-            };
 
             // Act
-            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.PostEdit(vm);
+            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.PostEdit((Person)Person);
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
 
             var routeValues = rtrr.RouteValues.Values;
 
             // Assert 
             Assert.AreEqual("alert-success", adr.AlertClass);
-            Assert.AreEqual(1, routeValues.Count); 
-            Assert.AreEqual(UIViewType.BaseIndex.ToString(), routeValues.ElementAt(0).ToString()); 
+            Assert.AreEqual(1, routeValues.Count);
+            Assert.AreEqual(UIViewType.BaseIndex.ToString(), routeValues.ElementAt(0).ToString());
         }
 
         [Ignore]
@@ -87,38 +87,27 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void SaveEditedPersonWithNameChange()
         {
             // Arrange 
-            PersonsController Controller1 = new PersonsController(Repo);
-            PersonsController Controller2 = new PersonsController(Repo);
-            PersonsController Controller3 = new PersonsController(Repo);
-            PersonsController Controller4 = new PersonsController(Repo);
-            PersonsController Controller5 = new PersonsController(Repo);
-            Person vm = new Person
-            {
-                FirstName = "0000",
-                LastName = "test",
-                Description = "Test.SaveEditedPersonWithNameChange",
-                ID = 335
-            };
+
 
             // Act 
-            ActionResult ar1 = Controller1.PostEdit(vm);
+            ActionResult ar1 = Controller1.PostEdit((Person)Person);
             ViewResult view1 = Controller2.Index();
-            List<Person> ListEntity= (List<Person>)view1.Model;
+            List<Person> ListEntity = (List<Person>)view1.Model;
             Person person = (from m in ListEntity
-                               where m.Name == "0000 test"
-                               select m).AsQueryable().FirstOrDefault();
+                             where m.Name == "0000 test"
+                             select m).AsQueryable().FirstOrDefault();
 
             // verify initial value:
             Assert.AreEqual("0000 test", person.Name);
 
 
             // now edit it
-            vm.LastName = "test Edited";
-            vm.ID = person.ID;
-            ActionResult ar2 = Controller3.PostEdit(vm);
+            Person.LastName = "test Edited";
+            Person.ID = person.ID;
+            ActionResult ar2 = Controller3.PostEdit((Person)Person);
             ViewResult view2 = Controller4.Index();
             List<Person> ListEntity2 = (List<Person>)view2.Model;
-            person = (from m in ListEntity2 
+            person = (from m in ListEntity2
                       where m.Name == "0000 test Edited"
                       select m).AsQueryable().FirstOrDefault();
 
@@ -131,37 +120,29 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestCategory("Edit")]
         public void SaveEditedPersonWithDescriptionChange()
         {
-            // Arrange 
-            PersonsController Controller1 = new PersonsController(Repo);
-            PersonsController Controller2 = new PersonsController(Repo);
-            PersonsController Controller3 = new PersonsController(Repo);
-            PersonsController Controller4 = new PersonsController(Repo);
-            PersonsController Controller5 = new PersonsController(Repo);
-            Person vm = new Person
-            {
-                Description = "SaveEditedPersonWithDescriptionChange Pre-test",
-                ID = 336
-            };
+            // Arrange  
+            Person.Description = "SaveEditedPersonWithDescriptionChange Pre-test";
+            Person.ID = 336;
 
             // Act 
-            ActionResult ar1 = Controller1.PostEdit(vm);
+            ActionResult ar1 = Controller1.PostEdit((Person)Person);
             ViewResult view1 = Controller2.Index();
-            List<Person> ListEntity= (List<Person>)view1.Model;
+            List<Person> ListEntity = (List<Person>)view1.Model;
             Person person = (from m in ListEntity
-                               where m.Description == "SaveEditedPersonWithDescriptionChange Pre-test"
-                               select m).AsQueryable().FirstOrDefault();
+                             where m.Description == "SaveEditedPersonWithDescriptionChange Pre-test"
+                             select m).AsQueryable().FirstOrDefault();
 
             // verify initial value:
             Assert.AreEqual("SaveEditedPersonWithDescriptionChange Pre-test", person.Description);
 
             // now edit it
-            vm.ID = person.ID;
-            vm.Description = "SaveEditedPersonWithDescriptionChange Post-test";
+            Person.ID = person.ID;
+            Person.Description = "SaveEditedPersonWithDescriptionChange Post-test";
 
-            ActionResult ar2 = Controller3.PostEdit(vm);
+            ActionResult ar2 = Controller3.PostEdit((Person)Person);
             ViewResult view2 = Controller4.Index();
             List<Person> ListEntity2 = (List<Person>)view2.Model;
-            person = (from m in ListEntity2 
+            person = (from m in ListEntity2
                       where m.Description == "SaveEditedPersonWithDescriptionChange Post-test"
                       select m).AsQueryable().FirstOrDefault();
 
@@ -177,15 +158,12 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void ActuallyDeleteAPersonFromTheDatabase()
         {
             // Arrange
-            Person person = new Person
-            {
-                FirstName = "Test.ActuallyDeleteAPersonfromDB",
-                LastName = ""
-            };
-            Repo.Save(person );
+            Person.FirstName = "Test.ActuallyDeleteAPersonfromDB";
+            Person.LastName = "";
+            Repo.Save((Person)Person);
 
             //Act
-            Controller.DeleteConfirmed(person.ID);
+            Controller.DeleteConfirmed(Person.ID);
             var deletedItem = (from m in Repo.GetAll()
                                where m.Description == Person.Name
                                select m).AsQueryable();
@@ -200,19 +178,16 @@ namespace LambAndLentil.Test.BasicControllerTests
         {
             // Arrange
             DateTime CreationDate = new DateTime(2010, 1, 1);
-            Person Person = new Person(CreationDate)
-            {
-                Description = "001 Test ",
-                ID = 37
-            };
-            PersonsController ControllerEdit = new PersonsController(Repo);
-            PersonsController ControllerView = new PersonsController(Repo);
-            PersonsController ControllerDelete = new PersonsController(Repo);
+            Person.Description = "001 Test ";
+            Person.ID = 37;
+            IGenericController<Person> ControllerEdit = new PersonsController(Repo);
+            IGenericController<Person> ControllerView = new PersonsController(Repo);
+            IGenericController<Person> ControllerDelete = new PersonsController(Repo);
 
             // Act
-            ControllerEdit.PostEdit(Person);
+            ControllerEdit.PostEdit((Person)Person);
             ViewResult view = ControllerView.Index();
-            List<Person> ListEntity= (List<Person>)view.Model;
+            List<Person> ListEntity = (List<Person>)view.Model;
             var result = (from m in ListEntity
                           where m.Description == "001 Test "
                           select m).AsQueryable().FirstOrDefault();
@@ -226,31 +201,31 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.AreEqual(CreationDate, shouldBeSameDate);
         }
 
-        
+
         [TestMethod]
         [TestCategory("Edit")]
         public void UpdateTheModificationDateBetweenPostedEdits()
         {
             Person.Name = "Test UpdateTheModificationDateBetweenPostedEdits";
             Person.ID = 6000;
-            Repo.Save(Person);
-            BaseUpdateTheModificationDateBetweenPostedEdits(Repo, Controller, Person);
+            Repo.Save((Person)Person);
+            BaseUpdateTheModificationDateBetweenPostedEdits(Repo, Controller, (Person)Person);
         }
 
-        internal Person GetPerson(IRepository<Person> Repo,  string description)
+        internal Person GetPerson(IRepository<Person> Repo, string description)
         {
-            PersonsController Controller = new PersonsController(Repo);
-            Person vm = new Person
+            IGenericController<Person> Controller = new PersonsController(Repo);
+            IPerson Person = new Person
             {
                 Description = description,
                 ID = int.MaxValue
             };
-            Controller.PostEdit(vm);
+            Controller.PostEdit((Person)Person);
 
-            Person Person = ((from m in Repo.GetAll()
-                                  where m.Description == description
-                                  select m).AsQueryable()).FirstOrDefault();
-            return Person;
-        } 
+            Person = ((from m in Repo.GetAll()
+                              where m.Description == description
+                              select m).AsQueryable()).FirstOrDefault();
+            return ((Person)Person);
+        }
     }
 }

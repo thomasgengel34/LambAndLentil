@@ -1,12 +1,5 @@
-﻿using AutoMapper;
-using LambAndLentil.Domain.Abstract;
+﻿using System.Linq;
 using LambAndLentil.Domain.Entities;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Linq.Expressions;
 
 namespace LambAndLentil.Domain.Concrete
 {

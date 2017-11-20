@@ -16,8 +16,7 @@ namespace LambAndLentil.Test.BasicControllerTests
     [TestClass]
     public class IngredientsController_Attach_Should : IngredientsController_Test_Should
     {
-        [TestMethod]
-        [TestCategory("Attach-Detach")]
+        [TestMethod] 
         public void SuccessfullyAttachIngredientChild()
         {
             // Arrange
@@ -32,8 +31,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.AreEqual("SuccessfullyAttachIngredientChild", ReturnedIngredient.Ingredients.Last().Name);
         }
 
-        [TestMethod]
-        [TestCategory("Attach-Detach")]
+        [TestMethod] 
         public void SuccessfullyDetachFirstIngredientChild()
         {
             IGenericController<Ingredient> DetachController = new IngredientsController(Repo);
@@ -41,8 +39,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         }
 
 
-        [TestMethod]
-        [TestCategory("Attach-Detach")]
+        [TestMethod] 
         public void DetachASetOfIngredientChildren()
         {
             // Arrange 
@@ -50,7 +47,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Ingredient.Ingredients.Add(new Ingredient { ID = 4006, Name = "Cayenne Pepper" });
             Ingredient.Ingredients.Add(new Ingredient { ID = 4007, Name = "Cheese" });
             Ingredient.Ingredients.Add(new Ingredient { ID = 4008, Name = "Chopped Green Pepper" });
-            Repo.Save(Ingredient);
+            Repo.Save((Ingredient)Ingredient);
             int initialIngredientCount = Ingredient.Ingredients.Count();
 
             // Act
@@ -64,17 +61,14 @@ namespace LambAndLentil.Test.BasicControllerTests
         }
 
 
-        
 
 
-        [TestMethod] 
-        public void DetachTheLastIngredientChild()
-        {
-            BaseDetachTheLastIngredientChild(Repo, Controller,Ingredient);
-        }
+
+        [TestMethod]
+        public void DetachTheLastIngredientChild() => BaseDetachTheLastIngredientChild(Repo, Controller, (Ingredient)Ingredient);
 
         [TestMethod] 
-        public void DetachAllIngredientChildren() => BaseDetachAllIngredientChildren(Repo, Controller, Ingredient);
+        public void DetachAllIngredientChildren() => BaseDetachAllIngredientChildren(Repo, Controller, (Ingredient)Ingredient);
 
         [TestMethod]
         public void ReturnsIndexWithWarningWithUnknownParentID() =>

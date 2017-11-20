@@ -10,8 +10,7 @@ namespace LambAndLentil.Test.BasicControllerTests
     [TestClass]
     [TestCategory("ShoppingListsController")]
     public class ShoppingListsController_Test_Should : BaseControllerTest<ShoppingList>
-    {
-        internal static ShoppingListsController Controller { get; set; }
+    { 
         internal static ShoppingList ShoppingList { get; set; }
         internal static ShoppingList ReturnedShoppingList { get; set; }
 

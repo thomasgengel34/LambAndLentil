@@ -19,10 +19,9 @@ namespace LambAndLentil.Test.BasicControllerTests
     [TestCategory("PersonsController")]
     public class PersonsController_Test_Should:BaseControllerTest<Person>
     {
-         
-       internal static PersonsController Controller { get; set; }
-        internal static Person Person { get; set; }
-         internal static Person ReturnedPerson { get; set; }
+          
+        internal static IPerson Person { get; set; }
+         internal static IPerson ReturnedPerson { get; set; }
 
         public PersonsController_Test_Should()
         {
@@ -30,6 +29,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             {
                 PageSize = 3
             };
+
             Person = new Person()
             {
                 ID = 1234567,
@@ -48,7 +48,7 @@ namespace LambAndLentil.Test.BasicControllerTests
                 Weight=150,
                 NoGarlic=false
             };
-            Repo.Save(Person);
+            Repo.Save((Person)Person);
         } 
     }
 }

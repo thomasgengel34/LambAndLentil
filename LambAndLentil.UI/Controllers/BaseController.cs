@@ -10,7 +10,7 @@ using LambAndLentil.UI.Models;
 
 namespace LambAndLentil.UI.Controllers
 {
-    public abstract class BaseController<T> : Controller
+    public abstract class BaseController<T> : Controller 
             where T : BaseEntity, IEntity, new()
     {
         public string ClassName { get; private set; }
@@ -29,12 +29,14 @@ namespace LambAndLentil.UI.Controllers
 
         //  TODO: filter
 
-        public ViewResult BaseIndex(IRepository<T> Repo, int page = 1)
+        public ViewResult BaseIndex(IRepository<T> Repo, int? page = 1)
         {
             PageSize = 8;
+            int pageInt = page ?? 1;
             ListEntity<T> model = new ListEntity<T>
             {
-                ListT = new BaseEntity().GetIndexedModel<T>(Repo, PageSize, page),
+               
+                ListT = new BaseEntity().GetIndexedModel<T>(Repo, PageSize, pageInt),
                 PagingInfo = new BaseEntity().PagingFunction<T>(Repo, page, PageSize)
             };
             return View(UIViewType.Index.ToString(), model);
@@ -161,13 +163,9 @@ namespace LambAndLentil.UI.Controllers
         public ActionResult BaseAttach<TChild>(IRepository<T> Repo, int? parentID, TChild child, AttachOrDetach attachOrDetach = AttachOrDetach.Attach, int orderNumber = 0)
         where TChild : BaseEntity, IEntity // todo: expand
         {
-           
-
             char[] charsToTrim = { 'V', 'M' };
             string entity = typeof(T).ToString().Split('.').Last();
             string childEntity = typeof(TChild).ToString().Split('.').Last().TrimEnd(charsToTrim);
-         
-
 
             if (parentID == null)
             {
@@ -182,51 +180,27 @@ namespace LambAndLentil.UI.Controllers
                     // TODO: log error - this could be a developer problem
                     return RedirectToAction(UIViewType.Index.ToString()).WithWarning(entity + " was not found");
                 }
-
-                if (child == null)
+                else if (child == null)
                 {
                     return RedirectToAction(UIViewType.Details.ToString(), new { id = parentID, actionMethod = UIViewType.Edit }).WithWarning(entity + " was not found"); ;
                 }
                 else
                 {
-                    if (child == null)
+                    if (attachOrDetach == AttachOrDetach.Detach)
                     {
-                        return RedirectToAction(UIViewType.Details.ToString(), new { id = parentID, actionMethod = UIViewType.Edit }).WithWarning("Please choose a(n) " + childEntity);
+                        Repo.DetachAnIndependentChild(parent.ID, child, 0);
+                        return RedirectToAction(UIViewType.Details.ToString(), new { id = parentID, actionMethod = UIViewType.Edit }).WithSuccess(childEntity + " was Successfully Detached!");
                     }
                     else
                     {
-
-                        if (attachOrDetach == AttachOrDetach.Detach)
-                        {
-                            if (typeof(TChild) == typeof(Ingredient))
-                            {
-                                Repo.DetachAnIndependentChild<Ingredient>(parent.ID, child as Ingredient, 0);
-                            }
-                            else if (typeof(TChild) == typeof(Recipe))
-                            {
-                                Repo.DetachAnIndependentChild<Recipe>(parent.ID, child as Recipe, 0);
-                            }
-
-                            return RedirectToAction(UIViewType.Details.ToString(), new { id = parentID, actionMethod = UIViewType.Edit }).WithSuccess(childEntity + " was Successfully Detached!");
-                        }
-                        else
-                        {
-                            if (typeof(TChild) == typeof(Ingredient))
-                            {
-                                Repo.AttachAnIndependentChild<Ingredient>(parent.ID, child as Ingredient, 0);
-                            }
-                            else if (typeof(TChild) == typeof(Recipe))
-                            {
-                                Repo.AttachAnIndependentChild<Recipe>(parent.ID, child as Recipe, 0);
-                            }
-                            return RedirectToAction(UIViewType.Details.ToString(), new { id = parentID, actionMethod = UIViewType.Edit }).WithSuccess(childEntity + " was Successfully Attached!");
-                        }
+                        Repo.AttachAnIndependentChild(parent.ID, child, 0);
+                        return RedirectToAction(UIViewType.Details.ToString(), new { id = parentID, actionMethod = UIViewType.Edit }).WithSuccess(childEntity + " was Successfully Attached!");
                     }
                 }
             }
         }
 
-       
+
 
         public void BaseAddIngredientToIngredientsList(IRepository<T> repo, UIControllerType tController, int id, string addedIngredient)
         {
@@ -239,35 +213,247 @@ namespace LambAndLentil.UI.Controllers
             }
         }
 
-        protected void BaseDetachAllIngredientChildren(IRepository<T> Repo, int ID)
-        {
-            T parent = Repo.GetById(ID);
-            parent.Ingredients.RemoveAll(match: x => x.ID >= 0);
-            Repo.Update(parent, parent.ID);
-        }
-
-        protected void BaseDetachAllIngredientChildren(IRepository<T> repo, int iD, List<Ingredient> selected)
-        {
-            T parent = Repo.GetById(iD);
-            var setToRemove = new HashSet<Ingredient>(selected);
-            parent.Ingredients.RemoveAll(ContainsSelected  );
-            Repo.Update(parent, parent.ID);
-
-
+        protected ActionResult BaseDetachAllIngredientChildren(IRepository<T> Repo, int? ID,  List<Ingredient>   selected   ) 
+        { 
+            string entity = typeof(T).ToString().Split('.').Last();
+            if (ID == null)
+            {
+                return RedirectToAction(UIViewType.Index.ToString()).WithWarning(entity + " was not found");
+            }
+            else
+            {
+                int parentNonNullID = (int)ID;
+                IEntityChildClassIngredients parent = (IEntityChildClassIngredients)Repo.GetById(parentNonNullID);
+                if (parent == null)
+                {
+                    // TODO: log error - this could be a developer problem
+                    return RedirectToAction(UIViewType.Index.ToString()).WithWarning(entity + " was not found");
+                }
+                else
+                if (parent.Ingredients.Count() > 0)
+                {
+                    if (selected == null)
+                    {
+                        parent.Ingredients.RemoveAll(match: x => x.ID >= 0);
+                    }
+                     else
+                    {
+                        var setToRemove = new HashSet<Ingredient>(selected);
+                        parent.Ingredients.RemoveAll(ContainsSelected);
+                    }
+                  
+                    Repo.Update((T)parent, parent.ID);
+                    return RedirectToAction(UIViewType.Details.ToString(), new { id = ID, actionMethod = UIViewType.Edit }).WithSuccess("All Ingredients Were Successfully Detached!");
+                }
+                else
+                {
+                    return RedirectToAction(UIViewType.Details.ToString(), new { id = ID, actionMethod = UIViewType.Edit }).WithWarning("No Ingredients Were Attached!");
+                }
+            }
             bool ContainsSelected(Ingredient ingredient)
             {
                 int ingredientID = ingredient.ID;
-                var numbers =    from f in selected select f.ID;
-                bool  foo=numbers.Contains(ingredientID);
-                return foo;
+                var numbers = from f in selected select f.ID;
+                bool trueOrFalse = numbers.Contains(ingredientID);
+                return trueOrFalse;
             }
         }
 
+        protected ActionResult BaseDetachAllRecipeChildren(IRepository<T> Repo, int? ID, List<Recipe> selected)
+        {
+            string entity = typeof(T).ToString().Split('.').Last();
+            if (ID == null)
+            {
+                return RedirectToAction(UIViewType.Index.ToString()).WithWarning(entity + " was not found");
+            }
+            else
+            {
+                int parentNonNullID = (int)ID;
+                IEntityChildClassRecipes parent = (IEntityChildClassRecipes)Repo.GetById(parentNonNullID);
+                if (parent == null)
+                {
+                    // TODO: log error - this could be a developer problem
+                    return RedirectToAction(UIViewType.Index.ToString()).WithWarning(entity + " was not found");
+                }
+                else
+                if (parent.Recipes.Count() > 0)
+                {
+                    if (selected == null)
+                    {
+                        parent.Recipes.RemoveAll(match: x => x.ID >= 0);
+                    }
+                    else
+                    {
+                        var setToRemove = new HashSet<Recipe>(selected);
+                        parent.Recipes.RemoveAll(ContainsSelected);
+                    }
+
+                    Repo.Update((T)parent, parent.ID);
+                    return RedirectToAction(UIViewType.Details.ToString(), new { id = ID, actionMethod = UIViewType.Edit }).WithSuccess("All Recipes Were Successfully Detached!");
+                }
+                else
+                {
+                    return RedirectToAction(UIViewType.Details.ToString(), new { id = ID, actionMethod = UIViewType.Edit }).WithWarning("No Recipes Were Attached!");
+                }
+            }
+            bool ContainsSelected(Recipe ingredient)
+            {
+                int ingredientID = ingredient.ID;
+                var numbers = from f in selected select f.ID;
+                bool trueOrFalse = numbers.Contains(ingredientID);
+                return trueOrFalse;
+            }
+        }
+
+        protected ActionResult BaseDetachAllPlanChildren(IRepository<T> Repo, int? ID, List<Plan> selected) 
+        {
+
+            string entity = typeof(T).ToString().Split('.').Last();
+            if (ID == null)
+            {
+                return RedirectToAction(UIViewType.Index.ToString()).WithWarning(entity + " was not found");
+            }
+            else
+            {
+                int parentNonNullID = (int)ID;
+                IEntityChildClassPlans parent = (IEntityChildClassPlans)Repo.GetById(parentNonNullID);
+                if (parent == null)
+                {
+                    // TODO: log error - this could be a developer problem
+                    return RedirectToAction(UIViewType.Index.ToString()).WithWarning(entity + " was not found");
+                }
+                else
+                if (parent.Plans.Count() > 0)
+                {
+                    if (selected == null)
+                    {
+                        parent.Plans.RemoveAll(match: x => x.ID >= 0);
+                    }
+                    else
+                    {
+                        var setToRemove = new HashSet<Plan>(selected);
+                        parent.Plans.RemoveAll(ContainsSelected);
+                    }
+
+                    Repo.Update((T)parent, parent.ID);
+                    return RedirectToAction(UIViewType.Details.ToString(), new { id = ID, actionMethod = UIViewType.Edit }).WithSuccess("All Plans Were Successfully Detached!");
+                }
+                else
+                {
+                    return RedirectToAction(UIViewType.Details.ToString(), new { id = ID, actionMethod = UIViewType.Edit }).WithWarning("No Plans Were Attached!");
+                }
+            }
+            bool ContainsSelected(Plan ingredient)
+            {
+                int ingredientID = ingredient.ID;
+                var numbers = from f in selected select f.ID;
+                bool trueOrFalse = numbers.Contains(ingredientID);
+                return trueOrFalse;
+            }
+        } 
+
+        protected ActionResult BaseDetachAllMenuChildren(IRepository<T> Repo, int? ID, List<Menu> selected)
+        {
+
+            string entity = typeof(T).ToString().Split('.').Last();
+            if (ID == null)
+            {
+                return RedirectToAction(UIViewType.Index.ToString()).WithWarning(entity + " was not found");
+            }
+            else
+            {
+                int parentNonNullID = (int)ID;
+                IEntityChildClassMenus parent = (IEntityChildClassMenus)Repo.GetById(parentNonNullID);
+                if (parent == null)
+                {
+                    // TODO: log error - this could be a developer problem
+                    return RedirectToAction(UIViewType.Index.ToString()).WithWarning(entity + " was not found");
+                }
+                else
+                if (parent.Menus.Count() > 0)
+                {
+                    if (selected == null)
+                    {
+                        parent.Menus.RemoveAll(match: x => x.ID >= 0);
+                    }
+                    else
+                    {
+                        var setToRemove = new HashSet<Menu>(selected);
+                        parent.Menus.RemoveAll(ContainsSelected);
+                    }
+
+                    Repo.Update((T)parent, parent.ID);
+                    return RedirectToAction(UIViewType.Details.ToString(), new { id = ID, actionMethod = UIViewType.Edit }).WithSuccess("All Menus Were Successfully Detached!");
+                }
+                else
+                {
+                    return RedirectToAction(UIViewType.Details.ToString(), new { id = ID, actionMethod = UIViewType.Edit }).WithWarning("No Menus Were Attached!");
+                }
+            }
+            bool ContainsSelected(Menu ingredient)
+            {
+                int ingredientID = ingredient.ID;
+                var numbers = from f in selected select f.ID;
+                bool trueOrFalse = numbers.Contains(ingredientID);
+                return trueOrFalse;
+            }
+        }
+
+
+
+        protected ActionResult BaseDetachAllShoppingListChildren(IRepository<T> Repo, int? ID, List<ShoppingList> selected)
+        {
+
+            string entity = typeof(T).ToString().Split('.').Last();
+            if (ID == null)
+            {
+                return RedirectToAction(UIViewType.Index.ToString()).WithWarning(entity + " was not found");
+            }
+            else
+            {
+                int parentNonNullID = (int)ID;
+                IEntityChildClassShoppingLists parent = (IEntityChildClassShoppingLists)Repo.GetById(parentNonNullID);
+                if (parent == null)
+                {
+                    // TODO: log error - this could be a developer problem
+                    return RedirectToAction(UIViewType.Index.ToString()).WithWarning(entity + " was not found");
+                }
+                else
+                if (parent.ShoppingLists.Count() > 0)
+                {
+                    if (selected == null)
+                    {
+                        parent.ShoppingLists.RemoveAll(match: x => x.ID >= 0);
+                    }
+                    else
+                    {
+                        var setToRemove = new HashSet<ShoppingList>(selected);
+                        parent.ShoppingLists.RemoveAll(ContainsSelected);
+                    }
+
+                    Repo.Update((T)parent, parent.ID);
+                    return RedirectToAction(UIViewType.Details.ToString(), new { id = ID, actionMethod = UIViewType.Edit }).WithSuccess("All ShoppingLists Were Successfully Detached!");
+                }
+                else
+                {
+                    return RedirectToAction(UIViewType.Details.ToString(), new { id = ID, actionMethod = UIViewType.Edit }).WithWarning("No ShoppingLists Were Attached!");
+                }
+            }
+            bool ContainsSelected(ShoppingList ingredient)
+            {
+                int ingredientID = ingredient.ID;
+                var numbers = from f in selected select f.ID;
+                bool trueOrFalse = numbers.Contains(ingredientID);
+                return trueOrFalse;
+            }
+        }
+       
+
         protected void BaseDetachLastIngredientChild(IRepository<T> repo, int iD)
         {
-            T parent = Repo.GetById(iD);
-            int count =parent.Ingredients.Count();
+            IEntityChildClassIngredients parent = (IEntityChildClassIngredients)Repo.GetById(iD);
+            int count = parent.Ingredients.Count();
             parent.Ingredients.RemoveAt(count - 1);
-        }  
+        } 
     }
 }

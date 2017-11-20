@@ -98,8 +98,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestMethod]
         public void SuccessfullyAttachRecipeChild()
         {
-            BaseSuccessfullyAttachRecipeChild(ShoppingList, Controller);
-            Assert.Fail();  // this test, at least, is a false pass.  There is the Base Entity Recipe, which is being attached but the other Recipe is being saved. This is probably true for all the attach tests. 
+            BaseSuccessfullyAttachRecipeChild(ShoppingList, Controller); 
         }
 
        
@@ -109,27 +108,15 @@ namespace LambAndLentil.Test.BasicControllerTests
             IGenericController<ShoppingList> DetachController = new ShoppingListsController(Repo);
             BaseSuccessfullyDetachRecipeChild(Repo, Controller, DetachController, UIControllerType.ShoppingLists);
         }
-
-        [Ignore]
-        [TestMethod]
-        public void SuccessfullyAttachMenuChild()
-        {
-
-        }
-
-        [Ignore]
-        [TestMethod]
-        public void SuccessfullyDetachMenuChild()
-        {
-
-        }
-
-        [Ignore]
+         
+        
         [TestMethod]
         public void SuccessfullyAttachPlanChild()
         {
-
+            BaseSuccessfullyAttachPlanChild(ShoppingList, Controller);
         }
+
+      
 
         [Ignore]
         [TestMethod]

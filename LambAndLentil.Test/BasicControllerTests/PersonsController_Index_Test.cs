@@ -21,7 +21,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void Index()
         {
             // Arrange
-            PersonsController Controller2 = new PersonsController(Repo);
+            IGenericController<Person> Controller2 = new PersonsController(Repo);
 
             // Act
             ViewResult view1 = Controller.Index(1) as ViewResult;
@@ -321,13 +321,10 @@ namespace LambAndLentil.Test.BasicControllerTests
 
 
 
-        [TestMethod] 
-        public void  CanPaginateArrayLengthIsCorrect()
-        {
-            BaseCanPaginateArrayLengthIsCorrect(Repo, Controller);
-        }
+        [TestMethod]
+        public void CanPaginateArrayLengthIsCorrect() => BaseCanPaginateArrayLengthIsCorrect(Repo, Controller);
 
-        
+
         [TestMethod]
         [TestCategory("Index")]
         public void CanPaginate_ArrayFirstItemNameIsCorrect()
@@ -390,10 +387,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [TestMethod]
         [TestCategory("Index")]
-        public void CanSendPaginationViewModel_TotalItemsCorrect()
-        {
-            BaseCanSendPaginationViewModel_TotalItemsCorrect(Repo, Controller, UIControllerType.Persons);
-        }
+        public void CanSendPaginationViewModel_TotalItemsCorrect() => BaseCanSendPaginationViewModel_TotalItemsCorrect(Repo, Controller, UIControllerType.Persons);
 
         [Ignore]
         [TestMethod]
@@ -443,7 +437,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void ContainsAllPersons()
         {
             // Arrange 
-            var Controller2 = new PersonsController(Repo);
+            IGenericController<Person> Controller2 = new PersonsController(Repo);
 
             // Act
             ViewResult view1 = Controller.Index(1);

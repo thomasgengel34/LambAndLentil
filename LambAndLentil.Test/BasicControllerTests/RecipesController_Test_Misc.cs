@@ -20,7 +20,23 @@ namespace LambAndLentil.Test.BasicControllerTests
     [TestCategory("RecipesController")]
     public class RecipesController_Test_Misc:RecipesController_Test_Should
     {
-    
+        public RecipesController_Test_Misc()
+        {
+            ListEntity.ListT = new List<Recipe> {
+                new Recipe {ID = int.MaxValue, Name = "RecipesController_Index_Test P1" ,AddedByUser="John Doe" ,ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue, ModifiedDate=DateTime.MaxValue.AddYears(-10)},
+                new Recipe {ID = int.MaxValue-1, Name = "RecipesController_Index_Test P2",  AddedByUser="Sally Doe",  ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(20), ModifiedDate=DateTime.MaxValue.AddYears(-20)},
+                new Recipe {ID = int.MaxValue-2, Name = "RecipesController_Index_Test P3",  AddedByUser="Sue Doe", ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(30), ModifiedDate=DateTime.MaxValue.AddYears(-30)},
+                new Recipe {ID = int.MaxValue-3, Name = "RecipesController_Index_Test P4",  AddedByUser="Kyle Doe" ,ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(40), ModifiedDate=DateTime.MaxValue.AddYears(-10)},
+                new Recipe {ID = int.MaxValue-4, Name = "RecipesController_Index_Test P5",  AddedByUser="John Doe",  ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(50), ModifiedDate=DateTime.MaxValue.AddYears(-100)}
+            };
+
+            foreach (Recipe recipe in ListEntity.ListT)
+            {
+                Repo.Add(recipe);
+            }
+
+            Controller.PageSize = 3;
+        }
          
 
         [TestMethod]
@@ -37,57 +53,25 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.AreEqual(isBase, true);
         }
 
-        protected RecipesController SetUpController(IRepository<Recipe> Repo)
-        {
-
-             ListEntity.ListT = new List<Recipe> {
-                new Recipe {ID = int.MaxValue, Name = "RecipesController_Index_Test P1" ,AddedByUser="John Doe" ,ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue, ModifiedDate=DateTime.MaxValue.AddYears(-10)},
-                new Recipe {ID = int.MaxValue-1, Name = "RecipesController_Index_Test P2",  AddedByUser="Sally Doe",  ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(20), ModifiedDate=DateTime.MaxValue.AddYears(-20)},
-                new Recipe {ID = int.MaxValue-2, Name = "RecipesController_Index_Test P3",  AddedByUser="Sue Doe", ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(30), ModifiedDate=DateTime.MaxValue.AddYears(-30)},
-                new Recipe {ID = int.MaxValue-3, Name = "RecipesController_Index_Test P4",  AddedByUser="Kyle Doe" ,ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(40), ModifiedDate=DateTime.MaxValue.AddYears(-10)},
-                new Recipe {ID = int.MaxValue-4, Name = "RecipesController_Index_Test P5",  AddedByUser="John Doe",  ModifiedByUser="Richard Roe", CreationDate=DateTime.MinValue.AddYears(50), ModifiedDate=DateTime.MaxValue.AddYears(-100)}
-            };
-
-            foreach (Recipe recipe in  ListEntity.ListT)
-            {
-                Repo.Add(recipe);
-            }
-
-            Controller = new RecipesController(Repo)
-            {
-                PageSize = 3
-            };
-
-            return Controller;
-        }
+ 
 
 
 
         [TestMethod]
         public void BePublic()
-        { // this is the one I just worked on.
-            // Arrange 
-
-            // Act
+        {   
             Type type = Controller.GetType();
-            bool isPublic = type.IsPublic;
+            bool isPublic = type.IsPublic; 
 
-            // Assert 
-            Assert.AreEqual(isPublic, true);
-             
+            Assert.AreEqual(isPublic, true); 
         }
 
         [TestMethod]
         public void ReturnNonNullIndex()
-        {
-            // Arrange
-
-
-            // Act
+        { 
             ViewResult result = Controller.Index(1) as ViewResult;
-            ViewResult result1 = Controller.Index(2) as ViewResult;
+            ViewResult result1 = Controller.Index(2) as ViewResult; 
 
-            // Assert
             Assert.IsNotNull(result);
             Assert.IsNotNull(result1);
 

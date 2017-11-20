@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace LambAndLentil.Domain.Entities
 {
     [Table("PLAN.Plan")]
-    public class Plan : BaseEntity,  IEntityChildClasses, IPlan
+    public class Plan : BaseEntity,  IPlan
     {
         public Plan():base()
         {
@@ -18,15 +18,11 @@ namespace LambAndLentil.Domain.Entities
         }
 
 
-        public Plan(DateTime creationDate) : base(creationDate)
-        {
-            CreationDate = creationDate;
-        }
+        public Plan(DateTime creationDate) : base(creationDate) => CreationDate = creationDate;
 
         public int ID { get; set; }
-
-        private new List<Person> Persons { get; set; }
-        private new List<Plan> Plans { get; set; }
-        private new List<ShoppingList> ShoppingLists { get; set; }
+        public List<Ingredient> Ingredients { get; set; }
+        public List<Menu> Menus { get; set; }
+        public List<Recipe> Recipes { get; set; } 
     } 
 }

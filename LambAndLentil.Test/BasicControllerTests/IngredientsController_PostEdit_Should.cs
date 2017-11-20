@@ -19,7 +19,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             CreationDate = new DateTime(2014, 2, 2);
             ModifiedDate = new DateTime(2014, 2, 3);
             Ingredient = new Ingredient { ID = 1000, AddedByUser = "Not Changed", CreationDate = CreationDate, Description = "Original Description", IngredientsList = "This, That, Those", ModifiedByUser = "See No Evil", ModifiedDate =ModifiedDate, Name = "Punkin" };
-            Repo.Save(Ingredient);
+            Repo.Save((Ingredient)Ingredient);
         }
 
 
@@ -35,7 +35,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
 
             // Act
-            ActionResult ar = Controller.PostEdit(rvm);
+            ActionResult ar =  Controller.PostEdit(rvm);
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             ViewResult view = (ViewResult)adr.InnerResult;
 
@@ -54,7 +54,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
 
             // Act
-            ActionResult ar = Controller.PostEdit(Ingredient);
+            ActionResult ar =  Controller.PostEdit((Ingredient)Ingredient);
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             ViewResult view = (ViewResult)adr.InnerResult;
 
@@ -72,7 +72,7 @@ namespace LambAndLentil.Test.BasicControllerTests
           // Arrange
 
             // Act 
-            ActionResult ar = Controller.PostEdit(Ingredient);
+            ActionResult ar =  Controller.PostEdit((Ingredient)Ingredient);
 
             Ingredient returnedIngredient = Repo.GetById(1000);
 
@@ -101,7 +101,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Act
             ingredient.AddedByUser = "Hermann Hesse  cxcxcxsr12212244443434";
             ingredient.ModifiedByUser = "Huck Finn gergtwtvkjtittjutjt-5258686545345";
-            Controller.PostEdit(ingredient);
+             Controller.PostEdit(ingredient);
             Ingredient returnedIngredient = Repo.GetById(1000);
 
             // Assert
@@ -116,7 +116,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange
 
             // Act
-            Controller.PostEdit(Ingredient);
+            Controller.PostEdit((Ingredient)Ingredient);
             Ingredient returnedIngredient = Repo.GetById(1000);
             // Assert
             Assert.AreNotEqual(ModifiedDate, returnedIngredient.ModifiedDate);
@@ -124,21 +124,18 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [Ignore]
         [TestMethod]
-        public void NotSaveLogicallyInvalidModel()
-        {
+        public void NotSaveLogicallyInvalidModel() =>
             // Arrange
 
             // Act
 
             // Assert
             Assert.Fail();
-
-        }
 
         [Ignore]
         [TestMethod]
-        public void NotSaveModelFlaggedInvalidByDataAnnotation()
-        {  // see https://msdn.microsoft.com/en-us/library/cc668224(v=vs.98).aspx
+        public void NotSaveModelFlaggedInvalidByDataAnnotation()=>
+          // see https://msdn.microsoft.com/en-us/library/cc668224(v=vs.98).aspx
 
             // Arrange
 
@@ -147,6 +144,6 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Assert
             Assert.Fail();
 
-        }
+        
     }
 }
