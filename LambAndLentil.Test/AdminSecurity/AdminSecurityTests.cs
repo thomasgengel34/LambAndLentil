@@ -12,10 +12,7 @@ namespace LambAndLentil.Test.AdminSecurity
     {
         static AccountController Controller;
 
-        public AdminSecurityTests()
-        {
-            Controller = new AccountController();
-        }
+        public AdminSecurityTests() => Controller = new AccountController();
 
 
         [TestMethod]

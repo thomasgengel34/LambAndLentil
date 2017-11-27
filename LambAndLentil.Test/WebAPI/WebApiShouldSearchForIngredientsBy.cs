@@ -1,14 +1,15 @@
 ﻿using System.Threading.Tasks;
 using LambAndLentil.Test.BasicControllerTests;
+using LambAndLentil.UI.Controllers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace LambAndLentil.Test.WebAPI
 {
 
     [TestClass]
-    public class WebApiShouldSearchForIngredientsBy: IngredientsControllerAsync_Test_Should
+    public class WebApiShouldSearchForIngredientsBy: IngredientsController_Test_Should
     {
-     
+        protected IIngredientsControllerAsync AsyncController = new IngredientsController(Repo);
 
         [TestMethod]
         public async Task BrandedFoodProductsAndFindAtLeast215557Ingredients()

@@ -12,16 +12,16 @@ namespace LambAndLentil.Test.BasicControllerTests
 
     public class ShoppingListsController_Edit_Should:ShoppingListsController_Test_Should
     {
+       private static IGenericController<ShoppingList>  Controller2, Controller3; 
+
         public ShoppingListsController_Edit_Should():base()
         {
 
         }
+
         [Ignore]
         [TestMethod]
-        public void CorrectShoppingListsAreBoundInEdit()
-        {
-            Assert.Fail();
-        }
+        public void CorrectShoppingListsAreBoundInEdit() => Assert.Fail();
 
 
         // not working, not done, not sure it's worth pursuing or abandoning
@@ -67,35 +67,32 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void SaveEditedShoppingList()
         {
             // Arrange
-            ShoppingListsController indexController = new ShoppingListsController(Repo);
-            ShoppingListsController Controller2 = new ShoppingListsController(Repo);
-            ShoppingListsController Controller3 = new ShoppingListsController(Repo);
+             
+             Controller2 = new ShoppingListsController(Repo);
+              Controller3 = new ShoppingListsController(Repo);
 
 
-            ShoppingList vm = new ShoppingList
-            {
-                Name = "0000 test",
-                ID = int.MaxValue - 100,
-                Description = "test ShoppingListsControllerShould.SaveEditedShoppingList"
-            };
+            ShoppingList.Name = "0000 test";
+            ShoppingList.ID = int.MaxValue - 100;
+            ShoppingList.Description = "test ShoppingListsControllerShould.SaveEditedShoppingList"; 
 
             // Act 
-            ActionResult ar1 = Controller.PostEdit(vm);
+            ActionResult ar1 = Controller.PostEdit((ShoppingList)ShoppingList);
 
 
             // now edit it
-            vm.Name = "0000 test Edited";
-            vm.ID = 7777;
-            ActionResult ar2 = Controller2.PostEdit(vm);
+            ShoppingList.Name = "0000 test Edited";
+            ShoppingList.ID = 7777;
+            ActionResult ar2 = Controller2.PostEdit((ShoppingList)ShoppingList);
             ViewResult view2 = Controller3.Index();
              ListEntity<ShoppingList> ListEntity2 = ( ListEntity<ShoppingList>)view2.Model;
-            ShoppingList vm3 = (from m in ListEntity2.ListT  
+            ShoppingList ShoppingList3 = (from m in ListEntity2.ListT  
                                 where m.Name == "0000 test Edited"
                                 select m).AsQueryable().FirstOrDefault();
 
             // Assert
-            Assert.AreEqual("0000 test Edited", vm3.Name);
-            Assert.AreEqual(7777, vm3.ID);
+            Assert.AreEqual("0000 test Edited", ShoppingList3.Name);
+            Assert.AreEqual(7777, ShoppingList3.ID);
 
         }
 

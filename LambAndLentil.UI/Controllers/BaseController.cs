@@ -10,7 +10,7 @@ using LambAndLentil.UI.Models;
 
 namespace LambAndLentil.UI.Controllers
 {
-    public abstract class BaseController<T> : Controller 
+    public abstract class BaseController<T> : Controller
             where T : BaseEntity, IEntity, new()
     {
         public string ClassName { get; private set; }
@@ -35,7 +35,7 @@ namespace LambAndLentil.UI.Controllers
             int pageInt = page ?? 1;
             ListEntity<T> model = new ListEntity<T>
             {
-               
+
                 ListT = new BaseEntity().GetIndexedModel<T>(Repo, PageSize, pageInt),
                 PagingInfo = new BaseEntity().PagingFunction<T>(Repo, page, PageSize)
             };
@@ -171,32 +171,33 @@ namespace LambAndLentil.UI.Controllers
             {
                 return RedirectToAction(UIViewType.Index.ToString()).WithWarning(entity + " was not found");
             }
+            int parentNonNullID = (int)parentID;
+            T parent = Repo.GetById(parentNonNullID);
+            if (parent == null)
+            {
+                // TODO: log error - this could be a developer problem
+                return RedirectToAction(UIViewType.Index.ToString()).WithWarning(entity + " was not found");
+            }
+            if (AttachOrDetach.Detach == attachOrDetach && orderNumber < 0)
+            {
+                return RedirectToAction(UIViewType.Index.ToString()).WithWarning("Order Number Was Negative! Nothing was detached");
+            }
+            else if (child == null)
+            {
+                return RedirectToAction(UIViewType.Details.ToString(), new { id = parentID, actionMethod = UIViewType.Edit }).WithWarning(entity + " was not found"); ;
+            }
             else
             {
-                int parentNonNullID = (int)parentID;
-                T parent = Repo.GetById(parentNonNullID);
-                if (parent == null)
+                if (attachOrDetach == AttachOrDetach.Detach)
                 {
-                    // TODO: log error - this could be a developer problem
-                    return RedirectToAction(UIViewType.Index.ToString()).WithWarning(entity + " was not found");
-                }
-                else if (child == null)
-                {
-                    return RedirectToAction(UIViewType.Details.ToString(), new { id = parentID, actionMethod = UIViewType.Edit }).WithWarning(entity + " was not found"); ;
+                    Repo.DetachAnIndependentChild(parent.ID, child, 0);
+                    return RedirectToAction(UIViewType.Details.ToString(), new { id = parentID, actionMethod = UIViewType.Edit }).WithSuccess(childEntity + " was Successfully Detached!");
                 }
                 else
                 {
-                    if (attachOrDetach == AttachOrDetach.Detach)
-                    {
-                        Repo.DetachAnIndependentChild(parent.ID, child, 0);
-                        return RedirectToAction(UIViewType.Details.ToString(), new { id = parentID, actionMethod = UIViewType.Edit }).WithSuccess(childEntity + " was Successfully Detached!");
-                    }
-                    else
-                    {
-                        Repo.AttachAnIndependentChild(parent.ID, child, 0);
-                        return RedirectToAction(UIViewType.Details.ToString(), new { id = parentID, actionMethod = UIViewType.Edit }).WithSuccess(childEntity + " was Successfully Attached!");
-                    }
-                }
+                    Repo.AttachAnIndependentChild(parent.ID, child, 0);
+                    return RedirectToAction(UIViewType.Details.ToString(), new { id = parentID, actionMethod = UIViewType.Edit }).WithSuccess(childEntity + " was Successfully Attached!");
+                } 
             }
         }
 
@@ -213,8 +214,8 @@ namespace LambAndLentil.UI.Controllers
             }
         }
 
-        protected ActionResult BaseDetachAllIngredientChildren(IRepository<T> Repo, int? ID,  List<Ingredient>   selected   ) 
-        { 
+        protected ActionResult BaseDetachAllIngredientChildren(IRepository<T> Repo, int? ID, List<Ingredient> selected)
+        {
             string entity = typeof(T).ToString().Split('.').Last();
             if (ID == null)
             {
@@ -236,12 +237,12 @@ namespace LambAndLentil.UI.Controllers
                     {
                         parent.Ingredients.RemoveAll(match: x => x.ID >= 0);
                     }
-                     else
+                    else
                     {
                         var setToRemove = new HashSet<Ingredient>(selected);
                         parent.Ingredients.RemoveAll(ContainsSelected);
                     }
-                  
+
                     Repo.Update((T)parent, parent.ID);
                     return RedirectToAction(UIViewType.Details.ToString(), new { id = ID, actionMethod = UIViewType.Edit }).WithSuccess("All Ingredients Were Successfully Detached!");
                 }
@@ -305,7 +306,7 @@ namespace LambAndLentil.UI.Controllers
             }
         }
 
-        protected ActionResult BaseDetachAllPlanChildren(IRepository<T> Repo, int? ID, List<Plan> selected) 
+        protected ActionResult BaseDetachAllPlanChildren(IRepository<T> Repo, int? ID, List<Plan> selected)
         {
 
             string entity = typeof(T).ToString().Split('.').Last();
@@ -350,7 +351,7 @@ namespace LambAndLentil.UI.Controllers
                 bool trueOrFalse = numbers.Contains(ingredientID);
                 return trueOrFalse;
             }
-        } 
+        }
 
         protected ActionResult BaseDetachAllMenuChildren(IRepository<T> Repo, int? ID, List<Menu> selected)
         {
@@ -447,13 +448,15 @@ namespace LambAndLentil.UI.Controllers
                 return trueOrFalse;
             }
         }
-       
+
 
         protected void BaseDetachLastIngredientChild(IRepository<T> repo, int iD)
         {
             IEntityChildClassIngredients parent = (IEntityChildClassIngredients)Repo.GetById(iD);
             int count = parent.Ingredients.Count();
             parent.Ingredients.RemoveAt(count - 1);
-        } 
+        }
+
+
     }
 }

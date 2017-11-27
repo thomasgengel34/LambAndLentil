@@ -29,13 +29,13 @@ namespace LambAndLentil.Test.JSONTests
         public void ReturnCorrectEntityForAValidIngredientID()
         {
             // Arrange
-            Ingredient ingredient = new Ingredient()
+            IIngredient ingredient = new Ingredient()
             {
                 ID = int.MaxValue,
                 Name = "test ReturnCorrectEntityForAValidIngredientID Name",
                 Description = "test ReturnCorrectEntityForAValidIngredientID Description"
             };
-            Repo.Add(ingredient);
+            Repo.Add((Ingredient)ingredient);
 
             // Act
             Ingredient returnedListEntity = Repo.GetById(ingredient.ID);

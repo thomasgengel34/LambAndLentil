@@ -32,7 +32,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange
 
             // Act
-            AlertDecoratorResult adr= (AlertDecoratorResult)Controller.Index(50000);
+            AlertDecoratorResult adr= (AlertDecoratorResult)Controller.Delete(50000);
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
             // Assert
         //    Assert.Fail();
@@ -46,9 +46,9 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestMethod]
         public void ReturnDetailsWhenIDIsFound() => BaseReturnDetailsWhenIDIsFound(Controller);
 
-        [TestMethod] 
-        public void AFoundIngredient()=> BaseAFoundEntity(Controller); 
+        //[TestMethod] 
+        //public void AFoundIngredient()=> BaseAFoundEntity(Controller); 
 
-        private void BaseAFoundEntity(IGenericController<Ingredient> controller) => throw new NotImplementedException();
+        //private void BaseAFoundEntity(IGenericController<Ingredient> controller) => throw new NotImplementedException();
     }
 }

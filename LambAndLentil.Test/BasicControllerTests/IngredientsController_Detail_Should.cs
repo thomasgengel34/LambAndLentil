@@ -228,7 +228,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void DetailsIngredientIDIsZeroAlertClassIsCorrect()
         {
             // Arrange
-            IngredientsController Controller = new IngredientsController(Repo);
+           
             Ingredient item = new Ingredient { ID = 0 };
             Repo.Save(item);
 
@@ -245,8 +245,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestCategory("Details")]
         public void DetailsIngredientIDIsZeroReturnModelIsCorrect()
         {
-            // Arrange
-            IngredientsController Controller = new IngredientsController(Repo);
+            // Arrange 
             Ingredient item = new Ingredient { ID = 0 };
             Repo.Save(item);
 
@@ -264,8 +263,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestCategory("Details")]
         public void Details_IngredientIDIsNegative_ResultNotNull()
         {
-            // Arrange
-
+            // Arrange 
             Ingredient item = new Ingredient { ID = -1 };
             Repo.Save(item);
 
@@ -300,8 +298,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestCategory("Details")]
         public void NotBeSuccessfulWithInvalidIngredientID_IngredientIDIsNegative_AlertClassCorrect()
         {
-            // Arrange
-            IngredientsController Controller = new IngredientsController(Repo);
+            // Arrange 
             Ingredient item = new Ingredient
             {
                 ID = -1,

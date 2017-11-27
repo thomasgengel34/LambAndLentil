@@ -16,7 +16,9 @@ namespace LambAndLentil.UI.HtmlHelpers
                 tag.MergeAttribute("href", pageUrl(i));
                 tag.InnerHtml = i.ToString();
                 if (i == pagingInfo.CurrentPage)
+                {
                     tag.AddCssClass("selected");
+                }
                 result.Append(tag.ToString());
             }
             return MvcHtmlString.Create(result.ToString());

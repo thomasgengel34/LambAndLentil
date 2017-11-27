@@ -4,12 +4,15 @@ using LambAndLentil.Test.BasicControllerTests;
 using System.Threading.Tasks;
 using LambAndLentil.Domain.Entities;
 using System.Collections.Generic;
+using LambAndLentil.UI.Controllers;
 
 namespace LambAndLentil.Test.WebAPI
 {
     [TestClass]
-    public class GetFoodsBySearchingUsingFreeTextToLocateFoodsInTheDatabase : IngredientsControllerAsync_Test_Should
+    public class GetFoodsBySearchingUsingFreeTextToLocateFoodsInTheDatabase : IngredientsController_Test_Should
     {
+         IIngredientsControllerAsync  AsyncController = new IngredientsController(Repo);
+
         /* Search -- use free text to locate foods in the database
  https://api.nal.usda.gov/ndb/search/?format=json&q=butter&sort=n&max=25&offset=0&api_key=DEMO_KEY 
  */
@@ -17,7 +20,7 @@ namespace LambAndLentil.Test.WebAPI
         [TestMethod]
         public async Task ReturnCorrectIngredientsFor076606619663OnSingleItemSearchAsync()
         {
-            //	single item search: 076606619663 will return ingredients for PICKLED ASPARAGUS , SPICY!, UPC: 076606619663
+            //	single item search: 076606619663 will return ingredients for PICKLED ASPARAGUS , SPICY!, UPC: 076606619663 
             // Arrange
             string searchString = " 076606619663";
             string correctIngredients = "INGREDIENTS: GREEN ASPARAGUS, WATER, VINEGAR, SUGAR, SALT, MUSTARD SEEDS, BLACK PEPPER, RED HOT PEPPER, GARLIC";

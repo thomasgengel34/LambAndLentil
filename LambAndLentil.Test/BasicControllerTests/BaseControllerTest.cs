@@ -40,6 +40,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Repo.Save(item);
             ListEntity.ListT = SetUpRepository();
             ClassName = typeof(T).ToString().Split('.').Last();
+           
         }
 
         public List<T> SetUpRepository()
@@ -405,10 +406,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         }
 
         protected void BaseReturnsIndexWithWarningWithNullParent(IRepository<T> repo, IGenericController<T> controller)
-        {
-            // Arrange 
-            item = null;
-
+        { 
             // Act 
             ActionResult ar = controller.AttachIngredient(null, new Ingredient(), 0);
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;

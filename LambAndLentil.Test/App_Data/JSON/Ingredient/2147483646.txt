@@ -1,1 +1,0 @@
-{"ID":2147483646,"Ingredients":[],"Name":"LambAndLentil.Domain.Entities.Ingredient ControllerTest2","Description":"test TsController.Setup","CreationDate":"0021-01-01T00:00:00","ModifiedDate":"9979-12-31T23:59:59.9999999","AddedByUser":"Sally Doe","ModifiedByUser":"PFW\\Poncho","IngredientsList":null}

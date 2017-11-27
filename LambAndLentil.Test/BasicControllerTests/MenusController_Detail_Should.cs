@@ -40,10 +40,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         }
 
         [TestMethod]
-        public void ReturnDeleteWithActionMethodDeleteWithEmptyResult()
-        {
-            BaseReturnDeleteWithActionMethodDeleteWithEmptyResult(Controller);
-        }
+        public void ReturnDeleteWithActionMethodDeleteWithEmptyResult() => BaseReturnDeleteWithActionMethodDeleteWithEmptyResult(Controller);
 
 
         [TestMethod]
@@ -136,12 +133,10 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [TestMethod]
         [TestCategory("Details")]
-        public void DetailsMenuIDTooHighMessageRight()
-        {
+        public void DetailsMenuIDTooHighMessageRight() =>
             // max is set by int.MaxValue, so the type controls this. 
             // Will always be true. Keep test in case I find this is wrong somehow.
             Assert.IsTrue(true);
-        }
 
 
         [TestMethod]
@@ -158,32 +153,26 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [TestMethod]
         [TestCategory("Details")]
-        public void DetailsMenuIDTooHighCorrectModel()
-        {
+        public void DetailsMenuIDTooHighCorrectModel() => 
             // max is set by int.MaxValue, so the type controls this. 
             // Will always be true. Keep test in case I find this is wrong somehow.
-            Assert.IsTrue(true);
-        }
+            Assert.IsTrue(true); 
 
 
         [TestMethod]
         [TestCategory("Details")]
-        public void DetailsMenuIDTooHighCorrectController()
-        {
+        public void DetailsMenuIDTooHighCorrectController() => 
             // max is set by int.MaxValue, so the type controls this. 
             // Will always be true. Keep test in case I find this is wrong somehow.
-            Assert.IsTrue(true);
-        }
+            Assert.IsTrue(true); 
 
 
         [TestMethod]
         [TestCategory("Details")]
-        public void DetailsMenuIDTooHighCorrectRouteValue()
-        {
+        public void DetailsMenuIDTooHighCorrectRouteValue() => 
             // max is set by int.MaxValue, so the type controls this. 
             // Will always be true. Keep test in case I find this is wrong somehow.
-            Assert.IsTrue(true);
-        }
+            Assert.IsTrue(true); 
 
 
         [TestMethod]
@@ -234,10 +223,9 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestCategory("Details")]
         public void DetailsMenuIDIsZeroAlertClassIsCorrect()
         {
-            // Arrange
-            MenusController Controller = new MenusController(Repo);
-            Menu menu = new Menu { ID = 0 };
-            Repo.Save(menu);
+            // Arrange 
+            Menu.ID = 0 ;
+            Repo.Save((Menu)Menu);
 
 
             // Act
@@ -252,10 +240,9 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestCategory("Details")]
         public void DetailsMenuIDIsZeroReturnModelIsCorrect()
         {
-            // Arrange
-            MenusController Controller = new MenusController(Repo);
-            Menu menu = new Menu { ID = 0 };
-            Repo.Save(menu);
+            // Arrange 
+            Menu.ID = 0  ;
+            Repo.Save((Menu)Menu);
 
 
             // Act
@@ -273,8 +260,8 @@ namespace LambAndLentil.Test.BasicControllerTests
         {
             // Arrange
 
-            Menu menu = new Menu { ID = -1 };
-            Repo.Save(menu);
+            Menu.ID = -1;
+            Repo.Save((Menu)Menu);
 
             // Act
             ActionResult view = Controller.Details(-1);
@@ -307,14 +294,10 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestCategory("Details")]
         public void NotBeSuccessfulWithInvalidMenuID_MenuIDIsNegative_AlertClassCorrect()
         {
-            // Arrange
-            MenusController Controller = new MenusController(Repo);
-            Menu menu = new Menu
-            {
-                ID = -1,
-                Name = "Details_MenuIDIsNegative_AlertClassCorrect"
-            };
-            Repo.Save(menu);
+            // Arrange 
+            Menu.ID = -1;
+            Menu.Name = "Details_MenuIDIsNegative_AlertClassCorrect"; 
+            Repo.Save((Menu)Menu);
 
             // Act
             ActionResult view = Controller.Details(-1);
@@ -327,27 +310,23 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [Ignore]
         [TestMethod]
-        public void ReturnDetailsViewActionTypeEdit_ValidID()
-        {
+        public void ReturnDetailsViewActionTypeEdit_ValidID()=> 
             // Arrange
 
             // Act
 
             // Assert
-            Assert.Fail();
-        }
+            Assert.Fail(); 
 
         [Ignore]
         [TestMethod]
-        public void ReturnDetailsViewActionTypeEdit_InValidID()
-        {
+        public void ReturnDetailsViewActionTypeEdit_InValidID() => 
             // Arrange
 
             // Act
 
             // Assert
-            Assert.Fail();
-        }
+            Assert.Fail(); 
 
 
         [TestMethod]

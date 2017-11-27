@@ -11,7 +11,7 @@ using System.Security.Principal;
 namespace LambAndLentil.Domain.Concrete
 {
     public class JSONRepository<T> : IRepository<T>
-        where T : BaseEntity, IEntity 
+        where T : BaseEntity, IEntity
     {
         protected static string FullPath { get; set; }
         private static string className;
@@ -52,7 +52,7 @@ namespace LambAndLentil.Domain.Concrete
         /// <param name="child"></param>
         /// <param name="orderNumber">zero-based index in list currently used only in Detach version</param>
         public void AttachAnIndependentChild<TChild>(int parentID, TChild child, int orderNumber = 0)
-            where TChild : BaseEntity, IEntity 
+            where TChild : BaseEntity, IEntity
         {
             char[] charsToTrim = { 'V', 'M' };
             string childName = typeof(TChild).ToString().Split('.').Last().Split('+').Last().TrimEnd(charsToTrim);
@@ -66,7 +66,7 @@ namespace LambAndLentil.Domain.Concrete
                 switch (childName)
                 {
                     case "Ingredient":
-                        IEntityChildClassIngredients item= (IEntityChildClassIngredients)entity;
+                        IEntityChildClassIngredients item = (IEntityChildClassIngredients)entity;
                         item.Ingredients.Add(child as Ingredient);
                         entity = (T)item;
                         break;
@@ -106,7 +106,7 @@ namespace LambAndLentil.Domain.Concrete
         }
 
 
-        public void DetachAnIndependentChild<TChild>(int parentID, TChild child, int orderNumber = 0)
+        public void DetachAnIndependentChild<TChild>(int parentID, TChild child, int orderNumber = 1)
             where TChild : BaseEntity, IEntity
         {
             char[] charsToTrim = { 'V', 'M' };
@@ -122,28 +122,31 @@ namespace LambAndLentil.Domain.Concrete
                 {
                     case "Ingredient":
                         IEntityChildClassIngredients item = (IEntityChildClassIngredients)entity;
-                        item.Ingredients.RemoveAt(orderNumber);
-                        entity = (T)item; 
+                        if (item.Ingredients.Count >= orderNumber &&  item.Ingredients.Count > 0)
+                        {
+                            item.Ingredients.RemoveAt(orderNumber); 
+                            entity = (T)item;
+                        }
                         break;
                     case "Recipe":
                         IEntityChildClassRecipes itemR = (IEntityChildClassRecipes)entity;
                         itemR.Recipes.RemoveAt(orderNumber);
-                        entity = (T)itemR; 
+                        entity = (T)itemR;
                         break;
                     case "Menu":
                         IEntityChildClassMenus itemM = (IEntityChildClassMenus)entity;
                         itemM.Menus.RemoveAt(orderNumber);
-                        entity = (T)itemM; 
+                        entity = (T)itemM;
                         break;
                     case "Plan":
                         IEntityChildClassPlans itemP = (IEntityChildClassPlans)entity;
                         itemP.Plans.RemoveAt(orderNumber);
-                        entity = (T)itemP; 
+                        entity = (T)itemP;
                         break;
                     case "ShoppingList":
                         IEntityChildClassShoppingLists itemS = (IEntityChildClassShoppingLists)entity;
                         itemS.ShoppingLists.RemoveAt(orderNumber);
-                        entity = (T)itemS; 
+                        entity = (T)itemS;
                         break;
                     default:
                         break;

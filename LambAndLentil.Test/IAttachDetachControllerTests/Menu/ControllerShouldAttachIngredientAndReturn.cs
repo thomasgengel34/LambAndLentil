@@ -1,59 +1,27 @@
-﻿using System;
+﻿using LambAndLentil.Test.IAttachDetachControllerTests.BaseTests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MenuType = LambAndLentil.Domain.Entities.Menu;
 
-namespace LambAndLentil.Test.IAttachDetachControllerTests.Menu 
+
+namespace LambAndLentil.Test.IAttachDetachControllerTests.Menu
 {
     [TestClass]
     [TestCategory("Attach-Detach")]
-    public class ControllerShouldAttachIngredientAndReturn
+    public class ControllerShouldAttachIngredientAndReturn:BaseTest<MenuType,MenuType>
     {
-        [Ignore]
+       
         [TestMethod]
-        public void  DetailWithSuccessWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSupplied()
-        {   
-            // Arrange
-
-            // Act
-
-            //Assert
-            Assert.Fail();
-        }
-
-        [Ignore]
+        public void DetailWithSuccessWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSupplied() => BaseDetailWithSuccessWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSupplied();
+         
         [TestMethod]
-        public void  IndexWithErrorWhenParentIDIsNull()
-        {
-            // Arrange
+        public void IndexWithErrorWhenParentIDIsNull() => BaseReturnsIndexWithWarningWithNullParent(); 
 
-            // Act
-
-            //Assert
-            Assert.Fail();
-        }
-
-        [Ignore]
         [TestMethod]
-        public void IndexWithErrorWhenParentIDIsNotForAnExistingMenu()
-        {
-            // Arrange
+        public void IndexWithErrorWhenParentIDIsNotForAnExistingMenu() => BaseIndexWithErrorWhenParentIDIsNotForAnExistingIngredient();
 
-            // Act
-
-            //Assert
-            Assert.Fail();
-        }
-
-        [Ignore]
+         
         [TestMethod]
-        public void DetailWithErrorWhenParentIDIsValidAndChildIsNotValid()
-        {
-            // Arrange
-
-            // Act
-
-            //Assert
-            Assert.Fail();
-        }
+        public void DetailWithErrorWhenParentIDIsValidAndChildIsNotValid() => BaseDetailWithErrorWhenParentIDIsValidAndChildIsNotValid(); 
 
         [Ignore]
         [TestMethod]

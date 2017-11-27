@@ -26,7 +26,7 @@ namespace IntegrationTests
 
         public MenusControllerShould()
         {
-            Repo = new JSONRepository<Menu>(); ;
+            Repo = new TestRepository<Menu>(); ;
             Controller1 = new MenusController(Repo);
             Controller2 = new MenusController(Repo);
             Controller3 = new MenusController(Repo);
@@ -37,6 +37,7 @@ namespace IntegrationTests
                 Name = "0000 test",
                 ID = 33
             };
+            Controller = new MenusController(Repo);
         }
 
 
@@ -119,31 +120,15 @@ namespace IntegrationTests
         public void SaveEditedMenuWithNameAndDayOfWeekChange()
         {
 
-            // Act 
-            ActionResult ar1 = Controller1.PostEdit((Menu)Menu);
-            ViewResult view1 = Controller2.Index();
-            List<Menu> ListEntity = (List<Menu>)((ListEntity<Menu>)view1.Model).ListT;
-            Menu menu = (from m in ListEntity
-                         where m.Name == "0000 test"
-                         select m).AsQueryable().FirstOrDefault();
-
-            // verify initial value:
-            Assert.AreEqual("0000 test", menu.Name);
-            // now edit it
-            Menu.ID = menu.ID;
-            Menu.Name = "0000 test Edited";
+            // Act   
             Menu.DayOfWeek = DayOfWeek.Friday;
 
             ActionResult ar2 = Controller3.PostEdit((Menu)Menu);
-            ViewResult view2 = Controller4.Index();
-            List<Menu> ListEntity2 = (List<Menu>)((ListEntity<Menu>)view2.Model).ListT;
-            menu = (from m in ListEntity2
-                    where m.Name == "0000 test Edited"
-                    select m).AsQueryable().FirstOrDefault();
 
-            // Assert
-            Assert.AreEqual("0000 test Edited", menu.Name);
-            Assert.AreEqual(DayOfWeek.Friday, menu.DayOfWeek);
+            IMenu returnedMenu = Repo.GetById(Menu.ID);
+
+            // Assert 
+            Assert.AreEqual(DayOfWeek.Friday, returnedMenu.DayOfWeek);
         }
 
 

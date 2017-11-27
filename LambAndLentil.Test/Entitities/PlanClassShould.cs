@@ -12,10 +12,7 @@ namespace LambAndLentil.Domain.Test.Entities
     {
         static Plan plan;
 
-        public PlanClassShould()
-        {
-             plan = new Plan();
-        }
+        public PlanClassShould() => plan = new Plan();
 
         [TestMethod]
         public void HaveCorrectDefaultsInConstructor()

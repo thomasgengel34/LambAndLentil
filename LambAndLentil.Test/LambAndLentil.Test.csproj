@@ -79,7 +79,6 @@
     <Compile Include="BasicControllerTests\AccountControllerTest.cs" />
     <Compile Include="BasicControllerTests\BaseControllerTest.cs" />
     <Compile Include="BasicControllerTests\HomeControllerTest.cs" />
-    <Compile Include="BasicControllerTests\IngredientsControllerAsync_Test_Should.cs" />
     <Compile Include="BasicControllerTests\IngredientsController_ClassPropertyChanges.cs" />
     <Compile Include="BasicControllerTests\IngredientsController_GetIngredients_Test.cs" />
     <Compile Include="BasicControllerTests\MenusController_Test_ClassPropertyChanges.cs" />

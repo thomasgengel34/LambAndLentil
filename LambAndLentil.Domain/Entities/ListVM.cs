@@ -7,16 +7,13 @@ using System.Linq.Expressions;
 
 namespace LambAndLentil.Domain.Entities
 {
-    public class ListEntity<T>
+     public class ListEntity<T>
          where T : BaseEntity
     {
         private DateTime creationDate;
 
 
-        public ListEntity()
-        {
-            ListT = new List<T>();
-        }
+        public ListEntity() => ListT = new List<T>();
 
         public ListEntity(DateTime creationDate)
         {
@@ -32,5 +29,5 @@ namespace LambAndLentil.Domain.Entities
         {
             return list;
         }
-    } 
+    }  
 }

@@ -20,14 +20,18 @@ namespace LambAndLentil.Test.BasicControllerTests
     [TestCategory("Integration")]
     [TestCategory("ShoppingListsController")]
     public class ShoppingListsControllerShould : BaseControllerTest<ShoppingList>
-    { 
+    {
+        private static IGenericController<ShoppingList> Controller1, Controller2, Controller3, Controller4;
+        private static IShoppingList ShoppingList;
         
-        static ShoppingList ShoppingList;
 
         public ShoppingListsControllerShould()
         {
             Repo = new TestRepository<ShoppingList>();
-            Controller = new ShoppingListsController(Repo);
+            Controller1 = new ShoppingListsController(Repo);
+            Controller2 = new ShoppingListsController(Repo);
+            Controller3 = new ShoppingListsController(Repo);
+            Controller4 = new ShoppingListsController(Repo);
             ShoppingList = new ShoppingList
             {
                 ID = 400,
@@ -56,13 +60,10 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void SaveAValidShoppingList()
         {
             // Arrange 
-            ShoppingListsController Controller = new ShoppingListsController(Repo);
-            ShoppingList ShoppingList = new ShoppingList
-            {
-                Name = "test"
-            };
+
+            ShoppingList.Name = "test"; 
             // Act
-            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.PostEdit(ShoppingList);
+            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.PostEdit((ShoppingList)ShoppingList);
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
 
             var routeValues = rtrr.RouteValues.Values;
@@ -82,18 +83,11 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void SaveEditedShoppingListWithNameChange()
         {
             // Arrange 
-            ShoppingListsController Controller1 = new ShoppingListsController(Repo);
-            ShoppingListsController Controller2 = new ShoppingListsController(Repo);
-            ShoppingListsController Controller3 = new ShoppingListsController(Repo);
-            ShoppingListsController Controller4 = new ShoppingListsController(Repo);
-            ShoppingListsController Controller5 = new ShoppingListsController(Repo);
-            ShoppingList ShoppingList = new ShoppingList
-            {
-                Name = "0000 test"
-            };
+            
+            ShoppingList.Name = "0000 test";
 
             // Act 
-            ActionResult ar1 = Controller1.PostEdit(ShoppingList);
+            ActionResult ar1 = Controller1.PostEdit((ShoppingList)ShoppingList);
             ViewResult view1 = Controller2.Index();
             IEnumerable<ShoppingList> ListEntity = (IEnumerable<ShoppingList>)view1.Model;
             var result = (from m in ListEntity
@@ -109,7 +103,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // now edit it
             ShoppingList.Name = "0000 test Edited";
             ShoppingList.ID = item.ID;
-            ActionResult ar2 = Controller3.PostEdit(ShoppingList);
+            ActionResult ar2 = Controller3.PostEdit((ShoppingList)ShoppingList);
             ViewResult view2 = Controller4.Index();
             List<ShoppingList> ListEntity2 = (List<ShoppingList>)view2.Model;
             ShoppingList result2 = (from m in ListEntity2
@@ -131,20 +125,12 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void SaveEditedShoppingListWithDescriptionChange()
         {
             // Arrange 
-            ShoppingListsController Controller1 = new ShoppingListsController(Repo);
-            ShoppingListsController Controller2 = new ShoppingListsController(Repo);
-            ShoppingListsController Controller3 = new ShoppingListsController(Repo);
-            ShoppingListsController Controller4 = new ShoppingListsController(Repo);
-            ShoppingListsController Controller5 = new ShoppingListsController(Repo);
-            ShoppingList ShoppingList = new ShoppingList
-            {
-                Name = "0000 test",
-                Description = "SaveEditedShoppingListWithDescriptionChange Pre-test"
-            };
+            ShoppingList.Name = "0000 test";
+            ShoppingList.Description = "SaveEditedShoppingListWithDescriptionChange Pre-test";
 
 
             // Act 
-            ActionResult ar1 = Controller1.PostEdit(ShoppingList);
+            ActionResult ar1 = Controller1.PostEdit((ShoppingList)ShoppingList);
             ViewResult view1 = Controller2.Index();
             List<ShoppingList> ListEntity = (List<ShoppingList>)view1.Model;
             ShoppingList shoppingListVM = (from m in ListEntity
@@ -160,7 +146,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             ShoppingList.Name = "0000 test Edited";
             ShoppingList.Description = "SaveEditedShoppingListWithDescriptionChange Post-test";
 
-            ActionResult ar2 = Controller3.PostEdit(ShoppingList);
+            ActionResult ar2 = Controller3.PostEdit((ShoppingList)ShoppingList);
             ViewResult view2 = Controller4.Index();
             List<ShoppingList> ListEntity2 = (List<ShoppingList>)view2.Model;
             var result2 = (from m in ListEntity2
@@ -233,8 +219,8 @@ namespace LambAndLentil.Test.BasicControllerTests
         {
             ShoppingList.Name = "Test UpdateTheModificationDateBetweenPostedEdits";
             ShoppingList.ID = 6000;
-            Repo.Save(ShoppingList);
-            BaseUpdateTheModificationDateBetweenPostedEdits(Repo, Controller, ShoppingList);
+            Repo.Save((ShoppingList)ShoppingList);
+            BaseUpdateTheModificationDateBetweenPostedEdits(Repo, Controller, (ShoppingList)ShoppingList);
         }
 
         internal ShoppingList GetShoppingList(IRepository<ShoppingList> Repo, string description)
@@ -242,7 +228,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
             ShoppingList.ID = int.MaxValue;
             ShoppingList.Description = description;
-            Controller.PostEdit(ShoppingList);
+            Controller.PostEdit((ShoppingList)ShoppingList);
 
             ShoppingList result = (from m in Repo.GetAll()
                                    where m.Description == ShoppingList.Description
@@ -280,50 +266,32 @@ namespace LambAndLentil.Test.BasicControllerTests
         [Ignore]
         [TestMethod]
         [TestCategory("Attach-Detach")]
-        public void NotDeleteAnIngredientAfterIngredientIsDetachedFromShoppingList()
-        {
-            Assert.Fail();
-        }
+        public void NotDeleteAnIngredientAfterIngredientIsDetachedFromShoppingList() => Assert.Fail();
 
         [Ignore]
         [TestMethod]
         [TestCategory("Attach-Detach")]
-        public void ReturnIndexViewWithWarningMessageWhenDetachingNonExistingIngredientAttachedToANonExistingShoppingList()
-        {
-            Assert.Fail();
-        }
+        public void ReturnIndexViewWithWarningMessageWhenDetachingNonExistingIngredientAttachedToANonExistingShoppingList() => Assert.Fail();
 
         [Ignore]
         [TestMethod]
         [TestCategory("Attach-Detach")]
-        public void ReturnIndexViewWithWarningWhenAttachingExistIngredientToNonExistingShoppingList()
-        {
-            Assert.Fail();
-        }
+        public void ReturnIndexViewWithWarningWhenAttachingExistIngredientToNonExistingShoppingList() => Assert.Fail();
 
         [Ignore]
         [TestMethod]
         [TestCategory("Attach-Detach")]
-        public void ReturnIndexViewWithWarningWhenAttachingNonExistIngredientToNonExistingShoppingList()
-        {
-            Assert.Fail();
-        }
+        public void ReturnIndexViewWithWarningWhenAttachingNonExistIngredientToNonExistingShoppingList() => Assert.Fail();
 
         [Ignore]
         [TestMethod]
         [TestCategory("Attach-Detach")]
-        public void ReturnIndexViewWithWarningWhenDetachingExistingIngredientAttachedToNonExistingShoppingList()
-        {
-            Assert.Fail();
-        }
+        public void ReturnIndexViewWithWarningWhenDetachingExistingIngredientAttachedToNonExistingShoppingList() => Assert.Fail();
 
         [Ignore]
         [TestMethod]
         [TestCategory("Attach-Detach")]
-        public void ReturnShoppingListEditViewWithSuccessMessageWhenDetachingExistingIngredientFromExistingShoppingList()
-        {
-            Assert.Fail();
-        }
+        public void ReturnShoppingListEditViewWithSuccessMessageWhenDetachingExistingIngredientFromExistingShoppingList() => Assert.Fail();
 
         [Ignore]
         [TestMethod]

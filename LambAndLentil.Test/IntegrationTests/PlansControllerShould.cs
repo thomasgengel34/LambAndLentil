@@ -22,11 +22,15 @@ namespace LambAndLentil.Test.BasicControllerTests
         
         static IPlan Plan;
 
-        public PlansControllerShould() => Plan = new Plan
+        public PlansControllerShould()
         {
-            ID = 1000,
-            Description = "test PlanControllerShould"
-        };
+            Plan = new Plan
+            {
+                ID = 1000,
+                Description = "test PlanControllerShould"
+            };
+            Controller = new PlansController(Repo);
+        }
 
         [TestMethod]
         public void CreateAnPlan()

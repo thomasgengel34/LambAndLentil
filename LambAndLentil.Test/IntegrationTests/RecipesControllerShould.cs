@@ -24,11 +24,7 @@ namespace IntegrationTests
     public class RecipesControllerShould: RecipesController_Test_Should
     {  
 
-        public RecipesControllerShould()
-        { 
-            Recipe = new Recipe();
-        }
-
+        public RecipesControllerShould() =>   Recipe = new Recipe(); 
 
         [TestMethod]
         public void CreateARecipe()
@@ -77,11 +73,11 @@ namespace IntegrationTests
         public void SaveEditedRecipeWithNameChange()
         {
             // Arrange 
-            RecipesController Controller1 = new RecipesController(Repo);
-            RecipesController Controller2 = new RecipesController(Repo);
-            RecipesController Controller3 = new RecipesController(Repo);
-            RecipesController Controller4 = new RecipesController(Repo);
-            RecipesController Controller5 = new RecipesController(Repo);
+
+            IGenericController<Recipe> Controller2 = new RecipesController(Repo);
+            IGenericController<Recipe> Controller3 = new RecipesController(Repo);
+            IGenericController<Recipe> Controller4 = new RecipesController(Repo);
+            
             Recipe vm = new Recipe
             {
                 Name = "0000 test",
@@ -89,7 +85,7 @@ namespace IntegrationTests
             };
 
             // Act 
-            ActionResult ar1 = Controller1.PostEdit(vm);
+            ActionResult ar1 = Controller.PostEdit(vm);
             ViewResult view1 = Controller2.Index();
             List<Recipe> ListEntity= (List<Recipe>)((( ListEntity<Recipe>)view1.Model).ListT);
             Recipe Recipe = (from m in ListEntity
@@ -137,11 +133,10 @@ namespace IntegrationTests
         [TestMethod]
         public void SaveAllPropertiesInBaseEntity()
         {
-            // Arrange 
-            RecipesController ControllerPost = new RecipesController(Repo);
-            RecipesController ControllerView = new RecipesController(Repo);
-            RecipesController ControllerDelete = new RecipesController(Repo);
-            Recipe vm = new Recipe
+            // Arrange  
+            IGenericController<Recipe> ControllerView = new RecipesController(Repo);
+            IGenericController<Recipe> ControllerDelete = new RecipesController(Repo);
+            IRecipe Recipe = new Recipe
             {
                 Name = "___test387",
                 Description = "test387 description",
@@ -149,19 +144,19 @@ namespace IntegrationTests
             };
 
             // Act
-            ControllerPost.PostEdit(vm);
+            Controller.PostEdit((Recipe)Recipe);
             ViewResult view1 = ControllerView.Index();
             List<Recipe> ListEntity= (List<Recipe>)((( ListEntity<Recipe>)view1.Model).ListT);
-            Recipe Recipe = (from m in ListEntity
+            Recipe = (from m in ListEntity
                                where m.Name == "___test387"
                                select m).AsQueryable().FirstOrDefault();
 
-            Assert.AreEqual(vm.Name, Recipe.Name);
-            Assert.AreEqual(vm.Description, Recipe.Description);
-            Assert.AreEqual(vm.CreationDate.Day, Recipe.CreationDate.Day);
-            Assert.AreEqual(vm.ModifiedDate.Day, Recipe.ModifiedDate.Day);
-            Assert.AreEqual(vm.AddedByUser, Recipe.AddedByUser);
-            Assert.AreEqual(vm.ModifiedByUser, Recipe.ModifiedByUser);
+            Assert.AreEqual(Recipe.Name, Recipe.Name);
+            Assert.AreEqual(Recipe.Description, Recipe.Description);
+            Assert.AreEqual(Recipe.CreationDate.Day, Recipe.CreationDate.Day);
+            Assert.AreEqual(Recipe.ModifiedDate.Day, Recipe.ModifiedDate.Day);
+            Assert.AreEqual(Recipe.AddedByUser, Recipe.AddedByUser);
+            Assert.AreEqual(Recipe.ModifiedByUser, Recipe.ModifiedByUser);
             // return View(UIViewType.Details.ToString(), vm).WithWarning("Something is wrong with the data!");
         }
 
@@ -173,7 +168,7 @@ namespace IntegrationTests
             // Arrange 
             TestRepository<Recipe> repoRecipe = new TestRepository<Recipe>();
             TestRepository<Ingredient> repoIngredient = new TestRepository<Ingredient>();
-            RecipesController Controller = new RecipesController(repoRecipe);
+          
 
             Recipe Recipe = new Recipe { ID = 3000, Description = "test AttachAnExistingIngredientToAnExistingRecipe" };
             Repo.Add(Recipe);
@@ -200,8 +195,8 @@ namespace IntegrationTests
             // Arrange
             TestRepository<Recipe> repoRecipe = new TestRepository<Recipe>();
             TestRepository<Ingredient> repoIngredient = new TestRepository<Ingredient>();
-            RecipesController Controller = new RecipesController(repoRecipe);
-            RecipesController ControllerSubtract = new RecipesController(repoRecipe);
+            
+            IGenericController<Recipe> ControllerSubtract = new RecipesController(repoRecipe);
 
             Recipe Recipe1 = GetRecipe(repoRecipe, "test NotDeleteAnIngredientAfterIngredientIsDetached");
 
@@ -223,9 +218,7 @@ namespace IntegrationTests
         {
             // Arrange
             TestRepository<Recipe> repoRecipe = new TestRepository<Recipe>();
-            TestRepository<Ingredient> repoIngredient = new TestRepository<Ingredient>();
-            RecipesController ControllerAttach = new RecipesController(repoRecipe);
-            RecipesController ControllerSubtract = new RecipesController(repoRecipe);
+            TestRepository<Ingredient> repoIngredient = new TestRepository<Ingredient>();  
 
             string description = "test ReturnIndexViewWhenAttachingExistIngredientToNonExistingRecipe";
 
@@ -233,7 +226,7 @@ namespace IntegrationTests
             repoIngredient.Add(ingredient);
 
             // Act
-            AlertDecoratorResult adr = (AlertDecoratorResult)ControllerAttach.AttachIngredient(-1, ingredient);
+            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.AttachIngredient(-1, ingredient);
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
             var routeValues = rtrr.RouteValues.Values;
 
@@ -273,12 +266,11 @@ namespace IntegrationTests
         public void ReturnIndexViewWithWarningWhenAttachingNonExistIngredientToNonExistingRecipe()
         {
             // Arrange
-            TestRepository<Recipe> repoRecipe = new TestRepository<Recipe>();
-            RecipesController Controller = new RecipesController(repoRecipe);
-            Ingredient vm = null;
+            TestRepository<Recipe> repoRecipe = new TestRepository<Recipe>(); 
+            Ingredient ingredient = null;
 
             // Act 
-            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.AttachIngredient(-1, vm);
+            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.AttachIngredient(-1, ingredient);
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
             var routeValues = rtrr.RouteValues.Values;
 
@@ -296,15 +288,13 @@ namespace IntegrationTests
         {
             // Arrange
 
-            TestRepository<Ingredient> repoIngredient = new TestRepository<Ingredient>();
-
-            RecipesController ControllerAttachIngredient = new RecipesController(Repo);
-            RecipesController ControllerRemoveIngredient = new RecipesController(Repo);
+            TestRepository<Ingredient> repoIngredient = new TestRepository<Ingredient>(); 
+            IGenericController<Recipe> ControllerRemoveIngredient = new RecipesController(Repo);
 
             Recipe Recipe = GetRecipe(Repo, "test ReturnRecipeEditViewWithSuccessMessageWhenDetachingExistingIngredientFromExistingRecipe");
 
             Ingredient ingredient = GetIngredient(repoIngredient, "test ReturnRecipeEditViewWithSuccessMessageWhenDetachingExistingIngredientFromExistingRecipe");
-            ControllerAttachIngredient.AttachIngredient(Recipe.ID, ingredient);
+            Controller.AttachIngredient(Recipe.ID, ingredient);
 
             // Act          
             AlertDecoratorResult adr = (AlertDecoratorResult)ControllerRemoveIngredient.DetachIngredient(Recipe.ID, ingredient);
@@ -327,7 +317,7 @@ namespace IntegrationTests
             // Arrange
             TestRepository<Recipe> repoRecipe = new TestRepository<Recipe>();
             TestRepository<Ingredient> repoIngredient = new TestRepository<Ingredient>();
-            RecipesController ControllerDetachIngredient = new RecipesController(repoRecipe);
+            IGenericController<Recipe> ControllerDetachIngredient = new RecipesController(repoRecipe);
             string description = "test ReturnIndexViewWithWarningWhenDetachingExistingIngredientAttachedToNoExistingRecipe";
 
             Ingredient ingredient = GetIngredient(repoIngredient, description);
@@ -351,8 +341,8 @@ namespace IntegrationTests
             // Arrange
 
             TestRepository<Ingredient> repoIngredient = new TestRepository<Ingredient>();
-            IngredientsController ControllerIngredient = new IngredientsController(repoIngredient);
-            RecipesController ControllerDetachIngredient = new RecipesController(Repo);
+            IGenericController<Ingredient> ControllerIngredient = new IngredientsController(repoIngredient);
+            IGenericController<Recipe> ControllerDetachIngredient = new RecipesController(Repo);
             string description = "test ReturnRecipeIndexViewWithWarningWhenDetachingExistingingredientNotAttachedToAnExistingRecipe";
             Ingredient ingredient = GetIngredient(repoIngredient, description);
             // Act 
@@ -373,9 +363,8 @@ namespace IntegrationTests
         public void ReturnRecipeEditViewWithWarningMessageWhenDetachingNonExistingIngredientAttachedToExistingRecipe()
         {
             // Arrange
-            TestRepository<Recipe> repoRecipe = new TestRepository<Recipe>();
-            RecipesController ControllerRecipe = new RecipesController(repoRecipe);
-            RecipesController ControllerDetachIngredient = new RecipesController(repoRecipe);
+            IRepository<Recipe> repoRecipe = new TestRepository<Recipe>();
+            IGenericController<Recipe> ControllerDetachIngredient = new RecipesController(repoRecipe);
             Recipe Recipe = GetRecipe(repoRecipe, "test ReturnRecipeEditViewWithWarningMessageWhenDetachingNonExistingIngredientAttachedToExistingRecipe");
             // Act 
             AlertDecoratorResult adr = (AlertDecoratorResult)ControllerDetachIngredient.DetachIngredient(Recipe.ID, null);
@@ -414,7 +403,7 @@ namespace IntegrationTests
 
         internal Ingredient GetIngredient(IRepository<Ingredient> Repo, string description)
         {
-            IngredientsController Controller = new IngredientsController(Repo);
+            IGenericController<Ingredient> Controller = new IngredientsController(Repo);
             Ingredient ivm = new Ingredient
             {
                 Description = description,
@@ -428,16 +417,15 @@ namespace IntegrationTests
             return ingredient;
         }
 
-        // phase out
+        // phase out - use action result methods instead
         internal Recipe GetRecipe(IRepository<Recipe> Repo, string description)
-        {
-            RecipesController Controller = new RecipesController(Repo);
-            Recipe vm = new Recipe
+        { 
+            Recipe recipe = new Recipe
             {
                 Description = description,
                 ID = int.MaxValue
             };
-            Controller.PostEdit(vm);
+            Controller.PostEdit(recipe);
 
             Recipe Recipe = ((from m in Repo.GetAll()
                                 where m.Description == description

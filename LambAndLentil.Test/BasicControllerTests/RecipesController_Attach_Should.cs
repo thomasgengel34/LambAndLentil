@@ -20,10 +20,7 @@ namespace LambAndLentil.Test.BasicControllerTests
     {
 
         [TestMethod]
-        public void ReturnsIndexWithWarningWithUnknownParentID()
-        {
-            BaseReturnsIndexWithWarningWithUnknownParentID(Repo, Controller);
-        }
+        public void ReturnsIndexWithWarningWithUnknownParentID() => BaseReturnsIndexWithWarningWithUnknownParentID(Repo, Controller);
 
         [TestMethod]
         public void ReturnsIndexWithWarningWithNullParent() => BaseReturnsIndexWithWarningWithNullParent(Repo, Controller);
@@ -68,15 +65,13 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [Ignore]
         [TestMethod]
-        public void ReturnsDetailWhenDetachingWithSuccessWithValidParentandValidChild()
-        {
+        public void ReturnsDetailWhenDetachingWithSuccessWithValidParentandValidChild() =>
             // Arrange
 
             // Act
 
             // Assert
             Assert.Fail();
-        }
 
 
         [TestMethod]
@@ -117,14 +112,14 @@ namespace LambAndLentil.Test.BasicControllerTests
             int initialIngredientCount = Recipe.Ingredients.Count();
 
             // Act
-            var setToSelect = new HashSet<int> { 4000, 4001, 4006, 4008 };
+            var setToSelect = new HashSet<int> {  4006, 4008 };
 
             List<Ingredient> selected = Recipe.Ingredients.Where(t => setToSelect.Contains(t.ID)).ToList();
 
             Controller.DetachAllIngredients(Recipe.ID, selected);
             Recipe returnedRecipe = Repo.GetById(Recipe.ID);
             // Assert
-            Assert.AreEqual(initialIngredientCount - 4, returnedRecipe.Ingredients.Count());
+            Assert.AreEqual(initialIngredientCount - 2, returnedRecipe.Ingredients.Count());
         }
 
 

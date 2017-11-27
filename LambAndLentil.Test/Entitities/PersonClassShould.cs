@@ -10,12 +10,9 @@ namespace LambAndLentil.Domain.Test.Entities
     [TestCategory("Person Class")]
     public class PersonClassShould
     {
-        static Person person; 
+        static Person person;
 
-        public PersonClassShould()
-        {
-            person = new Person();
-        }
+        public PersonClassShould() => person = new Person();
 
         [TestMethod]
         public void HaveCorrectDefaultsInConstructor()

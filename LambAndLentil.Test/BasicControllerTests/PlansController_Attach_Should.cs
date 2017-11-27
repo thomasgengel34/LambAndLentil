@@ -15,12 +15,9 @@ namespace LambAndLentil.Test.BasicControllerTests
     [TestCategory("Attach")]  
     [TestClass]
     public class PlansController_Attach_Should:PlansController_Test_Should
-    { 
+    {
         [TestMethod]
-        public void ReturnsIndexWithWarningWithUnknownParentID()
-        {
-            BaseReturnsIndexWithWarningWithUnknownParentID(Repo, Controller);
-        }
+        public void ReturnsIndexWithWarningWithUnknownParentID() => BaseReturnsIndexWithWarningWithUnknownParentID(Repo, Controller);
 
         [TestMethod]
         public void ReturnsIndexWithWarningWithNullParent() => BaseReturnsIndexWithWarningWithNullParent(Repo, Controller);
@@ -159,15 +156,13 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [Ignore]
         [TestMethod]
-        public void SuccessfullyDetachMenuChild()
-        {
+        public void SuccessfullyDetachMenuChild() =>
             // Arrange
 
             // Act
 
             // Assert
             Assert.Fail();
-        }
 
         [TestMethod]
         public void ReturnsDetailWhenDetachingWithSuccessWithValidParentandValidIngredientChild() => BaseReturnsDetailWhenDetachingWithSuccessWithValidParentandValidIngredientChild(Repo, Controller, Plan.ID);

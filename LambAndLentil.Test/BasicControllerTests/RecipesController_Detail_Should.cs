@@ -14,14 +14,9 @@ namespace LambAndLentil.Test.BasicControllerTests
     [TestCategory("RecipesController")]
     [TestCategory("Details")]
     public class RecipesController_Detail_Should:RecipesController_Test_Should
-    {
-        static Recipe recipe;
+    { 
+        public RecipesController_Detail_Should() => Recipe = new Recipe();
 
-        public RecipesController_Detail_Should()
-        { 
-           recipe = new Recipe();
-        }
-         
         [TestMethod]
         public void ReturnDeleteWithActionMethodDeleteWithNullResult()
         { // "Ingredient was not found"
@@ -40,12 +35,9 @@ namespace LambAndLentil.Test.BasicControllerTests
         }
 
         [TestMethod]
-        public void ReturnDeleteWithActionMethodDeleteWithEmptyResult()
-        {
-            BaseReturnDeleteWithActionMethodDeleteWithEmptyResult(Controller);
-        }
+        public void ReturnDeleteWithActionMethodDeleteWithEmptyResult() => BaseReturnDeleteWithActionMethodDeleteWithEmptyResult(Controller);
 
-      
+
 
 
         [TestMethod]
@@ -238,8 +230,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestCategory("Details")]
         public void DetailsIngredientIDIsZeroAlertClassIsCorrect()
         {
-            // Arrange
-            RecipesController Controller = new RecipesController(Repo);
+            // Arrange 
             Recipe ingredient = new Recipe { ID = 0 };
             Repo.Save(ingredient);
 
@@ -254,12 +245,11 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [TestMethod]
         [TestCategory("Details")]
-        public void DetailsIngredientIDIsZeroReturnModelIsCorrect()
+        public void DetailsRecipeIDIsZeroReturnModelIsCorrect()
         {
-            // Arrange
-            RecipesController Controller = new RecipesController(Repo);
-            Recipe ingredient = new Recipe { ID = 0 };
-            Repo.Save(ingredient);
+            // Arrange 
+            Recipe.ID = 0 ;
+            Repo.Save((Recipe)Recipe);
 
 
             // Act
@@ -294,8 +284,8 @@ namespace LambAndLentil.Test.BasicControllerTests
         {
             // Arrange
 
-           recipe.ID = -500;
-            Repo.Save(recipe);
+           Recipe.ID = -500;
+            Repo.Save((Recipe)Recipe);
 
             // Act
             ActionResult ar = Controller.Details(-500);
@@ -311,14 +301,10 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestCategory("Details")]
         public void NotBeSuccessfulWithInvalidIngredientID_IngredientIDIsNegative_AlertClassCorrect()
         {
-            // Arrange
-            RecipesController Controller = new RecipesController(Repo);
-            Recipe ingredient = new Recipe
-            {
-                ID = -1,
-                Name = "Details_IngredientIDIsNegative_AlertClassCorrect"
-            };
-            Repo.Save(ingredient);
+            // Arrange 
+            Recipe.ID = -1;
+            Recipe.Name = "Details_IngredientIDIsNegative_AlertClassCorrect"; 
+            Repo.Save((Recipe)Recipe);
 
             // Act
             ActionResult view = Controller.Details(-1);
