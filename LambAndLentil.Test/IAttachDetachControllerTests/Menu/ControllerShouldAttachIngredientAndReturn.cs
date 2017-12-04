@@ -7,9 +7,10 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.Menu
 {
     [TestClass]
     [TestCategory("Attach-Detach")]
-    public class ControllerShouldAttachIngredientAndReturn:BaseTest<MenuType,MenuType>
+    public class ControllerShouldAttachIngredientAndReturn: BaseControllerShouldAttachXAndReturn<MenuType,MenuType>
     {
-       
+        
+        [Ignore]
         [TestMethod]
         public void DetailWithSuccessWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSupplied() => BaseDetailWithSuccessWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSupplied();
          
@@ -49,7 +50,7 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.Menu
 
         [Ignore]
         [TestMethod]
-        public void  DetailWithWarningWhenParentIDIsValidAndChildIsValidAndOrderNumberIsGreaterThanTheNumberOfElements()
+        public void  DetailWithSuccessWhenParentIDIsValidAndChildIsValidAndOrderNumberIsGreaterThanTheNumberOfElementsWhenAttaching()
         { // simply add such an child onto the end of the child-list and tell the user that is what happened
             // Arrange
 

@@ -15,6 +15,11 @@ namespace LambAndLentil.Domain.Entities
             Ingredients = new List<Ingredient>();
             Recipes = new List<Recipe>();
             Menus = new List<Menu>();
+
+            CanHaveMenuChild = true;
+            CanHavePlanChild = false;
+            CanHaveRecipeChild = true;
+            CanHaveShoppingListChild = false;
         }
 
 

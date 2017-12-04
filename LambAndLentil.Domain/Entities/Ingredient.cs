@@ -7,13 +7,20 @@ namespace LambAndLentil.Domain.Entities
     [Table("INGREDIENT.Ingredient")]
     public class Ingredient : BaseEntity, IEntityChildClassIngredients, IIngredient
     {
-        public Ingredient() : base() => Ingredients = new List<Ingredient>();
+        public Ingredient() : base()
+        {
+            Ingredients = new List<Ingredient>();  
+            CanHaveMenuChild = false; 
+            CanHavePlanChild = false;
+            CanHaveRecipeChild = false;
+            CanHaveShoppingListChild = false;
+        }
 
         public Ingredient(DateTime creationDate) : this() => CreationDate = creationDate;
 
 
         public int ID { get; set; }
         public List<Ingredient> Ingredients { get; set; }
-         
+
     }
 }

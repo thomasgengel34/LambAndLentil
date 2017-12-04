@@ -25,10 +25,10 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         public PersonsController_Test_Should()
         {
-            Controller = new PersonsController(Repo)
+            Controller = (IGenericController<Person>)(new PersonsController(Repo)
             {
                 PageSize = 3
-            };
+            });
 
             Person = new Person()
             {

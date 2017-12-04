@@ -10,8 +10,8 @@ using LambAndLentil.Domain.Abstract;
 
 namespace LambAndLentil.Domain.Entities
 {
-    public class BaseEntity
-    {
+    public class BaseEntity:IPossibleChildren
+    { 
         [StringLength(50)]
         [Required]
         public string Name { get; set; }
@@ -22,7 +22,13 @@ namespace LambAndLentil.Domain.Entities
         public DateTime ModifiedDate { get; set; }
         public string AddedByUser { get; set; }
         public string ModifiedByUser { get; set; }
-        public string IngredientsList { get; set; } 
+        public string IngredientsList { get; set; }
+        public bool CanHaveIngredentChild { get; set; }
+        public bool CanHaveMenuChild { get; set; }
+        public bool CanHavePersonChild { get; set; }
+        public bool CanHavePlanChild { get; set; }
+        public bool CanHaveRecipeChild { get; set; }
+        public bool CanHaveShoppingListChild { get; set; }
 
         public BaseEntity()
         {
@@ -31,7 +37,10 @@ namespace LambAndLentil.Domain.Entities
             CreationDate = DateTime.Now;
             ModifiedDate = DateTime.Now;
             AddedByUser = WindowsIdentity.GetCurrent().Name;
-            ModifiedByUser = WindowsIdentity.GetCurrent().Name; 
+            ModifiedByUser = WindowsIdentity.GetCurrent().Name;
+
+            CanHaveIngredentChild = true;
+            CanHavePersonChild = false;
         }
 
         public BaseEntity(DateTime creationDate) : this()

@@ -1,33 +1,24 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection;
 using LambAndLentil.Domain.Abstract;
 using LambAndLentil.Domain.Concrete;
 using LambAndLentil.Domain.Entities;
 using LambAndLentil.UI.Controllers;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Reflection;
-using System.Web.Mvc;
-using LambAndLentil.UI.Infrastructure.Alerts;
-using LambAndLentil.UI;
-using IngredientType = LambAndLentil.Domain.Entities.Ingredient;
 
-namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
-
+namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests 
 {
-    [TestClass]
     public class BaseTest<TParent, TChild>
         where TParent : BaseEntity, IEntity, new()
         where TChild : BaseEntity, IEntity, new()
     {
         internal static IGenericController<TParent> Controller { get; set; }
-        internal static IEntity Parent { get; set; }
-
-       
-
+       protected internal static IEntity Parent { get; set; }
         internal static IEntity Child { get; set; }
         internal static IRepository<TParent> ParentRepo = new TestRepository<TParent>();
         internal static IRepository<TChild> ChildRepo = new TestRepository<TChild>();
         internal static string ParentClassName { get; private set; }
+        internal static string ChildClassName { get; private set; }
         internal static PropertyInfo ChildProperty { get; private set; }
 
         public BaseTest()
@@ -35,7 +26,7 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
             ParentClassName = typeof(TParent).ToString().Split('.').Last();
             Controller = ControllerFactory();
             ChildProperty = ChildPropertyFactory();
-            IEntity Parent = new TParent()
+            Parent = new TParent()
             {
                 ID = 1,
                 Name = "Name from BaseTest",
@@ -44,7 +35,7 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
 
             };
             ParentRepo.Save((TParent)Parent);
-            IEntity Child = new TChild()
+            Child = new TChild()
             {
                 ID = 2,
                 Name = "Child Name from BaseTest",
@@ -55,7 +46,7 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
             ChildRepo.Save((TChild)Child);
 
         }
-         
+
         private IGenericController<TParent> ControllerFactory()
         {
             switch (ParentClassName)
@@ -92,70 +83,6 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
 
             return property;
         }
-
-        protected static void BaseDetailWithSuccessWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSupplied()
-        {
-            // "Here it is!"
-            // Arrange
-
-
-            // Act
-            ActionResult ar = Controller.Details(2);
-            AlertDecoratorResult adr = (AlertDecoratorResult)ar;
-            ViewResult view = (ViewResult)adr.InnerResult;
-
-            // Assert
-            Assert.IsNotNull(ar);
-            Assert.AreEqual("Details", view.ViewName);
-            //   Assert.IsInstanceOfType(view.Model, typeof(Domain.Entities.Ingredient));
-              Assert.IsInstanceOfType(view.Model, typeof(TChild));
-            Assert.AreEqual("Here it is!", adr.Message);
-        }
-
-        protected static void BaseReturnsIndexWithWarningWithNullParent()
-        {
-            // Arrange 
-            
-
-            // Act 
-            ActionResult ar = Controller.AttachIngredient(null, new Domain.Entities.Ingredient(), 0);
-            AlertDecoratorResult adr = (AlertDecoratorResult)ar;
-            string message = adr.Message;
-
-            // Assert
-            Assert.AreEqual(ParentClassName + " was not found", message);
-            Assert.AreEqual("alert-warning", adr.AlertClass);
-        }
-
-        protected   void BaseIndexWithErrorWhenParentIDIsNotForAnExistingIngredient()
-        {  // Todo: add logging
-            // Act 
-            ActionResult ar = Controller.AttachIngredient(null, new Domain.Entities.Ingredient(), 0);
-            AlertDecoratorResult adr = (AlertDecoratorResult)ar;
-            string message = adr.Message;
-
-            // Assert
-            Assert.AreEqual(ParentClassName + " was not found", message);
-            Assert.AreEqual("alert-warning", adr.AlertClass);
-        }
-
-        protected void BaseDetailWithErrorWhenParentIDIsValidAndChildIsNotValid() { }
-
-  
-        protected void BaseDetailWithWarningWhenParentIDIsValidAndChildIstValidAndOrderNumberIsNegativeWhenDetaching()
-        { 
-          // Arrange
-            IIngredient ingredient = new IngredientType();
-            IRepository<IngredientType> IngredientRepo = new TestRepository<IngredientType>();
-            // Act 
-               ActionResult ar =Controller.DetachIngredient(1,(Domain.Entities.Ingredient)ingredient,-1);
-            AlertDecoratorResult adr = (AlertDecoratorResult)ar;
-            string message = adr.Message;
-
-            // Assert
-            Assert.AreEqual("Order Number Was Negative! Nothing was detached", message);
-            Assert.AreEqual("alert-warning", adr.AlertClass);
-        } 
 
     }
 }

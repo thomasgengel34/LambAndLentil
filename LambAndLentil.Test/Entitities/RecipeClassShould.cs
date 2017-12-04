@@ -13,10 +13,7 @@ namespace LambAndLentil.Domain.Test.Entities
 
         static Recipe recipe;
 
-        public RecipeClassShould()
-        {
-            recipe = new Recipe();
-        }
+        public RecipeClassShould() => recipe = new Recipe();
 
 
         [TestMethod]
@@ -147,9 +144,6 @@ namespace LambAndLentil.Domain.Test.Entities
 
         [Ignore]
         [TestMethod]
-        public void RequireIngredientChildrenToHaveUniqueIDs()
-        {
-            Assert.Fail();
-        }
+        public void RequireIngredientChildrenToHaveUniqueIDs() => Assert.Fail();
     }
 }

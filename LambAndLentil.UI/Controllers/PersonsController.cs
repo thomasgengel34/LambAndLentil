@@ -8,10 +8,8 @@ using System.Web.Mvc;
 
 namespace LambAndLentil.UI.Controllers
 { 
-    public class PersonsController : PersonsGenericController<Person>
+    public class PersonsController : BaseAttachDetachController<Person>
     {
-        public PersonsController(IRepository<Person> repository) : base(repository) => Repo = repository;
-
-
+        public PersonsController(IRepository<Person> repository) : base(repository) => Repo = repository; 
     } 
 }

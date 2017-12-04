@@ -17,14 +17,14 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestMethod]
         public void SuccessfullyAttachMenuChild()
         {
-             IGenericController<Person> DetachController = new PersonsController(Repo);
+             IGenericController<Person> DetachController =(IGenericController<Person>)( new PersonsController(Repo));
              BaseSuccessfullyDetachMenuChild(Repo, Controller, DetachController, UIControllerType.Persons);
         }
           
         [TestMethod]
         public void SuccessfullyDetachFirstMenuChild()
         {
-            IGenericController<Person> DetachController = new PersonsController(Repo);
+            IGenericController<Person> DetachController = (IGenericController<Person>)(new PersonsController(Repo));
             BaseSuccessfullyDetachIngredientChild(Repo, Controller, DetachController, UIControllerType.Persons, 0);
         }
          
@@ -51,19 +51,17 @@ namespace LambAndLentil.Test.BasicControllerTests
          
         [TestMethod]
         public void SuccessfullyDetachtheLastMenuChild()=> BaseDetachTheLastMenuChild(Repo, Controller, Person);
-        
+
 
         [Ignore]
         [TestMethod]
-        public void SuccessfullyDetachAllMenuChildren()
-        {
+        public void SuccessfullyDetachAllMenuChildren() =>
             // Arrange
 
             // Act
 
             //Assert
             Assert.Fail();
-        }
 
         [Ignore]
         [TestMethod]

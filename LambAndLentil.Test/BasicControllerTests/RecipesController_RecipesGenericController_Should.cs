@@ -22,14 +22,14 @@ namespace LambAndLentil.Test.BasicControllerTests
         }
 
         [TestMethod]
-        public void InheritRecipesGenericControllerInRecipe()
+        public void InheritBaseAttachDetachControllerInRecipe()
         {
             // Arrange
 
             // Act
             Type type = Type.GetType("LambAndLentil.UI.Controllers.RecipesController, LambAndLentil.UI", true);
             // Assert
-            Assert.IsTrue(type.IsSubclassOf(typeof(RecipesGenericController<Recipe>)));
+            Assert.IsTrue(type.IsSubclassOf(typeof(BaseAttachDetachController<Recipe>)));
         }
 
         [TestMethod]

@@ -56,15 +56,13 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [Ignore]
         [TestMethod]
-        public void SuccessfullyDetachAllMenuChildren()
-        {
+        public void SuccessfullyDetachAllMenuChildren() =>
             // Arrange
 
             // Act
 
             //Assert
             Assert.Fail();
-        }
 
         [Ignore]
         [TestMethod]

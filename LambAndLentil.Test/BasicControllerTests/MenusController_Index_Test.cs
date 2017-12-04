@@ -330,10 +330,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
 
         [TestMethod]
-        public void CanPaginateArrayLengthIsCorrect()
-        {
-            BaseCanPaginateArrayLengthIsCorrect(Repo, Controller);
-        }
+        public void CanPaginateArrayLengthIsCorrect() => BaseCanPaginateArrayLengthIsCorrect(Repo, Controller);
 
 
         [TestMethod]
@@ -398,10 +395,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [TestMethod]
         [TestCategory("Index")]
-        public void CanSendPaginationViewModel_TotalItemsCorrect()
-        {
-            BaseCanSendPaginationViewModel_TotalItemsCorrect(Repo, Controller, UIControllerType.Menus);
-        }
+        public void CanSendPaginationViewModel_TotalItemsCorrect() => BaseCanSendPaginationViewModel_TotalItemsCorrect(Repo, Controller, UIControllerType.Menus);
 
         [Ignore]
         [TestMethod]
@@ -421,39 +415,23 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [Ignore]
         [TestMethod]
-        public void FlagAnMenuFlaggedInAPerson()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
+        public void FlagAnMenuFlaggedInAPerson() => 
             Assert.Fail();
-        }
 
         [Ignore]
         [TestMethod]
-        public void FlagAnMenuFlaggedInTwoPersons()
-        {
+        public void FlagAnMenuFlaggedInTwoPersons() =>
             // Arrange
 
             // Act
 
             // Assert
             Assert.Fail();
-        }
 
         [Ignore]
         [TestMethod]
-        public void WhenAFlagHasBeenRemovedFromOnePersonStillThereForSecondFlaggedPerson()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
+        public void WhenAFlagHasBeenRemovedFromOnePersonStillThereForSecondFlaggedPerson() => 
             Assert.Fail();
-        }
 
 
 
@@ -498,10 +476,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [TestMethod]
         [TestCategory("Index")]
-        public void  FirstPageIsCorrect()
-        {
-            BaseFirstPageIsCorrect(Repo, Controller, UIControllerType.ShoppingLists); 
-        }
+        public void FirstPageIsCorrect() => BaseFirstPageIsCorrect(Repo, Controller, UIControllerType.ShoppingLists);
 
         [Ignore]
         [TestMethod]
@@ -536,25 +511,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [TestMethod]
         [TestCategory("Index")]
-        public void  PagingInfoIsCorrect()
-        {
-            BasePagingInfoIsCorrect(Repo, Controller, UIControllerType.Recipes);
-            //// Arrange
-            //int count = Repo.Count();
-
-
-            //// Action
-            //int totalItems = ((ListEntity<Menu>)((ViewResult)Controller.Index()).Model).PagingInfo.TotalItems;
-            //int currentPage = ((ListEntity<Menu>)((ViewResult)Controller.Index()).Model).PagingInfo.CurrentPage;
-            //int itemsPerPage = ((ListEntity<Menu>)((ViewResult)Controller.Index()).Model).PagingInfo.ItemsPerPage;
-            //int totalPages = ((ListEntity<Menu>)((ViewResult)Controller.Index()).Model).PagingInfo.TotalPages;
-
-            //// Assert
-            //Assert.AreEqual(count, totalItems);
-            //Assert.AreEqual(1, currentPage);
-            //Assert.AreEqual(8, itemsPerPage);
-            //Assert.AreEqual(1, totalPages);
-        }
+        public void PagingInfoIsCorrect() => BasePagingInfoIsCorrect(Repo, Controller, UIControllerType.Recipes);//// Arrange//int count = Repo.Count();//// Action//int totalItems = ((ListEntity<Menu>)((ViewResult)Controller.Index()).Model).PagingInfo.TotalItems;//int currentPage = ((ListEntity<Menu>)((ViewResult)Controller.Index()).Model).PagingInfo.CurrentPage;//int itemsPerPage = ((ListEntity<Menu>)((ViewResult)Controller.Index()).Model).PagingInfo.ItemsPerPage;//int totalPages = ((ListEntity<Menu>)((ViewResult)Controller.Index()).Model).PagingInfo.TotalPages;//// Assert//Assert.AreEqual(count, totalItems);//Assert.AreEqual(1, currentPage);//Assert.AreEqual(8, itemsPerPage);//Assert.AreEqual(1, totalPages);
 
         [TestMethod]
         [TestCategory("Index")]

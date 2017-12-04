@@ -4,13 +4,8 @@ using LambAndLentil.Domain.Entities;
 
 namespace LambAndLentil.UI.Controllers
 {
-    public class RecipesController : RecipesGenericController<Recipe>
+    public class RecipesController : BaseAttachDetachController<Recipe>
     {
-        public RecipesController(IRepository<Recipe> repository) : base(repository)
-        {
-            Repo = repository;
-        }
-
-        
+        public RecipesController(IRepository<Recipe> repository) : base(repository) => Repo = repository; 
     }
 }

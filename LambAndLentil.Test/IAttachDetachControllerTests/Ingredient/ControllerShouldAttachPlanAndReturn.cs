@@ -1,92 +1,46 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using LambAndLentil.Test.IAttachDetachControllerTests.BaseTests;
+using IngredientType = LambAndLentil.Domain.Entities.Ingredient;
+using PlanType = LambAndLentil.Domain.Entities.Plan;
 
 namespace LambAndLentil.Test.IAttachDetachControllerTests.Ingredient
 {
     [TestClass]
     [TestCategory("Attach-Detach")]
-    public class ControllerShouldAttachPlanAndReturn 
+    public class ControllerShouldAttachPlanAndReturn: BaseControllerShouldAttachXAndReturn<IngredientType, PlanType>
     {
-        [Ignore]
+        // ingredient cannot attach a plan
+
         [TestMethod]
-        public void DetailWithSuccessWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSupplied() =>
-            // Arrange
+        public void DetailWithErrorWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSuppliedWhenAttachingUnattachableChild() => BaseDetailWithErrorWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSuppliedWhenAttachingUnattachableChild();
 
-            // Act
 
-            //Assert
-            Assert.Fail();
 
-        [Ignore]
         [TestMethod]
-        public void  IndexWithErrorWhenParentIDIsNull()
-        {
-            // Arrange
+        public void IndexWithErrorWhenParentIDIsNull() => BaseReturnsIndexWithWarningWithNullParent();
 
-            // Act
 
-            //Assert
-            Assert.Fail();
-        }
-
-        [Ignore]
         [TestMethod]
-        public void IndexWithErrorWhenParentIDIsNotForAnExistingIngredient()
-        {
-            // Arrange
+        public void IndexWithErrorWhenParentIDIsNotForAnExistingIngredient() =>
+             BaseIndexWithErrorWhenParentIDIsNotForAnExistingIngredient();
 
-            // Act
 
-            //Assert
-            Assert.Fail();
-        }
-
-        [Ignore]
         [TestMethod]
-        public void DetailWithErrorWhenParentIDIsValidAndChildIsNotValid()
-        {
-            // Arrange
+        public void DetailWithErrorWhenParentIDIsValidAndChildIsNotValid() => BaseDetailWithErrorWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSuppliedWhenAttachingUnattachableChild();
 
-            // Act
 
-            //Assert
-            Assert.Fail();
-        }
-
-        [Ignore]
         [TestMethod]
-        public void  DetailWithWarningWhenParentIDIsValidAndChildIstValidAndOrderNumberIsNegative()
-        { // simply add such an child onto the end of the child-list and tell the user that is what happened
-            // Arrange
+        public void DetailWithErrorWhenParentIDIsValidAndChildIstValidAndOrderNumberIsNegative() => BaseDetailWithErrorWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSuppliedWhenAttachingUnattachableChild();
 
-            // Act
 
-            //Assert
-            Assert.Fail();
-        }
 
-        [Ignore]
         [TestMethod]
-        public void  DetailWithWarningWhenParentIDIsValidAndChildIstValidAndOrderNumberIsInUse()
-        { // simply add such an child onto the end of the child-list and tell the user that is what happened
-            // Arrange
+        public void DetailWithErrorWhenParentIDIsValidAndChildIstValidAndOrderNumberIsInUse() => BaseDetailWithErrorWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSuppliedWhenAttachingUnattachableChild();
 
-            // Act
 
-            //Assert
-            Assert.Fail();
-        }
 
-        [Ignore]
         [TestMethod]
-        public void  DetailWithWarningWhenParentIDIsValidAndChildIsValidAndOrderNumberIsGreaterThanTheNumberOfElements()
-        { // simply add such an child onto the end of the child-list and tell the user that is what happened
-            // Arrange
-
-            // Act
-
-            //Assert
-            Assert.Fail();
-        }
+        public void DetailWithSuccessWhenParentIDIsValidAndChildIsValidAndOrderNumberIsGreaterThanTheNumberOfElementsWhenAttaching() => BaseDetailWithErrorWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSuppliedWhenAttachingUnattachableChild();
     }
 }

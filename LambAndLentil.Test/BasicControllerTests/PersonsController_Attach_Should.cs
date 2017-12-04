@@ -18,15 +18,13 @@ namespace LambAndLentil.Test.BasicControllerTests
     {
         [Ignore]
         [TestMethod]
-        public void ReturnsErrorWithUnknownRepository()
-        {
+        public void ReturnsErrorWithUnknownRepository() =>
             // Arrange
 
             // Act
 
             // Assert
             Assert.Fail();
-        }
 
 
 
@@ -96,10 +94,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         }
 
         [TestMethod]
-        public void SuccessfullyAttachRecipeChild()
-        {
-            BaseSuccessfullyAttachRecipeChild(Person, Controller);
-        }
+        public void SuccessfullyAttachRecipeChild() => BaseSuccessfullyAttachRecipeChild(Person, Controller);
 
         [Ignore]
         [TestMethod]
@@ -117,15 +112,12 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestMethod]
         public void SuccessfullyDetachMenuChild()
         {
-            IGenericController<Person> DetachController = new PersonsController(Repo);
+            IGenericController<Person> DetachController = (IGenericController<Person>)(new PersonsController(Repo));
             BaseSuccessfullyDetachMenuChild(Repo, Controller, DetachController, UIControllerType.Persons);
         }
 
         [TestMethod]
-        public void SuccessfullyAttachPlanChild()
-        {
-            BaseSuccessfullyAttachPlanChild(Person, Controller);
-        }
+        public void SuccessfullyAttachPlanChild() => BaseSuccessfullyAttachPlanChild(Person, Controller);
 
         [Ignore]
         [TestMethod]
@@ -152,7 +144,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestCategory("Attach-Detach")]
         public void SuccessfullyDetachFirstIngredientChild()
         {
-            IGenericController<Person> DetachController = new PersonsController(Repo);
+            IGenericController<Person> DetachController = (IGenericController<Person>)(new PersonsController(Repo));
             BaseSuccessfullyDetachIngredientChild(Repo, Controller, DetachController, UIControllerType.ShoppingLists, 0);
         }
 
@@ -179,16 +171,10 @@ namespace LambAndLentil.Test.BasicControllerTests
         }
 
         [TestMethod]
-        public void DetachTheLastIngredientChild()
-        {
-            BaseDetachTheLastIngredientChild(Repo, Controller, Person);
-        }
+        public void DetachTheLastIngredientChild() => BaseDetachTheLastIngredientChild(Repo, Controller, Person);
 
         [TestMethod]
-        public void DetachAllIngredientChildren()
-        {
-            BaseDetachAllIngredientChildren(Repo, Controller, Person);
-        }
+        public void DetachAllIngredientChildren() => BaseDetachAllIngredientChildren(Repo, Controller, Person);
 
 
     }

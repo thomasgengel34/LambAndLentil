@@ -24,14 +24,14 @@ namespace LambAndLentil.Test.BasicControllerTests
         }
 
         [TestMethod]
-        public void InheritMenusGenericControllerInMenu()
+        public void InheritBaseAttachDetachControllerInMenu()
         {
             // Arrange
 
             // Act
             Type type = Type.GetType("LambAndLentil.UI.Controllers.MenusController, LambAndLentil.UI", true);
             // Assert
-            Assert.IsTrue(type.IsSubclassOf(typeof(MenusGenericController<Menu>)));
+            Assert.IsTrue(type.IsSubclassOf(typeof(BaseAttachDetachController<Menu>)));
         }
 
         [TestMethod]

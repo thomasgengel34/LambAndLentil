@@ -3,11 +3,9 @@ using LambAndLentil.Domain.Entities;
 
 namespace LambAndLentil.UI.Controllers
 {
-    public class ShoppingListsController : ShoppingListsGenericController<ShoppingList>
+    public class ShoppingListsController : BaseAttachDetachController<ShoppingList>
     {
-        public ShoppingListsController(IRepository<ShoppingList> repository) : base(repository)
-        {
-            Repo = repository;
-        }
-    } 
-} 
+        public ShoppingListsController(IRepository<ShoppingList> repository) : base(repository) =>
+                     Repo = repository;
+    }
+}

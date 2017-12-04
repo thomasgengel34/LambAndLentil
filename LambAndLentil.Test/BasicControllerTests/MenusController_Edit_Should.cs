@@ -11,14 +11,11 @@ namespace LambAndLentil.Test.BasicControllerTests
     [TestClass]
     public class MenusController_Edit_Should:MenusController_Test_Should
     {
-       
+
 
         [Ignore]
         [TestMethod]
-        public void CorrectMenusAreBoundInEdit()
-        {
-            Assert.Fail();
-        }
+        public void CorrectMenusAreBoundInEdit() => Assert.Fail();
 
         [TestMethod]
         [TestCategory("Edit")]

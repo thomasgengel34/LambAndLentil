@@ -11,6 +11,7 @@ namespace LambAndLentil.Domain.Entities
     [Table("PERSON.Person")]
     public class Person : BaseEntity, IPerson 
     {
+         
         public Person() : base()
         {
             Ingredients = new List<Ingredient>();
@@ -22,6 +23,11 @@ namespace LambAndLentil.Domain.Entities
             LastName = "Created";
             FullName = GetName(FirstName, LastName);
             Name = FullName;
+
+            CanHaveMenuChild = true;
+            CanHavePlanChild = true;
+            CanHaveRecipeChild =true;
+            CanHaveShoppingListChild = true;
         }
 
         public Person(string firstName, string lastName) : base()

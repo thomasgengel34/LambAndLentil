@@ -71,6 +71,7 @@
     <Compile Include="Entities\IMenu.cs" />
     <Compile Include="Entities\Ingredient.cs" />
     <Compile Include="Entities\IPlan.cs" />
+    <Compile Include="Entities\IPossibleChildren.cs" />
     <Compile Include="Entities\IRecipe.cs" />
     <Compile Include="Entities\IShoppingList.cs" />
     <Compile Include="Entities\ListExtensionMethods.cs" />

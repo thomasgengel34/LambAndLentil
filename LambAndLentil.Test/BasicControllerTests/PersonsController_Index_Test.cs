@@ -21,7 +21,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void Index()
         {
             // Arrange
-            IGenericController<Person> Controller2 = new PersonsController(Repo);
+            IGenericController<Person> Controller2 = (IGenericController<Person>)(new PersonsController(Repo));
 
             // Act
             ViewResult view1 = Controller.Index(1) as ViewResult;
@@ -437,7 +437,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void ContainsAllPersons()
         {
             // Arrange 
-            IGenericController<Person> Controller2 = new PersonsController(Repo);
+            IGenericController<Person> Controller2 = (IGenericController<Person>)(new PersonsController(Repo));
 
             // Act
             ViewResult view1 = Controller.Index(1);

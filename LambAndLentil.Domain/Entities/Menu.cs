@@ -12,7 +12,11 @@ namespace LambAndLentil.Domain.Entities
         public Menu() : base()
         {
             Ingredients = new List<Ingredient>();
-            Recipes = new List<Recipe>(); 
+            Recipes = new List<Recipe>();
+            CanHaveMenuChild = false;
+            CanHavePlanChild = false;
+            CanHaveRecipeChild = true;
+            CanHaveShoppingListChild = false;
         }
 
         public Menu(DateTime creationDate) : base(creationDate) => CreationDate = creationDate;

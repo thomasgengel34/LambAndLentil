@@ -227,6 +227,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\BaseAddDetachController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IAttachDetachController.cs" />
     <Compile Include="Controllers\ICanAttachAndDetachMenusController.cs" />
@@ -234,19 +235,13 @@
     <Compile Include="Controllers\IGenericController.cs" />
     <Compile Include="Controllers\IIngredientsControllerAsync.cs" />
     <Compile Include="Controllers\IngredientsController.cs" />
-    <Compile Include="Controllers\IngredientsGenericController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
-    <Compile Include="Controllers\MenusGenericController .cs" />
     <Compile Include="Controllers\MenusController.cs" />
     <Compile Include="Controllers\NavController.cs" />
     <Compile Include="Controllers\NotToBeImplementedException.cs" />
-    <Compile Include="Controllers\PersonsGenericController.cs" />
     <Compile Include="Controllers\PersonsController.cs" />
-    <Compile Include="Controllers\PlansGenericController.cs" />
     <Compile Include="Controllers\PlansController.cs" />
     <Compile Include="Controllers\RecipesController.cs" />
-    <Compile Include="Controllers\RecipesGenericController.cs" />
-    <Compile Include="Controllers\ShoppingListsGenericController.cs" />
     <Compile Include="Controllers\ShoppingListsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -1210,6 +1205,8 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Scripts\app\controllers\" />
+    <Folder Include="Views\BaseAttachDetach\" />
+    <Folder Include="Views\Foo\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

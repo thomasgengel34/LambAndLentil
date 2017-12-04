@@ -416,34 +416,21 @@ namespace IntegrationTests
         [Ignore]
         [TestMethod]
         [TestCategory("Attach-Detach")]
-        public void ReturnMenuEditViewWithSuccessMessageWhenDetachingExistingIngredientFromExistingMenu()
-        {
-            Assert.Fail();
-        }
+        public void ReturnMenuEditViewWithSuccessMessageWhenDetachingExistingIngredientFromExistingMenu() => Assert.Fail();
 
         [Ignore]
         [TestMethod]
         [TestCategory("Attach-Detach")]
-        public void ReturnMenuEditViewWithWarningMessageWhenAttachingNonExistingIngredientToExistingRMenu()
-        {
-            Assert.Fail();
-        }
+        public void ReturnMenuEditViewWithWarningMessageWhenAttachingNonExistingIngredientToExistingRMenu() => Assert.Fail();
 
         [Ignore]
         [TestMethod]
         [TestCategory("Attach-Detach")]
-        public void ReturnMenuEditViewWithWarningMessageWhenDetachingNonExistingIngredientAttachedToExistingMenu()
-        {
-            Assert.Fail();
-        }
+        public void ReturnMenuEditViewWithWarningMessageWhenDetachingNonExistingIngredientAttachedToExistingMenu() => Assert.Fail();
 
         [Ignore]
         [TestMethod]
         [TestCategory("Attach-Detach")]
-        public void ReturnMenuIndexViewWithWarningWhenDetachingExistingingredientNotAttachedToAnExistingMenu()
-        {
-            Assert.Fail();
-        }
-
+        public void ReturnMenuIndexViewWithWarningWhenDetachingExistingingredientNotAttachedToAnExistingMenu() => Assert.Fail(); 
     }
 }

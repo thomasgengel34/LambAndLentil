@@ -76,9 +76,14 @@ namespace LambAndLentil.Domain.Concrete
                         entity = (T)itemR;
                         break;
                     case "Menu":
-                        IEntityChildClassMenus itemM = (IEntityChildClassMenus)entity;
-                        itemM.Menus.Add(child as Menu);
-                        entity = (T)itemM;
+                        Type t = entity.GetType().GetInterface("IEntityChildClassMenus");
+                        if (t != null)
+                        {
+                            IEntityChildClassMenus itemM = (IEntityChildClassMenus)entity;
+                            itemM.Menus.Add(child as Menu);
+                            entity = (T)itemM;
+                        }
+
                         break;
                     case "Plan":
                         IEntityChildClassPlans itemP = (IEntityChildClassPlans)entity;
@@ -122,9 +127,9 @@ namespace LambAndLentil.Domain.Concrete
                 {
                     case "Ingredient":
                         IEntityChildClassIngredients item = (IEntityChildClassIngredients)entity;
-                        if (item.Ingredients.Count >= orderNumber &&  item.Ingredients.Count > 0)
+                        if (item.Ingredients.Count >= orderNumber && item.Ingredients.Count > 0)
                         {
-                            item.Ingredients.RemoveAt(orderNumber); 
+                            item.Ingredients.RemoveAt(orderNumber);
                             entity = (T)item;
                         }
                         break;

@@ -79,7 +79,7 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.Plan
 
         [Ignore]
         [TestMethod]
-        public void  DetailWithWarningWhenParentIDIsValidAndChildIsValidAndOrderNumberIsGreaterThanTheNumberOfElements()
+        public void  DetailWithSuccessWhenParentIDIsValidAndChildIsValidAndOrderNumberIsGreaterThanTheNumberOfElementsWhenAttaching()
         { // simply add such an child onto the end of the child-list and tell the user that is what happened
             // Arrange
 

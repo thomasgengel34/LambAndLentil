@@ -18,8 +18,8 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestMethod]
         public void SuccessfullyAttachRecipeChild()
         {
-             IGenericController<Person> DetachController = new PersonsController(Repo);
-             BaseSuccessfullyDetachRecipeChild(Repo, Controller, DetachController, UIControllerType.Persons);
+             IGenericController<Person> DetachController = (IGenericController<Person>)(new PersonsController(Repo));
+            BaseSuccessfullyDetachRecipeChild(Repo, Controller, DetachController, UIControllerType.Persons);
         }
 
 

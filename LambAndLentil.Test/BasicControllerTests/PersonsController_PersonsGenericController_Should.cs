@@ -24,14 +24,14 @@ namespace LambAndLentil.Test.BasicControllerTests
         }
 
         [TestMethod]
-        public void InheritPersonsGenericControllerInPerson()
+        public void InheritBaseAttachDetachControllerInPerson()
         {
             // Arrange
 
             // Act
             Type type = Type.GetType("LambAndLentil.UI.Controllers.PersonsController, LambAndLentil.UI", true);
             // Assert
-            Assert.IsTrue(type.IsSubclassOf(typeof(PersonsGenericController<Person>)));
+            Assert.IsTrue(type.IsSubclassOf(typeof(BaseAttachDetachController<Person>)));
         }
 
         [TestMethod]

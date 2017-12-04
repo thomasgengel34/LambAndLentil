@@ -11,7 +11,7 @@ namespace LambAndLentil.Test.WebAPI
     [TestClass]
     public class GetFoodsBySearchingUsingFreeTextToLocateFoodsInTheDatabase : IngredientsController_Test_Should
     {
-         IIngredientsControllerAsync  AsyncController = new IngredientsController(Repo);
+         IIngredientsControllerAsync  AsyncController = (IIngredientsControllerAsync)(new IngredientsController(Repo));
 
         /* Search -- use free text to locate foods in the database
  https://api.nal.usda.gov/ndb/search/?format=json&q=butter&sort=n&max=25&offset=0&api_key=DEMO_KEY 
@@ -155,15 +155,13 @@ namespace LambAndLentil.Test.WebAPI
 
         [Ignore]
         [TestMethod]
-        public void ReturnOnlyFifteenItemsInTheDDLWhenThereAreMoreThanFifteenInTheUSDADb()
-        {
+        public void ReturnOnlyFifteenItemsInTheDDLWhenThereAreMoreThanFifteenInTheUSDADb() =>
             // Arrange
 
             // Act
 
             //Assert
             Assert.Fail();
-        }
 
         [TestMethod]
         public async Task ReturnCorrectIngredientsForRaspberryHabeneroPreservesOnSingleItemSearchAsync()
@@ -418,15 +416,13 @@ namespace LambAndLentil.Test.WebAPI
 
         [Ignore]
         [TestMethod]
-        public void ReturnTheCorrectErrorMessageWhenItemIsNotFoundOnSearch()
-        {
+        public void ReturnTheCorrectErrorMessageWhenItemIsNotFoundOnSearch() =>
             // Arrange
 
             // Act
 
             //Assert
             Assert.Fail();
-        }
     }
 }
 

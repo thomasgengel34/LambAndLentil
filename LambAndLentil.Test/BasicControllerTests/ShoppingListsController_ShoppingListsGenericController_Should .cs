@@ -24,14 +24,14 @@ namespace LambAndLentil.Test.BasicControllerTests
         }
 
         [TestMethod]
-        public void InheritShoppingListsGenericControllerInShoppingList()
+        public void InheritBaseAttachDetachControllerInShoppingList()
         {
             // Arrange
 
             // Act
             Type type = Type.GetType("LambAndLentil.UI.Controllers.ShoppingListsController, LambAndLentil.UI", true);
             // Assert
-            Assert.IsTrue(type.IsSubclassOf(typeof(ShoppingListsGenericController<ShoppingList>)));
+            Assert.IsTrue(type.IsSubclassOf(typeof(BaseAttachDetachController<ShoppingList>)));
         }
 
         [TestMethod]

@@ -9,7 +9,7 @@ namespace LambAndLentil.Test.WebAPI
     [TestClass]
     public class WebApiShouldSearchForIngredientsBy: IngredientsController_Test_Should
     {
-        protected IIngredientsControllerAsync AsyncController = new IngredientsController(Repo);
+        protected IIngredientsControllerAsync AsyncController   = (IIngredientsControllerAsync)(new IngredientsController(Repo));
 
         [TestMethod]
         public async Task BrandedFoodProductsAndFindAtLeast215557Ingredients()
@@ -106,18 +106,15 @@ namespace LambAndLentil.Test.WebAPI
 
         //}
 
-            [Ignore]
+        [Ignore]
         [TestMethod]
-        public void UnfilteredAutocomplete()
-        {
-            // Arrange
+        public void UnfilteredAutocomplete() =>
+        // Arrange
 
-            // Act
+        // Act
 
-            //Assert
-            Assert.Fail();
-
-        }
+        //Assert
+        Assert.Fail();
 
         [Ignore]
         [TestMethod]

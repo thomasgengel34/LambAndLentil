@@ -225,7 +225,9 @@
     <Compile Include="Entitities\RecipeClassShould.cs" />
     <Compile Include="Entitities\ShoppingListClassShould.cs" />
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="IAttachDetachControllerTests\BaseTests\BaseControllerShouldDetachXAndReturn.cs" />
     <Compile Include="IAttachDetachControllerTests\BaseTests\BaseTest.cs" />
+    <Compile Include="IAttachDetachControllerTests\BaseTests\BaseControllerShouldAttachXAndReturn.cs" />
     <Compile Include="IAttachDetachControllerTests\Menu\ControllerShouldAttachIngredientAndReturn.cs" />
     <Compile Include="IAttachDetachControllerTests\Menu\ControllerShouldAttachMenuAndReturn.cs" />
     <Compile Include="IAttachDetachControllerTests\Menu\ControllerShouldAttachPlanAndReturn.cs" />

@@ -23,14 +23,25 @@ namespace LambAndLentil.Test.BasicControllerTests
         }
 
         [TestMethod]
-        public void InheritIngredientsGenericControllerInIngredient()
+        public void InheritBaseAttachDetachControllerInIngredient()
         {
             // Arrange
 
             // Act
             Type type = Type.GetType("LambAndLentil.UI.Controllers.IngredientsController, LambAndLentil.UI", true);
             // Assert
-            Assert.IsTrue(type.IsSubclassOf(typeof(IngredientsGenericController<Ingredient>)));
+            Assert.IsTrue(type.IsSubclassOf(typeof(BaseAttachDetachController<Ingredient>)));
+        }
+
+        [TestMethod]
+        public void InheritIIngredientsControllerAsync()
+        {
+            // Arrange
+
+            // Act
+            Type type = Type.GetType("LambAndLentil.UI.Controllers.IngredientsController, LambAndLentil.UI", true).GetInterface("IIngredientsControllerAsync");
+            // Assert
+            Assert.IsNotNull(type);
         }
 
         [TestMethod]

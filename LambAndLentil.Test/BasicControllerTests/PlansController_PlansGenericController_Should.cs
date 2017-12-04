@@ -22,14 +22,14 @@ namespace LambAndLentil.Test.BasicControllerTests
         }
 
         [TestMethod]
-        public void InheritPlansGenericControllerInPlan()
+        public void InheritBaseAttachDetachControllerInPlan()
         {
             // Arrange
 
             // Act
             Type type = Type.GetType("LambAndLentil.UI.Controllers.PlansController, LambAndLentil.UI", true);
             // Assert
-            Assert.IsTrue(type.IsSubclassOf(typeof(PlansGenericController<Plan>)));
+            Assert.IsTrue(type.IsSubclassOf(typeof(BaseAttachDetachController<Plan>)));
         }
 
         [TestMethod]

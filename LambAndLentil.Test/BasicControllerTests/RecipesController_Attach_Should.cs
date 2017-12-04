@@ -125,24 +125,15 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [TestMethod]
         [TestCategory("Attach-Detach")]
-        public void DetachASetOfIngredientChildrenSimplyIgnoresANonExistentIngredientIfItIsInTheSet()
-        {
-            BaseDetachASetOfIngredientChildrenSimplyIgnoresANonExistentIngredientIfItIsInTheSet<Recipe>(Repo, Controller);
-        }
+        public void DetachASetOfIngredientChildrenSimplyIgnoresANonExistentIngredientIfItIsInTheSet() => BaseDetachASetOfIngredientChildrenSimplyIgnoresANonExistentIngredientIfItIsInTheSet<Recipe>(Repo, Controller);
 
 
         [TestMethod]
-        public void DetachTheLastIngredientChild()
-        {
-            BaseDetachTheLastIngredientChild(Repo, Controller, Recipe);
-        }
+        public void DetachTheLastIngredientChild() => BaseDetachTheLastIngredientChild(Repo, Controller, Recipe);
 
         [TestMethod]
         [TestCategory("Attach-Detach")]
-        public void DetachAllIngredientChildren()
-        {
-            BaseDetachAllIngredientChildren(Repo, Controller, Recipe);
-        }
+        public void DetachAllIngredientChildren() => BaseDetachAllIngredientChildren(Repo, Controller, Recipe);
 
         [TestMethod]
         public void ReturnsDetailWhenDetachingWithSuccessWithValidParentandValidIngredientChild() => BaseReturnsDetailWhenDetachingWithSuccessWithValidParentandValidIngredientChild(Repo, Controller, Recipe.ID);

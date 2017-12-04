@@ -86,11 +86,8 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         
         [TestMethod]
-        public void SuccessfullyAttachRecipeChild()
-        {
-             BaseSuccessfullyAttachRecipeChild(Menu,Controller);
-        }
-
+        public void SuccessfullyAttachRecipeChild() => 
+             BaseSuccessfullyAttachRecipeChild(Menu,Controller); 
       
 
 
@@ -118,17 +115,11 @@ namespace LambAndLentil.Test.BasicControllerTests
         }
 
         [TestMethod]
-        public void DetachTheLastIngredientChild()
-        {
-            BaseDetachTheLastIngredientChild(Repo, Controller, Menu);
-        }
+        public void DetachTheLastIngredientChild() => BaseDetachTheLastIngredientChild(Repo, Controller, Menu);
 
         [TestMethod]
         [TestCategory("Attach-Detach")]
-        public void DetachAllIngredientChildren()
-        {
-            BaseDetachAllIngredientChildren(Repo, Controller, Menu);
-        }
+        public void DetachAllIngredientChildren() => BaseDetachAllIngredientChildren(Repo, Controller, Menu);
 
         [TestMethod]
         public void ReturnsIndexWithWarningWithUnknownParentID() =>

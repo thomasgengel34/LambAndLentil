@@ -19,10 +19,8 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [Ignore]
         [TestMethod]
-        public void CorrectPersonsAreBoundInEdit()
-        {
-            Assert.Fail();
-        }
+        public void CorrectPersonsAreBoundInEdit()=> Assert.Fail();
+        
 
 
         [Ignore]
@@ -31,11 +29,11 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void SaveEditedPersonWithDescriptionChange()
         {
             // Arrange 
-            IGenericController<Person> Controller1 = new PersonsController(Repo);
-            IGenericController<Person> Controller2 = new PersonsController(Repo);
-            IGenericController<Person> Controller3 = new PersonsController(Repo);
-            IGenericController<Person> Controller4 = new PersonsController(Repo);
-            IGenericController<Person> Controller5 = new PersonsController(Repo);
+            IGenericController<Person> Controller1 = (IGenericController<Person>)(new PersonsController(Repo));
+            IGenericController<Person> Controller2 = (IGenericController<Person>)(new PersonsController(Repo));
+            IGenericController<Person> Controller3 = (IGenericController<Person>)(new PersonsController(Repo));
+            IGenericController<Person> Controller4 = (IGenericController<Person>)(new PersonsController(Repo));
+            IGenericController<Person> Controller5 = (IGenericController<Person>)(new PersonsController(Repo));
             Person vm = new Person
             {
                 FirstName = "0000 test",
@@ -120,10 +118,10 @@ namespace LambAndLentil.Test.BasicControllerTests
                 ID = 5000
             };
 
-            TestRepository<Person> repoPerson = new TestRepository<Person>(); ;
-            IGenericController<Person> ControllerEdit = new PersonsController(repoPerson);
-            IGenericController<Person> ControllerView = new PersonsController(repoPerson);
-            IGenericController<Person> ControllerDelete = new PersonsController(repoPerson);
+            TestRepository<Person> repoPerson = new TestRepository<Person>();  
+            IGenericController<Person> ControllerEdit = (IGenericController<Person>)(new PersonsController(Repo));
+            IGenericController<Person> ControllerView = (IGenericController<Person>)(new PersonsController(Repo));
+            IGenericController<Person> ControllerDelete =  (IGenericController<Person>)(new PersonsController(Repo));
 
             // Act
             ControllerEdit.PostEdit(person);
@@ -161,7 +159,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void EditPerson()
         {
             // Arrange
-            IGenericController<Person> Controller2 = new PersonsController(Repo);
+            IGenericController<Person> Controller2 = (IGenericController<Person>)(new PersonsController(Repo));
             Person pVM = new Person("Kermit", "Frog") { ID = 1492, Description = "test CanEditPerson" };
 
             // Act  
@@ -186,8 +184,8 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void SaveEditedPerson()
         {
             // Arrange 
-            IGenericController<Person> Controller2 = new PersonsController(Repo);
-            IGenericController<Person> Controller3 = new PersonsController(Repo);
+            IGenericController<Person> Controller2 = (IGenericController<Person>)(new PersonsController(Repo));
+            IGenericController<Person> Controller3 = (IGenericController<Person>)(new PersonsController(Repo));
 
 
             // Act  
