@@ -1,70 +1,36 @@
-﻿using System;
+﻿using LambAndLentil.Test.IAttachDetachControllerTests.BaseTests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using IngredientType = LambAndLentil.Domain.Entities.Ingredient;
+using MenuType = LambAndLentil.Domain.Entities.Menu;
 
 namespace LambAndLentil.Test.IAttachDetachControllerTests.Ingredient
 {
     [TestClass]
-     [TestCategory("Attach-Detach")]
-    public class ControllerShouldDetachASetOfMenusAndReturn
+    [TestCategory("Attach-Detach")]
+    public class ControllerShouldDetachASetOfMenusAndReturn : BaseControllerShouldDetachXAndReturn<IngredientType, MenuType>
     {
-        [Ignore]
+        // ingredient cannot attach a menu
+
         [TestMethod]
-        public void DetailWithSuccessWhenIDisValidAndAllIngredientsOnListExist()
-        {
-            // Arrange
+        public void DetailWithErrorWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSuppliedWhenAttachingUnattachableChild() => BaseDetailWithErrorWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSuppliedWhenDetachingUnattachableChild();
 
-            // Act
 
-            //Assert
-            Assert.Fail();
-        }
 
-        [Ignore]
         [TestMethod]
-        public void DetailWithWarningWhenIDisValidAndNotAllIngredientsOnListExist()
-        {
-            // Arrange
+        public void IndexWithErrorWhenParentIDIsNull() => BaseReturnsIndexWithWarningWithNullParentWhenDetaching();
 
-            // Act
 
-            //Assert
-            Assert.Fail();
-        }
-
-        [Ignore]
         [TestMethod]
-        public void DetailWithErrorWhenIDisValidAndNoIngredientsOnListExist()
-        {
-            // Arrange
+        public void IndexWithWarningWhenParentIDIsNotForAnExistingIngredientWhenDetachingUnattachableChild() =>
+            BaseIndexWithWarningWhenParentIDIsNotForAnExistingIngredientWhenDetachingUnattachableChild();  
 
-            // Act
-
-            //Assert
-            Assert.Fail();
-        }
-
-        [Ignore]
         [TestMethod]
-        public void DetailWithSuccessWhenIDisValidAndThereAreThreeIngredientsOnList()
-        {
-            // Arrange
+        public void DetailWithErrorWhenParentIDIsValidAndChildIsNotValid() => BaseDetailWithErrorWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSuppliedWhenDetachingUnattachableChild(); 
 
-            // Act
-
-            //Assert
-            Assert.Fail();
-        }
-
-        [Ignore]
         [TestMethod]
-        public void DetailWithErrorWhenIDisNotForAFoundParent()
-        {
-            // Arrange
-
-            // Act
-
-            //Assert
-            Assert.Fail();
-        }
+        public void IndexWithWarningWhenParentIDIsValidAndChildIstValidAndOrderNumberIsNegative() => BaseIndexWithWarningWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberIsNegativeWhenAttachingUnattachableChild(); 
+          
+        [TestMethod]
+        public void DetailWithSuccessWhenParentIDIsValidAndChildIsValidAndOrderNumberIsGreaterThanTheNumberOfElementsWhenAttaching() =>  BaseDetailWithErrorWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSuppliedWhenAttachingUnattachableChild();  
     }
 }

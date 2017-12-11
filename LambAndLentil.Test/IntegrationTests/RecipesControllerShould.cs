@@ -32,7 +32,7 @@ namespace IntegrationTests
             // Arrange 
 
             // Act
-            ViewResult vr = Controller.Create(UIViewType.Create);
+            ViewResult vr = (ViewResult)Controller.Create(UIViewType.Create);
             Recipe vm = (Recipe)vr.Model;
             string modelName = vm.Name;
 
@@ -86,7 +86,7 @@ namespace IntegrationTests
 
             // Act 
             ActionResult ar1 = Controller.PostEdit(vm);
-            ViewResult view1 = Controller2.Index();
+            ViewResult view1 = (ViewResult)Controller2.Index();
             List<Recipe> ListEntity= (List<Recipe>)((( ListEntity<Recipe>)view1.Model).ListT);
             Recipe Recipe = (from m in ListEntity
                                where m.Name == "0000 test"
@@ -99,7 +99,7 @@ namespace IntegrationTests
             vm.Name = "0000 test Edited";
             vm.ID = Recipe.ID;
             ActionResult ar2 = Controller3.PostEdit(vm);
-            ViewResult view2 = Controller4.Index();
+            ViewResult view2 = (ViewResult)Controller4.Index();
             List<Recipe> ListEntity2 = (List<Recipe>)((( ListEntity<Recipe>)view2.Model).ListT);
             Recipe Recipe2 = (from m in ListEntity2
                               where m.Name == "0000 test Edited"
@@ -145,7 +145,7 @@ namespace IntegrationTests
 
             // Act
             Controller.PostEdit((Recipe)Recipe);
-            ViewResult view1 = ControllerView.Index();
+            ViewResult view1 = (ViewResult)ControllerView.Index();
             List<Recipe> ListEntity= (List<Recipe>)((( ListEntity<Recipe>)view1.Model).ListT);
             Recipe = (from m in ListEntity
                                where m.Name == "___test387"

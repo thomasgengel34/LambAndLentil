@@ -38,7 +38,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange 
 
             // Act
-            ViewResult vr = Controller.Create(UIViewType.Create);
+            ViewResult vr = (ViewResult)Controller.Create(UIViewType.Create);
             Plan Plan = (Plan)vr.Model;
             string modelName = Plan.Name;
 
@@ -86,7 +86,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
             // Act 
             ActionResult ar1 = Controller1.PostEdit((Plan)Plan);
-            ViewResult view1 = Controller2.Index();
+            ViewResult view1 = (ViewResult)Controller2.Index();
             List<Plan> ListEntity = (List<Plan>)view1.Model;
             Plan item = (from m in ListEntity
                          where m.Name == "0000 test"
@@ -100,7 +100,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Plan.Name = "0000 test Edited";
             Plan.ID = item.ID;
             ActionResult ar2 = Controller3.PostEdit((Plan)Plan);
-            ViewResult view2 = Controller4.Index();
+            ViewResult view2 = (ViewResult)Controller4.Index();
             List<Plan> ListEntity2 = (List<Plan>)view2.Model;
             Plan Plan2 = (from m in ListEntity2
                             where m.Name == "0000 test Edited"
@@ -130,7 +130,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
             // Act 
             ActionResult ar1 = Controller1.PostEdit((Plan)Plan);
-            ViewResult view1 = Controller2.Index();
+            ViewResult view1 = (ViewResult)Controller2.Index();
             List<Plan> ListEntity = (List<Plan>)view1.Model;
              Plan = (from m in ListEntity
                            where m.Name == "0000 test"
@@ -147,7 +147,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Plan.Description = "SaveEditedPlanWithDescriptionChange Post-test";
 
             ActionResult ar2 = Controller3.PostEdit((Plan)Plan);
-            ViewResult view2 = Controller4.Index();
+            ViewResult view2 = (ViewResult)Controller4.Index();
             List<Plan> ListEntity2 = (List<Plan>)view2.Model;
             Plan = (from m in ListEntity2
                       where m.Name == "0000 test Edited"
@@ -194,7 +194,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
             // Act
             ControllerEdit.PostEdit((Plan)Plan);
-            ViewResult view = ControllerView.Index();
+            ViewResult view = (ViewResult)ControllerView.Index();
             List<Plan> ListEntity = (List<Plan>)view.Model;
             Plan = (from m in ListEntity
                       where m.Name == "001 Test "

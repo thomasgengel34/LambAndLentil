@@ -25,5 +25,16 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.Ingredient
         public void DetailWithErrorWhenIDisNotForAFoundParentWhenDetachingAll() =>
 BaseDetailWithErrorWhenIDisNotForAFoundParentWhenDetachingAll();
 
+        [Ignore]
+        [TestMethod]
+        public void DetailWithErrorWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSuppliedAndThereIsNoChildAttached()
+        {
+            // Arrange
+
+            // Act
+
+            //Assert
+            Assert.Fail();
+        }
     }
 }

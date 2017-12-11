@@ -51,9 +51,9 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
             }
         }
 
-        protected  void BaseReturnsIndexWithWarningWithNullParent()
+        protected void BaseReturnsIndexWithWarningWithNullParent()
         {
-             
+
             ActionResult ar = Controller.AttachIngredient(null, new Domain.Entities.Ingredient(), 0);
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             string message = adr.Message;
@@ -66,7 +66,19 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
         protected void BaseIndexWithErrorWhenParentIDIsNotForAnExistingIngredient()
         {  // Todo: add logging
             // Act 
-            ActionResult ar = Controller.AttachIngredient(null, new Domain.Entities.Ingredient(), 0);
+            ActionResult ar = Controller.AttachIngredient(null, new IngredientType(), 0);
+            AlertDecoratorResult adr = (AlertDecoratorResult)ar;
+            string message = adr.Message;
+
+            // Assert
+            Assert.AreEqual(ParentClassName + " was not found", message);
+            Assert.AreEqual("alert-warning", adr.AlertClass);
+        }
+
+        protected void BaseIndexWithErrorWhenParentIDIsNotForAnExistingMenu()
+        {  // Todo: add logging
+            // Act 
+            ActionResult ar = Controller.AttachMenu(900000, new MenuType(), 0);
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             string message = adr.Message;
 

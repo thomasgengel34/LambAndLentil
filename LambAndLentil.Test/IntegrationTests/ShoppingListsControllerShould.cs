@@ -28,6 +28,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         public ShoppingListsControllerShould()
         {
             Repo = new TestRepository<ShoppingList>();
+            Controller  = new ShoppingListsController(Repo);
             Controller1 = new ShoppingListsController(Repo);
             Controller2 = new ShoppingListsController(Repo);
             Controller3 = new ShoppingListsController(Repo);
@@ -43,14 +44,11 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestMethod]
         public void CreateAShoppingList()
         {
-            // Arrange
-
-            // Act
-            ViewResult vr = Controller.Create(UIViewType.Create);
+            
+            ViewResult vr = (ViewResult)Controller.Create(UIViewType.Create);
             ShoppingList ShoppingList = (ShoppingList)vr.Model;
             string modelName = ShoppingList.Name;
-
-            // Assert 
+ 
             Assert.AreEqual(vr.ViewName, UIViewType.Details.ToString());
             Assert.AreEqual(modelName, "Newly Created");
         }
@@ -88,7 +86,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
             // Act 
             ActionResult ar1 = Controller1.PostEdit((ShoppingList)ShoppingList);
-            ViewResult view1 = Controller2.Index();
+            ViewResult view1 = (ViewResult)Controller2.Index();
             IEnumerable<ShoppingList> ListEntity = (IEnumerable<ShoppingList>)view1.Model;
             var result = (from m in ListEntity
                           where m.Name == "0000 test"
@@ -104,7 +102,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             ShoppingList.Name = "0000 test Edited";
             ShoppingList.ID = item.ID;
             ActionResult ar2 = Controller3.PostEdit((ShoppingList)ShoppingList);
-            ViewResult view2 = Controller4.Index();
+            ViewResult view2 = (ViewResult)Controller4.Index();
             List<ShoppingList> ListEntity2 = (List<ShoppingList>)view2.Model;
             ShoppingList result2 = (from m in ListEntity2
                                     where m.Name == "0000 test Edited"
@@ -131,7 +129,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
             // Act 
             ActionResult ar1 = Controller1.PostEdit((ShoppingList)ShoppingList);
-            ViewResult view1 = Controller2.Index();
+            ViewResult view1 = (ViewResult)Controller2.Index();
             List<ShoppingList> ListEntity = (List<ShoppingList>)view1.Model;
             ShoppingList shoppingListVM = (from m in ListEntity
                                            where m.Name == "0000 test"
@@ -147,7 +145,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             ShoppingList.Description = "SaveEditedShoppingListWithDescriptionChange Post-test";
 
             ActionResult ar2 = Controller3.PostEdit((ShoppingList)ShoppingList);
-            ViewResult view2 = Controller4.Index();
+            ViewResult view2 = (ViewResult)Controller4.Index();
             List<ShoppingList> ListEntity2 = (List<ShoppingList>)view2.Model;
             var result2 = (from m in ListEntity2
                            where m.Name == "0000 test Edited"

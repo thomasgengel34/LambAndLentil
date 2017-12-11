@@ -1,45 +1,22 @@
-﻿using System;
+﻿using LambAndLentil.Test.IAttachDetachControllerTests.BaseTests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using IngredientType = LambAndLentil.Domain.Entities.Ingredient;
+using RecipeType = LambAndLentil.Domain.Entities.Recipe;
 
 namespace LambAndLentil.Test.IAttachDetachControllerTests.Ingredient
 {
     [TestClass]
-    public class ControllerShouldDetachAllRecipesAndReturn
+    public class ControllerShouldDetachAllRecipesAndReturn : BaseControllerShouldDetachXAndReturn<IngredientType, RecipeType>
     {
-        [Ignore]
+        // since Recipe cannot be attached to an ingredient, these tests should return with an error
+
+
         [TestMethod]
-        public void DetailWithSuccessWhenIDisValidAndThereIsOneIngredientOnList()
-        {
-            // Arrange
+        public void DetailWithSuccessWhenIDisValidAndThereIsOneChildOnListWhenDetachingAndChildCannotBeAttachedWhenDetachingAll()
+       => BaseDetailWithDangerWhenIDisValidAndThereIsOneChildOnListWhenDetachingAndChildCannotBeAttachedWhenDetachingAll();
 
-            // Act
-
-            //Assert
-            Assert.Fail();
-        }
-
-        [Ignore]
         [TestMethod]
-        public void DetailWithSuccessWhenIDisValidAndThereAreThreeIngredientsOnList()
-        {
-            // Arrange
-
-            // Act
-
-            //Assert
-            Assert.Fail();
-        }
-
-        [Ignore]
-        [TestMethod]
-        public void DetailWithErrorWhenIDisNotForAFoundParent()
-        {
-            // Arrange
-
-            // Act
-
-            //Assert
-            Assert.Fail();
-        }
+        public void DetailWithErrorWhenIDisNotForAFoundParentWhenDetachingAndChildCannotBeAttachedWhenDetachingAll()
+        => BaseDetailWithErrorWhenIDisNotForAFoundParentWhenDetachingAndChildCannotBeAttachedWhenDetachingAll();
     }
-}
+} 

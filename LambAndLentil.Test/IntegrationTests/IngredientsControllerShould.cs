@@ -29,7 +29,7 @@ namespace LambAndLentil.Test.Infrastructure
             // Arrange
 
             // Act
-            ViewResult vr =  Controller.Create(UIViewType.Create);
+            ViewResult vr = (ViewResult)Controller.Create(UIViewType.Create);
             string modelName = ((Ingredient)vr.Model).Name;
             // Assert 
             Assert.AreEqual(vr.ViewName, UIViewType.Details.ToString());
@@ -86,7 +86,7 @@ namespace LambAndLentil.Test.Infrastructure
             Ingredient.Name = "0000 test Edited";
             Ingredient.ID = 7777;
             ActionResult ar2 = Controller2.PostEdit((Ingredient)Ingredient);
-            ViewResult view2 = Controller3.Index();
+            ViewResult view2 = (ViewResult)Controller3.Index();
             List<Ingredient> ListEntity2 = (List<Ingredient>)((ListEntity<Ingredient>)view2.Model).ListT;
             ReturnedIngredient = (from m in ListEntity2
                                   where m.Name == "0000 test Edited"
@@ -175,7 +175,7 @@ namespace LambAndLentil.Test.Infrastructure
 
             // Act
             ControllerEdit.PostEdit(ingredient);
-            ViewResult view = ControllerView.Index();
+            ViewResult view = (ViewResult)ControllerView.Index();
             List<Ingredient> ListEntity = (List<Ingredient>)((ListEntity<Ingredient>)view.Model).ListT;
             IIngredient returnedListEntity = Repo.GetById(ingredient.ID);
             DateTime shouldBeSameDate = returnedListEntity.CreationDate;

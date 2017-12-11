@@ -1,10 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Web.Mvc;
 using LambAndLentil.Domain.Abstract;
 using LambAndLentil.Domain.Concrete;
 using LambAndLentil.Domain.Entities;
 using LambAndLentil.UI.Controllers;
+using LambAndLentil.UI.Infrastructure.Alerts;
+using LambAndLentil.UI.Models;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests 
 {
@@ -19,7 +25,7 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
         internal static IRepository<TChild> ChildRepo = new TestRepository<TChild>();
         internal static string ParentClassName { get; private set; }
         internal static string ChildClassName { get; private set; }
-        internal static PropertyInfo ChildProperty { get; private set; }
+        internal static PropertyInfo ChildProperty { get; private set; } 
 
         public BaseTest()
         {
@@ -82,6 +88,24 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
             PropertyInfo property = (from p in propertyInfos where p.Name == ChildClassName select p).FirstOrDefault();
 
             return property;
+        }
+
+      
+
+        [TestCleanup]
+        public void TestCleanup() => ClassCleanup();
+
+        [ClassCleanup()]
+        public static void ClassCleanup()
+        {
+            string path = @"C:\Dev\TGE\LambAndLentil\LambAndLentil.Test\App_Data\JSON\" + ParentClassName + @"\";
+
+            IEnumerable<string> files = Directory.EnumerateFiles(path);
+
+            foreach (var file in files)
+            {
+                File.Delete(file);
+            }
         }
 
     }

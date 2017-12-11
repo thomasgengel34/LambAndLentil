@@ -70,7 +70,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             vm.Name = "0000 test Edited";
             vm.ID = 7777;
             ActionResult ar2 = Controller2.PostEdit(vm);
-            ViewResult view2 = Controller3.Index();
+            ViewResult view2 = (ViewResult)Controller3.Index();
             ListEntity<Menu> ListEntity2 = (ListEntity<Menu>)view2.Model;
             Menu vm3 = (from m in ListEntity2.ListT
                         where m.Name == "0000 test Edited"

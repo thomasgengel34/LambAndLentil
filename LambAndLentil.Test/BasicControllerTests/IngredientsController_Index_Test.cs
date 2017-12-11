@@ -64,11 +64,11 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange 
 
             // Act
-            ViewResult view1 = Controller.Index(1);
+            ViewResult view1 = (ViewResult)Controller.Index(1);
 
             int count1 = (( ListEntity<Ingredient>)(view1.Model)).ListT.Count();
 
-            ViewResult view2 = Controller.Index(2);
+            ViewResult view2 = (ViewResult)Controller.Index(2);
 
             int count2 = (( ListEntity<Ingredient>)(view2.Model)).ListT.Count();
 
@@ -84,7 +84,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange 
 
             // Act
-            ListEntity= ( ListEntity<Ingredient>)(Controller.Index(1)).Model;
+            ListEntity= ( ListEntity<Ingredient>)((ViewResult)(Controller.Index(1))).Model;
             Ingredient[] ingrArray1 = ListEntity.ListT.ToArray();
             int count1 = ingrArray1.Count();
 
@@ -96,15 +96,15 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void ContainsAllIngredientsView2Count0()
         {
             // Arrange 
-            ListEntity= ( ListEntity<Ingredient>)(Controller.Index(1)).Model;
+            ListEntity= ( ListEntity<Ingredient>)((ViewResult)Controller.Index(1)).Model;
             Ingredient[] ingrArray1 = ListEntity.ListT.ToArray();
 
             // Act
-            ViewResult view1 = Controller.Index(1);
+            ViewResult view1 = (ViewResult)Controller.Index(1);
 
             int count1 = (( ListEntity<Ingredient>)(view1.Model)).ListT.Count();
 
-            ViewResult view2 = Controller.Index(2);
+            ViewResult view2 = (ViewResult)Controller.Index(2);
 
             int count2 = (( ListEntity<Ingredient>)(view2.Model)).ListT.Count();
 
@@ -121,7 +121,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange  
 
             // Act
-            ViewResult view = Controller.Index(1);
+            ViewResult view = (ViewResult)Controller.Index(1);
 
 
             // Assert    
@@ -132,15 +132,15 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void ContainsAllIngredientsView2NameIsIndex()
         {
             // Arrange 
-            ListEntity= ( ListEntity<Ingredient>)(Controller.Index(1)).Model;
+            ListEntity= ( ListEntity<Ingredient>)((ViewResult)Controller.Index(1)).Model;
             Ingredient[] ingrArray1 = ListEntity.ListT.ToArray();
 
             // Act
-            ViewResult view1 = Controller.Index(1);
+            ViewResult view1 = (ViewResult)Controller.Index(1);
 
             int count1 = (( ListEntity<Ingredient>)(view1.Model)).ListT.Count();
 
-            ViewResult view2 = Controller.Index(2);
+            ViewResult view2 = (ViewResult)Controller.Index(2);
 
             int count2 = (( ListEntity<Ingredient>)(view2.Model)).ListT.Count();
 
@@ -154,12 +154,12 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void FirstPageIsNotNull()
         {
             // Arrange 
-            ListEntity= ( ListEntity<Ingredient>)(Controller.Index(1)).Model;
+            ListEntity= ( ListEntity<Ingredient>)((ViewResult)Controller.Index(1)).Model;
             Ingredient[] ingrArray1 = ListEntity.ListT.ToArray();
             Controller.PageSize = 8;
 
             // Act
-            ViewResult view1 = Controller.Index(1);
+            ViewResult view1 = (ViewResult)Controller.Index(1);
 
             int count1 = (( ListEntity<Ingredient>)(view1.Model)).ListT.Count();
 
@@ -176,12 +176,12 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void FirstPageNameIsIndex()
         {
             // Arrange 
-            ListEntity= ( ListEntity<Ingredient>)(Controller.Index(1)).Model;
+            ListEntity= ( ListEntity<Ingredient>)((ViewResult)Controller.Index(1)).Model;
             Ingredient[] ingrArray1 = ListEntity.ListT.ToArray();
             Controller.PageSize = 8;
 
             // Act
-            ViewResult view1 = Controller.Index(1);
+            ViewResult view1 = (ViewResult)Controller.Index(1);
 
             int count1 = (( ListEntity<Ingredient>)(view1.Model)).ListT.Count();
 
@@ -195,12 +195,12 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void FirstItemNameIsCorrect()
         {
             // Arrange 
-            ListEntity= ( ListEntity<Ingredient>)(Controller.Index(1)).Model;
+            ListEntity= ( ListEntity<Ingredient>)((ViewResult)Controller.Index(1)).Model;
             Ingredient[] ingrArray1 = ListEntity.ListT.ToArray();
             Controller.PageSize = 8;
 
             // Act
-            ViewResult view1 = Controller.Index(1);
+            ViewResult view1 = (ViewResult)Controller.Index(1);
 
             int count1 = (( ListEntity<Ingredient>)(view1.Model)).ListT.Count();
 
@@ -214,12 +214,12 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void FirstIngredientAddedByUserIsCorrect()
         {
             // Arrange 
-            ListEntity= ( ListEntity<Ingredient>)(Controller.Index(1)).Model;
+            ListEntity= ( ListEntity<Ingredient>)((ViewResult)Controller.Index(1)).Model;
             Ingredient[] ingrArray1 = ListEntity.ListT.ToArray();
             Controller.PageSize = 8;
 
             // Act
-            ViewResult view1 = Controller.Index(1);
+            ViewResult view1 = (ViewResult)Controller.Index(1);
 
             // Assert   
             Assert.AreEqual("John Doe", (( ListEntity<Ingredient>)(view1.Model)).ListT.FirstOrDefault().AddedByUser);
@@ -229,12 +229,12 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void FirstModifiedByUserIsCorrect()
         {
             // Arrange 
-            ListEntity= ( ListEntity<Ingredient>)(Controller.Index(1)).Model;
+            ListEntity= ( ListEntity<Ingredient>)((ViewResult)Controller.Index(1)).Model;
             Ingredient[] ingrArray1 = ListEntity.ListT.ToArray();
             Controller.PageSize = 8;
 
             // Act
-            ViewResult view1 = Controller.Index(1);
+            ViewResult view1 = (ViewResult)Controller.Index(1);
             string userName = WindowsIdentity.GetCurrent().Name;
             // Assert   
             Assert.AreEqual(userName, (( ListEntity<Ingredient>)(view1.Model)).ListT.FirstOrDefault().ModifiedByUser);
@@ -244,12 +244,12 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void FirstCreationDateIsCorrect()
         {
             // Arrange 
-            ListEntity= ( ListEntity<Ingredient>)(Controller.Index(1)).Model;
+            ListEntity= ( ListEntity<Ingredient>)((ViewResult)Controller.Index(1)).Model;
             Ingredient[] ingrArray1 = ListEntity.ListT.ToArray();
             Controller.PageSize = 8;
 
             // Act
-            ViewResult view1 = Controller.Index(1);
+            ViewResult view1 = (ViewResult)Controller.Index(1);
 
             // Assert   
             Assert.AreEqual(DateTime.MinValue, (( ListEntity<Ingredient>)(view1.Model)).ListT.FirstOrDefault().CreationDate);
@@ -259,12 +259,12 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void  FirstModifiedDateIsCorrect()
         {
             // Arrange 
-            ListEntity= ( ListEntity<Ingredient>)(Controller.Index(1)).Model;
+            ListEntity= ( ListEntity<Ingredient>)((ViewResult)Controller.Index(1)).Model;
             Ingredient[] ingrArray1 = ListEntity.ListT.ToArray();
             Controller.PageSize = 8;
 
             // Act
-            ViewResult view1 = Controller.Index(1);
+            ViewResult view1 = (ViewResult)Controller.Index(1);
 
             // Assert   
             Assert.AreEqual(DateTime.MaxValue.AddYears(-10), (( ListEntity<Ingredient>)(view1.Model)).ListT.FirstOrDefault().ModifiedDate);
@@ -276,12 +276,12 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void SecondItemNameIsCorrect()
         {
             // Arrange 
-            ListEntity= ( ListEntity<Ingredient>)(Controller.Index(1)).Model;
+            ListEntity= ( ListEntity<Ingredient>)((ViewResult)Controller.Index(1)).Model;
             Ingredient[] ingrArray1 = ListEntity.ListT.ToArray();
             Controller.PageSize = 8;
 
             // Act
-            ViewResult view1 = Controller.Index(1);
+            ViewResult view1 = (ViewResult)Controller.Index(1);
 
             int count1 = (( ListEntity<Ingredient>)(view1.Model)).ListT.Count();
 
@@ -294,12 +294,12 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void ThirdItemNameIsCorrect()
         {
             // Arrange 
-            ListEntity= ( ListEntity<Ingredient>)(Controller.Index(1)).Model;
+            ListEntity= ( ListEntity<Ingredient>)((ViewResult)Controller.Index(1)).Model;
             Ingredient[] ingrArray1 = ListEntity.ListT.ToArray();
             Controller.PageSize = 8;
 
             // Act
-            ViewResult view1 = Controller.Index(1);
+            ViewResult view1 = (ViewResult)Controller.Index(1);
 
             int count1 = (( ListEntity<Ingredient>)(view1.Model)).ListT.Count();
 
@@ -328,7 +328,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange 
 
             // Act
-            var result = ( ListEntity<Ingredient>)(Controller.Index(1)).Model;
+            var result = ( ListEntity<Ingredient>)((ViewResult)Controller.Index(1)).Model;
             Ingredient[] ingrArray1 = result.ListT.ToArray();
 
             // Assert  
@@ -342,7 +342,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange 
 
             // Act
-            var result = ( ListEntity<Ingredient>)(Controller.Index(1)).Model;
+            var result = ( ListEntity<Ingredient>)((ViewResult)Controller.Index(1)).Model;
             Ingredient[] ingrArray1 = result.ListT.ToArray();
 
             // Assert  

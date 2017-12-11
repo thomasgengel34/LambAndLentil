@@ -228,11 +228,11 @@
     <Compile Include="IAttachDetachControllerTests\BaseTests\BaseControllerShouldDetachXAndReturn.cs" />
     <Compile Include="IAttachDetachControllerTests\BaseTests\BaseTest.cs" />
     <Compile Include="IAttachDetachControllerTests\BaseTests\BaseControllerShouldAttachXAndReturn.cs" />
+    <Compile Include="IAttachDetachControllerTests\Menu\ControllerShouldAttacRecipeAndReturn.cs" />
     <Compile Include="IAttachDetachControllerTests\Menu\ControllerShouldAttachIngredientAndReturn.cs" />
     <Compile Include="IAttachDetachControllerTests\Menu\ControllerShouldAttachMenuAndReturn.cs" />
-    <Compile Include="IAttachDetachControllerTests\Menu\ControllerShouldAttachPlanAndReturn.cs" />
-    <Compile Include="IAttachDetachControllerTests\Menu\ControllerShouldAttachRecipeAndReturn.cs" />
     <Compile Include="IAttachDetachControllerTests\Menu\ControllerShouldAttachShoppingListAndReturn.cs" />
+    <Compile Include="IAttachDetachControllerTests\Menu\ControllerShouldAttachPlanAndReturn.cs" />
     <Compile Include="IAttachDetachControllerTests\Menu\ControllerShouldDetachAllIngredientsAndReturn.cs" />
     <Compile Include="IAttachDetachControllerTests\Menu\ControllerShouldDetachAllMenusAndReturn.cs" />
     <Compile Include="IAttachDetachControllerTests\Menu\ControllerShouldDetachAllPlansAndReturn.cs" />
@@ -263,11 +263,6 @@
     <Compile Include="IAttachDetachControllerTests\Ingredient\ControllerShouldDetachASetOfPlansAndReturn.cs" />
     <Compile Include="IAttachDetachControllerTests\Ingredient\ControllerShouldDetachASetOfRecipesAndReturn.cs" />
     <Compile Include="IAttachDetachControllerTests\Ingredient\ControllerShouldDetachASetOfShoppingListsAndReturn.cs" />
-    <Compile Include="IAttachDetachControllerTests\Ingredient\ControllerShouldDetachIngredientsAndReturn.cs" />
-    <Compile Include="IAttachDetachControllerTests\Ingredient\ControllerShouldDetachMenuAndReturn.cs" />
-    <Compile Include="IAttachDetachControllerTests\Ingredient\ControllerShouldDetachPlanAndReturn.cs" />
-    <Compile Include="IAttachDetachControllerTests\Ingredient\ControllerShouldDetachRecipesAndReturn.cs" />
-    <Compile Include="IAttachDetachControllerTests\Ingredient\ControllerShouldDetachShoppingListAndReturn.cs" />
     <Compile Include="IAttachDetachControllerTests\Recipe\ControllerShouldAttachIngredientAndReturn.cs" />
     <Compile Include="IAttachDetachControllerTests\Recipe\ControllerShouldAttachMenuAndReturn.cs" />
     <Compile Include="IAttachDetachControllerTests\Recipe\ControllerShouldAttachPlanAndReturn.cs" />

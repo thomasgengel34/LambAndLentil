@@ -7,10 +7,11 @@ using System.Security.Principal;
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
 using LambAndLentil.Domain.Abstract;
+using System.Reflection;
 
 namespace LambAndLentil.Domain.Entities
 {
-    public class BaseEntity:IPossibleChildren
+    public  class BaseEntity:IPossibleChildren
     { 
         [StringLength(50)]
         [Required]
@@ -29,6 +30,7 @@ namespace LambAndLentil.Domain.Entities
         public bool CanHavePlanChild { get; set; }
         public bool CanHaveRecipeChild { get; set; }
         public bool CanHaveShoppingListChild { get; set; }
+        public bool ChildCanBeAttached { get; set; }
 
         public BaseEntity()
         {
@@ -91,5 +93,36 @@ namespace LambAndLentil.Domain.Entities
 
             return PagingInfo;
         }
+
+
+        public static bool CanAttachChild<TChild>(IEntity entity)
+        {
+            if (entity == null) { return false; }
+            IPossibleChildren parent = (IPossibleChildren)entity;
+            if (typeof(TChild) == typeof(Ingredient) && parent.CanHaveIngredentChild) { return true; }
+            if (typeof(TChild) == typeof(Menu) && parent.CanHaveMenuChild) { return true; }
+            if (typeof(TChild) == typeof(Plan) && parent.CanHavePlanChild) { return true; }
+            if (typeof(TChild) == typeof(Person) && parent.CanHavePersonChild) { return true; }
+            if (typeof(TChild) == typeof(Recipe) && parent.CanHaveRecipeChild) { return true; }
+            if (typeof(TChild) == typeof(ShoppingList) && parent.CanHaveShoppingListChild) { return true; }
+            return false;
+        }
+
+        public static bool CanAttachChild1<TChild>(BaseEntity entity)
+        {
+            if (entity == null) { return false; }
+             IPossibleChildren parent = (IPossibleChildren)entity;
+             string parentName = parent.ToString().Split('.').Last();
+            string propertyName = string.Concat("CanHave", parentName, "Child");
+            //PropertyInfo[] propertyInfo = Type.GetType(entity.ToString()).GetProperties();
+
+            Type type = parent.GetType();
+
+            PropertyInfo prop = type.GetProperty( propertyName );
+
+            return (bool)prop.GetValue(entity);
+        }
+
+
     }
 }

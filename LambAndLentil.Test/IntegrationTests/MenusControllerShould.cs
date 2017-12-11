@@ -47,7 +47,7 @@ namespace IntegrationTests
             // Arrange
 
             // Act
-            ViewResult vr = Controller.Create(UIViewType.Create);
+            ViewResult vr = (ViewResult)Controller.Create(UIViewType.Create);
             Menu Menu = (Menu)vr.Model;
             string modelName = Menu.Name;
 
@@ -88,7 +88,7 @@ namespace IntegrationTests
 
             // Act 
             ActionResult ar1 = Controller1.PostEdit((Menu)Menu);
-            ViewResult view1 = Controller2.Index();
+            ViewResult view1 = (ViewResult)Controller2.Index();
             List<Menu> ListEntity = (List<Menu>)((ListEntity<Menu>)view1.Model).ListT;
             var menu = (from m in ListEntity
                         where m.Name == "0000 test"
@@ -102,7 +102,7 @@ namespace IntegrationTests
             Menu.Name = "0000 test Edited";
             Menu.ID = menu.ID;
             ActionResult ar2 = Controller3.PostEdit((Menu)Menu);
-            ViewResult view2 = Controller4.Index();
+            ViewResult view2 = (ViewResult)Controller4.Index();
             List<Menu> ListEntity2 = (List<Menu>)((ListEntity<Menu>)view2.Model).ListT;
             Menu menu2 = (from m in ListEntity2
                           where m.Name == "0000 test Edited"
@@ -144,7 +144,7 @@ namespace IntegrationTests
 
             // Act 
             ActionResult ar1 = Controller1.PostEdit((Menu)Menu);
-            ViewResult view1 = Controller2.Index();
+            ViewResult view1 = (ViewResult)Controller2.Index();
             List<Menu> ListEntity = (List<Menu>)((ListEntity<Menu>)view1.Model).ListT;
             Menu menu = (from m in ListEntity
                          where m.Name == "0000 test"
@@ -162,7 +162,7 @@ namespace IntegrationTests
             Menu.Description = "SaveEditedMenuWithDescriptionChange Post-test";
 
             ActionResult ar2 = Controller3.PostEdit((Menu)Menu);
-            ViewResult view2 = Controller4.Index();
+            ViewResult view2 = (ViewResult)Controller4.Index();
             List<Menu> ListEntity2 = (List<Menu>)((ListEntity<Menu>)view2.Model).ListT;
             menu = (from m in ListEntity2
                     where m.Name == "0000 test Edited"
@@ -238,7 +238,7 @@ namespace IntegrationTests
           
             // Act
             Controller1.PostEdit(Menu);
-            ViewResult view = Controller2.Index();
+            ViewResult view = (ViewResult)Controller2.Index();
             List<Menu> ListEntity = (List<Menu>)((ListEntity<Menu>)view.Model).ListT;
             Menu menu = (from m in ListEntity
                          where m.Name == "001 Test "

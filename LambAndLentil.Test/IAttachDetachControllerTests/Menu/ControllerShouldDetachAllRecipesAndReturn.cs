@@ -1,45 +1,33 @@
-﻿using System;
+﻿using LambAndLentil.Test.IAttachDetachControllerTests.BaseTests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using ChildType = LambAndLentil.Domain.Entities.Recipe;
+using ParentType = LambAndLentil.Domain.Entities.Menu;
+ 
 
 namespace LambAndLentil.Test.IAttachDetachControllerTests.Menu
-{
-    [TestClass]
-    public class ControllerShouldDetachAllRecipesAndReturn
     {
-        [Ignore]
-        [TestMethod]
-        public void DetailWithSuccessWhenIDisValidAndThereIsOneIngredientOnList()
+        [TestClass]
+        [TestCategory("Attach-Detach")]
+        public class ControllerShouldDetachAllRecipesAndReturn : BaseControllerShouldDetachXAndReturn<ParentType, ChildType>
         {
-            // Arrange
+            [TestMethod]
+            public void DetailWithSuccessWhenIDisValidAndThereIsOneChildOnListWhenDetachingAndSelectionSetIsNotSupplied() => BaseDetailWithSuccessWhenIDisValidAndThereIsOneChildOnListWhenDetachingAndSelectionSetIsNotSupplied();
 
-            // Act
 
-            //Assert
-            Assert.Fail();
-        }
+            [TestMethod]
+            public void DetailWithSuccessWhenIDisValidAndThereIsOneChildOnListWhenDetachingAndSelectionSetIsSupplied() => BaseDetailWithSuccessWhenIDisValidAndThereIsOneChildOnListWhenDetachingAndSelectionSetIsSupplied();
 
-        [Ignore]
-        [TestMethod]
-        public void DetailWithSuccessWhenIDisValidAndThereAreThreeIngredientsOnList()
-        {
-            // Arrange
 
-            // Act
+            [TestMethod]
+            public void DetailWithSuccessWhenIDisValidAndThereAreThreeChildrenOnList() =>
+               BaseDetailWithSuccessWhenIDisValidAndThereAreThreeChildrenOnListWhenDetachingAll();
 
-            //Assert
-            Assert.Fail();
-        }
 
-        [Ignore]
-        [TestMethod]
-        public void DetailWithErrorWhenIDisNotForAFoundParent()
-        {
-            // Arrange
+            [TestMethod]
+            public void DetailWithErrorWhenIDisNotForAFoundParentWhenDetachingAll() =>
+    BaseDetailWithErrorWhenIDisNotForAFoundParentWhenDetachingAll();
 
-            // Act
 
-            //Assert
-            Assert.Fail();
         }
     }
-}
+ 

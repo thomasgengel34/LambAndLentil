@@ -29,7 +29,7 @@ namespace LambAndLentil.UI.Controllers
 
         //  TODO: filter
 
-        public ViewResult BaseIndex(IRepository<T> Repo, int? page = 1)
+        public ActionResult BaseIndex(IRepository<T> Repo, int? page = 1)
         {
             PageSize = 8;
             int pageInt = page ?? 1;
@@ -186,12 +186,19 @@ namespace LambAndLentil.UI.Controllers
             {
                 return RedirectToAction(UIViewType.Details.ToString(), new { id = parentID, actionMethod = UIViewType.Edit }).WithWarning(entity + " was not found"); ;
             }
-            if (!CanAttachChild<TChild>(parent))
+            if (!BaseEntity.CanAttachChild<TChild>(parent))
             {
-                return RedirectToAction(UIViewType.Details.ToString(), new { id = parent.ID, actionMethod = UIViewType.Edit }).WithError("Element Could not Be Attached!"); ;
+                if (attachOrDetach == AttachOrDetach.Detach)
+                {// TODO: log. Probably a developer error. Or someone is playing games.
+                    return RedirectToAction(UIViewType.Details.ToString(), new { id = parent.ID, actionMethod = UIViewType.Edit }).WithError("Element Could not Be Attached - so it could not be detached");
+                }
+                else
+                {
+                    return RedirectToAction(UIViewType.Details.ToString(), new { id = parent.ID, actionMethod = UIViewType.Edit }).WithError("Element Could not Be Attached!");
+                }
             }
             if (attachOrDetach == AttachOrDetach.Detach)
-            {
+            { 
                 Repo.DetachAnIndependentChild(parent.ID, child, orderNumber);
                 return RedirectToAction(UIViewType.Details.ToString(), new { id = parentID, actionMethod = UIViewType.Edit }).WithSuccess(childEntity + " was Successfully Detached!");
             }
@@ -203,16 +210,6 @@ namespace LambAndLentil.UI.Controllers
 
         }
 
-        private bool CanAttachChild<TChild>(T parent)
-        {
-            if (typeof(TChild) == typeof(Ingredient)) { return true; }
-            if (typeof(TChild) == typeof(Menu) && parent.CanHaveMenuChild) { return true; }
-            if (typeof(TChild) == typeof(Plan) && parent.CanHavePlanChild) { return true; }
-            if (typeof(TChild) == typeof(Person) && parent.CanHavePersonChild) { return true; }
-            if (typeof(TChild) == typeof(Recipe) && parent.CanHaveRecipeChild) { return true; }
-            if (typeof(TChild) == typeof(ShoppingList) && parent.CanHaveShoppingListChild) { return true; }
-            return false;
-        }
 
 
         public void BaseAddIngredientToIngredientsList(IRepository<T> repo, UIControllerType tController, int id, string addedIngredient)
@@ -233,22 +230,26 @@ namespace LambAndLentil.UI.Controllers
             {
                 return RedirectToAction(UIViewType.Index.ToString()).WithWarning(entity + " was not found");
             }
+           
 
             else
             {
                 int parentNonNullID = (int)ID;
                 IEntityChildClassIngredients parent = (IEntityChildClassIngredients)Repo.GetById(parentNonNullID);
-                if (!CanAttachChild<Ingredient>((T)parent))
-                {
-                    return RedirectToAction(UIViewType.Details.ToString(), new { id = parent.ID, actionMethod = UIViewType.Edit }).WithError("Element Could not Be Attached!"); ;
-                }
                 if (parent == null)
                 {
                     // TODO: log error - this could be a developer problem
                     return RedirectToAction(UIViewType.Index.ToString()).WithWarning(entity + " was not found");
                 }
-                else
-                if (parent.Ingredients.Count() > 0)
+                else if (!BaseEntity.CanAttachChild<Ingredient>(parent))
+                {
+                    return RedirectToAction(UIViewType.Details.ToString(), new { id = parent.ID, actionMethod = UIViewType.Edit }).WithError("Element Could not Be Attached!");
+                }
+                else if (parent.Ingredients.Count==0)
+                {
+                    return RedirectToAction(UIViewType.Details.ToString(), new { id = parent.ID, actionMethod = UIViewType.Edit }).WithError("No Ingredients were attached!");
+                }
+                else 
                 {
                     if (selected == null)
                     {
@@ -262,18 +263,21 @@ namespace LambAndLentil.UI.Controllers
 
                     Repo.Update((T)parent, parent.ID);
                     return RedirectToAction(UIViewType.Details.ToString(), new { id = ID, actionMethod = UIViewType.Edit }).WithSuccess("All Ingredients Were Successfully Detached!");
-                }
-                else
-                {
-                    return RedirectToAction(UIViewType.Details.ToString(), new { id = ID, actionMethod = UIViewType.Edit }).WithWarning("No Ingredients Were Attached!");
-                }
+                } 
             }
             bool ContainsSelected(Ingredient ingredient)
             {
-                int ingredientID = ingredient.ID;
-                var numbers = from f in selected select f.ID;
-                bool trueOrFalse = numbers.Contains(ingredientID);
-                return trueOrFalse;
+                if (ingredient == null  )
+                {
+                    return true;
+                }
+                else
+                {
+                    int ingredientID = ingredient.ID;
+                    var numbers = from f in selected where f != null select f.ID;
+                    bool trueOrFalse = numbers.Contains(ingredientID);
+                    return trueOrFalse;
+                }
             }
         }
 
@@ -388,7 +392,7 @@ namespace LambAndLentil.UI.Controllers
                     return RedirectToAction(UIViewType.Index.ToString()).WithWarning(entity + " was not found");
                 }
 
-                if (!CanAttachChild<Menu>(tparent))
+                if (!BaseEntity.CanAttachChild<Menu>(tparent))
                 {
                     return RedirectToAction(UIViewType.Details.ToString(), new { id = ID, actionMethod = UIViewType.Edit }).WithError("Element Could not Be Attached!"); ;
                 }
@@ -426,63 +430,63 @@ namespace LambAndLentil.UI.Controllers
                 }
             }
         }
-           
 
-            protected ActionResult BaseDetachAllShoppingListChildren(IRepository<T> Repo, int? ID, List<ShoppingList> selected)
+
+        protected ActionResult BaseDetachAllShoppingListChildren(IRepository<T> Repo, int? ID, List<ShoppingList> selected)
+        {
+
+            string entity = typeof(T).ToString().Split('.').Last();
+            if (ID == null)
             {
-
-                string entity = typeof(T).ToString().Split('.').Last();
-                if (ID == null)
+                return RedirectToAction(UIViewType.Index.ToString()).WithWarning(entity + " was not found");
+            }
+            else
+            {
+                int parentNonNullID = (int)ID;
+                IEntityChildClassShoppingLists parent = (IEntityChildClassShoppingLists)Repo.GetById(parentNonNullID);
+                if (parent == null)
                 {
+                    // TODO: log error - this could be a developer problem
                     return RedirectToAction(UIViewType.Index.ToString()).WithWarning(entity + " was not found");
                 }
                 else
+                if (parent.ShoppingLists.Count() > 0)
                 {
-                    int parentNonNullID = (int)ID;
-                    IEntityChildClassShoppingLists parent = (IEntityChildClassShoppingLists)Repo.GetById(parentNonNullID);
-                    if (parent == null)
+                    if (selected == null)
                     {
-                        // TODO: log error - this could be a developer problem
-                        return RedirectToAction(UIViewType.Index.ToString()).WithWarning(entity + " was not found");
+                        parent.ShoppingLists.RemoveAll(match: x => x.ID >= 0);
                     }
                     else
-                    if (parent.ShoppingLists.Count() > 0)
                     {
-                        if (selected == null)
-                        {
-                            parent.ShoppingLists.RemoveAll(match: x => x.ID >= 0);
-                        }
-                        else
-                        {
-                            var setToRemove = new HashSet<ShoppingList>(selected);
-                            parent.ShoppingLists.RemoveAll(ContainsSelected);
-                        }
+                        var setToRemove = new HashSet<ShoppingList>(selected);
+                        parent.ShoppingLists.RemoveAll(ContainsSelected);
+                    }
 
-                        Repo.Update((T)parent, parent.ID);
-                        return RedirectToAction(UIViewType.Details.ToString(), new { id = ID, actionMethod = UIViewType.Edit }).WithSuccess("All ShoppingLists Were Successfully Detached!");
-                    }
-                    else
-                    {
-                        return RedirectToAction(UIViewType.Details.ToString(), new { id = ID, actionMethod = UIViewType.Edit }).WithWarning("No ShoppingLists Were Attached!");
-                    }
+                    Repo.Update((T)parent, parent.ID);
+                    return RedirectToAction(UIViewType.Details.ToString(), new { id = ID, actionMethod = UIViewType.Edit }).WithSuccess("All ShoppingLists Were Successfully Detached!");
                 }
-                bool ContainsSelected(ShoppingList ingredient)
+                else
                 {
-                    int ingredientID = ingredient.ID;
-                    var numbers = from f in selected select f.ID;
-                    bool trueOrFalse = numbers.Contains(ingredientID);
-                    return trueOrFalse;
+                    return RedirectToAction(UIViewType.Details.ToString(), new { id = ID, actionMethod = UIViewType.Edit }).WithWarning("No ShoppingLists Were Attached!");
                 }
             }
-
-
-            protected void BaseDetachLastIngredientChild(IRepository<T> repo, int iD)
+            bool ContainsSelected(ShoppingList ingredient)
             {
-                IEntityChildClassIngredients parent = (IEntityChildClassIngredients)Repo.GetById(iD);
-                int count = parent.Ingredients.Count();
-                parent.Ingredients.RemoveAt(count - 1);
+                int ingredientID = ingredient.ID;
+                var numbers = from f in selected select f.ID;
+                bool trueOrFalse = numbers.Contains(ingredientID);
+                return trueOrFalse;
             }
-
-
         }
+
+
+        protected void BaseDetachLastIngredientChild(IRepository<T> repo, int iD)
+        {
+            IEntityChildClassIngredients parent = (IEntityChildClassIngredients)Repo.GetById(iD);
+            int count = parent.Ingredients.Count();
+            parent.Ingredients.RemoveAt(count - 1);
+        }
+
+
     }
+}

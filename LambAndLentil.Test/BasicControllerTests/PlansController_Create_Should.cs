@@ -16,7 +16,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         {
             // Arrange
 
-            ViewResult view = Controller.Create(UIViewType.Edit);
+            ViewResult view = (ViewResult)Controller.Create(UIViewType.Edit);
 
 
             // Assert

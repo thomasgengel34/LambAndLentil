@@ -45,7 +45,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
             // Act 
             ActionResult ar1 = Controller1.PostEdit(vm);
-            ViewResult view1 = Controller2.Index();
+            ViewResult view1 = (ViewResult)Controller2.Index();
             List<Person> ListEntity = (List<Person>)(((ListEntity<Person>)view1.Model).ListT);
             Person recipeVM = (from m in ListEntity
                                where m.Name == "0000 test"
@@ -61,7 +61,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             vm.Description = "SaveEditedPersonWithDescriptionChange Post-test";
 
             ActionResult ar2 = Controller3.PostEdit(vm);
-            ViewResult view2 = Controller4.Index();
+            ViewResult view2 = (ViewResult)Controller4.Index();
             List<Person> ListEntity2 = (List<Person>)(((ListEntity<Person>)view2.Model).ListT);
             Person recipe2 = (from m in ListEntity2
                               where m.Name == "0000 test Edited"
@@ -125,7 +125,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
             // Act
             ControllerEdit.PostEdit(person);
-            ViewResult view = ControllerView.Index();
+            ViewResult view = (ViewResult)ControllerView.Index();
             List<Person> ListEntity = (List<Person>)(((ListEntity<Person>)view.Model).ListT);
             person = (from m in ListEntity
                       where m.ID == 5000
@@ -192,7 +192,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Person.FirstName = "SaveEditedPersonTest";
             Person.LastName = "";
             ActionResult ar2 = Controller2.PostEdit((Person)Person);
-            ViewResult view2 = Controller3.Index();
+            ViewResult view2 = (ViewResult)Controller3.Index();
             ListEntity<Person> ListEntity2 = (ListEntity<Person>)view2.Model;
             Person person3 = (from m in ListEntity2.ListT
                               where m.ID == Person.ID

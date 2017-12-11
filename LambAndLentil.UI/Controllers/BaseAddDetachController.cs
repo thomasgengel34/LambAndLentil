@@ -36,7 +36,7 @@ namespace LambAndLentil.UI.Controllers
         int IGenericController<T>.PageSize { get; set; }
         private static UIControllerType UIControllerType { get; set; }
 
-        ViewResult IGenericController<T>.Index(int? page) => BaseIndex(Repo, page);
+        ActionResult IGenericController<T>.Index(int? page) => BaseIndex(Repo, page);
 
 
         // GET: Recipes/Details/5
@@ -45,7 +45,7 @@ namespace LambAndLentil.UI.Controllers
 
         // GET: Ingredients/Create 
         [ActionName("Create")]
-        ViewResult IGenericController<T>.Create(UIViewType actionMethod) => BaseCreate(actionMethod);
+        ActionResult IGenericController<T>.Create(UIViewType actionMethod) => BaseCreate(actionMethod);
 
         [HttpGet]
         ActionResult IGenericController<T>.Edit(int id) => BaseDetails(Repo, UIControllerType, id, UIViewType.Edit);
@@ -102,11 +102,11 @@ namespace LambAndLentil.UI.Controllers
 
         ActionResult IAttachDetachController.AttachPlan(int iD, Plan child, int orderNumber) => BaseAttach(Repo, iD, child, AttachOrDetach.Attach, orderNumber);
 
-        ActionResult IAttachDetachController.DetachPlan(int iD, Menu child, int orderNumber) => BaseAttach(Repo, iD, child, AttachOrDetach.Detach, orderNumber); 
+        ActionResult IAttachDetachController.DetachPlan(int iD, Plan child, int orderNumber) => BaseAttach(Repo, iD, child, AttachOrDetach.Detach, orderNumber); 
 
         ActionResult IAttachDetachController.AttachShoppingList(int iD, ShoppingList child, int orderNumber) => BaseAttach(Repo, iD, child, 0);
 
-        ActionResult IAttachDetachController.DetachShoppingList(int iD, Menu child, int orderNumber) => BaseAttach(Repo, iD, child, AttachOrDetach.Detach, orderNumber);
+        ActionResult IAttachDetachController.DetachShoppingList(int iD,ShoppingList child, int orderNumber) => BaseAttach(Repo, iD, child, AttachOrDetach.Detach, orderNumber);
 
         ActionResult IAttachDetachController.DetachAllShoppingLists(int ID, List<ShoppingList> selected) => BaseDetachAllShoppingListChildren(Repo, ID, selected); 
 

@@ -26,12 +26,12 @@ namespace LambAndLentil.UI.Controllers
         ActionResult DetachASetOMenus(int ID, List<Menu> selected);
 
         ActionResult AttachPlan(int iD, Plan child, int orderNumber = 0);
-        ActionResult DetachPlan(int iD, Menu child, int orderNumber = 0);
+        ActionResult DetachPlan(int iD, Plan child, int orderNumber = 0);
         ActionResult DetachAllPlans(int ID, List<Plan> selected);
         ActionResult DetachASetOPlans(int ID, List<Plan> selected);
 
         ActionResult AttachShoppingList(int iD, ShoppingList child, int orderNumber = 0);
-        ActionResult DetachShoppingList(int iD, Menu child, int orderNumber = 0);
+        ActionResult DetachShoppingList(int iD, ShoppingList child, int orderNumber = 0);
         ActionResult DetachAllShoppingLists(int ID, List<ShoppingList> selected);
         ActionResult DetachASetOShoppingLists(int ID, List<ShoppingList> selected);
     }

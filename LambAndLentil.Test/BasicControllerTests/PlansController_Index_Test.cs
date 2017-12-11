@@ -37,21 +37,17 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [TestMethod]
         public void ContainsAllPlansView2NotNull()
-        {
-            // Arrange 
-
-            // Act
-            ViewResult view1 = Controller.Index(1);
+        { 
+            ViewResult view1 = (ViewResult)Controller.Index(1);
 
             int count1 = ((ListEntity<Plan>)(view1.Model)).ListT.Count();
 
-            ViewResult view2 = Controller.Index(2);
+            ViewResult view2 = (ViewResult)Controller.Index(2);
 
             int count2 = ((ListEntity<Plan>)(view2.Model)).ListT.Count();
 
             int count = count1 + count2;
-
-            // Assert 
+             
             Assert.IsNotNull(view2);
         }
 
@@ -62,7 +58,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             int count = Repo.Count();
 
             // Act
-            ListEntity = (ListEntity<Plan>)(Controller.Index(1)).Model;
+            ListEntity = (ListEntity<Plan>)((ViewResult)Controller.Index(1)).Model;
             Plan[] ingrArray1 = ListEntity.ListT.ToArray();
             int count1 = ingrArray1.Count();
 
@@ -75,15 +71,15 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void ContainsAllPlansView2Count0()
         {
             // Arrange 
-            ListEntity = (ListEntity<Plan>)(Controller.Index(1)).Model;
+            ListEntity = (ListEntity<Plan>)((ViewResult)Controller.Index(1)).Model;
             Plan[] ingrArray1 = ListEntity.ListT.ToArray();
 
             // Act
-            ViewResult view1 = Controller.Index(1);
+            ViewResult view1 = (ViewResult)Controller.Index(1);
 
             int count1 = ((ListEntity<Plan>)(view1.Model)).ListT.Count();
 
-            ViewResult view2 = Controller.Index(2);
+            ViewResult view2 = (ViewResult)Controller.Index(2);
 
             int count2 = ((ListEntity<Plan>)(view2.Model)).ListT.Count();
 
@@ -97,31 +93,22 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestMethod]
         [TestCategory("Index")]
         public void ContainsAllPlansView1NameIsIndex()
-        {
-            // Arrange  
-
-            // Act
-            ViewResult view = Controller.Index(1);
-
-
-            // Assert    
+        { 
+            ViewResult view = (ViewResult)Controller.Index(1); 
             Assert.AreEqual("Index", view.ViewName);
         }
 
         [TestMethod]
         [TestCategory("Index")]
         public void ContainsAllPlansView2NameIsIndex()
-        {
-            // Arrange 
-            ListEntity = (ListEntity<Plan>)(Controller.Index(1)).Model;
+        { 
+            ListEntity = (ListEntity<Plan>)((ViewResult)Controller.Index(1)).Model;
             Plan[] ingrArray1 = ListEntity.ListT.ToArray();
-
-            // Act
-            ViewResult view1 = Controller.Index(1);
-
+             
+            ViewResult view1 = (ViewResult)Controller.Index(1); 
             int count1 = ((ListEntity<Plan>)(view1.Model)).ListT.Count();
 
-            ViewResult view2 = Controller.Index(2);
+            ViewResult view2 = (ViewResult)Controller.Index(2);
 
             int count2 = ((ListEntity<Plan>)(view2.Model)).ListT.Count();
 
@@ -136,18 +123,16 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void FirstPageIsNotNull()
         {
             // Arrange 
-            ListEntity = (ListEntity<Plan>)(Controller.Index(1)).Model;
+            ListEntity = (ListEntity<Plan>)((ViewResult)Controller.Index(1)).Model;
             Plan[] ingrArray1 = ListEntity.ListT.ToArray();
             Controller.PageSize = 8;
 
             // Act
-            ViewResult view1 = Controller.Index(1);
+            ViewResult view1 = (ViewResult)Controller.Index(1);
 
             int count1 = ((ListEntity<Plan>)(view1.Model)).ListT.Count();
-
-            // Assert
-            Assert.IsNotNull(view1);
-
+             
+            Assert.IsNotNull(view1); 
         }
 
 
@@ -156,12 +141,12 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void FirstPageNameIsIndex()
         {
             // Arrange 
-            ListEntity = (ListEntity<Plan>)(Controller.Index(1)).Model;
+            ListEntity = (ListEntity<Plan>)((ViewResult)Controller.Index(1)).Model;
             Plan[] ingrArray1 = ListEntity.ListT.ToArray();
             Controller.PageSize = 8;
 
             // Act
-            ViewResult view1 = Controller.Index(1);
+            ViewResult view1 = (ViewResult)Controller.Index(1);
 
             int count1 = ((ListEntity<Plan>)(view1.Model)).ListT.Count();
 
@@ -176,12 +161,12 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void FirstItemNameIsCorrect()
         {
             // Arrange 
-            ListEntity = (ListEntity<Plan>)(Controller.Index(1)).Model;
+            ListEntity = (ListEntity<Plan>)((ViewResult)Controller.Index(1)).Model;
             Plan[] ingrArray1 = ListEntity.ListT.ToArray();
             Controller.PageSize = 8;
 
             // Act
-            ViewResult view1 = Controller.Index(1);
+            ViewResult view1 = (ViewResult)Controller.Index(1);
 
             int count1 = ((ListEntity<Plan>)(view1.Model)).ListT.Count();
 
@@ -196,12 +181,12 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void FirstPlanAddedByUserIsCorrect()
         {
             // Arrange 
-            ListEntity = (ListEntity<Plan>)(Controller.Index(1)).Model;
+            ListEntity = (ListEntity<Plan>)((ViewResult)Controller.Index(1)).Model;
             Plan[] ingrArray1 = ListEntity.ListT.ToArray();
             Controller.PageSize = 8;
 
             // Act
-            ViewResult view1 = Controller.Index(1);
+            ViewResult view1 = (ViewResult)Controller.Index(1);
 
             // Assert   
             Assert.AreEqual("John Doe", ((ListEntity<Plan>)(view1.Model)).ListT.FirstOrDefault().AddedByUser);
@@ -212,12 +197,12 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void FirstModifiedByUserIsCorrect()
         {
             // Arrange 
-            ListEntity = (ListEntity<Plan>)(Controller.Index(1)).Model;
+            ListEntity = (ListEntity<Plan>)((ViewResult)Controller.Index(1)).Model;
             Plan[] ingrArray1 = ListEntity.ListT.ToArray();
             Controller.PageSize = 8;
 
             // Act
-            ViewResult view1 = Controller.Index(1);
+            ViewResult view1 = (ViewResult)Controller.Index(1);
             string userName = WindowsIdentity.GetCurrent().Name;
             // Assert   
             Assert.AreEqual(userName, ((ListEntity<Plan>)(view1.Model)).ListT.FirstOrDefault().ModifiedByUser.ToString());
@@ -230,12 +215,12 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void FirstCreationDateIsCorrect()
         {
             // Arrange 
-            ListEntity = (ListEntity<Plan>)(Controller.Index(1)).Model;
+            ListEntity = (ListEntity<Plan>)((ViewResult)Controller.Index(1)).Model;
             Plan[] ingrArray1 = ListEntity.ListT.ToArray();
             Controller.PageSize = 8;
 
             // Act
-            ViewResult view1 = Controller.Index(1);
+            ViewResult view1 = (ViewResult)Controller.Index(1);
 
             // Assert   
             Assert.AreEqual(DateTime.MinValue, ((ListEntity<Plan>)(view1.Model)).ListT.FirstOrDefault().CreationDate);
@@ -246,12 +231,12 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void Index_FirstModifiedDateIsCorrect()
         {
             // Arrange 
-            ListEntity = (ListEntity<Plan>)(Controller.Index(1)).Model;
+            ListEntity = (ListEntity<Plan>)((ViewResult)Controller.Index(1)).Model;
             Plan[] ingrArray1 = ListEntity.ListT.ToArray();
             Controller.PageSize = 8;
 
             // Act
-            ViewResult view1 = Controller.Index(1);
+            ViewResult view1 = (ViewResult)Controller.Index(1);
 
             // Assert   
             Assert.AreEqual(DateTime.MaxValue.AddYears(-10), ((ListEntity<Plan>)(view1.Model)).ListT.FirstOrDefault().ModifiedDate);
@@ -264,12 +249,12 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void SecondItemNameIsCorrect()
         {
             // Arrange 
-            ListEntity = (ListEntity<Plan>)(Controller.Index(1)).Model;
+            ListEntity = (ListEntity<Plan>)((ViewResult)Controller.Index(1)).Model;
             Plan[] ingrArray1 = ListEntity.ListT.ToArray();
             Controller.PageSize = 8;
 
             // Act
-            ViewResult view1 = Controller.Index(1);
+            ViewResult view1 = (ViewResult)Controller.Index(1);
 
             int count1 = ((ListEntity<Plan>)(view1.Model)).ListT.Count();
 
@@ -283,12 +268,12 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void ThirdItemNameIsCorrect()
         {
             // Arrange 
-            ListEntity = (ListEntity<Plan>)(Controller.Index(1)).Model;
+            ListEntity = (ListEntity<Plan>)((ViewResult)Controller.Index(1)).Model;
             Plan[] ingrArray1 = ListEntity.ListT.ToArray();
             Controller.PageSize = 8;
 
             // Act
-            ViewResult view1 = Controller.Index(1);
+            ViewResult view1 = (ViewResult)Controller.Index(1);
 
             int count1 = ((ListEntity<Plan>)(view1.Model)).ListT.Count();
 
@@ -326,7 +311,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
 
             // Act
-            var result = (ListEntity<Plan>)(Controller.Index(1)).Model;
+            var result = (ListEntity<Plan>)((ViewResult)Controller.Index(1)).Model;
             Plan[] ingrArray1 = result.ListT.ToArray();
 
             // Assert  
@@ -341,7 +326,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange 
 
             // Act
-            var result = (ListEntity<Plan>)(Controller.Index(1)).Model;
+            var result = (ListEntity<Plan>)((ViewResult)Controller.Index(1)).Model;
             Plan[] ingrArray1 = result.ListT.ToArray();
 
             // Assert  
@@ -427,11 +412,11 @@ namespace LambAndLentil.Test.BasicControllerTests
             int repoCount = Repo.Count();
 
             // Act
-            ViewResult view1 = Controller.Index(1);
+            ViewResult view1 = (ViewResult)Controller.Index(1);
 
             int count1 = ((ListEntity<Plan>)(view1.Model)).ListT.Count();
 
-            ViewResult view2 = Controller.Index(2);
+            ViewResult view2 = (ViewResult)Controller.Index(2);
 
             int count2 = ((ListEntity<Plan>)(view2.Model)).ListT.Count();
 
@@ -518,7 +503,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             int count = Repo.Count();
 
             // Act
-            var result = (ListEntity<Plan>)(Controller.Index(1)).Model;
+            var result = (ListEntity<Plan>)((ViewResult)Controller.Index(1)).Model;
 
             // Assert 
             Assert.AreEqual(count, result.ListT.Count());

@@ -32,7 +32,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange
 
             // Act
-            ViewResult view = Controller.Create(UIViewType.Create);
+            ViewResult view = (ViewResult)Controller.Create(UIViewType.Create);
 
             // Assert
             Assert.IsNotNull(view);

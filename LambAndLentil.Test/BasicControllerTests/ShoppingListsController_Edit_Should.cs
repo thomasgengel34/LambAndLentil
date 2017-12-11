@@ -84,7 +84,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             ShoppingList.Name = "0000 test Edited";
             ShoppingList.ID = 7777;
             ActionResult ar2 = Controller2.PostEdit((ShoppingList)ShoppingList);
-            ViewResult view2 = Controller3.Index();
+            ViewResult view2 = (ViewResult)Controller3.Index();
              ListEntity<ShoppingList> ListEntity2 = ( ListEntity<ShoppingList>)view2.Model;
             ShoppingList ShoppingList3 = (from m in ListEntity2.ListT  
                                 where m.Name == "0000 test Edited"

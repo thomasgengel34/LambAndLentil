@@ -50,7 +50,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
 
             // Act
-            ViewResult vr = Controller.Create(UIViewType.Create);
+            ViewResult vr = (ViewResult)Controller.Create(UIViewType.Create);
             Person = (Person)vr.Model;
             Person.Description = "Test.CreateAPerson";
             Person.ID = 33;
@@ -91,7 +91,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
             // Act 
             ActionResult ar1 = Controller1.PostEdit((Person)Person);
-            ViewResult view1 = Controller2.Index();
+            ViewResult view1 = (ViewResult)Controller2.Index();
             List<Person> ListEntity = (List<Person>)view1.Model;
             Person person = (from m in ListEntity
                              where m.Name == "0000 test"
@@ -105,7 +105,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Person.LastName = "test Edited";
             Person.ID = person.ID;
             ActionResult ar2 = Controller3.PostEdit((Person)Person);
-            ViewResult view2 = Controller4.Index();
+            ViewResult view2 = (ViewResult)Controller4.Index();
             List<Person> ListEntity2 = (List<Person>)view2.Model;
             person = (from m in ListEntity2
                       where m.Name == "0000 test Edited"
@@ -126,7 +126,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
             // Act 
             ActionResult ar1 = Controller1.PostEdit((Person)Person);
-            ViewResult view1 = Controller2.Index();
+            ViewResult view1 = (ViewResult)Controller2.Index();
             List<Person> ListEntity = (List<Person>)view1.Model;
             Person person = (from m in ListEntity
                              where m.Description == "SaveEditedPersonWithDescriptionChange Pre-test"
@@ -140,7 +140,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Person.Description = "SaveEditedPersonWithDescriptionChange Post-test";
 
             ActionResult ar2 = Controller3.PostEdit((Person)Person);
-            ViewResult view2 = Controller4.Index();
+            ViewResult view2 = (ViewResult)Controller4.Index();
             List<Person> ListEntity2 = (List<Person>)view2.Model;
             person = (from m in ListEntity2
                       where m.Description == "SaveEditedPersonWithDescriptionChange Post-test"
@@ -186,7 +186,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
             // Act
             ControllerEdit.PostEdit((Person)Person);
-            ViewResult view = ControllerView.Index();
+            ViewResult view = (ViewResult)ControllerView.Index();
             List<Person> ListEntity = (List<Person>)view.Model;
             var result = (from m in ListEntity
                           where m.Description == "001 Test "

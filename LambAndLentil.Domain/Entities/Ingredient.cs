@@ -22,5 +22,6 @@ namespace LambAndLentil.Domain.Entities
         public int ID { get; set; }
         public List<Ingredient> Ingredients { get; set; }
 
+       
     }
 }

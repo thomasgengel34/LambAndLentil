@@ -40,7 +40,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Repo.Save(item);
             ListEntity.ListT = SetUpRepository();
             ClassName = typeof(T).ToString().Split('.').Last();
-           
+             
         }
 
         public List<T> SetUpRepository()
@@ -148,7 +148,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Controller.PageSize = 8;
 
             // Act
-            ViewResult view1 = Controller.Index(1);
+            ViewResult view1 = (ViewResult)Controller.Index(1);
             int count1 = ((ListEntity<T>)(view1.Model)).ListT.Count();
 
             // Assert
@@ -267,7 +267,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             int repoCount = Repo.Count();
 
             // Act
-            var result = (ListEntity<T>)(Controller.Index(1)).Model;
+            var result = (ListEntity<T>)((ViewResult)Controller.Index(1)).Model;
 
             // Assert 
             Assert.AreEqual(repoCount, result.ListT.Count());

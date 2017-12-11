@@ -12,27 +12,17 @@ namespace LambAndLentil.Test.BasicControllerTests
     {
         [TestMethod]
         public void  ReturnNonNull()
-        {
-            // Arrange
-
-            // Act
-            ViewResult result = Controller.Create(UIViewType.Create) as ViewResult;
-
-            // Assert
+        { 
+            ViewResult result = (ViewResult)Controller.Create(UIViewType.Create) ; 
             Assert.IsNotNull(result);
         }
 
         [TestMethod] 
         public void Create()
-        {
-            // Arrange 
-            ViewResult view = Controller.Create(UIViewType.Edit);
-
-
-            // Assert
+        { 
+            ViewResult view = (ViewResult)Controller.Create(UIViewType.Edit); 
             Assert.IsNotNull(view);
             Assert.AreEqual("Details", view.ViewName);
-        }
-
+        } 
     }
 }
