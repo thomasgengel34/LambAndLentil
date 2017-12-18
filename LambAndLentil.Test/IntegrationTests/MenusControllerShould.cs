@@ -37,6 +37,7 @@ namespace IntegrationTests
                 Name = "0000 test",
                 ID = 33
             };
+            Repo.Save((Menu)Menu);
             Controller = new MenusController(Repo);
         }
 
@@ -296,18 +297,13 @@ namespace IntegrationTests
         public void AttachAnExistingIngredientToAnExistingMenu()
         {
             // Arrange 
-            TestRepository<Ingredient> repoIngredient = new TestRepository<Ingredient>();
-
-            Menu menu = new Menu { ID = int.MaxValue - 100, Description = "test AttachAnExistingIngredientToAnExistingMenu" };
-            Ingredient ingredient = new Ingredient { ID = int.MaxValue - 100, Description = "test AttachAnExistingIngredientToAnExistingMenu" };
-            Repo.Add(menu);
-            repoIngredient.Add(ingredient);
-
+             
+           
+            Ingredient ingredient = new Ingredient { ID = int.MaxValue - 100, Description = "test AttachAnExistingIngredientToAnExistingMenu" }; 
+            Menu foo = Repo.GetById(Menu.ID);
             // Act
-            Controller.AttachIngredient(menu.ID, ingredient);
-            Menu returnedMenu = (from m in Repo.GetAll()
-                                 where m.Description == menu.Description
-                                 select m).FirstOrDefault();
+            ActionResult ar= Controller.AttachIngredient(Menu.ID, ingredient);
+            Menu returnedMenu = Repo.GetById(Menu.ID);
 
             // Assert 
             Assert.AreEqual(1, returnedMenu.Ingredients.Count());

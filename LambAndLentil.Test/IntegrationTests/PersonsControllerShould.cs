@@ -40,6 +40,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Controller3 = (IGenericController<Person>)(new PersonsController(Repo));
             Controller4 = (IGenericController<Person>)(new PersonsController(Repo));
             Controller5 = (IGenericController<Person>)(new PersonsController(Repo));
+            Repo.Save((Person)Person);
         }
 
 
@@ -54,7 +55,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Person = (Person)vr.Model;
             Person.Description = "Test.CreateAPerson";
             Person.ID = 33;
-            string modelName = Person.Name;
+            string modelName = ((Person)vr.Model).Name;
 
             // Assert 
             Assert.AreEqual(vr.ViewName, UIViewType.Details.ToString());

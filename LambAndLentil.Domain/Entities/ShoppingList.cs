@@ -18,7 +18,7 @@ namespace LambAndLentil.Domain.Entities
             Plans = new List<Plan>();
 
             CanHaveMenuChild =true;
-            CanHavePlanChild = false;
+            CanHavePlanChild = true;
             CanHaveRecipeChild = true;
             CanHaveShoppingListChild = false;
         }
@@ -29,15 +29,23 @@ namespace LambAndLentil.Domain.Entities
             Date = creationDate;
         }
 
+        public int ID { get; set; }
         public List<Ingredient> Ingredients { get; set; }
         public List<Recipe> Recipes { get; set; }
         public List<Menu> Menus { get; set; }
         public List<Plan> Plans { get; set; }
-
-        public int ID { get; set; }
         public DateTime Date { get; set; }
         public string Author { get; set; }
+        string IShoppingList.Author { get; set; }
+        DateTime IShoppingList.Date { get; set; }
+        
+        
 
+        void IEntity.AddChildrenToParent(IEntity entity) => throw new NotImplementedException();
 
+        bool IEntity.ParentCanHaveChild(IPossibleChildren parent)
+        {
+            return parent.CanHaveShoppingListChild;
+        }
     }
 }

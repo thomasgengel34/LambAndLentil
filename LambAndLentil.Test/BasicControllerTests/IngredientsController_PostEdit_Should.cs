@@ -74,7 +74,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Act 
             ActionResult ar =  Controller.PostEdit((Ingredient)Ingredient);
 
-            Ingredient returnedIngredient = Repo.GetById(1000);
+            Ingredient returnedIngredient = Repo.GetById(Ingredient.ID);
 
 
             // Assert  // Bind(Include = "ID, Name, Description, CreationDate,  IngredientsList")] 

@@ -1,31 +1,22 @@
 ﻿using LambAndLentil.Test.IAttachDetachControllerTests.BaseTests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ParentType = LambAndLentil.Domain.Entities.Menu;
-using ChildType = LambAndLentil.Domain.Entities.Plan;
+using TParent = LambAndLentil.Domain.Entities.Menu;
+using TChild = LambAndLentil.Domain.Entities.Plan;
 
 namespace LambAndLentil.Test.IAttachDetachControllerTests.Menu
 {
     [TestClass]
-    [TestCategory("Attach-Detach")]
-    public class ControllerShouldDetachAllPlansAndReturn : BaseControllerShouldDetachXAndReturn<ParentType, ChildType>
+    public class ControllerShouldDetachAllIPlansAndReturn : BaseControllerShouldDetachXAndReturn<TParent, TChild>
     {
-        [TestMethod]
-        public void DetailWithSuccessWhenIDisValidAndThereIsOneChildOnListWhenDetachingAndSelectionSetIsNotSupplied() => BaseDetailWithSuccessWhenIDisValidAndThereIsOneChildOnListWhenDetachingAndSelectionSetIsNotSupplied();
-
-
-        [TestMethod]
-        public void DetailWithSuccessWhenIDisValidAndThereIsOneChildOnListWhenDetachingAndSelectionSetIsSupplied() => BaseDetailWithSuccessWhenIDisValidAndThereIsOneChildOnListWhenDetachingAndSelectionSetIsSupplied();
-
+        // since Plan cannot be attached to an ingredient, these tests should return with an error
+        
 
         [TestMethod]
-        public void DetailWithSuccessWhenIDisValidAndThereAreThreeChildrenOnList() =>
-           BaseDetailWithSuccessWhenIDisValidAndThereAreThreeChildrenOnListWhenDetachingAll();
-
+        public void DetailWithSuccessWhenIDisValidAndThereIsOneChildOnListWhenDetachingAndChildCannotBeAttachedWhenDetachingAll()
+       => BaseDetailWithDangerWhenIDisValidAndThereIsOneChildOnListWhenDetachingAndChildCannotBeAttachedWhenDetachingAll();
 
         [TestMethod]
-        public void DetailWithErrorWhenIDisNotForAFoundParentWhenDetachingAll() =>
-BaseDetailWithErrorWhenIDisNotForAFoundParentWhenDetachingAll();
-
-
+        public void DetailWithErrorWhenIDisNotForAFoundParentWhenDetachingAndChildCannotBeAttachedWhenDetachingAll()
+        => BaseDetailWithErrorWhenIDisNotForAFoundParentWhenDetachingAndChildCannotBeAttachedWhenDetachingAll();
     }
 }

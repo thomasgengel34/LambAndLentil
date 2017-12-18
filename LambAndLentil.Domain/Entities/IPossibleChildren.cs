@@ -8,7 +8,7 @@ namespace LambAndLentil.Domain.Entities
 {
     public  interface IPossibleChildren
     {
-        bool CanHaveIngredentChild { get; set; }
+        bool CanHaveIngredientChild { get; set; }
         bool CanHaveMenuChild { get; set; }
         bool CanHavePersonChild { get; set; }
         bool CanHavePlanChild { get; set; }

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.16
+VisualStudioVersion = 15.0.27130.2003
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LambAndLentil.Domain", "LambAndLentil.Domain\LambAndLentil.Domain.csproj", "{011B34BE-4A36-4772-B2AF-DC1600948477}"
 EndProject
@@ -35,5 +35,8 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{A3348C9C-2CF1-438F-A378-0629FB23521A} = {8F7C3E6A-1D96-4B13-8830-C3F253DB537B}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0D007DE4-A799-4CC5-8D1C-9C7DC33495F5}
 	EndGlobalSection
 EndGlobal

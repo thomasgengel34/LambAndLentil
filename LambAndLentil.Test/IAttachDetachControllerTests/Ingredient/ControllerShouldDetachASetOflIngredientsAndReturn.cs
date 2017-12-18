@@ -1,12 +1,13 @@
 ﻿using LambAndLentil.Test.IAttachDetachControllerTests.BaseTests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using IngredientType = LambAndLentil.Domain.Entities.Ingredient;
+using TParent = LambAndLentil.Domain.Entities.Ingredient;
+using TChild = LambAndLentil.Domain.Entities.Ingredient;
 
 namespace LambAndLentil.Test.IAttachDetachControllerTests.Ingredient
 {
     [TestClass]
     [TestCategory("Attach-Detach")]
-    public class ControllerShouldDetachASetOfIngredientsAndReturn : BaseControllerShouldDetachXAndReturn<IngredientType, IngredientType>
+    public class ControllerShouldDetachASetOfIngredientsAndReturn : BaseControllerShouldDetachXAndReturn<TParent, TChild>
     {
 
 

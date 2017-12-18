@@ -112,23 +112,23 @@ namespace LambAndLentil.UI.Controllers
 
 
 
-        public ActionResult BasePostEdit(IRepository<T> Repo, T vm)
+        public ActionResult BasePostEdit(IRepository<T> Repo, T entity)
         {
-            T item = vm;
-            bool isValid = IsModelValid(vm);
+            T item = entity;
+            bool isValid = IsModelValid(entity);
 
             if (isValid)
             {
-                if (vm.ID == 0)
+                if (entity.ID == 0)
                 {
                     item = new T();
                 }
                 Repo.Update(item, item.ID);
-                return RedirectToAction(UIViewType.BaseIndex.ToString()).WithSuccess(string.Format($"{vm.Name} has been saved or modified"));
+                return RedirectToAction(UIViewType.BaseIndex.ToString()).WithSuccess(string.Format($"{entity.Name} has been saved or modified"));
             }
             else
             {
-                return View(UIViewType.Details.ToString(), vm).WithWarning("Something is wrong with the data!");
+                return View(UIViewType.Details.ToString(), entity).WithWarning("Something is wrong with the data!");
             }
         }
 
@@ -160,8 +160,8 @@ namespace LambAndLentil.UI.Controllers
             }
         }
 
-        public ActionResult BaseAttach<TChild>(IRepository<T> Repo, int? parentID, TChild child, AttachOrDetach attachOrDetach = AttachOrDetach.Attach, int orderNumber = 0)
-        where TChild : BaseEntity, IEntity
+        public ActionResult  BaseAttach<TChild>(IRepository<T> Repo, int? parentID, TChild child, AttachOrDetach attachOrDetach = AttachOrDetach.Attach, int orderNumber = 0)
+        where TChild : BaseEntity, IEntity 
         {
             char[] charsToTrim = { 'V', 'M' };
             string entity = typeof(T).ToString().Split('.').Last();
@@ -186,7 +186,7 @@ namespace LambAndLentil.UI.Controllers
             {
                 return RedirectToAction(UIViewType.Details.ToString(), new { id = parentID, actionMethod = UIViewType.Edit }).WithWarning(entity + " was not found"); ;
             }
-            if (!BaseEntity.CanAttachChild<TChild>(parent))
+            if (!BaseEntity.ParentCanAttachChild<T, TChild>(parent,child))
             {
                 if (attachOrDetach == AttachOrDetach.Detach)
                 {// TODO: log. Probably a developer error. Or someone is playing games.
@@ -198,7 +198,7 @@ namespace LambAndLentil.UI.Controllers
                 }
             }
             if (attachOrDetach == AttachOrDetach.Detach)
-            { 
+            {
                 Repo.DetachAnIndependentChild(parent.ID, child, orderNumber);
                 return RedirectToAction(UIViewType.Details.ToString(), new { id = parentID, actionMethod = UIViewType.Edit }).WithSuccess(childEntity + " was Successfully Detached!");
             }
@@ -230,44 +230,45 @@ namespace LambAndLentil.UI.Controllers
             {
                 return RedirectToAction(UIViewType.Index.ToString()).WithWarning(entity + " was not found");
             }
-           
+
 
             else
             {
                 int parentNonNullID = (int)ID;
-                IEntityChildClassIngredients parent = (IEntityChildClassIngredients)Repo.GetById(parentNonNullID);
+                T parent = Repo.GetById(parentNonNullID);
                 if (parent == null)
                 {
                     // TODO: log error - this could be a developer problem
                     return RedirectToAction(UIViewType.Index.ToString()).WithWarning(entity + " was not found");
                 }
-                else if (!BaseEntity.CanAttachChild<Ingredient>(parent))
+                else if (!BaseEntity.ParentCanAttachChild<T, Ingredient>(parent, new Ingredient()))
                 {
                     return RedirectToAction(UIViewType.Details.ToString(), new { id = parent.ID, actionMethod = UIViewType.Edit }).WithError("Element Could not Be Attached!");
                 }
-                else if (parent.Ingredients.Count==0)
+                IEntityChildClassIngredients tparent = (IEntityChildClassIngredients)parent;
+                if (tparent.Ingredients.Count == 0)
                 {
                     return RedirectToAction(UIViewType.Details.ToString(), new { id = parent.ID, actionMethod = UIViewType.Edit }).WithError("No Ingredients were attached!");
                 }
-                else 
+                else
                 {
                     if (selected == null)
                     {
-                        parent.Ingredients.RemoveAll(match: x => x.ID >= 0);
+                        tparent.Ingredients.RemoveAll(match: x=>x==null ||   x.ID >= 0);
                     }
                     else
                     {
                         var setToRemove = new HashSet<Ingredient>(selected);
-                        parent.Ingredients.RemoveAll(ContainsSelected);
+                        tparent.Ingredients.RemoveAll(ContainsSelected);
                     }
 
                     Repo.Update((T)parent, parent.ID);
                     return RedirectToAction(UIViewType.Details.ToString(), new { id = ID, actionMethod = UIViewType.Edit }).WithSuccess("All Ingredients Were Successfully Detached!");
-                } 
+                }
             }
             bool ContainsSelected(Ingredient ingredient)
             {
-                if (ingredient == null  )
+                if (ingredient == null)
                 {
                     return true;
                 }
@@ -318,12 +319,19 @@ namespace LambAndLentil.UI.Controllers
                     return RedirectToAction(UIViewType.Details.ToString(), new { id = ID, actionMethod = UIViewType.Edit }).WithWarning("No Recipes Were Attached!");
                 }
             }
-            bool ContainsSelected(Recipe ingredient)
+            bool ContainsSelected(Recipe recipe)
             {
-                int ingredientID = ingredient.ID;
-                var numbers = from f in selected select f.ID;
-                bool trueOrFalse = numbers.Contains(ingredientID);
-                return trueOrFalse;
+                if (recipe == null)
+                {
+                    return true;
+                }
+                else
+                {
+                    int id = recipe.ID;
+                    var numbers = from f in selected select f.ID;
+                    bool trueOrFalse = numbers.Contains(id);
+                    return trueOrFalse;
+                }
             }
         }
 
@@ -392,9 +400,9 @@ namespace LambAndLentil.UI.Controllers
                     return RedirectToAction(UIViewType.Index.ToString()).WithWarning(entity + " was not found");
                 }
 
-                if (!BaseEntity.CanAttachChild<Menu>(tparent))
+                if (!BaseEntity.ParentCanAttachChild(tparent, new Menu()))
                 {
-                    return RedirectToAction(UIViewType.Details.ToString(), new { id = ID, actionMethod = UIViewType.Edit }).WithError("Element Could not Be Attached!"); ;
+                    return RedirectToAction(UIViewType.Details.ToString(), new { id = ID, actionMethod = UIViewType.Edit }).WithError("Element Could not Be Attached!");  
                 }
                 else
                 {

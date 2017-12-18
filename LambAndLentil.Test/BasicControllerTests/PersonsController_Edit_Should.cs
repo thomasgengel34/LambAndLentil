@@ -16,6 +16,11 @@ namespace LambAndLentil.Test.BasicControllerTests
     [TestClass]
     public class PersonsController_Edit_Should : PersonsController_Test_Should
     {
+        public PersonsController_Edit_Should()
+        {
+            Person Person = new Person();
+            Repo.Save(Person);
+        }
 
         [Ignore]
         [TestMethod]
@@ -34,9 +39,9 @@ namespace LambAndLentil.Test.BasicControllerTests
             IGenericController<Person> Controller3 = (IGenericController<Person>)(new PersonsController(Repo));
             IGenericController<Person> Controller4 = (IGenericController<Person>)(new PersonsController(Repo));
             IGenericController<Person> Controller5 = (IGenericController<Person>)(new PersonsController(Repo));
-            Person vm = new Person
+            IPerson person = new Person
             {
-                FirstName = "0000 test",
+                 FirstName = "0000 test",
                 LastName = "",
                 Description = "SaveEditedPersonWithDescriptionChange Pre-test",
                 ID = 4000
@@ -44,7 +49,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
 
             // Act 
-            ActionResult ar1 = Controller1.PostEdit(vm);
+            ActionResult ar1 = Controller1.PostEdit((Person)person);
             ViewResult view1 = (ViewResult)Controller2.Index();
             List<Person> ListEntity = (List<Person>)(((ListEntity<Person>)view1.Model).ListT);
             Person recipeVM = (from m in ListEntity
@@ -55,12 +60,12 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.AreEqual("SaveEditedPersonWithDescriptionChange Pre-test", recipeVM.Description);
 
             // now edit it
-            vm.ID = recipeVM.ID;
-            vm.FirstName = "0000 test Edited";
-            vm.LastName = "";
-            vm.Description = "SaveEditedPersonWithDescriptionChange Post-test";
+            person.ID = recipeVM.ID;
+            person.FirstName = "0000 test Edited";
+            person.LastName = "";
+            person.Description = "SaveEditedPersonWithDescriptionChange Post-test";
 
-            ActionResult ar2 = Controller3.PostEdit(vm);
+            ActionResult ar2 = Controller3.PostEdit((Person)person);
             ViewResult view2 = (ViewResult)Controller4.Index();
             List<Person> ListEntity2 = (List<Person>)(((ListEntity<Person>)view2.Model).ListT);
             Person recipe2 = (from m in ListEntity2
@@ -216,9 +221,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Assert 
             Assert.IsNotNull(view);
             Assert.AreEqual("Name has been changed", returnedPersonListEntity.FirstName);
-            Assert.AreEqual(Person.Description, returnedPersonListEntity.Description);
-            Assert.AreEqual(Person.CreationDate, returnedPersonListEntity.CreationDate);
-            Assert.AreEqual(Person.ModifiedDate, returnedPersonListEntity.ModifiedDate);
+      
         }
 
 

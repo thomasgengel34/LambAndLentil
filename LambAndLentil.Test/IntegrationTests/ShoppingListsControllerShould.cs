@@ -38,6 +38,7 @@ namespace LambAndLentil.Test.BasicControllerTests
                 ID = 400,
                 Name = "ShoppingListsControllerShould"
             };
+            Repo.Save((ShoppingList)ShoppingList);
         }
 
 
@@ -240,23 +241,19 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void AttachAnExistingIngredientToAnExistingShoppingList()
         {
             // Arrange 
-            JSONRepository<Ingredient> repoIngredient = new TestRepository<Ingredient>();
-            //ShoppingListsController Controller = new ShoppingListsController(Repo );
+            IRepository<Ingredient> repoIngredient = new TestRepository<Ingredient>();
+            ////ShoppingListsController Controller = new ShoppingListsController(Repo );
 
-            ShoppingList slVM = GetShoppingList(Repo, "test AttachAnExistingIngredientToAnExistingShoppingList");
-            Ingredient ingredient = new Ingredient { ID = 500, Description = "test AttachAnExistingIngredientToAnExistingShoppingList" };
+            //ShoppingList slVM = GetShoppingList(Repo, "test AttachAnExistingIngredientToAnExistingShoppingList");
+             Ingredient ingredient = new Ingredient { ID = 500, Description = "test AttachAnExistingIngredientToAnExistingShoppingList" };
             repoIngredient.Add(ingredient);
             // Act
-            Controller.AttachIngredient(slVM.ID, ingredient);
-            ShoppingList returnedShoppingList = (from m in Repo.GetAll()
-                                                 where m.Description == slVM.Description
-                                                 select m).FirstOrDefault();
-
-
+            Controller.AttachIngredient(ShoppingList.ID, ingredient);
+            ShoppingList returnedShoppingList = Repo.GetById(ShoppingList.ID); 
 
             // Assert 
             Assert.AreEqual(1, returnedShoppingList.Ingredients.Count());
-            // how do I know the correct ingredient was added?
+            // Verify the correct ingredient was added 
             Assert.AreEqual(ingredient.ID, returnedShoppingList.Ingredients.First().ID);
 
         }

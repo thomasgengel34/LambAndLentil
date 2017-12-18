@@ -13,7 +13,7 @@ using System.Web.Mvc;
 namespace LambAndLentil.Test.Infrastructure
 {
     [TestClass]
-    // also using WebApi methods - something will be needed for additional ingredients, such as user entered
+    // also using WebApi methods - TODO: something will be needed for additional ingredients, such as user entered
     [TestCategory("Integration")]
     [TestCategory("IngredientsController")]
     public class IngredientsControllerShould : IngredientsController_Test_Should

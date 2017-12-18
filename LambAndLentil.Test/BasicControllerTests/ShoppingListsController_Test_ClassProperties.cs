@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using LambAndLentil.Domain.Entities;
 using LambAndLentil.UI;
+using System.Web.Mvc;
 
 namespace LambAndLentil.Test.BasicControllerTests
 {
@@ -102,7 +103,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             string user = "Abraham Lincoln";
             // Act
             Entity.ModifiedByUser = user;
-            Controller.PostEdit(Entity);
+            ActionResult ar =Controller.PostEdit(Entity);
             ReturnedEntity = Repo.GetById(Entity.ID);
 
             // Assert

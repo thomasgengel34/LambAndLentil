@@ -1,15 +1,15 @@
 ﻿using LambAndLentil.Test.IAttachDetachControllerTests.BaseTests;
 using Microsoft.VisualStudio.TestTools.UnitTesting; 
-using MenuType = LambAndLentil.Domain.Entities.Menu;
-using PlanType = LambAndLentil.Domain.Entities.Plan;
+using TParent = LambAndLentil.Domain.Entities.Menu;
+using TChild = LambAndLentil.Domain.Entities.Plan;
 
 namespace LambAndLentil.Test.IAttachDetachControllerTests.Menu
 {
     [TestClass]
     [TestCategory("Attach-Detach")]
-    public class ControllerShouldAttachPlanAndReturn : BaseControllerShouldAttachXAndReturn<MenuType, PlanType>
+    public class ControllerShouldAttachPlanAndReturn : BaseControllerShouldAttachXAndReturn<TParent, TChild>
     {
-        //menu cannot attach a plan
+        // menu cannot attach a plan
 
         [TestMethod]
         public void DetailWithErrorWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSuppliedWhenAttachingUnattachableChild() => BaseDetailWithErrorWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSuppliedWhenAttachingUnattachableChild();

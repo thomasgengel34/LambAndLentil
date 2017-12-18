@@ -26,8 +26,15 @@ namespace LambAndLentil.Domain.Entities
         public DayOfWeek DayOfWeek { get; set; } 
         public int Diners { get; set; }
         public List<Ingredient> Ingredients { get; set; }
-        public List<Recipe> Recipes { get; set; }
+        public List<Recipe> Recipes { get; set; }  
+        
+        string IEntity.AddedByUser { get; set; } 
 
-         
+        void IEntity.AddChildrenToParent(IEntity entity) => throw new NotImplementedException();
+
+        bool IEntity.ParentCanHaveChild(IPossibleChildren parent)
+        {
+            return parent.CanHaveMenuChild;
+        }
     }
 }

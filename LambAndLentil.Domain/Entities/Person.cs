@@ -44,8 +44,8 @@ namespace LambAndLentil.Domain.Entities
             FullName = GetName(FirstName, LastName);
         }
 
-        public int ID { get; set; }
-        public string FirstName { get; set; }
+        
+  
         public string LastName { get; set; }
         public string FullName { get; set; }
         public decimal Weight { get; set; }
@@ -57,13 +57,25 @@ namespace LambAndLentil.Domain.Entities
         //TODO: add all ingredients after I figure out how to economically
 
 
-       
+        public int ID { get; set; }
+        public string  FirstName { get; set; }
         public   List<Plan> Plans { get; set; }
         public List<Ingredient> Ingredients { get; set; }
         public List<Recipe> Recipes { get; set; }
         public List<Menu> Menus { get; set; }
         public List<ShoppingList> ShoppingLists { get; set; }
+      
+     
+       
+        
 
         public string GetName(string FirstName, string LastName) => FullName = String.Concat(FirstName, " ", LastName);
+
+        bool IEntity.ParentCanHaveChild(IPossibleChildren parent)
+        {
+            return parent.CanHavePersonChild;
+        }
+
+        void IEntity.AddChildrenToParent(IEntity entity) => throw new NotImplementedException();
     }
 }

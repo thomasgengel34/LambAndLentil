@@ -19,9 +19,20 @@ namespace LambAndLentil.Domain.Entities
         public Ingredient(DateTime creationDate) : this() => CreationDate = creationDate;
 
 
-        public int ID { get; set; }
-        public List<Ingredient> Ingredients { get; set; }
+        public int  ID { get; set; }
+        public List<Ingredient> Ingredients { get; set; }  
+        
 
-       
+        bool  IEntity.ParentCanHaveChild(IPossibleChildren parent)
+        {
+            return parent.CanHaveIngredientChild;
+        }
+
+        public bool  ParentCanHaveChild(IPossibleChildren parent)
+        {
+            return parent.CanHaveIngredientChild;
+        }
+
+        void IEntity.AddChildrenToParent(IEntity entity) => throw new NotImplementedException();
     }
 }

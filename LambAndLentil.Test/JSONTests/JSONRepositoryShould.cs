@@ -195,11 +195,35 @@ namespace LambAndLentil.Test.JSONTests
         private class TestReturnZeroCountForEmptyDirectory : BaseEntity, IEntity
         {
             public int ID { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+            string IEntity.AddedByUser { get; set; }
+            DateTime IEntity.CreationDate { get; set; }
+            int IEntity.ID { get; set; }
+            string IEntity.ModifiedByUser { get; set; }
+            DateTime IEntity.ModifiedDate { get; set; }
+            string IEntity.Name { get; set; }
+            string IEntity.Description { get; set; }
+            string IEntity.IngredientsList { get; set; }
+
+            public bool ParentCanHaveChild(IPossibleChildren parent) => throw new NotImplementedException();
+            void IEntity.AddChildrenToParent(IEntity entity) => throw new NotImplementedException();
+            bool IEntity.ParentCanHaveChild(IPossibleChildren parent) => throw new NotImplementedException();
         }
 
         private class TestReturnZeroCountForEmptyDirectoryVM : BaseEntity, IEntity
         {
             public int ID { get; set; }
+            string IEntity.AddedByUser { get; set; }
+            DateTime IEntity.CreationDate { get; set; }
+            int IEntity.ID { get; set; }
+            string IEntity.ModifiedByUser { get; set; }
+            DateTime IEntity.ModifiedDate { get; set; }
+            string IEntity.Name { get; set; }
+            string IEntity.Description { get; set; }
+            string IEntity.IngredientsList { get; set; }
+
+            public bool ParentCanHaveChild(IPossibleChildren parent) => throw new NotImplementedException();
+            void IEntity.AddChildrenToParent(IEntity entity) => throw new NotImplementedException();
+            bool IEntity.ParentCanHaveChild(IPossibleChildren parent) => throw new NotImplementedException();
         }
 
 

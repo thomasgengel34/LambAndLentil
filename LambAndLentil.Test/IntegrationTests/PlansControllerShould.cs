@@ -29,6 +29,8 @@ namespace LambAndLentil.Test.BasicControllerTests
                 ID = 1000,
                 Description = "test PlanControllerShould"
             };
+            Repo.Save((Plan)Plan);
+
             Controller = new PlansController(Repo);
         }
 
@@ -83,6 +85,8 @@ namespace LambAndLentil.Test.BasicControllerTests
             {
                 Name = "0000 test"
             };
+
+            Repo.Save((Plan)Plan);
 
             // Act 
             ActionResult ar1 = Controller1.PostEdit((Plan)Plan);
@@ -224,22 +228,11 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void AttachAnExistingIngredientToAnExistingPlan()
         {
             // Arrange
-
-            IRepository<Ingredient> repoIngredient = new TestRepository<Ingredient>(); 
-
-            Plan.Description = "test AttachAnExistingIngredientToAnExistingPlan";
-            IIngredient ingredient = new Ingredient
-            {
-                ID = 100,
-                Description = "test AttachAnExistingIngredientToAnExistingPlan"
-            };
-            Repo.Update((Plan)Plan, Plan.ID);
-            repoIngredient.Save((Ingredient)ingredient);
+            IEntity ingredient = new Ingredient() { ID = 100 };
+           
             // Act
-            Controller.AttachIngredient(Plan.ID, (Ingredient)ingredient);
-            IPlan returnedPlan = (from m in Repo.GetAll()
-                                 where m.Description == Plan.Description
-                                 select m).FirstOrDefault();
+            Controller.AttachIngredient(Plan.ID, (Ingredient)ingredient );
+            IPlan returnedPlan = Repo.GetById(Plan.ID);
 
             // Assert 
             Assert.AreEqual(1, returnedPlan.Ingredients.Count());
@@ -265,9 +258,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             repoRecipe.Save((Recipe)recipe);
             // Act
             Controller.AttachRecipe(Plan.ID, (Recipe)recipe);
-            Plan returnedPlan = (from m in Repo.GetAll()
-                                 where m.Description == Plan.Description
-                                 select m).FirstOrDefault();
+            Plan returnedPlan = Repo.GetById(Plan.ID);
 
             // Assert 
             Assert.AreEqual(1, returnedPlan.Recipes.Count());

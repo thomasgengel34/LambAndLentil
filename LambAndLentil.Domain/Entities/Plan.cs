@@ -28,6 +28,15 @@ namespace LambAndLentil.Domain.Entities
         public int ID { get; set; }
         public List<Ingredient> Ingredients { get; set; }
         public List<Menu> Menus { get; set; }
-        public List<Recipe> Recipes { get; set; } 
+        public List<Recipe> Recipes { get; set; }
+        
+       
+
+        void IEntity.AddChildrenToParent(IEntity entity) => throw new NotImplementedException();
+
+        bool IEntity.ParentCanHaveChild(IPossibleChildren parent)
+        {
+            return parent.CanHavePlanChild;
+        }
     } 
 }

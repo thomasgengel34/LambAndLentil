@@ -1,45 +1,22 @@
-﻿using System;
+﻿using LambAndLentil.Test.IAttachDetachControllerTests.BaseTests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using TParent = LambAndLentil.Domain.Entities.Menu;
+using TChild = LambAndLentil.Domain.Entities.ShoppingList;
 
 namespace LambAndLentil.Test.IAttachDetachControllerTests.Menu
 {
     [TestClass]
-    public class ControllerShouldDetachAllShoppingListsAndReturn
+    public class ControllerShouldDetachAllShoppingListsAndReturn : BaseControllerShouldDetachXAndReturn<TParent, TChild>
     {
-        [Ignore]
+        // since ShoppingList cannot be attached to a  menu, these tests should return with an error
+
+
         [TestMethod]
-        public void DetailWithSuccessWhenIDisValidAndThereIsOneIngredientOnList()
-        {
-            // Arrange
+        public void DetailWithSuccessWhenIDisValidAndThereIsOneChildOnListWhenDetachingAndChildCannotBeAttachedWhenDetachingAll()
+       => BaseDetailWithDangerWhenIDisValidAndThereIsOneChildOnListWhenDetachingAndChildCannotBeAttachedWhenDetachingAll();
 
-            // Act
-
-            //Assert
-            Assert.Fail();
-        }
-
-        [Ignore]
         [TestMethod]
-        public void DetailWithSuccessWhenIDisValidAndThereAreThreeIngredientsOnList()
-        {
-            // Arrange
-
-            // Act
-
-            //Assert
-            Assert.Fail();
-        }
-
-        [Ignore]
-        [TestMethod]
-        public void DetailWithErrorWhenIDisNotForAFoundParent()
-        {
-            // Arrange
-
-            // Act
-
-            //Assert
-            Assert.Fail();
-        }
+        public void DetailWithErrorWhenIDisNotForAFoundParentWhenDetachingAndChildCannotBeAttachedWhenDetachingAll()
+        => BaseDetailWithErrorWhenIDisNotForAFoundParentWhenDetachingAndChildCannotBeAttachedWhenDetachingAll();
     }
 }

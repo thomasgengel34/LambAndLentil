@@ -62,7 +62,7 @@ namespace LambAndLentil.Domain.Concrete
             {
                 T entity = JsonConvert.DeserializeObject<T>(File.ReadAllText
                     (String.Concat(FullPath, parentID, ".txt")));
-
+              //  child.AddChildrenToParent(entity);
                 switch (childName)
                 {
                     case "Ingredient":

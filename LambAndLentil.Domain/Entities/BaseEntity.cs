@@ -11,8 +11,8 @@ using System.Reflection;
 
 namespace LambAndLentil.Domain.Entities
 {
-    public  class BaseEntity:IPossibleChildren
-    { 
+    public class BaseEntity : IPossibleChildren
+    {
         [StringLength(50)]
         [Required]
         public string Name { get; set; }
@@ -24,7 +24,7 @@ namespace LambAndLentil.Domain.Entities
         public string AddedByUser { get; set; }
         public string ModifiedByUser { get; set; }
         public string IngredientsList { get; set; }
-        public bool CanHaveIngredentChild { get; set; }
+        public bool CanHaveIngredientChild { get; set; }
         public bool CanHaveMenuChild { get; set; }
         public bool CanHavePersonChild { get; set; }
         public bool CanHavePlanChild { get; set; }
@@ -41,8 +41,10 @@ namespace LambAndLentil.Domain.Entities
             AddedByUser = WindowsIdentity.GetCurrent().Name;
             ModifiedByUser = WindowsIdentity.GetCurrent().Name;
 
-            CanHaveIngredentChild = true;
+            CanHaveIngredientChild = true;
             CanHavePersonChild = false;
+
+            
         }
 
         public BaseEntity(DateTime creationDate) : this()
@@ -57,10 +59,10 @@ namespace LambAndLentil.Domain.Entities
             }
 
         }
-         
 
-       public List<T> GetIndexedModel<T>(IRepository<T> repository, int PageSize, int page = 1)
-            where T : BaseEntity, IEntity
+
+        public List<T> GetIndexedModel<T>(IRepository<T> repository, int PageSize, int page = 1)
+             where T : BaseEntity, IEntity
         {
 
 
@@ -80,8 +82,8 @@ namespace LambAndLentil.Domain.Entities
 
 
 
-       public PagingInfo PagingFunction<T>(IRepository<T> repository, int? page, int PageSize)
-            where T : BaseEntity, IEntity
+        public PagingInfo PagingFunction<T>(IRepository<T> repository, int? page, int PageSize)
+             where T : BaseEntity, IEntity
         {
             PagingInfo PagingInfo = new PagingInfo
             {
@@ -93,36 +95,15 @@ namespace LambAndLentil.Domain.Entities
 
             return PagingInfo;
         }
+ 
 
-
-        public static bool CanAttachChild<TChild>(IEntity entity)
+        public   static   bool ParentCanAttachChild<TParent, TChild>(TParent parent,TChild child)
+            where TParent:IEntity,IPossibleChildren
+            where TChild:IEntity, IPossibleChildren
         {
-            if (entity == null) { return false; }
-            IPossibleChildren parent = (IPossibleChildren)entity;
-            if (typeof(TChild) == typeof(Ingredient) && parent.CanHaveIngredentChild) { return true; }
-            if (typeof(TChild) == typeof(Menu) && parent.CanHaveMenuChild) { return true; }
-            if (typeof(TChild) == typeof(Plan) && parent.CanHavePlanChild) { return true; }
-            if (typeof(TChild) == typeof(Person) && parent.CanHavePersonChild) { return true; }
-            if (typeof(TChild) == typeof(Recipe) && parent.CanHaveRecipeChild) { return true; }
-            if (typeof(TChild) == typeof(ShoppingList) && parent.CanHaveShoppingListChild) { return true; }
-            return false;
-        }
-
-        public static bool CanAttachChild1<TChild>(BaseEntity entity)
-        {
-            if (entity == null) { return false; }
-             IPossibleChildren parent = (IPossibleChildren)entity;
-             string parentName = parent.ToString().Split('.').Last();
-            string propertyName = string.Concat("CanHave", parentName, "Child");
-            //PropertyInfo[] propertyInfo = Type.GetType(entity.ToString()).GetProperties();
-
-            Type type = parent.GetType();
-
-            PropertyInfo prop = type.GetProperty( propertyName );
-
-            return (bool)prop.GetValue(entity);
-        }
-
-
+            if (child == null) { return false; }  
+           return child.ParentCanHaveChild( parent); 
+         
+        } 
     }
 }

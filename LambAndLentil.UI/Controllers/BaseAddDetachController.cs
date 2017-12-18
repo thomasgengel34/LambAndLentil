@@ -69,55 +69,25 @@ namespace LambAndLentil.UI.Controllers
         [ValidateAntiForgeryToken]
         ActionResult IGenericController<T>.DeleteConfirmed(int id) => BaseDeleteConfirmed(Repo, UIControllerType, id);
 
-
-
-        ActionResult IAttachDetachController.AttachIngredient(int? iD, Ingredient child, int orderNumber) => BaseAttach(Repo, iD, child);
-
-        ActionResult IAttachDetachController.DetachIngredient(int? iD, Ingredient child, int orderNumber) => BaseAttach(Repo, iD, child, AttachOrDetach.Detach, orderNumber);
-
+          
         void IGenericController<T>.AddIngredientToIngredientsList(int id, string addedIngredient) => BaseAddIngredientToIngredientsList(Repo, UIControllerType, id, addedIngredient);
 
         public ActionResult DetachAllIngredients(int ID) => BaseDetachAllIngredientChildren(Repo, ID, null); 
 
-        ActionResult IAttachDetachController.DetachAllIngredients(int ID, List<Ingredient> selected) => BaseDetachAllIngredientChildren(Repo, ID, selected); 
+     
 
-        public void DetachLastIngredientChild(int ID) => BaseDetachLastIngredientChild(Repo, ID);
+        public void DetachLastIngredientChild(int ID) => BaseDetachLastIngredientChild(Repo, ID); 
 
-        ActionResult IAttachDetachController.DetachASetOfIngredients(int ID, List<Ingredient> selected) => BaseDetachAllIngredientChildren(Repo, ID, selected);
+        
+        //ActionResult  Attach<TChild>(int? iD, TChild child, int orderNumber)
+        //    => BaseAttach(Repo, iD, child, AttachOrDetach.Attach, orderNumber);
 
-        ActionResult IAttachDetachController.AttachRecipe(int? recipeID, Recipe child, int orderNumber) =>
-         BaseAttach(Repo, recipeID, child); 
+      /*  ActionResult IAttachDetachController.Detach<TChild>(int? iD, TChild child, int orderNumber) => BaseAttach<TChild>(Repo, iD, child, AttachOrDetach.Detach, orderNumber);
+     */
+        ActionResult IAttachDetachController.DetachASetOf<TChild>(int ID, List<TChild> selected) => BaseAttachASetOf<TChild>(Repo, ID,AttachOrDetach.Detach,  selected) ;
 
-        ActionResult IAttachDetachController.DetachRecipe(int? recipeID, Recipe child, int orderNumber) => BaseAttach(Repo, recipeID, child, AttachOrDetach.Detach, orderNumber); 
+        ActionResult IAttachDetachController.Attach<TChild>(int? iD, TChild child, int orderNumber) => BaseAttach<TChild>(Repo,iD, child, AttachOrDetach.Attach );
 
-        ActionResult IAttachDetachController.DetachAllRecipes(int ID, List<Recipe> selected) => BaseDetachAllRecipeChildren(Repo, ID, selected);
-
-        ActionResult IAttachDetachController.DetachASetORecipes(int ID, List<Recipe> selected) => BaseDetachAllRecipeChildren(Repo, ID, selected);
-
-        ActionResult IAttachDetachController.AttachMenu(int iD, Menu child, int orderNumber) => BaseAttach(Repo, iD, child, AttachOrDetach.Attach, orderNumber);
-
-        ActionResult IAttachDetachController.DetachMenu(int iD, Menu child, int orderNumber) => BaseAttach(Repo, iD, child, AttachOrDetach.Detach, orderNumber);
-
-        ActionResult IAttachDetachController.DetachAllMenus(int ID, List<Menu> selected) => BaseDetachAllMenuChildren(Repo, ID, selected);
-
-        ActionResult IAttachDetachController.AttachPlan(int iD, Plan child, int orderNumber) => BaseAttach(Repo, iD, child, AttachOrDetach.Attach, orderNumber);
-
-        ActionResult IAttachDetachController.DetachPlan(int iD, Plan child, int orderNumber) => BaseAttach(Repo, iD, child, AttachOrDetach.Detach, orderNumber); 
-
-        ActionResult IAttachDetachController.AttachShoppingList(int iD, ShoppingList child, int orderNumber) => BaseAttach(Repo, iD, child, 0);
-
-        ActionResult IAttachDetachController.DetachShoppingList(int iD,ShoppingList child, int orderNumber) => BaseAttach(Repo, iD, child, AttachOrDetach.Detach, orderNumber);
-
-        ActionResult IAttachDetachController.DetachAllShoppingLists(int ID, List<ShoppingList> selected) => BaseDetachAllShoppingListChildren(Repo, ID, selected); 
-
-        public void DetachAllShoppingLists(int ID) => BaseDetachAllShoppingListChildren(Repo, ID, null); 
-
-        ActionResult IAttachDetachController.DetachASetOMenus(int ID, List<Menu> selected) => BaseDetachAllMenuChildren(Repo, ID, selected);
-
-        ActionResult IAttachDetachController.DetachAllPlans(int ID, List<Plan> selected) => BaseDetachAllPlanChildren(Repo, ID, selected);
-
-        ActionResult IAttachDetachController.DetachASetOPlans(int ID, List<Plan> selected) => BaseDetachAllPlanChildren(Repo, ID, selected);
-
-        ActionResult IAttachDetachController.DetachASetOShoppingLists(int ID, List<ShoppingList> selected) => BaseDetachAllShoppingListChildren(Repo, ID, selected);
+        ActionResult IAttachDetachController.Detach<TChild>(int? iD, TChild child, int orderNumber) => BaseAttach<TChild>(Repo, iD, child, AttachOrDetach.Detach);
     }
 }

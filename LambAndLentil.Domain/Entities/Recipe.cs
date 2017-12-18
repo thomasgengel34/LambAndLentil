@@ -25,8 +25,13 @@ namespace LambAndLentil.Domain.Entities
         public MealType MealType { get; set; }
         public int? Calories { get; set; }
         public short? CalsFromFat { get; set; }
-        public List<Ingredient> Ingredients { get; set; }
+        public List<Ingredient> Ingredients { get; set; }    
 
+        void IEntity.AddChildrenToParent(IEntity entity) => throw new NotImplementedException();
 
+        bool IEntity.ParentCanHaveChild(IPossibleChildren parent)
+        {
+            return parent.CanHaveRecipeChild;
+        }
     }
 }
