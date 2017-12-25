@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Security.Principal;
 using System.ComponentModel.DataAnnotations;
-using System.Web.Mvc;
+using System.Linq;
+using System.Security.Principal;
 using LambAndLentil.Domain.Abstract;
-using System.Reflection;
 
 namespace LambAndLentil.Domain.Entities
 {
@@ -95,15 +91,18 @@ namespace LambAndLentil.Domain.Entities
 
             return PagingInfo;
         }
- 
 
-        public   static   bool ParentCanAttachChild<TParent, TChild>(TParent parent,TChild child)
-            where TParent:IEntity,IPossibleChildren
-            where TChild:IEntity, IPossibleChildren
+        
+
+        public static bool ParentCanAttachChild(IPossibleChildren parent, IEntity child)  
         {
             if (child == null) { return false; }  
-           return child.ParentCanHaveChild( parent); 
-         
+           return  child.ParentCanHaveChild( parent);  
         } 
+
+        //public virtual void ParentRemoveAllChildrenOfAType(IPossibleChildren parent, IEntity child)
+        //{
+
+        //}
     }
 }

@@ -248,7 +248,7 @@ namespace LambAndLentil.Test.BasicControllerTests
              Ingredient ingredient = new Ingredient { ID = 500, Description = "test AttachAnExistingIngredientToAnExistingShoppingList" };
             repoIngredient.Add(ingredient);
             // Act
-            Controller.AttachIngredient(ShoppingList.ID, ingredient);
+            Controller.Attach(Repo,ShoppingList.ID, ingredient, AttachOrDetach.Attach);
             ShoppingList returnedShoppingList = Repo.GetById(ShoppingList.ID); 
 
             // Assert 

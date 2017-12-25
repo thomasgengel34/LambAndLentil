@@ -29,14 +29,40 @@ namespace LambAndLentil.Domain.Entities
         public List<Ingredient> Ingredients { get; set; }
         public List<Menu> Menus { get; set; }
         public List<Recipe> Recipes { get; set; }
-        
-       
 
-        void IEntity.AddChildrenToParent(IEntity entity) => throw new NotImplementedException();
+
+
+        void IEntity.AddChildToParent(IEntity parent, IEntity child)
+        {
+            ((IEntityChildClassPlans)parent).Plans.Add((Plan)child);
+        }
 
         bool IEntity.ParentCanHaveChild(IPossibleChildren parent)
         {
             return parent.CanHavePlanChild;
+        }
+
+        public void ParentRemoveAllChildrenOfAType(IEntity  parent, IEntity child)
+        {
+            ((IEntityAllChildren)parent).Plans.Clear();
+        }
+
+
+        public IEntity  RemoveSelectionFromChildren<TChild>(IEntity  parent, List<TChild> selected)
+            where TChild : BaseEntity, IEntity, IPossibleChildren, new()
+        {
+            var setToRemove = new HashSet<TChild>(selected);
+            ((IEntityAllChildren)parent).Plans.RemoveAll(ContainsSelected);
+            return parent;
+
+            bool ContainsSelected(IEntity item)
+            {
+                int itemID = item.ID;
+                var numbers = from f in selected select f.ID;
+                bool trueOrFalse = numbers.Contains(itemID);
+                return trueOrFalse;
+            }
+
         }
     } 
 }

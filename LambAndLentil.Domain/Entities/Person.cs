@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 namespace LambAndLentil.Domain.Entities
 {
     [Table("PERSON.Person")]
-    public class Person : BaseEntity, IPerson 
+    public class Person : BaseEntity, IPerson
     {
-         
+
         public Person() : base()
         {
             Ingredients = new List<Ingredient>();
@@ -26,7 +26,7 @@ namespace LambAndLentil.Domain.Entities
 
             CanHaveMenuChild = true;
             CanHavePlanChild = true;
-            CanHaveRecipeChild =true;
+            CanHaveRecipeChild = true;
             CanHaveShoppingListChild = true;
         }
 
@@ -44,8 +44,8 @@ namespace LambAndLentil.Domain.Entities
             FullName = GetName(FirstName, LastName);
         }
 
-        
-  
+
+
         public string LastName { get; set; }
         public string FullName { get; set; }
         public decimal Weight { get; set; }
@@ -58,16 +58,16 @@ namespace LambAndLentil.Domain.Entities
 
 
         public int ID { get; set; }
-        public string  FirstName { get; set; }
-        public   List<Plan> Plans { get; set; }
+        public string FirstName { get; set; }
+        public List<Plan> Plans { get; set; }
         public List<Ingredient> Ingredients { get; set; }
         public List<Recipe> Recipes { get; set; }
         public List<Menu> Menus { get; set; }
         public List<ShoppingList> ShoppingLists { get; set; }
-      
-     
-       
-        
+
+
+
+
 
         public string GetName(string FirstName, string LastName) => FullName = String.Concat(FirstName, " ", LastName);
 
@@ -76,6 +76,20 @@ namespace LambAndLentil.Domain.Entities
             return parent.CanHavePersonChild;
         }
 
-        void IEntity.AddChildrenToParent(IEntity entity) => throw new NotImplementedException();
+        void IEntity.AddChildToParent(IEntity parent, IEntity child)
+        {
+            throw new Exception("You cannot have Persons as children");
+        }
+
+        public void ParentRemoveAllChildrenOfAType(IEntity  parent, IEntity child)
+        {
+            throw new Exception("You cannot have Persons as children");
+        }
+
+        public IEntity  RemoveSelectionFromChildren<TChild>(IEntity  parent, List<TChild> selected)
+            where TChild : BaseEntity, IEntity, IPossibleChildren, new()
+        {
+            throw new Exception("You cannot have Persons as children");
+        }
     }
 }

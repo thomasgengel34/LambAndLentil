@@ -1,8 +1,10 @@
 ﻿using System.Web.Mvc;
+using LambAndLentil.Domain.Entities;
 
 namespace LambAndLentil.UI.Controllers
 {
-    public interface IGenericController<T> : IAttachDetachController 
+    public interface IGenericController<T> : IAttachDetachController<T>
+        where T : BaseEntity, IEntity, new()
     {
         void AddIngredientToIngredientsList(int id = 1, string addedIngredient = "");
       

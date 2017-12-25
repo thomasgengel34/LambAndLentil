@@ -36,7 +36,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
 
         [TestMethod]
-        public void SuccessfullyDetachASetOfPlanChildren()
+        public void SuccessfullyDetachASetOfMenuChildren()
         {
             // Arrange 
             Person.Menus.Add(new Menu { ID = 4005, Name = "Butter" });
@@ -49,7 +49,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Act
             var setToSelect = new HashSet<int> { 4006, 4008 };
             List<Menu> selected = Person.Menus.Where(t => setToSelect.Contains(t.ID)).ToList();
-            Controller.DetachAllMenus(Person.ID, selected);
+            Controller.DetachASetOf<Menu>(Person.ID, selected);
             Person returnedPerson = Repo.GetById(Person.ID);
 
             // Assert

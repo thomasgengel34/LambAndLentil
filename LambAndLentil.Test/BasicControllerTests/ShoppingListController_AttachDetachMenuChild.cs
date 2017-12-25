@@ -10,22 +10,22 @@ namespace LambAndLentil.Test.BasicControllerTests
 {
     [TestClass]
     [TestCategory("Attach-Detach")]
-    public class ShoppingListController_AttachDetachMenuChild : ShoppingListsController_Test_Should
+    public class ShoppingListController_AttachDetachChild : ShoppingListsController_Test_Should
     {
        
-
+        [Ignore]
         [TestMethod]
-        public void SuccessfullyAttachMenuChild()
+        public void SuccessfullyAttachChild()
         {
-            IGenericController<ShoppingList> DetachController = new ShoppingListsController(Repo);
-            BaseSuccessfullyDetachMenuChild(Repo, Controller, DetachController, UIControllerType.ShoppingLists);
+            //IGenericController<ShoppingList> DetachController = new ShoppingListsController(Repo);
+            //BaseSuccessfullyDetachChild(Repo, Controller, DetachController, UIControllerType.ShoppingLists);
         } 
-
+[Ignore]
         [TestMethod]
         public void SuccessfullyDetachFirstMenuChild()
         {
-            IGenericController<ShoppingList> DetachController = new ShoppingListsController(Repo);
-            BaseSuccessfullyDetachIngredientChild(Repo, Controller, DetachController, UIControllerType.ShoppingLists, 0);
+            //IGenericController<ShoppingList> DetachController = new ShoppingListsController(Repo);
+            //BaseSuccessfullyDetachChild(Repo, Controller, DetachController, UIControllerType.ShoppingLists, 0);
         }
 
         
@@ -43,7 +43,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Act
             var setToSelect = new HashSet<int> { 4006, 4008 };
             List<Menu> selected = ShoppingList.Menus.Where(t => setToSelect.Contains(t.ID)).ToList();
-            Controller.DetachAllMenus(ShoppingList.ID, selected);
+            Controller.DetachASetOf<Menu>(ShoppingList.ID, selected);
             ShoppingList returnedShoppingList = Repo.GetById(ShoppingList.ID);
 
             // Assert

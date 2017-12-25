@@ -11,6 +11,7 @@ using RecipeType = LambAndLentil.Domain.Entities.Recipe;
 using MenuType = LambAndLentil.Domain.Entities.Menu;
 using PlanType = LambAndLentil.Domain.Entities.Plan;
 using ShoppingListType = LambAndLentil.Domain.Entities.ShoppingList;
+using LambAndLentil.UI.Models;
 
 namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
 {
@@ -18,12 +19,20 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
         where TParent : BaseEntity, IEntity, new()
         where TChild : BaseEntity, IEntity, new()
     {
+        public IRepository<TParent> Repo { get; set; }
+        private TChild child { get; set; }
+
+        public BaseControllerShouldAttachXAndReturn()
+        {
+            Repo = new TestRepository<TParent>();
+            child = new TChild();
+        }
 
         protected  void BaseDetailWithSuccessWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSupplied()
         {
             if (typeof(TChild) == typeof(IngredientType))
             {
-                ActionResult ar = Controller.AttachIngredient(Parent.ID, (IngredientType)Child);
+                ActionResult ar = Controller.Attach(Repo,Parent.ID, (IngredientType)Child,0);
                 AlertDecoratorResult adr = (AlertDecoratorResult)ar;
                 RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
 
@@ -37,7 +46,7 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
             }
             if (typeof(TChild) == typeof(MenuType))
             {
-                ActionResult ar = Controller.AttachMenu(Parent.ID, (MenuType)Child);
+                ActionResult ar = Controller.Attach(Repo,Parent.ID, (MenuType)Child,0);
                 AlertDecoratorResult adr = (AlertDecoratorResult)ar;
                 RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
 
@@ -54,7 +63,7 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
         protected void BaseReturnsIndexWithWarningWithNullParent()
         {
 
-            ActionResult ar = Controller.AttachIngredient(null, new Domain.Entities.Ingredient(), 0);
+            ActionResult ar = Controller.Attach(Repo, null, new Domain.Entities.Ingredient(), 0);
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             string message = adr.Message;
 
@@ -66,7 +75,7 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
         protected void BaseIndexWithErrorWhenParentIDIsNotForAnExistingIngredient()
         {  // Todo: add logging
             // Act 
-            ActionResult ar = Controller.AttachIngredient(null, new IngredientType(), 0);
+            ActionResult ar = Controller.Attach(Repo,null, new IngredientType(), 0);
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             string message = adr.Message;
 
@@ -78,7 +87,7 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
         protected void BaseIndexWithErrorWhenParentIDIsNotForAnExistingMenu()
         {  // Todo: add logging
             // Act 
-            ActionResult ar = Controller.AttachMenu(900000, new MenuType(), 0);
+            ActionResult ar = Controller.Attach(Repo,900000, new MenuType(), 0);
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             string message = adr.Message;
 
@@ -90,20 +99,7 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
         protected void BaseDetailWithErrorWhenParentIDIsValidAndChildIsNotValid() { }
 
 
-        protected void BaseDetailWithWarningWhenParentIDIsValidAndChildIstValidAndOrderNumberIsNegativeWhenDetaching()
-        {
-            // Arrange
-            IIngredient ingredient = new IngredientType();
-            IRepository<IngredientType> IngredientRepo = new TestRepository<IngredientType>();
-            // Act 
-            ActionResult ar = Controller.DetachIngredient(1, (Domain.Entities.Ingredient)ingredient, -1);
-            AlertDecoratorResult adr = (AlertDecoratorResult)ar;
-            string message = adr.Message;
-
-            // Assert
-            Assert.AreEqual("Order Number Was Negative! Nothing was detached", message);
-            Assert.AreEqual("alert-warning", adr.AlertClass);
-        }
+      
 
         protected void BaseDetailWithSuccessWhenParentIDIsValidAndChildIstValidAndOrderNumberIsInUseWhenAttaching()
         {
@@ -120,7 +116,7 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
                 IIngredient secondChild = new IngredientType() { ID = 60, Name = "second child" };
 
                 // Act
-                ActionResult ar = Controller.AttachIngredient(55, (IngredientType)secondChild, 0);
+                ActionResult ar = Controller.Attach(Repo,55, (IngredientType)secondChild, 0);
                 AlertDecoratorResult adr = (AlertDecoratorResult)ar;
                 string message = adr.Message;
 
@@ -136,7 +132,7 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
 
         protected void BaseDetailWithSuccessWhenParentIDIsValidAndChildIsValidAndOrderNumberIsGreaterThanTheNumberOfElementsWhenAttaching()
         {
-            ActionResult ar = Controller.AttachIngredient(Parent.ID, (IngredientType)Child, 70000);
+            ActionResult ar = Controller.Attach(Repo,Parent.ID, (IngredientType)Child,  AttachOrDetach.Attach, 70000);
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
 
@@ -152,27 +148,8 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
 
         protected void BaseDetailWithErrorWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSuppliedWhenAttachingUnattachableChild()
         {  // Parent Ingredient for initial test, child Menu.  TODO: expand
-            ActionResult ar= new ViewResult();
-            if (typeof(TChild) == typeof(IngredientType))
-            {
-                ar = Controller.AttachIngredient(Parent.ID, (IngredientType)Child, 70000);
-            }
-            else  if (typeof(TChild) == typeof(MenuType))
-            {
-                ar = Controller.AttachMenu(Parent.ID, (MenuType)Child, 70000);
-            }
-            else if (typeof(TChild) == typeof(PlanType))
-            {
-                 ar = Controller.AttachPlan(Parent.ID, (PlanType)Child, 70000);
-            }
-            else if (typeof(TChild) == typeof(RecipeType))
-            {
-                ar = Controller.AttachRecipe(Parent.ID, (RecipeType)Child, 70000);
-            }
-            else if (typeof(TChild) == typeof(ShoppingListType))
-            {
-                ar = Controller.AttachShoppingList(Parent.ID, (ShoppingListType)Child, 70000);
-            }
+            ActionResult ar= Controller.Attach(Repo,Parent.ID,  child, AttachOrDetach.Attach, 70000);
+            
 
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;

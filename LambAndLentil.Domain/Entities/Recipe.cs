@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 namespace LambAndLentil.Domain.Entities
 {
@@ -25,13 +26,40 @@ namespace LambAndLentil.Domain.Entities
         public MealType MealType { get; set; }
         public int? Calories { get; set; }
         public short? CalsFromFat { get; set; }
-        public List<Ingredient> Ingredients { get; set; }    
+        public List<Ingredient> Ingredients { get; set; }
 
-        void IEntity.AddChildrenToParent(IEntity entity) => throw new NotImplementedException();
+        void IEntity.AddChildToParent(IEntity parent, IEntity child)
+        {
+            ((IEntityChildClassRecipes)parent).Recipes.Add((Recipe)child);
+        }
 
         bool IEntity.ParentCanHaveChild(IPossibleChildren parent)
         {
             return parent.CanHaveRecipeChild;
+        }
+
+        public void ParentRemoveAllChildrenOfAType( IEntity parent, IEntity child)
+        {
+            ((IEntityChildClassRecipes)parent).Recipes.Clear();
+        }
+
+
+        public IEntity  RemoveSelectionFromChildren<TChild>(IEntity  parent, List<TChild> selected)
+            where TChild : BaseEntity, IEntity, IPossibleChildren, new()
+        {
+            var setToRemove = new HashSet<TChild>(selected);
+             
+           ((IEntityChildClassRecipes)parent).Recipes.RemoveAll(ContainsSelected);
+            return parent;
+
+            bool ContainsSelected(IEntity item)
+            {
+                int itemID = item.ID;
+                var numbers = from f in selected select f.ID;
+                bool trueOrFalse = numbers.Contains(itemID);
+                return trueOrFalse;
+            }
+
         }
     }
 }

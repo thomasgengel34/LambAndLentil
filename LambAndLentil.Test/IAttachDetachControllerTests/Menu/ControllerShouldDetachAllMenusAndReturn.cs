@@ -7,7 +7,7 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.Menu
 {
     [TestClass]
     [TestCategory("Attach-Detach")]
-    public class ControllerShouldDetachAllMenusAndReturn : BaseControllerShouldDetachXAndReturn<ParentType, ChildType>
+    public class ControllerShouldDetachASetOfAndReturn : BaseControllerShouldDetachXAndReturn<ParentType, ChildType>
     {
         [TestMethod]
         public void DetailWithSuccessWhenIDisValidAndThereIsOneChildOnListWhenDetachingAndSelectionSetIsNotSupplied() => BaseDetailWithSuccessWhenIDisValidAndThereIsOneChildOnListWhenDetachingAndSelectionSetIsNotSupplied();

@@ -51,7 +51,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Act
             var setToSelect = new HashSet<int> { 4006, 4008 };
             List<Recipe> selected = Person.Recipes.Where(t => setToSelect.Contains(t.ID)).ToList();
-            Controller.DetachAllRecipes(Person.ID, selected);
+            Controller.DetachASetOf(Person.ID, selected);
             Person returnedPerson = Repo.GetById(Person.ID);
 
             // Assert

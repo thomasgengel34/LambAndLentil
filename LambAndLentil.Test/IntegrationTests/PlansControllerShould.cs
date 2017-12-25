@@ -231,7 +231,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             IEntity ingredient = new Ingredient() { ID = 100 };
            
             // Act
-            Controller.AttachIngredient(Plan.ID, (Ingredient)ingredient );
+            Controller.Attach(Repo,Plan.ID, (Ingredient)ingredient ,AttachOrDetach.Attach);
             IPlan returnedPlan = Repo.GetById(Plan.ID);
 
             // Assert 
@@ -257,7 +257,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Repo.Update((Plan)Plan, Plan.ID);
             repoRecipe.Save((Recipe)recipe);
             // Act
-            Controller.AttachRecipe(Plan.ID, (Recipe)recipe);
+            Controller.Attach(Repo,Plan.ID, (Recipe)recipe, AttachOrDetach.Attach);
             Plan returnedPlan = Repo.GetById(Plan.ID);
 
             // Assert 

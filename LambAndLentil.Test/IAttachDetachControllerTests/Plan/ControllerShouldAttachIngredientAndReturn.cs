@@ -1,59 +1,29 @@
-﻿using System;
+﻿using LambAndLentil.Test.IAttachDetachControllerTests.BaseTests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using TParent = LambAndLentil.Domain.Entities.Plan;
+using TChild= LambAndLentil.Domain.Entities.Ingredient;
 
-namespace LambAndLentil.Test.IAttachDetachControllerTests.Plan 
+
+namespace LambAndLentil.Test.IAttachDetachControllerTests.Plan
 {
     [TestClass]
     [TestCategory("Attach-Detach")]
-    public class ControllerShouldAttachIngredientAndReturn
+    public class ControllerShouldAttachIngredientAndReturn: BaseControllerShouldAttachXAndReturn<TParent,TChild>
     {
+        
         [Ignore]
         [TestMethod]
-        public void  DetailWithSuccessWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSupplied()
-        {   
-            // Arrange
-
-            // Act
-
-            //Assert
-            Assert.Fail();
-        }
-
-        [Ignore]
+        public void DetailWithSuccessWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSupplied() => BaseDetailWithSuccessWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSupplied();
+         
         [TestMethod]
-        public void  IndexWithErrorWhenParentIDIsNull()
-        {
-            // Arrange
+        public void IndexWithErrorWhenParentIDIsNull() => BaseReturnsIndexWithWarningWithNullParent(); 
 
-            // Act
-
-            //Assert
-            Assert.Fail();
-        }
-
-        [Ignore]
         [TestMethod]
-        public void IndexWithErrorWhenParentIDIsNotForAnExistingPlan()
-        {
-            // Arrange
+        public void IndexWithErrorWhenParentIDIsNotForAnExistingMenu() => BaseIndexWithErrorWhenParentIDIsNotForAnExistingIngredient();
 
-            // Act
-
-            //Assert
-            Assert.Fail();
-        }
-
-        [Ignore]
+         
         [TestMethod]
-        public void DetailWithErrorWhenParentIDIsValidAndChildIsNotValid()
-        {
-            // Arrange
-
-            // Act
-
-            //Assert
-            Assert.Fail();
-        }
+        public void DetailWithErrorWhenParentIDIsValidAndChildIsNotValid() => BaseDetailWithErrorWhenParentIDIsValidAndChildIsNotValid(); 
 
         [Ignore]
         [TestMethod]

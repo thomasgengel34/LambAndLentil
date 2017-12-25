@@ -205,8 +205,10 @@ namespace LambAndLentil.Test.JSONTests
             string IEntity.IngredientsList { get; set; }
 
             public bool ParentCanHaveChild(IPossibleChildren parent) => throw new NotImplementedException();
-            void IEntity.AddChildrenToParent(IEntity entity) => throw new NotImplementedException();
+            void IEntity.AddChildToParent(IEntity entity, IEntity child) => throw new NotImplementedException();
             bool IEntity.ParentCanHaveChild(IPossibleChildren parent) => throw new NotImplementedException();
+            void IEntity.ParentRemoveAllChildrenOfAType(IEntity  parent, IEntity child) => throw new NotImplementedException();
+            IEntity  IEntity.RemoveSelectionFromChildren<TChild>(IEntity  parent, List<TChild> selected) => throw new NotImplementedException();
         }
 
         private class TestReturnZeroCountForEmptyDirectoryVM : BaseEntity, IEntity
@@ -222,8 +224,10 @@ namespace LambAndLentil.Test.JSONTests
             string IEntity.IngredientsList { get; set; }
 
             public bool ParentCanHaveChild(IPossibleChildren parent) => throw new NotImplementedException();
-            void IEntity.AddChildrenToParent(IEntity entity) => throw new NotImplementedException();
+            void IEntity.AddChildToParent(IEntity entity, IEntity child) => throw new NotImplementedException();
             bool IEntity.ParentCanHaveChild(IPossibleChildren parent) => throw new NotImplementedException();
+            void IEntity.ParentRemoveAllChildrenOfAType(IEntity  parent, IEntity child) => throw new NotImplementedException();
+            IEntity  IEntity.RemoveSelectionFromChildren<TChild>(IEntity  parent, List<TChild> selected) => throw new NotImplementedException();
         }
 
 

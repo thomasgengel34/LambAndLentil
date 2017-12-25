@@ -3,8 +3,8 @@ using LambAndLentil.Domain.Entities;
 
 namespace LambAndLentil.UI.Controllers
 {
-    public interface ICanAttachAndDetachRecipesController<T>: IGenericController<T>
-    {
+    //public interface ICanAttachAndDetachRecipesController<T>: IGenericController<T>
+    //{
         
-    }
+    //}
 }

@@ -62,43 +62,9 @@ namespace LambAndLentil.Domain.Concrete
             {
                 T entity = JsonConvert.DeserializeObject<T>(File.ReadAllText
                     (String.Concat(FullPath, parentID, ".txt")));
-              //  child.AddChildrenToParent(entity);
-                switch (childName)
-                {
-                    case "Ingredient":
-                        IEntityChildClassIngredients item = (IEntityChildClassIngredients)entity;
-                        item.Ingredients.Add(child as Ingredient);
-                        entity = (T)item;
-                        break;
-                    case "Recipe":
-                        IEntityChildClassRecipes itemR = (IEntityChildClassRecipes)entity;
-                        itemR.Recipes.Add(child as Recipe);
-                        entity = (T)itemR;
-                        break;
-                    case "Menu":
-                        Type t = entity.GetType().GetInterface("IEntityChildClassMenus");
-                        if (t != null)
-                        {
-                            IEntityChildClassMenus itemM = (IEntityChildClassMenus)entity;
-                            itemM.Menus.Add(child as Menu);
-                            entity = (T)itemM;
-                        }
+                child.AddChildToParent(entity, child);
 
-                        break;
-                    case "Plan":
-                        IEntityChildClassPlans itemP = (IEntityChildClassPlans)entity;
-                        itemP.Plans.Add(child as Plan);
-                        entity = (T)itemP;
-                        break;
-                    case "ShoppingList":
-                        IEntityChildClassShoppingLists itemS = (IEntityChildClassShoppingLists)entity;
-                        itemS.ShoppingLists.Add(child as ShoppingList);
-                        entity = (T)itemS;
-                        break;
-                    default:
-                        break;
-                }
-                Update(entity, entity.ID);
+                Save(entity);
             }
         }
 
@@ -112,7 +78,7 @@ namespace LambAndLentil.Domain.Concrete
 
 
         public void DetachAnIndependentChild<TChild>(int parentID, TChild child, int orderNumber = 1)
-            where TChild : BaseEntity, IEntity
+            where TChild : BaseEntity, IEntity,new()
         {
             char[] charsToTrim = { 'V', 'M' };
             string childName = typeof(TChild).ToString().Split('.').Last().Split('+').Last().TrimEnd(charsToTrim);
@@ -120,43 +86,12 @@ namespace LambAndLentil.Domain.Concrete
 
             if (parent != null && child != null)
             {
-                T entity = JsonConvert.DeserializeObject<T>(File.ReadAllText
+                IEntity entity = JsonConvert.DeserializeObject<T>(File.ReadAllText
                 (String.Concat(FullPath, parentID, ".txt")));
-
-                switch (childName)
-                {
-                    case "Ingredient":
-                        IEntityChildClassIngredients item = (IEntityChildClassIngredients)entity;
-                        if (item.Ingredients.Count >= orderNumber && item.Ingredients.Count > 0)
-                        {
-                            item.Ingredients.RemoveAt(orderNumber);
-                            entity = (T)item;
-                        }
-                        break;
-                    case "Recipe":
-                        IEntityChildClassRecipes itemR = (IEntityChildClassRecipes)entity;
-                        itemR.Recipes.RemoveAt(orderNumber);
-                        entity = (T)itemR;
-                        break;
-                    case "Menu":
-                        IEntityChildClassMenus itemM = (IEntityChildClassMenus)entity;
-                        itemM.Menus.RemoveAt(orderNumber);
-                        entity = (T)itemM;
-                        break;
-                    case "Plan":
-                        IEntityChildClassPlans itemP = (IEntityChildClassPlans)entity;
-                        itemP.Plans.RemoveAt(orderNumber);
-                        entity = (T)itemP;
-                        break;
-                    case "ShoppingList":
-                        IEntityChildClassShoppingLists itemS = (IEntityChildClassShoppingLists)entity;
-                        itemS.ShoppingLists.RemoveAt(orderNumber);
-                        entity = (T)itemS;
-                        break;
-                    default:
-                        break;
-                }
-                Update(entity, entity.ID);
+                List<TChild> list = new List<TChild>() { child };
+                child.RemoveSelectionFromChildren(entity, list);
+ 
+                Save((T)entity); 
             }
         }
 

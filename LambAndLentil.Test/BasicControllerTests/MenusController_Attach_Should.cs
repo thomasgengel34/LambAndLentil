@@ -9,6 +9,7 @@ using System.Linq;
 using LambAndLentil.UI;
 using LambAndLentil.UI.Controllers;
 using System.Collections.Generic;
+using LambAndLentil.UI.Models;
 
 namespace LambAndLentil.Test.BasicControllerTests
 {
@@ -44,7 +45,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             };
 
             // Act
-            ActionResult ar = Controller.AttachIngredient(int.MaxValue, ingredient);
+            ActionResult ar = Controller.Attach<Ingredient>(Repo, int.MaxValue, ingredient,UI.Models.AttachOrDetach.Attach);
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             RedirectToRouteResult rdr = (RedirectToRouteResult)adr.InnerResult;
      
@@ -61,27 +62,28 @@ namespace LambAndLentil.Test.BasicControllerTests
 
        
         [TestMethod]
-        public void SuccessfullyAttachIngredientChild()
+        public void SuccessfullyAttachChild()
         {
             // Arrange
-            Ingredient child = new Ingredient() { ID = 3000, Name = "SuccessfullyAttachIngredientChild" };
+            Ingredient child = new Ingredient() { ID = 3000, Name = "SuccessfullyAttachChild" };
             TestRepository<Ingredient> IngredientRepo = new TestRepository<Ingredient>();
             IngredientRepo.Save(child);
 
             // Act
-            Controller.AttachIngredient(Menu.ID, child);
+            Controller.Attach(Repo, Menu.ID, child, AttachOrDetach.Attach);
+              
             ReturnedMenu = Repo.GetById(Menu.ID);
             // Assert
             //  Assert.AreEqual("Default", Ingredient.Ingredients.Last().Name);
-            Assert.AreEqual("SuccessfullyAttachIngredientChild", ReturnedMenu.Ingredients.Last().Name);
+            Assert.AreEqual("SuccessfullyAttachChild", ReturnedMenu.Ingredients.Last().Name);
         }
 
-       
+       [Ignore]
         [TestMethod]
         public void SuccessfullyDetachFirstIngredientChild()
         {
-            IGenericController<Menu> DetachController = new MenusController(Repo);
-            BaseSuccessfullyDetachIngredientChild(Repo, Controller, DetachController, UIControllerType.ShoppingLists);
+            //IGenericController<Menu> DetachController = new MenusController(Repo);
+            //BaseSuccessfullyDetachChild(Repo, Controller, DetachController, UIControllerType.ShoppingLists);
         }
 
         
@@ -107,7 +109,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Act
             var setToSelect = new HashSet<int> { 4006, 4008 };
             List<Ingredient> selected = Menu.Ingredients.Where(t => setToSelect.Contains(t.ID)).ToList();
-            Controller.DetachAllIngredients(Menu.ID, selected);
+            Controller.DetachASetOf(Menu.ID, selected);
             Menu returnedMenu = Repo.GetById(Menu.ID);
 
             // Assert

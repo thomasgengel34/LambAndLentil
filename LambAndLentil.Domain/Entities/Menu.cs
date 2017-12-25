@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 namespace LambAndLentil.Domain.Entities
 {
@@ -30,11 +31,36 @@ namespace LambAndLentil.Domain.Entities
         
         string IEntity.AddedByUser { get; set; } 
 
-        void IEntity.AddChildrenToParent(IEntity entity) => throw new NotImplementedException();
+         void IEntity.AddChildToParent(IEntity parent, IEntity child)
+        {
+            ((IEntityChildClassMenus)parent).Menus.Add((Menu)child);
+        }
 
         bool IEntity.ParentCanHaveChild(IPossibleChildren parent)
         {
             return parent.CanHaveMenuChild;
+        }
+
+        public void ParentRemoveAllChildrenOfAType(IEntity  parent, IEntity child)
+        {
+            ((IEntityChildClassMenus)parent).Menus.Clear();
+        }
+
+
+        public IEntity  RemoveSelectionFromChildren<TChild>(IEntity  parent, List<TChild> selected)
+            where TChild : BaseEntity, IEntity, IPossibleChildren, new()
+        {
+            var setToRemove = new HashSet<TChild>(selected);
+            ((IEntityChildClassMenus)parent).Menus.RemoveAll(ContainsSelected);
+            return parent;
+
+            bool ContainsSelected(IEntity item)
+            {
+                int itemID = item.ID;
+                var numbers = from f in selected select f.ID;
+                bool trueOrFalse = numbers.Contains(itemID);
+                return trueOrFalse;
+            } 
         }
     }
 }

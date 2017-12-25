@@ -5,7 +5,7 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.Person
 {
     [TestClass]
     [TestCategory("Attach-Detach")]
-    public class ControllerShouldDetachIngredientAndReturn
+    public class ControllerShouldDetachAndReturn
     {
         [Ignore]
         [TestMethod]

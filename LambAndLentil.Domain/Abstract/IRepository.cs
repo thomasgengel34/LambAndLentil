@@ -37,6 +37,6 @@ namespace LambAndLentil.Domain.Abstract
             where TChild : BaseEntity, IEntity;
 
         void DetachAnIndependentChild<TChild>(int parentID, TChild child, int orderNumber) 
-            where TChild : BaseEntity, IEntity;
+            where TChild : BaseEntity, IEntity,new();
     }
 }

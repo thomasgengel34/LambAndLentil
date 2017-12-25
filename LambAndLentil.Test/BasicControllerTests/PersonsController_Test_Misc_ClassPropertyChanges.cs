@@ -272,7 +272,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [Ignore]
         [TestMethod]
-        public void ShouldDetachMenuFromMenusList()
+        public void ShouldDetachFromMenusList()
         {
             // Arrange
 

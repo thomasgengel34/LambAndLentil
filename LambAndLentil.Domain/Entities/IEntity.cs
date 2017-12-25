@@ -15,6 +15,9 @@ namespace LambAndLentil.Domain.Entities
         string IngredientsList { get; set; }
 
         bool ParentCanHaveChild(IPossibleChildren parent );
-        void AddChildrenToParent(IEntity entity);
+        void AddChildToParent(IEntity parent,IEntity child);
+        void ParentRemoveAllChildrenOfAType(IEntity  parent, IEntity child);
+        IEntity  RemoveSelectionFromChildren<TChild>(IEntity  parent, List<TChild> selected)
+            where TChild : BaseEntity, IEntity, IPossibleChildren, new();
     }
 }

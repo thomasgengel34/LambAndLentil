@@ -163,7 +163,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [Ignore]
         [TestMethod]
-        public void ShouldDetachIngredientFromIngredients()
+        public void ShouldDetachFromIngredients()
         {
             // Arrange
 
@@ -212,7 +212,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         [Ignore]
         [TestMethod]
         [TestCategory("Class Property")]
-        public void ShouldDetachMenuFromMenusList()
+        public void ShouldDetachFromMenusList()
         {
             // Arrange
 

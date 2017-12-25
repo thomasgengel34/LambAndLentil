@@ -1,13 +1,13 @@
 ﻿using LambAndLentil.Test.IAttachDetachControllerTests.BaseTests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TParent = LambAndLentil.Domain.Entities.Menu;
-using TChild = LambAndLentil.Domain.Entities.Ingredient;
+using TChild = LambAndLentil.Domain.Entities.Recipe;
 
 namespace LambAndLentil.Test.IAttachDetachControllerTests.Menu
 {
     [TestClass]
      [TestCategory("Attach-Detach")]
-    public class ControllerShouldDetachASetOfIngredientsAndReturn : BaseControllerShouldDetachXAndReturn<TParent, TChild>
+    public class ControllerShouldDetachASetOfRecipesAndReturn : BaseControllerShouldDetachXAndReturn<TParent, TChild>
     {
 
 

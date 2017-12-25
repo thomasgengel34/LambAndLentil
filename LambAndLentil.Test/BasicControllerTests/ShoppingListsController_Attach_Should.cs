@@ -47,7 +47,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             };
 
             // Act
-            ActionResult ar = Controller.AttachIngredient(int.MaxValue, ingredient);
+            ActionResult ar = Controller.Attach(Repo,int.MaxValue, ingredient,0);
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             RedirectToRouteResult rdr = (RedirectToRouteResult)adr.InnerResult;
 
@@ -72,27 +72,26 @@ namespace LambAndLentil.Test.BasicControllerTests
         } 
        
         [TestMethod]
-        public void SuccessfullyAttachIngredientChild()
+        public void SuccessfullyAttachChild()
         {
             // Arrange
-            Ingredient child = new Ingredient() { ID = 3000, Name = "SuccessfullyAttachIngredientChild" };
+            Ingredient child = new Ingredient() { ID = 3000, Name = "SuccessfullyAttachChild" };
             TestRepository<Ingredient> IngredientRepo = new TestRepository<Ingredient>();
             IngredientRepo.Save(child);
 
             // Act
-            Controller.AttachIngredient(ShoppingList.ID, child);
+            Controller.Attach(Repo,ShoppingList.ID, child,0);
             ReturnedShoppingList = Repo.GetById(ShoppingList.ID);
             // Assert
             //  Assert.AreEqual("Default", Ingredient.Ingredients.Last().Name);
-            Assert.AreEqual("SuccessfullyAttachIngredientChild", ReturnedShoppingList.Ingredients.Last().Name);
+            Assert.AreEqual("SuccessfullyAttachChild", ReturnedShoppingList.Ingredients.Last().Name);
         }
 
-        
+        [Ignore]
         [TestMethod]
         public void SuccessfullyDetachFirstIngredientChild()
         {
-           IGenericController<ShoppingList> DetachController = new ShoppingListsController(Repo);
-            BaseSuccessfullyDetachIngredientChild(Repo, Controller, DetachController,UIControllerType.ShoppingLists);
+            
         }
 
         [TestMethod]
@@ -139,7 +138,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Act
             var setToSelect = new HashSet<int> { 4006, 4008 };
             List<Ingredient> selected = ShoppingList.Ingredients.Where(t => setToSelect.Contains(t.ID)).ToList();
-            Controller.DetachAllIngredients(ShoppingList.ID, selected);
+            Controller.DetachASetOf<Ingredient>( ShoppingList.ID, selected);
             ShoppingList returnedShoppingList = Repo.GetById(ShoppingList.ID);
 
             // Assert

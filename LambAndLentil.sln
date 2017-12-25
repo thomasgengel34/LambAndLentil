@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2003
+VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LambAndLentil.Domain", "LambAndLentil.Domain\LambAndLentil.Domain.csproj", "{011B34BE-4A36-4772-B2AF-DC1600948477}"
 EndProject
@@ -10,6 +10,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LambAndLentil.Test", "LambAndLentil.Test\LambAndLentil.Test.csproj", "{A3348C9C-2CF1-438F-A378-0629FB23521A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{8F7C3E6A-1D96-4B13-8830-C3F253DB537B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LambAndLentil.UI.Test", "LambAndLentil.UI.Test\LambAndLentil.UI.Test.csproj", "{B53ABF2A-5B63-4795-A928-C49DE7CE93C2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,12 +31,17 @@ Global
 		{A3348C9C-2CF1-438F-A378-0629FB23521A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A3348C9C-2CF1-438F-A378-0629FB23521A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A3348C9C-2CF1-438F-A378-0629FB23521A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B53ABF2A-5B63-4795-A928-C49DE7CE93C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B53ABF2A-5B63-4795-A928-C49DE7CE93C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B53ABF2A-5B63-4795-A928-C49DE7CE93C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B53ABF2A-5B63-4795-A928-C49DE7CE93C2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{A3348C9C-2CF1-438F-A378-0629FB23521A} = {8F7C3E6A-1D96-4B13-8830-C3F253DB537B}
+		{B53ABF2A-5B63-4795-A928-C49DE7CE93C2} = {8F7C3E6A-1D96-4B13-8830-C3F253DB537B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0D007DE4-A799-4CC5-8D1C-9C7DC33495F5}

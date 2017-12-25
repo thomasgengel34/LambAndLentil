@@ -11,25 +11,23 @@ namespace LambAndLentil.Test.BasicControllerTests
 {
     [TestClass]
     [TestCategory("Attach-Detach")]
-    public class PlansController_AttachDetachMenuChild : PlansController_Test_Should
+    public class PlansController_AttachDetachChild : PlansController_Test_Should
     {
        
-         
+         [Ignore]
         [TestMethod]
-        public void SuccessfullyAttachMenuChild()
+        public void SuccessfullyAttachChild()
         {
-             IGenericController<Plan> DetachController = new PlansController(Repo);
-             BaseSuccessfullyDetachMenuChild(Repo, Controller, DetachController, UIControllerType.Plans);
+            Assert.Fail();
         }
 
 
 
-        
+          [Ignore]
         [TestMethod]
         public void SuccessfullyDetachFirstMenuChild()
         {
-            IGenericController<Plan> DetachController = new PlansController(Repo);
-            BaseSuccessfullyDetachIngredientChild(Repo, Controller, DetachController, UIControllerType.Plans, 0);
+            Assert.Fail();
         }
 
         
@@ -47,7 +45,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Act
             var setToSelect = new HashSet<int> { 4006, 4008 };
             List<Menu> selected = Plan.Menus.Where(t => setToSelect.Contains(t.ID)).ToList();
-            Controller.DetachAllMenus(Plan.ID, selected);
+            Controller.DetachASetOf(Plan.ID, selected);
             Plan returnedPlan = Repo.GetById(Plan.ID);
 
             // Assert

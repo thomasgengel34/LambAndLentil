@@ -5,7 +5,7 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.Menu
 {
     [TestClass]
     [TestCategory("Attach-Detach")]
-    public class ControllerShouldDetachMenuAndReturn
+    public class ControllerShouldDetachAndReturn
     {
         [Ignore]
         [TestMethod]

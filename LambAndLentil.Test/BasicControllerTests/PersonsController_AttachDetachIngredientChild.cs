@@ -2,30 +2,31 @@
 using System.Linq;
 using LambAndLentil.Domain.Concrete;
 using LambAndLentil.Domain.Entities;
+using LambAndLentil.UI.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace LambAndLentil.Test.BasicControllerTests
 {
     [TestClass]
     [TestCategory("Attach-Detach")]
-    public class PersonsController_AttachDetachIngredientChild : PersonsController_Test_Should
+    public class PersonsController_AttachDetachChild : PersonsController_Test_Should
     {
        
           
         [TestMethod]
-        public void SuccessfullyAttachIngredientChild()
+        public void SuccessfullyAttachChild()
         {
             // Arrange
-            Ingredient child = new Ingredient() { ID = 3000, Name = "SuccessfullyAttachIngredientChild" };
+            Ingredient child = new Ingredient() { ID = 3000, Name = "SuccessfullyAttachChild" };
             TestRepository<Ingredient> IngredientRepo = new TestRepository<Ingredient>();
             IngredientRepo.Save(child);
 
             // Act
-            Controller.AttachIngredient(Person.ID, child);
+            Controller.Attach(Repo,Person.ID, child, AttachOrDetach.Attach);
             ReturnedPerson = Repo.GetById(Person.ID);
             // Assert
             //  Assert.AreEqual("Default", Ingredient.Ingredients.Last().Name);
-            Assert.AreEqual("SuccessfullyAttachIngredientChild", ReturnedPerson.Ingredients.Last().Name);
+            Assert.AreEqual("SuccessfullyAttachChild", ReturnedPerson.Ingredients.Last().Name);
         }
 
 
@@ -57,7 +58,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Act
             var setToSelect = new HashSet<int> { 4006, 4008 };
             List<Ingredient> selected = Person.Ingredients.Where(t => setToSelect.Contains(t.ID)).ToList();
-            Controller.DetachAllIngredients(Person.ID, selected);
+            Controller.DetachASetOf(Person.ID, selected);
             Person returnedPerson = Repo.GetById(Person.ID);
 
             // Assert

@@ -16,19 +16,19 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [Ignore]
         [TestMethod]
-        public void SuccessfullyAttachShoppingListChild()
+        public void SuccessfullyAttachChild()
         {
             // Arrange
-            ShoppingList child = new ShoppingList() { ID = 3000, Name = "SuccessfullyAttachShoppingListChild" };
+            ShoppingList child = new ShoppingList() { ID = 3000, Name = "SuccessfullyAttachChild" };
             TestRepository<ShoppingList> ShoppingListRepo = new TestRepository<ShoppingList>();
             ShoppingListRepo.Save(child);
 
             // Act
-            Controller.AttachShoppingList(Person.ID, child);
+            Controller.Attach(Repo,Person.ID, child,0);
             ReturnedPerson = Repo.GetById(Person.ID);
             // Assert
             //  Assert.AreEqual("Default", ShoppingList.ShoppingLists.Last().Name);
-            Assert.AreEqual("SuccessfullyAttachShoppingListChild", ReturnedPerson.ShoppingLists.Last().Name);
+            Assert.AreEqual("SuccessfullyAttachChild", ReturnedPerson.ShoppingLists.Last().Name);
         }
 
            [Ignore]
@@ -53,7 +53,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Act
             var setToSelect = new HashSet<int> { 4006, 4008 };
             List<ShoppingList> selected = Person.ShoppingLists.Where(t => setToSelect.Contains(t.ID)).ToList();
-            Controller.DetachAllShoppingLists(Person.ID, selected);
+            Controller.DetachASetOf(Person.ID, selected);
             Person returnedPerson = Repo.GetById(Person.ID);
 
             // Assert

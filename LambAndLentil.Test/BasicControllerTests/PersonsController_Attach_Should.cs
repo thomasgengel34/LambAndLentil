@@ -9,6 +9,7 @@ using System.Linq;
 using LambAndLentil.UI;
 using LambAndLentil.UI.Controllers;
 using System.Collections.Generic;
+using LambAndLentil.UI.Models;
 
 namespace LambAndLentil.Test.BasicControllerTests
 {
@@ -58,7 +59,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             };
 
             // Act
-            ActionResult ar = Controller.AttachIngredient(int.MaxValue, ingredient);
+            ActionResult ar = Controller.Attach(Repo,int.MaxValue, ingredient, AttachOrDetach.Attach);
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             RedirectToRouteResult rdr = (RedirectToRouteResult)adr.InnerResult;
 
@@ -78,19 +79,19 @@ namespace LambAndLentil.Test.BasicControllerTests
 
 
         [TestMethod]
-        public void SuccessfullyAttachIngredientChild()
+        public void SuccessfullyAttachChild()
         {
             // Arrange
-            Ingredient child = new Ingredient() { ID = 3000, Name = "SuccessfullyAttachIngredientChild" };
+            Ingredient child = new Ingredient() { ID = 3000, Name = "SuccessfullyAttachChild" };
             TestRepository<Ingredient> IngredientRepo = new TestRepository<Ingredient>();
             IngredientRepo.Save(child);
 
             // Act
-            Controller.AttachIngredient(Person.ID, child);
+            Controller.Attach(Repo,Person.ID, child,UI.Models.AttachOrDetach.Attach);
             ReturnedPerson = Repo.GetById(Person.ID);
             // Assert
             //  Assert.AreEqual("Default", Ingredient.Ingredients.Last().Name);
-            Assert.AreEqual("SuccessfullyAttachIngredientChild", ReturnedPerson.Ingredients.Last().Name);
+            Assert.AreEqual("SuccessfullyAttachChild", ReturnedPerson.Ingredients.Last().Name);
         }
 
         [TestMethod]
@@ -103,17 +104,17 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         }
 
-        [TestMethod]
-        public void SuccessfullyAttachMenuChild() => BaseSuccessfullyAttachMenuChild(Person, Controller);
+        //[TestMethod]
+        //public void SuccessfullyAttachRecipeChild() => BaseSuccessfullyAttachChild(Person, Controller);
 
 
 
         [Ignore]
         [TestMethod]
-        public void SuccessfullyDetachMenuChild()
+        public void SuccessfullyDetachChild()
         {
-            IGenericController<Person> DetachController = (IGenericController<Person>)(new PersonsController(Repo));
-            BaseSuccessfullyDetachMenuChild(Repo, Controller, DetachController, UIControllerType.Persons);
+            //IGenericController<Person> DetachController = (IGenericController<Person>)(new PersonsController(Repo));
+            //BaseSuccessfullyDetachChild(Repo, Controller, DetachController, UIControllerType.Persons);
         }
 
         [TestMethod]
@@ -135,17 +136,18 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [Ignore]
         [TestMethod]
-        public void SuccessfullyDetachShoppingListChild()
+        public void SuccessfullyDetachIngredientChild()
         {
 
         }
 
+        [Ignore]
         [TestMethod]
         [TestCategory("Attach-Detach")]
         public void SuccessfullyDetachFirstIngredientChild()
         {
-            IGenericController<Person> DetachController = (IGenericController<Person>)(new PersonsController(Repo));
-            BaseSuccessfullyDetachIngredientChild(Repo, Controller, DetachController, UIControllerType.ShoppingLists, 0);
+            //IGenericController<Person> DetachController = (IGenericController<Person>)(new PersonsController(Repo));
+            //BaseSuccessfullyDetachChild(Repo, Controller, DetachController, UIControllerType.ShoppingLists, 0);
         }
 
         [TestMethod]
@@ -163,7 +165,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Act
             var setToSelect = new HashSet<int> { 4006, 4008 };
             List<Ingredient> selected = Person.Ingredients.Where(t => setToSelect.Contains(t.ID)).ToList();
-            Controller.DetachAllIngredients(Person.ID, selected);
+            Controller.DetachASetOf(Person.ID, selected);
             Person returnedPerson = Repo.GetById(Person.ID);
 
             // Assert

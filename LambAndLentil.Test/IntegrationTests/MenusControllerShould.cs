@@ -7,6 +7,7 @@ using LambAndLentil.Tests.Infrastructure;
 using LambAndLentil.UI;
 using LambAndLentil.UI.Controllers;
 using LambAndLentil.UI.Infrastructure.Alerts;
+using LambAndLentil.UI.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -280,7 +281,7 @@ namespace IntegrationTests
             Recipe recipeVM = new Recipe() { ID = 101, Description = "test AttachAnExistingRecipeToAnExistingMenu" };
             repoRecipe.Add(recipeVM);
             // Act
-            var x = ControllerAttach.AttachRecipe(menu.ID, recipeVM);
+            var x = ControllerAttach.Attach(Repo,menu.ID, recipeVM, AttachOrDetach.Attach);
 
             // Assert 
             Assert.AreEqual(1, menu.Recipes.Count());
@@ -302,7 +303,7 @@ namespace IntegrationTests
             Ingredient ingredient = new Ingredient { ID = int.MaxValue - 100, Description = "test AttachAnExistingIngredientToAnExistingMenu" }; 
             Menu foo = Repo.GetById(Menu.ID);
             // Act
-            ActionResult ar= Controller.AttachIngredient(Menu.ID, ingredient);
+            ActionResult ar= Controller.Attach(Repo,Menu.ID,ingredient, AttachOrDetach.Attach);
             Menu returnedMenu = Repo.GetById(Menu.ID);
 
             // Assert 
@@ -320,8 +321,8 @@ namespace IntegrationTests
             Ingredient ingredient = new Ingredient { ID = int.MaxValue - 100, Description = "test NotDeleteAnIngredientAfterIngredientIsDetachedFromMenu" };
 
             // Act
-            Controller.AttachIngredient(Menu.ID, ingredient);
-            Controller.DetachIngredient(Menu.ID, ingredient);
+            Controller.Attach(Repo,Menu.ID, ingredient,AttachOrDetach.Attach);
+            Controller.Detach(Menu.ID, ingredient);
 
             // Assert
             Assert.IsNotNull(ingredient);
@@ -334,7 +335,7 @@ namespace IntegrationTests
             // Arrange 
 
             // Act 
-            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.DetachIngredient(-1, null);
+            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.Detach(-1, (Ingredient)null);
 
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
             var routeValues = rtrr.RouteValues.Values;
@@ -355,7 +356,7 @@ namespace IntegrationTests
             // Arrange 
 
             // Act 
-            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.AttachIngredient(-1, null);
+            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.Attach(Repo,-1, (Ingredient)null, AttachOrDetach.Attach);
 
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
             var routeValues = rtrr.RouteValues.Values;
@@ -376,7 +377,7 @@ namespace IntegrationTests
             // Arrange 
 
             // Act 
-            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.AttachIngredient(-1, null);
+            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.Attach(Repo,-1, (Ingredient)null, AttachOrDetach.Attach);
 
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
             var routeValues = rtrr.RouteValues.Values;
@@ -397,7 +398,7 @@ namespace IntegrationTests
             // Arrange 
 
             // Act 
-            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.DetachIngredient(-1, null);
+            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.Detach(-1, (Ingredient)null);
 
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
             var routeValues = rtrr.RouteValues.Values;

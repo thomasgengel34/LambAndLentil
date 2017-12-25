@@ -169,7 +169,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [Ignore]
         [TestMethod]
-        public void ShouldDetachIngredientFromIngredientsList()
+        public void ShouldDetachFromIngredientsList()
         {
             // Arrange
 

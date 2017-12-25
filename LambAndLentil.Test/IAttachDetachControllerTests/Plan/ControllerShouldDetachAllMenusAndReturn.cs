@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace LambAndLentil.Test.IAttachDetachControllerTests.Plan
 {
     [TestClass]
-    public class ControllerShouldDetachAllMenusAndReturn
+    public class ControllerShouldDetachASetOfAndReturn
     {
         [Ignore]
         [TestMethod]

@@ -25,9 +25,10 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.Ingredient
         [TestMethod]
         public void DetailWithErrorWhenParentIDIsValidAndChildIsNotValid() => BaseDetailWithErrorWhenParentIDIsValidAndChildIsNotValid();
 
-
+        [Ignore]
         [TestMethod]
-        public void DetailWithWarningWhenParentIDIsValidAndChildIstValidAndOrderNumberIsNegativeWhenDetaching() => BaseDetailWithWarningWhenParentIDIsValidAndChildIstValidAndOrderNumberIsNegativeWhenDetaching();
+        public void DetailWithWarningWhenParentIDIsValidAndChildIstValidAndOrderNumberIsNegativeWhenDetaching() => //BaseDetailWithWarningWhenParentIDIsValidAndChildIstValidAndOrderNumberIsNegativeWhenDetaching();
+            Assert.Fail();
 
 
         [TestMethod]

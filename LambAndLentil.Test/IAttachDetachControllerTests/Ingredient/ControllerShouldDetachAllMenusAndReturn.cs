@@ -6,7 +6,7 @@ using MenuType = LambAndLentil.Domain.Entities.Menu;
 namespace LambAndLentil.Test.IAttachDetachControllerTests.Ingredient
 {
     [TestClass]
-    public class ControllerShouldDetachAllMenusAndReturn:BaseControllerShouldDetachXAndReturn< IngredientType,MenuType>
+    public class ControllerShouldDetachASetOfAndReturn:BaseControllerShouldDetachXAndReturn< IngredientType,MenuType>
     { 
         // since Menu cannot be attached to an ingredient, these tests should return with an error
 

@@ -5,7 +5,7 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.Recipe
 {
     [TestClass]
     [TestCategory("Attach-Detach")]
-    public class ControllerShouldAttachShoppingListAndReturn
+    public class ControllerShouldAttachShoppingListAndReturn_xcvxcvdgsfsdfsefef
     {
         [Ignore]
         [TestMethod]
