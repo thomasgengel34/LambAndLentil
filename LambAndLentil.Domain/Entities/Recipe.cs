@@ -38,10 +38,7 @@ namespace LambAndLentil.Domain.Entities
             return parent.CanHaveRecipeChild;
         }
 
-        public void ParentRemoveAllChildrenOfAType( IEntity parent, IEntity child)
-        {
-            ((IEntityChildClassRecipes)parent).Recipes.Clear();
-        }
+        public void ParentRemoveAllChildrenOfAType( IEntity parent, IEntity child) => ((IEntityChildClassRecipes)parent).Recipes.Clear();
 
 
         public IEntity  RemoveSelectionFromChildren<TChild>(IEntity  parent, List<TChild> selected)
@@ -58,6 +55,23 @@ namespace LambAndLentil.Domain.Entities
                 var numbers = from f in selected select f.ID;
                 bool trueOrFalse = numbers.Contains(itemID);
                 return trueOrFalse;
+            }
+
+        }
+
+        int IEntity.GetCountOfChildrenOnParent(IEntity parent)
+        {
+            try
+            {
+                return ((IEntityChildClassRecipes)parent).Recipes.Count();
+            }
+            catch (InvalidCastException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
             }
 
         }

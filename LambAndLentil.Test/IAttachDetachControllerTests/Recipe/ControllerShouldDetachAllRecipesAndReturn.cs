@@ -1,45 +1,44 @@
-﻿using System;
+﻿using LambAndLentil.Test.IAttachDetachControllerTests.BaseTests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using TParent  = LambAndLentil.Domain.Entities.Recipe;
+using TChild  = LambAndLentil.Domain.Entities.Recipe; 
 
 namespace LambAndLentil.Test.IAttachDetachControllerTests.Recipe
 {
     [TestClass]
-    public class ControllerShouldDetachAllRecipesAndReturn
+    [TestCategory("Attach-Detach")]
+    public class ControllerShouldDetachAllRecipesAndReturn : BaseControllerShouldDetachXAndReturn<TParent, TChild>
     {
-        [Ignore]
+        // Recipe cannot attach a recipe as a child
         [TestMethod]
-        public void DetailWithSuccessWhenIDisValidAndThereIsOneIngredientOnList()
-        {
-            // Arrange
+        public void DetailWithErrorWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSuppliedWhenAttachingUnattachableChild() => BaseDetailWithErrorWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSuppliedWhenAttachingUnattachableChild();
 
-            // Act
 
-            //Assert
-            Assert.Fail();
-        }
 
-        [Ignore]
         [TestMethod]
-        public void DetailWithSuccessWhenIDisValidAndThereAreThreeIngredientsOnList()
-        {
-            // Arrange
+        public void IndexWithErrorWhenParentIDIsNull() => BaseReturnsIndexWithWarningWithNullParentWhenDetaching();
 
-            // Act
 
-            //Assert
-            Assert.Fail();
-        }
-
-        [Ignore]
         [TestMethod]
-        public void DetailWithErrorWhenIDisNotForAFoundParent()
-        {
-            // Arrange
+        public void IndexWithErrorWhenParentIDIsNotForAnExistingIngredientWhenDetachingUnattachableChild() => 
+        BaseIndexWithWarningWhenParentIDIsNotForAnExistingIngredientWhenDetachingUnattachableChild();
 
-            // Act
+        [TestMethod]
+        public void DetailWithErrorWhenParentIDIsValidAndChildIsNotValid() => BaseDetailWithErrorWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSuppliedWhenAttachingUnattachableChild();
 
-            //Assert
-            Assert.Fail();
-        }
-    }
-}
+
+        [TestMethod]
+        public void DetailWithErrorWhenParentIDIsValidAndChildIstValidAndOrderNumberIsNegative() => BaseDetailWithErrorWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSuppliedWhenAttachingUnattachableChild();
+
+
+
+        [TestMethod]
+        public void DetailWithErrorWhenParentIDIsValidAndChildIstValidAndOrderNumberIsInUse() => BaseDetailWithErrorWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSuppliedWhenAttachingUnattachableChild();
+
+
+
+        [TestMethod]
+        public void DetailWithSuccessWhenParentIDIsValidAndChildIsValidAndOrderNumberIsGreaterThanTheNumberOfElementsWhenAttaching() => BaseDetailWithErrorWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSuppliedWhenAttachingUnattachableChild();
+    } 
+} 
+ 

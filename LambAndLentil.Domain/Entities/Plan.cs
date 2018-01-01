@@ -44,7 +44,7 @@ namespace LambAndLentil.Domain.Entities
 
         public void ParentRemoveAllChildrenOfAType(IEntity  parent, IEntity child)
         {
-            ((IEntityAllChildren)parent).Plans.Clear();
+            ((IEntityChildClassPlans)parent).Plans.Clear();
         }
 
 
@@ -52,7 +52,7 @@ namespace LambAndLentil.Domain.Entities
             where TChild : BaseEntity, IEntity, IPossibleChildren, new()
         {
             var setToRemove = new HashSet<TChild>(selected);
-            ((IEntityAllChildren)parent).Plans.RemoveAll(ContainsSelected);
+            ((IEntityChildClassPlans)parent).Plans.RemoveAll(ContainsSelected);
             return parent;
 
             bool ContainsSelected(IEntity item)
@@ -61,6 +61,23 @@ namespace LambAndLentil.Domain.Entities
                 var numbers = from f in selected select f.ID;
                 bool trueOrFalse = numbers.Contains(itemID);
                 return trueOrFalse;
+            }
+
+        }
+
+        int IEntity.GetCountOfChildrenOnParent(IEntity parent)
+        {
+            try
+            {
+                return ((IEntityChildClassPlans)parent).Plans.Count();
+            }
+            catch (InvalidCastException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
             }
 
         }

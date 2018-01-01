@@ -206,6 +206,7 @@ namespace LambAndLentil.Test.JSONTests
 
             public bool ParentCanHaveChild(IPossibleChildren parent) => throw new NotImplementedException();
             void IEntity.AddChildToParent(IEntity entity, IEntity child) => throw new NotImplementedException();
+            int IEntity.GetCountOfChildrenOnParent(IEntity parent) => throw new NotImplementedException();
             bool IEntity.ParentCanHaveChild(IPossibleChildren parent) => throw new NotImplementedException();
             void IEntity.ParentRemoveAllChildrenOfAType(IEntity  parent, IEntity child) => throw new NotImplementedException();
             IEntity  IEntity.RemoveSelectionFromChildren<TChild>(IEntity  parent, List<TChild> selected) => throw new NotImplementedException();
@@ -225,6 +226,7 @@ namespace LambAndLentil.Test.JSONTests
 
             public bool ParentCanHaveChild(IPossibleChildren parent) => throw new NotImplementedException();
             void IEntity.AddChildToParent(IEntity entity, IEntity child) => throw new NotImplementedException();
+            int IEntity.GetCountOfChildrenOnParent(IEntity parent) => throw new NotImplementedException();
             bool IEntity.ParentCanHaveChild(IPossibleChildren parent) => throw new NotImplementedException();
             void IEntity.ParentRemoveAllChildrenOfAType(IEntity  parent, IEntity child) => throw new NotImplementedException();
             IEntity  IEntity.RemoveSelectionFromChildren<TChild>(IEntity  parent, List<TChild> selected) => throw new NotImplementedException();

@@ -91,5 +91,22 @@ namespace LambAndLentil.Domain.Entities
         {
             throw new Exception("You cannot have Persons as children");
         }
+
+        int IEntity.GetCountOfChildrenOnParent(IEntity parent)
+        {
+            try
+            {
+                throw new Exception("Person cannot be a child");
+            }
+            catch (InvalidCastException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+        }
     }
 }

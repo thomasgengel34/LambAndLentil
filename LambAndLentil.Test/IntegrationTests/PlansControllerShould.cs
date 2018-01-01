@@ -228,16 +228,16 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void AttachAnExistingIngredientToAnExistingPlan()
         {
             // Arrange
-            IEntity ingredient = new Ingredient() { ID = 100 };
-           
+            Ingredient  ingredient = new Ingredient() { ID = 100 };
+            int foo = ingredient.ID;
             // Act
             Controller.Attach(Repo,Plan.ID, (Ingredient)ingredient ,AttachOrDetach.Attach);
-            IPlan returnedPlan = Repo.GetById(Plan.ID);
+            IEntityChildClassIngredients returnedPlan = Repo.GetById(Plan.ID);
 
             // Assert 
             Assert.AreEqual(1, returnedPlan.Ingredients.Count());
             // how do I know the correct ingredient was added?
-            Assert.AreEqual(ingredient.ID, returnedPlan.Ingredients.First().ID);
+            Assert.AreEqual(foo, returnedPlan.Ingredients.First().ID);
         }
 
         [TestMethod]

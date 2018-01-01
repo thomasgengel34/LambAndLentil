@@ -28,7 +28,7 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
             child = new TChild();
         }
 
-        protected  void BaseDetailWithSuccessWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSupplied()
+       internal  void BaseDetailWithSuccessWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSupplied()
         {
             if (typeof(TChild) == typeof(IngredientType))
             {

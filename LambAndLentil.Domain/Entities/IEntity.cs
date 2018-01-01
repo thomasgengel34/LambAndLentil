@@ -16,6 +16,7 @@ namespace LambAndLentil.Domain.Entities
 
         bool ParentCanHaveChild(IPossibleChildren parent );
         void AddChildToParent(IEntity parent,IEntity child);
+        int GetCountOfChildrenOnParent(IEntity parent );
         void ParentRemoveAllChildrenOfAType(IEntity  parent, IEntity child);
         IEntity  RemoveSelectionFromChildren<TChild>(IEntity  parent, List<TChild> selected)
             where TChild : BaseEntity, IEntity, IPossibleChildren, new();

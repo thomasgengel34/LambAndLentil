@@ -62,5 +62,22 @@ namespace LambAndLentil.Domain.Entities
                 return trueOrFalse;
             } 
         }
+
+        int IEntity.GetCountOfChildrenOnParent(IEntity parent)
+        {
+            try
+            {
+                return ((IEntityChildClassMenus)parent).Menus.Count();
+            }
+            catch (InvalidCastException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+        }
     }
 }

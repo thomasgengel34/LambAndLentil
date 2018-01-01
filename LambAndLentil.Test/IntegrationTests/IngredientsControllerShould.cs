@@ -98,22 +98,7 @@ namespace LambAndLentil.Test.Infrastructure
 
         }
 
-        //[TestMethod]
-        //[TestCategory("DeleteConfirmed")]
-        //public void ActuallyDeleteAnIngredientFromTheDatabase()
-        //{
-        //    // Arrange   
-        //    Controller = new IngredientsController_Index_Test().SetUpIngredientsController(Repo);
-        //    Ingredient item = Repo.GetById(int.MaxValue);
-        //    int countInRepo = Repo.Count();
-        //    //Act
-        //    Controller.DeleteConfirmed(item.ID);
-        //    int count = Repo.Count();
-
-        //    //Assert
-        //    Assert.AreEqual(countInRepo - 1, count);
-        //}
-
+         
         [TestMethod]
         [TestCategory("Edit")]
         public void ShouldSaveTheCreationDateOnIngredientCreationWithDateTimeParameter()
@@ -282,14 +267,15 @@ namespace LambAndLentil.Test.Infrastructure
         public void HaveDescriptionBoundInPostEditActionMethod()
         {
             //Arrange 
-            Ingredient.Description = "Changed";
+            IIngredient ingredient = new Ingredient { ID = 123456789, Description = "Changed" };
+           
 
             //Act
-             Controller.PostEdit((Ingredient)Ingredient);
-            ReturnedIngredient = Repo.GetById(Ingredient.ID);
+             Controller.PostEdit((Ingredient)ingredient);
+         IIngredient    returnedIngredient = Repo.GetById(Ingredient.ID);
 
             // Assert 
-            Assert.AreEqual(Ingredient.Description, ReturnedIngredient.Description);
+            Assert.AreEqual(Ingredient.Description, returnedIngredient.Description);
         }
           
         
@@ -299,19 +285,20 @@ namespace LambAndLentil.Test.Infrastructure
         public void HaveIngredientsBoundInPostEditActionMethod()
         {
             //Arrange 
-            Ingredient.Ingredients = new List<Ingredient> {
+            IIngredient ingredient = new Ingredient() { ID = 2000 };
+            ingredient.Ingredients = new List<Ingredient> {
                 new Ingredient { Name = "Changed" },
                 new Ingredient { Name = "Changed 2" },
                 new Ingredient { Name = "Changed Up" }
             };
 
             //Act
-             Controller.PostEdit((Ingredient)Ingredient);
-            ReturnedIngredient = Repo.GetById(Ingredient.ID);
+           ActionResult ar=  Controller.PostEdit((Ingredient)ingredient);
+           IIngredient returnedIngredient = Repo.GetById(ingredient.ID);
 
             // Assert 
-            Assert.AreEqual("Changed", ReturnedIngredient.Ingredients.First().Name);
-            Assert.AreEqual("Changed Up", ReturnedIngredient.Ingredients.Last().Name);
+            Assert.AreEqual("Changed", returnedIngredient.Ingredients.First().Name);
+            Assert.AreEqual("Changed Up", returnedIngredient.Ingredients.Last().Name);
         }
          
          

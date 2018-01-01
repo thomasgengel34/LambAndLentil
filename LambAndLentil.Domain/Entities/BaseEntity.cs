@@ -99,10 +99,6 @@ namespace LambAndLentil.Domain.Entities
             if (child == null) { return false; }  
            return  child.ParentCanHaveChild( parent);  
         } 
-
-        //public virtual void ParentRemoveAllChildrenOfAType(IPossibleChildren parent, IEntity child)
-        //{
-
-        //}
+         
     }
 }

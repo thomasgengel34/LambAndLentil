@@ -9,7 +9,7 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.Menu
     [TestCategory("Attach-Detach")]
     public class ControllerShouldAttachShoppingListAndReturn : BaseControllerShouldAttachXAndReturn<MenuType, ShoppingListType>
     {
-        //menu cannot attach a plan
+        //menu cannot attach a shopping list
 
         [TestMethod]
         public void DetailWithErrorWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSuppliedWhenAttachingUnattachableChild() => BaseDetailWithErrorWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSuppliedWhenAttachingUnattachableChild();

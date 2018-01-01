@@ -1,70 +1,45 @@
-﻿using System;
+﻿using LambAndLentil.Test.IAttachDetachControllerTests.BaseTests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using TParent = LambAndLentil.Domain.Entities.Person;
+using TChild = LambAndLentil.Domain.Entities.Ingredient;
 
 namespace LambAndLentil.Test.IAttachDetachControllerTests.Person
 {
     [TestClass]
-     [TestCategory("Attach-Detach")]
-    public class ControllerShouldDetachASetOfIngredientsAndReturn
+    [TestCategory("Attach-Detach")]
+    public class ControllerShouldDetachASetOfIngredientsAndReturn : BaseControllerShouldDetachXAndReturn<TParent, TChild>
     {
-        [Ignore]
+
+
         [TestMethod]
-        public void DetailWithSuccessWhenIDisValidAndAlChildrenOnListExist()
-        {
-            // Arrange
+        public void DetailWithSuccessWhenIDisValidAndAlChildrenOnListExistWhendDetachASetOfIngredients() => BaseDetailWithSuccessWhenIDisValidAndAlChildrenOnListExistWhendDetachASetOfIngredients();
 
-            // Act
 
-            //Assert
-            Assert.Fail();
-        }
-
-        [Ignore]
         [TestMethod]
-        public void DetailWithWarningWhenIDisValidAndNotAllChildrenOnListExist()
-        {
-            // Arrange
+        public void DetailWithSuccessWhenIDisValidAndNotAllChildrenOnListExistWhenDetachASetOfIngredients() =>
+            BaseDetailWithSuccessWhenIDisValidAndNotAllChildrenOnListExistWhenDetachASetOfIngredients(); 
 
-            // Act
 
-            //Assert
-            Assert.Fail();
-        }
-
-        [Ignore]
         [TestMethod]
-        public void DetailWithErrorWhenIDisValidAndNoChildrenOnListExist()
-        {
-            // Arrange
+        public void DetailWithErrorWhenIDisValidAndNoChildrenOnListExistWhenDetachASetOfIngredients() => 
+            BaseDetailWithErrorWhenIDisValidAndNoChildrenOnListExistWhenDetachASetOfIngredients(); 
 
-            // Act
 
-            //Assert
-            Assert.Fail();
-        }
-
-        [Ignore]
         [TestMethod]
-        public void DetailWithSuccessWhenIDisValidAndThereAreThreeChildrenOnList()
-        {
-            // Arrange
+        public void DetailWithSuccessWhenIDisValidAndThereAreThreeChildrenOnListWhenDetachASetOfIngredients() => 
+            BaseDetailWithSuccessWhenIDisValidAndThereAreThreeChildrenOnListWhenDetachASetOfIngredients(); 
 
-            // Act
 
-            //Assert
-            Assert.Fail();
-        }
-
-        [Ignore]
         [TestMethod]
-        public void DetailWithErrorWhenIDisNotForAFoundParent()
-        {
-            // Arrange
+        public void DetailWithWarningWhenIDisNotForAFoundParentWhenDetachASetOfIngredients() => 
+            BaseDetailWithWarningWhenIDisNotForAFoundParentWhenDetachASetOfIngredients(); 
 
-            // Act
-
-            //Assert
-            Assert.Fail();
-        }
+       
+           
+        [TestMethod]
+        public void DetailWithErrorWhenParentIDIsValidAndChildIsNotFound() =>        
+            BaseDetailWithErrorWhenIDisValidAndNoChildrenOnListExistWhenDetachASetOfIngredients(); 
+         
+   
     }
 }

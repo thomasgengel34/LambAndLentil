@@ -51,7 +51,7 @@ namespace LambAndLentil.Domain.Entities
 
         public void ParentRemoveAllChildrenOfAType(IEntity  parent, IEntity child)
         {
-            ((IEntityAllChildren)parent).ShoppingLists.Clear();
+            ((IEntityChildClassShoppingLists)parent).ShoppingLists.Clear();
         }
 
 
@@ -69,6 +69,23 @@ namespace LambAndLentil.Domain.Entities
                 bool trueOrFalse = numbers.Contains(itemID);
                 return trueOrFalse;
             } 
+        }
+
+        int IEntity.GetCountOfChildrenOnParent(IEntity parent)
+        {
+            try
+            {
+                return ((IEntityChildClassShoppingLists)parent).ShoppingLists.Count();
+            }
+            catch (InvalidCastException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
         }
     }
 }

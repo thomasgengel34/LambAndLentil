@@ -1,14 +1,14 @@
 ﻿using LambAndLentil.Test.IAttachDetachControllerTests.BaseTests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TParent = LambAndLentil.Domain.Entities.Plan;
-using TChild= LambAndLentil.Domain.Entities.Menu;
+using TParent = LambAndLentil.Domain.Entities.ShoppingList;
+using TChild= LambAndLentil.Domain.Entities.Plan;
 
 
-namespace LambAndLentil.Test.IAttachDetachControllerTests.Plan
+namespace LambAndLentil.Test.IAttachDetachControllerTests.ShoppingList
 {
     [TestClass]
     [TestCategory("Attach-Detach")]
-    public class ControllerShouldAttachMenuAndReturn: BaseControllerShouldAttachXAndReturn<TParent,TChild>
+    public class ControllerShouldAttachPlanAndReturn: BaseControllerShouldAttachXAndReturn<TParent,TChild>
     {
         
        
@@ -25,6 +25,6 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.Plan
         [TestMethod]
         public void DetailWithErrorWhenParentIDIsValidAndChildIsNotValid() => BaseDetailWithErrorWhenParentIDIsValidAndChildIsNotValid(); 
 
-        
+       
     }
 }

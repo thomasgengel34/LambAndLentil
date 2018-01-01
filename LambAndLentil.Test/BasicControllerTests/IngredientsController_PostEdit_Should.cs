@@ -88,27 +88,20 @@ namespace LambAndLentil.Test.BasicControllerTests
         }
 
         [TestMethod]
-        public void NotBindIngredientsNotIdentifiedToBeBoundInEdit()
-        { // Bind(Include = "ID, Name, Description, CreationDate,  IngredientsList")] 
-          // do not bind AddedByUser, ModifiedByUser
+        public void NotBindIngredientPropertiesNotIdentifiedToBeBoundInEdit()
+        { 
+             
+            IIngredient ingredient = new Ingredient { ID = 1000, AddedByUser = "Not Changed",    ModifiedByUser = "Original"  };
+            Repo.Save((Ingredient)ingredient);
 
-            // Arrange
-            DateTime creationDate = new DateTime(2014, 2, 2);
-            DateTime modifiedDate = new DateTime(2014, 2, 3);
-            Ingredient ingredient = new Ingredient { ID = 1000, AddedByUser = "Not Changed", CreationDate = creationDate, Description = "Original Description", IngredientsList = "This, That, Those", ModifiedByUser = "See No Evil", ModifiedDate = modifiedDate, Name = "Punkin" };
-            Repo.Save(ingredient);
+            ingredient.AddedByUser = "Changed";
+            ingredient.ModifiedByUser = "Should Not Be Original";
+            Controller.PostEdit((Ingredient)ingredient);
+            IIngredient returnedIngredient = Repo.GetById(ingredient.ID);
 
-            // Act
-            ingredient.AddedByUser = "Hermann Hesse  cxcxcxsr12212244443434";
-            ingredient.ModifiedByUser = "Huck Finn gergtwtvkjtittjutjt-5258686545345";
-             Controller.PostEdit(ingredient);
-            Ingredient returnedIngredient = Repo.GetById(1000);
-
-            // Assert
-            Assert.AreNotEqual("Hermann Hesse  cxcxcxsr12212244443434", returnedIngredient.AddedByUser);
-            Assert.AreNotEqual("Huck Finn gergtwtvkjtittjutjt-5258686545345", returnedIngredient.ModifiedByUser);
+            Assert.AreNotEqual("Changed", returnedIngredient.AddedByUser);
+            Assert.AreNotEqual("Should Not Be Original", returnedIngredient.ModifiedByUser);
         }
-
 
         [TestMethod]
         public void ModifiedDateUpDatesInEdit()

@@ -3,16 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Web.Mvc;
 using LambAndLentil.Domain.Abstract;
 using LambAndLentil.Domain.Concrete;
 using LambAndLentil.Domain.Entities;
 using LambAndLentil.UI.Controllers;
-using LambAndLentil.UI.Infrastructure.Alerts;
-using LambAndLentil.UI.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests 
+namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
 {
     public class BaseTest<TParent, TChild>
         where TParent : BaseEntity, IEntity, new()

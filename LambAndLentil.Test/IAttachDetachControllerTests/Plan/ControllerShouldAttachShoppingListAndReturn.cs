@@ -1,94 +1,45 @@
-﻿using System;
+﻿using LambAndLentil.Test.IAttachDetachControllerTests.BaseTests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using TParent = LambAndLentil.Domain.Entities.Plan;
+using TChild= LambAndLentil.Domain.Entities.ShoppingList;
+
 
 namespace LambAndLentil.Test.IAttachDetachControllerTests.Plan
 {
     [TestClass]
     [TestCategory("Attach-Detach")]
-    public class ControllerShouldAttachShoppingListAndReturn__DuplicateMaybe
+    public class ControllerShouldAttachShoppingListAndReturn: BaseControllerShouldAttachXAndReturn<TParent,TChild>
     {
-        [Ignore]
+        // Plan cannot attach a shopping list
         [TestMethod]
-        public void  DetailWithSuccessWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSupplied()
-        {   
-            // Arrange
+        public void DetailWithErrorWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSuppliedWhenAttachingUnattachableChild() => BaseDetailWithErrorWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSuppliedWhenAttachingUnattachableChild();
 
-            // Act
 
-            //Assert
-            Assert.Fail();
-        }
 
-        [Ignore]
         [TestMethod]
-        public void  IndexWithErrorWhenParentIDIsNull()
-        {
-            // Arrange
+        public void IndexWithErrorWhenParentIDIsNull() => BaseReturnsIndexWithWarningWithNullParent();
 
-            // Act
 
-            //Assert
-            Assert.Fail();
-        }
-
-        [Ignore]
         [TestMethod]
-        public void IndexWithErrorWhenParentIDIsNotForAnExistingPlan()
-        {
-            // Arrange
+        public void IndexWithErrorWhenParentIDIsNotForAnExistingIngredient() =>
+             BaseIndexWithErrorWhenParentIDIsNotForAnExistingIngredient();
 
-            // Act
 
-            //Assert
-            Assert.Fail();
-        }
-
-        [Ignore]
         [TestMethod]
-        public void DetailWithErrorWhenParentIDIsValidAndChildIsNotValid()
-        {
-            // Arrange
+        public void DetailWithErrorWhenParentIDIsValidAndChildIsNotValid() => BaseDetailWithErrorWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSuppliedWhenAttachingUnattachableChild();
 
-            // Act
 
-            //Assert
-            Assert.Fail();
-        }
-
-        [Ignore]
         [TestMethod]
-        public void  DetailWithWarningWhenParentIDIsValidAndChildIstValidAndOrderNumberIsNegative()
-        { // simply add such an child onto the end of the child-list and tell the user that is what happened
-            // Arrange
+        public void DetailWithErrorWhenParentIDIsValidAndChildIstValidAndOrderNumberIsNegative() => BaseDetailWithErrorWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSuppliedWhenAttachingUnattachableChild();
 
-            // Act
 
-            //Assert
-            Assert.Fail();
-        }
 
-        [Ignore]
         [TestMethod]
-        public void  DetailWithWarningWhenParentIDIsValidAndChildIstValidAndOrderNumberIsInUse()
-        { // simply add such an child onto the end of the child-list and tell the user that is what happened
-            // Arrange
+        public void DetailWithErrorWhenParentIDIsValidAndChildIstValidAndOrderNumberIsInUse() => BaseDetailWithErrorWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSuppliedWhenAttachingUnattachableChild();
 
-            // Act
 
-            //Assert
-            Assert.Fail();
-        }
 
-        [Ignore]
         [TestMethod]
-        public void  DetailWithSuccessWhenParentIDIsValidAndChildIsValidAndOrderNumberIsGreaterThanTheNumberOfElementsWhenAttaching()
-        { // simply add such an child onto the end of the child-list and tell the user that is what happened
-            // Arrange
-
-            // Act
-
-            //Assert
-            Assert.Fail();
-        }
+        public void DetailWithSuccessWhenParentIDIsValidAndChildIsValidAndOrderNumberIsGreaterThanTheNumberOfElementsWhenAttaching() => BaseDetailWithErrorWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSuppliedWhenAttachingUnattachableChild();
     }
 }

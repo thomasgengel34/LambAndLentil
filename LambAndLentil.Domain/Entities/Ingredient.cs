@@ -22,7 +22,15 @@ namespace LambAndLentil.Domain.Entities
 
         public int ID { get; set; }
         public List<Ingredient> Ingredients { get; set; }
-
+        List<Ingredient> IEntityChildClassIngredients.Ingredients { get; set; }
+        string IEntity.AddedByUser { get; set; }
+        DateTime IEntity.CreationDate { get; set; }
+        int IEntity.ID { get; set; }
+        string IEntity.ModifiedByUser { get; set; }
+        DateTime IEntity.ModifiedDate { get; set; }
+        string IEntity.Name { get; set; }
+        string IEntity.Description { get; set; }
+        string IEntity.IngredientsList { get; set; }
 
         bool IEntity.ParentCanHaveChild(IPossibleChildren parent)
         {
@@ -38,7 +46,7 @@ namespace LambAndLentil.Domain.Entities
         {
             ((IEntityChildClassIngredients)parent).Ingredients.Add((Ingredient)child);
         }
-       
+
 
         public void ParentRemoveAllChildrenOfAType(IEntity parent, IEntity child)
         {
@@ -61,13 +69,49 @@ namespace LambAndLentil.Domain.Entities
                 else
                 {
                     int itemID = item.ID;
-                    var newSet = from f in selected where f!= null select f;
+                    var newSet = from f in selected where f != null select f;
 
                     var numbers = from f in newSet select f.ID;
                     bool trueOrFalse = numbers.Contains(itemID);
                     return trueOrFalse;
-                } 
-            } 
+                }
+            }
+        }
+
+        int IEntity.GetCountOfChildrenOnParent(IEntity parent)
+        {
+            try
+            {
+                return ((IEntityChildClassIngredients)parent).Ingredients.Count();
+            }
+            catch (InvalidCastException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+        }
+        void IEntity.ParentRemoveAllChildrenOfAType(IEntity parent, IEntity child) => ((IEntityChildClassIngredients)parent).Ingredients.Clear();
+
+        IEntity IEntity.RemoveSelectionFromChildren<TChild>(IEntity parent, List<TChild> selected)
+        {
+            var setToRemove = new HashSet<TChild>(selected).Where(p => p != null);
+            ((IEntityChildClassIngredients)parent).Ingredients.RemoveAll(ContainsSelected);
+            return parent;
+
+            bool ContainsSelected(IEntity item)
+            { 
+                int itemID = ((Ingredient)item).ID;
+                //      var numbers = from f in selected select  f.ID;
+                //      bool trueOrFalse = numbers.Contains(itemID);
+
+                bool trueOrFalse = setToRemove.Contains(item);
+
+                return trueOrFalse; 
+            }
         }
     }
 }

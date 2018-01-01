@@ -88,21 +88,23 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [TestMethod]
         public void BeSuccessfulWithValidIngredientID()
-        { // "Here it is!"
-            // Arrange
+        {
+            // sut = system.under.test
+            string foo = "bar";
+            Ingredient sut = new Ingredient { ID = 60000};
+            Repo.Add(sut);
 
-
-            // Act
-            ActionResult ar = Controller.Details(int.MaxValue);
+            ActionResult ar = Controller.Details(sut.ID);
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
-            ViewResult view = (ViewResult)adr.InnerResult;
+            RedirectToRouteResult rdr = (RedirectToRouteResult)adr.InnerResult;
 
-            // Assert
             Assert.IsNotNull(ar);
-            Assert.AreEqual("Details", view.ViewName);
-            Assert.IsInstanceOfType(view.Model, typeof(Ingredient));
+            Assert.AreEqual(UIViewType.BaseIndex.ToString(), rdr.RouteValues.Values.ElementAt(0));
             Assert.AreEqual("Here it is!", adr.Message);
-        }
+            Assert.AreEqual("alert-success", adr.AlertClass);
+
+            
+        }  
 
         [TestMethod]
         public void GotToIndexViewForNonSpecifiedActionMethods()

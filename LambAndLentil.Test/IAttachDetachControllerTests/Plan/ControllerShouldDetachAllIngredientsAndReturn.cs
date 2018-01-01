@@ -1,46 +1,32 @@
-﻿using System;
+﻿using LambAndLentil.Test.IAttachDetachControllerTests.BaseTests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using ParentType = LambAndLentil.Domain.Entities.Plan;
+using ChildType = LambAndLentil.Domain.Entities.Ingredient;
 
 namespace LambAndLentil.Test.IAttachDetachControllerTests.Plan
 {
     [TestClass]
     [TestCategory("Attach-Detach")]
-    public class ControllerShouldDetachAllIngredientsAndReturn
+    public class ControllerShouldDetachAllIngredientsAndReturn  : BaseControllerShouldDetachXAndReturn<ParentType, ChildType>
     {
-        [Ignore]
         [TestMethod]
-        public void DetailWithSuccessWhenIDisValidAndThereIsOneChildOnList()
-        {
-            // Arrange
+        public void DetailWithSuccessWhenIDisValidAndThereIsOneChildOnListWhenDetachingAndSelectionSetIsNotSupplied() => BaseDetailWithSuccessWhenIDisValidAndThereIsOneChildOnListWhenDetachingAndSelectionSetIsNotSupplied();
 
-            // Act
 
-            //Assert
-            Assert.Fail();
-        }
-
-        [Ignore]
         [TestMethod]
-        public void DetailWithSuccessWhenIDisValidAndThereAreThreeChildsOnList()
-        {
-            // Arrange
+        public void DetailWithSuccessWhenIDisValidAndThereIsOneChildOnListWhenDetachingAndSelectionSetIsSupplied() => BaseDetailWithSuccessWhenIDisValidAndThereIsOneChildOnListWhenDetachingAndSelectionSetIsSupplied();
 
-            // Act
 
-            //Assert
-            Assert.Fail();
-        }
-
-        [Ignore]
         [TestMethod]
-        public void DetailWithErrorWhenIDisNotForAFoundParent()
-        {
-            // Arrange
+        public void DetailWithSuccessWhenIDisValidAndThereAreThreeChildrenOnList() =>
+           BaseDetailWithSuccessWhenIDisValidAndThereAreThreeChildrenOnListWhenDetachingAll();
 
-            // Act
 
-            //Assert
-            Assert.Fail();
-        }
+        [TestMethod]
+        public void DetailWithErrorWhenIDisNotForAFoundParentWhenDetachingAll() =>
+BaseDetailWithErrorWhenIDisNotForAFoundParentWhenDetachingAll();
+
+      
     }
 }
+ 
