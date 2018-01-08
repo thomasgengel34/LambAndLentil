@@ -22,19 +22,13 @@ namespace LambAndLentil.Test.BasicControllerTests
          
         [TestMethod]
         public void ReturnDeleteWithActionMethodDeleteWithNullResult()
-        { // "Ingredient was not found"
-
-            // Arrange
-
-            // Act 
+        {  
             AlertDecoratorResult adr = (AlertDecoratorResult)Controller.Details(400, UIViewType.Delete);
             RedirectToRouteResult rdr = (RedirectToRouteResult)adr.InnerResult;
-
-            // Assert
+ 
             Assert.AreEqual(UIViewType.Index.ToString(), rdr.RouteValues.Values.ElementAt(0));
             Assert.AreEqual("Ingredient was not found", adr.Message);
-            Assert.AreEqual("alert-warning", adr.AlertClass);
-
+            Assert.AreEqual("alert-warning", adr.AlertClass); 
         }
 
         [TestMethod]
@@ -44,16 +38,15 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [TestMethod]
         public void ReturnDeleteConfirmedWithActionMethodDeleteConfirmedWithFoundResult()
-        { // index, success,  "Item has been deleted"
-          // Arrange
+        {  
             int count = Repo.Count();
-            //Act
+             
             Controller.Details(int.MaxValue, UIViewType.DeleteConfirmed);
             Ingredient item = Repo.GetById(int.MaxValue);
-            //Assert
+         
             Assert.AreEqual(count - 1, Repo.Count());
             Assert.IsNull(item);
-            //   Assert.Fail();  // make sure the correct item was deleted before removing this line 
+            //   Assert.Fail();  // TODO: make sure the correct item was deleted before removing this line 
         }
 
 
@@ -89,22 +82,20 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestMethod]
         public void BeSuccessfulWithValidIngredientID()
         {
-            // sut = system.under.test
-            string foo = "bar";
-            Ingredient sut = new Ingredient { ID = 60000};
-            Repo.Add(sut);
-
+            // sut = system.under.test 
+            Ingredient sut = new Ingredient { ID = 60000 };
+         
+            Repo.Add(sut); 
             ActionResult ar = Controller.Details(sut.ID);
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
-            RedirectToRouteResult rdr = (RedirectToRouteResult)adr.InnerResult;
+
+            ViewResult viewResult = (ViewResult)adr.InnerResult;
 
             Assert.IsNotNull(ar);
-            Assert.AreEqual(UIViewType.BaseIndex.ToString(), rdr.RouteValues.Values.ElementAt(0));
+            Assert.AreEqual(UIViewType.Details.ToString(),  viewResult.ViewName);
             Assert.AreEqual("Here it is!", adr.Message);
-            Assert.AreEqual("alert-success", adr.AlertClass);
-
-            
-        }  
+            Assert.AreEqual("alert-success", adr.AlertClass); 
+        }
 
         [TestMethod]
         public void GotToIndexViewForNonSpecifiedActionMethods()

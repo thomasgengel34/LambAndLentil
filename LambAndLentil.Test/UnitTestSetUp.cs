@@ -9,12 +9,7 @@ namespace LambAndLentil.Test
         [Ignore]
         [TestMethod]
         public void TestMethod1()
-        {
-            // Arrange
-
-            // Act
-
-            //Assert
+        { 
             Assert.Fail();
         }
     }

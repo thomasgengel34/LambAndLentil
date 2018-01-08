@@ -11,10 +11,7 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.Recipe
     public class ControllerShouldAttachPlanAndReturn: BaseControllerShouldAttachXAndReturn<TParent,TChild>
     {
         // Recipe cannot attach a plan
-        [TestMethod]
-        public void DetailWithErrorWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSuppliedWhenAttachingUnattachableChild() => BaseDetailWithErrorWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSuppliedWhenAttachingUnattachableChild();
-
-
+         
 
         [TestMethod]
         public void IndexWithErrorWhenParentIDIsNull() => BaseReturnsIndexWithWarningWithNullParent();
@@ -23,23 +20,6 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.Recipe
         [TestMethod]
         public void IndexWithErrorWhenParentIDIsNotForAnExistingIngredient() =>
              BaseIndexWithErrorWhenParentIDIsNotForAnExistingIngredient();
-
-
-        [TestMethod]
-        public void DetailWithErrorWhenParentIDIsValidAndChildIsNotValid() => BaseDetailWithErrorWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSuppliedWhenAttachingUnattachableChild();
-
-
-        [TestMethod]
-        public void DetailWithErrorWhenParentIDIsValidAndChildIstValidAndOrderNumberIsNegative() => BaseDetailWithErrorWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSuppliedWhenAttachingUnattachableChild();
-
-
-
-        [TestMethod]
-        public void DetailWithErrorWhenParentIDIsValidAndChildIstValidAndOrderNumberIsInUse() => BaseDetailWithErrorWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSuppliedWhenAttachingUnattachableChild();
-
-
-
-        [TestMethod]
-        public void DetailWithSuccessWhenParentIDIsValidAndChildIsValidAndOrderNumberIsGreaterThanTheNumberOfElementsWhenAttaching() => BaseDetailWithErrorWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSuppliedWhenAttachingUnattachableChild();
+         
     }
 }

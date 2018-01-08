@@ -15,17 +15,14 @@ namespace LambAndLentil.Test.BasicControllerTests
           
         [TestMethod]
         public void SuccessfullyAttachChild()
-        {
-            // Arrange
+        { 
             Ingredient child = new Ingredient() { ID = 3000, Name = "SuccessfullyAttachChild" };
             TestRepository<Ingredient> IngredientRepo = new TestRepository<Ingredient>();
             IngredientRepo.Save(child);
-
-            // Act
-            Controller.Attach(Repo,Person.ID, child, AttachOrDetach.Attach);
+             
+            Controller.Attach(Repo,Person.ID, child );
             ReturnedPerson = Repo.GetById(Person.ID);
-            // Assert
-            //  Assert.AreEqual("Default", Ingredient.Ingredients.Last().Name);
+         
             Assert.AreEqual("SuccessfullyAttachChild", ReturnedPerson.Ingredients.Last().Name);
         }
 
@@ -34,20 +31,14 @@ namespace LambAndLentil.Test.BasicControllerTests
         [Ignore]
         [TestMethod]
         public void SuccessfullyDetachFirstIngredientChild()
-        {
-            // Arrange
-
-            // Act
-
-            //Assert
+        { 
             Assert.Fail();
         }
 
        
         [TestMethod]
         public void SuccessfullyDetachASetOfIngredientChildren()
-        {
-            // Arrange 
+        { 
             Person.Ingredients.Add(new Ingredient { ID = 4005, Name = "Butter" });
             Person.Ingredients.Add(new Ingredient { ID = 4006, Name = "Cayenne Pepper" });
             Person.Ingredients.Add(new Ingredient { ID = 4007, Name = "Cheese" });
@@ -75,7 +66,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         
         [TestMethod]
         public void  DetachAllIngredientChildren()=> 
-            BaseDetachAllIngredientChildren(Repo, Controller, Person); 
+            BaseDetachAllIngredientChildren(Repo, Controller ); 
 
         [Ignore]
         [TestMethod]

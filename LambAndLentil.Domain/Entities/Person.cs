@@ -57,7 +57,7 @@ namespace LambAndLentil.Domain.Entities
         //TODO: add all ingredients after I figure out how to economically
 
 
-        public int ID { get; set; }
+      
         public string FirstName { get; set; }
         public List<Plan> Plans { get; set; }
         public List<Ingredient> Ingredients { get; set; }

@@ -25,7 +25,7 @@ namespace LambAndLentil.Domain.Entities
 
         public Plan(DateTime creationDate) : base(creationDate) => CreationDate = creationDate;
 
-        public int ID { get; set; }
+     
         public List<Ingredient> Ingredients { get; set; }
         public List<Menu> Menus { get; set; }
         public List<Recipe> Recipes { get; set; }
@@ -81,5 +81,7 @@ namespace LambAndLentil.Domain.Entities
             }
 
         }
+
+        
     } 
 }

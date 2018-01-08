@@ -9,6 +9,7 @@ using LambAndLentil.UI.Controllers;
 using LambAndLentil.UI;
 using System.Collections.Generic;
 using LambAndLentil.UI.Models;
+using LambAndLentil.Test.TestObjects;
 
 namespace LambAndLentil.Test.BasicControllerTests
 {
@@ -47,7 +48,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             };
 
             // Act
-            ActionResult ar = Controller.Attach(Repo,int.MaxValue, ingredient,UI.Models.AttachOrDetach.Attach);
+            ActionResult ar = Controller.Attach(Repo,int.MaxValue, ingredient );
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             RedirectToRouteResult rdr = (RedirectToRouteResult)adr.InnerResult;
 
@@ -74,44 +75,37 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestMethod]
         public void SuccessfullyAttachChild()
         {
-            // Arrange
+             
             Ingredient child = new Ingredient() { ID = 3000, Name = "SuccessfullyAttachChild" };
             TestRepository<Ingredient> IngredientRepo = new TestRepository<Ingredient>();
             IngredientRepo.Save(child);
 
-            // Act
-            Controller.Attach(Repo,Plan.ID, child, AttachOrDetach.Attach);
+           
+            Controller.Attach(Repo,Plan.ID, child );
             ReturnedPlan = Repo.GetById(Plan.ID);
-            // Assert
-            //  Assert.AreEqual("Default", Ingredient.Ingredients.Last().Name);
+            
             Assert.AreEqual("SuccessfullyAttachChild", ReturnedPlan.Ingredients.Last().Name);
         }
-         
-        //[TestMethod]
-        //[TestCategory("Attach-Detach")]
-        //public void SuccessfullyDetachFirstIngredientChild()
-        //{
-        //    IGenericController<Plan> DetachController = new PlansController(Repo);
-        //    BaseSuccessfullyDetachChild(Repo, Controller, DetachController, UIControllerType.Plans, 0); 
-        //}
+          
 
         [TestMethod]
         [TestCategory("Attach-Detach")]
         public void DetachASetOfIngredientChildren()
-        {
-            // Arrange 
-            Plan.Ingredients.Add(new Ingredient { ID = 4005, Name = "Butter" });
-            Plan.Ingredients.Add(new Ingredient { ID = 4006, Name = "Cayenne Pepper" });
-            Plan.Ingredients.Add(new Ingredient { ID = 4007, Name = "Cheese" });
-            Plan.Ingredients.Add(new Ingredient { ID = 4008, Name = "Chopped Green Pepper" });
-            Repo.Save((Plan)Plan);
-            int initialIngredientCount = Plan.Ingredients.Count();
+        { 
+             Plan plan = new TestPlan().CreatePlan(); 
+            plan = new TestPlan().AddIngredientChildrenToPlan(plan);
+            
+            Repo.Save((Plan)plan);
+            int initialIngredientCount = plan.Ingredients.Count();
 
-            // Act
-            var setToSelect = new HashSet<int> { 4006, 4008 };
-            List<Ingredient> selected = Plan.Ingredients.Where(t => setToSelect.Contains(t.ID)).ToList();
-            Controller.DetachASetOf(Plan.ID, selected);
-            Plan returnedPlan = Repo.GetById(Plan.ID);
+            int firstIDtoRemove = int.MaxValue - 1;
+            int secondIDtoRemove = int.MaxValue - 3;
+
+
+            var setToSelect = new HashSet<int> { firstIDtoRemove, secondIDtoRemove };
+            List<Ingredient> selected = plan.Ingredients.Where(t => setToSelect.Contains(t.ID)).ToList();
+            Controller.DetachASetOf(plan.ID, selected);
+            Plan returnedPlan = Repo.GetById(plan.ID);
 
             // Assert
             Assert.AreEqual(initialIngredientCount - 2, returnedPlan.Ingredients.Count());
@@ -125,7 +119,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [TestMethod] 
         public void DetachAllIngredientChildren()=>       
-            BaseDetachAllIngredientChildren(Repo, Controller, Plan); 
+            BaseDetachAllIngredientChildren(Repo, Controller ); 
 
 
 

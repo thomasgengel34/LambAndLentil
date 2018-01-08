@@ -226,15 +226,14 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestMethod]
         [TestCategory("Attach-Detach")]
         public void AttachAnExistingIngredientToAnExistingPlan()
-        {
-            // Arrange
+        { 
             Ingredient  ingredient = new Ingredient() { ID = 100 };
             int foo = ingredient.ID;
-            // Act
-            Controller.Attach(Repo,Plan.ID, (Ingredient)ingredient ,AttachOrDetach.Attach);
+           
+            Controller.Attach(Repo,Plan.ID, (Ingredient)ingredient );
             IEntityChildClassIngredients returnedPlan = Repo.GetById(Plan.ID);
 
-            // Assert 
+          
             Assert.AreEqual(1, returnedPlan.Ingredients.Count());
             // how do I know the correct ingredient was added?
             Assert.AreEqual(foo, returnedPlan.Ingredients.First().ID);
@@ -243,9 +242,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestMethod]
         [TestCategory("Attach-Detach")]
         public void AttachAnExistingRecipeToAnExistingPlan()
-        {
-            // Arrange
-
+        { 
             IRepository<Recipe> repoRecipe = new TestRepository<Recipe>(); 
 
             Plan.Description = "test AttachAnExistingRecipeToAnExistingPlan";
@@ -257,7 +254,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Repo.Update((Plan)Plan, Plan.ID);
             repoRecipe.Save((Recipe)recipe);
             // Act
-            Controller.Attach(Repo,Plan.ID, (Recipe)recipe, AttachOrDetach.Attach);
+            Controller.Attach(Repo,Plan.ID, (Recipe)recipe );
             Plan returnedPlan = Repo.GetById(Plan.ID);
 
             // Assert 

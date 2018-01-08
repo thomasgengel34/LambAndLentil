@@ -8,8 +8,7 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.Ingredient
     [TestCategory("Attach-Detach")]
     public class ControllerShouldAttachIngredientAndReturn : BaseControllerShouldAttachXAndReturn<IngredientType, IngredientType>
     {
-        [TestMethod]
-        public void DetailWithSuccessWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSupplied() => BaseDetailWithSuccessWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSupplied();
+         
 
 
         [TestMethod]
@@ -25,20 +24,6 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.Ingredient
         [TestMethod]
         public void DetailWithErrorWhenParentIDIsValidAndChildIsNotValid() => BaseDetailWithErrorWhenParentIDIsValidAndChildIsNotValid();
 
-        [Ignore]
-        [TestMethod]
-        public void DetailWithWarningWhenParentIDIsValidAndChildIstValidAndOrderNumberIsNegativeWhenDetaching() => //BaseDetailWithWarningWhenParentIDIsValidAndChildIstValidAndOrderNumberIsNegativeWhenDetaching();
-            Assert.Fail();
-
-
-        [TestMethod]
-        public void DetailWithSuccessWhenParentIDIsValidAndChildIstValidAndOrderNumberIsInUseWhenAttaching() => BaseDetailWithSuccessWhenParentIDIsValidAndChildIstValidAndOrderNumberIsInUseWhenAttaching();
-
-
-
-        [TestMethod]
-        public void DetailWithSuccessWhenParentIDIsValidAndChildIsValidAndOrderNumberIsGreaterThanTheNumberOfElementsWhenAttaching() =>  BaseDetailWithSuccessWhenParentIDIsValidAndChildIsValidAndOrderNumberIsGreaterThanTheNumberOfElementsWhenAttaching();
-
-         
+        
     }
 }

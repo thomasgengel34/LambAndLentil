@@ -52,7 +52,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             };
 
             // Act
-            ActionResult ar = Controller.Attach(Repo,int.MaxValue, ingredient, AttachOrDetach.Attach);
+            ActionResult ar = Controller.Attach(Repo,int.MaxValue, ingredient);
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             RedirectToRouteResult rdr = (RedirectToRouteResult)adr.InnerResult;
 
@@ -77,34 +77,23 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [TestMethod]
         public void SuccessfullyAttachChild()
-        {
-            // Arrange
+        { 
             Ingredient child = new Ingredient() { ID = 3000, Name = "SuccessfullyAttachChild" };
             TestRepository<Ingredient> IngredientRepo = new TestRepository<Ingredient>();
             IngredientRepo.Save(child);
-
-            // Act
-            Controller.Attach(Repo,Recipe.ID, child,AttachOrDetach.Attach);
+ 
+            Controller.Attach(Repo,Recipe.ID, child );
             ReturnedRecipe = Repo.GetById(Recipe.ID);
-            // Assert
-            //  Assert.AreEqual("Default", Ingredient.Ingredients.Last().Name);
+           
+          
             Assert.AreEqual("SuccessfullyAttachChild", ReturnedRecipe.Ingredients.Last().Name);
         }
-
-        //[TestMethod]
-        //[TestCategory("Attach-Detach")]
-        //public void SuccessfullyDetachFirstIngredientChild()
-        //{
-        //    IGenericController<Recipe> DetachController = new RecipesController(Repo);
-        //    BaseSuccessfullyDetachChild(Repo, Controller, DetachController, UIControllerType.ShoppingLists, 0);
-        //}
+         
 
         [TestMethod]
         [TestCategory("Attach-Detach")]
         public void DetachASetOfIngredientChildren()
-        { // RemoveAll
-          // Arrange
-
+        {  
             Recipe.Ingredients.Add(new Ingredient { ID = 4005, Name = "Butter" });
             Recipe.Ingredients.Add(new Ingredient { ID = 4006, Name = "Cayenne Pepper" });
             Recipe.Ingredients.Add(new Ingredient { ID = 4007, Name = "Cheese" });
@@ -134,7 +123,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [TestMethod]
         [TestCategory("Attach-Detach")]
-        public void DetachAllIngredientChildren() => BaseDetachAllIngredientChildren(Repo, Controller, Recipe);
+        public void DetachAllIngredientChildren() => BaseDetachAllIngredientChildren(Repo, Controller );
 
         [TestMethod]
         public void ReturnsDetailWhenDetachingWithSuccessWithValidParentandValidIngredientChild() => BaseReturnsDetailWhenDetachingWithSuccessWithValidParentandValidIngredientChild(Repo, Controller, Recipe.ID);

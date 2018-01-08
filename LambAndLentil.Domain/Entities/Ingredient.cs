@@ -20,7 +20,7 @@ namespace LambAndLentil.Domain.Entities
         public Ingredient(DateTime creationDate) : this() => CreationDate = creationDate;
 
 
-        public int ID { get; set; }
+      
         public List<Ingredient> Ingredients { get; set; }
         List<Ingredient> IEntityChildClassIngredients.Ingredients { get; set; }
         string IEntity.AddedByUser { get; set; }
@@ -96,22 +96,39 @@ namespace LambAndLentil.Domain.Entities
         }
         void IEntity.ParentRemoveAllChildrenOfAType(IEntity parent, IEntity child) => ((IEntityChildClassIngredients)parent).Ingredients.Clear();
 
-        IEntity IEntity.RemoveSelectionFromChildren<TChild>(IEntity parent, List<TChild> selected)
+
+
+        IEntity IEntity.RemoveSelectionFromChildren<TChild>(IEntity  parent, List<TChild> selected)
         {
-            var setToRemove = new HashSet<TChild>(selected).Where(p => p != null);
-            ((IEntityChildClassIngredients)parent).Ingredients.RemoveAll(ContainsSelected);
-            return parent;
+            IEntityChildClassIngredients parentWithChildren = (IEntityChildClassIngredients)parent;
+          
+            var allIngredientIDs = parentWithChildren.Ingredients.Select(a => a.ID);
 
-            bool ContainsSelected(IEntity item)
-            { 
-                int itemID = ((Ingredient)item).ID;
-                //      var numbers = from f in selected select  f.ID;
-                //      bool trueOrFalse = numbers.Contains(itemID);
+           var setToRemove = new HashSet<TChild>(selected).Where(p => p != null).Select(r=>r.ID).AsQueryable();
 
-                bool trueOrFalse = setToRemove.Contains(item);
-
-                return trueOrFalse; 
-            }
+            var remainingIDs = allIngredientIDs.Except(setToRemove);
+            var remainingChildren = parentWithChildren.Ingredients.Where(b => remainingIDs.Contains(b.ID));
+            parentWithChildren.Ingredients =  remainingChildren.ToList();
+            parent = parentWithChildren;
+            return parent;  
         }
+   
+
+   private class IngredientComparer : IEqualityComparer<Ingredient>
+    {
+        public bool Equals(Ingredient x, Ingredient y)
+        {
+            if (string.Equals(x.ID.ToString(), y.ID.ToString(), StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public int GetHashCode(Ingredient obj)
+        {
+            return obj.Name.GetHashCode();
+        }
+    }
     }
 }

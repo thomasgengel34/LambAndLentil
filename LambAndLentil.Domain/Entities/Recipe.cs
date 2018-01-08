@@ -21,7 +21,7 @@ namespace LambAndLentil.Domain.Entities
 
         public Recipe(DateTime creationDate) : base(creationDate) => CreationDate = creationDate;
 
-        public int ID { get; set; }
+      
         public decimal Servings { get; set; }
         public MealType MealType { get; set; }
         public int? Calories { get; set; }

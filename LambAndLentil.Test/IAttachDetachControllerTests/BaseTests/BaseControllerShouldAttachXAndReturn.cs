@@ -32,7 +32,7 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
         {
             if (typeof(TChild) == typeof(IngredientType))
             {
-                ActionResult ar = Controller.Attach(Repo,Parent.ID, (IngredientType)Child,0);
+                ActionResult ar = Controller.Attach(Repo,Parent.ID, (IngredientType)Child );
                 AlertDecoratorResult adr = (AlertDecoratorResult)ar;
                 RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
 
@@ -46,7 +46,7 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
             }
             if (typeof(TChild) == typeof(MenuType))
             {
-                ActionResult ar = Controller.Attach(Repo,Parent.ID, (MenuType)Child,0);
+                ActionResult ar = Controller.Attach(Repo,Parent.ID, (MenuType)Child );
                 AlertDecoratorResult adr = (AlertDecoratorResult)ar;
                 RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
 
@@ -63,7 +63,7 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
         protected void BaseReturnsIndexWithWarningWithNullParent()
         {
 
-            ActionResult ar = Controller.Attach(Repo, null, new Domain.Entities.Ingredient(), 0);
+            ActionResult ar = Controller.Attach(Repo, null, new Domain.Entities.Ingredient() );
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             string message = adr.Message;
 
@@ -75,7 +75,7 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
         protected void BaseIndexWithErrorWhenParentIDIsNotForAnExistingIngredient()
         {  // Todo: add logging
             // Act 
-            ActionResult ar = Controller.Attach(Repo,null, new IngredientType(), 0);
+            ActionResult ar = Controller.Attach(Repo,null, new IngredientType() );
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             string message = adr.Message;
 
@@ -87,7 +87,7 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
         protected void BaseIndexWithErrorWhenParentIDIsNotForAnExistingMenu()
         {  // Todo: add logging
             // Act 
-            ActionResult ar = Controller.Attach(Repo,900000, new MenuType(), 0);
+            ActionResult ar = Controller.Attach(Repo,900000, new MenuType() );
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             string message = adr.Message;
 
@@ -116,7 +116,7 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
                 IIngredient secondChild = new IngredientType() { ID = 60, Name = "second child" };
 
                 // Act
-                ActionResult ar = Controller.Attach(Repo,55, (IngredientType)secondChild, 0);
+                ActionResult ar = Controller.Attach(Repo,55, (IngredientType)secondChild );
                 AlertDecoratorResult adr = (AlertDecoratorResult)ar;
                 string message = adr.Message;
 
@@ -130,9 +130,9 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
             }
         }
 
-        protected void BaseDetailWithSuccessWhenParentIDIsValidAndChildIsValidAndOrderNumberIsGreaterThanTheNumberOfElementsWhenAttaching()
+        protected void BaseDetailWithSuccessWhenParentIDIsValidAndChildIsValidWhenAttaching()
         {
-            ActionResult ar = Controller.Attach(Repo,Parent.ID, (IngredientType)Child,  AttachOrDetach.Attach, 70000);
+            ActionResult ar = Controller.Attach(Repo,Parent.ID, (IngredientType)Child );
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
 
@@ -146,9 +146,9 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
             Assert.AreEqual("alert-success", adr.AlertClass);
         }
 
-        protected void BaseDetailWithErrorWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSuppliedWhenAttachingUnattachableChild()
+        protected void BaseDetailWithErrorWhenParentIDIsValidAndChildIsValidWhenAttachingUnattachableChild()
         {  // Parent Ingredient for initial test, child Menu.  TODO: expand
-            ActionResult ar= Controller.Attach(Repo,Parent.ID,  child, AttachOrDetach.Attach, 70000);
+            ActionResult ar= Controller.Attach(Repo,Parent.ID,  child );
             
 
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;

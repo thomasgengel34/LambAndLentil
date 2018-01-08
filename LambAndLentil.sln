@@ -11,7 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LambAndLentil.Test", "LambA
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{8F7C3E6A-1D96-4B13-8830-C3F253DB537B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LambAndLentil.UI.Test", "LambAndLentil.UI.Test\LambAndLentil.UI.Test.csproj", "{B53ABF2A-5B63-4795-A928-C49DE7CE93C2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LambAndLentil.FluentMVC.Test", "LambAndLentil.UI.Test\LambAndLentil.FluentMVC.Test.csproj", "{B53ABF2A-5B63-4795-A928-C49DE7CE93C2}"
+	ProjectSection(ProjectDependencies) = postProject
+		{011B34BE-4A36-4772-B2AF-DC1600948477} = {011B34BE-4A36-4772-B2AF-DC1600948477}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -33,10 +33,10 @@ namespace LambAndLentil.Domain.Abstract
         void Update(T entity, int? key); 
         void Save(T entity);  
 
-        void AttachAnIndependentChild<TChild>(int parentID, TChild child, int orderNumber) 
+        void AttachAnIndependentChild<TChild>(int parentID, TChild child ) 
             where TChild : BaseEntity, IEntity;
 
-        void DetachAnIndependentChild<TChild>(int parentID, TChild child, int orderNumber) 
+        void DetachAnIndependentChild<TChild>(int parentID, TChild child ) 
             where TChild : BaseEntity, IEntity,new();
     }
 }

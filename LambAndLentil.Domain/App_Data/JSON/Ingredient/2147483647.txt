@@ -1,1 +1,0 @@
-{"ID":2147483647,"Recipe":null,"IngredientsList":null,"Name":"test ReturnCorrectEntityForAValidIngredientID Name","Description":"test ReturnCorrectEntityForAValidIngredientID Description","CreationDate":"2017-09-30T10:45:26.9505471-05:00","ModifiedDate":"2017-09-30T10:45:26.9505471-05:00","AddedByUser":"PFW\\Poncho","ModifiedByUser":"PFW\\Poncho"}

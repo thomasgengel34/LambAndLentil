@@ -1,15 +1,11 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using LambAndLentil.Domain.Entities;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
 using LambAndLentil.Domain.Abstract;
 using LambAndLentil.Domain.Concrete;
-using System.Web.Mvc;
+using LambAndLentil.Domain.Entities;
 using LambAndLentil.UI.Infrastructure.Alerts;
-using System.Linq;
-using LambAndLentil.UI;
-using LambAndLentil.UI.Controllers;
-using System.Collections.Generic;
-using LambAndLentil.UI.Models;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace LambAndLentil.Test.BasicControllerTests
 {
@@ -20,11 +16,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         [Ignore]
         [TestMethod]
         public void ReturnsErrorWithUnknownRepository() =>
-            // Arrange
-
-            // Act
-
-            // Assert
+           
             Assert.Fail();
 
 
@@ -43,8 +35,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [TestMethod]
         public void ReturnsDetailWhenAttachingWithSuccessWithValidParentandValidChild()
-        {
-            // Arrange
+        { 
             Person menu = new Person
             {
                 ID = int.MaxValue,
@@ -58,12 +49,12 @@ namespace LambAndLentil.Test.BasicControllerTests
                 Description = "test ReturnsDetailWhenAttachingWithSuccessWithValidParentandValidChild"
             };
 
-            // Act
-            ActionResult ar = Controller.Attach(Repo,int.MaxValue, ingredient, AttachOrDetach.Attach);
+            
+            ActionResult ar = Controller.Attach(Repo,int.MaxValue, ingredient );
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             RedirectToRouteResult rdr = (RedirectToRouteResult)adr.InnerResult;
 
-            //Assert
+           
             Assert.AreEqual("alert-success", adr.AlertClass);
             Assert.AreEqual("Ingredient was Successfully Attached!", adr.Message);
             Assert.AreEqual(int.MaxValue, rdr.RouteValues.ElementAt(0).Value);
@@ -87,7 +78,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             IngredientRepo.Save(child);
 
             // Act
-            Controller.Attach(Repo,Person.ID, child,UI.Models.AttachOrDetach.Attach);
+            Controller.Attach(Repo,Person.ID, child );
             ReturnedPerson = Repo.GetById(Person.ID);
             // Assert
             //  Assert.AreEqual("Default", Ingredient.Ingredients.Last().Name);
@@ -176,7 +167,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void DetachTheLastIngredientChild() => BaseDetachTheLastIngredientChild(Repo, Controller, Person);
 
         [TestMethod]
-        public void DetachAllIngredientChildren() => BaseDetachAllIngredientChildren(Repo, Controller, Person);
+        public void DetachAllIngredientChildren() => BaseDetachAllIngredientChildren(Repo, Controller );
 
 
     }

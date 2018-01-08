@@ -193,8 +193,7 @@ namespace LambAndLentil.Test.JSONTests
     
 
         private class TestReturnZeroCountForEmptyDirectory : BaseEntity, IEntity
-        {
-            public int ID { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        { 
             string IEntity.AddedByUser { get; set; }
             DateTime IEntity.CreationDate { get; set; }
             int IEntity.ID { get; set; }
@@ -213,8 +212,7 @@ namespace LambAndLentil.Test.JSONTests
         }
 
         private class TestReturnZeroCountForEmptyDirectoryVM : BaseEntity, IEntity
-        {
-            public int ID { get; set; }
+        { 
             string IEntity.AddedByUser { get; set; }
             DateTime IEntity.CreationDate { get; set; }
             int IEntity.ID { get; set; }

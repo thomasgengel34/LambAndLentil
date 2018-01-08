@@ -19,57 +19,33 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestMethod] 
         public void SuccessfullyAttachChild()
         {
-            // Arrange
+            
             Ingredient child = new Ingredient() { ID = 3000, Name = "SuccessfullyAttachChild" };
             Repo.Save(child);
-
-            // Act
-            Controller.Attach(Repo,Ingredient.ID, child, AttachOrDetach.Attach);
-            ReturnedIngredient = Repo.GetById(Ingredient.ID);
-            // Assert
-            //  Assert.AreEqual("Default", Ingredient.Ingredients.Last().Name);
+ 
+            Controller.Attach(Repo,Ingredient.ID, child );
+            ReturnedIngredient = Repo.GetById(Ingredient.ID); 
             Assert.AreEqual("SuccessfullyAttachChild", ReturnedIngredient.Ingredients.Last().Name);
         }
 
-        [Ignore]
-        [TestMethod] 
-        public void SuccessfullyDetachFirstIngredientChild()
-        {
-            //IGenericController<Ingredient> DetachController = new IngredientsController(Repo);
-            //BaseSuccessfullyDetachChild(Repo, Controller, DetachController, UIControllerType.ShoppingLists, 0);
-        }
-
+     
 
         [TestMethod] 
         public void DetachASetOfIngredientChildren()
-        {
-            // Arrange 
-            Ingredient.Ingredients.Add(new Ingredient { ID = 4005, Name = "Butter" });
-            Ingredient.Ingredients.Add(new Ingredient { ID = 4006, Name = "Cayenne Pepper" });
-            Ingredient.Ingredients.Add(new Ingredient { ID = 4007, Name = "Cheese" });
-            Ingredient.Ingredients.Add(new Ingredient { ID = 4008, Name = "Chopped Green Pepper" });
-            Repo.Save((Ingredient)Ingredient);
-            int initialIngredientCount = Ingredient.Ingredients.Count();
-
-            // Act
-            var setToSelect = new HashSet<int> { 4006, 4008 };
-            List<Ingredient> selected = Ingredient.Ingredients.Where(t => setToSelect.Contains(t.ID)).ToList();
-            Controller.DetachASetOf(Ingredient.ID, selected);
-            Ingredient returnedIngredient = Repo.GetById(Ingredient.ID);
-
-            // Assert
-            Assert.AreEqual(initialIngredientCount - 2, returnedIngredient.Ingredients.Count());
+        { 
+            BaseDetachASetOfIngredientChildren();
         }
 
-
-
-
+       
 
         [TestMethod]
         public void DetachTheLastIngredientChild() => BaseDetachTheLastIngredientChild(Repo, Controller, (Ingredient)Ingredient);
 
         [TestMethod] 
-        public void DetachAllIngredientChildren() => BaseDetachAllIngredientChildren(Repo, Controller, (Ingredient)Ingredient);
+        public void DetachAllIngredientChildren() => BaseDetachAllIngredientChildren(Repo, Controller );
+
+
+        
 
         [TestMethod]
         public void ReturnsIndexWithWarningWithUnknownParentID() =>

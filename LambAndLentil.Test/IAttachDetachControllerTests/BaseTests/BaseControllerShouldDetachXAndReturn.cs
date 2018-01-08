@@ -337,7 +337,7 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
         protected void BaseReturnsIndexWithWarningWithNullParentWhenDetaching()
         {
 
-            ActionResult ar = Controller.Detach(null, new TChild());
+            ActionResult ar = Controller.Detach(ParentRepo,null, new TChild());
 
 
             //null, new IngredientType(), 0);
@@ -353,7 +353,7 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
         {
             if (typeof(TChild) == typeof(IngredientType))
             {
-                ActionResult ar = Controller.Detach(Parent.ID, (IngredientType)Child);
+                ActionResult ar = Controller.Detach(ParentRepo,Parent.ID, (IngredientType)Child);
                 AlertDecoratorResult adr = (AlertDecoratorResult)ar;
                 RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
 
@@ -367,7 +367,7 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
             }
             if (typeof(TChild) == typeof(MenuType))
             {
-                ActionResult ar = Controller.Detach(Parent.ID, (MenuType)Child);
+                ActionResult ar = Controller.Detach(ParentRepo,Parent.ID, (MenuType)Child);
                 AlertDecoratorResult adr = (AlertDecoratorResult)ar;
                 RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
 
@@ -382,19 +382,12 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
         }
 
         protected void BaseIndexWithWarningWhenParentIDIsNotForAnExistingIngredientWhenDetachingUnattachableChild()
-        {
-
-
-
-            ActionResult ar = Controller.Detach(7000, child);
-
-            //(Parent.ID, Child, 70000);
-
+        { 
+            ActionResult ar = Controller.Detach(ParentRepo,7000, child); 
 
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
-
-            // Assert
+             
             Assert.IsNotNull(ar);
             Assert.AreEqual(UIViewType.Index.ToString(), rtrr.RouteValues.ElementAt(0).Value);
             Assert.AreEqual(1, rtrr.RouteValues.Count);
@@ -404,10 +397,9 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
 
 
         protected void BaseIndexWithWarningWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberIsNegativeWhenAttachingAttachableChild()
-        {
-            //  int orderNumber = -1;  never used.
+        { 
             // Parent Ingredient for initial test, child Menu.  TODO: expand
-            ActionResult ar = Controller.Detach(Parent.ID, child);
+            ActionResult ar = Controller.Detach(ParentRepo,Parent.ID, child);
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
 
@@ -421,7 +413,7 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
 
         protected void BaseDetailWithErrorWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSuppliedWhenAttachingUnattachableChild()
         {
-            ActionResult ar = Controller.Detach(Parent.ID, child);
+            ActionResult ar = Controller.Detach(ParentRepo, Parent.ID, child);
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
 
@@ -432,20 +424,7 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
             Assert.AreEqual(3, rtrr.RouteValues.Count);
             Assert.AreEqual("Element Could not Be Attached - so it could not be detached", adr.Message);
         }
-
-        //protected void BaseIndexWithErrorWhenParentIDIsNotForAnExistingIngredient()
-        //{
-        //    ActionResult ar = Controller.Index(9000);
-        //    AlertDecoratorResult adr = (AlertDecoratorResult)ar;
-        //    RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
-
-        //    // Assert
-        //    Assert.IsNotNull(ar);
-        //    Assert.AreEqual(UIViewType.Index.ToString(), rtrr.RouteValues.ElementAt(0).Value);
-        //    Assert.AreEqual(1, rtrr.RouteValues.Count);
-        //    Assert.AreEqual("Ingredient was not found", adr.Message);
-        //    Assert.AreEqual("alert-warning", adr.AlertClass);
-        //}
+         
 
         protected void BaseDetailWithErrorWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSuppliedAndThereIsNoChildAttachedWhenDetachingAllIngredients()
         {

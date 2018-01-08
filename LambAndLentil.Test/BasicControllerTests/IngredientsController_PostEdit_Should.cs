@@ -67,24 +67,19 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [TestMethod]
         public void BindCorrectIngredientsBoundInEdit()
-        { // Bind(Include = "ID, Name, Description, CreationDate,   IngredientsList")] 
+        {
+          Ingredient ingredient = new Ingredient { ID = 1000, Name = "Punkin", Description = "Original Description", IngredientsList = "This, That, Those" };
 
-          // Arrange
+            ActionResult ar =  Controller.PostEdit((Ingredient)ingredient);
 
-            // Act 
-            ActionResult ar =  Controller.PostEdit((Ingredient)Ingredient);
+            Ingredient returnedIngredient = Repo.GetById(ingredient.ID);
 
-            Ingredient returnedIngredient = Repo.GetById(Ingredient.ID);
-
-
-            // Assert  // Bind(Include = "ID, Name, Description, CreationDate,  IngredientsList")] 
+            Assert.IsNotNull(returnedIngredient); 
             Assert.AreEqual(1000, returnedIngredient.ID);
             Assert.AreEqual("Punkin", returnedIngredient.Name);
             Assert.AreEqual("Original Description", returnedIngredient.Description);
             Assert.AreEqual(CreationDate, returnedIngredient.CreationDate);
-            Assert.AreEqual("This, That, Those", returnedIngredient.IngredientsList);
-
-
+            Assert.AreEqual("This, That, Those", returnedIngredient.IngredientsList); 
         }
 
         [TestMethod]

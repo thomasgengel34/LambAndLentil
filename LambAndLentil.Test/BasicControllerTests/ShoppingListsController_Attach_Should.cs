@@ -47,7 +47,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             };
 
             // Act
-            ActionResult ar = Controller.Attach(Repo,int.MaxValue, ingredient,0);
+            ActionResult ar = Controller.Attach(Repo,int.MaxValue, ingredient );
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             RedirectToRouteResult rdr = (RedirectToRouteResult)adr.InnerResult;
 
@@ -80,7 +80,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             IngredientRepo.Save(child);
 
             // Act
-            Controller.Attach(Repo,ShoppingList.ID, child,0);
+            Controller.Attach(Repo,ShoppingList.ID, child );
             ReturnedShoppingList = Repo.GetById(ShoppingList.ID);
             // Assert
             //  Assert.AreEqual("Default", Ingredient.Ingredients.Last().Name);
@@ -150,7 +150,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             BaseDetachTheLastIngredientChild(Repo, Controller, ShoppingList); 
 
         [TestMethod] 
-        public void DetachAllIngredientChildren() =>  BaseDetachAllIngredientChildren(Repo, Controller, ShoppingList); 
+        public void DetachAllIngredientChildren() =>  BaseDetachAllIngredientChildren(Repo, Controller ); 
 
         [TestMethod]
         public void ReturnsDetailWithWarningWithUnknownChildID() => BaseReturnsDetailWithWarningWithUnknownChildID(ShoppingList, Repo, Controller);

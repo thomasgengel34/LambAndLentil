@@ -49,9 +49,8 @@ namespace LambAndLentil.Domain.Concrete
         /// </summary>
         /// <typeparam name="TChild"></typeparam>
         /// <param name="parentID"></param>
-        /// <param name="child"></param>
-        /// <param name="orderNumber">zero-based index in list currently used only in Detach version</param>
-        public void AttachAnIndependentChild<TChild>(int parentID, TChild child, int orderNumber = 0)
+        /// <param name="child"></param> 
+        public void AttachAnIndependentChild<TChild>(int parentID, TChild child )
             where TChild : BaseEntity, IEntity
         {
             char[] charsToTrim = { 'V', 'M' };
@@ -77,7 +76,7 @@ namespace LambAndLentil.Domain.Concrete
         }
 
 
-        public void DetachAnIndependentChild<TChild>(int parentID, TChild child, int orderNumber = 1)
+        public void DetachAnIndependentChild<TChild>(int parentID, TChild child )
             where TChild : BaseEntity, IEntity,new()
         {
             char[] charsToTrim = { 'V', 'M' };

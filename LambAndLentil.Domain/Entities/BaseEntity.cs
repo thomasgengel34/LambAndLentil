@@ -12,6 +12,7 @@ namespace LambAndLentil.Domain.Entities
         [StringLength(50)]
         [Required]
         public string Name { get; set; }
+        public int ID { get; set; }
 
         [DataType(DataType.MultilineText)]
         public string Description { get; set; }

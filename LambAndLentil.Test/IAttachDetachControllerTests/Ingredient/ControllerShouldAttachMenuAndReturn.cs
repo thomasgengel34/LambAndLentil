@@ -10,12 +10,7 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.Ingredient
     [TestCategory("Attach-Detach")]
     public class ControllerShouldAttachMenuAndReturn: BaseControllerShouldAttachXAndReturn<IngredientType,MenuType>
     { 
-        // ingredient cannot attach a menu
-
-        [TestMethod]
-        public void DetailWithErrorWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSuppliedWhenAttachingUnattachableChild() => BaseDetailWithErrorWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSuppliedWhenAttachingUnattachableChild();
-      
-
+        // ingredient cannot attach a menu 
        
         [TestMethod]
         public void  IndexWithErrorWhenParentIDIsNull() => BaseReturnsIndexWithWarningWithNullParent();
@@ -25,22 +20,6 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.Ingredient
         public void IndexWithErrorWhenParentIDIsNotForAnExistingIngredient() =>
              BaseIndexWithErrorWhenParentIDIsNotForAnExistingIngredient();
 
-      
-        [TestMethod]
-        public void DetailWithErrorWhenParentIDIsValidAndChildIsNotValid() => BaseDetailWithErrorWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSuppliedWhenAttachingUnattachableChild();
-
        
-        [TestMethod]
-        public void  DetailWithErrorWhenParentIDIsValidAndChildIstValidAndOrderNumberIsNegative()=> BaseDetailWithErrorWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSuppliedWhenAttachingUnattachableChild();
-
-
-        
-        [TestMethod]
-        public void  DetailWithErrorWhenParentIDIsValidAndChildIstValidAndOrderNumberIsInUse() => BaseDetailWithErrorWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSuppliedWhenAttachingUnattachableChild();
-
-
-        
-        [TestMethod]
-        public void  DetailWithSuccessWhenParentIDIsValidAndChildIsValidAndOrderNumberIsGreaterThanTheNumberOfElementsWhenAttaching() => BaseDetailWithErrorWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSuppliedWhenAttachingUnattachableChild();
     }
 }

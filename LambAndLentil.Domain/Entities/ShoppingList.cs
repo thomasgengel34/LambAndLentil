@@ -28,7 +28,7 @@ namespace LambAndLentil.Domain.Entities
             Date = creationDate;
         }
 
-        public int ID { get; set; }
+      
         public List<Ingredient> Ingredients { get; set; }
         public List<Recipe> Recipes { get; set; }
         public List<Menu> Menus { get; set; }

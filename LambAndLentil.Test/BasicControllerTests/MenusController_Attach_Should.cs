@@ -1,19 +1,15 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using LambAndLentil.Domain.Entities;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
 using LambAndLentil.Domain.Abstract;
 using LambAndLentil.Domain.Concrete;
-using System.Web.Mvc;
+using LambAndLentil.Domain.Entities;
 using LambAndLentil.UI.Infrastructure.Alerts;
-using System.Linq;
-using LambAndLentil.UI;
-using LambAndLentil.UI.Controllers;
-using System.Collections.Generic;
-using LambAndLentil.UI.Models;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace LambAndLentil.Test.BasicControllerTests
 {
-    
+
     [TestClass]
     public class MenusController_Attach_Should:MenusController_Test_Should
     {
@@ -29,8 +25,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [TestMethod]
         public void ReturnsDetailWhenAttachingWithSuccessWithValidParentandValidChild()
-        { 
-            // Arrange
+        {  
             Menu menu = new Menu
             {
                 ID = int.MaxValue,
@@ -45,7 +40,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             };
 
             // Act
-            ActionResult ar = Controller.Attach<Ingredient>(Repo, int.MaxValue, ingredient,UI.Models.AttachOrDetach.Attach);
+            ActionResult ar = Controller.Attach<Ingredient>(Repo, int.MaxValue, ingredient );
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             RedirectToRouteResult rdr = (RedirectToRouteResult)adr.InnerResult;
      
@@ -63,18 +58,15 @@ namespace LambAndLentil.Test.BasicControllerTests
        
         [TestMethod]
         public void SuccessfullyAttachChild()
-        {
-            // Arrange
+        { 
             Ingredient child = new Ingredient() { ID = 3000, Name = "SuccessfullyAttachChild" };
             TestRepository<Ingredient> IngredientRepo = new TestRepository<Ingredient>();
             IngredientRepo.Save(child);
-
-            // Act
-            Controller.Attach(Repo, Menu.ID, child, AttachOrDetach.Attach);
+ 
+            Controller.Attach(Repo, Menu.ID, child );
               
             ReturnedMenu = Repo.GetById(Menu.ID);
-            // Assert
-            //  Assert.AreEqual("Default", Ingredient.Ingredients.Last().Name);
+             
             Assert.AreEqual("SuccessfullyAttachChild", ReturnedMenu.Ingredients.Last().Name);
         }
 
@@ -121,7 +113,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [TestMethod]
         [TestCategory("Attach-Detach")]
-        public void DetachAllIngredientChildren() => BaseDetachAllIngredientChildren(Repo, Controller, Menu);
+        public void DetachAllIngredientChildren() => BaseDetachAllIngredientChildren(Repo, Controller );
 
         [TestMethod]
         public void ReturnsIndexWithWarningWithUnknownParentID() =>

@@ -24,7 +24,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             ShoppingListRepo.Save(child);
 
             // Act
-            Controller.Attach(Repo,Person.ID, child,0);
+            Controller.Attach(Repo,Person.ID, child );
             ReturnedPerson = Repo.GetById(Person.ID);
             // Assert
             //  Assert.AreEqual("Default", ShoppingList.ShoppingLists.Last().Name);

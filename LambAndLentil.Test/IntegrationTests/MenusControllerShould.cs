@@ -281,7 +281,7 @@ namespace IntegrationTests
             Recipe recipeVM = new Recipe() { ID = 101, Description = "test AttachAnExistingRecipeToAnExistingMenu" };
             repoRecipe.Add(recipeVM);
             // Act
-            var x = ControllerAttach.Attach(Repo,menu.ID, recipeVM, AttachOrDetach.Attach);
+            var x = ControllerAttach.Attach(Repo,menu.ID, recipeVM );
 
             // Assert 
             Assert.AreEqual(1, menu.Recipes.Count());
@@ -303,7 +303,7 @@ namespace IntegrationTests
             Ingredient ingredient = new Ingredient { ID = int.MaxValue - 100, Description = "test AttachAnExistingIngredientToAnExistingMenu" }; 
             Menu foo = Repo.GetById(Menu.ID);
             // Act
-            ActionResult ar= Controller.Attach(Repo,Menu.ID,ingredient, AttachOrDetach.Attach);
+            ActionResult ar= Controller.Attach(Repo,Menu.ID,ingredient );
             Menu returnedMenu = Repo.GetById(Menu.ID);
 
             // Assert 
@@ -316,32 +316,24 @@ namespace IntegrationTests
         [TestMethod]
         [TestCategory("Attach-Detach")]
         public void NotDeleteAnIngredientAfterIngredientIsDetachedFromMenu()
-        {
-            // Arrange  
+        { 
             Ingredient ingredient = new Ingredient { ID = int.MaxValue - 100, Description = "test NotDeleteAnIngredientAfterIngredientIsDetachedFromMenu" };
-
-            // Act
-            Controller.Attach(Repo,Menu.ID, ingredient,AttachOrDetach.Attach);
-            Controller.Detach(Menu.ID, ingredient);
-
-            // Assert
+             
+            Controller.Attach(Repo,Menu.ID, ingredient );
+            Controller.Detach(Repo,Menu.ID, ingredient);
+             
             Assert.IsNotNull(ingredient);
         }
 
         [TestMethod]
         [TestCategory("Attach-Detach")]
         public void ReturnIndexViewWithWarningWhenDetachingNonExistingIngredientAttachedToANonExistingMenu()
-        {
-            // Arrange 
-
-            // Act 
-            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.Detach(-1, (Ingredient)null);
+        { 
+            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.Detach(Repo,-1, (Ingredient)null);
 
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
             var routeValues = rtrr.RouteValues.Values;
-
-            // Assert
-
+             
             Assert.AreEqual("alert-warning", adr.AlertClass);
             Assert.AreEqual("Menu was not found", adr.Message);
             Assert.AreEqual(1, routeValues.Count);
@@ -356,7 +348,7 @@ namespace IntegrationTests
             // Arrange 
 
             // Act 
-            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.Attach(Repo,-1, (Ingredient)null, AttachOrDetach.Attach);
+            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.Attach(Repo,-1, (Ingredient)null );
 
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
             var routeValues = rtrr.RouteValues.Values;
@@ -376,14 +368,12 @@ namespace IntegrationTests
         {
             // Arrange 
 
-            // Act 
-            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.Attach(Repo,-1, (Ingredient)null, AttachOrDetach.Attach);
+            
+            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.Attach(Repo,-1, (Ingredient)null);
 
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
             var routeValues = rtrr.RouteValues.Values;
-
-            // Assert
-
+             
             Assert.AreEqual("alert-warning", adr.AlertClass);
             Assert.AreEqual("Menu was not found", adr.Message);
             Assert.AreEqual(1, routeValues.Count);
@@ -394,16 +384,12 @@ namespace IntegrationTests
         [TestMethod]
         [TestCategory("Attach-Detach")]
         public void ReturnIndexViewWithWarningWhenDetachingExistingIngredientAttachedToNonExistingMenu()
-        {
-            // Arrange 
-
-            // Act 
-            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.Detach(-1, (Ingredient)null);
+        { 
+            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.Detach(Repo,-1, (Ingredient)null);
 
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
             var routeValues = rtrr.RouteValues.Values;
-
-            // Assert
+             
             Assert.AreEqual("alert-warning", adr.AlertClass);
             Assert.AreEqual("Menu was not found", adr.Message);
             Assert.AreEqual(1, routeValues.Count);
