@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using LambAndLentil.BusinessObjects;
 using LambAndLentil.Domain.Abstract;
 using LambAndLentil.Domain.Entities;
 using LambAndLentil.UI.Infrastructure.Alerts;
@@ -84,7 +85,9 @@ namespace LambAndLentil.UI.Controllers
             ActionResult actionResult = GuardAttachAndDetachMethod(parentID, child);
             if (actionResult is EmptyResult)
             {
-                Repo.AttachAnIndependentChild((int)parentID, child);
+                T  parent = Repo.GetById((int)parentID);
+                parent = new Connections().AddChildToParent(parent, child);
+                Repo.Save(parent);
                 string childEntity = typeof(TChild).ToString().Split('.').Last();
 
                 return RedirectToAction(UIViewType.Details.ToString(), new { id = parentID, actionMethod = UIViewType.Edit }).WithSuccess(childEntity + " was Successfully Attached!");
@@ -129,7 +132,7 @@ namespace LambAndLentil.UI.Controllers
             else return new EmptyResult();
         }
 
-        private ActionResult HandleParentCannotAttachChild(T parent) => RedirectToAction(UIViewType.Details.ToString(), new { id = parent.ID, actionMethod = UIViewType.Edit }).WithError("Element Could not Be Attached!");
+        private ActionResult HandleParentCannotAttachChild(T parent) => RedirectToAction(UIViewType.Details.ToString(), new { id = parent.ID, actionMethod = UIViewType.Edit }).WithError("Element Could not Be Attached - So It Could Not Be Detached");
 
         private ActionResult HandleNullChild(int? parentID) =>
             RedirectToAction(UIViewType.Details.ToString(), new { id = parentID, actionMethod = UIViewType.Edit }).WithWarning(EntityName + " was not found");
@@ -165,7 +168,7 @@ namespace LambAndLentil.UI.Controllers
             {
                 return HandleNullChild(ID);
             }
-            else if (!BaseEntity.ParentCanAttachChild((IPossibleChildren)parent, child))
+            else if (!BaseEntity.ParentCanAttachChild( parent, child))
             {
                 return HandleParentCannotAttachChild((T)parent);
             }
@@ -177,7 +180,7 @@ namespace LambAndLentil.UI.Controllers
             }
             else
             {
-                parent = child.RemoveSelectionFromChildren(parent, selected);
+                parent = child.RemoveSelectionFromChildren((IEntityChildClassIngredients)parent, selected);
 
                 Repo.Save((T)parent);
 

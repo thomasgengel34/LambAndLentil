@@ -27,16 +27,28 @@ namespace LambAndLentil.Domain.Entities
         public DayOfWeek DayOfWeek { get; set; } 
         public int Diners { get; set; }
         public List<Ingredient> Ingredients { get; set; }
-        public List<Recipe> Recipes { get; set; }  
-        
-        string IEntity.AddedByUser { get; set; } 
+        public List<Recipe> Recipes { get; set; }   
+        public int ID { get; set; }
+        DayOfWeek IMenu.DayOfWeek { get; set; }
+        int IMenu.Diners { get; set; }
+        MealType IMenu.MealType { get; set; }
+        List<Recipe> IEntityChildClassRecipes.Recipes { get; set; }
+        string IEntity.AddedByUser { get; set; }
+        DateTime IEntity.CreationDate { get; set; }
+        int IEntity.ID { get; set; }
+        string IEntity.ModifiedByUser { get; set; }
+        DateTime IEntity.ModifiedDate { get; set; }
+        string IEntity.Name { get; set; }
+        string IEntity.Description { get; set; }
+        string IEntity.IngredientsList { get; set; }
+        List<Ingredient> IEntity.Ingredients { get; set; }
 
-         void IEntity.AddChildToParent(IEntity parent, IEntity child)
+        void  AddChildToParent(IEntity parent, IEntity child)
         {
             ((IEntityChildClassMenus)parent).Menus.Add((Menu)child);
         }
 
-        bool IEntity.ParentCanHaveChild(IPossibleChildren parent)
+        bool  ParentCanHaveChild(IPossibleChildren parent)
         {
             return parent.CanHaveMenuChild;
         }
@@ -45,9 +57,9 @@ namespace LambAndLentil.Domain.Entities
         {
             ((IEntityChildClassMenus)parent).Menus.Clear();
         }
+       
 
-
-        public IEntity  RemoveSelectionFromChildren<TChild>(IEntity  parent, List<TChild> selected)
+        public IEntity  RemoveSelectionFromChildren<TChild>(IEntityChildClassIngredients  parent, List<TChild> selected)
             where TChild : BaseEntity, IEntity, IPossibleChildren, new()
         {
             var setToRemove = new HashSet<TChild>(selected);
@@ -79,5 +91,16 @@ namespace LambAndLentil.Domain.Entities
             }
 
         }
+
+        
+
+        bool IEntity.ParentCanHaveChild(IEntity parent) => parent.CanHaveMenuChild;
+
+
+
+
+        IEntity IEntity.RemoveSelectionFromChildren<TChild>(IEntityChildClassIngredients parent, List<TChild> selected) => throw new NotImplementedException();
+        void IEntity.ParentRemoveAllChildrenOfAType(IEntity parent, IEntity child) => throw new NotImplementedException();
+        IEntity IEntity.RemoveSelectionFromChildren<TChild>(IEntityChildClassRecipes parent, List<TChild> selected) => throw new NotImplementedException();
     }
 }

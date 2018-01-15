@@ -1,4 +1,5 @@
-﻿using LambAndLentil.Test.IAttachDetachControllerTests.BaseTests;
+﻿using System;
+using LambAndLentil.Test.IAttachDetachControllerTests.BaseTests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using IngredientType = LambAndLentil.Domain.Entities.Ingredient;
 using MenuType = LambAndLentil.Domain.Entities.Menu;
@@ -12,7 +13,7 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.Ingredient
         // ingredient cannot attach a menu
 
         [TestMethod]
-        public void DetailWithErrorWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSuppliedWhenAttachingUnattachableChild() => BaseDetailWithErrorWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSuppliedWhenDetachingUnattachableChild();
+        public void DetailWithErrorWhenParentIDIsValidAndChildIsValidWhenAttachingUnattachableChild() => BaseDetailWithErrorWhenParentIDIsValidAndChildIsValidWhenDetachingUnattachableChild();
 
 
 
@@ -22,15 +23,15 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.Ingredient
 
         [TestMethod]
         public void IndexWithWarningWhenParentIDIsNotForAnExistingIngredientWhenDetachingUnattachableChild() =>
-            BaseIndexWithWarningWhenParentIDIsNotForAnExistingIngredientWhenDetachingUnattachableChild();  
+            BaseIndexWithWarningWhenParentIDIsNotForAnExistingIngredientWhenDetachingUnattachableChild();
 
         [TestMethod]
-        public void DetailWithErrorWhenParentIDIsValidAndChildIsNotValid() => BaseDetailWithErrorWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSuppliedWhenDetachingUnattachableChild(); 
+        public void EditWithWarningWhenParentIDIsValidAndChildIsNotValidWhenAttaching() =>
+                  BaseEditWithWarningWhenParentIDIsValidAndChildIsNotValidWhenAttaching();
 
         [TestMethod]
-        public void DetailWithErrorWhenParentIDIsValidAndChildIstValidAndOrderNumberIsNegative() => BaseDetailWithErrorWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSuppliedWhenAttachingUnattachableChild(); 
-          
-        [TestMethod]
-        public void DetailWithSuccessWhenParentIDIsValidAndChildIsValidAndOrderNumberIsGreaterThanTheNumberOfElementsWhenAttaching() =>  BaseDetailWithErrorWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSuppliedWhenAttachingUnattachableChild();  
+        public void EditWithWarningWhenParentIDIsValidAndChildIsNotValidWhenDetaching() =>
+                BaseEditWithWarningWhenParentIDIsValidAndChildIsNotValidWhenDetaching();
+
     }
 }

@@ -27,7 +27,7 @@ BaseDetailWithErrorWhenIDisNotForAFoundParentWhenDetachingAll();
 
         [Ignore]
         [TestMethod]
-        public void DetailWithErrorWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSuppliedAndThereIsNoChildAttached()
+        public void DetailWithErrorWhenParentIDIsValidAndChildIsValidAndThereIsNoChildAttached()
         {
             // Arrange
 

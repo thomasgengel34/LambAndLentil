@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using LambAndLentil.BusinessObjects;
 using LambAndLentil.Domain.Entities;
 using LambAndLentil.UI;
 using LambAndLentil.UI.Infrastructure.Alerts;
@@ -69,6 +70,10 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
                 SetUpIngredientsAndMyIngredientsList();
 
                 parentWithIngredients = (IEntityChildClassIngredients)parent;
+                if (parentWithIngredients.Ingredients== null)
+                {
+                    parentWithIngredients.Ingredients = new List<IngredientType>();
+                }
                 parentWithIngredients.Ingredients.AddRange(MyIngredientsList);
                 ParentRepo.Save((TParent)parentWithIngredients);
 
@@ -160,14 +165,14 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
 
         protected void BaseDetailWithSuccessWhenIDisValidAndThereAreThreeChildrenOnListWhenDetachingAll()
         {
+            TParent parent = new TParent() { ID = 7000 };
             ActionResult ar;
             AlertDecoratorResult adr;
             RedirectToRouteResult rtrr;
-            int returnedCount = 10000000;   // obviously wrong, to initialize
-            child.ParentRemoveAllChildrenOfAType(parent, child);
-            child.AddChildToParent(parent, new TChild());
-            child.AddChildToParent(parent, new TChild());
-            child.AddChildToParent(parent, new TChild());
+            int returnedCount = 10000000;   // obviously wrong, to initialize 
+            parent=new Connections().AddChildToParent(parent, new TChild());
+            parent=new Connections().AddChildToParent(parent, new TChild());
+            parent=new Connections().AddChildToParent(parent, new TChild()); 
             ParentRepo.Save(parent);
 
             ar = Controller.DetachAll<TChild>(parent.ID);
@@ -180,8 +185,7 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
             rtrr = (RedirectToRouteResult)adr.InnerResult;
 
 
-
-            // Assert
+ 
             Assert.IsNotNull(ar);
             Assert.AreEqual(parent.ID, rtrr.RouteValues.ElementAt(0).Value);
             Assert.AreEqual(UIViewType.Edit.ToString(), rtrr.RouteValues.ElementAt(1).Value.ToString());
@@ -209,22 +213,22 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
         }
 
         protected void BaseDetailWithDangerWhenIDisValidAndThereIsOneChildOnListWhenDetachingAndChildCannotBeAttachedWhenDetachingAll()
-        { //  return RedirectToAction(UIViewType.Index.ToString()).WithError("Cannot Attach that Child!");
-
+        { 
             ActionResult ar = Controller.DetachASetOf(parent.ID, MyChildrenList);
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
-            Assert.IsNotNull(ar);
-            Assert.AreEqual(UIViewType.Index.ToString(), rtrr.RouteValues.ElementAt(0).Value);
 
-            Assert.AreEqual(1, rtrr.RouteValues.Count);
-            Assert.AreEqual("Cannot Attach that Child!", adr.Message);
+            Assert.IsNotNull(ar);
+            Assert.AreEqual(parent.ID, rtrr.RouteValues.ElementAt(0).Value);
+            Assert.AreEqual(UIViewType.Edit, rtrr.RouteValues.ElementAt(1).Value);
+            Assert.AreEqual(UIViewType.Details.ToString(), rtrr.RouteValues.ElementAt(2).Value); 
+            Assert.AreEqual(3, rtrr.RouteValues.Count);
+            Assert.AreEqual("Element Could not Be Attached - So It Could Not Be Detached", adr.Message);
             Assert.AreEqual("alert-danger", adr.AlertClass);
-        }
+        } //RedirectToAction(UIViewType.Details.ToString(), new { id = parent.ID, actionMethod = UIViewType.Edit }).WithError("Element Could not Be Attached - So It Could Not Be Detached");
 
         protected void BaseDetailWithErrorWhenIDisNotForAFoundParentWhenDetachingAndChildCannotBeAttachedWhenDetachingAll()
         {
-            //  return RedirectToAction(UIViewType.Index.ToString()).WithWarning(parentName + " was not found");
             List<TChild> list = new List<TChild>();
             ActionResult ar = new EmptyResult();
             ar = Controller.DetachASetOf<TChild>(80000000, list);
@@ -307,8 +311,7 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
             MyIngredientsList.Clear();
             MyIngredientsList.Add(new IngredientType() { ID = 1000 });
             MyIngredientsList.Add(new IngredientType() { ID = 1001 });
-            MyIngredientsList.Add(new IngredientType() { ID = 1002 });
-            IEntityChildClassIngredients parent = (IEntityChildClassIngredients)Parent;
+            MyIngredientsList.Add(new IngredientType() { ID = 1002 }); 
             parent.Ingredients.Clear();
             parent.Ingredients.AddRange(MyIngredientsList);
             ParentRepo.Save((TParent)parent);
@@ -337,10 +340,8 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
         protected void BaseReturnsIndexWithWarningWithNullParentWhenDetaching()
         {
 
-            ActionResult ar = Controller.Detach(ParentRepo,null, new TChild());
-
-
-            //null, new IngredientType(), 0);
+            ActionResult ar = Controller.Detach(ParentRepo, null, new TChild()); 
+          
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             string message = adr.Message;
 
@@ -349,45 +350,29 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
             Assert.AreEqual("alert-warning", adr.AlertClass);
         }
 
-        protected void BaseDetailWithErrorWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSuppliedWhenDetachingUnattachableChild()
+        protected void BaseDetailWithErrorWhenParentIDIsValidAndChildIsValidWhenDetachingUnattachableChild()
         {
-            if (typeof(TChild) == typeof(IngredientType))
-            {
-                ActionResult ar = Controller.Detach(ParentRepo,Parent.ID, (IngredientType)Child);
-                AlertDecoratorResult adr = (AlertDecoratorResult)ar;
-                RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
+            ActionResult ar =  Controller.Detach(ParentRepo, Parent.ID, (TChild)Child); 
 
-                // Assert
-                Assert.IsNotNull(ar);
-                Assert.AreEqual(Parent.ID, rtrr.RouteValues.ElementAt(0).Value);
-                Assert.AreEqual(UIViewType.Edit.ToString(), rtrr.RouteValues.ElementAt(1).Value.ToString());
-                Assert.AreEqual(UIViewType.Details.ToString(), rtrr.RouteValues.ElementAt(2).Value.ToString());
-                Assert.AreEqual(3, rtrr.RouteValues.Count);
-                Assert.AreEqual("Element Could not Be Attached - so it could not be detached", adr.Message);
-            }
-            if (typeof(TChild) == typeof(MenuType))
-            {
-                ActionResult ar = Controller.Detach(ParentRepo,Parent.ID, (MenuType)Child);
-                AlertDecoratorResult adr = (AlertDecoratorResult)ar;
-                RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
-
-                // Assert
-                Assert.IsNotNull(ar);
-                Assert.AreEqual(1, rtrr.RouteValues.ElementAt(0).Value);
-                Assert.AreEqual(UIViewType.Edit.ToString(), rtrr.RouteValues.ElementAt(1).Value.ToString());
-                Assert.AreEqual(UIViewType.Details.ToString(), rtrr.RouteValues.ElementAt(2).Value.ToString());
-                Assert.AreEqual(3, rtrr.RouteValues.Count);
-                Assert.AreEqual("Element Could not Be Attached - so it could not be detached", adr.Message);
-            }
+            AlertDecoratorResult adr = (AlertDecoratorResult)ar;
+            RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult; 
+           
+            Assert.IsNotNull(ar);
+            Assert.AreEqual(Parent.ID, rtrr.RouteValues.ElementAt(0).Value);
+            Assert.AreEqual(UIViewType.Edit.ToString(), rtrr.RouteValues.ElementAt(1).Value.ToString());
+            Assert.AreEqual(UIViewType.Details.ToString(), rtrr.RouteValues.ElementAt(2).Value.ToString());
+            Assert.AreEqual(3, rtrr.RouteValues.Count);
+            Assert.AreEqual("Element Could not Be Attached - So It Could Not Be Detached", adr.Message);
         }
 
+
         protected void BaseIndexWithWarningWhenParentIDIsNotForAnExistingIngredientWhenDetachingUnattachableChild()
-        { 
-            ActionResult ar = Controller.Detach(ParentRepo,7000, child); 
+        {
+            ActionResult ar = Controller.Detach(ParentRepo, 7000, child);
 
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
-             
+
             Assert.IsNotNull(ar);
             Assert.AreEqual(UIViewType.Index.ToString(), rtrr.RouteValues.ElementAt(0).Value);
             Assert.AreEqual(1, rtrr.RouteValues.Count);
@@ -395,55 +380,29 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
             Assert.AreEqual("alert-warning", adr.AlertClass);
         }
 
-
-        protected void BaseIndexWithWarningWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberIsNegativeWhenAttachingAttachableChild()
-        { 
-            // Parent Ingredient for initial test, child Menu.  TODO: expand
-            ActionResult ar = Controller.Detach(ParentRepo,Parent.ID, child);
-            AlertDecoratorResult adr = (AlertDecoratorResult)ar;
-            RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
-
-            // Assert
-            Assert.IsNotNull(ar);
-            Assert.AreEqual(UIViewType.Index.ToString(), rtrr.RouteValues.ElementAt(0).Value);
-            Assert.AreEqual(1, rtrr.RouteValues.Count);
-            Assert.AreEqual("Order Number Was Negative! Nothing was detached", adr.Message);
-            Assert.AreEqual("alert-warning", adr.AlertClass);
-        }
-
-        protected void BaseDetailWithErrorWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSuppliedWhenAttachingUnattachableChild()
+        internal void BaseEditWithWarningWhenParentIDIsValidAndChildIsNotValidWhenAttaching()
         {
-            ActionResult ar = Controller.Detach(ParentRepo, Parent.ID, child);
+            TParent parent = new TParent() { ID  = 7001 };
+            ParentRepo.Save(parent);
+            IngredientType ingredient = null;
+            ActionResult ar = Controller.Detach(ParentRepo, parent.ID, ingredient);
+
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
 
             Assert.IsNotNull(ar);
             Assert.AreEqual(parent.ID, rtrr.RouteValues.ElementAt(0).Value);
-            Assert.AreEqual(UIViewType.Edit.ToString(), rtrr.RouteValues.ElementAt(1).Value.ToString());
-            Assert.AreEqual(UIViewType.Details.ToString(), rtrr.RouteValues.ElementAt(2).Value.ToString());
+            Assert.AreEqual(UIViewType.Edit , rtrr.RouteValues.ElementAt(1).Value);
+            Assert.AreEqual(UIViewType.Details.ToString(), rtrr.RouteValues.ElementAt(2).Value);
             Assert.AreEqual(3, rtrr.RouteValues.Count);
-            Assert.AreEqual("Element Could not Be Attached - so it could not be detached", adr.Message);
+            Assert.AreEqual(parentName + " was not found", adr.Message);
+            Assert.AreEqual("alert-warning", adr.AlertClass); 
         }
-         
-
-        protected void BaseDetailWithErrorWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSuppliedAndThereIsNoChildAttachedWhenDetachingAllIngredients()
+        internal void BaseEditWithWarningWhenParentIDIsValidAndChildIsNotValidWhenDetaching()
         {
-
-            parentWithIngredients.Ingredients.Clear();
-            ParentRepo.Add(parent);
-            string childClassName = typeof(TChild).ToString().Split('.').Last();
-            List<TChild> emptyList = new List<TChild>();
-            ActionResult ar = Controller.DetachASetOf(Parent.ID, emptyList);
-            AlertDecoratorResult adr = (AlertDecoratorResult)ar;
-            RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
-
-            Assert.IsNotNull(ar);
-            Assert.AreEqual(parent.ID, rtrr.RouteValues.ElementAt(0).Value);
-            Assert.AreEqual(UIViewType.Edit.ToString(), rtrr.RouteValues.ElementAt(1).Value.ToString());
-            Assert.AreEqual(UIViewType.Details.ToString(), rtrr.RouteValues.ElementAt(2).Value.ToString());
-            Assert.AreEqual(3, rtrr.RouteValues.Count);
-            Assert.AreEqual("No " + childClassName + "s were attached!", adr.Message);
-            Assert.AreEqual("alert-danger", adr.AlertClass);
+             
         }
+
+
     }
 }

@@ -356,6 +356,10 @@
     <Folder Include="App_Data\JSON\ShoppingList\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\LambAndLentil.BusinessObjects\LambAndLentil.BusinessObjects.csproj">
+      <Project>{685AA941-AFB7-4EDF-BF0D-D526F82BA77C}</Project>
+      <Name>LambAndLentil.BusinessObjects</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LambAndLentil.Domain\LambAndLentil.Domain.csproj">
       <Project>{011b34be-4a36-4772-b2af-dc1600948477}</Project>
       <Name>LambAndLentil.Domain</Name>

@@ -169,6 +169,6 @@ namespace LambAndLentil.Test.BasicControllerTests
         }
 
         [TestMethod]
-        public void ShouldAddIngredientToIngredientsList() => BaseShouldAddIngredientToIngredientsList(Repo, Entity, ReturnedEntity, Controller, UIControllerType.Ingredients);
+        public void ShouldAddIngredientToIngredientsList() => BaseShouldAddIngredientToIngredientsList();
     }
 }

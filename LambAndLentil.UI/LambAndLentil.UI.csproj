@@ -112,6 +112,9 @@
     <Reference Include="Ninject.Web.Mvc, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <HintPath>..\packages\Ninject.MVC5.3.2.1.0\lib\net45-full\Ninject.Web.Mvc.dll</HintPath>
     </Reference>
+    <Reference Include="nunit.framework, Version=3.9.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnit.3.9.0\lib\net45\nunit.framework.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -1226,6 +1229,10 @@
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\LambAndLentil.BusinessObjects\LambAndLentil.BusinessObjects.csproj">
+      <Project>{685AA941-AFB7-4EDF-BF0D-D526F82BA77C}</Project>
+      <Name>LambAndLentil.BusinessObjects</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LambAndLentil.Domain\LambAndLentil.Domain.csproj">
       <Project>{011b34be-4a36-4772-b2af-dc1600948477}</Project>
       <Name>LambAndLentil.Domain</Name>

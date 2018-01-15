@@ -43,30 +43,7 @@ namespace LambAndLentil.Domain.Concrete
             }
         }
 
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="TChild"></typeparam>
-        /// <param name="parentID"></param>
-        /// <param name="child"></param> 
-        public void AttachAnIndependentChild<TChild>(int parentID, TChild child )
-            where TChild : BaseEntity, IEntity
-        {
-            char[] charsToTrim = { 'V', 'M' };
-            string childName = typeof(TChild).ToString().Split('.').Last().Split('+').Last().TrimEnd(charsToTrim);
-            T parent = JsonConvert.DeserializeObject<T>(File.ReadAllText(String.Concat(FullPath, parentID, ".txt")));
-
-            if (parent != null && child != null)
-            {
-                T entity = JsonConvert.DeserializeObject<T>(File.ReadAllText
-                    (String.Concat(FullPath, parentID, ".txt")));
-                child.AddChildToParent(entity, child);
-
-                Save(entity);
-            }
-        }
-
+         
         public int Count()
         {
             int fileCount = (from file in Directory.EnumerateFiles(FullPath, "*.txt", SearchOption.AllDirectories)
@@ -85,7 +62,7 @@ namespace LambAndLentil.Domain.Concrete
 
             if (parent != null && child != null)
             {
-                IEntity entity = JsonConvert.DeserializeObject<T>(File.ReadAllText
+                IEntityChildClassIngredients entity = (IEntityChildClassIngredients)JsonConvert.DeserializeObject<T>(File.ReadAllText
                 (String.Concat(FullPath, parentID, ".txt")));
                 List<TChild> list = new List<TChild>() { child };
                 child.RemoveSelectionFromChildren(entity, list);

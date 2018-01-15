@@ -21,32 +21,28 @@ namespace LambAndLentil.Domain.Entities
 
         public Recipe(DateTime creationDate) : base(creationDate) => CreationDate = creationDate;
 
-      
+
         public decimal Servings { get; set; }
         public MealType MealType { get; set; }
         public int? Calories { get; set; }
         public short? CalsFromFat { get; set; }
         public List<Ingredient> Ingredients { get; set; }
+        public int ID { get; set; }
 
-        void IEntity.AddChildToParent(IEntity parent, IEntity child)
-        {
-            ((IEntityChildClassRecipes)parent).Recipes.Add((Recipe)child);
-        }
-
-        bool IEntity.ParentCanHaveChild(IPossibleChildren parent)
+        bool ParentCanHaveChild(IPossibleChildren parent)
         {
             return parent.CanHaveRecipeChild;
         }
 
-        public void ParentRemoveAllChildrenOfAType( IEntity parent, IEntity child) => ((IEntityChildClassRecipes)parent).Recipes.Clear();
+        public void ParentRemoveAllChildrenOfAType(IEntity parent, IEntity child) => ((IEntityChildClassRecipes)parent).Recipes.Clear();
 
 
-        public IEntity  RemoveSelectionFromChildren<TChild>(IEntity  parent, List<TChild> selected)
+        public IEntity RemoveSelectionFromChildren<TChild>(IEntityChildClassIngredients parent, List<TChild> selected)
             where TChild : BaseEntity, IEntity, IPossibleChildren, new()
         {
             var setToRemove = new HashSet<TChild>(selected);
-             
-           ((IEntityChildClassRecipes)parent).Recipes.RemoveAll(ContainsSelected);
+
+            ((IEntityChildClassRecipes)parent).Recipes.RemoveAll(ContainsSelected);
             return parent;
 
             bool ContainsSelected(IEntity item)
@@ -74,6 +70,31 @@ namespace LambAndLentil.Domain.Entities
                 throw;
             }
 
+        }
+
+        bool IEntity.ParentCanHaveChild(IEntity parent)   // TODO: replace parameter with type or make generic
+        {  // TODO: eliminate repetition in other modules
+            Type type = parent.GetType();   // this line should be eliminated when parameter is changed
+            if ( type ==typeof(Ingredient))
+            {
+                // return parent.CanHaveIngredientChild;    // TODO: is this property really needed??
+                return true;
+            } 
+            else return false;
+        }
+
+        void IEntity.ParentRemoveAllChildrenOfAType(IEntity parent, IEntity child) => throw new NotImplementedException();
+        IEntity IEntity.RemoveSelectionFromChildren<TChild>(IEntityChildClassRecipes parent, List<TChild> selected)
+        {
+
+            var allRecipeIDs = parent.Recipes.Select(a => a.ID);
+
+            var setToRemove = new HashSet<TChild>(selected).Where(p => p != null).Select(r => r.ID).AsQueryable();
+
+            var remainingIDs = allRecipeIDs.Except(setToRemove);
+            var remainingChildren = parent.Recipes.Where(b => remainingIDs.Contains(b.ID));
+            parent.Recipes = remainingChildren.ToList();
+            return parent;
         }
     }
 }

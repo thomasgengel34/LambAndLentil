@@ -8,6 +8,6 @@ namespace LambAndLentil.Domain.Entities
 {
    public interface IEntityChildClassIngredients:IEntity
     {
-         List<Ingredient> Ingredients { get; set; } 
+        
     }
 }

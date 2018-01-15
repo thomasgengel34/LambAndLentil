@@ -68,19 +68,18 @@ namespace LambAndLentil.Test.BasicControllerTests
 
 
 
-        protected void BaseShouldAddIngredientToIngredientsList(IRepository<T> Repo, IEntity Entity, IEntity ReturnedEntity, IGenericController<T> controller, UIControllerType uIControllerType)
+        protected void BaseShouldAddIngredientToIngredientsList()
         {
-            // Arrange
+            IRepository<Ingredient> repo = new TestRepository<Ingredient>();
+            IGenericController<Ingredient> controller = new IngredientsController(repo);
+            Ingredient ingredient = new Ingredient() { ID = 3500, IngredientsList = "start" };
             string addedIngredient = "added ingredient";
-            string originalIngredientList = Entity.IngredientsList;
-
-            // Act
-            controller.AddIngredientToIngredientsList(Entity.ID, addedIngredient);
-            ReturnedEntity = Repo.GetById(Entity.ID);
-
-            // Assert
-            string listWithAddedIngredient = String.Concat(originalIngredientList, ", ", addedIngredient);
-            Assert.AreEqual(listWithAddedIngredient, ReturnedEntity.IngredientsList);
+             repo.Save(ingredient);
+             controller.AddIngredientToIngredientsList(ingredient.ID, addedIngredient);
+            Ingredient returnedIngredient =  repo.GetById(ingredient.ID);
+             
+            string listWithAddedIngredient = String.Concat(ingredient.IngredientsList, ", ", addedIngredient);
+            Assert.AreEqual(listWithAddedIngredient, returnedIngredient.IngredientsList);
         }
 
         protected void BaseCanSendPaginationViewModel(IRepository<T> Repo, IGenericController<T> Controller, UIControllerType uIControllerType)
@@ -331,7 +330,8 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         public void BaseDetachAllIngredientChildren(IRepository<T> Repo, IGenericController<T> Controller )
         {    
-            T parent = Generate_T_WithFiveIngredientChildren(); 
+           T parent = Generate_T_WithFiveIngredientChildren();
+            Repo.Save(parent);
             Controller.DetachASetOf(parent.ID,parent.Ingredients);
            var returnedEntity = Repo.GetById(parent.ID);
             var trueOrFalse = (returnedEntity.Ingredients == null) || ( returnedEntity.Ingredients.Count()==0);
@@ -341,18 +341,22 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         private T Generate_T_WithFiveIngredientChildren()
         {
-           IRepository<T> repo = new TestRepository<T>();
-           IEntityChildClassIngredients  item= new T{ ID = 31425926 };
+           IRepository<Ingredient> repo = new TestRepository<Ingredient>();
+           T  item= new T{ ID = 31425926 };
 
             Ingredient ingredient0 = new Ingredient() { ID = 1000 };
             Ingredient ingredient1 = new Ingredient() { ID = 1001 };
             Ingredient ingredient2 = new Ingredient() { ID = 1002 };
             Ingredient ingredient3 = new Ingredient() { ID = 1003 };
-            Ingredient ingredient4 = new Ingredient() { ID = 1004 }; 
-          
-           item.Ingredients = new List<Ingredient>() { ingredient0, ingredient1, ingredient2, ingredient3, ingredient4 }; 
-            repo.Save((T)item);
-            return (T)item;
+            Ingredient ingredient4 = new Ingredient() { ID = 1004 };
+
+           item.Ingredients = new List<Ingredient>();
+           
+            List<Ingredient> list= new List<Ingredient>() { ingredient0, ingredient1, ingredient2, ingredient3, ingredient4 };
+            item.Ingredients.AddRange(list);
+           // repo.Save(item);
+            T foo = item as T;
+            return  item as T;
 
         }
 

@@ -9,7 +9,7 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.Recipe
     {
         [Ignore]
         [TestMethod]
-        public void  DetailWithWarningWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSuppliedAndThereIsOneChildAttached()
+        public void  DetailWithWarningWhenParentIDIsValidAndChildIsValidAndThereIsOneChildAttached()
         {   // warning that the last child child was detached
             // Arrange
 
@@ -21,7 +21,7 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.Recipe
 
         [Ignore]
         [TestMethod]
-        public void  DetailWithErrorWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSuppliedAndThereIsNoChildAttached()
+        public void  DetailWithErrorWhenParentIDIsValidAndChildIsValidAndThereIsNoChildAttached()
         {    
             // Arrange
 

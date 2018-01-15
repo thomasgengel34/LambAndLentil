@@ -12,7 +12,7 @@ namespace LambAndLentil.Domain.Entities
         [StringLength(50)]
         [Required]
         public string Name { get; set; }
-        public int ID { get; set; }
+        
 
         [DataType(DataType.MultilineText)]
         public string Description { get; set; }
@@ -95,10 +95,10 @@ namespace LambAndLentil.Domain.Entities
 
         
 
-        public static bool ParentCanAttachChild(IPossibleChildren parent, IEntity child)  
+        public static bool ParentCanAttachChild(IEntity parent, IEntity child)  
         {
             if (child == null) { return false; }  
-           return  child.ParentCanHaveChild( parent);  
+           return  child.ParentCanHaveChild( parent);  // TODO: this needs to be reworked, it's unintuitively backwards, awkward and I should look at removing the properties this refers to and just use it in the entity method instead of going to the child.  Parent can have x child, not child can have x parent. Simple ifs in the parent should handle it, one for true and one for false.
         } 
          
     }

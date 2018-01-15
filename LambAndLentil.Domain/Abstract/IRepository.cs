@@ -15,9 +15,8 @@ namespace LambAndLentil.Domain.Abstract
 
     public interface IRepository<T >
     where T : class, IEntity
-    {
-        //  EFDbContext context { get; set; }
-        IQueryable Ingredient { get; }
+    { 
+        IQueryable Ingredient { get; }  // TODO: remove these properties if possible. 
         IQueryable Recipe { get; }
         IQueryable Menu { get; }
         IQueryable Plan { get; }
@@ -28,15 +27,13 @@ namespace LambAndLentil.Domain.Abstract
         int Count(); 
         IEnumerable<T> GetAll(); 
         IEnumerable<T> Query(Expression<Func<T , bool>> filter); 
-        void Add(T entity); 
+        void Add(T entity); //TODO: remove 
         void Remove(T entity);  
-        void Update(T entity, int? key); 
+        void Update(T entity, int? key); //TODO: remove 
         void Save(T entity);  
-
-        void AttachAnIndependentChild<TChild>(int parentID, TChild child ) 
-            where TChild : BaseEntity, IEntity;
-
-        void DetachAnIndependentChild<TChild>(int parentID, TChild child ) 
+         
+      
+        void DetachAnIndependentChild<TChild>(int parentID, TChild child )   //TODO: remove 
             where TChild : BaseEntity, IEntity,new();
     }
 }

@@ -11,7 +11,7 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.Person
     public class ControllerShouldAttachRecipeAndReturn: BaseControllerShouldAttachXAndReturn<TParent,TChild>
     { 
         [TestMethod]
-        public void DetailWithSuccessWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSupplied() => BaseDetailWithSuccessWhenParentIDIsValidAndChildIsValidAndThereIsNoOrderNumberSupplied();
+        public void DetailWithSuccessWhenParentIDIsValidAndChildIsValid() => BaseDetailWithSuccessWhenParentIDIsValidAndChildIsValid();
          
         [TestMethod]
         public void IndexWithErrorWhenParentIDIsNull() => BaseReturnsIndexWithWarningWithNullParent(); 

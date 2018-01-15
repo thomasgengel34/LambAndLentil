@@ -239,19 +239,17 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestMethod]
         [TestCategory("Attach-Detach")]
         public void AttachAnExistingIngredientToAnExistingShoppingList()
-        {
-            // Arrange 
+        { 
             IRepository<Ingredient> repoIngredient = new TestRepository<Ingredient>();
-            ////ShoppingListsController Controller = new ShoppingListsController(Repo );
+            ShoppingList shoppingList = new ShoppingList() { ID = 76, Ingredients= new List<Ingredient>() };
+            Repo.Save(shoppingList); 
+             Ingredient ingredient = new Ingredient { ID = 500  };
+            repoIngredient.Save(ingredient);
+             
+            Controller.Attach(Repo,shoppingList.ID, ingredient );
+            ShoppingList returnedShoppingList = Repo.GetById(shoppingList.ID); 
 
-            //ShoppingList slVM = GetShoppingList(Repo, "test AttachAnExistingIngredientToAnExistingShoppingList");
-             Ingredient ingredient = new Ingredient { ID = 500, Description = "test AttachAnExistingIngredientToAnExistingShoppingList" };
-            repoIngredient.Add(ingredient);
-            // Act
-            Controller.Attach(Repo,ShoppingList.ID, ingredient );
-            ShoppingList returnedShoppingList = Repo.GetById(ShoppingList.ID); 
-
-            // Assert 
+            
             Assert.AreEqual(1, returnedShoppingList.Ingredients.Count());
             // Verify the correct ingredient was added 
             Assert.AreEqual(ingredient.ID, returnedShoppingList.Ingredients.First().ID);

@@ -65,37 +65,19 @@ namespace LambAndLentil.Test.Infrastructure
         [TestCategory("Edit")]
         public void SaveEditedIngredient()
         {
-            // Arrange
-            IGenericController<Ingredient> indexController = new IngredientsController(Repo);
-            IGenericController<Ingredient> Controller2 = new IngredientsController(Repo);
-            IGenericController<Ingredient> Controller3 = new IngredientsController(Repo);
-
-
-            Ingredient = new Ingredient
+            Ingredient ingredient = new Ingredient
             {
                 Name = "0000 test",
-                ID = int.MaxValue - 100,
+                ID = 5000,
                 Description = "test IngredientsControllerShould.SaveEditedIngredient"
             };
-
-            // Act 
-            ActionResult ar1 =  Controller.PostEdit((Ingredient)Ingredient);
-
-
-            // now edit it
-            Ingredient.Name = "0000 test Edited";
-            Ingredient.ID = 7777;
-            ActionResult ar2 = Controller2.PostEdit((Ingredient)Ingredient);
-            ViewResult view2 = (ViewResult)Controller3.Index();
-            List<Ingredient> ListEntity2 = (List<Ingredient>)((ListEntity<Ingredient>)view2.Model).ListT;
-            ReturnedIngredient = (from m in ListEntity2
-                                  where m.Name == "0000 test Edited"
-                                  select m).AsQueryable().FirstOrDefault();
-
-            // Assert
-            Assert.AreEqual("0000 test Edited", ReturnedIngredient.Name);
-            Assert.AreEqual(7777, ReturnedIngredient.ID);
-
+            Repo.Save(ingredient); 
+         
+            ingredient.Name = "0000 test Edited"; 
+            ActionResult ar  = Controller.PostEdit(ingredient);
+            Ingredient returnedIngredient = Repo.GetById(ingredient.ID);
+             
+            Assert.AreEqual("0000 test Edited", returnedIngredient.Name); 
         }
 
          
@@ -144,31 +126,19 @@ namespace LambAndLentil.Test.Infrastructure
         [TestMethod]
         [TestCategory("Edit")]
         public void SaveTheCreationDateBetweenPostedEdits()
-        {
-            // Arrange
+        { 
             DateTime CreationDate = new DateTime(2010, 1, 1);
             Ingredient ingredient = new Ingredient(CreationDate)
             {
                 ID = int.MaxValue - 200,
                 Name = "test IngredientsControllerShould.SaveTheCreationDateBetweenPostedEdits"
             };
-
-
-            IGenericController<Ingredient> ControllerEdit = new IngredientsController(Repo);
-            IGenericController<Ingredient> ControllerView = new IngredientsController(Repo);
-            IGenericController<Ingredient> ControllerDelete = new IngredientsController(Repo);
-
-            // Act
-            ControllerEdit.PostEdit(ingredient);
-            ViewResult view = (ViewResult)ControllerView.Index();
-            List<Ingredient> ListEntity = (List<Ingredient>)((ListEntity<Ingredient>)view.Model).ListT;
-            IIngredient returnedListEntity = Repo.GetById(ingredient.ID);
-            DateTime shouldBeSameDate = returnedListEntity.CreationDate;
-
-            // Assert
-            Assert.AreEqual(CreationDate, shouldBeSameDate);
-
-
+            Repo.Save(ingredient);
+            Controller.PostEdit(ingredient); 
+           Ingredient returnedIngredient= Repo.GetById(ingredient.ID);
+            DateTime shouldBeSameDate = returnedIngredient.CreationDate;
+             
+            Assert.AreEqual(CreationDate, shouldBeSameDate); 
         }
 
         [TestMethod]
@@ -250,15 +220,13 @@ namespace LambAndLentil.Test.Infrastructure
         [TestMethod]
         public void HaveNameBoundInPostEditActionMethod()
         {
-            //Arrange 
-            Ingredient.Name ="Changed";
+              Ingredient ingredient = new Ingredient() { ID = 4000, Name = "HaveNameBoundInPostEditActionMethod", IngredientsList = "" };
+            ingredient.Name ="Changed";
 
-            //Act
-             Controller.PostEdit((Ingredient)Ingredient);
-            ReturnedIngredient = Repo.GetById(Ingredient.ID); 
+              Controller.PostEdit(ingredient);
+            Ingredient returnedIngredient = Repo.GetById(ingredient.ID); 
 
-            // Assert 
-            Assert.AreEqual(Ingredient.Name, ReturnedIngredient.Name);
+            Assert.AreEqual("Changed", returnedIngredient.Name);
         }
          
          
@@ -305,15 +273,13 @@ namespace LambAndLentil.Test.Infrastructure
         [TestMethod]
         public void HaveIngredientsListBoundInPostEditActionMethod()
         {
-            //Arrange 
-            Ingredient.IngredientsList =  "Changed"  ;
-
-            //Act
-             Controller.PostEdit((Ingredient)Ingredient);
-            ReturnedIngredient = Repo.GetById(Ingredient.ID);
-
-            // Assert 
-            Assert.AreEqual("Changed", ReturnedIngredient.IngredientsList);
+            Ingredient ingredient = new Ingredient() { ID = 4000, Name = "HaveIngredientsListBoundInPostEditActionMethod", IngredientsList = "" }; 
+            ingredient.IngredientsList =  "Changed"  ; 
+             
+             Controller.PostEdit(ingredient);
+            Ingredient returnedIngredient = Repo.GetById(ingredient.ID); 
+            
+            Assert.AreEqual("Changed", returnedIngredient.IngredientsList);
         } 
     }
 }

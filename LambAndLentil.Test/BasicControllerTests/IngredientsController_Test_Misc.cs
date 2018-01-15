@@ -50,17 +50,11 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [TestMethod]
         public void BePublic()
-        {
-            // Arrange
-         
-
-            // Act
+        { 
             Type type = Controller.GetType();
             bool isPublic = type.IsPublic;
-
-            // Assert 
-            Assert.AreEqual(isPublic, true);
-           // Assert.Fail();
+             
+            Assert.AreEqual(isPublic, true); 
         }
 
      

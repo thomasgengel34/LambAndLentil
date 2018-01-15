@@ -93,16 +93,11 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [TestMethod]
         public void BeSuccessfulWithValidPersonID()
-        { // "Here it is!"
-            // Arrange
-
-
-            // Act
+        {  
             ActionResult ar = Controller.Details(int.MaxValue);
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             ViewResult view = (ViewResult)adr.InnerResult;
-
-            // Assert
+ 
             Assert.IsNotNull(ar);
             Assert.AreEqual("Details", view.ViewName);
             Assert.IsInstanceOfType(view.Model, typeof(Person));

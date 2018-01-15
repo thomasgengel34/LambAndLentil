@@ -1,12 +1,8 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TestStack.FluentMVCTesting;
-using LambAndLentil.UI.Controllers;
-using System.Linq.Expressions;
-using System.Linq ;
-using LambAndLentil.Domain.Abstract;
+﻿using LambAndLentil.Domain.Abstract;
 using LambAndLentil.Domain.Concrete;
 using LambAndLentil.Domain.Entities;
+using LambAndLentil.UI.Controllers;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace LambAndLentil.FluentMVC.Test
 {
@@ -14,39 +10,36 @@ namespace LambAndLentil.FluentMVC.Test
     public class IngredientsControllerShould
     {
         private IngredientsController controller;
-        public  IRepository<Ingredient> Repo  { get; set; }
+        public IRepository<Ingredient> Repo { get; set; }
+        private BaseFluentMVCTest<Ingredient> test;
 
         [TestInitialize]
         public void Setup()
         {
-          Repo  = new TestRepository<Ingredient>();
-
+            Repo = new TestRepository<Ingredient>();
             controller = new IngredientsController(Repo);
-        }
-
-
-        [TestMethod]
-        public void  RenderIndexDefaultView()
-        {
-            controller.WithCallTo(c => c.BaseIndex(Repo,1)).ShouldRenderView(UI.UIViewType.Index.ToString()); 
+            test = new BaseFluentMVCTest<Ingredient>(controller, Repo);
         }
 
         [TestMethod]
-        public void RenderDetailsDefaultView()
-        {
-            controller.WithCallTo(c => c.BaseDetails(Repo,UI.UIControllerType.Ingredients,1,  UI.UIViewType.Details)).ShouldRenderDefaultView();
-        }
+        public void RenderIndexDefaultView() => test.BaseRenderIndexDefaultView();
 
         [TestMethod]
-        public void RendeDeleteDefaultView()
-        {
-            controller.WithCallTo(c => c.BaseDelete(Repo,UI.UIControllerType.Ingredients,1,UI.UIViewType.Delete)).ShouldRenderDefaultView();
-        }
+        public void RenderDetailsDefaultView() => test.BaseRenderDetailsDefaultView();
 
         [TestMethod]
-        public void RendeDeleteConfirmedDefaultView()
-        {
-            controller.WithCallTo(c => c.BaseDeleteConfirmed(Repo, UI.UIControllerType.Ingredients, 1 )).ShouldRenderDefaultView();
-        }
+        public void RendeDeleteDefaultView() => test.BaseRendeDeleteDefaultView();
+
+        [TestMethod]
+        public void RendeDeleteConfirmedDefaultView() => test.BaseRendeDeleteConfirmedDefaultView();
+
+        [TestMethod]
+        public void RenderDetachDefaultView() => test.BaseDetachDefaultView();
+
+        [TestMethod]
+        public void RenderDetachAllDefaultView() => test.BaseDetachAllDefaultView();
+
+        [TestMethod]
+        public void RenderDetachASetOfDefaultView() =>test.BaseDetachASetOfDefaultView();
     }
 }

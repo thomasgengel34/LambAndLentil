@@ -193,7 +193,8 @@ namespace LambAndLentil.Test.JSONTests
     
 
         private class TestReturnZeroCountForEmptyDirectory : BaseEntity, IEntity
-        { 
+        {
+            public List<Ingredient> Ingredients { get; set; }
             string IEntity.AddedByUser { get; set; }
             DateTime IEntity.CreationDate { get; set; }
             int IEntity.ID { get; set; }
@@ -202,13 +203,14 @@ namespace LambAndLentil.Test.JSONTests
             string IEntity.Name { get; set; }
             string IEntity.Description { get; set; }
             string IEntity.IngredientsList { get; set; }
+            List<Ingredient> IEntity.Ingredients { get; set; }
 
-            public bool ParentCanHaveChild(IPossibleChildren parent) => throw new NotImplementedException();
-            void IEntity.AddChildToParent(IEntity entity, IEntity child) => throw new NotImplementedException();
+            public bool ParentCanHaveChild(IPossibleChildren parent) => throw new NotImplementedException(); 
             int IEntity.GetCountOfChildrenOnParent(IEntity parent) => throw new NotImplementedException();
-            bool IEntity.ParentCanHaveChild(IPossibleChildren parent) => throw new NotImplementedException();
+            bool IEntity.ParentCanHaveChild(IEntity parent) => throw new NotImplementedException();
             void IEntity.ParentRemoveAllChildrenOfAType(IEntity  parent, IEntity child) => throw new NotImplementedException();
-            IEntity  IEntity.RemoveSelectionFromChildren<TChild>(IEntity  parent, List<TChild> selected) => throw new NotImplementedException();
+            IEntity  IEntity.RemoveSelectionFromChildren<TChild>(IEntityChildClassIngredients parent, List<TChild> selected) => throw new NotImplementedException();
+            IEntity IEntity.RemoveSelectionFromChildren<TChild>(IEntityChildClassRecipes parent, List<TChild> selected) => throw new NotImplementedException();
         }
 
         private class TestReturnZeroCountForEmptyDirectoryVM : BaseEntity, IEntity
@@ -221,13 +223,14 @@ namespace LambAndLentil.Test.JSONTests
             string IEntity.Name { get; set; }
             string IEntity.Description { get; set; }
             string IEntity.IngredientsList { get; set; }
+            List<Ingredient> IEntity.Ingredients { get; set; }
 
-            public bool ParentCanHaveChild(IPossibleChildren parent) => throw new NotImplementedException();
-            void IEntity.AddChildToParent(IEntity entity, IEntity child) => throw new NotImplementedException();
+            public bool ParentCanHaveChild(IPossibleChildren parent) => throw new NotImplementedException(); 
             int IEntity.GetCountOfChildrenOnParent(IEntity parent) => throw new NotImplementedException();
-            bool IEntity.ParentCanHaveChild(IPossibleChildren parent) => throw new NotImplementedException();
+            bool IEntity.ParentCanHaveChild(IEntity parent) => throw new NotImplementedException();
             void IEntity.ParentRemoveAllChildrenOfAType(IEntity  parent, IEntity child) => throw new NotImplementedException();
-            IEntity  IEntity.RemoveSelectionFromChildren<TChild>(IEntity  parent, List<TChild> selected) => throw new NotImplementedException();
+            IEntity IEntity.RemoveSelectionFromChildren<TChild>(IEntityChildClassIngredients parent, List<TChild> selected) => throw new NotImplementedException();
+            IEntity IEntity.RemoveSelectionFromChildren<TChild>(IEntityChildClassRecipes parent, List<TChild> selected) => throw new NotImplementedException();
         }
 
 

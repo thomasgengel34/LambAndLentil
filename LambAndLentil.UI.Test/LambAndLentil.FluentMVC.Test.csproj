@@ -77,6 +77,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseFluentMVCTest.cs" />
+    <Compile Include="PersonsControllerShould .cs" />
+    <Compile Include="RecipesControllerShould.cs" />
+    <Compile Include="ShoppingListsControllerShould.cs" />
+    <Compile Include="PlansControllerShould.cs" />
+    <Compile Include="MenusControllerShould.cs" />
     <Compile Include="IngredientsControllerShould.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="HomeControllerShould.cs" />
