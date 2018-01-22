@@ -67,11 +67,11 @@ namespace LambAndLentil.Test.BasicControllerTests
                 Name = "test ShoppingListControllerTest.CanEditShoppingList",
                 Description = "test ShoppingListControllerTest.CanEditShoppingList"
             };
-            Repo.Add(shoppingList);
+            Repo.Save(shoppingList);
 
             // Act 
             shoppingList.Name = "Name has been changed";
-            Repo.Add(shoppingList);
+            Repo.Save(shoppingList);
             ViewResult view1 = (ViewResult)Controller.Edit(1);
 
             ShoppingList returnedShoppingListListEntity = Repo.GetById(1);

@@ -1,17 +1,4 @@
-﻿using AutoMapper;
-using LambAndLentil.Domain.Abstract;
-using LambAndLentil.Domain.Concrete;
-using LambAndLentil.Domain.Entities;
-using LambAndLentil.Tests.Infrastructure;
-using LambAndLentil.UI.Controllers;
-using LambAndLentil.UI.Models;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Security.Principal;
-using System.Web.Mvc;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace LambAndLentil.Test.BasicControllerTests
 {
@@ -26,18 +13,6 @@ namespace LambAndLentil.Test.BasicControllerTests
         public IngredientsController_GetIngredients_Test()
         { 
         }
-
-
-        [TestMethod]
-        public void MyTestMethod()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
-            Assert.Fail();
-
-        }
+         
     }
 }

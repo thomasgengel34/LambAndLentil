@@ -1,18 +1,10 @@
-﻿using AutoMapper;
-using LambAndLentil.Domain.Abstract;
-using LambAndLentil.Domain.Concrete;
-using LambAndLentil.Domain.Entities;
-using LambAndLentil.Tests.Infrastructure;
-using LambAndLentil.UI;
-using LambAndLentil.UI.Controllers;
-using LambAndLentil.UI.Models;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System;
 using System.Linq;
 using System.Security.Principal;
 using System.Web.Mvc;
+using LambAndLentil.Domain.Entities;
+using LambAndLentil.UI;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace LambAndLentil.Test.BasicControllerTests
 {
@@ -333,37 +325,28 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestMethod] 
         public void  CanPaginateArrayLengthIsCorrect()
         {
-            BaseCanPaginateArrayLengthIsCorrect(Repo, Controller);
+            BaseCanPaginateArrayLengthIsCorrect(Controller);
         }
 
         // [Ignore]
         [TestMethod]
         [TestCategory("Index")]
         public void CanPaginate_ArrayFirstItemNameIsCorrect()
-        {
-            // Arrange
-
-
-            // Act
+        { 
             var result = (ListEntity<ShoppingList>)((ViewResult)Controller.Index(1)).Model;
             ShoppingList[] ingrArray1 = result.ListT.ToArray();
-
-            // Assert  
+             
             Assert.AreEqual("LambAndLentil.Domain.Entities.ShoppingList ControllerTest1", ingrArray1[0].Name);
         }
 
-        // [Ignore]
+       
         [TestMethod]
         [TestCategory("Index")]
         public void CanPaginate_ArrayThirdItemNameIsCorrect()
-        {
-            // Arrange 
-
-            // Act
+        { 
             var result = (ListEntity<ShoppingList>)((ViewResult)Controller.Index(1)).Model;
             ShoppingList[] ingrArray1 = result.ListT.ToArray();
-
-            // Assert  
+             
             Assert.AreEqual("LambAndLentil.Domain.Entities.ShoppingList ControllerTest3", ingrArray1[2].Name);
         }
 
@@ -371,46 +354,30 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestMethod]
         [TestCategory("Index")]
         public void CanSendPaginationViewModel_CurrentPageCountCorrect()
-        {
-            // Arrange 
-
-            // Act 
+        { 
             ListEntity<ShoppingList> resultT = (ListEntity<ShoppingList>)((ViewResult)Controller.Index(2)).Model;
             PagingInfo pageInfoT = resultT.PagingInfo;
-
-            // Assert  
+               
             Assert.AreEqual(2, pageInfoT.CurrentPage);
         }
 
         [TestMethod]
         [TestCategory("Index")]
         public void ShoppingListsCtr_Index_CanSendPaginationViewModel_ItemsPerPageCorrect()
-        {
-            // Arrange
-
-
-            // Act 
+        { 
             ListEntity<ShoppingList> resultT = (ListEntity<ShoppingList>)((ViewResult)Controller.Index(2)).Model;
             PagingInfo pageInfoT = resultT.PagingInfo;
-
-            // Assert   
+             
             Assert.AreEqual(8, pageInfoT.ItemsPerPage);
         }
-
-
-        // [Ignore]
+         
         [TestMethod]
         [TestCategory("Index")]
         public void ShoppingListsCtr_Index_CanSendPaginationViewModel_TotalPagesCorrect()
-        {
-            // Arrange
-
-
-            // Act 
+        { 
             ListEntity<ShoppingList> resultT = (ListEntity<ShoppingList>)((ViewResult)Controller.Index(2)).Model;
             PagingInfo pageInfoT = resultT.PagingInfo;
-
-            // Assert 
+             
             Assert.AreEqual(1, pageInfoT.TotalPages);
         }
 
@@ -445,11 +412,9 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestMethod]
         [TestCategory("Index")]
         public void ContainsAllShoppingLists()
-        {
-            // Arrange
+        { 
             int repoCount = Repo.Count();
-
-            // Act
+             
             ViewResult view1 = (ViewResult)Controller.Index(1);
 
             int count1 = ((ListEntity<ShoppingList>)(view1.Model)).ListT.Count();
@@ -459,8 +424,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             int count2 = ((ListEntity<ShoppingList>)(view2.Model)).ListT.Count();
 
             int count = count1 + count2;
-
-            // Assert
+             
             Assert.IsNotNull(view1);
             Assert.IsNotNull(view2);
             Assert.AreEqual(repoCount, count1);
@@ -475,10 +439,10 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestCategory("Index")]
         public void FirstPageIsCorrect()
         {
-            BaseFirstPageIsCorrect(Repo, Controller, UIControllerType.ShoppingLists); 
+            BaseFirstPageIsCorrect(Repo, Controller); 
         }
 
-        // [Ignore]
+         
         [TestMethod]
         [TestCategory("Index")]
         // currently we only have one page here
@@ -492,13 +456,13 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestCategory("Index")]
         public void CanSendPaginationViewModel()
         {
-            BaseCanSendPaginationViewModel(Repo, Controller, UIControllerType.ShoppingLists);
+            BaseCanSendPaginationViewModel(Repo, Controller);
         }
 
         [TestMethod]
         public void CanSendPaginationViewModel_TotalItemsCorrect()
         {
-            BaseCanSendPaginationViewModel_TotalItemsCorrect(Repo, Controller, UIControllerType.ShoppingLists);
+            BaseCanSendPaginationViewModel_TotalItemsCorrect(Repo, Controller);
         }
 
 
@@ -508,7 +472,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestCategory("Index")]
         public void PagingInfoIsCorrect()
         {
-            BasePagingInfoIsCorrect(Repo, Controller, UIControllerType.ShoppingLists);
+            BasePagingInfoIsCorrect(Repo, Controller);
         }
 
         [TestMethod]

@@ -33,8 +33,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         
         [TestMethod]
         public void SuccessfullyDetachASetOfMenuChildren()
-        {
-            // Arrange 
+        { 
             Plan.Menus.Add(new Menu { ID = 4005, Name = "Butter" });
             Plan.Menus.Add(new Menu { ID = 4006, Name = "Cayenne Pepper" });
             Plan.Menus.Add(new Menu { ID = 4007, Name = "Cheese" });

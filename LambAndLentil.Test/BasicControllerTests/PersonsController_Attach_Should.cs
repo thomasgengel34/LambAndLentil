@@ -22,16 +22,16 @@ namespace LambAndLentil.Test.BasicControllerTests
 
 
         [TestMethod]
-        public void ReturnsIndexWithWarningWithNullParent() => BaseReturnsIndexWithWarningWithNullParent(Repo, Controller);
+        public void ReturnsIndexWithWarningWithNullParent() => BaseReturnsIndexWithWarningWithNullParent(Controller);
 
         [TestMethod]
-        public void ReturnsIndexWithWarningWithUnknownParentID() => BaseReturnsIndexWithWarningWithUnknownParentID(Repo, Controller);
+        public void ReturnsIndexWithWarningWithUnknownParentID() => BaseReturnsIndexWithWarningWithUnknownParentID(Controller);
 
         [TestMethod]
-        public void ReturnsDetailWithWarningIfAttachingNullChild() => BaseReturnsDetailWithWarningIfAttachingNullChild(Person, Repo, Controller);
+        public void ReturnsDetailWithWarningIfAttachingNullChild() => BaseReturnsDetailWithWarningIfAttachingNullChild(Person, Controller);
 
         [TestMethod]
-        public void ReturnsDetailWithWarningWithUnknownChildID() => BaseReturnsDetailWithWarningWithUnknownChildID(Person, Repo, Controller);
+        public void ReturnsDetailWithWarningWithUnknownChildID() => BaseReturnsDetailWithWarningWithUnknownChildID(Person,  Controller);
 
         [TestMethod]
         public void ReturnsDetailWhenAttachingWithSuccessWithValidParentandValidChild()
@@ -42,7 +42,7 @@ namespace LambAndLentil.Test.BasicControllerTests
                 Description = "test ReturnsDetailWhenAttachingWithSuccessWithValidParentandValidChild"
             };
             IRepository<Person> mRepo = new TestRepository<Person>();
-            mRepo.Add(menu);
+            mRepo.Save(menu);
             Ingredient ingredient = new Ingredient
             {
                 ID = 1492,
@@ -50,7 +50,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             };
 
             
-            ActionResult ar = Controller.Attach(Repo,int.MaxValue, ingredient );
+            ActionResult ar = Controller.Attach(int.MaxValue, ingredient );
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             RedirectToRouteResult rdr = (RedirectToRouteResult)adr.InnerResult;
 
@@ -65,7 +65,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [TestMethod]
         public void ReturnsDetailWhenDetachingWithSuccessWithValidParentandValidIngredientChild() =>
-            BaseReturnsDetailWhenDetachingWithSuccessWithValidParentandValidIngredientChild(Repo, Controller, Person.ID);
+            BaseReturnsDetailWhenDetachingWithSuccessWithValidParentandValidIngredientChild(Controller, Person.ID);
 
 
 
@@ -78,7 +78,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             IngredientRepo.Save(child);
 
             // Act
-            Controller.Attach(Repo,Person.ID, child );
+            Controller.Attach(Person.ID, child );
             ReturnedPerson = Repo.GetById(Person.ID);
             // Assert
             //  Assert.AreEqual("Default", Ingredient.Ingredients.Last().Name);
@@ -144,8 +144,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestMethod]
         [TestCategory("Attach-Detach")]
         public void DetachASetOfIngredientChildren()
-        {
-            // Arrange 
+        { 
             Person.Ingredients.Add(new Ingredient { ID = 4005, Name = "Butter" });
             Person.Ingredients.Add(new Ingredient { ID = 4006, Name = "Cayenne Pepper" });
             Person.Ingredients.Add(new Ingredient { ID = 4007, Name = "Cheese" });
@@ -164,10 +163,10 @@ namespace LambAndLentil.Test.BasicControllerTests
         }
 
         [TestMethod]
-        public void DetachTheLastIngredientChild() => BaseDetachTheLastIngredientChild(Repo, Controller, Person);
+        public void DetachTheLastIngredientChild() => BaseDetachTheLastIngredientChild(Controller, Person);
 
         [TestMethod]
-        public void DetachAllIngredientChildren() => BaseDetachAllIngredientChildren(Repo, Controller );
+        public void DetachAllIngredientChildren() => BaseDetachAllIngredientChildren(Controller );
 
 
     }

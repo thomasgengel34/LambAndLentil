@@ -6,7 +6,7 @@ using System.Linq;
 namespace LambAndLentil.Domain.Entities
 {
     [Table("MENU.Menu")]
-    public class Menu : BaseEntity,IMenu
+    public class Menu : BaseEntity, IMenu
 
     {
 
@@ -14,56 +14,57 @@ namespace LambAndLentil.Domain.Entities
         {
             Ingredients = new List<Ingredient>();
             Recipes = new List<Recipe>();
-            CanHaveMenuChild = false;
-            CanHavePlanChild = false;
-            CanHaveRecipeChild = true;
-            CanHaveShoppingListChild = false;
         }
 
         public Menu(DateTime creationDate) : base(creationDate) => CreationDate = creationDate;
 
-     
+
         public MealType MealType { get; set; }
-        public DayOfWeek DayOfWeek { get; set; } 
+        public DayOfWeek DayOfWeek { get; set; }
         public int Diners { get; set; }
         public List<Ingredient> Ingredients { get; set; }
-        public List<Recipe> Recipes { get; set; }   
+        public List<Recipe> Recipes { get; set; }
         public int ID { get; set; }
-        DayOfWeek IMenu.DayOfWeek { get; set; }
-        int IMenu.Diners { get; set; }
-        MealType IMenu.MealType { get; set; }
-        List<Recipe> IEntityChildClassRecipes.Recipes { get; set; }
-        string IEntity.AddedByUser { get; set; }
-        DateTime IEntity.CreationDate { get; set; }
-        int IEntity.ID { get; set; }
-        string IEntity.ModifiedByUser { get; set; }
-        DateTime IEntity.ModifiedDate { get; set; }
-        string IEntity.Name { get; set; }
-        string IEntity.Description { get; set; }
-        string IEntity.IngredientsList { get; set; }
-        List<Ingredient> IEntity.Ingredients { get; set; }
+         
+        List<Menu> IEntity.Menus { get; set; } = null;
+        List<Plan> IEntity.Plans { get; set; } = null;
+        List<ShoppingList> IEntity.ShoppingLists { get; set; } = null;
 
-        void  AddChildToParent(IEntity parent, IEntity child)
+        void AddChildToParent(IEntity parent, IEntity child)
         {
-            ((IEntityChildClassMenus)parent).Menus.Add((Menu)child);
+            ((IEntity)parent).Menus.Add((Menu)child);
         }
 
-        bool  ParentCanHaveChild(IPossibleChildren parent)
+        bool IEntity.CanHaveChild(IEntity child)
         {
-            return parent.CanHaveMenuChild;
+            Type type = child.GetType();
+            if (type == typeof(Ingredient) || type == typeof(Recipe))
+            {
+                return true;
+            }
+            return false;
         }
 
-        public void ParentRemoveAllChildrenOfAType(IEntity  parent, IEntity child)
+        public override bool CanHaveChild(IEntity child)
         {
-            ((IEntityChildClassMenus)parent).Menus.Clear();
+            Type type = child.GetType();
+            if (type == typeof(Ingredient) || type == typeof(Recipe))
+            {
+                return true;
+            }
+            return false;
         }
-       
+        public void ParentRemoveAllChildrenOfAType(IEntity parent, IEntity child)
+        {
+            ((IEntity)parent).Menus.Clear();
+        }
 
-        public IEntity  RemoveSelectionFromChildren<TChild>(IEntityChildClassIngredients  parent, List<TChild> selected)
-            where TChild : BaseEntity, IEntity, IPossibleChildren, new()
+
+        public IEntity RemoveSelectionFromChildren<TChild>(IEntity parent, List<TChild> selected)
+            where TChild : BaseEntity, IEntity, new()
         {
             var setToRemove = new HashSet<TChild>(selected);
-            ((IEntityChildClassMenus)parent).Menus.RemoveAll(ContainsSelected);
+            ((IEntity)parent).Menus.RemoveAll(ContainsSelected);
             return parent;
 
             bool ContainsSelected(IEntity item)
@@ -72,14 +73,14 @@ namespace LambAndLentil.Domain.Entities
                 var numbers = from f in selected select f.ID;
                 bool trueOrFalse = numbers.Contains(itemID);
                 return trueOrFalse;
-            } 
+            }
         }
 
         int IEntity.GetCountOfChildrenOnParent(IEntity parent)
         {
             try
             {
-                return ((IEntityChildClassMenus)parent).Menus.Count();
+                return ((IEntity)parent).Menus.Count();
             }
             catch (InvalidCastException)
             {
@@ -90,17 +91,6 @@ namespace LambAndLentil.Domain.Entities
                 throw;
             }
 
-        }
-
-        
-
-        bool IEntity.ParentCanHaveChild(IEntity parent) => parent.CanHaveMenuChild;
-
-
-
-
-        IEntity IEntity.RemoveSelectionFromChildren<TChild>(IEntityChildClassIngredients parent, List<TChild> selected) => throw new NotImplementedException();
-        void IEntity.ParentRemoveAllChildrenOfAType(IEntity parent, IEntity child) => throw new NotImplementedException();
-        IEntity IEntity.RemoveSelectionFromChildren<TChild>(IEntityChildClassRecipes parent, List<TChild> selected) => throw new NotImplementedException();
+        } 
     }
 }

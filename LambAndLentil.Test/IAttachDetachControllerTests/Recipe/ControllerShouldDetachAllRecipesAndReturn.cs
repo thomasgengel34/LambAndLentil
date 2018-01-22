@@ -9,9 +9,7 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.Recipe
     [TestCategory("Attach-Detach")]
     public class ControllerShouldDetachAllRecipesAndReturn : BaseControllerShouldDetachXAndReturn<TParent, TChild>
     {
-        // Recipe cannot attach a recipe as a child
-        
-
+        // Recipe cannot attach a recipe as a child 
 
         [TestMethod]
         public void IndexWithErrorWhenParentIDIsNull() => BaseReturnsIndexWithWarningWithNullParentWhenDetaching();
@@ -19,7 +17,14 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.Recipe
 
         [TestMethod]
         public void IndexWithErrorWhenParentIDIsNotForAnExistingIngredientWhenDetachingUnattachableChild() => 
-        BaseIndexWithWarningWhenParentIDIsNotForAnExistingIngredientWhenDetachingUnattachableChild(); 
+        BaseIndexWithWarningWhenParentIDIsNotForAnExistingIngredientWhenDetachingUnattachableChild();
+
+
+        [TestMethod]
+        public void DetailWithDangerWhenIDisValidAndThereIsOneChildOnListWhenDetachingAndChildCannotBeAttachedWhenDetachingAll()
+        {
+            BaseDetailWithDangerWhenIDisValidAndThereIsOneChildOnListWhenDetachingAndChildCannotBeAttachedWhenDetachingAll();
+        }
     } 
 } 
  

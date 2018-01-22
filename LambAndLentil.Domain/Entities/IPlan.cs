@@ -2,7 +2,7 @@
 
 namespace LambAndLentil.Domain.Entities
 {
-    public interface IPlan:IEntity, IEntityChildClassIngredients,IEntityChildClassRecipes,IEntityChildClassMenus
+    public interface IPlan:IEntity 
     { 
         
     }

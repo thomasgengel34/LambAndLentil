@@ -2,6 +2,7 @@
 using LambAndLentil.Domain.Entities;
 using LambAndLentil.UI;
 using LambAndLentil.UI.Controllers;
+using LambAndLentil.UI.Infrastructure.Alerts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 using System.Web.Mvc;
@@ -20,8 +21,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestMethod]
         [TestCategory("Edit")]
         public void CanEditMenu()
-        {
-            // Arrange
+        { 
             Menu menu = new Menu
             {
                 ID = 1,
@@ -29,20 +29,15 @@ namespace LambAndLentil.Test.BasicControllerTests
                 Description = "test MenuControllerTest.CanEditMenu"
             };
             Repo.Save(menu);
-
-            // Act 
+             
             menu.Name = "Name has been changed";
             Repo.Save(menu);
-            ViewResult view1 = (ViewResult)Controller.Edit(1);
-
-            var returnedMenu = (Menu)(view1.Model);
-
-
-            // Assert 
-            Assert.IsNotNull(view1);
-            Assert.AreEqual("Name has been changed", returnedMenu.Name);
-            //Assert.AreEqual(menu.Description, returnedMenuListEntity.Description);
-            //Assert.AreEqual(menu.CreationDate, returnedMenuListEntity.CreationDate);
+           AlertDecoratorResult adr =  (AlertDecoratorResult)Controller.Edit(1);
+            ViewResult vr = (ViewResult)adr.InnerResult;
+            Menu returnedMenu = (Menu)vr.Model;
+             
+            Assert.IsNotNull(returnedMenu);
+            Assert.AreEqual("Name has been changed", returnedMenu.Name); 
         }
 
         [TestMethod]
@@ -94,11 +89,11 @@ namespace LambAndLentil.Test.BasicControllerTests
                 Name = "test MenuControllerTest.CanEditMenu",
                 Description = "test MenuControllerTest.CanEditMenu"
             };
-            Repo.Add(menu);
+            Repo.Save(menu);
 
             // Act 
             menu.Name = "Name has been changed";
-            Repo.Add(menu);
+            Repo.Save(menu);
 
             ViewResult view1 = (ViewResult)Controller.Edit(1);
 

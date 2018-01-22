@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using LambAndLentil.Domain.Abstract;
@@ -13,11 +12,11 @@ namespace LambAndLentil.UI.Controllers
     public abstract class BaseController<T> : Controller
             where T : BaseEntity, IEntity, new()
     {
-        public string ClassName { get; private set; }
-        public int PageSize { get; set; }
+        string ClassName; 
+       public int PageSize { get; set; } 
         public static IRepository<T> Repo { get; set; }
-        public static IRepository<Ingredient> IngredientRepo { get; set; }
-        public static IRepository<Menu> MenuRepo { get; set; }
+        public static IRepository<Ingredient> IngredientRepo { get; set; }   // TODO: convert to Parent/Child Repos
+        public static IRepository<Menu> MenuRepo { get; set; }  // TODO: convert to Parent/Child Repos
 
         public BaseController(IRepository<T> repository)
         {
@@ -27,43 +26,22 @@ namespace LambAndLentil.UI.Controllers
 
 
 
-        //  TODO: filter
-
-        public ActionResult BaseIndex(IRepository<T> Repo, int? page = 1)
+        //  TODO: filter   
+        public ActionResult BaseIndex(int? page = 1)
         {
             PageSize = 8;
             int pageInt = page ?? 1;
             ListEntity<T> model = new ListEntity<T>
-            {
-
+            { 
                 ListT = new BaseEntity().GetIndexedModel<T>(Repo, PageSize, pageInt),
                 PagingInfo = new BaseEntity().PagingFunction<T>(Repo, page, PageSize)
             };
             return View(UIViewType.Index.ToString(), model);
         }
 
-        public ActionResult BaseDetails(IRepository<T> Repo, UIControllerType uIController, int id = 1, UIViewType actionMethod = UIViewType.Details)
-        {
-            ViewBag.Title = actionMethod.ToString();
-            switch (actionMethod)
-            {
-                case UIViewType.Delete: return BaseDelete(Repo, uIController, id);
-                case UIViewType.DeleteConfirmed: return BaseDeleteConfirmed(Repo, uIController, id);
-                case UIViewType.Details:
-                    {
-                        return BaseDetailsDealWithDetails(Repo, id);
-                    }
-                case UIViewType.Edit: return BaseEdit(Repo, uIController, id);
-                case UIViewType.PostEdit:
-                    {
-                        T item = Repo.GetById(id);
-                        return BasePostEdit(Repo, item);
-                    }
-                default: return View(UIViewType.Index);
-            }
-        }
+  
 
-        private ActionResult BaseDetailsDealWithDetails(IRepository<T> Repo, int id)
+       public ActionResult BaseDetails(int id)
         {
             T item = Repo.GetById(id);
             if (item == null)
@@ -85,12 +63,14 @@ namespace LambAndLentil.UI.Controllers
             }
         }
 
-        private ActionResult BaseEdit(IRepository<T> Repo, UIControllerType uIController, int id)
+       
+
+        public ActionResult BaseEdit( int id)
         {
             T item = Repo.GetById(id);
             if (item == null)
             {
-                return (ViewResult)RedirectToAction(UIViewType.Index.ToString()).WithWarning(ClassName + " was not found");
+                return  RedirectToAction(UIViewType.Index.ToString()).WithWarning(ClassName + " was not found");
             }
             else
             {
@@ -112,7 +92,7 @@ namespace LambAndLentil.UI.Controllers
 
 
 
-        public ActionResult BasePostEdit(IRepository<T> Repo, T entity)
+        public ActionResult BasePostEdit(T entity)
         {
             T item = entity;
             bool isValid = IsModelValid(entity);
@@ -130,7 +110,7 @@ namespace LambAndLentil.UI.Controllers
         }
 
 
-        public ActionResult BaseDelete(IRepository<T> Repo, UIControllerType uiControllerType, int id = 1, UIViewType actionMethod = UIViewType.Delete)
+        public ActionResult BaseDelete(int id = 1)
         {
             T item = Repo.GetById(id);
             if (item == null)
@@ -143,7 +123,7 @@ namespace LambAndLentil.UI.Controllers
             }
         }
 
-        public ActionResult BaseDeleteConfirmed(IRepository<T> Repo, UIControllerType controllerType, int id)
+        public ActionResult BaseDeleteConfirmed( int id=1)
         {
             T item = Repo.GetById(id);
             if (item == null)
@@ -155,13 +135,9 @@ namespace LambAndLentil.UI.Controllers
                 Repo.Remove(item);
                 return RedirectToAction(UIViewType.BaseIndex.ToString()).WithSuccess(string.Format($"{item.Name} has been deleted"));
             }
-        }
+        } 
 
-
-
-
-
-        public void BaseAddIngredientToIngredientsList(IRepository<T> repo, UIControllerType tController, int id, string addedIngredient)
+        public void BaseAddIngredientToIngredientsList( int id, string addedIngredient)
         {
             T item = Repo.GetById(id);
 
@@ -170,14 +146,6 @@ namespace LambAndLentil.UI.Controllers
                 item.IngredientsList += String.Concat(", ", addedIngredient);
                 Repo.Update(item, item.ID);
             }
-        } 
-
-        protected ActionResult BaseDetachLastIngredientChild(IRepository<T> repo, int iD)
-        {
-            IEntityChildClassIngredients parent = (IEntityChildClassIngredients)Repo.GetById(iD);
-            int count = parent.Ingredients.Count();
-            parent.Ingredients.RemoveAt(count - 1);
-            return View(UIViewType.Index);    // TODO: fix
-        }
+        }  
     }
 }

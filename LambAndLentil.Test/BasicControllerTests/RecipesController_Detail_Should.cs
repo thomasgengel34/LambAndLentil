@@ -1,12 +1,10 @@
-﻿using LambAndLentil.Domain.Entities;
-using LambAndLentil.Tests.Infrastructure;
-using LambAndLentil.UI;
-using LambAndLentil.UI.Controllers;
-using LambAndLentil.UI.Infrastructure.Alerts;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using System;
 using System.Linq;
 using System.Web.Mvc;
+using LambAndLentil.Domain.Entities;
+using LambAndLentil.UI;
+using LambAndLentil.UI.Infrastructure.Alerts;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace LambAndLentil.Test.BasicControllerTests
 {
@@ -24,7 +22,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange
 
             // Act 
-            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.Details(400, UIViewType.Delete);
+            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.Delete(400);
             RedirectToRouteResult rdr = (RedirectToRouteResult)adr.InnerResult;
 
             // Assert
@@ -46,7 +44,7 @@ namespace LambAndLentil.Test.BasicControllerTests
           // Arrange
             int count = Repo.Count();
             //Act
-            Controller.Details(int.MaxValue, UIViewType.DeleteConfirmed);
+            Controller.DeleteConfirmed(int.MaxValue );
             Recipe ingredient = Repo.GetById(int.MaxValue);
             //Assert
             Assert.AreEqual(count - 1, Repo.Count());
@@ -61,7 +59,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange
 
             // Act
-            ActionResult ar=Controller.Details(4000, UIViewType.DeleteConfirmed);
+            ActionResult ar=Controller.DeleteConfirmed(4000);
             AlertDecoratorResult adr = (AlertDecoratorResult)ar; 
             RedirectToRouteResult rdr = (RedirectToRouteResult)adr.InnerResult;
 
@@ -74,7 +72,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestMethod]
         public void ReturnDeleteConfirmedWithActionMethodDeleteConfirmedWithBadID()
         {
-            ActionResult ar = Controller.Details(-1, UIViewType.DeleteConfirmed);
+            ActionResult ar = Controller.DeleteConfirmed(-1);
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             RedirectToRouteResult rdr = (RedirectToRouteResult)adr.InnerResult;
 
@@ -101,20 +99,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.IsInstanceOfType(view.Model, typeof(Recipe));
             Assert.AreEqual("Here it is!", adr.Message);
         }
-
-        [TestMethod]
-        public void GotToIndexViewForNonSpecifiedActionMethods()
-        {
-            // Arrange
-
-            // Act 
-            ViewResult view = (ViewResult)Controller.Details(1, UIViewType.About); 
-
-            // Assert
-            Assert.AreEqual(UIViewType.Index, view.Model);
-
-        }
-
+         
 
         [TestMethod]
         [TestCategory("Details")]
@@ -300,17 +285,14 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestMethod]
         [TestCategory("Details")]
         public void NotBeSuccessfulWithInvalidIngredientID_IngredientIDIsNegative_AlertClassCorrect()
-        {
-            // Arrange 
+        { 
             Recipe.ID = -1;
             Recipe.Name = "Details_IngredientIDIsNegative_AlertClassCorrect"; 
             Repo.Save((Recipe)Recipe);
-
-            // Act
+             
             ActionResult view = Controller.Details(-1);
             AlertDecoratorResult adr = (AlertDecoratorResult)view;
-
-            // Assert  
+             
             Assert.AreEqual("alert-danger", adr.AlertClass);
             Assert.AreEqual("Something is wrong with the data!", adr.Message);
         }
@@ -319,23 +301,14 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestMethod]
         public void ReturnDetailsViewActionTypeEdit_ValidID()
         {
-            // Arrange
-
-            // Act
-
-            // Assert
+             
             Assert.Fail();
         }
 
         [Ignore]
         [TestMethod]
         public void ReturnDetailsViewActionTypeEdit_InValidID()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
+        { 
             Assert.Fail();
         }
         // the following are not really testable.  I am keeping them to remind me of that.

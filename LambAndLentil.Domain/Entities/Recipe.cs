@@ -27,22 +27,54 @@ namespace LambAndLentil.Domain.Entities
         public int? Calories { get; set; }
         public short? CalsFromFat { get; set; }
         public List<Ingredient> Ingredients { get; set; }
-        public int ID { get; set; }
+        public int ID { get; set; } 
+       
+        List<Recipe> IEntity.Recipes { get; set; } = null;
+        List<Menu> IEntity.Menus { get; set; } = null;
+        List<Plan> IEntity.Plans { get; set; } = null;
+        List<ShoppingList> IEntity.ShoppingLists { get; set; } = null;
 
-        bool ParentCanHaveChild(IPossibleChildren parent)
+        bool IEntity.CanHaveChild(IEntity child)
         {
-            return parent.CanHaveRecipeChild;
+            Type type = child.GetType();
+
+            List<Type> possibleChildren = new List<Type>()
+            {
+                typeof(Ingredient)
+            };
+
+            if (possibleChildren.Contains(type))
+            {
+                return true;
+            }
+            return false;
         }
 
-        public void ParentRemoveAllChildrenOfAType(IEntity parent, IEntity child) => ((IEntityChildClassRecipes)parent).Recipes.Clear();
+        public override bool CanHaveChild(IEntity child)
+        {
+            Type type = child.GetType();
+
+            List<Type> possibleChildren = new List<Type>()
+            {
+                typeof(Ingredient)
+            };
+
+            if (possibleChildren.Contains(type))
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public void ParentRemoveAllChildrenOfAType(IEntity parent, IEntity child) => ((IEntity)parent).Recipes.Clear();
 
 
-        public IEntity RemoveSelectionFromChildren<TChild>(IEntityChildClassIngredients parent, List<TChild> selected)
-            where TChild : BaseEntity, IEntity, IPossibleChildren, new()
+        public IEntity RemoveSelectionFromChildren<TChild>(IEntity parent, List<TChild> selected)
+            where TChild : BaseEntity, IEntity, new()
         {
             var setToRemove = new HashSet<TChild>(selected);
 
-            ((IEntityChildClassRecipes)parent).Recipes.RemoveAll(ContainsSelected);
+            ((IEntity)parent).Recipes.RemoveAll(ContainsSelected);
             return parent;
 
             bool ContainsSelected(IEntity item)
@@ -59,7 +91,7 @@ namespace LambAndLentil.Domain.Entities
         {
             try
             {
-                return ((IEntityChildClassRecipes)parent).Recipes.Count();
+                return ((IEntity)parent).Recipes.Count();
             }
             catch (InvalidCastException)
             {
@@ -68,33 +100,7 @@ namespace LambAndLentil.Domain.Entities
             catch (Exception)
             {
                 throw;
-            }
-
-        }
-
-        bool IEntity.ParentCanHaveChild(IEntity parent)   // TODO: replace parameter with type or make generic
-        {  // TODO: eliminate repetition in other modules
-            Type type = parent.GetType();   // this line should be eliminated when parameter is changed
-            if ( type ==typeof(Ingredient))
-            {
-                // return parent.CanHaveIngredientChild;    // TODO: is this property really needed??
-                return true;
             } 
-            else return false;
-        }
-
-        void IEntity.ParentRemoveAllChildrenOfAType(IEntity parent, IEntity child) => throw new NotImplementedException();
-        IEntity IEntity.RemoveSelectionFromChildren<TChild>(IEntityChildClassRecipes parent, List<TChild> selected)
-        {
-
-            var allRecipeIDs = parent.Recipes.Select(a => a.ID);
-
-            var setToRemove = new HashSet<TChild>(selected).Where(p => p != null).Select(r => r.ID).AsQueryable();
-
-            var remainingIDs = allRecipeIDs.Except(setToRemove);
-            var remainingChildren = parent.Recipes.Where(b => remainingIDs.Contains(b.ID));
-            parent.Recipes = remainingChildren.ToList();
-            return parent;
-        }
-    }
+        } 
+    } 
 }

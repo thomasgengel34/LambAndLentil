@@ -198,17 +198,17 @@ namespace LambAndLentil.Test.IntegrationTests
         //    menu.ID = int.MaxValue;
         //    Recipe recipe = new Recipe();
         //    Ingredient ingredient = new Ingredient();
-        //    recipe.Ingredients.Add(ingredient);
-        //    menu.Recipes.Add(recipe);
+        //    recipe.Ingredients.Save(ingredient);
+        //    menu.Recipes.Save(recipe);
         //    Ingredient ingredient1 = new Ingredient();
-        //    recipe.Ingredients.Add(ingredient1);
+        //    recipe.Ingredients.Save(ingredient1);
         //    IRepository<Menu> repoMenu = new JSONRepository< Menu>(); 
-        //    repoMenu.Add(menu);
+        //    repoMenu.Save(menu);
 
         //    //Act
         //    // Repo.RemoveT(ingredient1); never the correct approach. Keeping it here because this is important.
         //    menu.Recipes.First().Ingredients.Remove(ingredient1);
-        //    repoMenu.Add(menu);
+        //    repoMenu.Save(menu);
         //    Menu retrievedMenu = repoMenu.GetById(menu.ID);
         //    // Assert
         //    Assert.AreEqual(1, retrievedMenu.Recipes.First().Ingredients.Count());
@@ -323,9 +323,9 @@ namespace LambAndLentil.Test.IntegrationTests
         //        Menu menu = new Menu();
         //        Recipe recipe = new Recipe();
         //        Ingredient  ingredient  = new Ingredient();
-        //        recipe.Ingredients.Add(ingredient);
-        //        menu.Recipes.Add(recipe);
-        //        shoppingList.Menus.Add(menu);
+        //        recipe.Ingredients.Save(ingredient);
+        //        menu.Recipes.Save(recipe);
+        //        shoppingList.Menus.Save(menu);
         //        ingredient.Name = "Test ChangeShoppingMenuRecipeWhenIngredientIsChanged";
 
 

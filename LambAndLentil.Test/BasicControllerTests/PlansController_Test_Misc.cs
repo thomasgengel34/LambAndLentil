@@ -1,13 +1,6 @@
-﻿using LambAndLentil.Domain.Concrete;
-using LambAndLentil.Domain.Entities;
-using LambAndLentil.Tests.Infrastructure;
-using LambAndLentil.UI;
+﻿using System;
 using LambAndLentil.UI.Controllers;
-using LambAndLentil.UI.Infrastructure.Alerts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Linq;
-using System.Web.Mvc;
 
 namespace LambAndLentil.Test.BasicControllerTests
 {

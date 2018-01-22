@@ -228,6 +228,7 @@
     <Compile Include="IAttachDetachControllerTests\BaseTests\BaseControllerShouldDetachXAndReturn.cs" />
     <Compile Include="IAttachDetachControllerTests\BaseTests\BaseTest.cs" />
     <Compile Include="IAttachDetachControllerTests\BaseTests\BaseControllerShouldAttachXAndReturn.cs" />
+    <Compile Include="IAttachDetachControllerTests\GroupTestsWithSuccessfulResults.cs" />
     <Compile Include="IAttachDetachControllerTests\Menu\ControllerShouldAttacRecipeAndReturn.cs" />
     <Compile Include="IAttachDetachControllerTests\Menu\ControllerShouldAttachIngredientAndReturn.cs" />
     <Compile Include="IAttachDetachControllerTests\Menu\ControllerShouldAttachMenuAndReturn.cs" />
@@ -305,12 +306,9 @@
     <Compile Include="IAttachDetachControllerTests\Recipe\ControllerShouldDetachShoppingListAndReturn.cs" />
     <Compile Include="IAttachDetachControllerTests\ShoppingList\ControllerShouldAttachIngredientAndReturn.cs" />
     <Compile Include="IAttachDetachControllerTests\ShoppingList\ControllerShouldAttachPlanAndReturn.cs" />
-    <Compile Include="Infrastructure\AutoMapperConfigForTests.cs" />
     <Compile Include="Infrastructure\MetaDataBindingsTest.cs" />
     <Compile Include="Infrastructure\NinjectControllerFactoryTests.cs" />
-    <Compile Include="Infrastructure\AutoMapperShould.cs" />
     <Compile Include="Infrastructure\BundleConfigShould.cs" />
-    <Compile Include="Infrastructure\RepoWrapperShould.cs" />
     <Compile Include="IntegrationTests\ChangesInIngredientShould.cs" />
     <Compile Include="IntegrationTests\IngredientsControllerShould.cs" />
     <Compile Include="IntegrationTests\MenusControllerShould.cs" />

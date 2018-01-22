@@ -1,17 +1,11 @@
-﻿using AutoMapper;
-using LambAndLentil.Domain.Abstract;
-using LambAndLentil.Domain.Concrete;
-using LambAndLentil.Domain.Entities;
-using LambAndLentil.Tests.Infrastructure;
-using LambAndLentil.UI;
-using LambAndLentil.UI.Controllers;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System;
 using System.Linq;
 using System.Security.Principal;
 using System.Web.Mvc;
+using LambAndLentil.Domain.Entities;
+using LambAndLentil.UI;
+using LambAndLentil.UI.Controllers;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace LambAndLentil.Test.BasicControllerTests
 {
@@ -330,7 +324,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
 
         [TestMethod]
-        public void CanPaginateArrayLengthIsCorrect() => BaseCanPaginateArrayLengthIsCorrect(Repo, Controller);
+        public void CanPaginateArrayLengthIsCorrect() => BaseCanPaginateArrayLengthIsCorrect(Controller);
 
 
         [TestMethod]
@@ -395,7 +389,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [TestMethod]
         [TestCategory("Index")]
-        public void CanSendPaginationViewModel_TotalItemsCorrect() => BaseCanSendPaginationViewModel_TotalItemsCorrect(Repo, Controller, UIControllerType.Menus);
+        public void CanSendPaginationViewModel_TotalItemsCorrect() => BaseCanSendPaginationViewModel_TotalItemsCorrect(Repo, Controller);
 
         [Ignore]
         [TestMethod]
@@ -476,7 +470,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [TestMethod]
         [TestCategory("Index")]
-        public void FirstPageIsCorrect() => BaseFirstPageIsCorrect(Repo, Controller, UIControllerType.ShoppingLists);
+        public void FirstPageIsCorrect() => BaseFirstPageIsCorrect(Repo, Controller);
 
         [Ignore]
         [TestMethod]
@@ -511,7 +505,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [TestMethod]
         [TestCategory("Index")]
-        public void PagingInfoIsCorrect() => BasePagingInfoIsCorrect(Repo, Controller, UIControllerType.Recipes);//// Arrange//int count = Repo.Count();//// Action//int totalItems = ((ListEntity<Menu>)((ViewResult)Controller.Index()).Model).PagingInfo.TotalItems;//int currentPage = ((ListEntity<Menu>)((ViewResult)Controller.Index()).Model).PagingInfo.CurrentPage;//int itemsPerPage = ((ListEntity<Menu>)((ViewResult)Controller.Index()).Model).PagingInfo.ItemsPerPage;//int totalPages = ((ListEntity<Menu>)((ViewResult)Controller.Index()).Model).PagingInfo.TotalPages;//// Assert//Assert.AreEqual(count, totalItems);//Assert.AreEqual(1, currentPage);//Assert.AreEqual(8, itemsPerPage);//Assert.AreEqual(1, totalPages);
+        public void PagingInfoIsCorrect() => BasePagingInfoIsCorrect(Repo, Controller);//// Arrange//int count = Repo.Count();//// Action//int totalItems = ((ListEntity<Menu>)((ViewResult)Controller.Index()).Model).PagingInfo.TotalItems;//int currentPage = ((ListEntity<Menu>)((ViewResult)Controller.Index()).Model).PagingInfo.CurrentPage;//int itemsPerPage = ((ListEntity<Menu>)((ViewResult)Controller.Index()).Model).PagingInfo.ItemsPerPage;//int totalPages = ((ListEntity<Menu>)((ViewResult)Controller.Index()).Model).PagingInfo.TotalPages;//// Assert//Assert.AreEqual(count, totalItems);//Assert.AreEqual(1, currentPage);//Assert.AreEqual(8, itemsPerPage);//Assert.AreEqual(1, totalPages);
 
         [TestMethod]
         [TestCategory("Index")]

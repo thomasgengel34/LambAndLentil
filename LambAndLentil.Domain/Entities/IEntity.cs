@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace LambAndLentil.Domain.Entities
 {
-    public interface IEntity:IPossibleChildren
+    public interface IEntity 
     {
         string AddedByUser { get; set; }
         DateTime CreationDate { get; set; }
@@ -13,16 +13,19 @@ namespace LambAndLentil.Domain.Entities
         string Name { get; set; }
         string Description { get; set; } 
         string IngredientsList { get; set; }
+
         List<Ingredient> Ingredients { get; set; }
+        List<Recipe> Recipes { get; set; }
+        List<Menu> Menus { get; set; }
+        List<Plan> Plans { get; set; }
+        List<ShoppingList> ShoppingLists { get; set; }
 
-        bool ParentCanHaveChild(IEntity parent );
-   
+        // TODO: think about reducing parameter complexity down to string or Type
+        bool CanHaveChild(IEntity child);
+
+
         int GetCountOfChildrenOnParent(IEntity parent );
-        void ParentRemoveAllChildrenOfAType(IEntity  parent, IEntity child);
-        IEntity  RemoveSelectionFromChildren<TChild>(IEntityChildClassIngredients  parent, List<TChild> selected)
-            where TChild : BaseEntity, IEntity, IPossibleChildren, new();
-
-        IEntity  RemoveSelectionFromChildren<TChild>(IEntityChildClassRecipes parent, List<TChild> selected) where TChild : BaseEntity, IEntity, IPossibleChildren, new();
+      
     }
 }
  

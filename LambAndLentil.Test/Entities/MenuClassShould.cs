@@ -165,14 +165,10 @@ namespace LambAndLentil.Domain.Test.Entities
         [TestCategory("Class Child Test")]
         [TestMethod]
         public void NotBeAbleToHavePersonsChild()
-        {
-            // Arrange
-
-            // Act
+        { 
             PropertyInfo[] props = Menu.GetType().GetProperties();
             var result = props.Where(p => p.Name == "Persons");
-
-            // Assert
+             
             Assert.AreEqual(0, result.Count());
         }
 

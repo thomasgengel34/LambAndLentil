@@ -1,45 +1,30 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
+using TParent = LambAndLentil.Domain.Entities.Recipe;
+using TChild = LambAndLentil.Domain.Entities.Plan;
+using LambAndLentil.Test.IAttachDetachControllerTests.BaseTests;
+
 namespace LambAndLentil.Test.IAttachDetachControllerTests.Recipe
 {
     [TestClass]
-    public class ControllerShouldDetachAllIPlansAndReturn
+    public class ControllerShouldDetachAllIPlansAndReturn : BaseControllerShouldDetachXAndReturn<TParent, TChild>
     {
-        [Ignore]
+        // Recipe cannot have a Plan child
+
         [TestMethod]
-        public void DetailWithSuccessWhenIDisValidAndThereIsOneIngredientOnList()
-        {
-            // Arrange
+        public void IndexWithErrorWhenParentIDIsNull() => BaseReturnsIndexWithWarningWithNullParentWhenDetaching();
 
-            // Act
 
-            //Assert
-            Assert.Fail();
-        }
-
-        [Ignore]
         [TestMethod]
-        public void DetailWithSuccessWhenIDisValidAndThereAreThreeIngredientsOnList()
-        {
-            // Arrange
+        public void IndexWithErrorWhenParentIDIsNotForAnExistingIngredientWhenDetachingUnattachableChild() =>
+        BaseIndexWithWarningWhenParentIDIsNotForAnExistingIngredientWhenDetachingUnattachableChild();
 
-            // Act
 
-            //Assert
-            Assert.Fail();
-        }
-
-        [Ignore]
         [TestMethod]
-        public void DetailWithErrorWhenIDisNotForAFoundParent()
+        public void DetailWithDangerWhenIDisValidAndThereIsOneChildOnListWhenDetachingAndChildCannotBeAttachedWhenDetachingAll()
         {
-            // Arrange
-
-            // Act
-
-            //Assert
-            Assert.Fail();
+            BaseDetailWithDangerWhenIDisValidAndThereIsOneChildOnListWhenDetachingAndChildCannotBeAttachedWhenDetachingAll();
         }
     }
 }

@@ -90,7 +90,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         {
             // Arrange - create an recipe
             Recipe recipeVM = new Recipe { ID = 2, Name = "Test2" };
-            Repo.Add(recipeVM);
+            Repo.Save(recipeVM);
             int repoCount = Repo.Count(); 
 
             // Act 

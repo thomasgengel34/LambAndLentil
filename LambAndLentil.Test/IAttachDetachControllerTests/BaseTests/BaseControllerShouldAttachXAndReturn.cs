@@ -32,107 +32,78 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
         {
             if (typeof(TChild) == typeof(IngredientType))
             {
-                ActionResult ar = Controller.Attach(Repo,Parent.ID, (IngredientType)Child );
+                ActionResult ar = Controller.Attach(Parent.ID, (IngredientType)Child );
                 AlertDecoratorResult adr = (AlertDecoratorResult)ar;
                 RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
-
-                // Assert
+                 
                 Assert.IsNotNull(ar);
                 Assert.AreEqual(1, rtrr.RouteValues.ElementAt(0).Value);
                 Assert.AreEqual(UIViewType.Edit.ToString(), rtrr.RouteValues.ElementAt(1).Value.ToString());
                 Assert.AreEqual(UIViewType.Details.ToString(), rtrr.RouteValues.ElementAt(2).Value.ToString());
                 Assert.AreEqual(3, rtrr.RouteValues.Count);
                 Assert.AreEqual("Ingredient was Successfully Attached!", adr.Message);
+                Assert.AreEqual("alert-success", adr.AlertClass);
+
             }
             if (typeof(TChild) == typeof(MenuType))
             {
-                ActionResult ar = Controller.Attach(Repo,Parent.ID, (MenuType)Child );
+                ActionResult ar = Controller.Attach(Parent.ID, (MenuType)Child );
                 AlertDecoratorResult adr = (AlertDecoratorResult)ar;
                 RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
-
-                // Assert
+                 
                 Assert.IsNotNull(ar);
                 Assert.AreEqual(1, rtrr.RouteValues.ElementAt(0).Value);
                 Assert.AreEqual(UIViewType.Edit.ToString(), rtrr.RouteValues.ElementAt(1).Value.ToString());
                 Assert.AreEqual(UIViewType.Details.ToString(), rtrr.RouteValues.ElementAt(2).Value.ToString());
                 Assert.AreEqual(3, rtrr.RouteValues.Count);
                 Assert.AreEqual("Menu was Successfully Attached!", adr.Message);
-            }
-        }
-
-        protected void BaseReturnsIndexWithWarningWithNullParent()
-        {
-
-            ActionResult ar = Controller.Attach(Repo, null, new Domain.Entities.Ingredient() );
-            AlertDecoratorResult adr = (AlertDecoratorResult)ar;
-            string message = adr.Message;
-
-            // Assert
-            Assert.AreEqual(ParentClassName + " was not found", message);
-            Assert.AreEqual("alert-warning", adr.AlertClass);
-        }
-
-        protected void BaseIndexWithErrorWhenParentIDIsNotForAnExistingIngredient()
-        {  // Todo: add logging
-            // Act 
-            ActionResult ar = Controller.Attach(Repo,null, new IngredientType() );
-            AlertDecoratorResult adr = (AlertDecoratorResult)ar;
-            string message = adr.Message;
-
-            // Assert
-            Assert.AreEqual(ParentClassName + " was not found", message);
-            Assert.AreEqual("alert-warning", adr.AlertClass);
-        }
-
-        protected void BaseIndexWithErrorWhenParentIDIsNotForAnExistingMenu()
-        {  // Todo: add logging
-            // Act 
-            ActionResult ar = Controller.Attach(Repo,900000, new MenuType() );
-            AlertDecoratorResult adr = (AlertDecoratorResult)ar;
-            string message = adr.Message;
-
-            // Assert
-            Assert.AreEqual(ParentClassName + " was not found", message);
-            Assert.AreEqual("alert-warning", adr.AlertClass);
-        }
-
-        protected void BaseDetailWithErrorWhenParentIDIsValidAndChildIsNotValid() { }
-
-
-      
-
-        protected void BaseDetailWithSuccessWhenParentIDIsValidAndChildIstValidAndOrderNumberIsInUseWhenAttaching()
-        {
-            Parent.ID = 55;
-            Child.ID = 500;
-            ChildRepo.Save((TChild)Child);
-            if (typeof(TChild) == typeof(IngredientType))
-            {
-                IEntityChildClassIngredients parent = (IEntityChildClassIngredients)Parent;
-                IIngredient child = (IIngredient)Child;
-                parent.Ingredients.Add((IngredientType)Child);
-                ParentRepo.Save((TParent)Parent);
-
-                IIngredient secondChild = new IngredientType() { ID = 60, Name = "second child" };
-
-                // Act
-                ActionResult ar = Controller.Attach(Repo,55, (IngredientType)secondChild );
-                AlertDecoratorResult adr = (AlertDecoratorResult)ar;
-                string message = adr.Message;
-
-                // Assert
                 Assert.AreEqual("alert-success", adr.AlertClass);
-                Assert.AreEqual("Ingredient was Successfully Attached!", message);
-            }
-            else
-            {
-                Assert.IsFalse(1 == 1, "class not supported");
-            }
+            }  
         }
 
-        protected void BaseDetailWithSuccessWhenParentIDIsValidAndChildIsValidWhenAttaching()
+        internal void BaseReturnsIndexWithWarningWithNullParent()
         {
-            ActionResult ar = Controller.Attach(Repo,Parent.ID, (IngredientType)Child );
+
+            ActionResult ar = Controller.Attach( null, new Domain.Entities.Ingredient() );
+            AlertDecoratorResult adr = (AlertDecoratorResult)ar;
+            string message = adr.Message;
+
+            // Assert
+            Assert.AreEqual(ParentClassName + " was not found", message);
+            Assert.AreEqual("alert-warning", adr.AlertClass);
+        }
+
+        internal void BaseIndexWithErrorWhenParentIDIsNotForAnExistingIngredient()
+        {  // Todo: add logging
+            // Act 
+            ActionResult ar = Controller.Attach(null, new IngredientType() );
+            AlertDecoratorResult adr = (AlertDecoratorResult)ar;
+            string message = adr.Message;
+
+            // Assert
+            Assert.AreEqual(ParentClassName + " was not found", message);
+            Assert.AreEqual("alert-warning", adr.AlertClass);
+        }
+
+        internal void BaseIndexWithErrorWhenParentIDIsNotForAnExistingMenu()
+        {  // Todo: add logging
+            // Act 
+            ActionResult ar = Controller.Attach(900000, new MenuType() );
+            AlertDecoratorResult adr = (AlertDecoratorResult)ar;
+            string message = adr.Message;
+
+            // Assert
+            Assert.AreEqual(ParentClassName + " was not found", message);
+            Assert.AreEqual("alert-warning", adr.AlertClass);
+        }
+
+        internal void BaseDetailWithErrorWhenParentIDIsValidAndChildIsNotValid() { }
+
+         
+
+        internal void BaseDetailWithSuccessWhenParentIDIsValidAndChildIsValidWhenAttaching()
+        {
+            ActionResult ar = Controller.Attach(Parent.ID, (IngredientType)Child );
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
 
@@ -146,15 +117,14 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
             Assert.AreEqual("alert-success", adr.AlertClass);
         }
 
-        protected void BaseDetailWithErrorWhenParentIDIsValidAndChildIsValidWhenAttachingUnattachableChild()
+        internal void BaseDetailWithErrorWhenParentIDIsValidAndChildIsValidWhenAttachingUnattachableChild()
         {  // Parent Ingredient for initial test, child Menu.  TODO: expand
-            ActionResult ar= Controller.Attach(Repo,Parent.ID,  child );
+            ActionResult ar= Controller.Attach(Parent.ID,  child );
             
 
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
-
-            // Assert
+             
             Assert.IsNotNull(ar);
             Assert.AreEqual(1, rtrr.RouteValues.ElementAt(0).Value);
             Assert.AreEqual(UIViewType.Edit.ToString(), rtrr.RouteValues.ElementAt(1).Value.ToString());

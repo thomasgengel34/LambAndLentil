@@ -9,7 +9,7 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.Recipe
     [TestCategory("Attach-Detach")]
     public class ControllerShouldAttachRecipeAndReturn : BaseControllerShouldAttachXAndReturn<TParent,TChild>
     {
-        //recipe cannot attach a menu 
+        //recipe cannot attach a recipe
 
         [TestMethod]
         public void IndexWithErrorWhenParentIDIsNull() => BaseReturnsIndexWithWarningWithNullParent(); 

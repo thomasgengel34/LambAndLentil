@@ -24,8 +24,8 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [Ignore]
         [TestMethod]
-        public void CorrectPersonsAreBoundInEdit()=> Assert.Fail();
-        
+        public void CorrectPersonsAreBoundInEdit() => Assert.Fail();
+
 
 
         [Ignore]
@@ -41,7 +41,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             IGenericController<Person> Controller5 = (IGenericController<Person>)(new PersonsController(Repo));
             IPerson person = new Person
             {
-                 FirstName = "0000 test",
+                FirstName = "0000 test",
                 LastName = "",
                 Description = "SaveEditedPersonWithDescriptionChange Pre-test",
                 ID = 4000
@@ -123,10 +123,10 @@ namespace LambAndLentil.Test.BasicControllerTests
                 ID = 5000
             };
 
-            TestRepository<Person> repoPerson = new TestRepository<Person>();  
+            TestRepository<Person> repoPerson = new TestRepository<Person>();
             IGenericController<Person> ControllerEdit = (IGenericController<Person>)(new PersonsController(Repo));
             IGenericController<Person> ControllerView = (IGenericController<Person>)(new PersonsController(Repo));
-            IGenericController<Person> ControllerDelete =  (IGenericController<Person>)(new PersonsController(Repo));
+            IGenericController<Person> ControllerDelete = (IGenericController<Person>)(new PersonsController(Repo));
 
             // Act
             ControllerEdit.PostEdit(person);
@@ -151,10 +151,13 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestCategory("Edit")]
         public void UpdateTheModificationDateBetweenPostedEdits()
         {
-            Person.Name = "Test UpdateTheModificationDateBetweenPostedEdits";
-            Person.ID = 6000;
-            Repo.Save((Person)Person);
-            BaseUpdateTheModificationDateBetweenPostedEdits(Repo, Controller, (Person)Person);
+            Person person = new  Person()
+            {
+                ID = 6000,
+                Name = "Test UpdateTheModificationDateBetweenPostedEdits"
+            };
+            Repo.Save(person);
+            BaseUpdateTheModificationDateBetweenPostedEdits(person);
         }
 
 
@@ -171,7 +174,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             ViewResult view1 = (ViewResult)Controller.Edit(1492);
             Person p1 = (Person)view1.Model;
             ViewResult view2 = (ViewResult)Controller2.Edit(2);
-            Person p2 = (Person)view2.Model; 
+            Person p2 = (Person)view2.Model;
 
             // Assert 
             Assert.IsNotNull(view1);
@@ -206,22 +209,22 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Assert
             Assert.AreEqual("SaveEditedPersonTest ", person3.Name);
         }
-         
+
         [TestMethod]
         [TestCategory("Edit")]
         public void CanPostEditPerson()
-        { 
+        {
 
             // Act 
-            Person.FirstName = "Name has been changed"; 
-            ViewResult view  = (ViewResult)Controller.PostEdit((Person)Person );
+            Person.FirstName = "Name has been changed";
+            ViewResult view = (ViewResult)Controller.PostEdit((Person)Person);
 
             Person returnedPersonListEntity = Repo.GetById(Person.ID);
 
             // Assert 
             Assert.IsNotNull(view);
             Assert.AreEqual("Name has been changed", returnedPersonListEntity.FirstName);
-      
+
         }
 
 

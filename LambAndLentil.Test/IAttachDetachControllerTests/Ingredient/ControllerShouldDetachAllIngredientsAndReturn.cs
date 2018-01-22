@@ -1,12 +1,13 @@
 ﻿using LambAndLentil.Test.IAttachDetachControllerTests.BaseTests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using IngredientType = LambAndLentil.Domain.Entities.Ingredient;
+using ParentType = LambAndLentil.Domain.Entities.Ingredient;
+using ChildType = LambAndLentil.Domain.Entities.Ingredient;
 
 namespace LambAndLentil.Test.IAttachDetachControllerTests.Ingredient
 {
     [TestClass]
     [TestCategory("Attach-Detach")]
-    public class ControllerShouldDetachAllIngredientsAndReturn : BaseControllerShouldDetachXAndReturn<IngredientType, IngredientType>
+    public class ControllerShouldDetachAllIngredientsAndReturn : BaseControllerShouldDetachXAndReturn<ParentType, ChildType>
     {
         [TestMethod]
         public void DetailWithSuccessWhenIDisValidAndThereIsOneChildOnListWhenDetachingAndSelectionSetIsNotSupplied() => BaseDetailWithSuccessWhenIDisValidAndThereIsOneChildOnListWhenDetachingAndSelectionSetIsNotSupplied();
@@ -23,18 +24,7 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.Ingredient
 
         [TestMethod]
         public void DetailWithErrorWhenIDisNotForAFoundParentWhenDetachingAll() =>
-BaseDetailWithErrorWhenIDisNotForAFoundParentWhenDetachingAll();
-
-        [Ignore]
-        [TestMethod]
-        public void DetailWithErrorWhenParentIDIsValidAndChildIsValidAndThereIsNoChildAttached()
-        {
-            // Arrange
-
-            // Act
-
-            //Assert
-            Assert.Fail();
-        }
+BaseDetailWithErrorWhenIDisNotForAFoundParentWhenDetachingAll(); 
+      
     }
 }

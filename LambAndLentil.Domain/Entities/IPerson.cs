@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace LambAndLentil.Domain.Entities
 {
-    public interface IPerson:IEntityChildClassIngredients, IEntityChildClassRecipes, IEntityChildClassMenus, IEntityChildClassPlans, IEntityChildClassShoppingLists
+    public interface IPerson:IEntity 
     { 
           string FirstName { get; set; }
           string LastName { get; set; }

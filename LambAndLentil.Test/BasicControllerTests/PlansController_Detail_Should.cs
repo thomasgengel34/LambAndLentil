@@ -1,14 +1,10 @@
-﻿using LambAndLentil.Domain.Abstract;
-using LambAndLentil.Domain.Concrete;
-using LambAndLentil.Domain.Entities;
-using LambAndLentil.Tests.Infrastructure;
-using LambAndLentil.UI;
-using LambAndLentil.UI.Controllers;
-using LambAndLentil.UI.Infrastructure.Alerts;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using System;
 using System.Linq;
 using System.Web.Mvc;
+using LambAndLentil.Domain.Entities;
+using LambAndLentil.UI;
+using LambAndLentil.UI.Infrastructure.Alerts;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace LambAndLentil.Test.BasicControllerTests
 {
@@ -30,7 +26,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange
 
             // Act 
-            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.Details(400, UIViewType.Delete);
+            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.Delete(400);
             RedirectToRouteResult rdr = (RedirectToRouteResult)adr.InnerResult;
 
             // Assert
@@ -49,13 +45,12 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [TestMethod]
         public void ReturnDeleteConfirmedWithActionMethodDeleteConfirmedWithFoundResult()
-        { // index, success,  "Item has been deleted"
-          // Arrange
+        {  
             int count = Repo.Count();
-            //Act
-            Controller.Details(int.MaxValue, UIViewType.DeleteConfirmed);
+             
+            Controller.DeleteConfirmed(int.MaxValue);
             Plan plan = Repo.GetById(int.MaxValue);
-            //Assert
+            
             Assert.AreEqual(count - 1, Repo.Count());
             Assert.IsNull(plan);
             //   Assert.Fail();  // make sure the correct item was deleted before removing this line 
@@ -68,7 +63,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange
 
             // Act
-            ActionResult ar=Controller.Details(4000, UIViewType.DeleteConfirmed);
+            ActionResult ar=Controller.DeleteConfirmed(4000);
             AlertDecoratorResult adr = (AlertDecoratorResult)ar; 
             RedirectToRouteResult rdr = (RedirectToRouteResult)adr.InnerResult;
 
@@ -81,7 +76,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestMethod]
         public void ReturnDeleteConfirmedWithActionMethodDeleteConfirmedWithBadID()
         {
-            ActionResult ar = Controller.Details(-1, UIViewType.DeleteConfirmed);
+            ActionResult ar = Controller.DeleteConfirmed(-1);
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             RedirectToRouteResult rdr = (RedirectToRouteResult)adr.InnerResult;
 
@@ -109,18 +104,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.AreEqual("Here it is!", adr.Message);
         }
 
-        [TestMethod]
-        public void GotToIndexViewForNonSpecifiedActionMethods()
-        {
-            // Arrange
-
-            // Act 
-            ViewResult view = (ViewResult)Controller.Details(1, UIViewType.About); 
-
-            // Assert
-            Assert.AreEqual(UIViewType.Index, view.Model);
-
-        }
+      
 
 
         [TestMethod]
@@ -350,14 +334,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestMethod]
         [TestCategory("Details")]
         public void RecipeIDIsNegative()
-        {
-            // Arrange
-
-            // AutoMapperConfigForTests.AMConfigForTests();
-            AutoMapperConfigForTests.InitializeMap();
-
-
-            // Act
+        { 
             ViewResult view = Controller.Details(0) as ViewResult;
             AlertDecoratorResult adr = (AlertDecoratorResult)view;
 
@@ -389,12 +366,10 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestMethod]
         [TestCategory("Details")]
         public void RecipeIDTooHigh()
-        {
-            // Arrange 
-            AutoMapperConfigForTests.InitializeMap();
+        { 
             ActionResult view = Controller.Details(4000);
             AlertDecoratorResult adr = (AlertDecoratorResult)view;
-            // Assert
+           
             Assert.IsNotNull(view);
             Assert.AreEqual("No Plan was found with that id.", adr.Message);
             Assert.AreEqual("alert-danger", adr.AlertClass);
@@ -405,42 +380,23 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestCategory("Details")]
         public void RecipeIDPastIntLimit()
         {
-            // Arrange
-
-            AutoMapperConfigForTests.InitializeMap();
-
-
-            // Act
+           
             ViewResult result = Controller.Details(Int16.MaxValue + 1) as ViewResult;
-
-            // Assert
+             
             Assert.IsNotNull(result);
         }
 
         [TestMethod]
         [TestCategory("Details")]
         public void RecipeIDIsZero()
-        {
-            // Arrange 
-            AutoMapperConfigForTests.InitializeMap();
-
-
-            // Act
+        { 
             ViewResult view = Controller.Details(0) as ViewResult;
             AlertDecoratorResult adr = (AlertDecoratorResult)view;
-
-            // Assert
+             
             Assert.IsNotNull(view);
             Assert.AreEqual("No Plan was found with that id.", adr.Message);
             Assert.AreEqual("alert-danger", adr.AlertClass);
             Assert.AreEqual(UIViewType.BaseIndex.ToString(), ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(0).ToString());
-        }
-        // the following are not really testable.  I am keeping them to remind me of that.
-        //[TestMethod]
-        //public void PlansCtr_DetailsPlanIDIsNotANumber() { }
-
-        //[TestMethod]
-        //public void PlansCtr_DetailsPlanIDIsNotAInteger() { } 
-
+        }  
     }
 }

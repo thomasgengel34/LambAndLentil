@@ -99,7 +99,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange 
 
             Menu menu = new Menu { ID = 2, Name = "Test2", Description = "test MenusControllerTest.CanDeleteValidMenu" };
-            Repo.Add(menu);
+            Repo.Save(menu);
             int beginningCount = Repo.Count();
 
             // Act - delete the menu

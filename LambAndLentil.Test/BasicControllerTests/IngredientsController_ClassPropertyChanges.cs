@@ -154,16 +154,13 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [TestMethod]
         public void ShouldAddIngredientToIngredients()
-        {
-            // Arrange
+        { 
             int initialCount = Entity.Ingredients.Count;
-
-            // Act
+             
             Entity.Ingredients.Add(new Ingredient() { ID = 134, Name = "ShouldAddIngredientToIngredients" });
              Controller.PostEdit(Entity);
             ReturnedEntity = Repo.GetById(Entity.ID);
-
-            // Assert
+             
             Assert.AreEqual(initialCount + 1, Entity.Ingredients.Count);
             Assert.AreEqual("ShouldAddIngredientToIngredients", Entity.Ingredients[initialCount].Name);
         }

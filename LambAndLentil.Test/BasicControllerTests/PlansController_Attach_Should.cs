@@ -19,16 +19,16 @@ namespace LambAndLentil.Test.BasicControllerTests
     public class PlansController_Attach_Should:PlansController_Test_Should
     {
         [TestMethod]
-        public void ReturnsIndexWithWarningWithUnknownParentID() => BaseReturnsIndexWithWarningWithUnknownParentID(Repo, Controller);
+        public void ReturnsIndexWithWarningWithUnknownParentID() => BaseReturnsIndexWithWarningWithUnknownParentID(Controller);
 
         [TestMethod]
-        public void ReturnsIndexWithWarningWithNullParent() => BaseReturnsIndexWithWarningWithNullParent(Repo, Controller);
+        public void ReturnsIndexWithWarningWithNullParent() => BaseReturnsIndexWithWarningWithNullParent(Controller);
 
         [TestMethod]
-        public void ReturnsDetailWithWarningWithUnknownChildID() => BaseReturnsDetailWithWarningWithUnknownChildID(Plan, Repo, Controller);
+        public void ReturnsDetailWithWarningWithUnknownChildID() => BaseReturnsDetailWithWarningWithUnknownChildID(Plan,  Controller);
 
         [TestMethod]
-        public void ReturnsDetailWithWarningIfAttachingNullChild() => BaseReturnsDetailWithWarningIfAttachingNullChild(Plan, Repo, Controller);
+        public void ReturnsDetailWithWarningIfAttachingNullChild() => BaseReturnsDetailWithWarningIfAttachingNullChild(Plan,  Controller);
 
         [TestMethod]
         public void ReturnsDetailWhenAttachingWithSuccessWithValidParentandValidChild()
@@ -40,7 +40,7 @@ namespace LambAndLentil.Test.BasicControllerTests
                 Description = "test ReturnsDetailWhenAttachingWithSuccessWithValidParentandValidChild"
             };
             IRepository<Plan> mRepo = new TestRepository<Plan>();
-            mRepo.Add(menu);
+            mRepo.Save(menu);
             Ingredient ingredient = new Ingredient
             {
                 ID = 1492,
@@ -48,7 +48,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             };
 
             // Act
-            ActionResult ar = Controller.Attach(Repo,int.MaxValue, ingredient );
+            ActionResult ar = Controller.Attach(int.MaxValue, ingredient );
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             RedirectToRouteResult rdr = (RedirectToRouteResult)adr.InnerResult;
 
@@ -81,7 +81,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             IngredientRepo.Save(child);
 
            
-            Controller.Attach(Repo,Plan.ID, child );
+            Controller.Attach(Plan.ID, child );
             ReturnedPlan = Repo.GetById(Plan.ID);
             
             Assert.AreEqual("SuccessfullyAttachChild", ReturnedPlan.Ingredients.Last().Name);
@@ -105,21 +105,20 @@ namespace LambAndLentil.Test.BasicControllerTests
             var setToSelect = new HashSet<int> { firstIDtoRemove, secondIDtoRemove };
             List<Ingredient> selected = plan.Ingredients.Where(t => setToSelect.Contains(t.ID)).ToList();
             Controller.DetachASetOf(plan.ID, selected);
-            Plan returnedPlan = Repo.GetById(plan.ID);
-
-            // Assert
+            Plan returnedPlan = Repo.GetById(plan.ID); 
+           
             Assert.AreEqual(initialIngredientCount - 2, returnedPlan.Ingredients.Count());
         }
 
         [TestMethod]
         public void DetachTheLastIngredientChild()
         {
-            BaseDetachTheLastIngredientChild(Repo, Controller, Plan);
+            BaseDetachTheLastIngredientChild(Controller, Plan);
         }
 
         [TestMethod] 
         public void DetachAllIngredientChildren()=>       
-            BaseDetachAllIngredientChildren(Repo, Controller ); 
+            BaseDetachAllIngredientChildren(Controller ); 
 
 
 
@@ -151,15 +150,10 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [Ignore]
         [TestMethod]
-        public void SuccessfullyDetachChild() =>
-            // Arrange
-
-            // Act
-
-            // Assert
+        public void SuccessfullyDetachChild() => 
             Assert.Fail();
 
         [TestMethod]
-        public void ReturnsDetailWhenDetachingWithSuccessWithValidParentandValidIngredientChild() => BaseReturnsDetailWhenDetachingWithSuccessWithValidParentandValidIngredientChild(Repo, Controller, Plan.ID);
+        public void ReturnsDetailWhenDetachingWithSuccessWithValidParentandValidIngredientChild() => BaseReturnsDetailWhenDetachingWithSuccessWithValidParentandValidIngredientChild(Controller, Plan.ID);
     }
 }

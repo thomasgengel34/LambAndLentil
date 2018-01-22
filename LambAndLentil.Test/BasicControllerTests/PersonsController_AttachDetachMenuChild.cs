@@ -12,15 +12,15 @@ namespace LambAndLentil.Test.BasicControllerTests
     [TestCategory("Attach-Detach")]
     public class PersonsController_AttachDetachMenuChild : PersonsController_Test_Should
     {
-       
-         [Ignore]
+
+        [Ignore]
         [TestMethod]
         public void SuccessfullyAttachChild()
         {
-             //IGenericController<Person> DetachController =(IGenericController<Person>)( new PersonsController(Repo));
-             //BaseSuccessfullyDetachChild(Repo, Controller, DetachController, UIControllerType.Persons);
+            //IGenericController<Person> DetachController =(IGenericController<Person>)( new PersonsController(Repo));
+            //BaseSuccessfullyDetachChild(Repo, Controller, DetachController, UIControllerType.Persons);
         }
-          
+
         [Ignore]
         [TestMethod]
         public void SuccessfullyDetachFirstMenuChild()
@@ -28,15 +28,15 @@ namespace LambAndLentil.Test.BasicControllerTests
             //IGenericController<Person> DetachController = (IGenericController<Person>)(new PersonsController(Repo));
             //BaseSuccessfullyDetachChild(Repo, Controller, DetachController, UIControllerType.Persons, 0);
         }
-         
+
         [TestMethod]
         public void SuccessfullyDetachASetOfMenuChildren()
         {
             // Arrange 
-           Person.Menus.Add(new Menu { ID = 4005, Name = "Butter" });
+            Person.Menus.Add(new Menu { ID = 4005, Name = "Butter" });
             Person.Menus.Add(new Menu { ID = 4006, Name = "Cayenne Pepper" });
             Person.Menus.Add(new Menu { ID = 4007, Name = "Cheese" });
-           Person.Menus.Add(new Menu { ID = 4008, Name = "Chopped Green Pepper" });
+            Person.Menus.Add(new Menu { ID = 4008, Name = "Chopped Green Pepper" });
             Repo.Save((Person)Person);
             int initialMenuCount = Person.Menus.Count();
 
@@ -49,19 +49,14 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Assert
             Assert.AreEqual(initialMenuCount - 2, returnedPerson.Menus.Count());
         }
-         
+
         [TestMethod]
-        public void SuccessfullyDetachtheLastMenuChild()=> BaseDetachTheLastMenuChild(Repo, Controller, Person);
+        public void SuccessfullyDetachtheLastMenuChild() => BaseDetachTheLastMenuChild(Repo, Controller, Person);
 
 
         [Ignore]
         [TestMethod]
         public void SuccessfullyDetachAllMenuChildren() =>
-            // Arrange
-
-            // Act
-
-            //Assert
             Assert.Fail();
 
         [Ignore]
@@ -74,6 +69,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [Ignore]
         [TestMethod]
-        public void ReturnsDetailWhenDetachingShoppingListWithSuccessWithValidParentandValidIngredientChild() { }
+        public void ReturnsDetailWhenDetachingShoppingListWithSuccessWithValidParentandValidIngredientChild() =>
+                   Assert.Fail();
     }
 }

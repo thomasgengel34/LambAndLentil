@@ -25,7 +25,7 @@ namespace LambAndLentil.Domain.Entities
         public PagingInfo PagingInfo { get; set; }
 
 
-        public ListEntity<T> Add(ListEntity<T> list, BaseEntity item)
+        public ListEntity<T> Save(ListEntity<T> list, BaseEntity item)
         {
             return list;
         }

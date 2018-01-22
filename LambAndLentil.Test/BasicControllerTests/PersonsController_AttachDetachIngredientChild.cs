@@ -20,7 +20,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             TestRepository<Ingredient> IngredientRepo = new TestRepository<Ingredient>();
             IngredientRepo.Save(child);
              
-            Controller.Attach(Repo,Person.ID, child );
+            Controller.Attach(Person.ID, child );
             ReturnedPerson = Repo.GetById(Person.ID);
          
             Assert.AreEqual("SuccessfullyAttachChild", ReturnedPerson.Ingredients.Last().Name);
@@ -60,13 +60,13 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestMethod]
         public void SuccessfullyDetachtheLastIngredientChild()
         {
-            BaseDetachTheLastIngredientChild(Repo, Controller, Person);
+            BaseDetachTheLastIngredientChild(Controller, Person);
         }
 
         
         [TestMethod]
         public void  DetachAllIngredientChildren()=> 
-            BaseDetachAllIngredientChildren(Repo, Controller ); 
+            BaseDetachAllIngredientChildren(Controller ); 
 
         [Ignore]
         [TestMethod]

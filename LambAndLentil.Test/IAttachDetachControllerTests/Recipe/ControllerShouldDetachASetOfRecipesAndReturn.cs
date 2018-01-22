@@ -1,69 +1,22 @@
-﻿using System;
+﻿using LambAndLentil.Test.IAttachDetachControllerTests.BaseTests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using ChildType = LambAndLentil.Domain.Entities.Recipe;
+using ParentType = LambAndLentil.Domain.Entities.Recipe;
 
 namespace LambAndLentil.Test.IAttachDetachControllerTests.Recipe
 {
     [TestClass]
      [TestCategory("Attach-Detach")]
-    public class ControllerShouldDetachASetOfRecipesAndReturn { 
-        [Ignore]
+    public class ControllerShouldDetachASetOfRecipesAndReturn :  BaseControllerShouldDetachXAndReturn<ParentType, ChildType>
+    {
+        // Recipe cannot have a recipe child 
+
         [TestMethod]
-        public void DetailWithSuccessWhenIDisValidAndAllIngredientsOnListExist()
-        {
-            // Arrange
+        public void DetailWithSuccessWhenIDisValidAndThereIsOneChildOnListWhenDetachingAndChildCannotBeAttachedWhenDetachingAll()
+       => BaseDetailWithDangerWhenIDisValidAndThereIsOneChildOnListWhenDetachingAndChildCannotBeAttachedWhenDetachingAll();
 
-            // Act
-
-            //Assert
-            Assert.Fail();
-        }
-
-        [Ignore]
         [TestMethod]
-        public void DetailWithWarningWhenIDisValidAndNotAllIngredientsOnListExist()
-        {
-            // Arrange
-
-            // Act
-
-            //Assert
-            Assert.Fail();
-        }
-
-        [Ignore]
-        [TestMethod]
-        public void DetailWithErrorWhenIDisValidAndNoIngredientsOnListExist()
-        {
-            // Arrange
-
-            // Act
-
-            //Assert
-            Assert.Fail();
-        }
-
-        [Ignore]
-        [TestMethod]
-        public void DetailWithSuccessWhenIDisValidAndThereAreThreeIngredientsOnList()
-        {
-            // Arrange
-
-            // Act
-
-            //Assert
-            Assert.Fail();
-        }
-
-        [Ignore]
-        [TestMethod]
-        public void DetailWithErrorWhenIDisNotForAFoundParent()
-        {
-            // Arrange
-
-            // Act
-
-            //Assert
-            Assert.Fail();
-        }
+        public void DetailWithErrorWhenIDisNotForAFoundParentWhenDetachingAndChildCannotBeAttachedWhenDetachingAll()
+        => BaseDetailWithErrorWhenIDisNotForAFoundParentWhenDetachingAndChildCannotBeAttachedWhenDetachingAll();
     }
 }

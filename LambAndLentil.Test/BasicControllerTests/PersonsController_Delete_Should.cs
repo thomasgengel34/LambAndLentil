@@ -85,7 +85,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         {
             // Arrange
             Person person = new Person { ID = 1 };
-            Repo.Add(person);
+            Repo.Save(person);
             // Act
             ActionResult result = Controller.DeleteConfirmed(1) as ActionResult;
             // improve this test when I do some route tests to return a more exact result
@@ -102,7 +102,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange  
             int initialCount = Repo.Count();
             Person person = new Person("John", "Doe") { ID = 100, Description = "test CanDeleteValidPerson" };
-            Repo.Add(person);
+            Repo.Save(person);
             int newCount = Repo.Count();
 
             // Act - delete the person

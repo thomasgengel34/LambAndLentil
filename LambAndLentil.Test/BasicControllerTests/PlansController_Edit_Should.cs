@@ -50,16 +50,16 @@ namespace LambAndLentil.Test.BasicControllerTests
         }
 
 
-        [Ignore]
-        [TestMethod] 
+        
+        [TestMethod]  
         public void CannotEditNonexistentPlan()
         {
-            // Arrange
+            
+            ActionResult ar = Controller.Edit(-1);
 
-            // Act
-            Plan result = (Plan)((ViewResult)Controller.Edit(8)).ViewData.Model;
-            // Assert
-            Assert.IsNull(result);
+            Assert.IsNotNull(ar);
+
+             
         }
 
         [TestMethod]

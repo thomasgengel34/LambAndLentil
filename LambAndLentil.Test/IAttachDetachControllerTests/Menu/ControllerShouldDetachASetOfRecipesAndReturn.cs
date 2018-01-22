@@ -7,7 +7,7 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.Menu
 {
     [TestClass]
     [TestCategory("Attach-Detach")]
-    public class ControllerShouldDetachASetOfRecipesXXXXXXXXXXXXAndReturn : BaseControllerShouldDetachXAndReturn<TParent, TChild>
+    public class ControllerShouldDetachASetOfRecipesAndReturn1 : BaseControllerShouldDetachXAndReturn<TParent, TChild>
     {
 
 
@@ -37,7 +37,7 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.Menu
 
 
         [TestMethod]
-        public void DetailWithErrorWhenParentIDIsValidAndChildIsNotFound() =>
+        public void DetailWithErrorWhenParentIDIsValidAndChildIsNotFoundWhenDetachASetOfIngredients() =>
             BaseDetailWithErrorWhenIDisValidAndNoChildrenOnListExistWhenDetachASetOfIngredients();
 
 

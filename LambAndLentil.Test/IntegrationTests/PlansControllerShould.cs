@@ -220,7 +220,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Plan.Name = "Test UpdateTheModificationDateBetweenPostedEdits";
             Plan.ID = 6000;
             Repo.Save((Plan)Plan);
-            BaseUpdateTheModificationDateBetweenPostedEdits(Repo, Controller, (Plan)Plan);
+            BaseUpdateTheModificationDateBetweenPostedEdits( (Plan)Plan);
         }
 
         [TestMethod]
@@ -228,15 +228,14 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void AttachAnExistingIngredientToAnExistingPlan()
         { 
             Ingredient  ingredient = new Ingredient() { ID = 100 };
-            int foo = ingredient.ID;
+         
            
-            Controller.Attach(Repo,Plan.ID, (Ingredient)ingredient );
-            IEntityChildClassIngredients returnedPlan = Repo.GetById(Plan.ID);
+            Controller.Attach(Plan.ID, (Ingredient)ingredient );
+            IEntity returnedPlan = Repo.GetById(Plan.ID);
 
           
-            Assert.AreEqual(1, returnedPlan.Ingredients.Count());
-            // how do I know the correct ingredient was added?
-            Assert.AreEqual(foo, returnedPlan.Ingredients.First().ID);
+            Assert.AreEqual(1, returnedPlan.Ingredients.Count()); 
+            Assert.AreEqual(ingredient.ID, returnedPlan.Ingredients.First().ID);
         }
 
         [TestMethod]
@@ -246,7 +245,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             IRepository<Recipe> repoRecipe = new TestRepository<Recipe>(); 
 
             Plan.Description = "test AttachAnExistingRecipeToAnExistingPlan";
-            IRecipe recipe = new Recipe
+             Recipe recipe = new Recipe
             {
                 ID = 100,
                 Description = "test AttachAnExistingRecipeToAnExistingPlan"
@@ -254,12 +253,10 @@ namespace LambAndLentil.Test.BasicControllerTests
             Repo.Update((Plan)Plan, Plan.ID);
             repoRecipe.Save((Recipe)recipe);
             // Act
-            Controller.Attach(Repo,Plan.ID, (Recipe)recipe );
-            Plan returnedPlan = Repo.GetById(Plan.ID);
+            Controller.Attach(Plan.ID, (Recipe)recipe );
+            Plan returnedPlan = Repo.GetById(Plan.ID); 
 
-            // Assert 
-            Assert.AreEqual(1, returnedPlan.Recipes.Count());
-            // how do I know the correct recipe was added?
+            Assert.AreEqual(1, returnedPlan.Recipes.Count()); 
             Assert.AreEqual(recipe.ID, returnedPlan.Recipes.First().ID);
         }
 

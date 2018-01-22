@@ -181,11 +181,10 @@ namespace LambAndLentil.Test.BasicControllerTests
             DateTime CreationDate = new DateTime(2010, 1, 1);
             Person.Description = "001 Test ";
             Person.ID = 37;
-            IGenericController<Person> ControllerEdit = (IGenericController<Person>)(new PersonsController(Repo)); 
-            IGenericController<Person> ControllerView = (IGenericController<Person>)(new PersonsController(Repo));
-            IGenericController<Person> ControllerDelete = (IGenericController<Person>)(new PersonsController(Repo));
-
-            // Act
+            IGenericController<Person> ControllerEdit = new PersonsController(Repo); 
+            IGenericController<Person> ControllerView = new PersonsController(Repo);
+            IGenericController<Person> ControllerDelete = new PersonsController(Repo);
+             
             ControllerEdit.PostEdit((Person)Person);
             ViewResult view = (ViewResult)ControllerView.Index();
             List<Person> ListEntity = (List<Person>)view.Model;
@@ -193,12 +192,9 @@ namespace LambAndLentil.Test.BasicControllerTests
                           where m.Description == "001 Test "
                           select m).AsQueryable().FirstOrDefault();
 
-            Person person = Mapper.Map<Person>(result);
-
-
+            Person person = Mapper.Map<Person>(result); 
             DateTime shouldBeSameDate = person.CreationDate;
-
-            // Assert
+             
             Assert.AreEqual(CreationDate, shouldBeSameDate);
         }
 
@@ -210,12 +206,12 @@ namespace LambAndLentil.Test.BasicControllerTests
             Person.Name = "Test UpdateTheModificationDateBetweenPostedEdits";
             Person.ID = 6000;
             Repo.Save((Person)Person);
-            BaseUpdateTheModificationDateBetweenPostedEdits(Repo, Controller, (Person)Person);
+            BaseUpdateTheModificationDateBetweenPostedEdits((Person)Person);
         }
 
         internal Person GetPerson(IRepository<Person> Repo, string description)
         {
-            IGenericController<Person> Controller = (IGenericController<Person>)(new PersonsController(Repo));
+            IGenericController<Person> Controller = new PersonsController(Repo);
             IPerson Person = new Person
             {
                 Description = description,

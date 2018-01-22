@@ -296,7 +296,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestMethod]
         public void CanPaginateArrayLengthIsCorrect()
         {
-            BaseCanPaginateArrayLengthIsCorrect(Repo,Controller);
+            BaseCanPaginateArrayLengthIsCorrect(Controller);
         }
 
      
@@ -443,7 +443,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestCategory("Index")]
         public void FirstPageIsCorrect()
         {
-            BaseFirstPageIsCorrect(Repo, Controller, UIControllerType.Plans);
+            BaseFirstPageIsCorrect(Repo, Controller);
         }
 
 
@@ -460,13 +460,13 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestCategory("Index")]
         public void CanSendPaginationViewModel()
         {
-            BaseCanSendPaginationViewModel(Repo, Controller, UIControllerType.Plans);
+            BaseCanSendPaginationViewModel(Repo, Controller);
         }
 
         [TestMethod]
         public void CanSendPaginationViewModel_TotalItemsCorrect()
         {
-            BaseCanSendPaginationViewModel_TotalItemsCorrect(Repo, Controller, UIControllerType.Plans);
+            BaseCanSendPaginationViewModel_TotalItemsCorrect(Repo, Controller);
         }
 
 
@@ -474,7 +474,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestCategory("Index")]
         public void PagingInfoIsCorrect()
         {
-            BasePagingInfoIsCorrect(Repo, Controller, UIControllerType.Recipes);
+            BasePagingInfoIsCorrect(Repo, Controller);
             //// Arrange
 
 

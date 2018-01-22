@@ -40,7 +40,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Connections.cs" />
+    <Compile Include="ChildAttachment.cs" />
+    <Compile Include="ChildDetachment.cs" />
+    <Compile Include="IEntityTypes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

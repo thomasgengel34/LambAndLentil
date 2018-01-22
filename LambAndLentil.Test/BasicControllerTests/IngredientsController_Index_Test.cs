@@ -1,18 +1,10 @@
-﻿using AutoMapper;
-using LambAndLentil.Domain.Abstract;
-using LambAndLentil.Domain.Concrete;
-using LambAndLentil.Domain.Entities;
-using LambAndLentil.Tests.Infrastructure;
-using LambAndLentil.UI;
-using LambAndLentil.UI.Controllers;
-using LambAndLentil.UI.Models;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System;
 using System.Linq;
 using System.Security.Principal;
 using System.Web.Mvc;
+using LambAndLentil.Domain.Entities;
+using LambAndLentil.UI;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace LambAndLentil.Test.BasicControllerTests
 {
@@ -31,17 +23,12 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [TestMethod] 
         public void Index()
-        {
-            // Arrange
-
-
-            // Act
+        { 
             ViewResult result = Controller.Index(1) as ViewResult;
-            ViewResult result1 = Controller.Index(2) as ViewResult;
-
-            // Assert
+            ViewResult result1 = Controller.Index(2) as ViewResult; 
 
             Assert.IsNotNull(result);
+            Assert.IsNotNull(result1);
         }
 
         [TestMethod] 
@@ -170,7 +157,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [TestMethod]
         [TestCategory("Index")]
-        public void FirstPageIsCorrect()=> BaseFirstPageIsCorrect(Repo, Controller, UIControllerType.Ingredients); 
+        public void FirstPageIsCorrect()=> BaseFirstPageIsCorrect(Repo, Controller); 
 
         [TestMethod] 
         public void FirstPageNameIsIndex()
@@ -319,7 +306,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
 
         [TestMethod]
-        public void CanPaginateArrayLengthIsCorrect() => BaseCanPaginateArrayLengthIsCorrect(Repo, Controller);
+        public void CanPaginateArrayLengthIsCorrect() => BaseCanPaginateArrayLengthIsCorrect(Controller);
 
 
         [TestMethod] 
@@ -378,7 +365,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         }
 
         [TestMethod]
-        public void CanSendPaginationViewModel_TotalItemsCorrect() => BaseCanSendPaginationViewModel_TotalItemsCorrect(Repo, Controller, UIControllerType.Ingredients);
+        public void CanSendPaginationViewModel_TotalItemsCorrect() => BaseCanSendPaginationViewModel_TotalItemsCorrect(Repo, Controller);
 
         [TestMethod] 
         public void  CanSendPaginationViewModel_TotalPagesCorrect()

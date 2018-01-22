@@ -10,7 +10,7 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.Recipe
     [TestCategory("Attach-Detach")]
     public class ControllerShouldAttachShoppingListAndReturn: BaseControllerShouldAttachXAndReturn<TParent,TChild>
     {
-        // Plan cannot attach a shopping list
+        // recipe cannot attach a shopping list
       
 
         [TestMethod]

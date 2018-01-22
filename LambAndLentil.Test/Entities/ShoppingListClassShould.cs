@@ -145,20 +145,7 @@ namespace LambAndLentil.Domain.Test.Entities
             // Assert
             Assert.AreEqual(1, result.Count());
         }
-
-        [TestCategory("Class Child Test")]
-        [TestMethod]
-        public void NotBeAbleToHaveShoppingListsChild()
-        {
-            // Arrange
-
-            // Act
-            PropertyInfo[] props = shoppingList.GetType().GetProperties();
-            var result = props.Where(p => p.Name == "ShoppingLists");
-
-            // Assert
-            Assert.AreEqual(0, result.Count());
-        }
+ 
 
         [TestCategory("Class Child Test")]
         [TestMethod]

@@ -2,7 +2,7 @@
 
 namespace LambAndLentil.Domain.Entities
 {
-    public interface IRecipe:IEntityChildClassIngredients
+    public interface IRecipe:IEntity
     {
         int? Calories { get; set; }
         short? CalsFromFat { get; set; } 

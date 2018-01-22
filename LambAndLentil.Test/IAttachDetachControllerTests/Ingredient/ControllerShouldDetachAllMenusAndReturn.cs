@@ -8,11 +8,11 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.Ingredient
     [TestClass]
     public class ControllerShouldDetachASetOfAndReturn:BaseControllerShouldDetachXAndReturn< IngredientType,MenuType>
     { 
-        // since Menu cannot be attached to an ingredient, these tests should return with an error
+        // ingredient cannot have a menu child
 
 
         [TestMethod]
-        public void DetailWithSuccessWhenIDisValidAndThereIsOneChildOnListWhenDetachingAndChildCannotBeAttachedWhenDetachingAll()
+        public void DetailWithDangerWhenIDisValidAndThereIsOneChildOnListWhenDetachingAndChildCannotBeAttachedWhenDetachingAll()
        => BaseDetailWithDangerWhenIDisValidAndThereIsOneChildOnListWhenDetachingAndChildCannotBeAttachedWhenDetachingAll();
               
         [TestMethod]

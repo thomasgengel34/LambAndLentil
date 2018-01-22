@@ -1,19 +1,14 @@
-﻿using AutoMapper;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
 using LambAndLentil.Domain.Abstract;
 using LambAndLentil.Domain.Concrete;
 using LambAndLentil.Domain.Entities;
+using LambAndLentil.Test.BasicControllerTests;
 using LambAndLentil.UI;
 using LambAndLentil.UI.Controllers;
 using LambAndLentil.UI.Infrastructure.Alerts;
-using LambAndLentil.UI.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Web.Mvc;
-using LambAndLentil.Tests.Controllers;
-using LambAndLentil.Test.BasicControllerTests;
 
 namespace IntegrationTests
 {
@@ -28,10 +23,7 @@ namespace IntegrationTests
 
         [TestMethod]
         public void CreateARecipe()
-        {
-            // Arrange 
-
-            // Act
+        { 
             ViewResult vr = (ViewResult)Controller.Create(UIViewType.Create);
             Recipe vm = (Recipe)vr.Model;
             string modelName = vm.Name;
@@ -114,77 +106,58 @@ namespace IntegrationTests
         [TestMethod]
         [TestCategory("DeleteConfirmed")]
         public void ActuallyDeleteARecipeFromTheDatabase()
-        {
-            // Arrange
+        { 
 
            Recipe.Description = "test ActuallyDeleteARecipeFromTheDatabase";
-            //Act
+            
             Controller.DeleteConfirmed(Recipe.ID);
             var deletedItem = (from m in Repo.GetAll()
                                where m.Description == Recipe.Description
                                select m).AsQueryable();
 
-            //Assert
+            
             Assert.AreEqual(0, deletedItem.Count());
         }
 
 
-        // [Ignore]
+        
         [TestMethod]
         public void SaveAllPropertiesInBaseEntity()
-        {
-            // Arrange  
+        { 
             IGenericController<Recipe> ControllerView = new RecipesController(Repo);
             IGenericController<Recipe> ControllerDelete = new RecipesController(Repo);
-            IRecipe Recipe = new Recipe
+             Recipe Recipe = new Recipe
             {
                 Name = "___test387",
                 Description = "test387 description",
                 ID = 774
             };
+             
+            Controller.PostEdit(Recipe); 
+            Recipe returnedRecipe = Repo.GetById(Recipe.ID);
 
-            // Act
-            Controller.PostEdit((Recipe)Recipe);
-            ViewResult view1 = (ViewResult)ControllerView.Index();
-            List<Recipe> ListEntity= (List<Recipe>)((( ListEntity<Recipe>)view1.Model).ListT);
-            Recipe = (from m in ListEntity
-                               where m.Name == "___test387"
-                               select m).AsQueryable().FirstOrDefault();
-
-            Assert.AreEqual(Recipe.Name, Recipe.Name);
-            Assert.AreEqual(Recipe.Description, Recipe.Description);
-            Assert.AreEqual(Recipe.CreationDate.Day, Recipe.CreationDate.Day);
-            Assert.AreEqual(Recipe.ModifiedDate.Day, Recipe.ModifiedDate.Day);
-            Assert.AreEqual(Recipe.AddedByUser, Recipe.AddedByUser);
-            Assert.AreEqual(Recipe.ModifiedByUser, Recipe.ModifiedByUser);
-            // return View(UIViewType.Details.ToString(), vm).WithWarning("Something is wrong with the data!");
+            Assert.AreEqual(returnedRecipe.Name, Recipe.Name);
+            Assert.AreEqual(returnedRecipe.Description, Recipe.Description);
+            Assert.AreEqual(returnedRecipe.CreationDate.Day, Recipe.CreationDate.Day);
+            Assert.AreEqual(returnedRecipe.ModifiedDate.Day, Recipe.ModifiedDate.Day);
+            Assert.AreEqual(returnedRecipe.AddedByUser, Recipe.AddedByUser);
+            Assert.AreEqual(returnedRecipe.ModifiedByUser, Recipe.ModifiedByUser); 
         }
 
-        // [Ignore]
+        
         [TestMethod]
         [TestCategory("Attach-Detach")]
-        public void AttachAnExistingIngredientToAnExistingRecipe()
-        {
-            // Arrange 
-            TestRepository<Recipe> repoRecipe = new TestRepository<Recipe>();
-            TestRepository<Ingredient> repoIngredient = new TestRepository<Ingredient>();
+        public void AttachAnIngredientToAnExistingRecipe()
+        { 
+            Recipe recipe = new Recipe { ID = 3000, Description = "test AttachAnExistingIngredientToAnExistingRecipe" };
+            Repo.Save(recipe);
+            Ingredient ingredient = new Ingredient { ID = 3300 };
+                      
+            Controller.Attach(recipe.ID, ingredient );
+            Recipe returnedRecipe = Repo.GetById(recipe.ID);
           
-
-            Recipe Recipe = new Recipe { ID = 3000, Description = "test AttachAnExistingIngredientToAnExistingRecipe" };
-            Repo.Add(Recipe);
-            Ingredient ingredient = new Ingredient { ID = 3300, Description = "test AttachAnExistingIngredientToAnExistingRecipe" };
-            repoIngredient.Add(ingredient);
-
-
-            // Act
-            Controller.Attach(Repo,Recipe.ID, ingredient );
-            Recipe returnedRecipe = (from m in repoRecipe.GetAll()
-                                     where m.Description == Recipe.Description
-                                     select m).FirstOrDefault();
-            // Assert 
             Assert.AreEqual(1, returnedRecipe.Ingredients.Count());
-            // how do I know the correct ingredient was added?
-            Assert.AreEqual(ingredient.ID, returnedRecipe.Ingredients.First().ID);
+            Assert.AreEqual("test AttachAnExistingIngredientToAnExistingRecipe", recipe.Description);
         }
 
         [Ignore]
@@ -202,9 +175,9 @@ namespace IntegrationTests
 
 
             Ingredient ingredient2 = GetIngredient(repoIngredient, "test NotDeleteAnIngredientAfterIngredientIsDetached");
-            Controller.Attach(Repo,Recipe1.ID, ingredient2 );
+            Controller.Attach(Recipe1.ID, ingredient2 );
             // Act
-            ControllerSubtract.Detach(Repo,Recipe1.ID, ingredient2);
+            ControllerSubtract.Detach(Recipe1.ID, ingredient2);
 
 
             // Assert
@@ -223,10 +196,10 @@ namespace IntegrationTests
             string description = "test ReturnIndexViewWhenAttachingExistIngredientToNonExistingRecipe";
 
             Ingredient ingredient = GetIngredient(repoIngredient, description);
-            repoIngredient.Add(ingredient);
+            repoIngredient.Save(ingredient);
 
             // Act
-            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.Attach(Repo,-1, ingredient );
+            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.Attach(-1, ingredient );
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
             var routeValues = rtrr.RouteValues.Values;
 
@@ -248,7 +221,7 @@ namespace IntegrationTests
             Recipe Recipe = GetRecipe(Repo, "test ReturnRecipeEditViewWithErrorMessageWhenAttachingNonExistingIngredientToExistingRRecipe");
             Ingredient ingredient = null;
             // Act  
-            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.Attach(Repo,Recipe.ID, ingredient );
+            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.Attach(Recipe.ID, ingredient );
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
             var routeValues = rtrr.RouteValues.Values;
 
@@ -270,7 +243,7 @@ namespace IntegrationTests
             Ingredient ingredient = null;
 
             // Act 
-            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.Attach(Repo,-1, ingredient );
+            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.Attach(-1, ingredient );
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
             var routeValues = rtrr.RouteValues.Values;
 
@@ -285,19 +258,17 @@ namespace IntegrationTests
         [TestMethod]
         [TestCategory("Attach-Detach")]
         public void ReturnRecipeEditViewWithSuccessMessageWhenDetachingExistingIngredientFromExistingRecipe()
-        {
-            // Arrange
-
+        { 
             TestRepository<Ingredient> repoIngredient = new TestRepository<Ingredient>(); 
             IGenericController<Recipe> ControllerRemoveIngredient = new RecipesController(Repo);
 
             Recipe Recipe = GetRecipe(Repo, "test ReturnRecipeEditViewWithSuccessMessageWhenDetachingExistingIngredientFromExistingRecipe");
 
             Ingredient ingredient = GetIngredient(repoIngredient, "test ReturnRecipeEditViewWithSuccessMessageWhenDetachingExistingIngredientFromExistingRecipe");
-            Controller.Attach(Repo,Recipe.ID, ingredient );
+            Controller.Attach(Recipe.ID, ingredient );
 
             // Act          
-            AlertDecoratorResult adr = (AlertDecoratorResult)ControllerRemoveIngredient.Detach(Repo,Recipe.ID, ingredient);
+            AlertDecoratorResult adr = (AlertDecoratorResult)ControllerRemoveIngredient.Detach(Recipe.ID, ingredient);
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
             var routeValues = rtrr.RouteValues.Values;
 
@@ -322,7 +293,7 @@ namespace IntegrationTests
 
             Ingredient ingredient = GetIngredient(repoIngredient, description);
             // Act  
-            AlertDecoratorResult adr = (AlertDecoratorResult)ControllerDetach.Detach(Repo,-1, ingredient);
+            AlertDecoratorResult adr = (AlertDecoratorResult)ControllerDetach.Detach(-1, ingredient);
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
             var routeValues = rtrr.RouteValues.Values;
 
@@ -337,16 +308,14 @@ namespace IntegrationTests
         [TestMethod]
         [TestCategory("Attach-Detach")]
         public void ReturnRecipeIndexViewWithWarningWhenDetachingExistingingredientNotAttachedToAnExistingRecipe()
-        {
-            // Arrange
-
+        { 
             TestRepository<Ingredient> repoIngredient = new TestRepository<Ingredient>();
             IGenericController<Ingredient> ControllerIngredient = new IngredientsController(repoIngredient);
             IGenericController<Recipe> ControllerDetach = new RecipesController(Repo);
             string description = "test ReturnRecipeIndexViewWithWarningWhenDetachingExistingingredientNotAttachedToAnExistingRecipe";
             Ingredient ingredient = GetIngredient(repoIngredient, description);
             // Act 
-            AlertDecoratorResult adr = (AlertDecoratorResult)ControllerDetach.Detach(Repo,-1, ingredient);
+            AlertDecoratorResult adr = (AlertDecoratorResult)ControllerDetach.Detach(-1, ingredient);
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
             var routeValues = rtrr.RouteValues.Values;
 
@@ -367,7 +336,7 @@ namespace IntegrationTests
             IGenericController<Recipe> ControllerDetach = new RecipesController(repoRecipe);
             Recipe Recipe = GetRecipe(repoRecipe, "test ReturnRecipeEditViewWithWarningMessageWhenDetachingNonExistingIngredientAttachedToExistingRecipe");
             // Act 
-            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.Detach(Repo,Recipe.ID, (Ingredient)null);
+            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.Detach(Recipe.ID, (Ingredient)null);
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
             var routeValues = rtrr.RouteValues.Values;
 
@@ -387,7 +356,7 @@ namespace IntegrationTests
             // Arrange 
 
             // Act 
-            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.Detach(Repo,-1, (Ingredient)null);
+            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.Detach(-1, (Ingredient)null);
 
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
             var routeValues = rtrr.RouteValues.Values;

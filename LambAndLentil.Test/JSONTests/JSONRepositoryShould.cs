@@ -1,19 +1,15 @@
-﻿using AutoMapper;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using AutoMapper;
 using LambAndLentil.Domain.Abstract;
 using LambAndLentil.Domain.Concrete;
 using LambAndLentil.Domain.Entities;
-using LambAndLentil.Tests.Infrastructure;
-using LambAndLentil.UI.Controllers;
-using LambAndLentil.UI.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text.RegularExpressions;
 
 namespace LambAndLentil.Test.JSONTests
 {
-   
+
     [TestClass]
     public class JSONRepositoryShould
     {
@@ -75,7 +71,7 @@ namespace LambAndLentil.Test.JSONTests
             string file = "";
             // Act
 
-            Repo.Add(menu);
+            Repo.Save(menu);
             file = @"../../../\LambAndLentil.Test\App_Data\JSON\Menu\" + menu.ID + ".txt";
             StreamReader sr = new StreamReader(file);
             string theFile = "";
@@ -109,7 +105,7 @@ namespace LambAndLentil.Test.JSONTests
             string file = "";
             // Act
 
-            Repo.Add(plan);
+            Repo.Save(plan);
             file = @"../../../\LambAndLentil.Test\App_Data\JSON\ShoppingList\" + plan.ID + ".txt";
             StreamReader sr = new StreamReader(file);
             string theFile = "";
@@ -143,7 +139,7 @@ namespace LambAndLentil.Test.JSONTests
             string file = "";
             // Act
 
-            Repo.Add(person);
+            Repo.Save(person);
             file = @"../../../\LambAndLentil.Test\App_Data\JSON\Person\" + person.ID + ".txt";
             StreamReader sr = new StreamReader(file);
             string theFile = "";
@@ -204,17 +200,19 @@ namespace LambAndLentil.Test.JSONTests
             string IEntity.Description { get; set; }
             string IEntity.IngredientsList { get; set; }
             List<Ingredient> IEntity.Ingredients { get; set; }
+            List<Recipe> IEntity.Recipes { get; set; }
+            List<Menu> IEntity.Menus { get; set; }
+            List<Plan> IEntity.Plans { get; set; }
+            List<ShoppingList> IEntity.ShoppingLists { get; set; }
 
-            public bool ParentCanHaveChild(IPossibleChildren parent) => throw new NotImplementedException(); 
+            public bool ParentCanHaveChild(IEntity parent) => throw new NotImplementedException();
+            bool IEntity.CanHaveChild(IEntity child) => throw new NotImplementedException();
             int IEntity.GetCountOfChildrenOnParent(IEntity parent) => throw new NotImplementedException();
-            bool IEntity.ParentCanHaveChild(IEntity parent) => throw new NotImplementedException();
-            void IEntity.ParentRemoveAllChildrenOfAType(IEntity  parent, IEntity child) => throw new NotImplementedException();
-            IEntity  IEntity.RemoveSelectionFromChildren<TChild>(IEntityChildClassIngredients parent, List<TChild> selected) => throw new NotImplementedException();
-            IEntity IEntity.RemoveSelectionFromChildren<TChild>(IEntityChildClassRecipes parent, List<TChild> selected) => throw new NotImplementedException();
+          
         }
 
         private class TestReturnZeroCountForEmptyDirectoryVM : BaseEntity, IEntity
-        { 
+        {
             string IEntity.AddedByUser { get; set; }
             DateTime IEntity.CreationDate { get; set; }
             int IEntity.ID { get; set; }
@@ -224,13 +222,17 @@ namespace LambAndLentil.Test.JSONTests
             string IEntity.Description { get; set; }
             string IEntity.IngredientsList { get; set; }
             List<Ingredient> IEntity.Ingredients { get; set; }
+            List<Recipe> IEntity.Recipes { get; set; }
+            List<Menu> IEntity.Menus { get; set; }
+            List<Plan> IEntity.Plans { get; set; }
+            List<ShoppingList> IEntity.ShoppingLists { get; set; }
 
-            public bool ParentCanHaveChild(IPossibleChildren parent) => throw new NotImplementedException(); 
+            public bool ParentCanHaveChild(IEntity parent) => throw new NotImplementedException();
+            bool IEntity.CanHaveChild(IEntity child) => throw new NotImplementedException();
             int IEntity.GetCountOfChildrenOnParent(IEntity parent) => throw new NotImplementedException();
-            bool IEntity.ParentCanHaveChild(IEntity parent) => throw new NotImplementedException();
-            void IEntity.ParentRemoveAllChildrenOfAType(IEntity  parent, IEntity child) => throw new NotImplementedException();
-            IEntity IEntity.RemoveSelectionFromChildren<TChild>(IEntityChildClassIngredients parent, List<TChild> selected) => throw new NotImplementedException();
-            IEntity IEntity.RemoveSelectionFromChildren<TChild>(IEntityChildClassRecipes parent, List<TChild> selected) => throw new NotImplementedException();
+         
+           
+          
         }
 
 
@@ -278,12 +280,7 @@ namespace LambAndLentil.Test.JSONTests
         [TestMethod]
         public void NotThrowAnErrorForAValidModel()
         {
-            // Arrange
-
-            // Act
-
-
-            // Assert
+             
             Assert.Fail();
         }
 
@@ -293,12 +290,7 @@ namespace LambAndLentil.Test.JSONTests
         [TestMethod]
         public void ThrowAnErrorForAnInvalidModel()
         {
-            // Arrange
-
-            // Act
-
-
-            // Assert
+             
             Assert.Fail();
         }
 
@@ -306,12 +298,7 @@ namespace LambAndLentil.Test.JSONTests
         [TestMethod]
         public void BubbleUpErrorToCallingMethodForAnInvalidModel()
         {
-            // Arrange
-
-            // Act
-
-
-            // Assert
+             
             Assert.Fail();
         }
 

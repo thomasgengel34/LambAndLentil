@@ -1,50 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using LambAndLentil.BusinessObjects;
 using LambAndLentil.Domain.Abstract;
 using LambAndLentil.Domain.Entities;
 using LambAndLentil.UI.Infrastructure.Alerts;
-using LambAndLentil.UI.Models;
 
 namespace LambAndLentil.UI.Controllers
 {
     public class BaseAttachDetachController<T> : BaseController<T>, IGenericController<T>, IAttachDetachController<T>
      where T : BaseEntity, IEntity, new()
 
-    {
-        // TODO: get UIControllerType for the appropriate T
+    { 
         protected string EntityName { get; set; }
 
         public BaseAttachDetachController(IRepository<T> repository) : base(repository)
         {
-            Repo = repository;
-            UIControllerType = GetUIControllerType();
+            Repo = repository; 
             EntityName = typeof(T).ToString().Split('.').Last();
         }
-
-        private UIControllerType GetUIControllerType()
-        {
-            if (typeof(T) == typeof(Ingredient)) return UIControllerType.Ingredients;
-            if (typeof(T) == typeof(Menu)) return UIControllerType.Menus;
-            if (typeof(T) == typeof(Person)) return UIControllerType.Persons;
-            if (typeof(T) == typeof(Plan)) return UIControllerType.Plans;
-            if (typeof(T) == typeof(ShoppingList)) return UIControllerType.ShoppingLists;
-            if (typeof(T) == typeof(Recipe)) return UIControllerType.Recipes;
-            return UIControllerType.Ingredients;
-        }
+         
 
 
         int IGenericController<T>.PageSize { get; set; }
-        private static UIControllerType UIControllerType { get; set; }
+     //   private static UIControllerType UIControllerType { get; set; }
 
-        ActionResult IGenericController<T>.Index(int? page) => BaseIndex(Repo, page);
+        ActionResult IGenericController<T>.Index(int? page) => BaseIndex(page);
 
 
         // GET: Recipes/Details/5
-        ActionResult IGenericController<T>.Details(int id, UIViewType actionMethod) => BaseDetails(Repo, UIControllerType, id, actionMethod);
+        ActionResult IGenericController<T>.Details(int id) => BaseDetails(  id );
 
 
         // GET: Ingredients/Create 
@@ -52,7 +37,7 @@ namespace LambAndLentil.UI.Controllers
         ActionResult IGenericController<T>.Create(UIViewType actionMethod) => BaseCreate(actionMethod);
 
         [HttpGet]
-        ActionResult IGenericController<T>.Edit(int id) => BaseDetails(Repo, UIControllerType, id, UIViewType.Edit);
+        ActionResult IGenericController<T>.Edit(int id) => BaseEdit(  id );
 
         // POST: Recipes/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
@@ -60,33 +45,31 @@ namespace LambAndLentil.UI.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ActionName("PostEdit")]
-        ActionResult IGenericController<T>.PostEdit([Bind(Include = "ID, Name, Description, CreationDate,  ModifiedDate,  AddedByUser, ModifiedByUser, IngredientsList")]  T t) => BasePostEdit(Repo, t);
+        ActionResult IGenericController<T>.PostEdit([Bind(Include = "ID, Name, Description, CreationDate,  ModifiedDate,  AddedByUser, ModifiedByUser, IngredientsList")]  T t) => BasePostEdit(t);
 
 
         // GET: Recipes/Delete/5
         [ActionName("Delete")]
-        ActionResult IGenericController<T>.Delete(int id, UIViewType actionMethod) => BaseDelete(Repo, UIControllerType, id);
+        ActionResult IGenericController<T>.Delete(int id) => BaseDelete(id);
 
 
         // POST: Ingredients/Delete/5
         [HttpPost, ActionName("DeleteConfirmed")]
         [ValidateAntiForgeryToken]
-        ActionResult IGenericController<T>.DeleteConfirmed(int id) => BaseDeleteConfirmed(Repo, UIControllerType, id);
+        ActionResult IGenericController<T>.DeleteConfirmed(int id) => BaseDeleteConfirmed(id);
 
 
-        void IGenericController<T>.AddIngredientToIngredientsList(int id, string addedIngredient) => BaseAddIngredientToIngredientsList(Repo, UIControllerType, id, addedIngredient);
+        void IGenericController<T>.AddIngredientToIngredientsList(int id, string addedIngredient) => BaseAddIngredientToIngredientsList(   id, addedIngredient); 
+  
 
-
-        public void DetachLastIngredientChild(int ID) => BaseDetachLastIngredientChild(Repo, ID);
-
-        public ActionResult Attach<TChild>(IRepository<T> Repo, int? parentID, TChild child)
-                 where TChild : BaseEntity, IEntity, IPossibleChildren, new()
+        public ActionResult Attach<TChild>(int? parentID, TChild child)
+                 where TChild : BaseEntity, IEntity, new()
         {
             ActionResult actionResult = GuardAttachAndDetachMethod(parentID, child);
             if (actionResult is EmptyResult)
             {
-                T  parent = Repo.GetById((int)parentID);
-                parent = new Connections().AddChildToParent(parent, child);
+                T parent = Repo.GetById((int)parentID);
+                parent = new ChildAttachment().AddChildToParent(parent, child);
                 Repo.Save(parent);
                 string childEntity = typeof(TChild).ToString().Split('.').Last();
 
@@ -95,17 +78,26 @@ namespace LambAndLentil.UI.Controllers
             else return actionResult;
         }
 
-        public ActionResult Detach<TChild>(IRepository<T> Repo, int? parentID, TChild child)
-        where TChild : BaseEntity, IEntity, IPossibleChildren, new()
+        public ActionResult Detach<TChild>(int? parentID, TChild child)
+        where TChild : BaseEntity, IEntity, new()
         {
-            ActionResult actionResult = GuardAttachAndDetachMethod(parentID, child);
-            if (actionResult is EmptyResult)
+            if (parentID == null)
             {
-                Repo.DetachAnIndependentChild((int)parentID, child);
-                string childEntity = typeof(TChild).ToString().Split('.').Last();
-                return RedirectToAction(UIViewType.Details.ToString(), new { id = parentID, actionMethod = UIViewType.Edit }).WithSuccess(childEntity + " was Successfully Detached!");
+               return HandleNullParent();
             }
-            else return actionResult;
+            else
+            {
+                IEntity parent = Repo.GetById((int)parentID);
+                ActionResult actionResult = GuardAttachAndDetachMethod(parentID, child);
+                if (actionResult is EmptyResult)
+                {
+                    parent = new ChildDetachment().DetachAnIndependentChild<TChild>(parent, child);
+                    Repo.Save((T)parent);
+                    string childEntity = typeof(TChild).ToString().Split('.').Last();
+                    return RedirectToAction(UIViewType.Details.ToString(), new { id = parentID, actionMethod = UIViewType.Edit }).WithSuccess(childEntity + " was Successfully Detached!");
+                }
+                else return actionResult; 
+            }
         }
 
 
@@ -125,7 +117,7 @@ namespace LambAndLentil.UI.Controllers
             {
                 return HandleNullChild(parentID);
             }
-            else if (!BaseEntity.ParentCanAttachChild(parent, child))
+            else if (!parent.CanHaveChild(child))
             {
                 return HandleParentCannotAttachChild(parent);
             }
@@ -147,13 +139,13 @@ namespace LambAndLentil.UI.Controllers
 
 
         public ActionResult DetachASetOf<TChild>(int? ID, List<TChild> selected)
-               where TChild : BaseEntity, IEntity, IPossibleChildren, new()
+               where TChild : BaseEntity, IEntity, new()
         {
             string parentName = typeof(T).ToString().Split('.').Last();
             string childName = typeof(TChild).ToString().Split('.').Last();
 
-         
-           TChild child = new TChild();
+
+            TChild child = new TChild();
 
             if (ID == null) { return HandleNullParentID(); }
 
@@ -168,7 +160,7 @@ namespace LambAndLentil.UI.Controllers
             {
                 return HandleNullChild(ID);
             }
-            else if (!BaseEntity.ParentCanAttachChild( parent, child))
+            else if (!parent.CanHaveChild(child))
             {
                 return HandleParentCannotAttachChild((T)parent);
             }
@@ -180,8 +172,7 @@ namespace LambAndLentil.UI.Controllers
             }
             else
             {
-                parent = child.RemoveSelectionFromChildren((IEntityChildClassIngredients)parent, selected);
-
+                parent = new ChildDetachment().DetachSelectionFromChildren(parent, selected);
                 Repo.Save((T)parent);
 
                 return RedirectToAction(UIViewType.Details.ToString(), new { ID, actionMethod = UIViewType.Edit }).WithSuccess("All " + childName + "s Were Successfully Detached!");
@@ -191,7 +182,7 @@ namespace LambAndLentil.UI.Controllers
 
 
         public ActionResult DetachAll<TChild>(int? ID)
-            where TChild : BaseEntity, IEntity, IPossibleChildren, new()
+            where TChild : BaseEntity, IEntity, new()
         {
             if (ID == null) { return HandleNullParentID(); }
 
@@ -201,8 +192,9 @@ namespace LambAndLentil.UI.Controllers
             {
                 return HandleNullParent();
             }
+
             TChild child = new TChild();
-            child.ParentRemoveAllChildrenOfAType(parent, child);
+            parent = new ChildDetachment().DetachAllChildrenOfAType(parent, child);
             Repo.Save((T)parent);
             string childName = typeof(TChild).ToString().Split('.').Last();
 

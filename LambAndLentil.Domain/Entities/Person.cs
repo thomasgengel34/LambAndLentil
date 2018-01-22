@@ -57,7 +57,7 @@ namespace LambAndLentil.Domain.Entities
         //TODO: add all ingredients after I figure out how to economically
 
 
-      
+
         public string FirstName { get; set; }
         public List<Plan> Plans { get; set; }
         public List<Ingredient> Ingredients { get; set; }
@@ -65,46 +65,53 @@ namespace LambAndLentil.Domain.Entities
         public List<Menu> Menus { get; set; }
         public List<ShoppingList> ShoppingLists { get; set; }
         public int ID { get; set; }
-        string IPerson.FirstName { get; set; }
-        string IPerson.LastName { get; set; }
-        string IPerson.FullName { get; set; }
-        decimal IPerson.Weight { get; set; }
-        int IPerson.MinCalories { get; set; }
-        int IPerson.MaxCalories { get; set; }
-        bool IPerson.NoGarlic { get; set; }
-        List<Recipe> IEntityChildClassRecipes.Recipes { get; set; }
-        List<Menu> IEntityChildClassMenus.Menus { get; set; }
-        List<Plan> IEntityChildClassPlans.Plans { get; set; }
-        List<ShoppingList> IEntityChildClassShoppingLists.ShoppingLists { get; set; }
-        string IEntity.AddedByUser { get; set; }
-        DateTime IEntity.CreationDate { get; set; }
-        int IEntity.ID { get; set; }
-        string IEntity.ModifiedByUser { get; set; }
-        DateTime IEntity.ModifiedDate { get; set; }
-        string IEntity.Name { get; set; }
-        string IEntity.Description { get; set; }
-        string IEntity.IngredientsList { get; set; }
-        List<Ingredient> IEntity.Ingredients { get; set; }
+         
 
         public string GetName(string FirstName, string LastName) => FullName = String.Concat(FirstName, " ", LastName);
 
-        bool  ParentCanHaveChild(IPossibleChildren parent)
+
+
+        bool IEntity.CanHaveChild(IEntity child)
         {
-            return parent.CanHavePersonChild;
+            Type type = child.GetType();
+
+            List<Type> possibleChildren = new List<Type>()
+            {
+                typeof(Ingredient),
+                typeof(Menu),
+                typeof(Plan),
+                typeof(Recipe),
+                typeof(ShoppingList)
+            };
+
+            if (possibleChildren.Contains(type))
+            {
+                return true;
+            }
+            return false;
         }
 
-      
-
-        public void ParentRemoveAllChildrenOfAType(IEntity  parent, IEntity child)
+        public override bool CanHaveChild(IEntity child)
         {
-            throw new Exception("You cannot have Persons as children");
-        }
+            Type type = child.GetType();
 
-        public IEntity  RemoveSelectionFromChildren<TChild>(IEntityChildClassIngredients  parent, List<TChild> selected)
-            where TChild : BaseEntity, IEntity, IPossibleChildren, new()
-        {
-            throw new Exception("You cannot have Persons as children");
+            List<Type> possibleChildren = new List<Type>()
+            {
+                typeof(Ingredient),
+                typeof(Menu),
+                typeof(Plan),
+                typeof(Recipe),
+                typeof(ShoppingList)
+            };
+
+            if (possibleChildren.Contains(type))
+            {
+                return true;
+            }
+            return false;
         }
+         
+         
 
         int IEntity.GetCountOfChildrenOnParent(IEntity parent)
         {
@@ -123,9 +130,6 @@ namespace LambAndLentil.Domain.Entities
 
         }
 
-        bool IEntity.ParentCanHaveChild(IEntity parent) => parent.CanHaveIngredientChild;
-        void IEntity.ParentRemoveAllChildrenOfAType(IEntity parent, IEntity child) => throw new NotImplementedException();
-        IEntity IEntity.RemoveSelectionFromChildren<TChild>(IEntityChildClassIngredients parent, List<TChild> selected) => throw new NotImplementedException();
-        IEntity IEntity.RemoveSelectionFromChildren<TChild>(IEntityChildClassRecipes parent, List<TChild> selected) => throw new NotImplementedException();
+         
     }
 }

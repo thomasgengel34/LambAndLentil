@@ -93,7 +93,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange  
             Plan pVM = new Plan() { ID = 6000, Name = "test CanDeleteValidPlan" };
             int count = Repo.Count();
-            Repo.Add(pVM);
+            Repo.Save(pVM);
             int countPlus = Repo.Count();
 
             // Act - delete the plan

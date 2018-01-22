@@ -1,18 +1,9 @@
-﻿using LambAndLentil.UI.Controllers;
-using LambAndLentil.Domain.Abstract;
-using LambAndLentil.Domain.Concrete;
-using LambAndLentil.Domain.Entities;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Linq;
-using System.Web.Mvc;
-using LambAndLentil.UI.Models;
+﻿using System;
 using System.Collections.Generic;
-using AutoMapper;
-using LambAndLentil.Tests.Infrastructure;
-using LambAndLentil.UI.Infrastructure.Alerts;
-using LambAndLentil.UI;
-using System.IO;
+using System.Web.Mvc;
+using LambAndLentil.Domain.Entities;
+using LambAndLentil.UI.Controllers;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace LambAndLentil.Test.BasicControllerTests
 {
@@ -32,7 +23,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
             foreach (Recipe recipe in ListEntity.ListT)
             {
-                Repo.Add(recipe);
+                Repo.Save(recipe);
             }
 
             Controller.PageSize = 3;

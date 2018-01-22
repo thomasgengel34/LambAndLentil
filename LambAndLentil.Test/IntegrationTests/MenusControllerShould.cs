@@ -1,18 +1,15 @@
-﻿using AutoMapper;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
 using LambAndLentil.Domain.Abstract;
 using LambAndLentil.Domain.Concrete;
 using LambAndLentil.Domain.Entities;
 using LambAndLentil.Test.BasicControllerTests;
-using LambAndLentil.Tests.Infrastructure;
 using LambAndLentil.UI;
 using LambAndLentil.UI.Controllers;
 using LambAndLentil.UI.Infrastructure.Alerts;
-using LambAndLentil.UI.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
 
 namespace IntegrationTests
 {
@@ -23,10 +20,11 @@ namespace IntegrationTests
     public class MenusControllerShould : MenusController_Test_Should
     {
         private static IGenericController<Menu> Controller1, Controller2, Controller3, Controller4, Controller5;
-       
+
 
         public MenusControllerShould()
         {
+
             Repo = new TestRepository<Menu>(); ;
             Controller1 = new MenusController(Repo);
             Controller2 = new MenusController(Repo);
@@ -46,9 +44,6 @@ namespace IntegrationTests
         [TestMethod]
         public void CreateAnMenu()
         {
-            // Arrange
-
-            // Act
             ViewResult vr = (ViewResult)Controller.Create(UIViewType.Create);
             Menu Menu = (Menu)vr.Model;
             string modelName = Menu.Name;
@@ -62,20 +57,16 @@ namespace IntegrationTests
         [TestMethod]
         public void SaveAValidMenu()
         {
-            // Arrange 
             Menu Menu = new Menu
             {
                 Name = "test",
                 ID = 2
             };
-            // Act
             AlertDecoratorResult adr = (AlertDecoratorResult)Controller.PostEdit(Menu);
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
 
             var routeValues = rtrr.RouteValues.Values;
 
-
-            // Assert 
             Assert.AreEqual("alert-success", adr.AlertClass);
             Assert.AreEqual(1, routeValues.Count);
             Assert.AreEqual(UIViewType.BaseIndex.ToString(), routeValues.ElementAt(0).ToString());
@@ -84,31 +75,15 @@ namespace IntegrationTests
         [TestMethod]
         [TestCategory("Edit")]
         public void SaveEditedMenuWithNameChange()
-        { 
-            ActionResult ar1 = Controller1.PostEdit((Menu)Menu);
-            ViewResult view1 = (ViewResult)Controller2.Index();
-            List<Menu> ListEntity = (List<Menu>)((ListEntity<Menu>)view1.Model).ListT;
-            var menu = (from m in ListEntity
-                        where m.Name == "0000 test"
-                        select m).FirstOrDefault();
+        {
+            Menu menu = new Menu() { ID = 6001, Name = "test SaveEditedMenuWithNameChange" };
+            Repo.Save(menu);
 
+            menu.Name = "0000 test Edited";
+            ActionResult ar = Controller.PostEdit(menu); 
+            Menu returnedMenu = Repo.GetById(menu.ID);
 
-            // verify initial value:
-            Assert.AreEqual("0000 test", menu.Name);
-
-            // now edit it
-            Menu.Name = "0000 test Edited";
-            Menu.ID = menu.ID;
-            ActionResult ar2 = Controller3.PostEdit((Menu)Menu);
-            ViewResult view2 = (ViewResult)Controller4.Index();
-            List<Menu> ListEntity2 = (List<Menu>)((ListEntity<Menu>)view2.Model).ListT;
-            Menu menu2 = (from m in ListEntity2
-                          where m.Name == "0000 test Edited"
-                          select m).AsQueryable().FirstOrDefault();
-
-          
-            Assert.AreEqual("0000 test Edited", menu2.Name);
-
+            Assert.AreEqual("0000 test Edited", returnedMenu.Name); 
         }
 
 
@@ -116,10 +91,10 @@ namespace IntegrationTests
         [TestMethod]
         [TestCategory("Edit")]
         public void SaveEditedMenuWithNameAndDayOfWeekChange()
-        { 
-            Menu.DayOfWeek = DayOfWeek.Friday; 
-            ActionResult ar2 = Controller3.PostEdit((Menu)Menu); 
-            IMenu returnedMenu = Repo.GetById(Menu.ID); 
+        {
+            Menu.DayOfWeek = DayOfWeek.Friday;
+            ActionResult ar2 = Controller3.PostEdit((Menu)Menu);
+            IMenu returnedMenu = Repo.GetById(Menu.ID);
             Assert.AreEqual(DayOfWeek.Friday, returnedMenu.DayOfWeek);
         }
 
@@ -129,12 +104,12 @@ namespace IntegrationTests
         [TestCategory("Edit")]
         public void SaveEditedMenuWithDescriptionChange()
         {
-            
+
             Menu.Name = "0000 test";
             Menu.Description = "SaveEditedMenuWithDescriptionChange Pre-test";
-            Menu.ID = int.MaxValue / 2; 
+            Menu.ID = int.MaxValue / 2;
 
-           
+
             ActionResult ar1 = Controller1.PostEdit((Menu)Menu);
             ViewResult view1 = (ViewResult)Controller2.Index();
             List<Menu> ListEntity = (List<Menu>)((ListEntity<Menu>)view1.Model).ListT;
@@ -161,7 +136,7 @@ namespace IntegrationTests
                     select m).AsQueryable().FirstOrDefault();
 
 
-           
+
             Assert.AreEqual("0000 test Edited", menu.Name);
             Assert.AreEqual("SaveEditedMenuWithDescriptionChange Post-test", menu.Description);
 
@@ -172,13 +147,13 @@ namespace IntegrationTests
         [TestCategory("Edit")]
         public void SaveTheCreationDateOnMenuCreationWithNoParameterCtor()
         {
-            
+
             DateTime CreationDate = DateTime.Now;
 
-            
+
             Menu menu = new Menu();
             TimeSpan timeSpan = CreationDate - menu.CreationDate;
-            
+
             Assert.AreEqual(CreationDate.Date, menu.CreationDate.Date);
         }
 
@@ -187,13 +162,13 @@ namespace IntegrationTests
         [TestCategory("Edit")]
         public void ShouldSaveTheCreationDateOnMenuCreationWithDateTimeParameter()
         {
-             
+
             DateTime CreationDate = new DateTime(2010, 1, 1);
 
-           
+
             Menu menu = new Menu(CreationDate);
 
-            
+
             Assert.AreEqual(CreationDate, menu.CreationDate);
         }
 
@@ -203,13 +178,13 @@ namespace IntegrationTests
         [TestCategory("Edit")]
         public void SaveTheCreationDateOnMenuCreationWithDateTimeParameter()
         {
-            
+
             DateTime CreationDate = new DateTime(2010, 1, 1);
 
-           
+
             Menu Menu = new Menu(CreationDate);
 
-           
+
             Assert.AreEqual(CreationDate, Menu.CreationDate);
         }
 
@@ -217,7 +192,7 @@ namespace IntegrationTests
         [TestCategory("Edit")]
         public void SaveTheCreationDateBetweenPostedEdits()
         {
-             
+
             DateTime CreationDate = new DateTime(2010, 1, 1);
             Menu Menu = new Menu(CreationDate)
             {
@@ -227,8 +202,8 @@ namespace IntegrationTests
             };
 
 
-          
-          
+
+
             Controller1.PostEdit(Menu);
             ViewResult view = (ViewResult)Controller2.Index();
             List<Menu> ListEntity = (List<Menu>)((ListEntity<Menu>)view.Model).ListT;
@@ -238,7 +213,7 @@ namespace IntegrationTests
 
             DateTime shouldBeSameDate = menu.CreationDate;
 
-            
+
             Assert.AreEqual(CreationDate, shouldBeSameDate);
 
         }
@@ -250,7 +225,7 @@ namespace IntegrationTests
             Menu.Name = "Test UpdateTheModificationDateBetweenPostedEdits";
             Menu.ID = 6000;
             Repo.Save((Menu)Menu);
-            BaseUpdateTheModificationDateBetweenPostedEdits(Repo, Controller, (Menu)Menu);
+            BaseUpdateTheModificationDateBetweenPostedEdits((Menu)Menu);
         }
 
         [Ignore]
@@ -258,7 +233,6 @@ namespace IntegrationTests
         [TestCategory("Attach-Detach")]
         public void ReturnIndexWithSuccessAttachAnExistingRecipeToAnExistingMenu()
         {
-            // Arrange 
             IRepository<Recipe> repoRecipe = new TestRepository<Recipe>();
             IGenericController<Menu> ControllerAttach = new MenusController(Repo);
             IGenericController<Recipe> ControllerAttachI = new RecipesController(repoRecipe);
@@ -266,19 +240,17 @@ namespace IntegrationTests
 
 
             Menu menu = new Menu() { ID = 100, Description = "test AttachAnExistingRecipeToAnExistingMenu" };
-            Repo.Add(menu);
+            Repo.Save(menu);
 
             Recipe recipeVM = new Recipe() { ID = 101, Description = "test AttachAnExistingRecipeToAnExistingMenu" };
-            repoRecipe.Add(recipeVM);
-            
-            var x = ControllerAttach.Attach(Repo,menu.ID, recipeVM );
+            repoRecipe.Save(recipeVM);
 
-             
+            var x = ControllerAttach.Attach(menu.ID, recipeVM);
+
+
             Assert.AreEqual(1, menu.Recipes.Count());
-            // how do I know the correct recipe was added?
+
             Assert.AreEqual(recipeVM.ID, menu.Recipes.First().ID);
-
-
         }
 
 
@@ -286,16 +258,16 @@ namespace IntegrationTests
         [TestMethod]
         [TestCategory("Attach-Detach")]
         public void AttachAnExistingIngredientToAnExistingMenu()
-        { 
-            Ingredient ingredient = new Ingredient { ID = int.MaxValue - 100, Description = "test AttachAnExistingIngredientToAnExistingMenu" }; 
-            Menu foo = Repo.GetById(Menu.ID);
-         
-            ActionResult ar= Controller.Attach(Repo,Menu.ID,ingredient );
-            Menu returnedMenu = Repo.GetById(Menu.ID);
+        {
+            Menu menu = new LambAndLentil.Domain.Entities.Menu { ID = 101, Description = "test AttachAnExistingIngredientToAnExistingMenu" };
+            Repo.Save(menu);
 
-           
+            Ingredient ingredient = new Ingredient { ID = 100, Description = "test AttachAnExistingIngredientToAnExistingMenu" };
+
+            ActionResult ar = Controller.Attach(menu.ID, ingredient);
+            Menu returnedMenu = Repo.GetById(menu.ID);
+
             Assert.AreEqual(1, returnedMenu.Ingredients.Count());
-            // how do I know the correct ingredient was added?
             Assert.AreEqual(ingredient.ID, returnedMenu.Ingredients.First().ID);
 
         }
@@ -303,24 +275,24 @@ namespace IntegrationTests
         [TestMethod]
         [TestCategory("Attach-Detach")]
         public void NotDeleteAnIngredientAfterIngredientIsDetachedFromMenu()
-        { 
+        {
             Ingredient ingredient = new Ingredient { ID = int.MaxValue - 100, Description = "test NotDeleteAnIngredientAfterIngredientIsDetachedFromMenu" };
-             
-            Controller.Attach(Repo,Menu.ID, ingredient );
-            Controller.Detach(Repo,Menu.ID, ingredient);
-             
+
+            Controller.Attach(Menu.ID, ingredient);
+            Controller.Detach(Menu.ID, ingredient);
+
             Assert.IsNotNull(ingredient);
         }
 
         [TestMethod]
         [TestCategory("Attach-Detach")]
         public void ReturnIndexViewWithWarningWhenDetachingNonExistingIngredientAttachedToANonExistingMenu()
-        { 
-            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.Detach(Repo,-1, (Ingredient)null);
+        {
+            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.Detach(-1, (Ingredient)null);
 
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
             var routeValues = rtrr.RouteValues.Values;
-             
+
             Assert.AreEqual("alert-warning", adr.AlertClass);
             Assert.AreEqual("Menu was not found", adr.Message);
             Assert.AreEqual(1, routeValues.Count);
@@ -331,12 +303,12 @@ namespace IntegrationTests
         [TestMethod]
         [TestCategory("Attach-Detach")]
         public void ReturnIndexViewWithWarningWhenAttachingExistIngredientToNonExistingMenu()
-        { 
-            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.Attach(Repo,-1, (Ingredient)null );
+        {
+            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.Attach(-1, (Ingredient)null);
 
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
             var routeValues = rtrr.RouteValues.Values;
-             
+
             Assert.AreEqual("alert-warning", adr.AlertClass);
             Assert.AreEqual("Menu was not found", adr.Message);
             Assert.AreEqual(1, routeValues.Count);
@@ -347,12 +319,12 @@ namespace IntegrationTests
         [TestMethod]
         [TestCategory("Attach-Detach")]
         public void ReturnIndexViewWithWarningWhenAttachingNonExistIngredientToNonExistingMenu()
-        { 
-            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.Attach(Repo,-1, (Ingredient)null);
+        {
+            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.Attach(-1, (Ingredient)null);
 
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
             var routeValues = rtrr.RouteValues.Values;
-             
+
             Assert.AreEqual("alert-warning", adr.AlertClass);
             Assert.AreEqual("Menu was not found", adr.Message);
             Assert.AreEqual(1, routeValues.Count);
@@ -363,12 +335,12 @@ namespace IntegrationTests
         [TestMethod]
         [TestCategory("Attach-Detach")]
         public void ReturnIndexViewWithWarningWhenDetachingExistingIngredientAttachedToNonExistingMenu()
-        { 
-            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.Detach(Repo,-1, (Ingredient)null);
+        {
+            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.Detach(-1, (Ingredient)null);
 
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
             var routeValues = rtrr.RouteValues.Values;
-             
+
             Assert.AreEqual("alert-warning", adr.AlertClass);
             Assert.AreEqual("Menu was not found", adr.Message);
             Assert.AreEqual(1, routeValues.Count);
@@ -393,6 +365,9 @@ namespace IntegrationTests
         [Ignore]
         [TestMethod]
         [TestCategory("Attach-Detach")]
-        public void ReturnMenuIndexViewWithWarningWhenDetachingExistingingredientNotAttachedToAnExistingMenu() => Assert.Fail(); 
+        public void ReturnMenuIndexViewWithWarningWhenDetachingExistingingredientNotAttachedToAnExistingMenu() => Assert.Fail();
+
+
+
     }
 }

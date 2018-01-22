@@ -1,16 +1,11 @@
-﻿using LambAndLentil.Domain.Abstract;
-using LambAndLentil.Domain.Concrete;
-using LambAndLentil.Domain.Entities;
-using LambAndLentil.UI;
-using LambAndLentil.UI.Infrastructure.Alerts;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using LambAndLentil.UI.Controllers;
-using System.Collections.Generic;
-using System;
-using System.Linq.Expressions;
-using LambAndLentil.UI.Models;
+using LambAndLentil.Domain.Abstract;
+using LambAndLentil.Domain.Concrete;
+using LambAndLentil.Domain.Entities;
+using LambAndLentil.UI.Infrastructure.Alerts;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace LambAndLentil.Test.BasicControllerTests
 {
@@ -21,17 +16,17 @@ namespace LambAndLentil.Test.BasicControllerTests
     {
 
         [TestMethod]
-        public void ReturnsIndexWithWarningWithUnknownParentID() => BaseReturnsIndexWithWarningWithUnknownParentID(Repo, Controller);
+        public void ReturnsIndexWithWarningWithUnknownParentID() => BaseReturnsIndexWithWarningWithUnknownParentID(Controller);
 
         [TestMethod]
-        public void ReturnsIndexWithWarningWithNullParent() => BaseReturnsIndexWithWarningWithNullParent(Repo, Controller);
+        public void ReturnsIndexWithWarningWithNullParent() => BaseReturnsIndexWithWarningWithNullParent(Controller);
 
         
         [TestMethod]
-        public void ReturnsDetailWithWarningWithUnknownChildID() => BaseReturnsDetailWithWarningWithUnknownChildID(Recipe, Repo, Controller);
+        public void ReturnsDetailWithWarningWithUnknownChildID() => BaseReturnsDetailWithWarningWithUnknownChildID(Recipe,  Controller);
 
         [TestMethod]
-        public void ReturnsDetailWithWarningIfAttachingNullChild() => BaseReturnsDetailWithWarningIfAttachingNullChild(Recipe, Repo, Controller);
+        public void ReturnsDetailWithWarningIfAttachingNullChild() => BaseReturnsDetailWithWarningIfAttachingNullChild(Recipe,  Controller);
 
         [Ignore]
         [TestMethod]
@@ -44,7 +39,7 @@ namespace LambAndLentil.Test.BasicControllerTests
                 Description = "test ReturnsDetailWhenAttachingWithSuccessWithValidParentandValidChild"
             };
             IRepository<Recipe> mRepo = new TestRepository<Recipe>();
-            mRepo.Add(menu);
+            mRepo.Save(menu);
             Ingredient ingredient = new Ingredient
             {
                 ID = 1492,
@@ -52,7 +47,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             };
 
             // Act
-            ActionResult ar = Controller.Attach(Repo,int.MaxValue, ingredient);
+            ActionResult ar = Controller.Attach(int.MaxValue, ingredient);
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             RedirectToRouteResult rdr = (RedirectToRouteResult)adr.InnerResult;
 
@@ -66,12 +61,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [Ignore]
         [TestMethod]
-        public void ReturnsDetailWhenDetachingWithSuccessWithValidParentandValidChild() =>
-            // Arrange
-
-            // Act
-
-            // Assert
+        public void ReturnsDetailWhenDetachingWithSuccessWithValidParentandValidChild() => 
             Assert.Fail();
 
 
@@ -82,7 +72,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             TestRepository<Ingredient> IngredientRepo = new TestRepository<Ingredient>();
             IngredientRepo.Save(child);
  
-            Controller.Attach(Repo,Recipe.ID, child );
+            Controller.Attach(Recipe.ID, child );
             ReturnedRecipe = Repo.GetById(Recipe.ID);
            
           
@@ -115,17 +105,17 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [TestMethod]
         [TestCategory("Attach-Detach")]
-        public void DetachASetOfIngredientChildrenSimplyIgnoresANonExistentIngredientIfItIsInTheSet() => BaseDetachASetOfIngredientChildrenSimplyIgnoresANonExistentIngredientIfItIsInTheSet<Recipe>(Repo, Controller);
+        public void DetachASetOfIngredientChildrenSimplyIgnoresANonExistentIngredientIfItIsInTheSet() => BaseDetachASetOfIngredientChildrenSimplyIgnoresANonExistentIngredientIfItIsInTheSet<Recipe>(Controller);
 
 
         [TestMethod]
-        public void DetachTheLastIngredientChild() => BaseDetachTheLastIngredientChild(Repo, Controller, Recipe);
+        public void DetachTheLastIngredientChild() => BaseDetachTheLastIngredientChild(Controller, Recipe);
 
         [TestMethod]
         [TestCategory("Attach-Detach")]
-        public void DetachAllIngredientChildren() => BaseDetachAllIngredientChildren(Repo, Controller );
+        public void DetachAllIngredientChildren() => BaseDetachAllIngredientChildren(Controller );
 
         [TestMethod]
-        public void ReturnsDetailWhenDetachingWithSuccessWithValidParentandValidIngredientChild() => BaseReturnsDetailWhenDetachingWithSuccessWithValidParentandValidIngredientChild(Repo, Controller, Recipe.ID);
+        public void ReturnsDetailWhenDetachingWithSuccessWithValidParentandValidIngredientChild() => BaseReturnsDetailWhenDetachingWithSuccessWithValidParentandValidIngredientChild(Controller, Recipe.ID);
     }
 }

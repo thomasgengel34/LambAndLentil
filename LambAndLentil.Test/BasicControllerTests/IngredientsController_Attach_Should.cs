@@ -23,7 +23,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Ingredient child = new Ingredient() { ID = 3000, Name = "SuccessfullyAttachChild" };
             Repo.Save(child);
  
-            Controller.Attach(Repo,Ingredient.ID, child );
+            Controller.Attach(Ingredient.ID, child );
             ReturnedIngredient = Repo.GetById(Ingredient.ID); 
             Assert.AreEqual("SuccessfullyAttachChild", ReturnedIngredient.Ingredients.Last().Name);
         }
@@ -39,28 +39,28 @@ namespace LambAndLentil.Test.BasicControllerTests
        
 
         [TestMethod]
-        public void DetachTheLastIngredientChild() => BaseDetachTheLastIngredientChild(Repo, Controller, (Ingredient)Ingredient);
+        public void DetachTheLastIngredientChild() => BaseDetachTheLastIngredientChild(Controller, (Ingredient)Ingredient);
 
         [TestMethod] 
-        public void DetachAllIngredientChildren() => BaseDetachAllIngredientChildren(Repo, Controller );
+        public void DetachAllIngredientChildren() => BaseDetachAllIngredientChildren(Controller );
 
 
         
 
         [TestMethod]
         public void ReturnsIndexWithWarningWithUnknownParentID() =>
-            BaseReturnsIndexWithWarningWithUnknownParentID(Repo, Controller);
+            BaseReturnsIndexWithWarningWithUnknownParentID(Controller);
 
         [TestMethod]
-        public void ReturnsIndexWithWarningWithNullParent() => BaseReturnsIndexWithWarningWithNullParent(Repo, Controller);
+        public void ReturnsIndexWithWarningWithNullParent() => BaseReturnsIndexWithWarningWithNullParent(Controller);
 
         [TestMethod]
-        public void ReturnsDetailWithWarningIfAttachingNullChild() => BaseReturnsDetailWithWarningIfAttachingNullChild(Ingredient, Repo, Controller);
+        public void ReturnsDetailWithWarningIfAttachingNullChild() => BaseReturnsDetailWithWarningIfAttachingNullChild(Ingredient, Controller);
 
         [TestMethod]
-        public void ReturnsDetailWithWarningWithUnknownChildID() => BaseReturnsDetailWithWarningWithUnknownChildID(Ingredient, Repo, Controller);
+        public void ReturnsDetailWithWarningWithUnknownChildID() => BaseReturnsDetailWithWarningWithUnknownChildID(Ingredient, Controller);
 
         [TestMethod]
-        public void ReturnsDetailWhenDetachingWithSuccessWithValidParentandValidIngredientChild() => BaseReturnsDetailWhenDetachingWithSuccessWithValidParentandValidIngredientChild(Repo, Controller,Ingredient.ID); 
+        public void ReturnsDetailWhenDetachingWithSuccessWithValidParentandValidIngredientChild() => BaseReturnsDetailWhenDetachingWithSuccessWithValidParentandValidIngredientChild(Controller,Ingredient.ID); 
     }
 }

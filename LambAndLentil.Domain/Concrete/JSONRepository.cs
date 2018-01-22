@@ -33,7 +33,7 @@ namespace LambAndLentil.Domain.Concrete
         public IQueryable Person { get; set; }
         public IQueryable ShoppingList { get; set; }
 
-        public void Add(T entity)
+        public void Save(T entity)
         {
             entity.ModifiedByUser = WindowsIdentity.GetCurrent().Name;
             using (StreamWriter file = File.CreateText(FullPath + entity.ID + ".txt"))
@@ -53,23 +53,7 @@ namespace LambAndLentil.Domain.Concrete
         }
 
 
-        public void DetachAnIndependentChild<TChild>(int parentID, TChild child )
-            where TChild : BaseEntity, IEntity,new()
-        {
-            char[] charsToTrim = { 'V', 'M' };
-            string childName = typeof(TChild).ToString().Split('.').Last().Split('+').Last().TrimEnd(charsToTrim);
-            T parent = JsonConvert.DeserializeObject<T>(File.ReadAllText(String.Concat(FullPath, parentID, ".txt")));
-
-            if (parent != null && child != null)
-            {
-                IEntityChildClassIngredients entity = (IEntityChildClassIngredients)JsonConvert.DeserializeObject<T>(File.ReadAllText
-                (String.Concat(FullPath, parentID, ".txt")));
-                List<TChild> list = new List<TChild>() { child };
-                child.RemoveSelectionFromChildren(entity, list);
- 
-                Save((T)entity); 
-            }
-        }
+      
 
         public T GetById(int id)
         {
@@ -92,11 +76,7 @@ namespace LambAndLentil.Domain.Concrete
 
         public IEnumerable<T> Query(Expression<Func<T, bool>> filter) => throw new NotImplementedException();
 
-        public void Remove(T t) => File.Delete(String.Concat(FullPath, t.ID, ".txt"));
-
-
-        public void Save(T entity) => Add(entity);
-
+        public void Remove(T t) => File.Delete(String.Concat(FullPath, t.ID, ".txt")); 
 
         public void Update(T entity, int? key)
         {
@@ -144,7 +124,7 @@ namespace LambAndLentil.Domain.Concrete
                     entity.Name = person.FullName;
                 }
             }
-            Add(entity);
+            Save(entity);
         }
 
 

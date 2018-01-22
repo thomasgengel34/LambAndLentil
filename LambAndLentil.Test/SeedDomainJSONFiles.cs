@@ -36,7 +36,7 @@ namespace LambAndLentil.Test
 
                 foreach (Ingredient ingredient in ListEntity)
                 {
-                    Repo.Add(ingredient);
+                    Repo.Save(ingredient);
                 }
 
             }

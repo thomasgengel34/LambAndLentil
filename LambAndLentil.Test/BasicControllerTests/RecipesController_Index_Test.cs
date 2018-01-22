@@ -1,18 +1,10 @@
-﻿using AutoMapper;
-using LambAndLentil.Domain.Abstract;
-using LambAndLentil.Domain.Concrete;
-using LambAndLentil.Domain.Entities;
-using LambAndLentil.Tests.Infrastructure;
-using LambAndLentil.UI;
-using LambAndLentil.UI.Controllers;
-using LambAndLentil.UI.Models;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System;
 using System.Linq;
 using System.Security.Principal;
 using System.Web.Mvc;
+using LambAndLentil.Domain.Entities;
+using LambAndLentil.UI;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace LambAndLentil.Test.BasicControllerTests
 {
@@ -338,22 +330,17 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestMethod] 
         public void  CanPaginateArrayLengthIsCorrect()
         {
-            BaseCanPaginateArrayLengthIsCorrect(Repo, Controller);
+            BaseCanPaginateArrayLengthIsCorrect(Controller);
         }
 
      
         [TestMethod]
         [TestCategory("Index")]
         public void CanPaginate_ArrayFirstItemNameIsCorrect()
-        {
-            // Arrange
-
-
-            // Act
+        { 
             var result = ( ListEntity<Recipe>)((ViewResult)Controller.Index(1)).Model;
             Recipe[] ingrArray1 = result.ListT.ToArray();
-
-            // Assert  
+             
             Assert.AreEqual("LambAndLentil.Domain.Entities.Recipe ControllerTest1", ingrArray1[0].Name); 
         }
 
@@ -361,14 +348,10 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestMethod]
         [TestCategory("Index")]
         public void CanPaginate_ArrayThirdItemNameIsCorrect()
-        {
-            // Arrange 
-
-            // Act
+        { 
             var result = ( ListEntity<Recipe>)((ViewResult)Controller.Index(1)).Model;
             Recipe[] ingrArray1 = result.ListT.ToArray();
-
-            // Assert  
+             
             Assert.AreEqual("RecipesController_Index_Test P3", ingrArray1[2].Name);
         }
 
@@ -376,29 +359,20 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestMethod]
         [TestCategory("Index")]
         public void CanSendPaginationViewModel_CurrentPageCountCorrect()
-        {
-            // Arrange 
-
-            // Act 
+        { 
              ListEntity<Recipe> resultT = ( ListEntity<Recipe>)((ViewResult)Controller.Index(2)).Model;
             PagingInfo pageInfoT = resultT.PagingInfo;
-
-            // Assert  
+             
             Assert.AreEqual(2, pageInfoT.CurrentPage);
         }
 
         [TestMethod]
         [TestCategory("Index")]
         public void RecipesCtr_Index_CanSendPaginationViewModel_ItemsPerPageCorrect()
-        {
-            // Arrange
-
-
-            // Act 
+        {  
              ListEntity<Recipe> resultT = ( ListEntity<Recipe>)((ViewResult)Controller.Index(2)).Model;
             PagingInfo pageInfoT = resultT.PagingInfo;
-
-            // Assert   
+             
             Assert.AreEqual(8, pageInfoT.ItemsPerPage);
         }
 
@@ -406,7 +380,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestCategory("Index")]
         public void CanSendPaginationViewModel_TotalItemsCorrect()
         {
-            BaseCanSendPaginationViewModel_TotalItemsCorrect(Repo, Controller, UIControllerType.Recipes);
+            BaseCanSendPaginationViewModel_TotalItemsCorrect(Repo, Controller);
         }
 
         [Ignore]
@@ -414,7 +388,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestCategory("Index")]
         public void RecipesCtr_Index_CanSendPaginationViewModel_TotalPagesCorrect()
         {
-            BaseCanSendPaginationViewModel_TotalItemsCorrect(Repo, Controller, UIControllerType.Recipes);
+            BaseCanSendPaginationViewModel_TotalItemsCorrect(Repo, Controller);
         }
 
 
@@ -494,7 +468,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestMethod]
         public void  FirstPageIsCorrect()
         {
-            BaseFirstPageIsCorrect(Repo, Controller, UIControllerType.Recipes); 
+            BaseFirstPageIsCorrect(Repo, Controller); 
         }
 
       
@@ -502,7 +476,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestMethod]
         public void  PagingInfoIsCorrect()
         {
-            BasePagingInfoIsCorrect(Repo, Controller, UIControllerType.Recipes);
+            BasePagingInfoIsCorrect(Repo, Controller);
         }
 
         [Ignore]

@@ -29,8 +29,7 @@ namespace LambAndLentil.Test.BasicControllerTests
                 Ingredients = new List<Ingredient>()
             };
             Ingredient ingredient = new Ingredient() { ID = 545, Name = "Default" };
-            Ingredient.Ingredients.Add(ingredient);
-      //  Ingredient.Ingredients.Add(new Ingredient { ID = 545, Name = "Default" });
+            Ingredient.Ingredients.Add(new Ingredient() { ID = 545, Name = "Default" });
         }
 
        

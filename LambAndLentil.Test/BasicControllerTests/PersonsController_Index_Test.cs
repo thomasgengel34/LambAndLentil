@@ -322,7 +322,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
 
         [TestMethod]
-        public void CanPaginateArrayLengthIsCorrect() => BaseCanPaginateArrayLengthIsCorrect(Repo, Controller);
+        public void CanPaginateArrayLengthIsCorrect() => BaseCanPaginateArrayLengthIsCorrect(Controller);
 
 
         [TestMethod]
@@ -373,42 +373,28 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestMethod]
         [TestCategory("Index")]
         public void  CanSendPaginationViewModel_ItemsPerPageCorrect()
-        {
-            // Arrange
-
-
-            // Act 
+        { 
              ListEntity<Person> resultT = ( ListEntity<Person>)((ViewResult)Controller.Index(2)).Model;
             PagingInfo pageInfoT = resultT.PagingInfo;
-
-            // Assert   
+             
             Assert.AreEqual(8, pageInfoT.ItemsPerPage);
         }
 
         [TestMethod]
         [TestCategory("Index")]
-        public void CanSendPaginationViewModel_TotalItemsCorrect() => BaseCanSendPaginationViewModel_TotalItemsCorrect(Repo, Controller, UIControllerType.Persons);
+        public void CanSendPaginationViewModel_TotalItemsCorrect() => BaseCanSendPaginationViewModel_TotalItemsCorrect(Repo, Controller);
 
         [Ignore]
         [TestMethod]
         [TestCategory("Index")]
         public void PersonsCtr_Index_CanSendPaginationViewModel_TotalPagesCorrect()
-        {
-            // Arrange
-
-
-            // Act 
+        { 
              ListEntity<Person> resultT = ( ListEntity<Person>)((ViewResult)Controller.Index(2)).Model;
             PagingInfo pageInfoT = resultT.PagingInfo;
-
-            // Assert 
+             
             Assert.AreEqual(1, pageInfoT.TotalPages);
         }
-
-        
-
-
-
+         
         [Ignore]
         [TestMethod]
         public void FlagAnPersonFlaggedInAPerson()
@@ -435,11 +421,9 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestMethod]
         [TestCategory("Index")]
         public void ContainsAllPersons()
-        {
-            // Arrange 
+        { 
             IGenericController<Person> Controller2 = (IGenericController<Person>)(new PersonsController(Repo));
-
-            // Act
+             
             ViewResult view1 = (ViewResult)Controller.Index(1);
 
             int count1 = ((ListEntity<Person>)(view1.Model)).ListT.Count();
@@ -449,8 +433,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             int count2 = ((ListEntity<Person>)(view2.Model)).ListT.Count();
 
             int count = count1 + count2;
-
-            // Assert
+             
             Assert.IsNotNull(view1);
             Assert.IsNotNull(view2);
             Assert.AreEqual(7, count1);
@@ -516,7 +499,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestCategory("Index")]
         public void PagingInfoIsCorrect()
         {
-            BasePagingInfoIsCorrect(Repo, Controller, UIControllerType.Recipes);
+            BasePagingInfoIsCorrect(Repo, Controller);
             //// Arrange 
 
             //// Action

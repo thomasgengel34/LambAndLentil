@@ -15,13 +15,13 @@ namespace LambAndLentil.Test.BasicControllerTests
     {
          
         [TestMethod]
-        public void ReturnsIndexWithWarningWithNullParent() => BaseReturnsIndexWithWarningWithNullParent(Repo, Controller);
+        public void ReturnsIndexWithWarningWithNullParent() => BaseReturnsIndexWithWarningWithNullParent(Controller);
 
         [TestMethod]
-        public void ReturnsDetailWithWarningWithUnknownChildID() => BaseReturnsDetailWithWarningWithUnknownChildID(Menu, Repo, Controller);
+        public void ReturnsDetailWithWarningWithUnknownChildID() => BaseReturnsDetailWithWarningWithUnknownChildID(Menu, Controller);
 
         [TestMethod]
-        public void ReturnsDetailWithWarningIfAttachingNullChild() => BaseReturnsDetailWithWarningIfAttachingNullChild(Menu, Repo, Controller);
+        public void ReturnsDetailWithWarningIfAttachingNullChild() => BaseReturnsDetailWithWarningIfAttachingNullChild(Menu, Controller);
 
         [TestMethod]
         public void ReturnsDetailWhenAttachingWithSuccessWithValidParentandValidChild()
@@ -32,7 +32,7 @@ namespace LambAndLentil.Test.BasicControllerTests
                 Description = "test ReturnsDetailWhenAttachingWithSuccessWithValidParentandValidChild"
             };
             IRepository<Menu> mRepo = new TestRepository<Menu>();
-            mRepo.Add(menu);
+            mRepo.Save(menu);
             Ingredient ingredient = new Ingredient
             {
                 ID = 1492,
@@ -40,7 +40,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             };
 
             // Act
-            ActionResult ar = Controller.Attach<Ingredient>(Repo, int.MaxValue, ingredient );
+            ActionResult ar = Controller.Attach(int.MaxValue, ingredient );
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             RedirectToRouteResult rdr = (RedirectToRouteResult)adr.InnerResult;
      
@@ -63,7 +63,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             TestRepository<Ingredient> IngredientRepo = new TestRepository<Ingredient>();
             IngredientRepo.Save(child);
  
-            Controller.Attach(Repo, Menu.ID, child );
+            Controller.Attach( Menu.ID, child );
               
             ReturnedMenu = Repo.GetById(Menu.ID);
              
@@ -109,17 +109,17 @@ namespace LambAndLentil.Test.BasicControllerTests
         }
 
         [TestMethod]
-        public void DetachTheLastIngredientChild() => BaseDetachTheLastIngredientChild(Repo, Controller, Menu);
+        public void DetachTheLastIngredientChild() => BaseDetachTheLastIngredientChild( Controller, Menu);
 
         [TestMethod]
         [TestCategory("Attach-Detach")]
-        public void DetachAllIngredientChildren() => BaseDetachAllIngredientChildren(Repo, Controller );
+        public void DetachAllIngredientChildren() => BaseDetachAllIngredientChildren(Controller );
 
         [TestMethod]
         public void ReturnsIndexWithWarningWithUnknownParentID() =>
-            BaseReturnsIndexWithWarningWithUnknownParentID(Repo, Controller); 
+            BaseReturnsIndexWithWarningWithUnknownParentID(Controller); 
 
         [TestMethod]
-        public void ReturnsDetailWhenDetachingWithSuccessWithValidParentandValidIngredientChild() => BaseReturnsDetailWhenDetachingWithSuccessWithValidParentandValidIngredientChild(Repo, Controller, Menu.ID);
+        public void ReturnsDetailWhenDetachingWithSuccessWithValidParentandValidIngredientChild() => BaseReturnsDetailWhenDetachingWithSuccessWithValidParentandValidIngredientChild(Controller, Menu.ID);
     }
 }

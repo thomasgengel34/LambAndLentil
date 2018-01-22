@@ -604,7 +604,7 @@ $.extend($.validator, {
 					}
 					
 					if( !result ) {
-						this.formatAndAdd( element, rule );
+						this.formatAndSave( element, rule );
 						return false;
 					}
 				} catch(e) {

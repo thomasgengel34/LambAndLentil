@@ -1,18 +1,11 @@
-﻿using AutoMapper;
-using LambAndLentil.Domain.Abstract;
-using LambAndLentil.Domain.Concrete;
+﻿using System;
+using System.Linq;
+using System.Web.Mvc;
 using LambAndLentil.Domain.Entities;
-using LambAndLentil.Tests.Infrastructure;
 using LambAndLentil.UI;
 using LambAndLentil.UI.Controllers;
 using LambAndLentil.UI.Infrastructure.Alerts;
-using LambAndLentil.UI.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Web.Mvc;
 
 namespace LambAndLentil.Test.BasicControllerTests
 {
@@ -123,7 +116,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         {
             // Arrange - create an shoppingList
             ShoppingList shoppingListEntity = new ShoppingList { ID = 2, Name = "Test2" };
-            Repo.Add(shoppingListEntity);
+            Repo.Save(shoppingListEntity);
 
             // Act - delete the shoppingList Entity
             ActionResult result = Controller.DeleteConfirmed(shoppingListEntity.ID);

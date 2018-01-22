@@ -15,25 +15,15 @@ namespace LambAndLentil.Domain.Abstract
 
     public interface IRepository<T >
     where T : class, IEntity
-    { 
-        IQueryable Ingredient { get; }  // TODO: remove these properties if possible. 
-        IQueryable Recipe { get; }
-        IQueryable Menu { get; }
-        IQueryable Plan { get; }
-        IQueryable Person { get; }
-        IQueryable ShoppingList { get; }
-
+    {   
         T  GetById(int id); 
         int Count(); 
         IEnumerable<T> GetAll(); 
         IEnumerable<T> Query(Expression<Func<T , bool>> filter); 
-        void Add(T entity); //TODO: remove 
+        
         void Remove(T entity);  
-        void Update(T entity, int? key); //TODO: remove 
+        void Update(T entity, int? key);  
         void Save(T entity);  
-         
-      
-        void DetachAnIndependentChild<TChild>(int parentID, TChild child )   //TODO: remove 
-            where TChild : BaseEntity, IEntity,new();
+          
     }
 }

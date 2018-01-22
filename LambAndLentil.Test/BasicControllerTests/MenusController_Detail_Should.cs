@@ -1,13 +1,10 @@
-﻿using LambAndLentil.Domain.Concrete;
-using LambAndLentil.Domain.Entities;
-using LambAndLentil.Tests.Infrastructure;
-using LambAndLentil.UI;
-using LambAndLentil.UI.Controllers;
-using LambAndLentil.UI.Infrastructure.Alerts;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using System;
 using System.Linq;
 using System.Web.Mvc;
+using LambAndLentil.Domain.Entities;
+using LambAndLentil.UI;
+using LambAndLentil.UI.Infrastructure.Alerts;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace LambAndLentil.Test.BasicControllerTests
 {
@@ -29,7 +26,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange
 
             // Act 
-            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.Details(400, UIViewType.Delete);
+            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.Delete(400);
             RedirectToRouteResult rdr = (RedirectToRouteResult)adr.InnerResult;
 
             // Assert
@@ -49,7 +46,7 @@ namespace LambAndLentil.Test.BasicControllerTests
           // Arrange
             int count = Repo.Count();
             //Act
-            Controller.Details(int.MaxValue, UIViewType.DeleteConfirmed);
+            Controller.DeleteConfirmed(int.MaxValue );
             Menu menu = Repo.GetById(int.MaxValue);
             //Assert
             Assert.AreEqual(count - 1, Repo.Count());
@@ -64,7 +61,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange
 
             // Act
-            ActionResult ar=Controller.Details(4000, UIViewType.DeleteConfirmed);
+            ActionResult ar=Controller.DeleteConfirmed(4000 );
             AlertDecoratorResult adr = (AlertDecoratorResult)ar; 
             RedirectToRouteResult rdr = (RedirectToRouteResult)adr.InnerResult;
 
@@ -77,7 +74,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestMethod]
         public void ReturnDeleteConfirmedWithActionMethodDeleteConfirmedWithBadID()
         {
-            ActionResult ar = Controller.Details(-1, UIViewType.DeleteConfirmed);
+            ActionResult ar = Controller.DeleteConfirmed(-1 );
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             RedirectToRouteResult rdr = (RedirectToRouteResult)adr.InnerResult;
 
@@ -105,18 +102,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.AreEqual("Here it is!", adr.Message);
         }
 
-        [TestMethod]
-        public void GotToIndexViewForNonSpecifiedActionMethods()
-        {
-            // Arrange
-
-            // Act 
-            ViewResult view = (ViewResult)Controller.Details(1, UIViewType.About); 
-
-            // Assert
-            Assert.AreEqual(UIViewType.Index, view.Model);
-
-        }
+       
 
 
         [TestMethod]

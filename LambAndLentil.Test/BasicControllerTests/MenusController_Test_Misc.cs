@@ -1,19 +1,6 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using LambAndLentil.UI.Controllers;
-using LambAndLentil.Domain.Abstract;
 using LambAndLentil.Domain.Entities;
-using System.Linq;
-using LambAndLentil.UI.Models;
-using System.Web.Mvc;
-using System.Collections.Generic;
-using AutoMapper;
-using LambAndLentil.Tests.Infrastructure;
-using LambAndLentil.UI;
-using LambAndLentil.UI.HtmlHelpers;
-using LambAndLentil.UI.Infrastructure.Alerts;
-using LambAndLentil.Domain.Concrete;
-using System.IO;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace LambAndLentil.Test.BasicControllerTests
 {

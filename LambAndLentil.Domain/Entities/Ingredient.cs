@@ -6,41 +6,63 @@ using System.Linq;
 namespace LambAndLentil.Domain.Entities
 {
     [Table("INGREDIENT.Ingredient")]
-    public class Ingredient : BaseEntity, IEntityChildClassIngredients, IIngredient
+    public class Ingredient : BaseEntity, IEntity, IIngredient
     {
         public Ingredient() : base()
         {
-            Ingredients = new List<Ingredient>();
-            CanHaveMenuChild = false;
-            CanHavePlanChild = false;
-            CanHaveRecipeChild = false;
-            CanHaveShoppingListChild = false;
+            Ingredients = new List<Ingredient>(); 
         }
 
         public Ingredient(DateTime creationDate) : this() => CreationDate = creationDate;
 
 
 
-        public List<Ingredient> Ingredients { get; set; }
+        public List<Ingredient> Ingredients { get; set; } 
+        public int ID { get; set; }
+         
+        List<Recipe> IEntity.Recipes { get; set; } = null;
+        List<Menu> IEntity.Menus { get; set; } = null;
+        List<Plan> IEntity.Plans { get; set; } = null;
+        List<ShoppingList> IEntity.ShoppingLists { get; set; } = null;
 
-
-        public int ID { get; set; } 
-
-        bool IEntity.ParentCanHaveChild(IEntity parent)
+        bool IEntity.CanHaveChild(IEntity child)
         {
-            return true;
+            Type type = child.GetType();
+
+            List<Type> possibleChildren = new List<Type>()
+            {
+                typeof(Ingredient)
+            };
+
+            if (possibleChildren.Contains(type))
+            {
+                return true;
+            }
+            return false;
         } 
-
-        public void ParentRemoveAllChildrenOfAType(IEntity parent, IEntity child)
+        public override bool CanHaveChild(IEntity child)
         {
-            ((IEntityChildClassIngredients)parent).Ingredients.Clear();
+            Type type = child.GetType();
+
+            List<Type> possibleChildren = new List<Type>()
+            {
+                typeof(Ingredient)
+            };
+
+            if (possibleChildren.Contains(type))
+            {
+                return true;
+            }
+            return false;
         }
+
+      
 
         int IEntity.GetCountOfChildrenOnParent(IEntity parent)
         {
             try
             {
-                return ((IEntityChildClassIngredients)parent).Ingredients.Count();
+                return ((IEntity)parent).Ingredients.Count();
             }
             catch (InvalidCastException)
             {
@@ -52,22 +74,8 @@ namespace LambAndLentil.Domain.Entities
             }
 
         }
-        void IEntity.ParentRemoveAllChildrenOfAType(IEntity parent, IEntity child) => ((IEntityChildClassIngredients)parent).Ingredients.Clear();
-
-
-
-        IEntity IEntity.RemoveSelectionFromChildren<TChild>(IEntityChildClassIngredients parent, List<TChild> selected)
-        {
-            var allIngredientIDs = parent.Ingredients.Select(a => a.ID);
-
-            var setToRemove = new HashSet<TChild>(selected).Where(p => p != null).Select(r => r.ID).AsQueryable();
-
-            var remainingIDs = allIngredientIDs.Except(setToRemove);
-            var remainingChildren = parent.Ingredients.Where(b => remainingIDs.Contains(b.ID));
-            parent.Ingredients = remainingChildren.ToList();
-            return parent;
-        }
-
-        IEntity IEntity.RemoveSelectionFromChildren<TChild>(IEntityChildClassRecipes parent, List<TChild> selected) => throw new NotImplementedException();
+       
+         
+       
     }
 }

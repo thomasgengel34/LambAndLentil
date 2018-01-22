@@ -49,13 +49,13 @@ namespace LambAndLentil.Test.BasicControllerTests
         {
             // Arrange
             Person person = new Person { ID = 1000, FirstName = "Jon", LastName = "Johns", Description = "PostEditPersonsFullName" };
-            Repo.Add(person);
+            Repo.Save(person);
 
             // Act
             person.FirstName = "Reynard";
             person.LastName = "Finkelstein";
             Controller.PostEdit(person);
-            Repo.Add(person);
+            Repo.Save(person);
             Person newPerson = Repo.GetById(1000);
             //Assert
             Assert.AreEqual("Reynard Finkelstein", person.Name);
@@ -66,12 +66,12 @@ namespace LambAndLentil.Test.BasicControllerTests
         {
             // Arrange
             Person person = new Person { ID = 1001, FirstName = "Jon", LastName = "Johns", Description = "PostEditPersonsFirstName" };
-            Repo.Add(person);
+            Repo.Save(person);
 
             // Act
             person.FirstName = "Reynard"; 
             Controller.PostEdit(person);
-            Repo.Add(person);
+            Repo.Save(person);
             Person newPerson = Repo.GetById(1000);
             //Assert
             Assert.AreEqual("Reynard Johns", person.Name);
@@ -83,12 +83,12 @@ namespace LambAndLentil.Test.BasicControllerTests
         {
             // Arrange
             Person person = new Person { ID = 1001, FirstName = "Jon", LastName = "Johns", Description = "PostEditPersonsLastName" };
-            Repo.Add(person);
+            Repo.Save(person);
 
             // Act
             person.LastName = "Luc";
             Controller.PostEdit(person);
-            Repo.Add(person);
+            Repo.Save(person);
             Person newPerson = Repo.GetById(1000);
             //Assert
             Assert.AreEqual("Jon Luc", person.Name);

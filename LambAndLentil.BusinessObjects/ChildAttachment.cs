@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using LambAndLentil.Domain.Entities;
+﻿using LambAndLentil.Domain.Entities;
 
 namespace LambAndLentil.BusinessObjects
 {
-    public class Connections
+    public class ChildAttachment
     {
         public TParent AddChildToParent<TParent, TChild>(TParent parent, TChild child)
             where TParent : BaseEntity, IEntity
@@ -43,7 +38,7 @@ namespace LambAndLentil.BusinessObjects
             where TParent : BaseEntity, IEntity
             where TChild : BaseEntity, IEntity
         {
-            ((IEntityChildClassShoppingLists)parent).ShoppingLists.Add(child as ShoppingList);
+            parent.ShoppingLists.Add(child as ShoppingList);
             return parent;
         }
 
@@ -51,7 +46,7 @@ namespace LambAndLentil.BusinessObjects
             where TParent : BaseEntity, IEntity
             where TChild : BaseEntity, IEntity
         {
-            ((IEntityChildClassPlans)parent).Plans.Add(child as Plan);
+            parent.Plans.Add(child as Plan);
             return parent;
         }
 
@@ -59,7 +54,7 @@ namespace LambAndLentil.BusinessObjects
             where TParent : BaseEntity, IEntity
             where TChild : BaseEntity, IEntity
         {
-            ((IEntityChildClassRecipes)parent).Recipes.Add(child as Recipe);
+            parent.Recipes.Add(child as Recipe);
             return parent;
         }
 
@@ -67,7 +62,7 @@ namespace LambAndLentil.BusinessObjects
             where TParent : BaseEntity, IEntity
             where TChild : BaseEntity, IEntity
         {
-            ((IEntityChildClassMenus)parent).Menus.Add(child as Menu);
+             parent.Menus.Add(child as Menu);
             return parent;
         }
     }

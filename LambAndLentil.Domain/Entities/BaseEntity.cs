@@ -7,12 +7,12 @@ using LambAndLentil.Domain.Abstract;
 
 namespace LambAndLentil.Domain.Entities
 {
-    public class BaseEntity : IPossibleChildren
+    public class BaseEntity
     {
         [StringLength(50)]
         [Required]
         public string Name { get; set; }
-        
+
 
         [DataType(DataType.MultilineText)]
         public string Description { get; set; }
@@ -41,7 +41,7 @@ namespace LambAndLentil.Domain.Entities
             CanHaveIngredientChild = true;
             CanHavePersonChild = false;
 
-            
+
         }
 
         public BaseEntity(DateTime creationDate) : this()
@@ -93,13 +93,8 @@ namespace LambAndLentil.Domain.Entities
             return PagingInfo;
         }
 
-        
+        public virtual bool CanHaveChild(IEntity child){ return false; }
 
-        public static bool ParentCanAttachChild(IEntity parent, IEntity child)  
-        {
-            if (child == null) { return false; }  
-           return  child.ParentCanHaveChild( parent);  // TODO: this needs to be reworked, it's unintuitively backwards, awkward and I should look at removing the properties this refers to and just use it in the entity method instead of going to the child.  Parent can have x child, not child can have x parent. Simple ifs in the parent should handle it, one for true and one for false.
-        } 
-         
+
     }
 }

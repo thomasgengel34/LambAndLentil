@@ -19,15 +19,15 @@ namespace LambAndLentil.Test.BasicControllerTests
          
 
         [TestMethod]
-        public void ReturnsIndexWithWarningWithNullParent() => BaseReturnsIndexWithWarningWithNullParent(Repo, Controller);
+        public void ReturnsIndexWithWarningWithNullParent() => BaseReturnsIndexWithWarningWithNullParent(Controller);
 
         [TestMethod]
         public void ReturnsIndexWithWarningWithUnknownParentID() => 
-            BaseReturnsIndexWithWarningWithUnknownParentID(Repo, Controller); 
+            BaseReturnsIndexWithWarningWithUnknownParentID(Controller); 
 
         
         [TestMethod]
-        public void ReturnsDetailWithWarningIfAttachingNullChild()  => BaseReturnsDetailWithWarningIfAttachingNullChild(ShoppingList, Repo, Controller);
+        public void ReturnsDetailWithWarningIfAttachingNullChild()  => BaseReturnsDetailWithWarningIfAttachingNullChild(ShoppingList, Controller);
        
         [TestMethod]
         public void ReturnsDetailWhenAttachingWithSuccessWithValidParentandValidChild()
@@ -39,7 +39,7 @@ namespace LambAndLentil.Test.BasicControllerTests
                 Description = "test ReturnsDetailWhenAttachingWithSuccessWithValidParentandValidChild"
             };
             IRepository<ShoppingList> mRepo = new TestRepository<ShoppingList>();
-            mRepo.Add(menu);
+            mRepo.Save(menu);
             Ingredient ingredient = new Ingredient
             {
                 ID = 1492,
@@ -47,7 +47,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             };
 
             // Act
-            ActionResult ar = Controller.Attach(Repo,int.MaxValue, ingredient );
+            ActionResult ar = Controller.Attach(int.MaxValue, ingredient );
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             RedirectToRouteResult rdr = (RedirectToRouteResult)adr.InnerResult;
 
@@ -80,7 +80,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             IngredientRepo.Save(child);
 
             // Act
-            Controller.Attach(Repo,ShoppingList.ID, child );
+            Controller.Attach(ShoppingList.ID, child );
             ReturnedShoppingList = Repo.GetById(ShoppingList.ID);
             // Assert
             //  Assert.AreEqual("Default", Ingredient.Ingredients.Last().Name);
@@ -105,7 +105,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void SuccessfullyDetachRecipeChild()
         {
             IGenericController<ShoppingList> DetachController = new ShoppingListsController(Repo);
-            BaseSuccessfullyDetachRecipeChild(Repo, Controller, DetachController, UIControllerType.ShoppingLists);
+            BaseSuccessfullyDetachRecipeChild(Controller, DetachController);
         }
          
          [Ignore]
@@ -147,16 +147,16 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [TestMethod]
         public void DetachTheLastIngredientChild() =>
-            BaseDetachTheLastIngredientChild(Repo, Controller, ShoppingList); 
+            BaseDetachTheLastIngredientChild(Controller, ShoppingList); 
 
         [TestMethod] 
-        public void DetachAllIngredientChildren() =>  BaseDetachAllIngredientChildren(Repo, Controller ); 
+        public void DetachAllIngredientChildren() =>  BaseDetachAllIngredientChildren(Controller ); 
 
         [TestMethod]
-        public void ReturnsDetailWithWarningWithUnknownChildID() => BaseReturnsDetailWithWarningWithUnknownChildID(ShoppingList, Repo, Controller);
+        public void ReturnsDetailWithWarningWithUnknownChildID() => BaseReturnsDetailWithWarningWithUnknownChildID(ShoppingList, Controller);
 
         [TestMethod]
-        public void ReturnsDetailWhenDetachingWithSuccessWithValidParentandValidIngredientChild() => BaseReturnsDetailWhenDetachingWithSuccessWithValidParentandValidIngredientChild(Repo, Controller, ShoppingList.ID);
+        public void ReturnsDetailWhenDetachingWithSuccessWithValidParentandValidIngredientChild() => BaseReturnsDetailWhenDetachingWithSuccessWithValidParentandValidIngredientChild(Controller, ShoppingList.ID);
 
     }
 }

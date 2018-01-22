@@ -14,7 +14,7 @@ using System.Web.Mvc;
 namespace LambAndLentil.Test.BasicControllerTests
 {
     public class BaseControllerTest<T>
-      where T : BaseEntity, IEntity, IEntityChildClassIngredients, new()
+      where T : BaseEntity, IEntity,  new()
     {
         internal static IGenericController<T> Controller { get; set; }
         internal static IRepository<T> Repo { get; set; }
@@ -24,6 +24,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         public BaseControllerTest()
         {
+            ClassCleanup();
             Repo = new TestRepository<T>();
             ListEntity = new ListEntity<T>
             {
@@ -61,7 +62,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
             foreach (T item in list)
             {
-                Repo.Add(item);
+                Repo.Save(item);
             }
             return list;
         }
@@ -82,21 +83,17 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.AreEqual(listWithAddedIngredient, returnedIngredient.IngredientsList);
         }
 
-        protected void BaseCanSendPaginationViewModel(IRepository<T> Repo, IGenericController<T> Controller, UIControllerType uIControllerType)
-        {
-
-            // Arrange
+        protected void BaseCanSendPaginationViewModel(IRepository<T> Repo, IGenericController<T> Controller)
+        { 
             int count = Repo.Count();
-
-            // Act 
+             
             ListEntity<T> resultT1 = (ListEntity<T>)((ViewResult)Controller.Index(1)).Model;
             ListEntity<T> resultT2 = (ListEntity<T>)((ViewResult)Controller.Index(2)).Model;
             int repoCount = Repo.Count();
             int resultT1Count = resultT1.ListT.Count();
             int resultT2Count = resultT2.ListT.Count();
             PagingInfo pageInfoT = resultT1.PagingInfo;
-
-            // Assert  
+             
             Assert.AreEqual(1, pageInfoT.CurrentPage);
             Assert.AreEqual(8, pageInfoT.ItemsPerPage);
             Assert.AreEqual(count, resultT1.ListT.Count());
@@ -104,53 +101,44 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.AreEqual(1, pageInfoT.TotalPages);
         }
 
-        protected void BasePagingInfoIsCorrect(IRepository<ShoppingList> Repo, IGenericController<ShoppingList> Controller, UIControllerType uIControllerType)
-        {
-            // Arrange 
+        protected void BasePagingInfoIsCorrect(IRepository<ShoppingList> Repo, IGenericController<ShoppingList> Controller )
+        { 
             int repoCount = Repo.Count();
-
-            // Action
+             
             int totalItems = ((ListEntity<ShoppingList>)((ViewResult)Controller.Index()).Model).PagingInfo.TotalItems;
             int currentPage = ((ListEntity<ShoppingList>)((ViewResult)Controller.Index()).Model).PagingInfo.CurrentPage;
             int itemsPerPage = ((ListEntity<ShoppingList>)((ViewResult)Controller.Index()).Model).PagingInfo.ItemsPerPage;
             int totalPages = ((ListEntity<ShoppingList>)((ViewResult)Controller.Index()).Model).PagingInfo.TotalPages;
-
-            // Assert
+             
             Assert.AreEqual(repoCount, totalItems);
             Assert.AreEqual(1, currentPage);
             Assert.AreEqual(8, itemsPerPage);
             Assert.AreEqual(1, totalPages);
         }
 
-        protected void BaseCanSendPaginationViewModel_TotalItemsCorrect(IRepository<T> Repo, IGenericController<T> Controller, UIControllerType uIControllerType)
-        {
-            // Arrange 
+        protected void BaseCanSendPaginationViewModel_TotalItemsCorrect(IRepository<T> Repo, IGenericController<T> Controller)
+        { 
             int count = Repo.Count();
-
-            // Act 
+             
             ListEntity<T> result = (ListEntity<T>)((ViewResult)Controller.Index(1)).Model;
             PagingInfo pageInfoT = result.PagingInfo;
-
-            // Assert 
+             
             Assert.AreEqual(count, result.ListT.Count());
         }
 
-        private void BaseShouldAddRecipeToList(IRepository<Ingredient> repo, Ingredient entity, Ingredient returnedEntity, IngredientsController controller, UIControllerType ingredients) => throw new NotImplementedException();
+        private void BaseShouldAddRecipeToList(IRepository<Ingredient> repo, Ingredient entity, Ingredient returnedEntity, IngredientsController controller) => throw new NotImplementedException();
 
 
 
-        protected void BaseFirstPageIsCorrect(IRepository<T> Repo, IGenericController<T> Controller, UIControllerType uIControllerType)
-        {
-            // Arrange
+        protected void BaseFirstPageIsCorrect(IRepository<T> Repo, IGenericController<T> Controller)
+        { 
             int repoCount = Repo.Count();
             ListEntity<T> ilListEntity = new ListEntity<T>();
             Controller.PageSize = 8;
-
-            // Act
+             
             ViewResult view1 = (ViewResult)Controller.Index(1);
             int count1 = ((ListEntity<T>)(view1.Model)).ListT.Count();
-
-            // Assert
+             
             Assert.IsNotNull(view1);
             Assert.AreEqual(repoCount, count1);
             Assert.AreEqual("Index", view1.ViewName);
@@ -161,100 +149,85 @@ namespace LambAndLentil.Test.BasicControllerTests
         }
 
 
-        protected void BasePagingInfoIsCorrect(IRepository<T> Repo, IGenericController<T> Controller, UIControllerType uIControllerType)
-        {
-            // Arrange 
+        protected void BasePagingInfoIsCorrect(IRepository<T> Repo, IGenericController<T> Controller)
+        { 
             int repoCount = Repo.Count();
-
-            // Action
+             
             int totalItems = ((ListEntity<T>)((ViewResult)Controller.Index()).Model).PagingInfo.TotalItems;
             int currentPage = ((ListEntity<T>)((ViewResult)Controller.Index()).Model).PagingInfo.CurrentPage;
             int itemsPerPage = ((ListEntity<T>)((ViewResult)Controller.Index()).Model).PagingInfo.ItemsPerPage;
             int totalPages = ((ListEntity<T>)((ViewResult)Controller.Index()).Model).PagingInfo.TotalPages;
-
-
-
-            // Assert
+             
             Assert.AreEqual(repoCount, totalItems);
             Assert.AreEqual(1, currentPage);
             Assert.AreEqual(8, itemsPerPage);
             Assert.AreEqual(1, totalPages);
         }
 
-        protected void BaseSuccessfullyDetachChild<TChild>(IRepository<T> ParentRepo, IGenericController<T> attachController, IGenericController<T> detachController, UIControllerType uIControllerType )
+        protected void BaseSuccessfullyDetachChild<TChild>(IRepository<T> ParentRepo, IGenericController<T> attachController, IGenericController<T> detachController)
             where TChild: BaseEntity,IEntity, new()
-        {
-            // Arrange
+        { 
             T parent = new T() { ID = 4000, Name = "ParentForSuccessfullyAttachAndDetachChild" };
             ParentRepo.Save(parent);
             TChild child = new TChild();
 
-            attachController.Attach(Repo, parent.ID, child );
-            IEntityChildClassMenus parentM = (IEntityChildClassMenus)parent;
-
-            // Act
-
-            detachController.Detach(Repo,parent.ID, child);
-            IEntityChildClassMenus ReturnedItem = (IEntityChildClassMenus)ParentRepo.GetById(parent.ID);
-
-            // Assert 
+            attachController.Attach( parent.ID, child );
+            IEntity parentM = parent;
+             
+            detachController.Detach( parent.ID, child);
+            IEntity ReturnedItem = ParentRepo.GetById(parent.ID);
+             
             Assert.AreEqual(0, parentM.Menus.Count());
             Assert.AreEqual(0, ReturnedItem.Menus.Count());
         }
 
       
 
-        protected void BaseSuccessfullyDetachRecipeChild(IRepository<T> ParentRepo, IGenericController<T> AttachController, IGenericController<T> DetachController, UIControllerType uIControllerType )
-        {
-            // Arrange
+        protected void BaseSuccessfullyDetachRecipeChild(IGenericController<T> AttachController, IGenericController<T> DetachController )
+        { 
             T parent = new T() { ID = 4000, Name = "ParentForSuccessfullyAttachAndDetachRecipeChild" };
-            ParentRepo.Save(parent);
+             Repo.Save(parent);
             Recipe child = new Recipe() { ID = 3500, Name = "SuccessfullyAttachAndDetachRecipeChild" };
             IRepository<Recipe> childRepo = new TestRepository<Recipe>();
             childRepo.Save(child);
-            AttachController.Attach(Repo,parent.ID, child );
+            AttachController.Attach(parent.ID, child ); 
 
-         
-
-            DetachController.Detach(Repo,parent.ID, child);
-            IEntityChildClassRecipes ReturnedItem = (IEntityChildClassRecipes)ParentRepo.GetById(parent.ID);
-            IEntityChildClassRecipes parentR = (IEntityChildClassRecipes)parent;
-            // Assert 
+            DetachController.Detach(parent.ID, child);
+            IEntity ReturnedItem =  Repo.GetById(parent.ID);
+            IEntity parentR = parent;
+          
             Assert.AreEqual(0, parentR.Recipes.Count());
             Assert.AreEqual(0, ReturnedItem.Recipes.Count());
         }
 
-        protected void BaseSuccessfullyDetachFirstRecipeChild(IRepository<T> ParentRepo, IGenericController<T> AttachController, IGenericController<T> DetachController, UIControllerType uIControllerType, int orderNumber = 0)
+        protected void BaseSuccessfullyDetachFirstRecipeChild(IGenericController<T> AttachController, IGenericController<T> DetachController, int orderNumber = 0)
         {
              
             T parent = new T() { ID = 4000, Name = "ParentForSuccessfullyAttachAndDetachFirstRecipeChild" };
-            ParentRepo.Save(parent);
+            Repo.Save(parent);
             Recipe child = new Recipe() { ID = 3500, Name = "SuccessfullyAttachAndDetachhRecipeChild" };
             IRepository<Recipe> childRepo = new TestRepository<Recipe>();
             childRepo.Save(child);
-            AttachController.Attach(Repo,parent.ID, child );
-            IEntityChildClassRecipes parentR = (IEntityChildClassRecipes)parent;
+            AttachController.Attach(parent.ID, child );
+            IEntity parentR = (IEntity)parent;
 
         
 
-            DetachController.Detach(Repo,parent.ID, child);
-            IEntityChildClassRecipes ReturnedItem = (IEntityChildClassRecipes)ParentRepo.GetById(parent.ID);
+            DetachController.Detach(parent.ID, child);
+            IEntity ReturnedItem = Repo.GetById(parent.ID);
 
           
             Assert.AreEqual(0, parentR.Recipes.Count());
             Assert.AreEqual(0, ReturnedItem.Recipes.Count());
         }
         protected void BaseDeleteAFoundEntity(IGenericController<T> Controller)
-        {
-            // Arrange
+        { 
             int repoCount = Repo.Count();
-
-            // Act  
+             
             ActionResult ar = Controller.Delete(int.MaxValue - 1);
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             string viewName = ((ViewResult)adr.InnerResult).ViewName;
-
-            // Assert
+             
             Assert.IsNotNull(ar);
             Assert.AreEqual("Here it is!", adr.Message);
             Assert.AreEqual(UIViewType.Details.ToString(), viewName);
@@ -262,28 +235,21 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.AreEqual(repoCount, Repo.Count());  // shows this does not actually delete anything.  That is done in delete-confirm
         }
 
-        protected void BaseCanPaginateArrayLengthIsCorrect(IRepository<T> ParentRepo, IGenericController<T> Controller)
-        {
-            // Arrange
+        protected void BaseCanPaginateArrayLengthIsCorrect(IGenericController<T> Controller)
+        { 
             int repoCount = Repo.Count();
-
-            // Act
+             
             var result = (ListEntity<T>)((ViewResult)Controller.Index(1)).Model;
-
-            // Assert 
+             
             Assert.AreEqual(repoCount, result.ListT.Count());
         }
 
         protected void BaseReturnDetailsWhenIDIsFound(IGenericController<T> Controller)
-        {
-            // Arrange
-
-            // Act
+        { 
             ActionResult ar = Controller.Delete(int.MaxValue - 1);
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             string viewName = ((ViewResult)adr.InnerResult).ViewName;
-
-            // Assert
+             
             Assert.IsNotNull(ar);
             Assert.AreEqual("Here it is!", adr.Message);
             Assert.AreEqual(UIViewType.Details.ToString(), viewName);
@@ -291,36 +257,30 @@ namespace LambAndLentil.Test.BasicControllerTests
         }
 
         protected void BaseReturnDeleteWithActionMethodDeleteWithEmptyResult(IGenericController<T> Controller)
-        {
-             
+        { 
             ActionResult ar = Controller.Delete(int.MaxValue - 1);
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             ViewResult vr = (ViewResult)adr.InnerResult;
             string viewName = vr.ViewName;
-
-
-            // Assert
+             
             Assert.IsNotNull(ar);
-            Assert.AreEqual("Here it is!", adr.Message); // no message
+            Assert.AreEqual("Here it is!", adr.Message);  
             Assert.AreEqual(UIViewType.Details.ToString(), viewName);
             Assert.AreEqual("alert-success", adr.AlertClass);
             Assert.IsInstanceOfType(vr.Model, typeof(T));
 
         }
 
-        protected void BaseUpdateTheModificationDateBetweenPostedEdits(IRepository<T> Repo, IGenericController<T> Controller, T entity)
-        {
-            // Arrange  
+        protected void BaseUpdateTheModificationDateBetweenPostedEdits(T entity)
+        { 
             DateTime CreationDate = entity.CreationDate;
             DateTime modDate = entity.ModifiedDate;
-
-            // Act
+             
             Controller.PostEdit(entity);
             IEntity returnedEntity = Repo.GetById(entity.ID);
             DateTime newCreationDate = entity.CreationDate;
             DateTime newModDate = entity.ModifiedDate;
-
-            // Assert
+             
             Assert.AreEqual(CreationDate, newCreationDate);
             Assert.AreNotEqual(modDate, newModDate);
         }
@@ -328,7 +288,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         
 
-        public void BaseDetachAllIngredientChildren(IRepository<T> Repo, IGenericController<T> Controller )
+        public void BaseDetachAllIngredientChildren(IGenericController<T> Controller )
         {    
            T parent = Generate_T_WithFiveIngredientChildren();
             Repo.Save(parent);
@@ -353,35 +313,32 @@ namespace LambAndLentil.Test.BasicControllerTests
            item.Ingredients = new List<Ingredient>();
            
             List<Ingredient> list= new List<Ingredient>() { ingredient0, ingredient1, ingredient2, ingredient3, ingredient4 };
-            item.Ingredients.AddRange(list);
-           // repo.Save(item);
-            T foo = item as T;
+            item.Ingredients.AddRange(list);  
             return  item as T;
 
         }
 
-        public void BaseDetachAllMenuChildren(IRepository<T> Repo, IGenericController<T> controller, IEntityChildClassMenus entity)
+        public void BaseDetachAllMenuChildren(IRepository<T> Repo, IGenericController<T> controller, IEntity entity)
         {  
             entity.Menus.Add(new Menu() { ID = 1000 });
             entity.Menus.Add(new Menu() { ID = 1001 });
             entity.Menus.Add(new Menu() { ID = 1002 });
             entity.Menus.Add(new Menu() { ID = 1003 });
             entity.Menus.Add(new Menu() { ID = 1004 });
-            Repo.Update((T)entity, entity.ID);
+            Repo.Save((T)entity);
 
-
-            // Act
+ 
             controller.DetachAll<Menu>(entity.ID);
-            IEntityChildClassMenus returnedEntity = (IEntityChildClassMenus)Repo.GetById(entity.ID);
-            // Assert
+            IEntity returnedEntity = (IEntity)Repo.GetById(entity.ID);
+           
             Assert.AreEqual(0, returnedEntity.Menus.Count());
         }
 
 
-        public void BaseDetachASetOfIngredientChildrenSimplyIgnoresANonExistentIngredientIfItIsInTheSet<TParent>(IRepository<T> Repo, IGenericController<T> Controller)
+        public void BaseDetachASetOfIngredientChildrenSimplyIgnoresANonExistentIngredientIfItIsInTheSet<TParent>(IGenericController<T> Controller)
            where TParent : BaseEntity, IEntity, new()
         {
-            IEntityChildClassIngredients entity = (IEntityChildClassIngredients)(new TParent() { ID = 7654321 });
+            IEntity entity = (IEntity)(new TParent() { ID = 7654321 });
             entity.Ingredients.Clear();
             entity.Ingredients.Add(new Ingredient { ID = 4005, Name = "Butter" });
             entity.Ingredients.Add(new Ingredient { ID = 4006, Name = "Cayenne Pepper" });
@@ -389,68 +346,58 @@ namespace LambAndLentil.Test.BasicControllerTests
             entity.Ingredients.Add(new Ingredient { ID = 4008, Name = "Chopped Green Pepper" });
             int initialIngredientCount = entity.Ingredients.Count();
             Repo.Save(entity as T);
-            // Act
-           
+          
             List<Ingredient> selected = new List<Ingredient>() { new Ingredient { ID = 6000 } };
             Controller.DetachASetOf(entity.ID, selected);
-            IEntityChildClassIngredients returnedEntity = (IEntityChildClassIngredients)Repo.GetById(entity.ID);
-
-            // Assert
+            IEntity returnedEntity = (IEntity)Repo.GetById(entity.ID);
+             
             Assert.AreEqual(initialIngredientCount, returnedEntity.Ingredients.Count());
         }
 
-        protected void BaseReturnsIndexWithWarningWithUnknownParentID(IRepository<T> Repo, IGenericController<T> controller)
-        {
-            // Arrange
+        protected void BaseReturnsIndexWithWarningWithUnknownParentID(IGenericController<T> controller)
+        { 
             int id = item.ID;
             Repo.Remove(item);
-
-            // Act 
-            ActionResult ar = controller.Attach(Repo,id, new Ingredient() );
+             
+            ActionResult ar = controller.Attach(id, new Ingredient() );
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             string message = adr.Message;
-
-            // Assert
+             
             Assert.AreEqual(ClassName + " was not found", message);
-            Assert.AreEqual("alert-warning", adr.AlertClass);
-
+            Assert.AreEqual("alert-warning", adr.AlertClass); 
         }
 
-        protected void BaseReturnsIndexWithWarningWithNullParent(IRepository<T> repo, IGenericController<T> controller)
-        { 
-            // Act 
-            ActionResult ar = controller.Attach(Repo,null, new Ingredient() );
+        protected void BaseReturnsIndexWithWarningWithNullParent(IGenericController<T> controller)
+        {  
+            ActionResult ar = controller.Attach(null, new Ingredient() );
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             string message = adr.Message;
-
-            // Assert
+             
             Assert.AreEqual(ClassName + " was not found", message);
             Assert.AreEqual("alert-warning", adr.AlertClass);
         }
 
-        public void BaseDetachTheLastIngredientChild(IRepository<T> Repo, IGenericController<T> controller, IEntityChildClassIngredients notusing)
+        public void BaseDetachTheLastIngredientChild(IGenericController<T> controller, IEntity notusing)
         {
-            IEntityChildClassIngredients Entity = new T();
+            IEntity Entity = new T();
             Entity.Ingredients.Add(new Ingredient { ID = 4005, Name = "Butter" });
             Entity.Ingredients.Add(new Ingredient { ID = 4006, Name = "Cayenne Pepper" });
             Entity.Ingredients.Add(new Ingredient { ID = 4007, Name = "Cheese" });
             Entity.Ingredients.Add(new Ingredient { ID = 54008, Name = "Chopped Green Pepper" });
             Repo.Save((T)Entity);
             int initialIngredientCount = Entity.Ingredients.Count();
-
-            // Act  
+             
             Ingredient LastIngredient = Entity.Ingredients.LastOrDefault();
             Entity.Ingredients.RemoveAt(initialIngredientCount - 1);
             bool IsLastIngredientStillThere = Entity.Ingredients.Contains(LastIngredient);
-
-            // Assert
+             
             Assert.AreEqual(initialIngredientCount - 1, Entity.Ingredients.Count());
             Assert.IsFalse(IsLastIngredientStillThere);
         }
 
-        protected void BaseReturnsDetailWithWarningIfAttachingNullChild(IEntity entity, IRepository<T> repo, IGenericController<T> controller)
+        protected void BaseReturnsDetailWithWarningIfAttachingNullChild(IEntity entity,IGenericController<T> controller)
         {
-            var ar = controller.Attach(Repo,entity.ID, (Ingredient)null );
+            var ar = controller.Attach(entity.ID, (Ingredient)null );
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
 
             Assert.AreEqual("alert-warning", adr.AlertClass);
@@ -458,9 +405,9 @@ namespace LambAndLentil.Test.BasicControllerTests
         }
 
 
-        protected void BaseReturnsDetailWithWarningWithUnknownChildID(IEntity entity, IRepository<T> repo, IGenericController<T> controller)
+        protected void BaseReturnsDetailWithWarningWithUnknownChildID(IEntity entity, IGenericController<T> controller)
         {
-            var ar = controller.Attach(Repo,entity.ID, (Ingredient)null );
+            var ar = controller.Attach(entity.ID, (Ingredient)null );
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
 
             Assert.AreEqual("alert-warning", adr.AlertClass);
@@ -468,16 +415,16 @@ namespace LambAndLentil.Test.BasicControllerTests
         }
 
 
-        protected void BaseReturnsDetailWhenDetachingWithSuccessWithValidParentandValidIngredientChild(IRepository<T> repo, IGenericController<T> controller, int iD)
+        protected void BaseReturnsDetailWhenDetachingWithSuccessWithValidParentandValidIngredientChild(IGenericController<T> controller, int iD)
         {
-            IEntityChildClassIngredients entity = Repo.GetById(iD);
+            IEntity entity = Repo.GetById(iD);
 
             Ingredient ingredient = new Ingredient() { ID = 8000, Name = "BaseReturnsDetailWhenDetachingWithSuccessWithValidParentandValidIngredientChild" };
 
             entity.Ingredients.Add(ingredient);
             Repo.Update((T)entity, entity.ID);
 
-            var ar = controller.Detach(Repo,entity.ID, ingredient);
+            var ar = controller.Detach(entity.ID, ingredient);
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
 
             Assert.AreEqual("alert-success", adr.AlertClass);
@@ -485,15 +432,15 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         }
 
-        protected void BaseSuccessfullyAttachRecipeChild(IEntityChildClassRecipes Entity, IGenericController<T> controller)
+        protected void BaseSuccessfullyAttachRecipeChild(IEntity Entity, IGenericController<T> controller)
         {
             Recipe recipe = new Recipe() { ID = 91, Name = "SuccessfullyAttachRecipeChild" };
 
-            ActionResult ar = controller.Attach(Repo,Entity.ID, recipe );
+            ActionResult ar = controller.Attach(Entity.ID, recipe );
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             RedirectToRouteResult rdr = (RedirectToRouteResult)adr.InnerResult;
 
-            IEntityChildClassRecipes returnedEntity = (IEntityChildClassRecipes)Repo.GetById(Entity.ID);
+            IEntity returnedEntity =  Repo.GetById(Entity.ID);
             Recipe returnedRecipe = returnedEntity.Recipes.First();
 
 
@@ -506,19 +453,19 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.IsNotNull(returnedRecipe);
             Assert.AreEqual("SuccessfullyAttachRecipeChild", returnedRecipe.Name);
         }
-        // protected void BaseSuccessfullyDetachChild(IRepository<T> ParentRepo, IGenericController<T> AttachController, IGenericController<T> DetachController, UIControllerType uIControllerType, int orderNumber = 0)
+       
       
 
 
-        protected void BaseSuccessfullyAttachPlanChild(IEntityChildClassPlans Entity, IGenericController<T> controller)
+        protected void BaseSuccessfullyAttachPlanChild(IEntity Entity, IGenericController<T> controller)
         {
             Plan plan = new Plan() { ID = 91, Name = "SuccessfullyAttachPlanChild" };
 
-            ActionResult ar = controller.Attach(Repo,Entity.ID, plan );
+            ActionResult ar = controller.Attach(Entity.ID, plan );
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             RedirectToRouteResult rdr = (RedirectToRouteResult)adr.InnerResult;
 
-            IEntityChildClassPlans returnedEntity = (IEntityChildClassPlans)Repo.GetById(Entity.ID);
+            IEntity returnedEntity = Repo.GetById(Entity.ID);
             Plan returnedPlan = returnedEntity.Plans.First();
 
 
@@ -533,15 +480,15 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         }
 
-        protected void BaseSuccessfullyAttachChild(IEntityChildClassPlans Entity, IGenericController<T> controller)
+        protected void BaseSuccessfullyAttachChild(IEntity Entity, IGenericController<T> controller)
         {
             Menu menu = new Menu() { ID = 91, Name = "SuccessfullyAttachChild" };
 
-            ActionResult ar = controller.Attach(Repo,Entity.ID, menu );
+            ActionResult ar = controller.Attach(Entity.ID, menu );
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             RedirectToRouteResult rdr = (RedirectToRouteResult)adr.InnerResult;
 
-            IEntityChildClassMenus returnedEntity = (IEntityChildClassMenus)Repo.GetById(Entity.ID);
+            IEntity returnedEntity = (IEntity)Repo.GetById(Entity.ID);
             Menu returnedMenu = returnedEntity.Menus.First();
 
 
@@ -556,69 +503,59 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         }
 
-        protected void BaseDetachTheLastMenuChild(IRepository<T> repo, IGenericController<T> controller, IEntityChildClassMenus Entity)
-        { // RemoveAt
-          // Arrange
+        protected void BaseDetachTheLastMenuChild(IRepository<T> repo, IGenericController<T> controller, IEntity Entity)
+        {  
             Entity.Menus.Add(new Menu { ID = 4005, Name = "Butter" });
             Entity.Menus.Add(new Menu { ID = 4006, Name = "Cayenne Pepper" });
             Entity.Menus.Add(new Menu { ID = 4007, Name = "Cheese" });
             Entity.Menus.Add(new Menu { ID = 54008, Name = "Chopped Green Pepper" });
             Repo.Save((T)Entity);
             int initialMenuCount = Entity.Menus.Count();
-
-            // Act  
+              
             Menu LastMenu = Entity.Menus.LastOrDefault();
             Entity.Menus.RemoveAt(initialMenuCount - 1);
             bool IsLastMenuStillThere = Entity.Menus.Contains(LastMenu);
-
-            // Assert
+             
             Assert.AreEqual(initialMenuCount - 1, Entity.Menus.Count());
             Assert.IsFalse(IsLastMenuStillThere);
         }
 
-        protected void BaseDetachTheLastRecipeChild(IRepository<T> repo, IGenericController<T> controller, IEntityChildClassRecipes Entity)
-        { // RemoveAt
-          // Arrange
+        protected void BaseDetachTheLastRecipeChild(IRepository<T> repo, IGenericController<T> controller, IEntity Entity)
+        {  
             Entity.Recipes.Add(new Recipe { ID = 4005, Name = "Butter" });
             Entity.Recipes.Add(new Recipe { ID = 4006, Name = "Cayenne Pepper" });
             Entity.Recipes.Add(new Recipe { ID = 4007, Name = "Cheese" });
             Entity.Recipes.Add(new Recipe { ID = 54008, Name = "Chopped Green Pepper" });
             Repo.Save((T)Entity);
             int initialRecipeCount = Entity.Recipes.Count();
-
-            // Act  
+             
             Recipe LastRecipe = Entity.Recipes.LastOrDefault();
             Entity.Recipes.RemoveAt(initialRecipeCount - 1);
             bool IsLastRecipeStillThere = Entity.Recipes.Contains(LastRecipe);
-
-            // Assert
+             
             Assert.AreEqual(initialRecipeCount - 1, Entity.Recipes.Count());
             Assert.IsFalse(IsLastRecipeStillThere);
         }
 
-        protected void BaseDetachTheLastShoppingListChild(IRepository<T> repo, IGenericController<T> controller, IEntityChildClassShoppingLists Entity)
-        { // RemoveAt
-          // Arrange
+        protected void BaseDetachTheLastShoppingListChild(IRepository<T> repo, IGenericController<T> controller, IEntity Entity)
+        {  
             Entity.ShoppingLists.Add(new ShoppingList { ID = 4005, Name = "Butter" });
             Entity.ShoppingLists.Add(new ShoppingList { ID = 4006, Name = "Cayenne Pepper" });
             Entity.ShoppingLists.Add(new ShoppingList { ID = 4007, Name = "Cheese" });
             Entity.ShoppingLists.Add(new ShoppingList { ID = 54008, Name = "Chopped Green Pepper" });
             Repo.Save((T)Entity);
             int initialShoppingListCount = Entity.ShoppingLists.Count();
-
-            // Act  
+             
             ShoppingList LastShoppingList = Entity.ShoppingLists.LastOrDefault();
             Entity.ShoppingLists.RemoveAt(initialShoppingListCount - 1);
             bool IsLastShoppingListStillThere = Entity.ShoppingLists.Contains(LastShoppingList);
-
-            // Assert
+             
             Assert.AreEqual(initialShoppingListCount - 1, Entity.ShoppingLists.Count());
             Assert.IsFalse(IsLastShoppingListStillThere);
         }
 
         protected static void BaseDetachASetOfIngredientChildren()
-        {
-             
+        { 
             item.Ingredients.Add(new Ingredient { ID = 4005, Name = "Butter" });
             item.Ingredients.Add(new Ingredient { ID = 4006, Name = "Cayenne Pepper" });
             item.Ingredients.Add(new Ingredient { ID = 4007, Name = "Cheese" });
@@ -629,7 +566,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             var setToSelect = new HashSet<int> { 4006, 4008 };
             List<Ingredient> selected =item.Ingredients.Where(t => setToSelect.Contains(t.ID)).ToList();
             Controller.DetachASetOf(item.ID, selected);
-            IEntityChildClassIngredients returnedEntity = (IEntityChildClassIngredients)Repo.GetById(item.ID);
+            IEntity returnedEntity = (IEntity)Repo.GetById(item.ID);
 
             Assert.AreEqual(initialIngredientCount - 2, returnedEntity.Ingredients.Count());
         }

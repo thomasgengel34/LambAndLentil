@@ -1,11 +1,9 @@
-﻿//using AutoMapper;
-using LambAndLentil.Domain.Concrete;
-using LambAndLentil.Domain.Entities;
-using LambAndLentil.Tests.Infrastructure;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿
 using System.Collections.Generic;
 using System.IO;
+using LambAndLentil.Domain.Concrete;
+using LambAndLentil.Domain.Entities;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace LambAndLentil.Test.JSONTests
 {
@@ -19,8 +17,7 @@ namespace LambAndLentil.Test.JSONTests
 
 
         public JSONRepositoryGetByIDShould()
-        {
-            AutoMapperConfigForTests.InitializeMap();
+        { 
             Repo = new TestRepository<Ingredient>();
             Directory.CreateDirectory(path);
         }
@@ -34,7 +31,7 @@ namespace LambAndLentil.Test.JSONTests
                 Name = "test ReturnCorrectEntityForAValidIngredientID Name",
                 Description = "test ReturnCorrectEntityForAValidIngredientID Description"
             };
-            Repo.Add(ingredient);
+            Repo.Save(ingredient);
              
             Ingredient returnedListEntity = Repo.GetById(ingredient.ID);
 
