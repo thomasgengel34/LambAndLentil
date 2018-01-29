@@ -14,35 +14,26 @@ namespace LambAndLentil.Test.BasicControllerTests
     {
         [TestMethod]
         public void InheritBaseControllerInPerson()
-        {
-            // Arrange
-
-            // Act 
+        { 
             Type type = Type.GetType("LambAndLentil.UI.Controllers.PersonsController, LambAndLentil.UI", true);
-            // Assert
+           
             Assert.IsTrue(type.IsSubclassOf(typeof(BaseController<Person>)));
         }
 
         [TestMethod]
         public void InheritBaseAttachDetachControllerInPerson()
-        {
-            // Arrange
-
-            // Act
+        { 
             Type type = Type.GetType("LambAndLentil.UI.Controllers.PersonsController, LambAndLentil.UI", true);
-            // Assert
+            
             Assert.IsTrue(type.IsSubclassOf(typeof(BaseAttachDetachController<Person>)));
         }
 
         [TestMethod]
         public void CallRepositoryInPerson()
-        {
-            // Arrange
-
-            // Act
+        { 
             Type type = Repo.GetType();
            string name=  type.GenericTypeArguments[0].Name;
-            // Assert
+          
             Assert.AreEqual("Person", name);
         }
     }

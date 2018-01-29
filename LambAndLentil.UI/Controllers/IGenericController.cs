@@ -8,7 +8,7 @@ namespace LambAndLentil.UI.Controllers
     {
         void AddIngredientToIngredientsList(int id = 1, string addedIngredient = "");
       
-        ActionResult Create(UIViewType actionMethod);
+        ActionResult Create();
         ActionResult Delete(int id = 1 );
         ActionResult DeleteConfirmed(int id); 
         ActionResult Details(int id = 1 );

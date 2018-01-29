@@ -13,25 +13,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         public BaseController_Should() => Controller = new IngredientsController(Repo);
 
-
-
-        [TestMethod]
-        public void HavePublicReadOnlyStringClassNameProperty()
-        {
-            // BaseController is abstract, so use property on inherited class
-            // Arrange
-             
-            // Act
-            var property = Type.GetType("LambAndLentil.UI.Controllers.IngredientsController, LambAndLentil.UI").GetProperty("ClassName");
-            var ListEntity= Type.GetType("LambAndLentil.UI.Controllers.IngredientsController, LambAndLentil.UI").GetProperties();
-            var zz = property.DeclaringType.Attributes;
-            // Assert 
-            Assert.AreEqual("ClassName", property.Name);
-            Assert.IsTrue(property.CanRead);
-            Assert.IsFalse(property.CanWrite);
-            Assert.AreEqual("String", property.PropertyType.Name);
-            Assert.AreEqual( System.Reflection.TypeAttributes.Abstract|System.Reflection.TypeAttributes.Public|System.Reflection.TypeAttributes.BeforeFieldInit, zz );  
-        }
+         
 
         [TestMethod]
         public void HavePublicIntPageSizeProperty()

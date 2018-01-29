@@ -19,13 +19,15 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
         where TParent : BaseEntity, IEntity, new()
         where TChild : BaseEntity, IEntity, new()
     {
-        public IRepository<TParent> Repo { get; set; }
-        private TChild child { get; set; }
+        public IRepository<TParent> Repo { get; set; } // TODO: look at changing this to a private field
+        private TChild child { get; set; }   // TODO: look at changing this to a field
+        private string childName;
 
         public BaseControllerShouldAttachXAndReturn()
         {
             Repo = new TestRepository<TParent>();
             child = new TChild();
+            childName = typeof(TChild).ToString().Split('.').Last();
         }
 
        internal  void BaseDetailWithSuccessWhenParentIDIsValidAndChildIsValid()
@@ -103,25 +105,22 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
 
         internal void BaseDetailWithSuccessWhenParentIDIsValidAndChildIsValidWhenAttaching()
         {
-            ActionResult ar = Controller.Attach(Parent.ID, (IngredientType)Child );
+            ActionResult ar = Controller.Attach(Parent.ID, (TChild)Child );
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
-
-            // Assert
+ 
             Assert.IsNotNull(ar);
             Assert.AreEqual(1, rtrr.RouteValues.ElementAt(0).Value);
             Assert.AreEqual(UIViewType.Edit.ToString(), rtrr.RouteValues.ElementAt(1).Value.ToString());
             Assert.AreEqual(UIViewType.Details.ToString(), rtrr.RouteValues.ElementAt(2).Value.ToString());
             Assert.AreEqual(3, rtrr.RouteValues.Count);
-            Assert.AreEqual("Ingredient was Successfully Attached!", adr.Message);
+            Assert.AreEqual(childName+" was Successfully Attached!", adr.Message);
             Assert.AreEqual("alert-success", adr.AlertClass);
         }
 
         internal void BaseDetailWithErrorWhenParentIDIsValidAndChildIsValidWhenAttachingUnattachableChild()
-        {  // Parent Ingredient for initial test, child Menu.  TODO: expand
-            ActionResult ar= Controller.Attach(Parent.ID,  child );
-            
-
+        {   
+            ActionResult ar= Controller.Attach(Parent.ID,  child ); 
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
              
@@ -130,8 +129,9 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
             Assert.AreEqual(UIViewType.Edit.ToString(), rtrr.RouteValues.ElementAt(1).Value.ToString());
             Assert.AreEqual(UIViewType.Details.ToString(), rtrr.RouteValues.ElementAt(2).Value.ToString());
             Assert.AreEqual(3, rtrr.RouteValues.Count);
-            Assert.AreEqual("Element Could not Be Attached!", adr.Message);
+            Assert.AreEqual("Element Could not Be Attached - So It Could Not Be Detached", adr.Message);
             Assert.AreEqual("alert-danger", adr.AlertClass);
         }
+
     }
 }

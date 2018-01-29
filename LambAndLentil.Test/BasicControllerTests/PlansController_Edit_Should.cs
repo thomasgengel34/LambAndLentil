@@ -64,14 +64,9 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [TestMethod]
         public void ListEntityTVMCtr_CreateReturnsNonNull()
-        {
-            // Arrange
-
-
-            // Act
-            ViewResult result = Controller.Create(UIViewType.Create) as ViewResult;
-
-            // Assert
+        { 
+            ViewResult result = Controller.Create() as ViewResult;
+             
             Assert.IsNotNull(result);
         }
 

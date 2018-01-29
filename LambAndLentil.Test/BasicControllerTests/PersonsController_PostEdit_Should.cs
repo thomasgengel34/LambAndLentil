@@ -13,31 +13,20 @@ namespace LambAndLentil.Test.BasicControllerTests
         [Ignore]
         [TestMethod]
         public void ReturnIndexWithValidModelStateWithSuccessMessageWhenSaved()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
+        { 
             Assert.Fail();
         }
         [Ignore]
         [TestMethod]
         public void ReturnIndexWithInValidModelStateWithWarningMessageWhenSaved()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
+        { 
             Assert.Fail();
         }
 
       
         [TestMethod] 
         public void CanEditPerson2()
-        {
-            // Arrange
+        { 
             Person person = new Person
             {
                 ID = 1,
@@ -46,16 +35,13 @@ namespace LambAndLentil.Test.BasicControllerTests
                 Description = "test PersonControllerTest.CanEditPerson"
             };
             Repo.Save(person);
-
-            // Act 
+             
             person.FirstName = "Name has been changed";
             person.LastName = ""; 
            ActionResult view1 = Controller.PostEdit(person);
 
             Person returnedPerson = Repo.GetById(person.ID);
-
-
-            // Assert 
+             
             Assert.IsNotNull(view1);
             Assert.AreEqual("Name has been changed ", returnedPerson.Name);
             //Assert.AreEqual(person.Description, returnedPersonListEntity.Description);
@@ -65,12 +51,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         [Ignore]
         [TestMethod]
         public void NotSaveLogicallyInvalidModel()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
+        { 
             Assert.Fail();
 
         }
@@ -80,11 +61,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void NotSaveModelFlaggedInvalidByDataAnnotation()
         {  // see https://msdn.microsoft.com/en-us/library/cc668224(v=vs.98).aspx
 
-            // Arrange
-
-            // Act
-
-            // Assert
+            
             Assert.Fail();
 
         }

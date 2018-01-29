@@ -41,33 +41,19 @@ namespace LambAndLentil.Test.BasicControllerTests
             Repo.Save((ShoppingList)ShoppingList);
         }
 
-
-        [TestMethod]
-        public void CreateAShoppingList()
-        {
-
-            ViewResult vr = (ViewResult)Controller.Create(UIViewType.Create);
-            ShoppingList ShoppingList = (ShoppingList)vr.Model;
-            string modelName = ShoppingList.Name;
-
-            Assert.AreEqual(vr.ViewName, UIViewType.Details.ToString());
-            Assert.AreEqual(modelName, "Newly Created");
-        }
+         
 
         [Ignore]
         [TestMethod]
         public void SaveAValidShoppingList()
-        {
-            // Arrange 
-
+        { 
             ShoppingList.Name = "test";
-            // Act
+        
             AlertDecoratorResult adr = (AlertDecoratorResult)Controller.PostEdit((ShoppingList)ShoppingList);
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
 
             var routeValues = rtrr.RouteValues.Values;
-
-            // Assert 
+              
             Assert.AreEqual("alert-success", adr.AlertClass);
             Assert.AreEqual(4, routeValues.Count);
             Assert.AreEqual(UIControllerType.ShoppingLists.ToString(), routeValues.ElementAt(0).ToString());

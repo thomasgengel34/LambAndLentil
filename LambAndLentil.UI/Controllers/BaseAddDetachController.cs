@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using LambAndLentil.BusinessObjects;
@@ -23,7 +24,7 @@ namespace LambAndLentil.UI.Controllers
 
 
         int IGenericController<T>.PageSize { get; set; }
-     //   private static UIControllerType UIControllerType { get; set; }
+     
 
         ActionResult IGenericController<T>.Index(int? page) => BaseIndex(page);
 
@@ -34,7 +35,7 @@ namespace LambAndLentil.UI.Controllers
 
         // GET: Ingredients/Create 
         [ActionName("Create")]
-        ActionResult IGenericController<T>.Create(UIViewType actionMethod) => BaseCreate(actionMethod);
+        ActionResult IGenericController<T>.Create() => BaseCreate();
 
         [HttpGet]
         ActionResult IGenericController<T>.Edit(int id) => BaseEdit(  id );
@@ -59,47 +60,50 @@ namespace LambAndLentil.UI.Controllers
         ActionResult IGenericController<T>.DeleteConfirmed(int id) => BaseDeleteConfirmed(id);
 
 
-        void IGenericController<T>.AddIngredientToIngredientsList(int id, string addedIngredient) => BaseAddIngredientToIngredientsList(   id, addedIngredient); 
+        void IGenericController<T>.AddIngredientToIngredientsList(int id, string addedIngredient) => BaseAddIngredientToIngredientsList(id, addedIngredient); 
   
 
-        public ActionResult Attach<TChild>(int? parentID, TChild child)
-                 where TChild : BaseEntity, IEntity, new()
+        public ActionResult Attach(IEntity parent, IEntity child) 
         {
-            ActionResult actionResult = GuardAttachAndDetachMethod(parentID, child);
+            ActionResult actionResult = GuardAttachAndDetachMethod(parent , child);
             if (actionResult is EmptyResult)
-            {
-                T parent = Repo.GetById((int)parentID);
-                parent = new ChildAttachment().AddChildToParent(parent, child);
-                Repo.Save(parent);
-                string childEntity = typeof(TChild).ToString().Split('.').Last();
-
-                return RedirectToAction(UIViewType.Details.ToString(), new { id = parentID, actionMethod = UIViewType.Edit }).WithSuccess(childEntity + " was Successfully Attached!");
+            { 
+                parent =  new ChildAttachment().AddChildToParent(parent, child) ;
+                Repo.Save((T)parent);
+                string childEntity = child.GetType().ToString().Split('.').Last();
+                return HandleSuccessfulAttachment(parent.ID , childEntity);
             }
             else return actionResult;
         }
 
-        public ActionResult Detach<TChild>(int? parentID, TChild child)
-        where TChild : BaseEntity, IEntity, new()
-        {
-            if (parentID == null)
-            {
-               return HandleNullParent();
-            }
-            else
-            {
-                IEntity parent = Repo.GetById((int)parentID);
-                ActionResult actionResult = GuardAttachAndDetachMethod(parentID, child);
+        private ActionResult HandleSuccessfulAttachment(int? parentID, string childEntity) =>
+                        RedirectToAction(UIViewType.Details.ToString(), new { id = parentID, actionMethod = UIViewType.Edit }).WithSuccess(childEntity + " was Successfully Attached!");
+
+        public ActionResult Detach (IEntity parent, IEntity child) 
+        { 
+               
+                ActionResult actionResult = GuardAttachAndDetachMethod(parent , child);
                 if (actionResult is EmptyResult)
                 {
-                    parent = new ChildDetachment().DetachAnIndependentChild<TChild>(parent, child);
-                    Repo.Save((T)parent);
-                    string childEntity = typeof(TChild).ToString().Split('.').Last();
-                    return RedirectToAction(UIViewType.Details.ToString(), new { id = parentID, actionMethod = UIViewType.Edit }).WithSuccess(childEntity + " was Successfully Detached!");
+                    parent = new ChildDetachment().DetachAnIndependentChild(parent, child);
+                    Repo.Save( (T)parent);
+                    string childEntity = child.GetType().ToString().Split('.').Last();
+                    return HandleSuccessfulDetachment(parent.ID, childEntity);
                 }
-                else return actionResult; 
-            }
+                else return actionResult;  
         }
 
+        private ActionResult HandleSuccessfulDetachment(int? parentID, string childEntity) => RedirectToAction(UIViewType.Details.ToString(), new { id = parentID, actionMethod = UIViewType.Edit }).WithSuccess(childEntity + " was Successfully Detached!");
+
+        ActionResult GuardAttachAndDetachMethod(IEntity parent, IEntity child)
+        {
+            if (!parent.CanHaveChild(child))
+            {
+                return HandleParentCannotAttachChild(parent);
+            }
+            else return new EmptyResult();
+        }
+        
 
         ActionResult GuardAttachAndDetachMethod(int? parentID, IEntity child)
         {
@@ -117,14 +121,10 @@ namespace LambAndLentil.UI.Controllers
             {
                 return HandleNullChild(parentID);
             }
-            else if (!parent.CanHaveChild(child))
-            {
-                return HandleParentCannotAttachChild(parent);
-            }
-            else return new EmptyResult();
+            else return GuardAttachAndDetachMethod(parent, child);
         }
 
-        private ActionResult HandleParentCannotAttachChild(T parent) => RedirectToAction(UIViewType.Details.ToString(), new { id = parent.ID, actionMethod = UIViewType.Edit }).WithError("Element Could not Be Attached - So It Could Not Be Detached");
+        private ActionResult HandleParentCannotAttachChild(IEntity parent) => RedirectToAction(UIViewType.Details.ToString(), new { id = parent.ID, actionMethod = UIViewType.Edit }).WithError("Element Could not Be Attached - So It Could Not Be Detached");
 
         private ActionResult HandleNullChild(int? parentID) =>
             RedirectToAction(UIViewType.Details.ToString(), new { id = parentID, actionMethod = UIViewType.Edit }).WithWarning(EntityName + " was not found");
@@ -136,29 +136,16 @@ namespace LambAndLentil.UI.Controllers
         private ActionResult HandleNullParentID() => RedirectToAction(UIViewType.Index.ToString()).WithWarning(EntityName + " was not found");
 
 
-
-
-        public ActionResult DetachASetOf<TChild>(int? ID, List<TChild> selected)
-               where TChild : BaseEntity, IEntity, new()
+        public ActionResult DetachASetOf(IEntity parent, List<IEntity> selected)
         {
-            string parentName = typeof(T).ToString().Split('.').Last();
-            string childName = typeof(TChild).ToString().Split('.').Last();
+            IEntity _parent =  parent;
+            string parentName = _parent.GetType().ToString().Split('.').Last();
+            IEntity child = selected.First();
+            string childName = selected.First().GetType().ToString().Split('.').Last();  
 
-
-            TChild child = new TChild();
-
-            if (ID == null) { return HandleNullParentID(); }
-
-            IEntity parent = Repo.GetById((int)ID);
-
-            if (parent == null)
+             if (child == null)
             {
-                return HandleNullParent();
-            }
-
-            else if (child == null)
-            {
-                return HandleNullChild(ID);
+                return HandleNullChild(0);
             }
             else if (!parent.CanHaveChild(child))
             {
@@ -168,37 +155,35 @@ namespace LambAndLentil.UI.Controllers
 
             if (selected == null || selected.Count == 0)
             {
-                return DetachAll<TChild>(ID);
+                return DetachAll(parent,child.GetType());
             }
             else
             {
                 parent = new ChildDetachment().DetachSelectionFromChildren(parent, selected);
                 Repo.Save((T)parent);
 
-                return RedirectToAction(UIViewType.Details.ToString(), new { ID, actionMethod = UIViewType.Edit }).WithSuccess("All " + childName + "s Were Successfully Detached!");
+                return HandleSuccessfulDetachment(parent.ID,childName);
             }
         }
 
 
 
-        public ActionResult DetachAll<TChild>(int? ID)
-            where TChild : BaseEntity, IEntity, new()
-        {
-            if (ID == null) { return HandleNullParentID(); }
-
-            IEntity parent = Repo.GetById((int)ID);
-
+        public ActionResult DetachAll(IEntity parent, Type type ) 
+        { 
             if (parent == null)
             {
                 return HandleNullParent();
             }
-
-            TChild child = new TChild();
-            parent = new ChildDetachment().DetachAllChildrenOfAType(parent, child);
+             
+            parent = new ChildDetachment().DetachAllChildrenOfAType(parent, type);
             Repo.Save((T)parent);
-            string childName = typeof(TChild).ToString().Split('.').Last();
-
-            return RedirectToAction(UIViewType.Details.ToString(), new { ID, actionMethod = UIViewType.Edit }).WithSuccess("All " + childName + "s Were Successfully Detached!");
+            string childName =  type.ToString().Split('.').Last();
+            return HandleAllChildrenSuccessfullyDetached(parent.ID, childName);
         }
+
+        private ActionResult HandleAllChildrenSuccessfullyDetached(int? ID, string childName) =>
+                    RedirectToAction(UIViewType.Details.ToString(), new { ID, actionMethod = UIViewType.Edit }).WithSuccess("All " + childName + "s Were Successfully Detached!");
+
+       
     }
 }

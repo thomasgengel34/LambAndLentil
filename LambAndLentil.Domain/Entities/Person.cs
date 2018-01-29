@@ -22,12 +22,7 @@ namespace LambAndLentil.Domain.Entities
             FirstName = "Newly";
             LastName = "Created";
             FullName = GetName(FirstName, LastName);
-            Name = FullName;
-
-            CanHaveMenuChild = true;
-            CanHavePlanChild = true;
-            CanHaveRecipeChild = true;
-            CanHaveShoppingListChild = true;
+            Name = FullName; 
         }
 
         public Person(string firstName, string lastName) : base()

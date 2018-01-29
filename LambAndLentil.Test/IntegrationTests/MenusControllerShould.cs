@@ -41,18 +41,9 @@ namespace IntegrationTests
         }
 
 
-        [TestMethod]
-        public void CreateAnMenu()
-        {
-            ViewResult vr = (ViewResult)Controller.Create(UIViewType.Create);
-            Menu Menu = (Menu)vr.Model;
-            string modelName = Menu.Name;
+      
 
-            // Assert 
-            Assert.AreEqual(vr.ViewName, UIViewType.Details.ToString());
-            Assert.AreEqual(modelName, "Newly Created");
-            Assert.AreEqual(DayOfWeek.Sunday, Menu.DayOfWeek);
-        }
+        
 
         [TestMethod]
         public void SaveAValidMenu()

@@ -10,78 +10,18 @@ namespace LambAndLentil.Test.BasicControllerTests
 
     [TestClass]
     public class RecipesController_PostEdit_Should: RecipesController_Test_Should
-    {
+    { 
+         
+        [Ignore]
         [TestMethod]
-        public void ReturnIndexWithValidModelStateWithSuccessMessageWhenSaved()
-        {
-            // Arrange
-            Recipe rvm = new Recipe
-            {
-                ID = -2
-            };
-
-
-            // Act
-            ActionResult ar =Controller.PostEdit(rvm);
-            AlertDecoratorResult adr = (AlertDecoratorResult)ar;
-            ViewResult view = (ViewResult)adr.InnerResult;
-
-            // Assert
-            Assert.AreEqual("Something is wrong with the data!",adr.Message);
-            Assert.AreEqual("alert-warning",adr.AlertClass);
-            Assert.AreEqual("Details", view.ViewName);
-
-
-        }
-
-        [TestMethod]
-        public void ReturnIndexWithInValidModelStateWithWarningMessageWhenSaved()
-        {
-
-            // Arrange
-            Recipe rvm = new Recipe
-            {
-                ID = -2
-            };
-
-
-            // Act
-            ActionResult ar = Controller.PostEdit(rvm);
-            AlertDecoratorResult adr = (AlertDecoratorResult)ar;
-            ViewResult view = (ViewResult)adr.InnerResult;
-
-            // Assert
-            Assert.AreEqual("Something is wrong with the data!", adr.Message);
-            Assert.AreEqual("alert-warning", adr.AlertClass);
-            Assert.AreEqual("Details", view.ViewName);
-             
-        }
+        public void NotSaveLogicallyInvalidModel() => 
+            Assert.Fail(); 
 
         [Ignore]
         [TestMethod]
-        public void NotSaveLogicallyInvalidModel()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
-            Assert.Fail();
-
-        }
-
-        [Ignore]
-        [TestMethod]
-        public void NotSaveModelFlaggedInvalidByDataAnnotation()
-        {  // see https://msdn.microsoft.com/en-us/library/cc668224(v=vs.98).aspx
-
-            // Arrange
-
-            // Act
-
-            // Assert
-            Assert.Fail();
-
-        }
+        public void NotSaveModelFlaggedInvalidByDataAnnotation() =>  Assert.Fail();
+           // see https://msdn.microsoft.com/en-us/library/cc668224(v=vs.98).aspx
+         
+        
     }
 } 

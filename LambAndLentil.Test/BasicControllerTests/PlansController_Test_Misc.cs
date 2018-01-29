@@ -9,41 +9,7 @@ namespace LambAndLentil.Test.BasicControllerTests
     [TestCategory("PlansController")]
     public class PlansController_Test_Misc: PlansController_Test_Should
     {
-          
-
-        [TestMethod]
-        public void IsPublic()
-        {
-            // Arrange 
-
-            // Act
-            Type type = Controller.GetType();
-            bool isPublic = type.IsPublic;
-
-            // Assert 
-            Assert.AreEqual(isPublic, true);
-        }
-
-
-
-
-        [TestMethod]
-        public void InheritsFromBaseControllerCorrectly()
-        { 
-            // Arrange
-
-            // Act 
-            Controller.PageSize = 4;
-
-            var type = typeof(PlansController);
-            var DoesDisposeExist = type.GetMethod("Dispose");
-
-            // Assert 
-            Assert.AreEqual(4, Controller.PageSize);
-            Assert.IsNotNull(DoesDisposeExist);
-        }
-          
-
+            
         [Ignore]
         [TestMethod]
         public void FlagAnIngredientFlaggedInAPerson()

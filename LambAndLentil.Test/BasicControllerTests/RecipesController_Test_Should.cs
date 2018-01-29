@@ -20,6 +20,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         public RecipesController_Test_Should()
         {
+
             ListEntity = new ListEntity<Recipe>();
             Controller = new RecipesController(Repo)
             {

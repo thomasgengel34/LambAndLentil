@@ -12,82 +12,76 @@ namespace LambAndLentil.UI.Controllers
     public abstract class BaseController<T> : Controller
             where T : BaseEntity, IEntity, new()
     {
-        string ClassName; 
-       public int PageSize { get; set; } 
-        public static IRepository<T> Repo { get; set; }
-        public static IRepository<Ingredient> IngredientRepo { get; set; }   // TODO: convert to Parent/Child Repos
-        public static IRepository<Menu> MenuRepo { get; set; }  // TODO: convert to Parent/Child Repos
+        private string className;
+
+        public int PageSize { get; set; } 
+        internal static IRepository<T> Repo;
 
         public BaseController(IRepository<T> repository)
         {
             Repo = repository;
-            ClassName = new RepositoryHelperMethods().GetClassName<T>();
+            className = new RepositoryHelperMethods().GetClassName<T>();
+            PageSize = 8;
         }
-
 
 
         //  TODO: filter   
         public ActionResult BaseIndex(int? page = 1)
-        {
-            PageSize = 8;
+        { 
             int pageInt = page ?? 1;
             ListEntity<T> model = new ListEntity<T>
-            { 
-                ListT = new BaseEntity().GetIndexedModel<T>(Repo, PageSize, pageInt),
-                PagingInfo = new BaseEntity().PagingFunction<T>(Repo, page, PageSize)
+            {
+                ListT = new BaseEntity().GetIndexedModel(Repo, PageSize, pageInt),
+                PagingInfo = new BaseEntity().PagingFunction(Repo, page, PageSize)
             };
             return View(UIViewType.Index.ToString(), model);
         }
 
-  
 
-       public ActionResult BaseDetails(int id)
+
+        public ActionResult BaseDetails(int id)
         {
             T item = Repo.GetById(id);
             if (item == null)
             {
-                return RedirectToAction(UIViewType.BaseIndex.ToString()).WithError("No " + ClassName + " was found with that id.");
+                return HandleNullItem();
+            }
+            else if (IsModelValid(item))
+            {
+                return HandleSuccess(item);
             }
             else
             {
-                bool IsValid = IsModelValid(item);
-
-                if (IsValid)
-                {
-                    return View(UIViewType.Details.ToString(), item).WithSuccess("Here it is!");
-                }
-                else
-                {
-                    return View(UIViewType.Details.ToString(), item).WithError("Something is wrong with the data!");
-                }
+                return HandleError(item);
             }
+
         }
 
-       
+        private ActionResult HandleError(T item) => View(UIViewType.Details.ToString(), item).WithError("Something is wrong with the data!");
 
-        public ActionResult BaseEdit( int id)
+        private ActionResult HandleSuccess(T item) => View(UIViewType.Details.ToString(), item).WithSuccess("Here it is!");
+
+        private ActionResult HandleNullItem() => RedirectToAction(UIViewType.Index.ToString()).WithError("No " + className + " was found with that id.");
+
+        public ActionResult BaseEdit(int id)
         {
             T item = Repo.GetById(id);
             if (item == null)
             {
-                return  RedirectToAction(UIViewType.Index.ToString()).WithWarning(ClassName + " was not found");
+                return HandleNullItem();
             }
             else
             {
-                return View(UIViewType.Details.ToString(), item);
+                return HandleSuccess(item);
             }
         }
 
         private bool IsModelValid(T item) => new ModelValidation().IsModelValid<T>(item);
 
-        public ViewResult BaseCreate(UIViewType actionMethod)
-        {
-            ViewBag.ActionMethod = UIViewType.Create;
-            T item = new T
-            {
-                CreationDate = DateTime.Now
-            };
-            return View(UIViewType.Details.ToString(), item);
+        public ActionResult BaseCreate()
+        { 
+            T item = new T();            
+            return HandleSuccess(item);
         }
 
 
@@ -99,45 +93,46 @@ namespace LambAndLentil.UI.Controllers
             if (isValid)
             {
                 Repo.Update(entity, entity.ID);
-
-
-                return RedirectToAction(UIViewType.BaseIndex.ToString()).WithSuccess(string.Format($"{entity.Name} has been saved or modified"));
+                return HandleSavedOrModified(entity);
             }
             else
             {
-                return View(UIViewType.Details.ToString(), entity).WithWarning("Something is wrong with the data!");
+                return HandleError(item);
             }
         }
 
+        private ActionResult HandleSavedOrModified(T entity) => RedirectToAction(UIViewType.BaseIndex.ToString()).WithSuccess(string.Format($"{entity.Name} has been saved or modified"));
 
         public ActionResult BaseDelete(int id = 1)
         {
             T item = Repo.GetById(id);
             if (item == null)
             {
-                return (ViewResult)RedirectToAction(UIViewType.Index.ToString()).WithWarning(ClassName + " was not found");
+                return HandleNullItem();
             }
             else
             {
-                return View(UIViewType.Details.ToString(), item).WithSuccess("Here it is!");   // not exactly what we want! TODO: in view,   Need a button with an Are You SURE you want to delete this?
+                return View(UIViewType.Details.ToString(), item).WithSuccess("Here it is!");   //  TODO: in view,   Need a button with an Are You SURE you want to delete this?
             }
         }
 
-        public ActionResult BaseDeleteConfirmed( int id=1)
+        public ActionResult BaseDeleteConfirmed(int id = 1)
         {
             T item = Repo.GetById(id);
             if (item == null)
             {
-                return RedirectToAction(UIViewType.BaseIndex.ToString()).WithWarning(ClassName + " was not found");
+                return HandleNullItem();
             }
             else
             {
                 Repo.Remove(item);
-                return RedirectToAction(UIViewType.BaseIndex.ToString()).WithSuccess(string.Format($"{item.Name} has been deleted"));
+                return HandleHasBeenDeleted(item);
             }
-        } 
+        }
 
-        public void BaseAddIngredientToIngredientsList( int id, string addedIngredient)
+        private ActionResult HandleHasBeenDeleted(T item) => RedirectToAction(UIViewType.BaseIndex.ToString()).WithSuccess(string.Format($"{item.Name} has been deleted"));
+
+        public void BaseAddIngredientToIngredientsList(int id, string addedIngredient)
         {
             T item = Repo.GetById(id);
 
@@ -146,6 +141,6 @@ namespace LambAndLentil.UI.Controllers
                 item.IngredientsList += String.Concat(", ", addedIngredient);
                 Repo.Update(item, item.ID);
             }
-        }  
+        }
     }
 }

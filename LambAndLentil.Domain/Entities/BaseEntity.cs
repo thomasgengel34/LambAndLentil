@@ -20,14 +20,14 @@ namespace LambAndLentil.Domain.Entities
         public DateTime ModifiedDate { get; set; }
         public string AddedByUser { get; set; }
         public string ModifiedByUser { get; set; }
-        public string IngredientsList { get; set; }
-        public bool CanHaveIngredientChild { get; set; }
-        public bool CanHaveMenuChild { get; set; }
-        public bool CanHavePersonChild { get; set; }
-        public bool CanHavePlanChild { get; set; }
-        public bool CanHaveRecipeChild { get; set; }
-        public bool CanHaveShoppingListChild { get; set; }
+        public string IngredientsList { get; set; } 
         public bool ChildCanBeAttached { get; set; }
+
+        public List<IEntity> Ingredients { get; set; }
+        public List<IEntity> Recipes { get; set; }
+        public List<IEntity> Menus { get; set; }
+        public List<IEntity> Plans { get; set; }
+        public List<IEntity> ShoppingLists { get; set; }
 
         public BaseEntity()
         {
@@ -38,9 +38,10 @@ namespace LambAndLentil.Domain.Entities
             AddedByUser = WindowsIdentity.GetCurrent().Name;
             ModifiedByUser = WindowsIdentity.GetCurrent().Name;
 
-            CanHaveIngredientChild = true;
-            CanHavePersonChild = false;
-
+            Ingredients = new List<IEntity>(); 
+            Recipes = new List<IEntity>();
+            Menus = new List<IEntity>();
+            Plans = new List<IEntity>();
 
         }
 

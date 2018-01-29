@@ -13,40 +13,8 @@ namespace LambAndLentil.Test.BasicControllerTests
     [TestClass]
     [TestCategory("ShoppingListsController")]
     public class ShoppingListsController_Test_Misc : ShoppingListsController_Test_Should
-    {
-        [TestMethod]
-        public void IsPublic()
-        {
-            // Arrange 
-
-            // Act
-            Type type = Controller.GetType();
-            bool isPublic = type.IsPublic;
-
-            // Assert 
-            Assert.AreEqual(isPublic, true);
-        }
-
-        [TestMethod]
-        public void InheritsFromBaseControllerCorrectly()
-        {
-            // Arrange
-
-            // Act 
-            Controller.PageSize = 4;
-
-            var type = typeof(ShoppingListsController);
-            var DoesDisposeExist = type.GetMethod("Dispose");
-
-            // Assert 
-            Assert.AreEqual(4, Controller.PageSize);
-            Assert.IsNotNull(DoesDisposeExist);
-        }
-
-
-
-
-
+    { 
+       
         [TestMethod]
         [TestCategory("Attach-Detach")]
         public void SuccessfullyDeleteAFoundShoppingList()
@@ -54,8 +22,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // TODO: verify "Are you sure you want to delete this?" message shows up.
             // Arrange
             int count = Repo.Count();
-
-            // Act 
+             
             AlertDecoratorResult adr = (AlertDecoratorResult)Controller.Delete(int.MaxValue);
             ViewResult view = (ViewResult)adr.InnerResult;
 
@@ -70,26 +37,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.AreEqual("Here it is!", message); 
         }
 
-
-
-        [TestMethod]
-        [TestCategory("Remove")]
-        public void DetachAnInvalidShoppingList()
-        {
-            // Arrange 
-
-            // Act 
-            var view = Controller.Delete(4000) as ViewResult;
-            AlertDecoratorResult adr = (AlertDecoratorResult)view;
-
-            // Assert
-            Assert.IsNotNull(view);
-            Assert.AreEqual("Shopping List was not found", adr.Message);
-            Assert.AreEqual("alert-warning", adr.AlertClass);
-
-            Assert.AreEqual(UIViewType.Index.ToString(), ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(0).ToString());
-
-        }
+         
 
         [TestMethod]
         [TestCategory("Detach")]
@@ -133,13 +81,9 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [TestMethod]
         public void CreateReturnsNonNull()
-        {
-            // Arrange 
-
-            // Act
-            ViewResult result = Controller.Create(UIViewType.Create) as ViewResult;
-
-            // Assert
+        { 
+            ViewResult result = Controller.Create() as ViewResult;
+             
             Assert.IsNotNull(result);
         }
 

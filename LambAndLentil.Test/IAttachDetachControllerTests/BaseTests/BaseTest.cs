@@ -50,27 +50,27 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
 
         }
 
-        private IGenericController<TParent> ControllerFactory()
+     internal IGenericController<TParent> ControllerFactory()
         {
             switch (ParentClassName)
             {
                 case "Ingredient":
-                    Controller = new IngredientsController(new TestRepository<Domain.Entities.Ingredient>()) as IGenericController<TParent>;
+                    Controller = new IngredientsController(new TestRepository<Ingredient>()) as IGenericController<TParent>;
                     return Controller;
                 case "Recipe":
-                    Controller = new RecipesController(new TestRepository<Domain.Entities.Recipe>()) as IGenericController<TParent>;
+                    Controller = new RecipesController(new TestRepository<Recipe>()) as IGenericController<TParent>;
                     return Controller;
                 case "Menu":
-                    Controller = new MenusController(new TestRepository<Domain.Entities.Menu>()) as IGenericController<TParent>;
+                    Controller = new MenusController(new TestRepository<Menu>()) as IGenericController<TParent>;
                     return Controller;
                 case "Plan":
-                    Controller = new PlansController(new TestRepository<Domain.Entities.Plan>()) as IGenericController<TParent>;
+                    Controller = new PlansController(new TestRepository<Plan>()) as IGenericController<TParent>;
                     return Controller;
                 case "ShoppingList":
-                    Controller = new ShoppingListsController(new TestRepository<Domain.Entities.ShoppingList>()) as IGenericController<TParent>;
+                    Controller = new ShoppingListsController(new TestRepository<ShoppingList>()) as IGenericController<TParent>;
                     return Controller;
                 case "Person":
-                    Controller = new PersonsController(new TestRepository<Domain.Entities.Person>()) as IGenericController<TParent>;
+                    Controller = new PersonsController(new TestRepository<Person>()) as IGenericController<TParent>;
                     return Controller;
                 default:
                     throw new NotImplementedException();

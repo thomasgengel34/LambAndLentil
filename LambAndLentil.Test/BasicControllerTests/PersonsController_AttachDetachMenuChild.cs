@@ -50,8 +50,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.AreEqual(initialMenuCount - 2, returnedPerson.Menus.Count());
         }
 
-        [TestMethod]
-        public void SuccessfullyDetachtheLastMenuChild() => BaseDetachTheLastMenuChild(Repo, Controller, Person);
+     
 
 
         [Ignore]

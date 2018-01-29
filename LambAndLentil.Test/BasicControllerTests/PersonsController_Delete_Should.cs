@@ -49,35 +49,10 @@ namespace LambAndLentil.Test.BasicControllerTests
         }
 
 
+         
 
-        [TestMethod]
-        [TestCategory("Delete")]
-        public void DeleteAFoundPerson()
-        {
-            BaseDeleteAFoundEntity(Controller);
-        }
-
-        [TestMethod]
-        public void ReturnDetailsWhenIDIsFound()
-        {
-            BaseReturnDetailsWhenIDIsFound(Controller);
-        }
-
-
-
-        [TestMethod]
-        [TestCategory("Delete")]
-        public void DeleteAnInvalidPerson()
-        {
-            // Arrange 
-            var view = Controller.Delete(4000) as ViewResult;
-            AlertDecoratorResult adr = (AlertDecoratorResult)view;
-            // Assert
-            Assert.IsNotNull(view);
-            Assert.AreEqual("Person was not found", adr.Message);
-            Assert.AreEqual("alert-warning", adr.AlertClass);
-            Assert.AreEqual(UIViewType.Index.ToString(), ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(0).ToString());
-        }
+       
+      
 
         [TestMethod]
         [TestCategory("Delete")]

@@ -16,7 +16,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         protected static IIngredient ReturnedIngredient { get; set; }
 
 
-        protected IngredientsController_Test_Should()
+       public IngredientsController_Test_Should()
         { 
              Controller = new IngredientsController(Repo)
             {
@@ -30,8 +30,6 @@ namespace LambAndLentil.Test.BasicControllerTests
             };
             Ingredient ingredient = new Ingredient() { ID = 545, Name = "Default" };
             Ingredient.Ingredients.Add(new Ingredient() { ID = 545, Name = "Default" });
-        }
-
-       
+        } 
     }
 }

@@ -24,51 +24,11 @@ namespace LambAndLentil.Test.BasicControllerTests
         [Ignore]
         [TestMethod]
         public void ReturnIndexWithWarningWhenIDIsNotFound()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
+        { 
             Assert.Fail();
         }
-
-        [TestMethod]
-        public void ReturnDetailsWhenIDIsFound()
-        {
-            BaseReturnDetailsWhenIDIsFound(Controller);
-        }
-
-
-
-
-
-
-        [TestMethod]
-        [TestCategory("Delete")]
-        public void DeleteAFoundRecipe()
-        {
-            BaseDeleteAFoundEntity(Controller);
-        }
-
-        [TestMethod]
-        [TestCategory("Delete")]
-        public void DeleteAnInvalidRecipe()
-        {
-            // Arrange 
-            ClassCleanup();
-            // Act 
-            ActionResult ar = Controller.Delete(int.MaxValue - 6) as ViewResult;   // does not exist
-            AlertDecoratorResult adr = (AlertDecoratorResult)ar;
-
-            // Assert
-
-            Assert.AreEqual("Recipe was not found", adr.Message);
-            Assert.AreEqual("alert-warning", adr.AlertClass);
-
-            Assert.AreEqual(UIViewType.Index.ToString(), ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(0).ToString());
-
-        }
+         
+          
 
         [TestMethod]
         [TestCategory("Delete")]

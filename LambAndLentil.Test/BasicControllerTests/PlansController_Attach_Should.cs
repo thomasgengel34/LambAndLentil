@@ -17,18 +17,7 @@ namespace LambAndLentil.Test.BasicControllerTests
     [TestCategory("Attach")]  
     [TestClass]
     public class PlansController_Attach_Should:PlansController_Test_Should
-    {
-        [TestMethod]
-        public void ReturnsIndexWithWarningWithUnknownParentID() => BaseReturnsIndexWithWarningWithUnknownParentID(Controller);
-
-        [TestMethod]
-        public void ReturnsIndexWithWarningWithNullParent() => BaseReturnsIndexWithWarningWithNullParent(Controller);
-
-        [TestMethod]
-        public void ReturnsDetailWithWarningWithUnknownChildID() => BaseReturnsDetailWithWarningWithUnknownChildID(Plan,  Controller);
-
-        [TestMethod]
-        public void ReturnsDetailWithWarningIfAttachingNullChild() => BaseReturnsDetailWithWarningIfAttachingNullChild(Plan,  Controller);
+    { 
 
         [TestMethod]
         public void ReturnsDetailWhenAttachingWithSuccessWithValidParentandValidChild()
@@ -47,12 +36,11 @@ namespace LambAndLentil.Test.BasicControllerTests
                 Description = "test ReturnsDetailWhenAttachingWithSuccessWithValidParentandValidChild"
             };
 
-            // Act
+          
             ActionResult ar = Controller.Attach(int.MaxValue, ingredient );
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             RedirectToRouteResult rdr = (RedirectToRouteResult)adr.InnerResult;
-
-            //Assert
+             
             Assert.AreEqual("alert-success", adr.AlertClass);
             Assert.AreEqual("Ingredient was Successfully Attached!", adr.Message);
             Assert.AreEqual(int.MaxValue, rdr.RouteValues.ElementAt(0).Value);
@@ -63,12 +51,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         [Ignore]
         [TestMethod]
         public void ReturnsDetailWhenDetachingWithSuccessWithValidParentandValidChild()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
+        { 
             Assert.Fail();
         }
  
@@ -109,34 +92,11 @@ namespace LambAndLentil.Test.BasicControllerTests
            
             Assert.AreEqual(initialIngredientCount - 2, returnedPlan.Ingredients.Count());
         }
-
-        [TestMethod]
-        public void DetachTheLastIngredientChild()
-        {
-            BaseDetachTheLastIngredientChild(Controller, Plan);
-        }
-
-        [TestMethod] 
-        public void DetachAllIngredientChildren()=>       
-            BaseDetachAllIngredientChildren(Controller ); 
-
-
-
-        [TestMethod]
-        public void SuccessfullyAttachRecipeChild()
-        {
-            BaseSuccessfullyAttachRecipeChild(Plan, Controller);
-        }
-
+         
         [Ignore]
         [TestMethod]
         public void SuccessfullyDetachRecipeChild()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
+        { 
             Assert.Fail();
         }
 
@@ -153,7 +113,6 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void SuccessfullyDetachChild() => 
             Assert.Fail();
 
-        [TestMethod]
-        public void ReturnsDetailWhenDetachingWithSuccessWithValidParentandValidIngredientChild() => BaseReturnsDetailWhenDetachingWithSuccessWithValidParentandValidIngredientChild(Controller, Plan.ID);
+     
     }
 }

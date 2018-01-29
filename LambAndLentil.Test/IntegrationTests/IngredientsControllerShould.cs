@@ -19,18 +19,7 @@ namespace LambAndLentil.Test.Infrastructure
         public IngredientsControllerShould()
         {
         }
-
-        [TestMethod]
-        [TestCategory("Create")]
-        public void CreateAnIngredient()
-        { 
-            ViewResult vr = (ViewResult)Controller.Create(UIViewType.Create);
-            string modelName = ((Ingredient)vr.Model).Name;
-             
-            Assert.AreEqual(vr.ViewName, UIViewType.Details.ToString());
-            Assert.AreEqual(modelName, "Newly Created");
-        }
-
+         
         [TestMethod]
         [TestCategory("Save")]
         public void SaveAValidIngredientAndReturnIndexView()
@@ -161,32 +150,8 @@ namespace LambAndLentil.Test.Infrastructure
             Assert.AreEqual(initialCount, Repo.Count());
         }
 
-        [TestMethod]
-        [TestCategory("Edit")]
-        public void ReturnIndexWithWarningForNonexistentIngredient()
-        { 
-            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.Edit(1000);
-            RedirectToRouteResult rdr = (RedirectToRouteResult)adr.InnerResult;
-             
-            Assert.AreEqual(UIViewType.Index.ToString(), rdr.RouteValues.ElementAt(0).Value.ToString());
-            Assert.AreEqual("Ingredient was not found", adr.Message);
-            Assert.AreEqual("alert-warning", adr.AlertClass);
-        }
-
-
-        [TestMethod]
-        public void NotChangeIDInPostEditActionMethod()
-        { 
-            int originalID = Ingredient.ID;
-            Ingredient.ID = 7000; 
-            
-            Controller.PostEdit((Ingredient)Ingredient);
-            ReturnedIngredient = Repo.GetById(7000);
-            Ingredient OriginalIngredient = Repo.GetById(originalID); 
-
-            Assert.AreEqual(originalID, OriginalIngredient.ID);
-            Assert.AreEqual(7000, ReturnedIngredient.ID);
-        }
+      
+       
 
 
         [TestCategory("BaseEntiity Property")]

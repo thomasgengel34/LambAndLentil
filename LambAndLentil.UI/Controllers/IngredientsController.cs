@@ -10,15 +10,14 @@ namespace LambAndLentil.UI.Controllers
 {
 
     public class IngredientsController : BaseAttachDetachController<Ingredient>, IIngredientsControllerAsync
-    {  
-        static HttpClient Client { get; set; }
+    {
+        static  HttpClient Client;
         static string key   = "sFtfcrVdSOKA4ip3Z1MlylQmdj5Uw3JoIIWlbeQm";
 
         public IngredientsController(IRepository<Ingredient> repository) : base(repository)
         {
             Repo = repository;
-            Client = new HttpClient();
-
+            Client =  new HttpClient(); 
         }
 
         

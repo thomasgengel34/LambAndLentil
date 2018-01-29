@@ -9,12 +9,7 @@ namespace LambAndLentil.Test.BasicControllerTests
     {
         [TestMethod]
         public void ReturnIndexWithValidModelStateWithSuccessMessageWhenSaved()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
+        { 
             Assert.Fail();
         }
 

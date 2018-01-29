@@ -11,23 +11,7 @@ namespace LambAndLentil.Test.BasicControllerTests
    
     [TestClass]
     public class IngredientsController_DeleteConfirmed_Should:IngredientsController_Test_Should
-    {
-        [TestMethod]
-        public void ReturnIndexWithWarningWhenIDIsNotFound()
-        {  //  return RedirectToAction(UIViewType.BaseIndex.ToString()).WithWarning(ClassName + " was not found");
-            // Arrange
-
-            // Act
-            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.DeleteConfirmed(8000);
-            RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
-            
-            // Assert
-            Assert.AreEqual("Ingredient was not found", adr.Message);
-            Assert.AreEqual("alert-warning", adr.AlertClass);
-            Assert.AreEqual(1, rtrr.RouteValues.Count, 1);
-            Assert.AreEqual("BaseIndex", rtrr.RouteValues.Values.ElementAt(0).ToString());           
-        }
-
+    { 
         [TestMethod]
         public void ReturnIndexWithConfirmationWhenIDIsFound()
         { //        return RedirectToAction(UIViewType.BaseIndex.ToString()).WithSuccess(string.Format("{0} has been deleted", item.Name));

@@ -14,36 +14,7 @@ namespace LambAndLentil.Test.BasicControllerTests
     [TestCategory("Misc")]
     public class PersonsController_Test_Misc : PersonsController_Test_Should
     {
-        [TestMethod]
-        public void InheritsFromBaseControllerCorrectly()
-        {
-            // Arrange
-
-            // Act 
-            Controller.PageSize = 4;
-
-            var type = typeof(PersonsController);
-            var DoesDisposeExist = type.GetMethod("Dispose");
-
-            // Assert 
-            Assert.AreEqual(4, Controller.PageSize);
-            Assert.IsNotNull(DoesDisposeExist);
-        }
-
-        [TestMethod]
-        public void IsPublic()
-        {
-            // Arrange 
-
-            // Act
-            Type type = Controller.GetType();
-            bool isPublic = type.IsPublic;
-
-            // Assert 
-            Assert.AreEqual(isPublic, true);
-        }
-           
-
+       
         [TestMethod]
         public void PostEditPersonsFullName()
         {
@@ -84,13 +55,12 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Arrange
             Person person = new Person { ID = 1001, FirstName = "Jon", LastName = "Johns", Description = "PostEditPersonsLastName" };
             Repo.Save(person);
-
-            // Act
+             
             person.LastName = "Luc";
             Controller.PostEdit(person);
             Repo.Save(person);
             Person newPerson = Repo.GetById(1000);
-            //Assert
+           
             Assert.AreEqual("Jon Luc", person.Name);
         }
 
@@ -99,13 +69,9 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [TestMethod]
         public void CreateReturnsNonNull()
-        {
-            // Arrange 
-
-            // Act
-            ViewResult result = Controller.Create(UIViewType.Create) as ViewResult;
-
-            // Assert
+        { 
+            ViewResult result = Controller.Create() as ViewResult;
+             
             Assert.IsNotNull(result);
         } 
 

@@ -55,18 +55,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Assert
             Assert.AreEqual(initialIngredientCount - 2, returnedPerson.Ingredients.Count());
         }
-
-      
-        [TestMethod]
-        public void SuccessfullyDetachtheLastIngredientChild()
-        {
-            BaseDetachTheLastIngredientChild(Controller, Person);
-        }
-
-        
-        [TestMethod]
-        public void  DetachAllIngredientChildren()=> 
-            BaseDetachAllIngredientChildren(Controller ); 
+         
 
         [Ignore]
         [TestMethod]

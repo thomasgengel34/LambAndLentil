@@ -33,35 +33,16 @@ namespace LambAndLentil.Test.BasicControllerTests
 
             Controller = new PlansController(Repo);
         }
-
-        [TestMethod]
-        public void CreateAnPlan()
-        {
-            // Arrange 
-
-            // Act
-            ViewResult vr = (ViewResult)Controller.Create(UIViewType.Create);
-            Plan Plan = (Plan)vr.Model;
-            string modelName = Plan.Name;
-
-            // Assert 
-            Assert.AreEqual(vr.ViewName, UIViewType.Details.ToString());
-            Assert.AreEqual(modelName, "Newly Created");
-        }
-
+         
         [Ignore]
         [TestMethod]
         public void SaveAValidPlan()
-        {
-            // Arrange  
-
-            // Act
+        { 
             AlertDecoratorResult adr = (AlertDecoratorResult)Controller.PostEdit((Plan)Plan);
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
 
             var routeValues = rtrr.RouteValues.Values;
-
-            // Assert 
+             
             Assert.AreEqual("alert-success", adr.AlertClass);
             Assert.AreEqual(4, routeValues.Count);
             Assert.AreEqual(UIControllerType.Plans.ToString(), routeValues.ElementAt(0).ToString());

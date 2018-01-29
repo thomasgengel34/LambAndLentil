@@ -20,10 +20,10 @@ namespace LambAndLentil.Domain.Entities
         public List<Ingredient> Ingredients { get; set; } 
         public int ID { get; set; }
          
-        List<Recipe> IEntity.Recipes { get; set; } = null;
-        List<Menu> IEntity.Menus { get; set; } = null;
-        List<Plan> IEntity.Plans { get; set; } = null;
-        List<ShoppingList> IEntity.ShoppingLists { get; set; } = null;
+        List<IEntity> IEntity.Recipes { get; set; } = null;
+        List<IEntity> IEntity.Menus { get; set; } = null;
+        List<IEntity> IEntity.Plans { get; set; } = null;
+        List<IEntity> IEntity.ShoppingLists { get; set; } = null;
 
         bool IEntity.CanHaveChild(IEntity child)
         {

@@ -11,34 +11,19 @@ namespace LambAndLentil.Test.BasicControllerTests
     {
         [TestMethod]
         public void ReturnIndexWithWarningWhenIDIsNotFound()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
+        { 
             Assert.Fail();
         }
 
         [TestMethod]
         public void ReturnIndexWithConfirmationWhenIDIsFound()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
+        { 
             Assert.Fail();
         }
 
         [TestMethod]
         public void DeleteTheCorrectItemAndNotOtherItemsWhenIDIsFound()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
+        { 
             Assert.Fail();
         }
     }

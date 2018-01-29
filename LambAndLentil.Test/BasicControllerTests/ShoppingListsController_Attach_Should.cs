@@ -126,32 +126,26 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [TestMethod] 
         public void DetachASetOfIngredientChildren()
-        {
-            // Arrange 
+        { 
             ShoppingList.Ingredients.Add(new Ingredient { ID = 4005, Name = "Butter" });
             ShoppingList.Ingredients.Add(new Ingredient { ID = 4006, Name = "Cayenne Pepper" });
             ShoppingList.Ingredients.Add(new Ingredient { ID = 4007, Name = "Cheese" });
             ShoppingList.Ingredients.Add(new Ingredient { ID = 4008, Name = "Chopped Green Pepper" });
             Repo.Save(ShoppingList);
             int initialIngredientCount = ShoppingList.Ingredients.Count();
-
-            // Act
+             
             var setToSelect = new HashSet<int> { 4006, 4008 };
             List<Ingredient> selected = ShoppingList.Ingredients.Where(t => setToSelect.Contains(t.ID)).ToList();
             Controller.DetachASetOf<Ingredient>( ShoppingList.ID, selected);
             ShoppingList returnedShoppingList = Repo.GetById(ShoppingList.ID);
-
-            // Assert
+             
             Assert.AreEqual(initialIngredientCount - 2, returnedShoppingList.Ingredients.Count());
         }
 
         [TestMethod]
         public void DetachTheLastIngredientChild() =>
-            BaseDetachTheLastIngredientChild(Controller, ShoppingList); 
-
-        [TestMethod] 
-        public void DetachAllIngredientChildren() =>  BaseDetachAllIngredientChildren(Controller ); 
-
+            BaseDetachTheLastIngredientChild(Controller, ShoppingList);
+         
         [TestMethod]
         public void ReturnsDetailWithWarningWithUnknownChildID() => BaseReturnsDetailWithWarningWithUnknownChildID(ShoppingList, Controller);
 

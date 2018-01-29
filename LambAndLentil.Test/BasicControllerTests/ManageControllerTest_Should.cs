@@ -12,15 +12,12 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         public void  InheritsFromController()
-        {
-            // Arrange
+        { 
             ManageController testController = new ManageController();
-
-            // Act 
+             
             Type baseType = typeof(IController);
             bool isBase = baseType.IsInstanceOfType(testController);
-
-            // Assert 
+             
             Assert.AreEqual(isBase, true);
         }
 

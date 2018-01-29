@@ -67,12 +67,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         [Ignore]
         [TestMethod]
         public void SuccessfullyDetachAllShoppingListChildren()
-        {
-            // Arrange
-
-            // Act
-
-            //Assert
+        { 
             Assert.Fail();
         }
 

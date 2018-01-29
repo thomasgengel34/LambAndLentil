@@ -1,66 +1,58 @@
 ﻿using LambAndLentil.Domain.Entities;
+using System;
 
 namespace LambAndLentil.BusinessObjects
 {
     public class ChildAttachment
     {
-        public TParent AddChildToParent<TParent, TChild>(TParent parent, TChild child)
-            where TParent : BaseEntity, IEntity
-            where TChild : BaseEntity, IEntity
+        public IEntity AddChildToParent(IEntity parent, IEntity child) 
         {
+            Type type = child.GetType();
             {   // TODO: avoid mundane repetition  
-                if (typeof(TChild) == typeof(Ingredient))
-                {
+                if ( type  == typeof(Ingredient))
+                { 
                     parent.Ingredients.Add(child as Ingredient);
                     return parent;
                 }
-                if (typeof(TChild) == typeof(Menu))
+                if (type  == typeof(Menu))
                 {
                     return AddMenu(parent, child);
                 }
-                if (typeof(TChild) == typeof(Recipe))
+                if (type  == typeof(Recipe))
                 {
-                    return AddRecipe(parent, child);
+                    return  AddRecipe(parent, child);
                 }
-                if (typeof(TChild) == typeof(Plan))
+                if (type  == typeof(Plan))
                 {
-                    return AddPlan(parent, child);
+                    return  AddPlan(parent, child);
                 }
-                if (typeof(TChild) == typeof(ShoppingList))
+                if (type  == typeof(ShoppingList))
                 {
-                    return AddShoppingList(parent, child);
+                    return  AddShoppingList(parent, child);
                 }
                 return parent;
             }
         }
 
-        private static TParent AddShoppingList<TParent, TChild>(TParent parent, TChild child)
-            where TParent : BaseEntity, IEntity
-            where TChild : BaseEntity, IEntity
+        private static IEntity AddShoppingList(IEntity parent, IEntity child) 
         {
             parent.ShoppingLists.Add(child as ShoppingList);
             return parent;
         }
 
-        private static TParent AddPlan<TParent, TChild>(TParent parent, TChild child)
-            where TParent : BaseEntity, IEntity
-            where TChild : BaseEntity, IEntity
+        private static IEntity AddPlan(IEntity parent, IEntity child) 
         {
-            parent.Plans.Add(child as Plan);
+            parent.Plans.Add( child );
             return parent;
         }
 
-        private static TParent AddRecipe<TParent, TChild>(TParent parent, TChild child)
-            where TParent : BaseEntity, IEntity
-            where TChild : BaseEntity, IEntity
+        private static IEntity AddRecipe(IEntity parent, IEntity child) 
         {
             parent.Recipes.Add(child as Recipe);
             return parent;
         }
 
-        private static TParent AddMenu<TParent, TChild>(TParent parent, TChild child)
-            where TParent : BaseEntity, IEntity
-            where TChild : BaseEntity, IEntity
+        private static IEntity AddMenu(IEntity parent, IEntity child) 
         {
              parent.Menus.Add(child as Menu);
             return parent;

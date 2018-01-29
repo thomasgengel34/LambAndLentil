@@ -18,21 +18,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void ReturnsErrorWithUnknownRepository() =>
            
             Assert.Fail();
-
-
-
-        [TestMethod]
-        public void ReturnsIndexWithWarningWithNullParent() => BaseReturnsIndexWithWarningWithNullParent(Controller);
-
-        [TestMethod]
-        public void ReturnsIndexWithWarningWithUnknownParentID() => BaseReturnsIndexWithWarningWithUnknownParentID(Controller);
-
-        [TestMethod]
-        public void ReturnsDetailWithWarningIfAttachingNullChild() => BaseReturnsDetailWithWarningIfAttachingNullChild(Person, Controller);
-
-        [TestMethod]
-        public void ReturnsDetailWithWarningWithUnknownChildID() => BaseReturnsDetailWithWarningWithUnknownChildID(Person,  Controller);
-
+         
         [TestMethod]
         public void ReturnsDetailWhenAttachingWithSuccessWithValidParentandValidChild()
         { 
@@ -62,11 +48,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.AreEqual("Details", rdr.RouteValues.ElementAt(2).Value.ToString());
         }
 
-
-        [TestMethod]
-        public void ReturnsDetailWhenDetachingWithSuccessWithValidParentandValidIngredientChild() =>
-            BaseReturnsDetailWhenDetachingWithSuccessWithValidParentandValidIngredientChild(Controller, Person.ID);
-
+         
 
 
         [TestMethod]
@@ -84,9 +66,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             //  Assert.AreEqual("Default", Ingredient.Ingredients.Last().Name);
             Assert.AreEqual("SuccessfullyAttachChild", ReturnedPerson.Ingredients.Last().Name);
         }
-
-        [TestMethod]
-        public void SuccessfullyAttachRecipeChild() => BaseSuccessfullyAttachRecipeChild(Person, Controller);
+         
 
         [Ignore]
         [TestMethod]
@@ -98,18 +78,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         //[TestMethod]
         //public void SuccessfullyAttachRecipeChild() => BaseSuccessfullyAttachChild(Person, Controller);
 
-
-
-        [Ignore]
-        [TestMethod]
-        public void SuccessfullyDetachChild()
-        {
-            //IGenericController<Person> DetachController = (IGenericController<Person>)(new PersonsController(Repo));
-            //BaseSuccessfullyDetachChild(Repo, Controller, DetachController, UIControllerType.Persons);
-        }
-
-        [TestMethod]
-        public void SuccessfullyAttachPlanChild() => BaseSuccessfullyAttachPlanChild(Person, Controller);
+  
 
         [Ignore]
         [TestMethod]
@@ -151,23 +120,14 @@ namespace LambAndLentil.Test.BasicControllerTests
             Person.Ingredients.Add(new Ingredient { ID = 4008, Name = "Chopped Green Pepper" });
             Repo.Save((Person)Person);
             int initialIngredientCount = Person.Ingredients.Count();
-
-            // Act
+             
             var setToSelect = new HashSet<int> { 4006, 4008 };
             List<Ingredient> selected = Person.Ingredients.Where(t => setToSelect.Contains(t.ID)).ToList();
             Controller.DetachASetOf(Person.ID, selected);
             Person returnedPerson = Repo.GetById(Person.ID);
-
-            // Assert
+             
             Assert.AreEqual(initialIngredientCount - 2, returnedPerson.Ingredients.Count());
         }
-
-        [TestMethod]
-        public void DetachTheLastIngredientChild() => BaseDetachTheLastIngredientChild(Controller, Person);
-
-        [TestMethod]
-        public void DetachAllIngredientChildren() => BaseDetachAllIngredientChildren(Controller );
-
-
+         
     }
 }

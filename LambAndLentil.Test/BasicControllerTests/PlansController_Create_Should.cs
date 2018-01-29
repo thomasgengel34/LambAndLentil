@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Web.Mvc;
 using LambAndLentil.UI;
+using LambAndLentil.UI.Infrastructure.Alerts;
 
 namespace LambAndLentil.Test.BasicControllerTests
 {
@@ -13,15 +14,14 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestMethod]
         [TestCategory("Create")]
         public void Create()
-        {
-            // Arrange
+        {  
+            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.Create();
+            ViewResult view = (ViewResult)adr.InnerResult;
 
-            ViewResult view = (ViewResult)Controller.Create(UIViewType.Edit);
-
-
-            // Assert
             Assert.IsNotNull(view);
-            Assert.AreEqual("Details", view.ViewName);
-        }
+            Assert.AreEqual(UIViewType.Details.ToString(), view.ViewName);
+            Assert.AreEqual("alert-success", adr.AlertClass);
+            Assert.AreEqual("Here it is!", adr.Message); 
+        }  
     }
 }

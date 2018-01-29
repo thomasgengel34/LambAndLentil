@@ -12,16 +12,13 @@ namespace LambAndLentil.UI.Controllers
     public interface IAttachDetachController<T>
         where T : class, IEntity
     {
-        ActionResult Attach<TChild>(int? parentID, TChild child )
-            where TChild : BaseEntity, IEntity, new();
+        ActionResult Attach(IEntity parent, IEntity child );
 
-        ActionResult Detach<TChild>(  int? parentID, TChild child)
-             where TChild : BaseEntity, IEntity, new();
+        ActionResult Detach(IEntity parent, IEntity child);
 
-        ActionResult DetachASetOf<TChild>(int? ID, List<TChild> selected)
-              where TChild : BaseEntity, IEntity, new();
+        ActionResult DetachASetOf(IEntity parent, List<IEntity> selected);
+   
 
-        ActionResult DetachAll<TChild>(int? ID)
-         where TChild : BaseEntity, IEntity, new();
+        ActionResult DetachAll(IEntity parent, Type type);
     }
 }

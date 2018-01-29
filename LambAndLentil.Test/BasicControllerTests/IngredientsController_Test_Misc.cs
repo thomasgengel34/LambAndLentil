@@ -16,11 +16,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [TestMethod]
         public void InheritFromBaseControllerCorrectlyPageSizeRight()
-        {
-
-            // Arrange
-        
-            // Act 
+        { 
             Controller.PageSize = 4;
 
             var type = typeof(IngredientsController);
@@ -34,11 +30,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [TestMethod]
         public void InheritFromBaseControllerCorrectlyDisposeExists()
-        {
-
-            // Arrange
-           
-            // Act 
+        { 
             Controller.PageSize = 4;
 
             var type = typeof(IngredientsController);
@@ -57,20 +49,11 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.AreEqual(isPublic, true); 
         }
 
-     
- 
 
-        
+
+
+
         [TestMethod]
-        public void GetTheClassNameCorrect()
-        {
-            // Arrange
-
-            // Act
-
-
-            // Assert 
-           Assert.AreEqual("LambAndLentil.UI.Controllers.IngredientsController", IngredientsController_Test_Should.Controller.ToString()); 
-        } 
+        public void GetTheClassNameCorrect() => Assert.AreEqual("LambAndLentil.UI.Controllers.IngredientsController", Controller.ToString());
     }
 }

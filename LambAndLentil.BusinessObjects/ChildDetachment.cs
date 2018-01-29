@@ -8,15 +8,13 @@ namespace LambAndLentil.BusinessObjects
 {
     public class ChildDetachment
     {
-        private IEntity _parent;
-        private IEntity _child;
+        private IEntity _parent; 
        
-        public IEntity DetachAllChildrenOfAType(IEntity parent, IEntity child)
+        public IEntity DetachAllChildrenOfAType(IEntity parent, Type type)
         {
-            _parent = parent;
-            _child = child;
+            _parent = parent; 
 
-            string typeAsString = child.GetType().ToString().Split('.').Last();
+            string typeAsString = type.ToString().Split('.').Last();
             Enum.TryParse(typeAsString, out EntityType typeAsEnumMember);
 
             switch (typeAsEnumMember)
@@ -46,16 +44,17 @@ namespace LambAndLentil.BusinessObjects
 
 
 
-        public IEntity DetachSelectionFromChildren<TChild>(IEntity parent, List<TChild> selected)
-            where TChild : BaseEntity, IEntity, new()
+        public IEntity DetachSelectionFromChildren(IEntity parent, List<IEntity> selected) 
         {
             _parent = parent;
+           Type  childType = selected.First().GetType(); 
+             
 
-            if (typeof(TChild) == typeof(Ingredient))
+            if ( childType == typeof(Ingredient))
             {
                 var allIngredientIDs = _parent.Ingredients.Select(a => a.ID);
 
-                var setToDetach = new HashSet<TChild>(selected).Where(p => p != null).Select(r => r.ID).AsQueryable();
+                var setToDetach = new HashSet<IEntity>(selected).Where(p => p != null).Select(r => r.ID).AsQueryable();
 
                 var remainingIDs = allIngredientIDs.Except(setToDetach);
                 var remainingChildren = _parent.Ingredients.Where(b => remainingIDs.Contains(b.ID));
@@ -63,11 +62,11 @@ namespace LambAndLentil.BusinessObjects
                 parent = _parent;
                 return parent;
             }
-            else if (typeof(TChild) == typeof(Recipe))
+            else if (childType == typeof(Recipe))
             {
                 var allRecipeIDs = _parent.Recipes.Select(a => a.ID);
 
-                var setToDetach = new HashSet<TChild>(selected).Where(p => p != null).Select(r => r.ID).AsQueryable();
+                var setToDetach = new HashSet<IEntity>(selected).Where(p => p != null).Select(r => r.ID).AsQueryable();
 
                 var remainingIDs = allRecipeIDs.Except(setToDetach);
                 var remainingChildren = _parent.Recipes.Where(b => remainingIDs.Contains(b.ID));
@@ -76,11 +75,11 @@ namespace LambAndLentil.BusinessObjects
                 return parent;
 
             }
-            else if (typeof(TChild) == typeof(Menu))
+            else if (childType == typeof(Menu))
             {
                 var allMenuIDs = _parent.Menus.Select(a => a.ID);
 
-                var setToDetach = new HashSet<TChild>(selected).Where(p => p != null).Select(r => r.ID).AsQueryable();
+                var setToDetach = new HashSet<IEntity>(selected).Where(p => p != null).Select(r => r.ID).AsQueryable();
 
                 var remainingIDs = allMenuIDs.Except(setToDetach);
                 var remainingChildren = _parent.Menus.Where(b => remainingIDs.Contains(b.ID));
@@ -89,11 +88,11 @@ namespace LambAndLentil.BusinessObjects
                 return parent;
 
             }
-            else if (typeof(TChild) == typeof(Plan))
+            else if (childType == typeof(Plan))
             {
                 var allPlanIDs = _parent.Plans.Select(a => a.ID);
 
-                var setToDetach = new HashSet<TChild>(selected).Where(p => p != null).Select(r => r.ID).AsQueryable();
+                var setToDetach = new HashSet<IEntity>(selected).Where(p => p != null).Select(r => r.ID).AsQueryable();
 
                 var remainingIDs = allPlanIDs.Except(setToDetach);
                 var remainingChildren = _parent.Plans.Where(b => remainingIDs.Contains(b.ID));
@@ -102,11 +101,11 @@ namespace LambAndLentil.BusinessObjects
                 return parent;
 
             }
-            else if (typeof(TChild) == typeof(ShoppingList))
+            else if (childType == typeof(ShoppingList))
             {
                 var allShoppingListIDs = _parent.ShoppingLists.Select(a => a.ID);
 
-                var setToDetach = new HashSet<TChild>(selected).Where(p => p != null).Select(r => r.ID).AsQueryable();
+                var setToDetach = new HashSet<IEntity>(selected).Where(p => p != null).Select(r => r.ID).AsQueryable();
 
                 var remainingIDs = allShoppingListIDs.Except(setToDetach);
                 var remainingChildren = _parent.ShoppingLists.Where(b => remainingIDs.Contains(b.ID));
@@ -115,18 +114,17 @@ namespace LambAndLentil.BusinessObjects
                 return parent;
 
             }
-            else if (typeof(TChild)==typeof(Person))
+            else if (childType == typeof(Person))
             {
                 throw new Exception("Person cannot be a child");
             }
             else throw new NotImplementedException();
         }
 
-        public IEntity DetachAnIndependentChild<TChild>(IEntity parent, IEntity child)
-              where TChild : BaseEntity, IEntity, new()
+        public IEntity DetachAnIndependentChild(IEntity parent, IEntity child) 
         {  
             _parent = parent;
-            List<TChild> selected = new List<TChild>() { (TChild)child };
+            List<IEntity> selected = new List<IEntity>() {  child };
             _parent = DetachSelectionFromChildren(_parent, selected);
             parent = _parent;
             return parent;

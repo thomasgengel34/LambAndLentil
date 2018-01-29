@@ -232,12 +232,9 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestMethod]
         [TestCategory("Edit")]
         public void CannotEditNonexistentPerson()
-        {
-            // Arrange
-
-            // Act
+        { 
             Person result = (Person)((ViewResult)Controller.Edit(8)).ViewData.Model;
-            // Assert
+          
             Assert.IsNull(result);
         }
 

@@ -22,48 +22,8 @@ namespace LambAndLentil.Test.BasicControllerTests
             Repo.Save((Ingredient)Ingredient);
         }
 
-
-        [TestMethod]
-        public void ReturnIndexWithValidModelStateWithSuccessMessageWhenSaved()
-        {
-
-            // Arrange
-            Ingredient rvm = new Ingredient
-            {
-                ID = -2
-            };
-
-
-            // Act
-            ActionResult ar =  Controller.PostEdit(rvm);
-            AlertDecoratorResult adr = (AlertDecoratorResult)ar;
-            ViewResult view = (ViewResult)adr.InnerResult;
-
-            // Assert
-            Assert.AreEqual("Something is wrong with the data!", adr.Message);
-            Assert.AreEqual("alert-warning", adr.AlertClass);
-            Assert.AreEqual("Details", view.ViewName);
-        }
-
-        [TestMethod]
-        public void ReturnIndexWithInValidModelStateWithWarningMessageWhenSaved()
-        {
-
-            // Arrange
-            Ingredient.ID = -2;
-
-
-            // Act
-            ActionResult ar =  Controller.PostEdit((Ingredient)Ingredient);
-            AlertDecoratorResult adr = (AlertDecoratorResult)ar;
-            ViewResult view = (ViewResult)adr.InnerResult;
-
-            // Assert
-            Assert.AreEqual("Something is wrong with the data!", adr.Message);
-            Assert.AreEqual("alert-warning", adr.AlertClass);
-            Assert.AreEqual("Details", view.ViewName);
-        }
-
+         
+         
 
         [TestMethod]
         public void BindCorrectIngredientsBoundInEdit()
@@ -100,36 +60,24 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [TestMethod]
         public void ModifiedDateUpDatesInEdit()
-        {
-            // Arrange
-
-            // Act
+        { 
             Controller.PostEdit((Ingredient)Ingredient);
             Ingredient returnedIngredient = Repo.GetById(1000);
-            // Assert
+            
             Assert.AreNotEqual(ModifiedDate, returnedIngredient.ModifiedDate);
         }
 
         [Ignore]
         [TestMethod]
         public void NotSaveLogicallyInvalidModel() =>
-            // Arrange
-
-            // Act
-
-            // Assert
+            
             Assert.Fail();
 
         [Ignore]
         [TestMethod]
         public void NotSaveModelFlaggedInvalidByDataAnnotation()=>
           // see https://msdn.microsoft.com/en-us/library/cc668224(v=vs.98).aspx
-
-            // Arrange
-
-            // Act
-
-            // Assert
+           
             Assert.Fail();
 
         

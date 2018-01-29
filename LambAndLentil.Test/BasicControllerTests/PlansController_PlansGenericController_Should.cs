@@ -12,21 +12,16 @@ namespace LambAndLentil.Test.BasicControllerTests
     {
         [TestMethod]
         public void InheritBaseControllerInPlan()
-        {
-            // Arrange
-
-            // Act 
+        { 
             Type type = Type.GetType("LambAndLentil.UI.Controllers.PlansController, LambAndLentil.UI", true);
-            // Assert
+          
             Assert.IsTrue(type.IsSubclassOf(typeof(BaseController<Plan>)));
         }
 
         [TestMethod]
         public void InheritBaseAttachDetachControllerInPlan()
         {
-            // Arrange
-
-            // Act
+             
             Type type = Type.GetType("LambAndLentil.UI.Controllers.PlansController, LambAndLentil.UI", true);
             // Assert
             Assert.IsTrue(type.IsSubclassOf(typeof(BaseAttachDetachController<Plan>)));
@@ -34,13 +29,10 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [TestMethod]
         public void CallRepositoryInPlan()
-        {
-            // Arrange
-
-            // Act
+        { 
             Type type = Repo.GetType();
            string name=  type.GenericTypeArguments[0].Name;
-            // Assert
+          
             Assert.AreEqual("Plan", name);
         }
     }

@@ -15,27 +15,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Menu = new Menu { ID = 1000, Name = "Original Name" };
             Repo.Save((Menu)Menu);
         }
-
-        [TestMethod]
-        public void InheritsFromBaseControllerCorrectly()
-        {
-
-            Assert.IsNotNull("this is a placeholder");
-        }
-
-        [TestMethod]
-        public void IsPublic()
-        {
-            // Arrange 
-
-            // Act
-            Type type = Controller.GetType();
-            bool isPublic = type.IsPublic;
-
-            // Assert 
-            Assert.AreEqual(true, isPublic);
-        }
-         
+ 
 
         [Ignore]
         [TestMethod]
@@ -75,20 +55,10 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [TestMethod]
         public void GetTheClassNameCorrect()
-        {
-            // Arrange
-
-            // Act
-
-
-            // Assert
-            //  Assert.Fail();
+        { 
             Assert.AreEqual("LambAndLentil.UI.Controllers.MenusController", MenusController_Test_Should.Controller.ToString());
         }
-
-
-      
-
+         
       
 
         [TestMethod]

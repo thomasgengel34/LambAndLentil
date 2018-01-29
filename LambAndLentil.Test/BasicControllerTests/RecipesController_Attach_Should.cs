@@ -113,9 +113,11 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [TestMethod]
         [TestCategory("Attach-Detach")]
-        public void DetachAllIngredientChildren() => BaseDetachAllIngredientChildren(Controller );
+        public void DetachAllIngredientChildren() => BaseDetachAllIngredientChildren(  );
 
         [TestMethod]
         public void ReturnsDetailWhenDetachingWithSuccessWithValidParentandValidIngredientChild() => BaseReturnsDetailWhenDetachingWithSuccessWithValidParentandValidIngredientChild(Controller, Recipe.ID);
+
+
     }
 }

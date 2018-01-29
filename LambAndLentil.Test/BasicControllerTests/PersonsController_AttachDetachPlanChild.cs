@@ -12,25 +12,12 @@ namespace LambAndLentil.Test.BasicControllerTests
     [TestCategory("Attach-Detach")]
     public class PersonsController_AttachDetachPlanChild : PersonsController_Test_Should
     {
-
-
-        [TestMethod]
-        public void SuccessfullyAttachPlanChild()
-        {
-            BaseSuccessfullyAttachPlanChild(Person, Controller);
-        }
-
-
+         
 
         [Ignore]
         [TestMethod]
         public void SuccessfullyDetachFirstPlanChild()
-        {
-            // Arrange
-
-            // Act
-
-            //Assert
+        { 
             Assert.Fail();
         }
 
@@ -60,12 +47,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         [Ignore]
         [TestMethod]
         public void SuccessfullyDetachAllPlanChildren()
-        {
-            // Arrange
-
-            // Act
-
-            //Assert
+        { 
             Assert.Fail();
         }
 

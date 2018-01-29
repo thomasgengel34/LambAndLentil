@@ -11,9 +11,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 {
     [TestClass]
     public class MenusController_Edit_Should:MenusController_Test_Should
-    {
-
-
+    { 
         [Ignore]
         [TestMethod]
         public void CorrectMenusAreBoundInEdit() => Assert.Fail();
@@ -98,8 +96,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             ViewResult view1 = (ViewResult)Controller.Edit(1);
 
             Menu returnedMenuListEntity = Repo.GetById(1);
-
-            // Assert 
+             
             Assert.IsNotNull(view1);
             Assert.AreEqual("Name has been changed", returnedMenuListEntity.Name);
             Assert.AreEqual(menu.Description, returnedMenuListEntity.Description);
@@ -111,24 +108,17 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestMethod]
         [TestCategory("Edit")]
         public void CannotEditNonexistentMenu()
-        {
-            // Arrange
-
-            // Act
+        { 
             Menu result = (Menu)((ViewResult)Controller.Edit(8)).ViewData.Model;
-            // Assert
+          
             Assert.IsNull(result);
         }
 
         [TestMethod]
         public void CreateReturnsNonNull()
-        {
-            // Arrange 
-
-            // Act
-            ViewResult result = Controller.Create(UIViewType.Create) as ViewResult;
-
-            // Assert
+        { 
+            ViewResult result = Controller.Create() as ViewResult;
+             
             Assert.IsNotNull(result);
         }
     }

@@ -22,18 +22,9 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestMethod]
         public void ReturnIndexWithWarningWhenIDIsNotFound()
         {
-            // Arrange
-
-            // Act
-
-            // Assert
+             
             Assert.Fail();
         }
-
-        [TestMethod]
-        public void ReturnDetailsWhenIDIsFound()
-        {
-            BaseReturnDetailsWhenIDIsFound(Controller);
-        }
+         
     }
 }

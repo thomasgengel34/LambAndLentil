@@ -43,40 +43,17 @@ namespace LambAndLentil.Test.BasicControllerTests
             Repo.Save((Person)Person);
         }
 
+         
 
-        [TestMethod]
-        public void CreateAnPerson()
-        {
-            // Arrange
-
-
-            // Act
-            ViewResult vr = (ViewResult)Controller.Create(UIViewType.Create);
-            Person = (Person)vr.Model;
-            Person.Description = "Test.CreateAPerson";
-            Person.ID = 33;
-            string modelName = ((Person)vr.Model).Name;
-
-            // Assert 
-            Assert.AreEqual(vr.ViewName, UIViewType.Details.ToString());
-            Assert.AreEqual("Newly Created", modelName);
-        }
-
-
-
-        //  [Ignore]
+         
         [TestMethod]
         public void SaveAValidPerson()
-        {
-            // Arrange 
-
-            // Act
+        { 
             AlertDecoratorResult adr = (AlertDecoratorResult)Controller.PostEdit((Person)Person);
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
 
             var routeValues = rtrr.RouteValues.Values;
-
-            // Assert 
+             
             Assert.AreEqual("alert-success", adr.AlertClass);
             Assert.AreEqual(1, routeValues.Count);
             Assert.AreEqual(UIViewType.BaseIndex.ToString(), routeValues.ElementAt(0).ToString());

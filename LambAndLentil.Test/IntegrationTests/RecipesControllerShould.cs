@@ -20,52 +20,33 @@ namespace IntegrationTests
     {  
 
         public RecipesControllerShould() =>   Recipe = new Recipe(); 
-
-        [TestMethod]
-        public void CreateARecipe()
-        { 
-            ViewResult vr = (ViewResult)Controller.Create(UIViewType.Create);
-            Recipe vm = (Recipe)vr.Model;
-            string modelName = vm.Name;
-
-            // Assert 
-            Assert.AreEqual(vr.ViewName, UIViewType.Details.ToString());
-            Assert.AreEqual(modelName, "Newly Created");
-        }
-
-        // [Ignore]
+         
+         
         [TestMethod]
         public void SaveAValidRecipe()
-        {
-            // Arrange
-
+        { 
             Recipe vm = new Recipe
             {
                 Name = "test SaveAValidRecipe",
                 ID = int.MaxValue / 2
-            };
-            // Act
+            }; 
+
             AlertDecoratorResult adr = (AlertDecoratorResult)Controller.PostEdit(vm);
-            RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
-
+            RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult; 
             var routeValues = rtrr.RouteValues.Values;
-
-
-            // Assert 
+             
 
             Assert.AreEqual("alert-success", adr.AlertClass);
             Assert.AreEqual("test SaveAValidRecipe has been saved or modified", adr.Message);
             Assert.AreEqual(1, routeValues.Count);
             Assert.AreEqual(UIViewType.BaseIndex.ToString(), routeValues.ElementAt(0).ToString());
         }
-
-        // [Ignore]
+         
         [TestMethod]
         [TestCategory("Edit")]
         public void SaveEditedRecipeWithNameChange()
         {
-            // Arrange 
-
+            
             IGenericController<Recipe> Controller2 = new RecipesController(Repo);
             IGenericController<Recipe> Controller3 = new RecipesController(Repo);
             IGenericController<Recipe> Controller4 = new RecipesController(Repo);
@@ -144,28 +125,13 @@ namespace IntegrationTests
             Assert.AreEqual(returnedRecipe.ModifiedByUser, Recipe.ModifiedByUser); 
         }
 
-        
-        [TestMethod]
-        [TestCategory("Attach-Detach")]
-        public void AttachAnIngredientToAnExistingRecipe()
-        { 
-            Recipe recipe = new Recipe { ID = 3000, Description = "test AttachAnExistingIngredientToAnExistingRecipe" };
-            Repo.Save(recipe);
-            Ingredient ingredient = new Ingredient { ID = 3300 };
-                      
-            Controller.Attach(recipe.ID, ingredient );
-            Recipe returnedRecipe = Repo.GetById(recipe.ID);
-          
-            Assert.AreEqual(1, returnedRecipe.Ingredients.Count());
-            Assert.AreEqual("test AttachAnExistingIngredientToAnExistingRecipe", recipe.Description);
-        }
+      
 
         [Ignore]
         [TestMethod]
         [TestCategory("Attach-Detach")]
         public void NotDeleteAnIngredientAfterIngredientIsDetachedFromRecipe()
-        {
-            // Arrange
+        { 
             TestRepository<Recipe> repoRecipe = new TestRepository<Recipe>();
             TestRepository<Ingredient> repoIngredient = new TestRepository<Ingredient>();
             

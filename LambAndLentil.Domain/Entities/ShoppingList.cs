@@ -7,19 +7,11 @@ using System.Linq;
 namespace LambAndLentil.Domain.Entities
 {
     [Table("SHOPPINGLIST.ShoppingList")]
-    public class ShoppingList : BaseEntity, IShoppingList
+    public class ShoppingList : BaseEntity, IEntity 
     {
         public ShoppingList() : base()
         {
-            Ingredients = new List<Ingredient>();
-            Recipes = new List<Recipe>();
-            Menus = new List<Menu>();
-            Plans = new List<Plan>();
-
-            CanHaveMenuChild =true;
-            CanHavePlanChild = true;
-            CanHaveRecipeChild = true;
-            CanHaveShoppingListChild = false;
+             
         }
 
         public ShoppingList(DateTime creationDate) : base(creationDate)
@@ -29,11 +21,7 @@ namespace LambAndLentil.Domain.Entities
         }
 
       
-        public List<Ingredient> Ingredients { get; set; }
-        public List<Recipe> Recipes { get; set; }
-        public List<Menu> Menus { get; set; }
-        public List<Plan> Plans { get; set; }
-        public List<ShoppingList> ShoppingLists { get; set; }
+      
         public DateTime Date { get; set; }
         public string Author { get; set; }  
         public int  ID { get; set; }

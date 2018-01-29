@@ -27,64 +27,23 @@ namespace LambAndLentil.Test.BasicControllerTests
         [Ignore]
         [TestMethod]
         public void ReturnIndexWithWarningWhenIDIsNotFound()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
+        { 
             Assert.Fail();
         }
 
         [Ignore]
         [TestMethod]
         public void ReturnIDetailsWhenIDIstFound()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
+        { 
             Assert.Fail();
         }
 
-
-        [TestMethod]
-        [TestCategory("Delete")]
-        public void DeleteAFoundMenu()
-        {
-            BaseDeleteAFoundEntity(Controller);
-        }
-
-        [TestMethod]
-        public void ReturnDetailsWhenIDIsFound()
-        {
-            BaseReturnDetailsWhenIDIsFound(Controller);
-        }
-
-        [TestMethod]
-        [TestCategory("Delete")]
-        public void MenusCtr_DeleteAnInvalidMenu()
-        {
-            // Arrange 
-
-            // Act 
-            var view = Controller.Delete(4000) as ViewResult;
-            AlertDecoratorResult adr = (AlertDecoratorResult)view;
-            // Assert
-            Assert.IsNotNull(view);
-            Assert.AreEqual("Menu was not found", adr.Message);
-            Assert.AreEqual("alert-warning", adr.AlertClass);
-            Assert.AreEqual(UIViewType.Index.ToString(), ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(0).ToString());
-        }
+          
 
         [TestMethod]
         [TestCategory("Delete")]
         public void DeleteConfirmed()
-        {
-            // Arrange
-
-            // Act
+        { 
             ActionResult result = Controller.DeleteConfirmed(ListEntity.ListT.FirstOrDefault().ID) as ActionResult;
             // improve this test when I do some more route tests to return a more exact result
             //RedirectToRouteResult x = new RedirectToRouteResult("default",new  RouteValueDictionary { new Route( { Controller = "Menus", Action = "Index" } } );
@@ -95,18 +54,14 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestMethod]
         [TestCategory("Delete")]
         public void CanDeleteValidMenu()
-        {
-            // Arrange 
-
+        { 
             Menu menu = new Menu { ID = 2, Name = "Test2", Description = "test MenusControllerTest.CanDeleteValidMenu" };
             Repo.Save(menu);
             int beginningCount = Repo.Count();
-
-            // Act - delete the menu
+             
             ActionResult result = Controller.DeleteConfirmed(menu.ID);
             AlertDecoratorResult adr = (AlertDecoratorResult)result;
-
-            // Assert
+             
             Assert.AreEqual(beginningCount - 1, Repo.Count());
             Assert.AreEqual("Test2 has been deleted", adr.Message);
         }

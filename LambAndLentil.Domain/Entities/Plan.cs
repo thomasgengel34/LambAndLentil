@@ -8,32 +8,27 @@ using System.Threading.Tasks;
 namespace LambAndLentil.Domain.Entities
 {
     [Table("PLAN.Plan")]
-    public class Plan : BaseEntity, IPlan
+    public class Plan : BaseEntity, IEntity 
     {
         public Plan() : base()
         {
-            Ingredients = new List<Ingredient>();
-            Recipes = new List<Recipe>();
-            Menus = new List<Menu>();
+            Plans   = null;
+            ShoppingLists = null;
         }
 
 
         public Plan(DateTime creationDate) : base(creationDate) => CreationDate = creationDate;
 
 
-        public List<Ingredient> Ingredients { get; set; }
-        public List<Menu> Menus { get; set; }
-        public List<Recipe> Recipes { get; set; }
+       
         public int ID { get; set; } 
-        List<Plan> IEntity.Plans { get; set; } = null;
-        List<ShoppingList> IEntity.ShoppingLists { get; set; } = null;
-
+       
         void AddChildToParent(IEntity parent, IEntity child)
         {
-            ((IEntity)parent).Plans.Add((Plan)child);
+            parent.Plans.Add( child);
         }
 
-        bool IEntity.CanHaveChild(IEntity child)
+        public override bool  CanHaveChild(IEntity child)
         {
             Type type = child.GetType();
 
@@ -50,28 +45,11 @@ namespace LambAndLentil.Domain.Entities
             }
             return false;
         }
-
-        public override bool CanHaveChild(IEntity child)
-        {
-            Type type = child.GetType();
-
-            List<Type> possibleChildren = new List<Type>()
-            {
-                typeof(Ingredient),
-                typeof(Recipe),
-                typeof(Menu)
-            };
-
-            if (possibleChildren.Contains(type))
-            {
-                return true;
-            }
-            return false;
-        }
+         
 
         public void ParentRemoveAllChildrenOfAType(IEntity parent, IEntity child)
         {
-            ((IEntity)parent).Plans.Clear();
+            parent.Plans.Clear();
         }
 
 
@@ -92,11 +70,11 @@ namespace LambAndLentil.Domain.Entities
 
         }
 
-        int IEntity.GetCountOfChildrenOnParent(IEntity parent)
+        int  GetCountOfChildrenOnParent(IEntity parent)
         {
             try
             {
-                return ((IEntity)parent).Plans.Count();
+                return parent.Plans.Count();
             }
             catch (InvalidCastException)
             {
