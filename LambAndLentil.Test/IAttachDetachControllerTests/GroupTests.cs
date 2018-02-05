@@ -17,11 +17,11 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests
         public void RunAttachDetachControllerTests()
         {
             IngredientTestsDealer();
-            RecipeTestsDealer();
-            MenuTestsDealer();
-            PersonTestsDealer();
-            PlanTestsDealer();
-            ShoppingListTestsDealer();
+            //   RecipeTestsDealer();
+            //MenuTestsDealer();
+            //PersonTestsDealer();
+            //PlanTestsDealer();
+            //ShoppingListTestsDealer();
         }
 
 
@@ -30,15 +30,15 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests
         {
             TestsRunner<IngredientType, IngredientType>();
 
-            TestsRunner<IngredientType, RecipeType>();
+            //TestsRunner<IngredientType, RecipeType>();
 
-            TestsRunner<IngredientType, MenuType>();
+            //TestsRunner<IngredientType, MenuType>();
 
-            TestsRunner<IngredientType, PlanType>();
+            //TestsRunner<IngredientType, PlanType>();
 
-            TestsRunner<IngredientType, ShoppingListType>();
+            //TestsRunner<IngredientType, ShoppingListType>();
 
-            TestsRunner<IngredientType, PersonType>();
+            //TestsRunner<IngredientType, PersonType>();
 
         }
 
@@ -134,17 +134,19 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests
             if (CanBeChild)
             {
                 baseAttach.BaseDetailWithSuccessWhenParentIDIsValidAndChildIsValid();
-                baseAttach.BaseDetailWithSuccessWhenParentIDIsValidAndChildIsValidWhenAttaching(); 
+                baseAttach.BaseDetailWithSuccessWhenParentIDIsValidAndChildIsValidWhenAttaching();
+                baseAttach.BaseIndexWithErrorWhenParentIDIsNotForAnExistingIngredient();
+                baseAttach.BaseReturnsIndexWithWarningWithNullParent();
                 baseDetach.BaseDetailWithErrorWhenIDisValidAndNoChildrenOnListExistWhenDetachASetOfIngredients();
             }
             else
             {
-                baseAttach.BaseDetailWithErrorWhenParentIDIsValidAndChildIsNotValid();
-                baseAttach.BaseDetailWithErrorWhenParentIDIsValidAndChildIsValidWhenAttachingUnattachableChild();
-                baseDetach.BaseDetailWithDangerWhenIDisValidAndThereIsOneChildOnListWhenDetachingAndChildCannotBeAttachedWhenDetachingAll();
-               
+                 //baseAttach.BaseDetailWithErrorWhenParentIDIsValidAndChildIsNotValid();
+                //baseAttach.BaseDetailWithErrorWhenParentIDIsValidAndChildIsValidWhenAttachingUnattachableChild();
 
-                attachAnXToAYEntity.MakeAttachments();
+                //baseDetach.BaseDetailWithErrorWhenParentIDIsValidAndChildIsValidWhenDetachingUnattachableChild();
+
+                //attachAnXToAYEntity.MakeAttachments();
             }
 
 

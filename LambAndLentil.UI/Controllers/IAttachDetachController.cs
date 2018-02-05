@@ -16,8 +16,7 @@ namespace LambAndLentil.UI.Controllers
 
         ActionResult Detach(IEntity parent, IEntity child);
 
-        ActionResult DetachASetOf(IEntity parent, List<IEntity> selected);
-   
+        ActionResult DetachASetOf(IEntity parent, List<IEntity> selected); 
 
         ActionResult DetachAll(IEntity parent, Type type);
     }

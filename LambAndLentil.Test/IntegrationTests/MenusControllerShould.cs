@@ -236,27 +236,27 @@ namespace IntegrationTests
             Recipe recipeVM = new Recipe() { ID = 101, Description = "test AttachAnExistingRecipeToAnExistingMenu" };
             repoRecipe.Save(recipeVM);
 
-            var x = ControllerAttach.Attach(menu.ID, recipeVM);
+            var x = ControllerAttach.Attach(menu, recipeVM);
 
 
             Assert.AreEqual(1, menu.Recipes.Count());
 
             Assert.AreEqual(recipeVM.ID, menu.Recipes.First().ID);
         }
-
-
+         
 
         [TestMethod]
         [TestCategory("Attach-Detach")]
         public void AttachAnExistingIngredientToAnExistingMenu()
         {
-            Menu menu = new LambAndLentil.Domain.Entities.Menu { ID = 101, Description = "test AttachAnExistingIngredientToAnExistingMenu" };
-            Repo.Save(menu);
+            IRepository<Menu> repository = new TestRepository<Menu>();
+            Menu menu = new Menu { ID = 101, Description = "test AttachAnExistingIngredientToAnExistingMenu" };
+            repository.Save(menu);
 
             Ingredient ingredient = new Ingredient { ID = 100, Description = "test AttachAnExistingIngredientToAnExistingMenu" };
 
-            ActionResult ar = Controller.Attach(menu.ID, ingredient);
-            Menu returnedMenu = Repo.GetById(menu.ID);
+            ActionResult ar = Controller.Attach(menu, ingredient);
+            Menu returnedMenu = repository.GetById(menu.ID);
 
             Assert.AreEqual(1, returnedMenu.Ingredients.Count());
             Assert.AreEqual(ingredient.ID, returnedMenu.Ingredients.First().ID);
@@ -269,8 +269,8 @@ namespace IntegrationTests
         {
             Ingredient ingredient = new Ingredient { ID = int.MaxValue - 100, Description = "test NotDeleteAnIngredientAfterIngredientIsDetachedFromMenu" };
 
-            Controller.Attach(Menu.ID, ingredient);
-            Controller.Detach(Menu.ID, ingredient);
+            Controller.Attach(Menu, ingredient);
+            Controller.Detach(Menu, ingredient);
 
             Assert.IsNotNull(ingredient);
         }
@@ -279,7 +279,9 @@ namespace IntegrationTests
         [TestCategory("Attach-Detach")]
         public void ReturnIndexViewWithWarningWhenDetachingNonExistingIngredientAttachedToANonExistingMenu()
         {
-            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.Detach(-1, (Ingredient)null);
+            Menu menu = new Menu();
+            menu = null;
+            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.Detach(menu, (Ingredient)null);
 
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
             var routeValues = rtrr.RouteValues.Values;
@@ -295,7 +297,9 @@ namespace IntegrationTests
         [TestCategory("Attach-Detach")]
         public void ReturnIndexViewWithWarningWhenAttachingExistIngredientToNonExistingMenu()
         {
-            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.Attach(-1, (Ingredient)null);
+            Menu menu = new Menu();
+            menu = null;
+            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.Attach(menu, (Ingredient)null);
 
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
             var routeValues = rtrr.RouteValues.Values;
@@ -311,7 +315,10 @@ namespace IntegrationTests
         [TestCategory("Attach-Detach")]
         public void ReturnIndexViewWithWarningWhenAttachingNonExistIngredientToNonExistingMenu()
         {
-            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.Attach(-1, (Ingredient)null);
+            Menu menu = new Menu();
+            menu = null;
+
+            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.Attach(menu, null);
 
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
             var routeValues = rtrr.RouteValues.Values;
@@ -327,7 +334,9 @@ namespace IntegrationTests
         [TestCategory("Attach-Detach")]
         public void ReturnIndexViewWithWarningWhenDetachingExistingIngredientAttachedToNonExistingMenu()
         {
-            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.Detach(-1, (Ingredient)null);
+            Menu menu = new Menu();
+            menu = null;
+            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.Detach(menu, (Ingredient)null);
 
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
             var routeValues = rtrr.RouteValues.Values;

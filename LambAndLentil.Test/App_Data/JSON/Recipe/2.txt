@@ -1,1 +1,0 @@
-{"Servings":0.0,"MealType":0,"Calories":null,"CalsFromFat":null,"Ingredients":[],"ID":2,"Name":"Child Name from BaseTest","Description":"Child BasicTest","CreationDate":"2013-02-03T00:00:00","ModifiedDate":"2018-01-26T14:48:26.0209081-06:00","AddedByUser":"PFW\\Poncho","ModifiedByUser":"PFW\\Poncho","IngredientsList":null,"ChildCanBeAttached":false}

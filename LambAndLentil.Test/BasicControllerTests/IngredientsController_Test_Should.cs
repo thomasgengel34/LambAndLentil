@@ -12,8 +12,8 @@ namespace LambAndLentil.Test.BasicControllerTests
     public class IngredientsController_Test_Should : BaseControllerTest<Ingredient>
     {
        
-        protected static IIngredient Ingredient { get; set; }
-        protected static IIngredient ReturnedIngredient { get; set; }
+        protected static  Ingredient Ingredient { get; set; }
+        protected static  Ingredient ReturnedIngredient { get; set; }
 
 
        public IngredientsController_Test_Should()

@@ -61,7 +61,6 @@
     <Compile Include="Entities\ContainerSizeUnit.cs" />
     <Compile Include="Entities\FoodGroup.cs" />
     <Compile Include="Entities\IEntity.cs" />
-    <Compile Include="Entities\IIngredient.cs" />
     <Compile Include="Entities\IPerson.cs" />
     <Compile Include="Entities\IMenu.cs" />
     <Compile Include="Entities\Ingredient.cs" />

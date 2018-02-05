@@ -20,10 +20,11 @@ namespace LambAndLentil.Test.BasicControllerTests
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             RedirectToRouteResult rdr = (RedirectToRouteResult)adr.InnerResult;
 
-            Assert.AreEqual(UIViewType.BaseIndex.ToString(), rdr.RouteValues.Values.ElementAt(0));
-            Assert.AreEqual(ClassName+" was not found", adr.Message);
-            Assert.AreEqual("alert-warning", adr.AlertClass);
-        }
+            Assert.AreEqual(UIViewType.Index.ToString(), rdr.RouteValues.Values.ElementAt(0));
+            Assert.AreEqual("No " + className + " was found with that id.", adr.Message);
+            Assert.AreEqual("alert-danger", adr.AlertClass);
+        }  // RedirectToAction(UIViewType.Index.ToString()).WithError("No " + className + " was found with that id.");
+
 
         public void ReturnDeleteConfirmedWithActionMethodDeleteConfirmedWithFoundResult()
         {

@@ -22,7 +22,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             var result = (ListEntity<ShoppingList>)((ViewResult)Controller.Index(1)).Model;
             ShoppingList[] ingrArray1 = result.ListT.ToArray();
 
-            Assert.AreEqual("LambAndLentil.Domain.Entities.ShoppingList ControllerTest3", ingrArray1[2].Name);
+            Assert.AreEqual("ControllerTest3", ingrArray1[2].Name);
         }
 
         [Ignore]

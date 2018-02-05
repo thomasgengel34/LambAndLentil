@@ -20,17 +20,21 @@ namespace LambAndLentil.Domain.Entities
         public decimal Servings { get; set; }
         public MealType MealType { get; set; }
         public int? Calories { get; set; }
-        public short? CalsFromFat { get; set; }
-        public List<Ingredient> Ingredients { get; set; }
-        public int ID { get; set; } 
-       
-        List<Recipe> IEntity.Recipes { get; set; } = null;
-        List<Menu> IEntity.Menus { get; set; } = null;
-        List<Plan> IEntity.Plans { get; set; } = null;
-        List<ShoppingList> IEntity.ShoppingLists { get; set; } = null;
+        public short? CalsFromFat { get; set; } 
+        public int ID { get; set; }
+
+        new List<Ingredient> Ingredients { get; set; }  
+        new List<Recipe> Recipes { get; set; } = null;
+        new List<Menu> Menus { get; set; } = null;
+        new List<Plan> Plans { get; set; } = null;
+        new List<ShoppingList> ShoppingLists { get; set; } = null;
 
         bool IEntity.CanHaveChild(IEntity child)
         {
+            if (child==null)
+            {
+                return false;
+            }
             Type type = child.GetType();
 
             List<Type> possibleChildren = new List<Type>()

@@ -45,7 +45,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             var result = ( ListEntity<Recipe>)((ViewResult)Controller.Index(1)).Model;
             Recipe[] ingrArray1 = result.ListT.ToArray();
              
-            Assert.AreEqual("LambAndLentil.Domain.Entities.Recipe ControllerTest1", ingrArray1[0].Name); 
+            Assert.AreEqual("ControllerTest1", ingrArray1[0].Name); 
         }
          
          

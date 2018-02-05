@@ -16,35 +16,47 @@ namespace LambAndLentil.Test.BasicControllerTests
 
 
         public void CanPaginate()
-        {
-            int count = Controller.PageSize;
-
+        { 
             var result = (ListEntity<T>)((ViewResult)Controller.Index(1)).Model;
 
-            Assert.AreEqual(count, result.ListT.Count());
-            Assert.AreEqual("LambAndLentil.Domain.Entities.Recipe ControllerTest1", result.ListT.First().Name);
-            Assert.AreEqual("LambAndLentil.Domain.Entities.Recipe ControllerTest3", result.ListT.Skip(2).First().Name);
+            Assert.AreEqual(Repo.Count(), result.ListT.Count());
+            Assert.AreEqual("ControllerTest1", result.ListT.First().Name);
+            Assert.AreEqual("ControllerTest3", result.ListT.Skip(2).First().Name);
+        }
+
+        public void CanReturnCorrectPageInfo()
+        { 
+            int totalItems = Repo.Count();
+            ListEntity<T> resultT = (ListEntity<T>)((ViewResult)Controller.Index(2)).Model;
+
+            // TODO: use variables not "magic numbers"
+            PagingInfo pageInfoT = resultT.PagingInfo;
+            Assert.AreEqual(2, pageInfoT.CurrentPage);
+            Assert.AreEqual(  8, pageInfoT.ItemsPerPage);
+            Assert.AreEqual(totalItems, pageInfoT.TotalItems);
+            Assert.AreEqual(1, pageInfoT.TotalPages);
+
         }
 
         public void  FirstItemNameIsCorrect()
         {
-            var result = (ListEntity<Person>)((ViewResult)Controller.Index(1)).Model;
-            Person[] ingrArray1 = result.ListT.ToArray();
+            var result = (ListEntity<T>)((ViewResult)Controller.Index(1)).Model;
+            T[] ingrArray1 = result.ListT.ToArray();
              
-            Assert.AreEqual("LambAndLentil.Domain.Entities.Person ControllerTest1", ingrArray1[0].Name);
+            Assert.AreEqual("ControllerTest1", ingrArray1[0].Name);
         }
          
         public void   ThirdItemNameIsCorrect()
         { 
-            var result = (ListEntity<Person>)((ViewResult)Controller.Index(1)).Model;
-            Person[] ingrArray1 = result.ListT.ToArray();
+            var result = (ListEntity<T>)((ViewResult)Controller.Index(1)).Model;
+            T[] ingrArray1 = result.ListT.ToArray();
               
-            Assert.AreEqual("PersonsController_Index_Test P3", ingrArray1[2].Name);
+            Assert.AreEqual("ControllerTest3", ingrArray1[2].Name);
         }
          
         public void  CurrentPageCountCorrect()
         { 
-            ListEntity<Person> resultT = (ListEntity<Person>)((ViewResult)Controller.Index(2)).Model;
+            ListEntity<T> resultT = (ListEntity<T>)((ViewResult)Controller.Index(2)).Model;
             PagingInfo pageInfoT = resultT.PagingInfo;
              
             Assert.AreEqual(2, pageInfoT.CurrentPage);
@@ -75,20 +87,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.AreEqual(1, pageInfoT.TotalPages);
         }
          
-        public void CanReturnCorrectPageInfo()
-        {
-            int pageSize = Controller.PageSize;
-
-            int totalItems = Repo.Count();
-            ListEntity<Recipe> resultT = (ListEntity<Recipe>)((ViewResult)Controller.Index(2)).Model;
-
-            PagingInfo pageInfoT = resultT.PagingInfo;
-            Assert.AreEqual(2, pageInfoT.CurrentPage);
-            Assert.AreEqual(pageSize, pageInfoT.ItemsPerPage);
-            Assert.AreEqual(totalItems, pageInfoT.TotalItems);
-            Assert.AreEqual(1, pageInfoT.TotalPages);
-
-        }
+      
 
         // TODO: refactor and combine with other tests
         public void CanSendPaginationViewModel()

@@ -2,6 +2,7 @@
 using LambAndLentil.Domain.Concrete;
 using LambAndLentil.Domain.Entities;
 using LambAndLentil.Test.BasicControllerTests;
+using LambAndLentil.Test.Entities;
 using LambAndLentil.UI.Controllers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using IngredientType = LambAndLentil.Domain.Entities.Ingredient;
@@ -43,7 +44,7 @@ namespace LambAndLentil.Tests.Controllers
             BaseControllerTests_Pagination<T> baseControllerPagination = new BaseControllerTests_Pagination<T>();
             ClassPropertyChanges<T> classPropertyChanges = new ClassPropertyChanges<T>();
             DeleteReturnsIndexWithWarningWhen<T> deleteReturnsIndexWithWarningWhen = new DeleteReturnsIndexWithWarningWhen<T>();
-
+          
             // TODO: refactor
             if (typeof(T) == typeof(IngredientType))
             {
@@ -116,6 +117,14 @@ namespace LambAndLentil.Tests.Controllers
 
             BasicDeleteConfirmed<T> basicDeleteConfirmed = new BasicDeleteConfirmed<T>();
             basicDeleteConfirmed.ReturnIndexWithActionMethodDeleteConfirmedWithBadID();
+
+            
+
+            BaseTest<T>.BaseBeAbleToHaveIngredientsChild();
+            BaseTest<T>.BaseBeAbleToHaveMenusChild();
+            BaseTest<T>.BaseBeAbleToHavePlansChild();
+            BaseTest<T>.BaseBeAbleToHaveRecipesChild();
+            BaseTest<T>.BaseBeAbleToHaveShoppingListsChild();
 
             // TODO: add more
 

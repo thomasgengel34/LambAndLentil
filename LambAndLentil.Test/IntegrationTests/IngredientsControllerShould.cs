@@ -172,7 +172,7 @@ namespace LambAndLentil.Test.Infrastructure
         [TestMethod]
         public void HaveDescriptionBoundInPostEditActionMethod()
         {
-            IIngredient ingredient = new Ingredient { ID = 123456789, Description = "Changed" };
+             Ingredient ingredient = new Ingredient { ID = 123456789, Description = "Changed" };
 
             Controller.PostEdit((Ingredient)ingredient);
             Ingredient returnedIngredient = Repo.GetById(ingredient.ID);

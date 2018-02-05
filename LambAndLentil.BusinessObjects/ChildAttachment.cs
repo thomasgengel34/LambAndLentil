@@ -42,7 +42,7 @@ namespace LambAndLentil.BusinessObjects
 
         private static IEntity AddPlan(IEntity parent, IEntity child) 
         {
-            parent.Plans.Add( child );
+            parent.Plans.Add( (Plan)child );
             return parent;
         }
 

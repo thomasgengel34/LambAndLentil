@@ -11,7 +11,7 @@ using System.Security.Principal;
 namespace LambAndLentil.Domain.Concrete
 {
     public class JSONRepository<T> : IRepository<T>
-        where T : BaseEntity, IEntity
+        where T : BaseEntity, IEntity 
     {
         protected static string FullPath { get; set; }
         private static string className;
@@ -58,15 +58,16 @@ namespace LambAndLentil.Domain.Concrete
         public T GetById(int id)
         {
             IEnumerable<string> availableFiles = Directory.EnumerateFiles(FullPath);
-
+            string path = string.Concat(FullPath, id, ".txt");
             var result = from f in availableFiles
-                         where f == string.Concat(FullPath, id, ".txt")
+                         where f == path
                          select f;
 
             if (result.Count() > 0)
             {
-                T entity = JsonConvert.DeserializeObject<T>(File.ReadAllText(String.Concat(FullPath, id, ".txt")));
-                return entity;
+                   // Menu entity = JsonConvert.DeserializeObject<Menu>(File.ReadAllText(@"C:\Dev\TGE\LambAndLentil\LambAndLentil.Test\App_Data\JSON\Menu\101.txt"));
+                 T entity = JsonConvert.DeserializeObject<T>(File.ReadAllText(path));
+                return  entity as T;
             }
             else
             {

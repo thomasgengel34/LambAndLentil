@@ -215,6 +215,7 @@
     <Compile Include="ControllerSecurity\MenusIndexShouldAllow.cs" />
     <Compile Include="ControllerSecurity\IngredientsIndexShouldAllow.cs" />
     <Compile Include="ControllerSecurity\IngredientsAttachShouldAllow.cs" />
+    <Compile Include="Entities\BaseTest.cs" />
     <Compile Include="Entities\IngredientClassShould.cs" />
     <Compile Include="Entities\MenuClassShould.cs" />
     <Compile Include="Entities\PersonClassShould.cs" />

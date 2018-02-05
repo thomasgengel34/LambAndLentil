@@ -18,29 +18,23 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         public void AccountCtr_InheritsFromBaseController()
-        {
-            // Arrange
+        { 
             AccountController testController = new AccountController();
-
-            // Act 
+             
             Type baseType = typeof(IController);
             bool isBase = baseType.IsInstanceOfType(testController);
-
-            // Assert 
+             
             Assert.AreEqual(isBase, true);
         }
 
         [TestMethod]
         public void AccountCtr_IsPublic()
-        {
-            // Arrange
+        { 
             AccountController testController = new AccountController();
-
-            // Act
+             
             Type type = testController.GetType();
             bool isPublic = type.IsPublic;
-
-            // Assert 
+             
             Assert.AreEqual(isPublic, true);
         }
 /// <summary>
@@ -48,32 +42,24 @@ namespace LambAndLentil.Tests.Controllers
 /// </summary>
         [TestMethod]
         public void AccountCtr_LoginInvalidLoginAttempt()
-        {
-            // Arrange
+        { 
            AccountController testController = new AccountController();
 
             LoginViewModel model = new LoginViewModel();
             string returnUrl = "foo";
-
-             //Act
-
+             
             Task<ViewResult> result = GetActionResult(testController, model, returnUrl);
-
-            // Assert
+             
             Assert.IsNotNull(result);
         }
          
         // TODO: additional tests
-
-        #region PrivateMethods  
-
+         
         private async Task<ViewResult> GetActionResult(AccountController Controller, LoginViewModel model, string returnUrl )
         {
             Task<ActionResult> task = Controller.Login(model, returnUrl);
              ViewResult result = await task as ViewResult;
             return result; 
-        }
-        #endregion
-
+        } 
     }
 }

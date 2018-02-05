@@ -7,7 +7,7 @@ using LambAndLentil.Domain.Abstract;
 
 namespace LambAndLentil.Domain.Entities
 {
-    public class BaseEntity
+    public class BaseEntity 
     {
         [StringLength(50)]
         [Required]
@@ -23,11 +23,11 @@ namespace LambAndLentil.Domain.Entities
         public string IngredientsList { get; set; } 
         public bool ChildCanBeAttached { get; set; }
 
-        public List<IEntity> Ingredients { get; set; }
-        public List<IEntity> Recipes { get; set; }
-        public List<IEntity> Menus { get; set; }
-        public List<IEntity> Plans { get; set; }
-        public List<IEntity> ShoppingLists { get; set; }
+        public List<Ingredient> Ingredients { get; set; }
+        public List<Recipe> Recipes { get; set; }
+        public List<Menu> Menus { get; set; }
+        public List<Plan> Plans { get; set; }
+        public List<ShoppingList> ShoppingLists { get; set; }
 
         public BaseEntity()
         {
@@ -38,10 +38,10 @@ namespace LambAndLentil.Domain.Entities
             AddedByUser = WindowsIdentity.GetCurrent().Name;
             ModifiedByUser = WindowsIdentity.GetCurrent().Name;
 
-            Ingredients = new List<IEntity>(); 
-            Recipes = new List<IEntity>();
-            Menus = new List<IEntity>();
-            Plans = new List<IEntity>();
+            Ingredients = new List<Ingredient>(); 
+            Recipes = new List<Recipe>();
+            Menus = new List<Menu>();
+            Plans = new List<Plan>();
 
         }
 
@@ -97,5 +97,22 @@ namespace LambAndLentil.Domain.Entities
         public virtual bool CanHaveChild(IEntity child){ return false; }
 
 
+        public static List<IEntity> GetIEntityListFromIngredientsList(BaseEntity parent)
+        {
+            var ingredients = parent.Ingredients;
+            List<IEntity> selection = new List<IEntity>();
+            selection.AddRange(ingredients);
+            return selection;
+        }
+
+        public static List<Ingredient> GetIngredientsListFromIEntityList(List<IEntity> list)
+        {
+            List<Ingredient> selection = new List<Ingredient>();
+            foreach (var item in list)
+            {
+                selection.Add((Ingredient)item);
+            }
+            return selection;
+        }
     }
 }

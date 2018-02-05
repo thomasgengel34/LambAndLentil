@@ -11,16 +11,16 @@ namespace LambAndLentil.Test.BasicControllerTests
 {
     public class BasicDetails<T> : BaseControllerTest<T>
         where T : BaseEntity, IEntity, new()
-    {
+    { 
         public void ReturnIndexWithErrorWhenIDIsNegative()
         {
             ViewResult view = Controller.Details(-1) as ViewResult;
             AlertDecoratorResult adr = (AlertDecoratorResult)view;
 
             Assert.IsNotNull(view);
-            Assert.AreEqual("No " + ClassName + " was found with that id.", adr.Message);
+            Assert.AreEqual("No " + className + " was found with that id.", adr.Message);
             Assert.AreEqual("alert-danger", adr.AlertClass);
-            Assert.AreEqual(UIViewType.BaseIndex.ToString(), ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(0).ToString());
+            Assert.AreEqual(UIViewType.Index.ToString(), ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(0).ToString());
         }
 
         public void IDIsZeroViewIsNotNull()
@@ -36,11 +36,9 @@ namespace LambAndLentil.Test.BasicControllerTests
             ViewResult view = Controller.Details(0) as ViewResult;
             AlertDecoratorResult adr = (AlertDecoratorResult)view;
 
-            Assert.AreEqual("No " + ClassName + " was found with that id.", adr.Message);
+            Assert.AreEqual("No " + className + " was found with that id.", adr.Message);
             Assert.AreEqual("alert-danger", adr.AlertClass);
             Assert.AreEqual(UIViewType.BaseIndex.ToString(), ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(0).ToString());
-        }
-
-
+        } 
     }
 }

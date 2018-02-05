@@ -11,8 +11,8 @@ namespace LambAndLentil.Test.BasicControllerTests
     public class PlansController_Test_Should : BaseControllerTest<Plan>
     {
        
-        internal static IPlan Plan { get; set; }
-        internal static IPlan ReturnedPlan { get; set; }
+        internal static  Plan Plan { get; set; }
+        internal static  Plan ReturnedPlan { get; set; }
 
         public PlansController_Test_Should()
         {

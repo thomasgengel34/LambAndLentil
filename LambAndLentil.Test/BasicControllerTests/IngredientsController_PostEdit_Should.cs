@@ -46,13 +46,13 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void NotBindIngredientPropertiesNotIdentifiedToBeBoundInEdit()
         { 
              
-            IIngredient ingredient = new Ingredient { ID = 1000, AddedByUser = "Not Changed",    ModifiedByUser = "Original"  };
-            Repo.Save((Ingredient)ingredient);
+            Ingredient ingredient = new Ingredient { ID = 1000, AddedByUser = "Not Changed",    ModifiedByUser = "Original"  };
+            Repo.Save(ingredient);
 
             ingredient.AddedByUser = "Changed";
             ingredient.ModifiedByUser = "Should Not Be Original";
             Controller.PostEdit((Ingredient)ingredient);
-            IIngredient returnedIngredient = Repo.GetById(ingredient.ID);
+             Ingredient returnedIngredient = Repo.GetById(ingredient.ID);
 
             Assert.AreNotEqual("Changed", returnedIngredient.AddedByUser);
             Assert.AreNotEqual("Should Not Be Original", returnedIngredient.ModifiedByUser);

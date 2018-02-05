@@ -24,14 +24,15 @@ namespace LambAndLentil.Domain.Entities
         public int Diners { get; set; }
        
         public int ID { get; set; }
-         
-        List<IEntity> IEntity.Menus { get; set; } = null;
-        List<IEntity> IEntity.Plans { get; set; } = null;
-        List<IEntity> IEntity.ShoppingLists { get; set; } = null;
+       new  List<Ingredient> Ingredients { get; set; }
+        new List<Recipe> Recipes { get; set; }
+        new List<Menu>  Menus { get; set; } = null;
+        new List<Plan> Plans { get; set; } = null;
+        new List<ShoppingList>  ShoppingLists { get; set; } = null;
 
         void AddChildToParent(IEntity parent, IEntity child)
         {
-            ((IEntity)parent).Menus.Add((Menu)child);
+            parent.Menus.Add((Menu)child);
         }
 
         bool IEntity.CanHaveChild(IEntity child)

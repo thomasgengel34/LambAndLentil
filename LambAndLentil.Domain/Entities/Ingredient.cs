@@ -6,25 +6,23 @@ using System.Linq;
 namespace LambAndLentil.Domain.Entities
 {
     [Table("INGREDIENT.Ingredient")]
-    public class Ingredient : BaseEntity, IEntity, IIngredient
+    public class Ingredient :  BaseEntity, IEntity 
     {
         public Ingredient() : base()
         {
             Ingredients = new List<Ingredient>(); 
         }
 
-        public Ingredient(DateTime creationDate) : this() => CreationDate = creationDate;
-
-
-
-        public List<Ingredient> Ingredients { get; set; } 
+        public Ingredient(DateTime creationDate) : this() => CreationDate = creationDate; 
+        
         public int ID { get; set; }
          
-        List<IEntity> IEntity.Recipes { get; set; } = null;
-        List<IEntity> IEntity.Menus { get; set; } = null;
-        List<IEntity> IEntity.Plans { get; set; } = null;
-        List<IEntity> IEntity.ShoppingLists { get; set; } = null;
-
+        public new List<Ingredient> Ingredients { get; set; }
+        public new List<Recipe>  Recipes { get; set; } = null;
+        public new List<Menu>  Menus { get; set; } = null;
+        public new List<Plan>  Plans { get; set; } = null;
+        public new List<ShoppingList>  ShoppingLists { get; set; } = null;
+      
         bool IEntity.CanHaveChild(IEntity child)
         {
             Type type = child.GetType();
@@ -74,8 +72,8 @@ namespace LambAndLentil.Domain.Entities
             }
 
         }
-       
-         
-       
+
+
+
     }
 }

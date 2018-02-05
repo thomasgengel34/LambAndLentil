@@ -1,1 +1,0 @@
-{"MealType":0,"DayOfWeek":0,"Diners":0,"Ingredients":[],"Recipes":[],"ID":3000,"Name":"Newly Created","Description":"test Attach ","CreationDate":"2018-01-26T14:50:14.3067431-06:00","ModifiedDate":"2018-01-26T14:50:14.3067431-06:00","AddedByUser":"PFW\\Poncho","ModifiedByUser":"PFW\\Poncho","IngredientsList":null,"ChildCanBeAttached":false}

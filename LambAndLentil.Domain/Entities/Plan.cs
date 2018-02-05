@@ -18,14 +18,18 @@ namespace LambAndLentil.Domain.Entities
 
 
         public Plan(DateTime creationDate) : base(creationDate) => CreationDate = creationDate;
+        new List<Ingredient> Ingredients { get; set; }
+        new List<Recipe> Recipes { get; set; }
+        new List<Menu> Menus { get; set; }  
+        new List<Plan> Plans { get; set; } = null;
+        new List<ShoppingList> ShoppingLists { get; set; } = null;
 
 
-       
         public int ID { get; set; } 
        
         void AddChildToParent(IEntity parent, IEntity child)
         {
-            parent.Plans.Add( child);
+            parent.Plans.Add( (Plan)child);
         }
 
         public override bool  CanHaveChild(IEntity child)
@@ -70,7 +74,7 @@ namespace LambAndLentil.Domain.Entities
 
         }
 
-        int  GetCountOfChildrenOnParent(IEntity parent)
+       public int  GetCountOfChildrenOnParent(IEntity parent)
         {
             try
             {

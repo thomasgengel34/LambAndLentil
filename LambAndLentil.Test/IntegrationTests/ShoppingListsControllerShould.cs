@@ -22,7 +22,7 @@ namespace LambAndLentil.Test.BasicControllerTests
     public class ShoppingListsControllerShould : BaseControllerTest<ShoppingList>
     {
         private static IGenericController<ShoppingList> Controller1, Controller2, Controller3, Controller4;
-        private static IShoppingList ShoppingList;
+        private static  ShoppingList ShoppingList;
 
 
         public ShoppingListsControllerShould()
@@ -235,7 +235,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Ingredient ingredient = new Ingredient { ID = 500 };
             repoIngredient.Save(ingredient);
 
-            Controller.Attach(shoppingList.ID, ingredient);
+            Controller.Attach(shoppingList, ingredient);
             ShoppingList returnedShoppingList = Repo.GetById(shoppingList.ID);
 
 

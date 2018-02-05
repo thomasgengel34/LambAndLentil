@@ -386,30 +386,27 @@ namespace LambAndLentil.Test.WebAPI
             // search for 45134255, CHEF BOYARDEE Pizza Twist, UNPREPARED, GTIN: 00064144020805
             // manufacturer Conagra
 
-            // Arrange
+          
             string searchString = "CHEF BOYARDEE Pizza Twist, UNPREPARED, GTIN: 00064144020805";  //   
             string correctIngredients = "Tomatoes (Tomato Puree, Water), Water, Enriched Pasta (Durum Wheat Semolina, Niacin, Ferrous Sulfate, Thiamine Mononitrate [Vitamin B1], Riboflavin [Vitamin B2], Folic Acid), Pepperoni (Pork And Beef, Salt, Contains 2% or Less of: Dextrose, Flavorings, Lactic Acid Starter Culture, Oleoresin Paprika, Sodium Nitrite and BHA, BHT, Citric Acid [to protect flavor]), LESS THAN 2% OF: High Fructose Corn Syrup, Garlic Powder, Onion Powder, Modified Corn Starch, Salt, Spices, Maltodextrin, Citric Acid, Yeast Extract, Sugar, Sea Salt, Potassium Chloride, Flavorings, Ammonium Chloride, Paprika, Lactic Acid.  CONTAINS:  WHEAT";
             string manufacturer = "Conagra";
-            // Act 
+            
             string returnedIngredients = await AsyncController.GetIngredientsFromDescription(searchString, manufacturer);
-
-            // Assert 
+ 
             Assert.AreEqual(correctIngredients, returnedIngredients);
         }
 
-       
+       [Ignore]  // this test is dependent on the data over on the actual site.  The method needs to be replaced by an interface so it can be tested without going out to the actual data, which they keep changing.
         [TestMethod]
         [TestCategory("Websearch:Diet Coke")]
         public async Task ReturnCorrectIngredientsForDietCokeOnSearch()
-        { 
-            // Arrange
+        {  
             string searchString = "Diet Coke";  //   
             string correctIngredients = "Carbonated Water, Caramel Color, Aspartame, Phosphoric Acid, Natural Flavors, Citric Acid, Caffeine, Potassium Citrate, Phenylketonurics: Contains Phenylalanine, Phenylalanine"; 
-            // Act 
+            
             string returnedIngredients = await AsyncController.GetIngredientsFromDescription(searchString);
-
-            // Assert 
-            Assert.AreEqual(correctIngredients, returnedIngredients);
+ 
+            Assert.AreEqual(correctIngredients.ToUpper(), returnedIngredients.ToUpper());
         }
 
 

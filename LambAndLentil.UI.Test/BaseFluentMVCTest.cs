@@ -11,22 +11,24 @@ namespace LambAndLentil.FluentMVC.Test
     {
         private BaseAttachDetachController<T> controller;
         private IRepository<T> Repo;
+        private T t;
 
         public BaseFluentMVCTest(BaseAttachDetachController<T> controllerParameter, IRepository<T> repo)
         {
             controller = controllerParameter;
-            Repo = repo; 
+            Repo = repo;
+            t = new T() { ID = 7000 };
         }
 
         public void BaseRenderIndexDefaultView()
         {
-            controller.WithCallTo(c => c.BaseIndex( 1)).ShouldRenderView(UI.UIViewType.Index.ToString());
+            controller.WithCallTo(c => c.BaseIndex(1)).ShouldRenderView(UI.UIViewType.Index.ToString());
         }
 
 
         public void BaseRenderDetailsDefaultView()
         {
-            controller.WithCallTo(c => c.BaseDetails( 1)).ShouldRenderDefaultView();
+            controller.WithCallTo(c => c.BaseDetails(1)).ShouldRenderDefaultView();
         }
 
 
@@ -51,18 +53,19 @@ namespace LambAndLentil.FluentMVC.Test
         public void BaseDetachDefaultView()
         {
             Ingredient ingredient = new Ingredient();
-            controller.WithCallTo(c => c.Detach(1, ingredient)).ShouldRenderDefaultView();
+            controller.WithCallTo(c => c.Detach(t, ingredient)).ShouldRenderDefaultView();
         }
 
         public void BaseDetachAllDefaultView()
-        {  
-            controller.WithCallTo(c => c.DetachAll<Ingredient>(1)).ShouldRenderDefaultView();
+        {
+
+            controller.WithCallTo(c => c.DetachAll(t, typeof(Ingredient))).ShouldRenderDefaultView();
         }
 
         public void BaseDetachASetOfDefaultView()
         {
-            List<Ingredient> selected = new List<Ingredient>();
-            controller.WithCallTo(c => c.DetachASetOf(1,selected)).ShouldRenderDefaultView();
-        } 
+            List<IEntity> selected = new List<IEntity>();
+            controller.WithCallTo(c => c.DetachASetOf(t, selected)).ShouldRenderDefaultView();
+        }
     }
 }

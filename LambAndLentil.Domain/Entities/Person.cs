@@ -39,7 +39,11 @@ namespace LambAndLentil.Domain.Entities
             FullName = GetName(FirstName, LastName);
         }
 
-
+        new List<Ingredient> Ingredients { get; set; }
+        new List<Recipe> Recipes { get; set; }
+        new List<Menu> Menus { get; set; }  
+        new List<Plan> Plans { get; set; }  
+        new List<ShoppingList> ShoppingLists { get; set; }  
 
         public string LastName { get; set; }
         public string FullName { get; set; }
@@ -54,11 +58,7 @@ namespace LambAndLentil.Domain.Entities
 
 
         public string FirstName { get; set; }
-        public List<Plan> Plans { get; set; }
-        public List<Ingredient> Ingredients { get; set; }
-        public List<Recipe> Recipes { get; set; }
-        public List<Menu> Menus { get; set; }
-        public List<ShoppingList> ShoppingLists { get; set; }
+        
         public int ID { get; set; }
          
 

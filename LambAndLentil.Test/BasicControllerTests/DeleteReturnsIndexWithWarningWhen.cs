@@ -16,9 +16,14 @@ namespace LambAndLentil.Test.BasicControllerTests
             AlertDecoratorResult adr = (AlertDecoratorResult)view;
 
             Assert.IsNotNull(view);
-            Assert.AreEqual("No"+ClassName+ " was found with that id.", adr.Message);
-            Assert.AreEqual("alert-warning", adr.AlertClass);
+            string className = ClassName;
+            if (ClassName == "ShoppingList")
+            {
+                className = "Shopping List";
+            }
+            Assert.AreEqual("No "+className+ " was found with that id.", adr.Message);
+            Assert.AreEqual("alert-danger", adr.AlertClass);
             Assert.AreEqual(UIViewType.Index.ToString(), ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(0).ToString());
-        }
+        }   
     }
 }

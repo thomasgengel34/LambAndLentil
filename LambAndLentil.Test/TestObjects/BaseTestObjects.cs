@@ -5,7 +5,7 @@ using LambAndLentil.Domain.Entities;
 namespace LambAndLentil.Test.TestObjects
 {
     public   class BaseTestObjects<T>
-        where T:BaseEntity,IEntity,new()
+        where T:IEntity,new()
     {
         public List<T> SetUpTList()
         {

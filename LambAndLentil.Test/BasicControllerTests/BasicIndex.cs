@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Principal;
 using System.Web.Mvc;
@@ -66,38 +67,8 @@ namespace LambAndLentil.Test.BasicControllerTests
         // TODO: break up into multiple tests
         public void ContainsAllView1NameIsIndex()
         {
-            ViewResult view = (ViewResult)Controller.Index(1);
-
-            Assert.AreEqual(UIViewType.Index.ToString(), view.ViewName);
-
-            int repoCount = Repo.Count();
-            IGenericController<T> Controller2 = new BaseTest<T, T>().ControllerFactory();
-
-            ViewResult view1 = (ViewResult)Controller.Index(1);
-
-            int count1 = ((ListEntity<Menu>)(view1.Model)).ListT.Count();
-            var firstName = ((ListEntity<Menu>)(view1.Model)).ListT.FirstOrDefault().Name;
-            var secondName = ((ListEntity<Menu>)(view1.Model)).ListT.Skip(1).FirstOrDefault().Name;
-            var thirdName = ((ListEntity<Menu>)(view1.Model)).ListT.Skip(2).FirstOrDefault().Name;
-            var fifthName = ((ListEntity<Menu>)(view1.Model)).ListT.Skip(4).FirstOrDefault().Name;
-
-            ViewResult view2 = (ViewResult)Controller2.Index(2);
-            int count2 = ((ListEntity<Menu>)(view2.Model)).ListT.Count();
-
-            int count = count1 + count2;
-
-            Assert.IsNotNull(view1);
-            Assert.IsNotNull(view2);
-            Assert.AreEqual(repoCount, count1);
-            Assert.AreEqual(0, count2);
-            Assert.AreEqual(repoCount, count);
-            Assert.AreEqual(UIViewType.Index.ToString(), view1.ViewName);
-            Assert.AreEqual(UIViewType.Index.ToString(), view2.ViewName);
-            Assert.AreEqual("LambAndLentil.Domain.Entities.Menu ControllerTest1", firstName);
-            Assert.AreEqual("LambAndLentil.Domain.Entities.Menu ControllerTest2", secondName);
-            Assert.AreEqual("LambAndLentil.Domain.Entities.Menu ControllerTest3", thirdName);
-            Assert.AreEqual("LambAndLentil.Domain.Entities.Menu ControllerTest5", fifthName);
-
+            ViewResult view = (ViewResult)Controller.Index(1); 
+            Assert.AreEqual(UIViewType.Index.ToString(), view.ViewName); 
         }
 
         public void ContainsAllView1NameIsIndex__1()
@@ -149,7 +120,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
             int count1 = ((ListEntity<T>)(view1.Model)).ListT.Count();
 
-            Assert.AreEqual("LambAndLentil.Domain.Entities.Ingredient ControllerTest1", ((ListEntity<T>)(view1.Model)).ListT.FirstOrDefault().Name);
+            Assert.AreEqual("ControllerTest1", ((ListEntity<T>)(view1.Model)).ListT.FirstOrDefault().Name);
         }
 
 
@@ -235,7 +206,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
             int count1 = ((ListEntity<T>)(view1.Model)).ListT.Count();
 
-            Assert.AreEqual("LambAndLentil.Domain.Entities.Ingredient ControllerTest2", ((ListEntity<T>)(view1.Model)).ListT.Skip(1).FirstOrDefault().Name);
+            Assert.AreEqual("ControllerTest2", ((ListEntity<T>)(view1.Model)).ListT.Skip(1).FirstOrDefault().Name);
         }
 
         public void ThirdItemNameIsCorrect()
@@ -248,7 +219,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
             int count1 = ((ListEntity<T>)(view1.Model)).ListT.Count();
 
-            Assert.AreEqual("LambAndLentil.Domain.Entities.Ingredient ControllerTest3", ((ListEntity<T>)(view1.Model)).ListT.Skip(2).FirstOrDefault().Name);
+            Assert.AreEqual("ControllerTest3", ((ListEntity<T>)(view1.Model)).ListT.Skip(2).FirstOrDefault().Name);
         }
 
 

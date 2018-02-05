@@ -13,10 +13,7 @@ namespace LambAndLentil.Test.TestObjects
         public List<Plan> ListOfPlans { get; set; }
 
 
-        public TestPlan()
-        { 
-            ListOfPlans = new BaseTestObjects<Plan>().SetUpTList();
-        }
+        public TestPlan() => ListOfPlans = new BaseTestObjects<Plan>().SetUpTList();
 
         internal Plan CreatePlan()
         {
@@ -25,8 +22,13 @@ namespace LambAndLentil.Test.TestObjects
 
        internal Plan AddIngredientChildrenToPlan(Plan plan)
         {
-            List<Ingredient> ingredients = new BaseTestObjects<Ingredient>().SetUpTList();
-            plan.Ingredients = ingredients;
+            //List<Plan> plans = new BaseTestObjects<Plan>().SetUpTList();
+            //List<Ingredient> ingredientsAsIentity = new List<Ingredient>();
+            //foreach (Plan item in plans)
+            //{
+            //    ingredientsAsIentity.Add(item);
+            //}
+            //plan.Ingredients = ingredientsAsIentity;
             return plan;
         }
     }
