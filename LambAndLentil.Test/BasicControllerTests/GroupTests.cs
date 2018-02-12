@@ -16,9 +16,8 @@ namespace LambAndLentil.Tests.Controllers
 {
     [TestClass]
     public class GroupTests
-    {
-
-       [TestMethod]
+    { 
+        [TestMethod]
         public void RunBasicControllerTests()
         {
             TestsRunner<IngredientType>();
@@ -39,12 +38,9 @@ namespace LambAndLentil.Tests.Controllers
         public static void TestsRunner<T>()
              where T : BaseEntity, IEntity, new()
         {
-            IRepository<T> Repo = new TestRepository<T>();
-            BaseController_Should baseController = new BaseController_Should();
-            BaseControllerTests_Pagination<T> baseControllerPagination = new BaseControllerTests_Pagination<T>();
-            ClassPropertyChanges<T> classPropertyChanges = new ClassPropertyChanges<T>();
-            DeleteReturnsIndexWithWarningWhen<T> deleteReturnsIndexWithWarningWhen = new DeleteReturnsIndexWithWarningWhen<T>();
-          
+            IRepository<T> Repo = new TestRepository<T>(); 
+             
+
             // TODO: refactor
             if (typeof(T) == typeof(IngredientType))
             {
@@ -71,60 +67,58 @@ namespace LambAndLentil.Tests.Controllers
             {
                 IGenericController<ShoppingListType> controller = new ShoppingListsController((IRepository<ShoppingListType>)(Repo));
             }
-            baseController.BaseDetachAllIngredientChildren();
-            baseController.BaseShouldCreate(); 
-            baseController.BaseReturnDetailsWhenIDIsFound();
-            baseController.IsPublic();
-            baseController.InheritsFromBaseControllerCorrectly();
+            BaseController_Should.HavePublicIntPageSizeProperty();
+            BaseControllerTest<T>.BaseDetachAllIngredientChildren();
+            BaseControllerTest<T>.BaseShouldCreate();
+            BaseControllerTest<T>.BaseReturnDetailsWhenIDIsFound();
+            BaseControllerTest<T>.IsPublic();
+            BaseControllerTest<T>.InheritsFromBaseControllerCorrectly();
+            BaseControllerTests_Pagination<T>.BaseCanPaginateArrayLengthIsCorrect(); 
+            BaseControllerTests_Pagination<T>.CanPaginate();
+            BaseControllerTests_Pagination<T>.FirstItemNameIsCorrect();
+            BaseControllerTests_Pagination<T>.CurrentPageCountCorrect();
+            BaseControllerTests_Pagination<T>.ThirdItemNameIsCorrect();
+            BaseControllerTests_Pagination<T>.ItemsPerPageCorrect();
+            BaseControllerTests_Pagination<T>.TotalItemsCorrect();
+            BaseControllerTests_Pagination<T>.TotalPagesCorrect();
+            BaseControllerTests_Pagination<T>.CanReturnCorrectPageInfo();
 
-            baseControllerPagination.CanPaginate();
-            baseControllerPagination.FirstItemNameIsCorrect();
-            baseControllerPagination.CurrentPageCountCorrect();
-            baseControllerPagination.ThirdItemNameIsCorrect();
-            baseControllerPagination.ItemsPerPageCorrect();
-            baseControllerPagination.TotalItemsCorrect();
-            baseControllerPagination.TotalPagesCorrect();
-            baseControllerPagination.CanReturnCorrectPageInfo();
+            BaseControllerTests_Pagination<T>.BaseCanPaginateArrayLengthIsCorrect();
+            ClassPropertyChanges<T>.BaseDetachAllIngredientChildren();
+            ClassPropertyChanges<T>.BaseShouldCreate();
+            ClassPropertyChanges<T>.BaseDetachAllMenuChildren();
 
-            classPropertyChanges.BaseDetachAllIngredientChildren();
-            classPropertyChanges.BaseShouldCreate();
+            DeleteReturnsIndexWithWarningWhen<T>.DeletingInvalidEntity();
 
-            deleteReturnsIndexWithWarningWhen.DeletingInvalidEntity();
+            BasicIndex<T>.ContainsAllView1Count5();
+            BasicIndex<T>.ContainsAllView1NameIsIndex();
+            BasicIndex<T>.ContainsAllView2Count0();
+            BasicIndex<T>.ContainsAllView2NameIsIndex();
+            BasicIndex<T>.ContainsAllView2NotNull();
+            BasicIndex<T>.FirstCreationDateIsCorrect();
+            BasicIndex<T>.FirstAddedByUserIsCorrect();
+            BasicIndex<T>.FirstItemNameIsCorrect();
+            BasicIndex<T>.FirstModifiedByUserIsCorrect();
+            BasicIndex<T>.FirstModifiedDateIsCorrect();
+            BasicIndex<T>.FirstPageIsNotNull();
+            BasicIndex<T>.FirstPageNameIsIndex();
+            BasicIndex<T>.Index();
+            BasicIndex<T>.SecondItemNameIsCorrect();
+            BasicIndex<T>.SecondPageIsCorrect();
+             
+            BasicDetails<T>.ReturnIndexWithErrorWhenIDIsNegative(); 
+            BasicDetails<T>.BaseDetachAllIngredientChildren();
 
-
-
-            BasicIndex<T> basicIndexContain = new BasicIndex<T>();
-            basicIndexContain.ContainsAllView1Count5();
-            basicIndexContain.ContainsAllView1NameIsIndex();
-            basicIndexContain.ContainsAllView2Count0();
-            basicIndexContain.ContainsAllView2NameIsIndex();
-            basicIndexContain.ContainsAllView2NotNull();
-            basicIndexContain.FirstCreationDateIsCorrect();
-            basicIndexContain.FirstAddedByUserIsCorrect();
-            basicIndexContain.FirstItemNameIsCorrect();
-            basicIndexContain.FirstModifiedByUserIsCorrect();
-            basicIndexContain.FirstModifiedDateIsCorrect();
-            basicIndexContain.FirstPageIsNotNull();
-            basicIndexContain.FirstPageNameIsIndex();
-            basicIndexContain.Index(); 
-            basicIndexContain.SecondItemNameIsCorrect();
-            basicIndexContain.SecondPageIsCorrect();
-
-
-
-            BasicDetails<T> basicDetails = new BasicDetails<T>();
-            basicDetails.ReturnIndexWithErrorWhenIDIsNegative();
-
-            BasicDeleteConfirmed<T> basicDeleteConfirmed = new BasicDeleteConfirmed<T>();
-            basicDeleteConfirmed.ReturnIndexWithActionMethodDeleteConfirmedWithBadID();
-
-            
-
+            BasicDeleteConfirmed<T>.ReturnIndexWithActionMethodDeleteConfirmedWithBadID(); 
+            BasicDeleteConfirmed<T>.ReturnIndexWithConfirmationWhenIDIsFound(); 
             BaseTest<T>.BaseBeAbleToHaveIngredientsChild();
             BaseTest<T>.BaseBeAbleToHaveMenusChild();
             BaseTest<T>.BaseBeAbleToHavePlansChild();
             BaseTest<T>.BaseBeAbleToHaveRecipesChild();
             BaseTest<T>.BaseBeAbleToHaveShoppingListsChild();
+
+            BaseControllerDetailsShould<T>.ReturnDeleteConfirmedWithActionMethodDeleteConfirmedWithFoundResult();
+            BaseControllerDetailsShould<T>.BeSuccessfulWithValidIngredientID();
 
             // TODO: add more
 

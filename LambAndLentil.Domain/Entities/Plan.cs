@@ -14,15 +14,18 @@ namespace LambAndLentil.Domain.Entities
         {
             Plans   = null;
             ShoppingLists = null;
+            Ingredients = new List<Ingredient>(); 
+            ClassName = "Plan";
+            DisplayName = "Plan";
         }
 
 
         public Plan(DateTime creationDate) : base(creationDate) => CreationDate = creationDate;
-        new List<Ingredient> Ingredients { get; set; }
+         public List<Ingredient> Ingredients { get; set; }
         new List<Recipe> Recipes { get; set; }
         new List<Menu> Menus { get; set; }  
         new List<Plan> Plans { get; set; } = null;
-        new List<ShoppingList> ShoppingLists { get; set; } = null;
+        public List<ShoppingList> ShoppingLists { get; set; } = null;
 
 
         public int ID { get; set; } 

@@ -37,7 +37,7 @@ namespace LambAndLentil.Test.Infrastructure
              
             Assert.AreEqual("alert-success", adr.AlertClass);
             Assert.AreEqual(1, routeValues.Count);
-            Assert.AreEqual(UIViewType.BaseIndex.ToString(), routeValues.ElementAt(0).ToString());
+            Assert.AreEqual(UIViewType.Index.ToString(), routeValues.ElementAt(0).ToString());
 
         }
 

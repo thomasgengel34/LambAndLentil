@@ -8,49 +8,63 @@ namespace LambAndLentil.BusinessObjects
 {
     public class ChildDetachment
     {
-        private IEntity _parent; 
-       
-        public IEntity DetachAllChildrenOfAType(IEntity parent, Type type)
-        {
-            _parent = parent; 
+        private IEntity _parent;
 
-            string typeAsString = type.ToString().Split('.').Last();
-            Enum.TryParse(typeAsString, out EntityType typeAsEnumMember);
-
-            switch (typeAsEnumMember)
-            {
-                case EntityType.Ingredient:
-                    _parent.Ingredients.Clear();
-                    break;
-                case EntityType.Recipe:
-                    _parent.Recipes.Clear();
-                    break;
-                case EntityType.Menu:
-                    _parent.Menus.Clear();
-                    break;
-                case EntityType.Plan:
-                    _parent.Plans.Clear();
-                    break;
-                case EntityType.ShoppingList:
-                    _parent.ShoppingLists.Clear();
-                    break;
-                default:
-                    break;
-            }
-
-            parent = _parent;
-            return parent;
-        }
-
-
-
-        public IEntity DetachSelectionFromChildren(IEntity parent, List<IEntity> selected) 
+        public IEntity DetachAllChildrenOfAType(IEntity parent,IEntity child)
         {
             _parent = parent;
-           Type  childType = selected.First().GetType(); 
-             
 
-            if ( childType == typeof(Ingredient))
+            bool parentCanHaveChild =   _parent.CanHaveChild(child);
+
+            if (parentCanHaveChild)
+            {
+
+                string typeAsString = child.GetType().ToString().Split('.').Last();
+                Enum.TryParse(typeAsString, out EntityType typeAsEnumMember);
+
+                switch (typeAsEnumMember)
+                {
+                    case EntityType.Ingredient:
+                        ClearIngredientChildren();
+                        break;
+                    case EntityType.Recipe:
+                        _parent.Recipes.Clear();
+                        break;
+                    case EntityType.Menu:
+                        _parent.Menus.Clear();
+                        break;
+                    case EntityType.Plan:
+                        _parent.Plans.Clear();
+                        break;
+                    case EntityType.ShoppingList:
+                        _parent.ShoppingLists.Clear();
+                        break;
+                    default:
+                        break;
+                }
+
+                parent = _parent;
+                return parent;
+            }
+            else throw new Exception("You can't attach that!");
+        }
+
+        private void ClearIngredientChildren()
+        {
+            if (_parent.Ingredients == null)
+            {
+                _parent.Ingredients = new List<Ingredient>();
+            }
+            _parent.Ingredients.Clear();
+        }
+
+        public IEntity DetachSelectionFromChildren(IEntity parent, List<IEntity> selected)
+        {
+            _parent = parent;
+            Type childType = selected.First().GetType();
+
+
+            if (childType == typeof(Ingredient))
             {
                 var allIngredientIDs = _parent.Ingredients.Select(a => a.ID);
 
@@ -103,6 +117,11 @@ namespace LambAndLentil.BusinessObjects
             }
             else if (childType == typeof(ShoppingList))
             {
+                if (parent.ShoppingLists == null)
+                {
+                    parent.ShoppingLists = new List<ShoppingList>();
+                }
+
                 var allShoppingListIDs = _parent.ShoppingLists.Select(a => a.ID);
 
                 var setToDetach = new HashSet<IEntity>(selected).Where(p => p != null).Select(r => r.ID).AsQueryable();
@@ -121,13 +140,13 @@ namespace LambAndLentil.BusinessObjects
             else throw new NotImplementedException();
         }
 
-        public IEntity DetachAnIndependentChild(IEntity parent, IEntity child) 
-        {  
+        public IEntity DetachAnIndependentChild(IEntity parent, IEntity child)
+        {
             _parent = parent;
-            List<IEntity> selected = new List<IEntity>() {  child };
+            List<IEntity> selected = new List<IEntity>() { child };
             _parent = DetachSelectionFromChildren(_parent, selected);
             parent = _parent;
             return parent;
         }
     }
-}  
+}

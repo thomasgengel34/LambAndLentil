@@ -24,22 +24,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestMethod]
         public void ReturnDeleteWithActionMethodDeleteWithEmptyResult() => BaseReturnDeleteWithActionMethodDeleteWithEmptyResult(Controller);
 
-
-        [TestMethod]
-        public void ReturnDeleteConfirmedWithActionMethodDeleteConfirmedWithFoundResult()
-        { // index, success,  "Item has been deleted"
-          // Arrange
-            int count = Repo.Count();
-            //Act
-            Controller.DeleteConfirmed(int.MaxValue );
-            Menu menu = Repo.GetById(int.MaxValue);
-            //Assert
-            Assert.AreEqual(count - 1, Repo.Count());
-            Assert.IsNull(menu);
-            //   Assert.Fail();  // make sure the correct item was deleted before removing this line 
-        }
          
-
         [TestMethod]
         public void BeSuccessfulWithValidMenuID()
         {  

@@ -175,9 +175,8 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
             parent = (TParent)(new ChildAttachment().AddChildToParent(parent, new TChild()));
             parent = (TParent)(new ChildAttachment().AddChildToParent(parent, new TChild()));
             parent = (TParent)(new ChildAttachment().AddChildToParent(parent, new TChild()));
-            ParentRepo.Save(parent);
-            Type type = typeof(TChild);
-            ar = Controller.DetachAll(parent, type);
+            ParentRepo.Save(parent); 
+            ar = Controller.DetachAll(parent, new TChild());
 
             TParent returnedParent = ParentRepo.GetById(parent.ID);
             returnedCount = child.GetCountOfChildrenOnParent(returnedParent);

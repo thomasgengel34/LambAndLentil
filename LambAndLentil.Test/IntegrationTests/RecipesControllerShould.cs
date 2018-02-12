@@ -39,7 +39,7 @@ namespace IntegrationTests
             Assert.AreEqual("alert-success", adr.AlertClass);
             Assert.AreEqual("test SaveAValidRecipe has been saved or modified", adr.Message);
             Assert.AreEqual(1, routeValues.Count);
-            Assert.AreEqual(UIViewType.BaseIndex.ToString(), routeValues.ElementAt(0).ToString());
+            Assert.AreEqual(UIViewType.Index.ToString(), routeValues.ElementAt(0).ToString());
         }
 
         [TestMethod]
@@ -88,13 +88,15 @@ namespace IntegrationTests
         [TestCategory("DeleteConfirmed")]
         public void ActuallyDeleteARecipeFromTheDatabase()
         {
+            IGenericController<Recipe> controller = new RecipesController(Repo);
             Recipe recipe = new Recipe()
             {
                 ID = 1000,
                 Description = "test ActuallyDeleteARecipeFromTheDatabase"
             };
+            Repo.Save(recipe);
 
-            Controller.DeleteConfirmed(recipe.ID);
+            controller.DeleteConfirmed(recipe.ID);
             var deletedItem = Repo.GetById(recipe.ID);
 
             Assert.IsNull(deletedItem);
@@ -186,7 +188,7 @@ namespace IntegrationTests
             var routeValues = rtrr.RouteValues.Values;
 
             Assert.AreEqual("alert-warning", adr.AlertClass);
-            Assert.AreEqual("Recipe was not found", adr.Message);
+            Assert.AreEqual("Child was not found", adr.Message);
             Assert.AreEqual(3, routeValues.Count);
             Assert.AreEqual(Recipe.ID, routeValues.ElementAt(0));
             Assert.AreEqual(UIViewType.Details.ToString(), routeValues.ElementAt(2).ToString());
@@ -273,13 +275,13 @@ namespace IntegrationTests
             var routeValues = rtrr.RouteValues.Values;
 
             Assert.AreEqual("alert-warning", adr.AlertClass);
-            Assert.AreEqual("Recipe was not found", adr.Message);
+            Assert.AreEqual("Child was not found", adr.Message);
             Assert.AreEqual(3, routeValues.Count);
             Assert.AreEqual(UIViewType.Details.ToString(), routeValues.ElementAt(2).ToString());
             Assert.AreEqual(UIViewType.Edit.ToString(), routeValues.ElementAt(1).ToString());
-        }
+        }  
 
-        [TestMethod]
+    [TestMethod]
         [TestCategory("Attach-Detach")]
         public void ReturnIndexViewWithWarningWhenDetachingNonExistingIngredientAttachedToANonExistingRecipe()
         {

@@ -46,7 +46,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.AreEqual("alert-success", adr.AlertClass);
             Assert.AreEqual(4, routeValues.Count);
             Assert.AreEqual(UIControllerType.Plans.ToString(), routeValues.ElementAt(0).ToString());
-            Assert.AreEqual(UIViewType.BaseIndex.ToString(), routeValues.ElementAt(1).ToString());
+            Assert.AreEqual(UIViewType.Index.ToString(), routeValues.ElementAt(1).ToString());
             Assert.AreEqual("Plans", routeValues.ElementAt(2).ToString());
             Assert.AreEqual(1.ToString(), routeValues.ElementAt(3).ToString());
         }

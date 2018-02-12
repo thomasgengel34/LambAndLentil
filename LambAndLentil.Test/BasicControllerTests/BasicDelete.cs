@@ -19,7 +19,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
 
             Assert.AreEqual(UIViewType.Index.ToString(), rdr.RouteValues.Values.ElementAt(0));
-            Assert.AreEqual(ClassName+" was not found", adr.Message);
+            Assert.AreEqual(item.DisplayName+" was not found", adr.Message);
             Assert.AreEqual("alert-warning", adr.AlertClass);
 
         }

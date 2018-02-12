@@ -14,6 +14,8 @@ namespace LambAndLentil.Domain.Entities
         {
             Ingredients = new List<Ingredient>();
             Recipes = new List<Recipe>();
+            ClassName = "Menu";
+            DisplayName = "Menu";
         }
 
         public Menu(DateTime creationDate) : base(creationDate) => CreationDate = creationDate;
@@ -22,13 +24,13 @@ namespace LambAndLentil.Domain.Entities
         public MealType MealType { get; set; }
         public DayOfWeek DayOfWeek { get; set; }
         public int Diners { get; set; }
-       
+
         public int ID { get; set; }
-       new  List<Ingredient> Ingredients { get; set; }
+        public List<Ingredient> Ingredients { get; set; }
         new List<Recipe> Recipes { get; set; }
-        new List<Menu>  Menus { get; set; } = null;
+        new List<Menu> Menus { get; set; } = null;
         new List<Plan> Plans { get; set; } = null;
-        new List<ShoppingList>  ShoppingLists { get; set; } = null;
+       public List<ShoppingList> ShoppingLists { get; set; } = null;
 
         void AddChildToParent(IEntity parent, IEntity child)
         {
@@ -91,6 +93,6 @@ namespace LambAndLentil.Domain.Entities
                 throw;
             }
 
-        } 
+        }
     }
 }

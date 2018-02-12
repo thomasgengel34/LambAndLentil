@@ -73,20 +73,29 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestCategory("Attach-Detach")]
         public void DetachASetOfIngredientChildren()
         {
-            Plan plan = new TestPlan().CreatePlan();
-            plan = new TestPlan().AddIngredientChildrenToPlan(plan);
+            Plan plan = new Plan() { ID = 4000 };
+            Ingredient ingredient1 = new Ingredient() { ID = 2001 };
+            Ingredient ingredient2 = new Ingredient() { ID = 2002 };
+            Ingredient ingredient3 = new Ingredient() { ID = 2003 };
+            Ingredient ingredient4 = new Ingredient() { ID = 2004 };
+            Ingredient ingredient5 = new Ingredient() { ID = 2005 };
+            plan.Ingredients = new List<Ingredient>();
+            List<Ingredient> listOfIngredients = new List<Ingredient>()
+            {
+                ingredient1,
+                ingredient2,
+                ingredient3,
+                ingredient4,
+                ingredient5
+            };
+            plan.Ingredients.AddRange(listOfIngredients); 
+            int initialIngredientCount = plan.Ingredients.Count(); 
 
-            Repo.Save((Plan)plan);
-            int initialIngredientCount = plan.Ingredients.Count();
-
-            int firstIDtoRemove = int.MaxValue - 1;
-            int secondIDtoRemove = int.MaxValue - 3;
-
-
-            var setToSelect = new HashSet<int> { firstIDtoRemove, secondIDtoRemove };
+            var setToSelect = new HashSet<int> { ingredient1.ID,ingredient3.ID };
             List<Ingredient> list = plan.Ingredients.Where(t => setToSelect.Contains(t.ID)).ToList();
-            List<IEntity> selected =   BaseEntity.GetIEntityListFromIngredientsList(plan) ;
-            Controller.DetachASetOf(plan, selected);
+            List<IEntity> selected = new List<IEntity>();
+            selected.AddRange(list);
+            Controller.DetachASetOf(plan,selected);
             Plan returnedPlan = Repo.GetById(plan.ID);
 
             Assert.AreEqual(initialIngredientCount - 2, returnedPlan.Ingredients.Count());

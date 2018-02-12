@@ -23,6 +23,8 @@ namespace LambAndLentil.Domain.Entities
             LastName = "Created";
             FullName = GetName(FirstName, LastName);
             Name = FullName; 
+            ClassName = "Person";
+            DisplayName = "Person";
         }
 
         public Person(string firstName, string lastName) : base()
@@ -39,11 +41,11 @@ namespace LambAndLentil.Domain.Entities
             FullName = GetName(FirstName, LastName);
         }
 
-        new List<Ingredient> Ingredients { get; set; }
+        public List<Ingredient> Ingredients { get; set; }
         new List<Recipe> Recipes { get; set; }
         new List<Menu> Menus { get; set; }  
         new List<Plan> Plans { get; set; }  
-        new List<ShoppingList> ShoppingLists { get; set; }  
+       public List<ShoppingList> ShoppingLists { get; set; }  
 
         public string LastName { get; set; }
         public string FullName { get; set; }

@@ -198,7 +198,11 @@ namespace LambAndLentil.Test.JSONTests
             string IEntity.Name { get; set; }
             string IEntity.Description { get; set; }
             string IEntity.IngredientsList { get; set; }
-           
+            List<Ingredient> IEntity.Ingredients { get; set; }
+            List<Recipe> IEntity.Recipes { get; set; }
+            List<Menu> IEntity.Menus { get; set; }
+            List<Plan> IEntity.Plans { get; set; }
+            List<ShoppingList> IEntity.ShoppingLists { get; set; }
 
             public bool ParentCanHaveChild(IEntity parent) => throw new NotImplementedException();
             bool IEntity.CanHaveChild(IEntity child) => throw new NotImplementedException();
@@ -216,7 +220,11 @@ namespace LambAndLentil.Test.JSONTests
             string IEntity.Name { get; set; }
             string IEntity.Description { get; set; }
             string IEntity.IngredientsList { get; set; }
-           
+            List<Ingredient> IEntity.Ingredients { get; set; }
+            List<Recipe> IEntity.Recipes { get; set; }
+            List<Menu> IEntity.Menus { get; set; }
+            List<Plan> IEntity.Plans { get; set; }
+            List<ShoppingList> IEntity.ShoppingLists { get; set; }
 
             public bool ParentCanHaveChild(IEntity parent) => throw new NotImplementedException();
             bool IEntity.CanHaveChild(IEntity child) => throw new NotImplementedException();

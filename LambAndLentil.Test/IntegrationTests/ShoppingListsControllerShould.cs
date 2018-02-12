@@ -57,7 +57,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.AreEqual("alert-success", adr.AlertClass);
             Assert.AreEqual(4, routeValues.Count);
             Assert.AreEqual(UIControllerType.ShoppingLists.ToString(), routeValues.ElementAt(0).ToString());
-            Assert.AreEqual(UIViewType.BaseIndex.ToString(), routeValues.ElementAt(1).ToString());
+            Assert.AreEqual(UIViewType.Index.ToString(), routeValues.ElementAt(1).ToString());
             Assert.AreEqual("ShoppingLists", routeValues.ElementAt(2).ToString());
             Assert.AreEqual(1.ToString(), routeValues.ElementAt(3).ToString());
         }
@@ -148,20 +148,15 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestMethod]
         [TestCategory("DeleteConfirmed")]
         public void ActuallyDeleteAShoppingListFromTheDatabase()
-        {
-            // Arrange  
+        {  
             ShoppingList item = new ShoppingList { ID = 1, Description = "test ActuallyDeleteAShoppingListFromTheDatabase" };
 
             Repo.Save(item);
-
-            //Act
+             
             Controller.DeleteConfirmed(item.ID);
-            var deletedItem = (from m in Repo.GetAll()
-                               where m.ID == item.ID
-                               select m).AsQueryable();
+            ShoppingList returnedItem= Repo.GetById(item.ID);
 
-            //Assert
-            Assert.AreEqual(0, deletedItem.Count());
+            Assert.IsNull(returnedItem);
         }
 
         [Ignore]

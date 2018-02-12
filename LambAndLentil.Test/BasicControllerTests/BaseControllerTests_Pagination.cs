@@ -1,100 +1,152 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Web.Mvc;
+using LambAndLentil.Domain.Abstract;
+using LambAndLentil.Domain.Concrete;
 using LambAndLentil.Domain.Entities;
+using LambAndLentil.UI.Controllers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace LambAndLentil.Test.BasicControllerTests
 {
-    internal class BaseControllerTests_Pagination<T>:BaseControllerTest<T>
+    internal class BaseControllerTests_Pagination<T> : BaseControllerTest<T>
          where T : BaseEntity, IEntity, new()
-    { 
+    {
+        static private IRepository<T> repo;
+        static private IGenericController<T> controller;
+
         // currently we only have one page here
-        public void SecondPageIsCorrect()
+        internal static void SecondPageIsCorrect()
         {
             //TODO: add enough test ingredients to test the second page
         }
 
 
-        public void CanPaginate()
+        internal static void CanPaginate()
         { 
-            var result = (ListEntity<T>)((ViewResult)Controller.Index(1)).Model;
 
-            Assert.AreEqual(Repo.Count(), result.ListT.Count());
-            Assert.AreEqual("ControllerTest1", result.ListT.First().Name);
-            Assert.AreEqual("ControllerTest3", result.ListT.Skip(2).First().Name);
+            SetupRepoAndControllerForAStaticMethod(out repo, out controller);
+            var result = (ListEntity<T>)((ViewResult)controller.Index(1)).Model;
+            
+            Assert.AreEqual(result.PagingInfo.ItemsPerPage, result.ListT.Count());
+            int firstID =  (from r in repo.GetAll()
+                                select r.ID).First();
+            int secondID = (from r in repo.GetAll()
+                           select r.ID).Skip(2).First();
+            Assert.AreEqual(firstID, result.ListT.First().ID);
+            Assert.AreEqual(secondID, result.ListT.Skip(2).First().ID);
         }
 
-        public void CanReturnCorrectPageInfo()
-        { 
-            int totalItems = Repo.Count();
-            ListEntity<T> resultT = (ListEntity<T>)((ViewResult)Controller.Index(2)).Model;
-
+        internal static void CanReturnCorrectPageInfo()
+        {
+            SetupRepoAndControllerForAStaticMethod(out repo, out controller);
+            int totalItems = repo.Count();
+            ListEntity<T> resultT = (ListEntity<T>)((ViewResult)controller.Index(2)).Model;
+            decimal decimalNumberOfPages = totalItems / ((decimal) resultT.PagingInfo.ItemsPerPage);
+            int integerNumberOfPages=(int)Decimal.Ceiling(decimalNumberOfPages);
+            
             // TODO: use variables not "magic numbers"
             PagingInfo pageInfoT = resultT.PagingInfo;
             Assert.AreEqual(2, pageInfoT.CurrentPage);
-            Assert.AreEqual(  8, pageInfoT.ItemsPerPage);
+            Assert.AreEqual(8, pageInfoT.ItemsPerPage);
             Assert.AreEqual(totalItems, pageInfoT.TotalItems);
-            Assert.AreEqual(1, pageInfoT.TotalPages);
-
+            Assert.AreEqual(integerNumberOfPages, pageInfoT.TotalPages); 
         }
 
-        public void  FirstItemNameIsCorrect()
+        
+        internal static void BaseCanPaginateArrayLengthIsCorrect()
+        { 
+            SetupRepoAndControllerForAStaticMethod(out repo, out controller);
+
+            int repoCount = repo.Count();
+
+            var result = (ListEntity<T>)((ViewResult)controller.Index(1)).Model;
+
+           // Assert.AreEqual(repoCount, result.ListT.Count());
+        }
+
+        private static void SetupRepoAndControllerForAStaticMethod(out IRepository<T> repo, out IGenericController<T> controller)
         {
-            var result = (ListEntity<T>)((ViewResult)Controller.Index(1)).Model;
-            T[] ingrArray1 = result.ListT.ToArray();
-             
-            Assert.AreEqual("ControllerTest1", ingrArray1[0].Name);
+            ClassCleanup();
+            repo = new TestRepository<T>();
+            T item1 = new T() { ID = 1000 };
+            T item2 = new T() { ID = 1001 };
+            T item3 = new T() { ID = 1002 };
+            T item4 = new T() { ID = 1003 };
+            T item5 = new T() { ID = 1004 };
+            repo.Save(item1);
+            repo.Save(item2);
+            repo.Save(item3);
+            repo.Save(item4);
+            repo.Save(item5);
+            controller = BaseControllerTestFactory(typeof(T));
         }
-         
-        public void   ThirdItemNameIsCorrect()
-        { 
-            var result = (ListEntity<T>)((ViewResult)Controller.Index(1)).Model;
+
+        internal static void FirstItemNameIsCorrect()
+        {
+            SetupRepoAndControllerForAStaticMethod(out repo, out controller);
+            var result = (ListEntity<T>)((ViewResult)controller.Index(1)).Model;
             T[] ingrArray1 = result.ListT.ToArray();
-              
-            Assert.AreEqual("ControllerTest3", ingrArray1[2].Name);
+            int firstID = (from r in repo.GetAll()
+                           select r.ID).First();
+            Assert.AreEqual(firstID, ingrArray1[0].ID);
         }
-         
-        public void  CurrentPageCountCorrect()
-        { 
-            ListEntity<T> resultT = (ListEntity<T>)((ViewResult)Controller.Index(2)).Model;
+
+        internal static void ThirdItemNameIsCorrect()
+        {
+            SetupRepoAndControllerForAStaticMethod(out repo, out controller);
+            var result = (ListEntity<T>)((ViewResult)controller.Index(1)).Model;
+            T[] ingrArray1 = result.ListT.ToArray();
+            int thirdID = (from r in repo.GetAll()
+                           select r.ID).Skip(2).First();
+            Assert.AreEqual(thirdID, ingrArray1[2].ID);
+        }
+
+        internal static void CurrentPageCountCorrect()
+        {
+            SetupRepoAndControllerForAStaticMethod(out repo, out controller);
+            ListEntity<T> resultT = (ListEntity<T>)((ViewResult)controller.Index(2)).Model;
             PagingInfo pageInfoT = resultT.PagingInfo;
-             
+
             Assert.AreEqual(2, pageInfoT.CurrentPage);
         }
-         
-        public void  ItemsPerPageCorrect()
+
+        internal static void ItemsPerPageCorrect()
         {
-            ListEntity<T> resultT = (ListEntity<T>)((ViewResult)Controller.Index(2)).Model;
+            SetupRepoAndControllerForAStaticMethod(out repo, out controller);
+            ListEntity<T> resultT = (ListEntity<T>)((ViewResult)controller.Index(2)).Model;
             PagingInfo pageInfoT = resultT.PagingInfo;
 
             Assert.AreEqual(8, pageInfoT.ItemsPerPage);
         }
-         
-        
-        public void TotalItemsCorrect()
+
+
+        internal static void TotalItemsCorrect()
         {
-            ListEntity<T> resultT  = (ListEntity<T>)((ViewResult)Controller.Index(1)).Model; 
-            PagingInfo pageInfoT  = resultT.PagingInfo; 
-            int count = Repo.Count();
+            SetupRepoAndControllerForAStaticMethod(out repo, out controller);
+            ListEntity<T> resultT = (ListEntity<T>)((ViewResult)controller.Index(1)).Model;
+            PagingInfo pageInfoT = resultT.PagingInfo;
+            int count = repo.Count();
             Assert.AreEqual(count, pageInfoT.TotalItems);
         }
-         
-        public void  TotalPagesCorrect()
+
+        internal static void TotalPagesCorrect()
         {
-            ListEntity<T> resultT = (ListEntity<T>)((ViewResult)Controller.Index(2)).Model;
+            SetupRepoAndControllerForAStaticMethod(out repo, out controller);
+            ListEntity<T> resultT = (ListEntity<T>)((ViewResult)controller.Index(2)).Model;
             PagingInfo pageInfoT = resultT.PagingInfo;
 
-            Assert.AreEqual(1, pageInfoT.TotalPages);
+            Assert.AreEqual(2, pageInfoT.TotalPages);
         }
-         
-      
+
+
 
         // TODO: refactor and combine with other tests
-        public void CanSendPaginationViewModel()
+        internal static void CanSendPaginationViewModel()
         {
+            SetupRepoAndControllerForAStaticMethod(out repo, out controller);
+            ListEntity<T> resultT = (ListEntity<T>)((ViewResult)controller.Index(2)).Model;
 
-            ListEntity<T> resultT = (ListEntity<T>)((ViewResult)Controller.Index(2)).Model;
- 
             PagingInfo pageInfoT = resultT.PagingInfo;
             Assert.AreEqual(2, pageInfoT.CurrentPage);
             Assert.AreEqual(8, pageInfoT.ItemsPerPage);

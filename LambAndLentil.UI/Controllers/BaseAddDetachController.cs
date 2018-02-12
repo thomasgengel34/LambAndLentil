@@ -65,7 +65,7 @@ namespace LambAndLentil.UI.Controllers
 
         public ActionResult Attach(IEntity parent, IEntity child)
         {
-            if (parent==null)
+            if (parent == null)
             {
                 return HandleNullParent();
             }
@@ -95,18 +95,18 @@ namespace LambAndLentil.UI.Controllers
                 parent = new ChildDetachment().DetachAnIndependentChild(parent, child);
                 Repo.Save((T)parent);
                 string childEntity = child.GetType().ToString().Split('.').Last();
-                return HandleSuccessfulDetachment(parent , child );
+                return HandleSuccessfulDetachment(parent, child);
             }
             else return actionResult;
         }
 
-        private ActionResult HandleSuccessfulDetachment(IEntity parent , IEntity child)
+        private ActionResult HandleSuccessfulDetachment(IEntity parent, IEntity child)
         {
-            if (parent ==null)
+            if (parent == null)
             {
                 return HandleNullParent();
             }
-            if (child==null)
+            if (child == null)
             {
                 return HandleNullChild(parent.ID);
             }
@@ -114,13 +114,13 @@ namespace LambAndLentil.UI.Controllers
 
             bool IsChildAttached = CheckParentForAttachedChild(parent, child);
             if (IsChildAttached)
-            {  
-                parent = new ChildDetachment().DetachAnIndependentChild(parent,child);
-           return  RedirectToAction(UIViewType.Details.ToString(), new { id = parent.ID, actionMethod = UIViewType.Edit }).WithSuccess(childName + " was Successfully Detached!");
+            {
+                parent = new ChildDetachment().DetachAnIndependentChild(parent, child);
+                return RedirectToAction(UIViewType.Details.ToString(), new { id = parent.ID, actionMethod = UIViewType.Edit }).WithSuccess(childName + " was Successfully Detached!");
             }
             else
             {
-               return RedirectToAction(UIViewType.Details.ToString(), new { id = parent.ID, actionMethod = UIViewType.Edit }).WithError("No child was attached!");
+                return RedirectToAction(UIViewType.Details.ToString(), new { id = parent.ID, actionMethod = UIViewType.Edit }).WithError("No child was attached!");
             }
         }
 
@@ -128,10 +128,10 @@ namespace LambAndLentil.UI.Controllers
         {
             bool isChildAttached = false;
             Type childType = child.GetType();
-            if (childType==typeof(Ingredient))
+            if (childType == typeof(Ingredient))
             {
                 Ingredient ingredient = parent.Ingredients.Where(m => m.ID == child.ID).FirstOrDefault();
-                if (ingredient !=null)
+                if (ingredient != null)
                 {
                     isChildAttached = true;
                 }
@@ -171,7 +171,7 @@ namespace LambAndLentil.UI.Controllers
             return isChildAttached;
         }
 
-       
+
 
         ActionResult GuardAttachAndDetachMethod(int? parentID, IEntity child)
         {
@@ -200,12 +200,12 @@ namespace LambAndLentil.UI.Controllers
         }
 
 
-     
+
 
         private ActionResult HandleParentCannotAttachChild(IEntity parent) => RedirectToAction(UIViewType.Details.ToString(), new { id = parent.ID, actionMethod = UIViewType.Edit }).WithWarning("Element Could not Be Attached - So It Could Not Be Detached!");
 
         private ActionResult HandleNullChild(int? parentID) =>
-            RedirectToAction(UIViewType.Details.ToString(), new { id = parentID, actionMethod = UIViewType.Edit }).WithWarning(EntityName + " was not found");
+            RedirectToAction(UIViewType.Details.ToString(), new { id = parentID, actionMethod = UIViewType.Edit }).WithWarning("Child was not found");
 
 
         private ActionResult HandleNullParent() =>// TODO: log error - this could be a developer problem
@@ -219,7 +219,7 @@ namespace LambAndLentil.UI.Controllers
             IEntity _parent = parent;
             string parentName = _parent.GetType().ToString().Split('.').Last();
 
-            if (selected==null||selected.Count==0)
+            if (selected == null || selected.Count == 0)
             {
                 return HandleNothingWasSelected(parent.ID);
             }
@@ -240,31 +240,38 @@ namespace LambAndLentil.UI.Controllers
 
             if (selected == null || selected.Count == 0)
             {
-                return DetachAll(parent, child.GetType());
+                return DetachAll(parent, child );
             }
             else
             {
                 parent = new ChildDetachment().DetachSelectionFromChildren(parent, selected);
                 Repo.Save((T)parent);
 
-                return HandleSuccessfulDetachment(parent , child );
+                return HandleSuccessfulDetachment(parent, child);
             }
         }
 
         private ActionResult HandleNothingWasSelected(int id) =>
                     RedirectToAction(UIViewType.Details.ToString(), new { id, actionMethod = UIViewType.Edit }).WithWarning("Nothing was Selected!");
 
-        public ActionResult DetachAll(IEntity parent, Type type)
+        public ActionResult DetachAll(IEntity parent, IEntity child)
         {
             if (parent == null)
             {
                 return HandleNullParent();
             }
-
-            parent = new ChildDetachment().DetachAllChildrenOfAType(parent, type);
-            Repo.Save((T)parent);
-            string childName = type.ToString().Split('.').Last();
-            return HandleAllChildrenSuccessfullyDetached(parent.ID, childName);
+            bool canHaveChild = parent.CanHaveChild(child);
+            if (canHaveChild)
+            {
+                parent = new ChildDetachment().DetachAllChildrenOfAType(parent, child);
+                Repo.Save((T)parent);
+                string childName = child.GetType().ToString().Split('.').Last();
+                return HandleAllChildrenSuccessfullyDetached(parent.ID, childName);
+            }
+            else
+            {
+                return HandleParentCannotAttachChild(parent);
+            }
         }
 
         private ActionResult HandleAllChildrenSuccessfullyDetached(int? ID, string childName) =>

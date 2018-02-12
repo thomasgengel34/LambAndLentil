@@ -9,21 +9,21 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace LambAndLentil.Test.BasicControllerTests
 {
-    public class BasicDetails<T> : BaseControllerTest<T>
+   public class BasicDetails<T> : BaseControllerTest<T>
         where T : BaseEntity, IEntity, new()
     { 
-        public void ReturnIndexWithErrorWhenIDIsNegative()
+       internal static void ReturnIndexWithErrorWhenIDIsNegative()
         {
             ViewResult view = Controller.Details(-1) as ViewResult;
             AlertDecoratorResult adr = (AlertDecoratorResult)view;
 
             Assert.IsNotNull(view);
-            Assert.AreEqual("No " + className + " was found with that id.", adr.Message);
+            Assert.AreEqual("No " + item.DisplayName + " was found with that id.", adr.Message);
             Assert.AreEqual("alert-danger", adr.AlertClass);
             Assert.AreEqual(UIViewType.Index.ToString(), ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(0).ToString());
         }
 
-        public void IDIsZeroViewIsNotNull()
+       internal static void IDIsZeroViewIsNotNull()
         {
             ViewResult view = Controller.Details(0) as ViewResult;
             AlertDecoratorResult adr = (AlertDecoratorResult)view;
@@ -31,14 +31,14 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.IsNotNull(view);
         }
 
-        public void ReturnIndexWithErrorWhenIDIsZero()
+       internal static void ReturnIndexWithErrorWhenIDIsZero()
         {
             ViewResult view = Controller.Details(0) as ViewResult;
             AlertDecoratorResult adr = (AlertDecoratorResult)view;
 
-            Assert.AreEqual("No " + className + " was found with that id.", adr.Message);
+            Assert.AreEqual("No " + item.DisplayName + " was found with that id.", adr.Message);
             Assert.AreEqual("alert-danger", adr.AlertClass);
-            Assert.AreEqual(UIViewType.BaseIndex.ToString(), ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(0).ToString());
+            Assert.AreEqual(UIViewType.Index.ToString(), ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(0).ToString());
         } 
     }
 }

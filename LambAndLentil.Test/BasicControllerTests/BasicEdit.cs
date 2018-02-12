@@ -18,7 +18,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             RedirectToRouteResult rdr = (RedirectToRouteResult)adr.InnerResult;
 
             Assert.AreEqual(UIViewType.Index.ToString(), rdr.RouteValues.ElementAt(0).Value.ToString());
-            Assert.AreEqual(ClassName+" was not found", adr.Message);
+            Assert.AreEqual(item.DisplayName+" was not found", adr.Message);
             Assert.AreEqual("alert-warning", adr.AlertClass);
         }
     }

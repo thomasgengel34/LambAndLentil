@@ -57,7 +57,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
        
         [TestMethod]
-        public void  DetachAllMenuChildren() =>   BaseDetachAllMenuChildren( Repo, Controller, Plan ); 
+        public void  DetachAllMenuChildren() =>   BaseDetachAllMenuChildren(); 
 
         [Ignore]
         [TestMethod]

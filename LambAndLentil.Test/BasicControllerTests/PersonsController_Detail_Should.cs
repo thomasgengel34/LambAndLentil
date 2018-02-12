@@ -19,23 +19,6 @@ namespace LambAndLentil.Test.BasicControllerTests
         { 
         }
           
-         
-        [TestMethod]
-        public void ReturnDeleteConfirmedWithActionMethodDeleteConfirmedWithFoundResult()
-        { // index, success,  "Item has been deleted"
-           
-            int count = Repo.Count();
-            //Act
-            Controller.DeleteConfirmed(int.MaxValue);
-            Person person = Repo.GetById(int.MaxValue);
-            //Assert
-            Assert.AreEqual(count - 1, Repo.Count());
-            Assert.IsNull(person);
-            //   Assert.Fail();  // make sure the correct item was deleted before removing this line 
-        }
-
-         
-         
         [TestMethod]
         public void BeSuccessfulWithValidPersonID()
         {  

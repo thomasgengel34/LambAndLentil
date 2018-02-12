@@ -15,7 +15,7 @@ namespace LambAndLentil.Test.BasicControllerTests
     public class BasicIndex<T> : BaseControllerTest<T>
         where T : BaseEntity, IEntity, new()
     {
-        public void Index()
+        internal static void Index()
         {
             ViewResult result = Controller.Index(1) as ViewResult;
             ViewResult result1 = Controller.Index(2) as ViewResult;
@@ -24,7 +24,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.IsNotNull(result1);
         }
 
-        public void ContainsAllView2NotNull()
+        internal static void ContainsAllView2NotNull()
         {
             ViewResult view1 = (ViewResult)Controller.Index(1);
 
@@ -35,7 +35,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.IsNotNull(view2);
         }
 
-        public void ContainsAllView1Count5()
+        internal static void ContainsAllView1Count5()
         {
             int count = Repo.Count();
 
@@ -46,7 +46,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.AreEqual(6, count1);
         }
 
-        public void ContainsAllView2Count0()
+        internal static void ContainsAllView2Count0()
         {
             ListEntity = (ListEntity<T>)((ViewResult)Controller.Index(1)).Model;
             T[] ingrArray1 = ListEntity.ListT.ToArray();
@@ -65,20 +65,20 @@ namespace LambAndLentil.Test.BasicControllerTests
         }
 
         // TODO: break up into multiple tests
-        public void ContainsAllView1NameIsIndex()
+        internal static void ContainsAllView1NameIsIndex()
         {
             ViewResult view = (ViewResult)Controller.Index(1); 
             Assert.AreEqual(UIViewType.Index.ToString(), view.ViewName); 
         }
 
-        public void ContainsAllView1NameIsIndex__1()
+        internal static void ContainsAllView1NameIsIndex__1()
         {
             ViewResult view = (ViewResult)Controller.Index(1);
             Assert.AreEqual("Index", view.ViewName);
         }
 
         // TODO: see if this test is redundant.  Maybe check the count on each page and the total instead of what it is doing. If so, rename. 
-        public void ContainsAllView2NameIsIndex()
+        internal static void ContainsAllView2NameIsIndex()
         {
             ListEntity = (ListEntity<T>)((ViewResult)Controller.Index(1)).Model;
 
@@ -94,7 +94,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         }
 
 
-        public void FirstPageNameIsIndex()
+        internal static void FirstPageNameIsIndex()
         {
             ListEntity = (ListEntity<T>)((ViewResult)Controller.Index(1)).Model;
             T[] ingrArray1 = ListEntity.ListT.ToArray();
@@ -110,7 +110,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
 
 
-        public void FirstItemNameIsCorrect()
+        internal static void FirstItemNameIsCorrect()
         {
             ListEntity = (ListEntity<T>)((ViewResult)Controller.Index(1)).Model;
             T[] ingrArray1 = ListEntity.ListT.ToArray();
@@ -126,7 +126,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
 
 
-        public void FirstAddedByUserIsCorrect()
+        internal static void FirstAddedByUserIsCorrect()
         {
 
             ListEntity = (ListEntity<T>)((ViewResult)Controller.Index(1)).Model;
@@ -143,7 +143,7 @@ namespace LambAndLentil.Test.BasicControllerTests
          
 
 
-        public void FirstModifiedByUserIsCorrect()
+        internal static void FirstModifiedByUserIsCorrect()
         {
 
             ListEntity = (ListEntity<T>)((ViewResult)Controller.Index(1)).Model;
@@ -157,7 +157,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         }
 
 
-        public void FirstCreationDateIsCorrect()
+        internal static void FirstCreationDateIsCorrect()
         {
 
             ListEntity = (ListEntity<T>)((ViewResult)Controller.Index(1)).Model;
@@ -172,7 +172,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         }
 
 
-        public void FirstModifiedDateIsCorrect()
+        internal static void FirstModifiedDateIsCorrect()
         {
 
             ListEntity = (ListEntity<T>)((ViewResult)Controller.Index(1)).Model;
@@ -186,7 +186,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.AreEqual(DateTime.MaxValue.AddYears(-10), ((ListEntity<T>)(view1.Model)).ListT.FirstOrDefault().ModifiedDate);
         }
 
-        public void FirstPageIsNotNull()
+        internal static void FirstPageIsNotNull()
         {
             ListEntity = (ListEntity<T>)((ViewResult)Controller.Index(1)).Model;
 
@@ -196,7 +196,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         }
 
 
-        public void SecondItemNameIsCorrect()
+        internal static void SecondItemNameIsCorrect()
         {
             ListEntity = (ListEntity<T>)((ViewResult)Controller.Index(1)).Model;
             T[] ingrArray1 = ListEntity.ListT.ToArray();
@@ -209,7 +209,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.AreEqual("ControllerTest2", ((ListEntity<T>)(view1.Model)).ListT.Skip(1).FirstOrDefault().Name);
         }
 
-        public void ThirdItemNameIsCorrect()
+        internal static void ThirdItemNameIsCorrect()
         {
             ListEntity = (ListEntity<T>)((ViewResult)Controller.Index(1)).Model;
             T[] ingrArray1 = ListEntity.ListT.ToArray();
@@ -225,23 +225,23 @@ namespace LambAndLentil.Test.BasicControllerTests
 
 
         [Ignore]
-        public void SecondPageIsCorrect()
+        internal static void SecondPageIsCorrect()
         {
             //TODO: add enough test ingredients to test the second page
         }
 
-        public void ReturnIndexWithErrorWhenIDIsNegative()
+        internal static void ReturnIndexWithErrorWhenIDIsNegative()
         {
             ViewResult view = Controller.Details(-1) as ViewResult;
             AlertDecoratorResult adr = (AlertDecoratorResult)view;
 
             Assert.IsNotNull(view);
-            Assert.AreEqual("No " + ClassName + " was found with that id.", adr.Message);
+            Assert.AreEqual("No " + item.DisplayName + " was found with that id.", adr.Message);
             Assert.AreEqual("alert-danger", adr.AlertClass);
-            Assert.AreEqual(UIViewType.BaseIndex.ToString(), ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(0).ToString());
+            Assert.AreEqual(UIViewType.Index.ToString(), ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(0).ToString());
         }
 
-        public void ContainsAllView1Count6()
+        internal static void ContainsAllView1Count6()
         {
             int count = Repo.Count();
 
@@ -258,7 +258,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
 
         // TODO: refactor and combine with other tests
-        public void ShowAll()
+        internal static void ShowAll()
         {
             int repoCount = Repo.Count(); 
 
@@ -282,25 +282,25 @@ namespace LambAndLentil.Test.BasicControllerTests
         }
 
         [Ignore] 
-        public void FlagAnPlanFlaggedInAPlan()
+        internal static void FlagAnPlanFlaggedInAPlan()
         {
             Assert.Fail();
         }
 
         [Ignore] 
-        public void FlagAnPlanFlaggedInTwoPlans()
+        internal static void FlagAnPlanFlaggedInTwoPlans()
         {
             Assert.Fail();
         }
 
         [Ignore] 
-        public void WhenAFlagHasBeenRemovedFromOnePlanStillThereForSecondFlaggedPlan()
+        internal static void WhenAFlagHasBeenRemovedFromOnePlanStillThereForSecondFlaggedPlan()
         {
             Assert.Fail();
         }
 
 
-        public void ContainsAll()
+        internal static void ContainsAll()
         {
             int repoCount = Repo.Count();
 
@@ -323,7 +323,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.AreEqual("Index", view2.ViewName);
         }
 
-        public void FirstPageCountIsCorrect()
+        internal static void FirstPageCountIsCorrect()
         {
             Controller.PageSize = 8;
             ViewResult view = (ViewResult)Controller.Index(1);

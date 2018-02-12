@@ -101,7 +101,7 @@ namespace LambAndLentil.UI.Controllers
             }
         }
 
-        private ActionResult HandleSavedOrModified(T entity) => RedirectToAction(UIViewType.BaseIndex.ToString()).WithSuccess(string.Format($"{entity.Name} has been saved or modified"));
+        private ActionResult HandleSavedOrModified(T entity) => RedirectToAction(UIViewType.Index.ToString()).WithSuccess(string.Format($"{entity.Name} has been saved or modified"));
 
         public ActionResult BaseDelete(int id = 1)
         {
@@ -130,7 +130,7 @@ namespace LambAndLentil.UI.Controllers
             }
         }
 
-        private ActionResult HandleHasBeenDeleted(T item) => RedirectToAction(UIViewType.BaseIndex.ToString()).WithSuccess(string.Format($"{item.Name} has been deleted"));
+        private ActionResult HandleHasBeenDeleted(T item) => RedirectToAction(UIViewType.Index.ToString()).WithSuccess(string.Format($"{item.Name} has been deleted"));
 
         public void BaseAddIngredientToIngredientsList(int id, string addedIngredient)
         {

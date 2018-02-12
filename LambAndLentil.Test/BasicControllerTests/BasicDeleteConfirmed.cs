@@ -14,31 +14,19 @@ namespace LambAndLentil.Test.BasicControllerTests
     {
 
         
-        public void ReturnIndexWithActionMethodDeleteConfirmedWithBadID()
+        public static void ReturnIndexWithActionMethodDeleteConfirmedWithBadID()
         {
             ActionResult ar = Controller.DeleteConfirmed(-1);
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             RedirectToRouteResult rdr = (RedirectToRouteResult)adr.InnerResult;
 
             Assert.AreEqual(UIViewType.Index.ToString(), rdr.RouteValues.Values.ElementAt(0));
-            Assert.AreEqual("No " + className + " was found with that id.", adr.Message);
+            Assert.AreEqual("No " + item.DisplayName + " was found with that id.", adr.Message);
             Assert.AreEqual("alert-danger", adr.AlertClass);
-        }  // RedirectToAction(UIViewType.Index.ToString()).WithError("No " + className + " was found with that id.");
+        }   
 
-
-        public void ReturnDeleteConfirmedWithActionMethodDeleteConfirmedWithFoundResult()
-        {
-            int count = Repo.Count();
-
-            Controller.DeleteConfirmed(int.MaxValue);
-            T item = Repo.GetById(int.MaxValue);
-
-            Assert.AreEqual(count - 1, Repo.Count());
-            Assert.IsNull(item);
-            //   TODO: Assert.Fail();  // make sure the correct item was deleted before removing this line 
-        }
-
-        public void ReturnIndexWithConfirmationWhenIDIsFound()
+  
+        public static void ReturnIndexWithConfirmationWhenIDIsFound()
         {  
             AlertDecoratorResult adr = (AlertDecoratorResult)Controller.DeleteConfirmed(item.ID);
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
@@ -47,6 +35,18 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.AreEqual("alert-success", adr.AlertClass);
             Assert.AreEqual(1, rtrr.RouteValues.Count, 1);
             Assert.AreEqual(UIViewType.Index.ToString(), rtrr.RouteValues.Values.ElementAt(0).ToString());
+        }
+
+        public void DeleteTheCorrectItemAndNotOtherItemsWhenIDIsFound()
+        {
+            int initialCount = Repo.Count();
+
+            Controller.DeleteConfirmed(int.MaxValue);
+            int finalCount = Repo.Count();
+            object shouldBeNull = Repo.GetById(int.MaxValue);
+
+            Assert.AreEqual(initialCount - 1, finalCount);
+            Assert.IsNull(shouldBeNull);
         }
     }
 }

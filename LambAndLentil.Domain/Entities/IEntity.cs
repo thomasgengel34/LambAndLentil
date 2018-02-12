@@ -11,6 +11,8 @@ namespace LambAndLentil.Domain.Entities
         string ModifiedByUser { get; set; }
         DateTime ModifiedDate { get; set; }
         string Name { get; set; }
+        string ClassName { get; set; }
+        string DisplayName { get; set; }
         string Description { get; set; } 
         string IngredientsList { get; set; }
 

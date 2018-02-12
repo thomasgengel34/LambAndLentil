@@ -11,26 +11,9 @@ namespace LambAndLentil.Test.BasicControllerTests
     [TestCategory("IngredientsController")]
     [TestCategory("Details")]
     public class IngredientsController_Detail_Should : IngredientsController_Test_Should
-    {
-        public IngredientsController_Detail_Should()
-        {
-
-        }
-         
+    { 
       
-
-        [TestMethod]
-        public void ReturnDeleteConfirmedWithActionMethodDeleteConfirmedWithFoundResult()
-        {
-            int count = Repo.Count();
-
-            Controller.DeleteConfirmed(int.MaxValue);
-            Ingredient item = Repo.GetById(int.MaxValue);
-
-            Assert.AreEqual(count - 1, Repo.Count());
-            Assert.IsNull(item);
-            //   Assert.Fail();  // TODO: make sure the correct item was deleted before removing this line 
-        }
+ 
 
          
 

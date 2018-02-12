@@ -7,42 +7,46 @@ using LambAndLentil.Domain.Abstract;
 
 namespace LambAndLentil.Domain.Entities
 {
-    public class BaseEntity 
+    public class BaseEntity
     {
         [StringLength(50)]
         [Required]
         public string Name { get; set; }
 
-
+        public string ClassName { get; set; }
+        public string DisplayName { get; set; }
         [DataType(DataType.MultilineText)]
         public string Description { get; set; }
         public DateTime CreationDate { get; set; }
         public DateTime ModifiedDate { get; set; }
         public string AddedByUser { get; set; }
         public string ModifiedByUser { get; set; }
-        public string IngredientsList { get; set; } 
+        public string IngredientsList { get; set; }
         public bool ChildCanBeAttached { get; set; }
 
-        public List<Ingredient> Ingredients { get; set; }
+
         public List<Recipe> Recipes { get; set; }
         public List<Menu> Menus { get; set; }
-        public List<Plan> Plans { get; set; }
-        public List<ShoppingList> ShoppingLists { get; set; }
+        public List<Plan> Plans { get; set; } 
+
+        
 
         public BaseEntity()
         {
             Name = "Newly Created";
+            DisplayName = Name;
             Description = "not yet described";
             CreationDate = DateTime.Now;
             ModifiedDate = DateTime.Now;
             AddedByUser = WindowsIdentity.GetCurrent().Name;
             ModifiedByUser = WindowsIdentity.GetCurrent().Name;
 
-            Ingredients = new List<Ingredient>(); 
+
             Recipes = new List<Recipe>();
             Menus = new List<Menu>();
             Plans = new List<Plan>();
 
+          
         }
 
         public BaseEntity(DateTime creationDate) : this()
@@ -54,10 +58,9 @@ namespace LambAndLentil.Domain.Entities
             else
             {
                 CreationDate = creationDate;
-            }
-
+            } 
         }
-
+       
 
         public List<T> GetIndexedModel<T>(IRepository<T> repository, int PageSize, int page = 1)
              where T : BaseEntity, IEntity
@@ -94,10 +97,10 @@ namespace LambAndLentil.Domain.Entities
             return PagingInfo;
         }
 
-        public virtual bool CanHaveChild(IEntity child){ return false; }
+        public virtual bool CanHaveChild(IEntity child) { return false; }
 
 
-        public static List<IEntity> GetIEntityListFromIngredientsList(BaseEntity parent)
+        public static List<IEntity> GetIEntityListFromIngredientsList(IEntity parent)
         {
             var ingredients = parent.Ingredients;
             List<IEntity> selection = new List<IEntity>();

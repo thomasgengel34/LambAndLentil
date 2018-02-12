@@ -65,24 +65,22 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
         }
 
         internal void BaseReturnsIndexWithWarningWithNullParent()
-        {
-
-            ActionResult ar = Controller.Attach( null, new Domain.Entities.Ingredient() );
+        { 
+            ActionResult ar = Controller.Attach( null, new IngredientType() );
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
-            string message = adr.Message;
-
-            // Assert
+            string message = adr.Message; 
+           
             Assert.AreEqual(ParentClassName + " was not found", message);
             Assert.AreEqual("alert-warning", adr.AlertClass);
         }
 
-        internal void BaseIndexWithErrorWhenParentIDIsNotForAnExistingIngredient()
+        internal void IndexWithErrorWhenParentIDIsNotForAnExistingIngredient()
         {  // Todo: add logging 
             ActionResult ar = Controller.Attach(null, new IngredientType() );
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             string message = adr.Message;
              
-            Assert.AreEqual(ParentClassName + " was not found", message);
+            Assert.AreEqual("Ingredient was not found", message);
             Assert.AreEqual("alert-warning", adr.AlertClass);
         }
          
@@ -102,13 +100,11 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
             Assert.AreEqual(UIViewType.Edit.ToString(), rtrr.RouteValues.ElementAt(1).Value.ToString());
             Assert.AreEqual(UIViewType.Details.ToString(), rtrr.RouteValues.ElementAt(2).Value.ToString());
             Assert.AreEqual(3, rtrr.RouteValues.Count); 
-            Assert.AreEqual("Element Could not Be Attached - So It Could Not Be Detached!", message);
+            Assert.AreEqual("Child was not found", message);
             Assert.AreEqual("alert-warning", adr.AlertClass);
-        }//   RedirectToAction(UIViewType.Details.ToString(), new { id = parentID, actionMethod = UIViewType.Edit }).WithWarning(EntityName + " was not found");
-        // private ActionResult HandleParentCannotAttachChild(IEntity parent) => RedirectToAction(UIViewType.Details.ToString(), new { id = parent.ID, actionMethod = UIViewType.Edit }).WithError("Element Could not Be Attached - So It Could Not Be Detached!");   The test reflects what is happening. TODO: recode to get the first, not the second, message and alert class. 
+        }  
 
-
-        internal void BaseDetailWithSuccessWhenParentIDIsValidAndChildIsValidWhenAttaching()
+    internal void BaseDetailWithSuccessWhenParentIDIsValidAndChildIsValidWhenAttaching()
         {
             ActionResult ar = Controller.Attach(Parent, (TChild)Child );
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;

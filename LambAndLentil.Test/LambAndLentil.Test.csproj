@@ -77,6 +77,7 @@
     <Compile Include="AdminSecurity\ManagerControllerTest_Security_Should.cs" />
     <Compile Include="AdminSecurity\ErrorLogging.cs" />
     <Compile Include="BasicControllerTests\AccountControllerTest.cs" />
+    <Compile Include="BasicControllerTests\BaseControllerDetailsShould.cs" />
     <Compile Include="BasicControllerTests\BaseControllerTest.cs" />
     <Compile Include="BasicControllerTests\BaseControllerTests_Pagination.cs" />
     <Compile Include="BasicControllerTests\BasicEdit.cs" />
@@ -161,7 +162,6 @@
     <Compile Include="BasicControllerTests\ShoppingListsController_Test_Misc.cs" />
     <Compile Include="BasicControllerTests\ShoppingListsController_Test_Should.cs" />
     <Compile Include="BasicControllerTests\IngredientsControllerTest_FilterShould.cs" />
-    <Compile Include="BasicControllerTests\IngredientsController_DeleteConfirmed_Should.cs" />
     <Compile Include="BasicControllerTests\IngredientsController_IngredientsGenericController_Should.cs" />
     <Compile Include="BasicControllerTests\BaseController_Should.cs" />
     <Compile Include="BasicControllerTests\BasicControllerTest_ClassPropertyChanges.cs" />

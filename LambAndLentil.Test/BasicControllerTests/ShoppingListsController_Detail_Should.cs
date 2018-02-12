@@ -13,29 +13,7 @@ namespace LambAndLentil.Test.BasicControllerTests
     public class ShoppingListsController_Detail_Should:ShoppingListsController_Test_Should
     { 
        
-        
-
-        public ShoppingListsController_Detail_Should()
-        { 
-             
-        }
-          
-
-      
-
-
-        [TestMethod]
-        public void ReturnDeleteConfirmedWithActionMethodDeleteConfirmedWithFoundResult()
-        { 
-            int count = Repo.Count();
-           
-            Controller.DeleteConfirmed(int.MaxValue);
-            ShoppingList shoppingList = Repo.GetById(int.MaxValue);
-            
-            Assert.AreEqual(count - 1, Repo.Count());
-            Assert.IsNull(shoppingList);
-            //   Assert.Fail();  // make sure the correct item was deleted before removing this line 
-        }
+         
          
 
         [TestMethod]

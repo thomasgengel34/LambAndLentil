@@ -12,6 +12,8 @@ namespace LambAndLentil.Domain.Entities
         public Recipe() : base()
         {
             Ingredients = new List<Ingredient>(); 
+            ClassName = "Recipe";
+            DisplayName = "Recipe";
         }
 
         public Recipe(DateTime creationDate) : base(creationDate) => CreationDate = creationDate;
@@ -23,11 +25,11 @@ namespace LambAndLentil.Domain.Entities
         public short? CalsFromFat { get; set; } 
         public int ID { get; set; }
 
-        new List<Ingredient> Ingredients { get; set; }  
+        public List<Ingredient> Ingredients { get; set; }
         new List<Recipe> Recipes { get; set; } = null;
         new List<Menu> Menus { get; set; } = null;
         new List<Plan> Plans { get; set; } = null;
-        new List<ShoppingList> ShoppingLists { get; set; } = null;
+        public List<ShoppingList> ShoppingLists { get; set; } = null;
 
         bool IEntity.CanHaveChild(IEntity child)
         {

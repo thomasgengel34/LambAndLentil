@@ -11,17 +11,19 @@ namespace LambAndLentil.Domain.Entities
         public Ingredient() : base()
         {
             Ingredients = new List<Ingredient>(); 
+            ClassName  = "Ingredient";
+            DisplayName  = "Ingredient";
         }
 
         public Ingredient(DateTime creationDate) : this() => CreationDate = creationDate; 
         
         public int ID { get; set; }
          
-        public new List<Ingredient> Ingredients { get; set; }
+        public  List<Ingredient> Ingredients { get; set; }
         public new List<Recipe>  Recipes { get; set; } = null;
         public new List<Menu>  Menus { get; set; } = null;
         public new List<Plan>  Plans { get; set; } = null;
-        public new List<ShoppingList>  ShoppingLists { get; set; } = null;
+        public  List<ShoppingList>  ShoppingLists { get; set; } = null;
       
         bool IEntity.CanHaveChild(IEntity child)
         {

@@ -34,7 +34,7 @@ namespace LambAndLentil.Test.BasicControllerTests
                 ID = 1000
             };
             Repo = new TestRepository<Person>();
-            Controller = (IGenericController<Person>)(new PersonsController(Repo));
+            Controller = new PersonsController(Repo);
             Controller1 = (IGenericController<Person>)(new PersonsController(Repo));
             Controller2 = (IGenericController<Person>)(new PersonsController(Repo));
             Controller3 = (IGenericController<Person>)(new PersonsController(Repo));
@@ -56,7 +56,7 @@ namespace LambAndLentil.Test.BasicControllerTests
              
             Assert.AreEqual("alert-success", adr.AlertClass);
             Assert.AreEqual(1, routeValues.Count);
-            Assert.AreEqual(UIViewType.BaseIndex.ToString(), routeValues.ElementAt(0).ToString());
+            Assert.AreEqual(UIViewType.Index.ToString(), routeValues.ElementAt(0).ToString());
         }
 
         [Ignore]
@@ -134,19 +134,16 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestMethod]
         [TestCategory("DeleteConfirmed")]
         public void ActuallyDeleteAPersonFromTheDatabase()
-        {
-            // Arrange
+        { 
             Person.FirstName = "Test.ActuallyDeleteAPersonfromDB";
             Person.LastName = "";
             Repo.Save((Person)Person);
-
-            //Act
+             
             Controller.DeleteConfirmed(Person.ID);
             var deletedItem = (from m in Repo.GetAll()
                                where m.Description == Person.Name
                                select m).AsQueryable();
-
-            //Assert
+ 
             Assert.AreEqual(0, deletedItem.Count());
         }
         [Ignore]

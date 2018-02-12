@@ -1,5 +1,6 @@
 ﻿using LambAndLentil.Domain.Entities;
 using System;
+using System.Collections.Generic;
 
 namespace LambAndLentil.BusinessObjects
 {
@@ -10,7 +11,11 @@ namespace LambAndLentil.BusinessObjects
             Type type = child.GetType();
             {   // TODO: avoid mundane repetition  
                 if ( type  == typeof(Ingredient))
-                { 
+                {
+                    if (parent.Ingredients==null)
+                    {
+                        parent.Ingredients = new List<Ingredient>();
+                    }
                     parent.Ingredients.Add(child as Ingredient);
                     return parent;
                 }

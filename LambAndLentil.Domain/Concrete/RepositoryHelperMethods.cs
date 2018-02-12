@@ -17,6 +17,10 @@ namespace LambAndLentil.Domain.Concrete
             char[] splitterArray = { '.' };
             string[] classNameArray = className.Split(splitterArray);
             className =  classNameArray.Last() ;
+            if (className=="ShoppingList")
+            {
+                className = "Shopping List";
+            }
             return className;
         }
 

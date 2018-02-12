@@ -52,14 +52,19 @@ namespace LambAndLentil.FluentMVC.Test
 
         public void BaseDetachDefaultView()
         {
-            Ingredient ingredient = new Ingredient();
-            controller.WithCallTo(c => c.Detach(t, ingredient)).ShouldRenderDefaultView();
+           T parent  = new T() { ID = 1 };
+            Ingredient childIngredient = new Ingredient() { ID = 2 };
+            parent.Ingredients = new List<Ingredient>();
+            parent.Ingredients.Add(childIngredient);
+            Repo.Save(parent);
+
+            controller.WithCallTo(c => c.Detach(parent, childIngredient)).ShouldRenderDefaultView();
         }
 
         public void BaseDetachAllDefaultView()
         {
-
-            controller.WithCallTo(c => c.DetachAll(t, typeof(Ingredient))).ShouldRenderDefaultView();
+            IEntity ingredient = new Ingredient() { ID = 4000 };
+            controller.WithCallTo(c => c.DetachAll(t,ingredient)).ShouldRenderDefaultView();
         }
 
         public void BaseDetachASetOfDefaultView()
