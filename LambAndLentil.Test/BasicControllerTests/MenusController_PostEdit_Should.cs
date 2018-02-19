@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace LambAndLentil.Test.BasicControllerTests
+namespace  LambAndLentil.Test.BaseControllerTests
 {
     [Ignore]
     [TestClass]
@@ -16,23 +16,14 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestMethod]
         public void ReturnIndexWithInValidModelStateWithWarningMessageWhenSaved()
         {
-            // Arrange
-
-            // Act
-
-            // Assert
+             
             Assert.Fail();
         }
 
         [Ignore]
         [TestMethod]
         public void NotSaveLogicallyInvalidModel()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
+        { 
             Assert.Fail();
 
         }

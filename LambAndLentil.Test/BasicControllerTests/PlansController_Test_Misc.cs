@@ -2,7 +2,7 @@
 using LambAndLentil.UI.Controllers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace LambAndLentil.Test.BasicControllerTests
+namespace  LambAndLentil.Test.BaseControllerTests
 {
 
     [TestClass]
@@ -53,19 +53,6 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.Fail();
         }
 
-        [TestMethod]
-        public void GetTheClassNameCorrect()
-        {
-            // Arrange
-
-            // Act
-
-
-            // Assert
-            //  Assert.Fail();
-            Assert.AreEqual("LambAndLentil.UI.Controllers.PlansController", PlansController_Test_Should.Controller.ToString());
-        }
-
-      
+     
     }
 }

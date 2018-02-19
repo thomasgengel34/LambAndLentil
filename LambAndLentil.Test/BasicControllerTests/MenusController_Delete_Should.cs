@@ -6,37 +6,13 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 using System.Web.Mvc;
 
-namespace LambAndLentil.Test.BasicControllerTests
+namespace  LambAndLentil.Test.BaseControllerTests
 {
     [TestCategory("MenusController")]
     [TestCategory("Delete")]
     [TestClass]
     public class MenusController_Delete_Should:MenusController_Test_Should
-    {
-        public MenusController_Delete_Should()
-        {
-
-        }
-        [Ignore]
-        [TestMethod]
-        public void AllowUserToConfirmDeleteRequestAndCallConfirmDelete()
-        {
-            Assert.Fail();
-        }
-
-        [Ignore]
-        [TestMethod]
-        public void ReturnIndexWithWarningWhenIDIsNotFound()
-        { 
-            Assert.Fail();
-        }
-
-        [Ignore]
-        [TestMethod]
-        public void ReturnIDetailsWhenIDIstFound()
-        { 
-            Assert.Fail();
-        }
+    { 
 
           
 

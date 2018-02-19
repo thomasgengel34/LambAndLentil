@@ -4,7 +4,7 @@ using System.Web.Mvc;
 using LambAndLentil.Domain.Abstract;
 using LambAndLentil.Domain.Concrete;
 using LambAndLentil.Domain.Entities;
-using LambAndLentil.Test.BasicControllerTests;
+using LambAndLentil.Test.BaseControllerTests;
 using LambAndLentil.UI;
 using LambAndLentil.UI.Controllers;
 using LambAndLentil.UI.Infrastructure.Alerts;
@@ -151,30 +151,7 @@ namespace IntegrationTests
             // Assert
             Assert.IsNotNull(ingredient2);
         }
-
-        [TestMethod]
-        [TestCategory("Attach-Detach")]
-        public void ReturnIndexViewWithWarningWhenAttachingExistIngredientToNonExistingRecipe()
-        {
-            TestRepository<Recipe> repoRecipe = new TestRepository<Recipe>();
-            TestRepository<Ingredient> repoIngredient = new TestRepository<Ingredient>();
-
-            string description = "test ReturnIndexViewWhenAttachingExistIngredientToNonExistingRecipe";
-
-            Ingredient ingredient = GetIngredient(repoIngredient, description);
-            repoIngredient.Save(ingredient);
-            Recipe recipe = new Recipe();
-            recipe = null;
-
-            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.Attach(recipe, ingredient);
-            RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
-            var routeValues = rtrr.RouteValues.Values;
-
-            Assert.AreEqual("alert-warning", adr.AlertClass);
-            Assert.AreEqual("Recipe was not found", adr.Message);
-            Assert.AreEqual(1, routeValues.Count);
-            Assert.AreEqual(UIViewType.Index.ToString(), routeValues.ElementAt(0).ToString());
-        }
+         
 
         [TestMethod]
         [TestCategory("Attach-Detach")]
@@ -194,25 +171,7 @@ namespace IntegrationTests
             Assert.AreEqual(UIViewType.Details.ToString(), routeValues.ElementAt(2).ToString());
             Assert.AreEqual(UIViewType.Edit.ToString(), routeValues.ElementAt(1).ToString()); 
         }  
-
-        [TestMethod]
-        [TestCategory("Attach-Detach")]
-        public void ReturnIndexViewWithWarningWhenAttachingNonExistIngredientToNonExistingRecipe()
-        {
-            TestRepository<Recipe> repoRecipe = new TestRepository<Recipe>();
-            Ingredient ingredient = null;
-            Recipe recipe = new Recipe();
-            recipe = null;
-
-            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.Attach(recipe, ingredient);
-            RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
-            var routeValues = rtrr.RouteValues.Values;
-
-            Assert.AreEqual("alert-warning", adr.AlertClass);
-            Assert.AreEqual("Recipe was not found", adr.Message);
-            Assert.AreEqual(1, routeValues.Count);
-            Assert.AreEqual(UIViewType.Index.ToString(), routeValues.ElementAt(0).ToString());
-        }
+         
 
         [Ignore]
         [TestMethod]
@@ -237,66 +196,9 @@ namespace IntegrationTests
             Assert.AreEqual(UIViewType.Edit.ToString(), routeValues.ElementAt(1).ToString());
             Assert.AreEqual(UIViewType.Details.ToString(), routeValues.ElementAt(2).ToString());
         }
+         
 
-        [TestMethod]
-        [TestCategory("Attach-Detach")]
-        public void ReturnIndexViewWithWarningWhenDetachingExistingIngredientAttachedToNonExistingRecipe()
-        {
-            TestRepository<Recipe> repoRecipe = new TestRepository<Recipe>();
-            TestRepository<Ingredient> repoIngredient = new TestRepository<Ingredient>();
-            IGenericController<Recipe> ControllerDetach = new RecipesController(repoRecipe);
-            string description = "test ReturnIndexViewWithWarningWhenDetachingExistingIngredientAttachedToNoExistingRecipe";
-
-            Ingredient ingredient = GetIngredient(repoIngredient, description);
-            Recipe recipe = new Recipe();
-            recipe = null;
-
-            AlertDecoratorResult adr = (AlertDecoratorResult)ControllerDetach.Detach(recipe, ingredient);
-            RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
-            var routeValues = rtrr.RouteValues.Values;
-
-            Assert.AreEqual("alert-warning", adr.AlertClass);
-            Assert.AreEqual("Recipe was not found", adr.Message);
-            Assert.AreEqual(1, routeValues.Count);
-            Assert.AreEqual(UIViewType.Index.ToString(), routeValues.ElementAt(0).ToString());
-        }
-
-
-
-        [TestMethod]
-        [TestCategory("Attach-Detach")]
-        public void ReturnRecipeEditViewWithWarningMessageWhenDetachingNonExistingIngredientAttachedToExistingRecipe()
-        {
-            IRepository<Recipe> repoRecipe = new TestRepository<Recipe>();
-            IGenericController<Recipe> ControllerDetach = new RecipesController(repoRecipe);
-            Recipe Recipe = GetRecipe(repoRecipe, "test ReturnRecipeEditViewWithWarningMessageWhenDetachingNonExistingIngredientAttachedToExistingRecipe");
-            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.Detach(Recipe, (Ingredient)null);
-            RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
-            var routeValues = rtrr.RouteValues.Values;
-
-            Assert.AreEqual("alert-warning", adr.AlertClass);
-            Assert.AreEqual("Child was not found", adr.Message);
-            Assert.AreEqual(3, routeValues.Count);
-            Assert.AreEqual(UIViewType.Details.ToString(), routeValues.ElementAt(2).ToString());
-            Assert.AreEqual(UIViewType.Edit.ToString(), routeValues.ElementAt(1).ToString());
-        }  
-
-    [TestMethod]
-        [TestCategory("Attach-Detach")]
-        public void ReturnIndexViewWithWarningWhenDetachingNonExistingIngredientAttachedToANonExistingRecipe()
-        {
-            Recipe recipe = new Recipe();
-            recipe = null;
-            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.Detach(recipe, (Ingredient)null);
-
-            RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
-            var routeValues = rtrr.RouteValues.Values;
-
-            Assert.AreEqual("alert-warning", adr.AlertClass);
-            Assert.AreEqual("Recipe was not found", adr.Message);
-            Assert.AreEqual(1, routeValues.Count);
-            Assert.AreEqual(UIViewType.Index.ToString(), routeValues.ElementAt(0).ToString());
-        }
+          
 
         internal Ingredient GetIngredient(IRepository<Ingredient> Repo, string description)
         {

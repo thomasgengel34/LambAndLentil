@@ -5,28 +5,13 @@ using LambAndLentil.UI.Models;
 using LambAndLentil.Tests.Controllers;
 using LambAndLentil.Domain.Entities;
 
-namespace LambAndLentil.Test.BasicControllerTests
+namespace  LambAndLentil.Test.BaseControllerTests
 {
 
     [TestClass]
     [TestCategory("PersonsController")]
     public class PersonsController_PersonsGenericController_Should : PersonsController_Test_Should
-    {
-        [TestMethod]
-        public void InheritBaseControllerInPerson()
-        { 
-            Type type = Type.GetType("LambAndLentil.UI.Controllers.PersonsController, LambAndLentil.UI", true);
-           
-            Assert.IsTrue(type.IsSubclassOf(typeof(BaseController<Person>)));
-        }
-
-        [TestMethod]
-        public void InheritBaseAttachDetachControllerInPerson()
-        { 
-            Type type = Type.GetType("LambAndLentil.UI.Controllers.PersonsController, LambAndLentil.UI", true);
-            
-            Assert.IsTrue(type.IsSubclassOf(typeof(BaseAttachDetachController<Person>)));
-        }
+    { 
 
         [TestMethod]
         public void CallRepositoryInPerson()

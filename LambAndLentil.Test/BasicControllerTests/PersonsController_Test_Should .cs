@@ -13,7 +13,7 @@ using System.IO;
 using System.Linq;
 using System.Web.Mvc;
 
-namespace LambAndLentil.Test.BasicControllerTests
+namespace  LambAndLentil.Test.BaseControllerTests
 {
     [TestClass]  
     [TestCategory("PersonsController")]

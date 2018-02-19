@@ -4,7 +4,7 @@ using LambAndLentil.UI;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Web.Mvc;
 
-namespace LambAndLentil.Test.BasicControllerTests
+namespace  LambAndLentil.Test.BaseControllerTests
 {
     [TestCategory("PlansController")]
     [TestCategory("Edit")]
@@ -27,19 +27,14 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestMethod]
         [TestCategory("Edit")]
         public void CanSetUpToEditPlan()
-        {
-            // Arrange 
-
-            // Act  
+        { 
             ViewResult view1 = (ViewResult)Controller.Edit(int.MaxValue);
             Plan p1 = (Plan)view1.Model;
             ViewResult view2 = (ViewResult)Controller.Edit(int.MaxValue - 1);
             Plan p2 = (Plan)view2.Model;
             ViewResult view3 = (ViewResult)Controller.Edit(int.MaxValue - 2);
             Plan p3 = (Plan)view3.Model;
-
-
-            // Assert 
+             
             Assert.IsNotNull(view1);
             Assert.AreEqual(int.MaxValue, p1.ID);
             Assert.AreEqual(int.MaxValue - 1, p2.ID);
@@ -49,18 +44,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.AreEqual("PlansController_Index_Test P3", p3.Name);
         }
 
-
-        
-        [TestMethod]  
-        public void CannotEditNonexistentPlan()
-        {
-            
-            ActionResult ar = Controller.Edit(-1);
-
-            Assert.IsNotNull(ar);
-
-             
-        }
+         
 
         [TestMethod]
         public void ListEntityTVMCtr_CreateReturnsNonNull()

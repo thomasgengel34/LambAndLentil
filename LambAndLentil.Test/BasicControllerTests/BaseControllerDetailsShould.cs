@@ -1,38 +1,48 @@
 ﻿using System.Linq;
 using System.Web.Mvc;
+using LambAndLentil.Domain.Abstract;
+using LambAndLentil.Domain.Concrete;
 using LambAndLentil.Domain.Entities;
 using LambAndLentil.UI;
+using LambAndLentil.UI.Controllers;
 using LambAndLentil.UI.Infrastructure.Alerts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace LambAndLentil.Test.BasicControllerTests
+namespace LambAndLentil.Test.BaseControllerTests
 {
     internal class BaseControllerDetailsShould<T> : BaseControllerTest<T>
          where T : BaseEntity, IEntity, new()
     {
-       internal static void ReturnDeleteConfirmedWithActionMethodDeleteConfirmedWithFoundResult()
+        internal static void ReturnDeleteConfirmedWithActionMethodDeleteConfirmedWithFoundResult()
         {
-            int count = Repo.Count();
-
-            T item = new T() { ID = 1000000 };
-            Repo.Save(item);
-             
-            Controller.DeleteConfirmed(item.ID);
-            T returnedItem = Repo.GetById(item.ID);
-
-            Assert.AreEqual(count, Repo.Count());
-            Assert.IsNull(returnedItem);
+            ClassCleanup();
+            IRepository<T> repo = new TestRepository<T>();
+            IGenericController<T> controller = BaseControllerTestFactory(typeof(T));
            
+            T item = new T() { ID = 1000000 };
+            repo.Save(item);
+            int count = repo.Count();
+
+            ActionResult ar = controller.DeleteConfirmed(item.ID);
+            T returnedItem = repo.GetById(item.ID);
+
+            Assert.AreEqual(count - 1, repo.Count());
+            Assert.IsNull(returnedItem);
+            // TODO: flesh out rest of test
+
         }
 
 
         internal static void BeSuccessfulWithValidIngredientID()
         {
-            // sut = system.under.test 
-            T sut = new T { ID = 60000 };
+            ClassCleanup();
+            IRepository<T> repo = new TestRepository<T>();
+            IGenericController<T> controller = BaseControllerTestFactory(typeof(T));
+            T sut = new T { ID = 60000 }; // sut = system.under.test 
+            repo.Save(sut);
 
-            Repo.Save(sut);
-            ActionResult ar = Controller.Details(sut.ID);
+          
+            ActionResult ar = controller.Details(sut.ID);
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
 
             ViewResult viewResult = (ViewResult)adr.InnerResult;

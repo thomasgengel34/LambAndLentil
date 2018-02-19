@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Principal;
 using System.Web.Mvc;
+using LambAndLentil.Domain.Abstract;
+using LambAndLentil.Domain.Concrete;
 using LambAndLentil.Domain.Entities;
 using LambAndLentil.Test.IAttachDetachControllerTests.BaseTests;
 using LambAndLentil.UI;
@@ -10,7 +12,7 @@ using LambAndLentil.UI.Controllers;
 using LambAndLentil.UI.Infrastructure.Alerts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace LambAndLentil.Test.BasicControllerTests
+namespace  LambAndLentil.Test.BaseControllerTests
 {
     public class BasicIndex<T> : BaseControllerTest<T>
         where T : BaseEntity, IEntity, new()
@@ -37,13 +39,34 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         internal static void ContainsAllView1Count5()
         {
-            int count = Repo.Count();
+            IRepository<T> repo = BuildRepository();
+            int count = repo.Count();
+            IGenericController<T> controller = BaseControllerTestFactory(typeof(T));
 
-            ListEntity = (ListEntity<T>)((ViewResult)(Controller.Index(1))).Model;
+            ListEntity = (ListEntity<T>)((ViewResult)(controller.Index(1))).Model;
             T[] ingrArray1 = ListEntity.ListT.ToArray() as T[];
             int count1 = ingrArray1.Count();
 
-            Assert.AreEqual(6, count1);
+            Assert.AreEqual(count, count1);
+        }
+
+        private static IRepository<T> BuildRepository()
+        {
+            IRepository<T> repo = new TestRepository<T>();
+            ClassCleanup();
+            T t1 = new T() { ID = 10001 };
+            T t2 = new T() { ID = 10002 };
+            T t3 = new T() { ID = 10003 };
+            T t4 = new T() { ID = 10004 };
+            T t5 = new T() { ID = 10005 };
+            T t6 = new T() { ID = 10006 };
+            repo.Save(t1);
+            repo.Save(t2);
+            repo.Save(t3);
+            repo.Save(t4);
+            repo.Save(t5);
+            repo.Save(t6);
+            return repo;
         }
 
         internal static void ContainsAllView2Count0()
@@ -67,8 +90,8 @@ namespace LambAndLentil.Test.BasicControllerTests
         // TODO: break up into multiple tests
         internal static void ContainsAllView1NameIsIndex()
         {
-            ViewResult view = (ViewResult)Controller.Index(1); 
-            Assert.AreEqual(UIViewType.Index.ToString(), view.ViewName); 
+            ViewResult view = (ViewResult)Controller.Index(1);
+            Assert.AreEqual(UIViewType.Index.ToString(), view.ViewName);
         }
 
         internal static void ContainsAllView1NameIsIndex__1()
@@ -112,6 +135,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         internal static void FirstItemNameIsCorrect()
         {
+            T item = new T();
             ListEntity = (ListEntity<T>)((ViewResult)Controller.Index(1)).Model;
             T[] ingrArray1 = ListEntity.ListT.ToArray();
             Controller.PageSize = 8;
@@ -120,7 +144,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
             int count1 = ((ListEntity<T>)(view1.Model)).ListT.Count();
 
-            Assert.AreEqual("ControllerTest1", ((ListEntity<T>)(view1.Model)).ListT.FirstOrDefault().Name);
+            Assert.AreEqual(item.Name, ((ListEntity<T>)(view1.Model)).ListT.FirstOrDefault().Name);
         }
 
 
@@ -136,11 +160,11 @@ namespace LambAndLentil.Test.BasicControllerTests
 
             ViewResult view1 = (ViewResult)Controller.Index(1);
 
-
-            Assert.AreEqual("John Doe", ((ListEntity<T>)(view1.Model)).ListT.FirstOrDefault().AddedByUser);
+            string userName = WindowsIdentity.GetCurrent().Name;
+            Assert.AreEqual(userName, ((ListEntity<T>)(view1.Model)).ListT.FirstOrDefault().AddedByUser);
         }
 
-         
+
 
 
         internal static void FirstModifiedByUserIsCorrect()
@@ -159,31 +183,36 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         internal static void FirstCreationDateIsCorrect()
         {
-
-            ListEntity = (ListEntity<T>)((ViewResult)Controller.Index(1)).Model;
+            ClassCleanup();
+            DateTime dateTime = DateTime.Now;
+            IRepository<T> repo = new TestRepository<T>();
+            IGenericController<T> controller = BaseControllerTestFactory(typeof(T));
+            T item = new T() { CreationDate = dateTime };
+            ClassCleanup();
+            repo.Save(item);
+            ListEntity = (ListEntity<T>)((ViewResult)controller.Index(1)).Model;
             T[] ingrArray1 = ListEntity.ListT.ToArray();
-            Controller.PageSize = 8;
-
 
             ViewResult view1 = (ViewResult)Controller.Index(1);
 
-
-            Assert.AreEqual(DateTime.MinValue, ((ListEntity<T>)(view1.Model)).ListT.FirstOrDefault().CreationDate);
+            Assert.AreEqual(dateTime, ((ListEntity<T>)(view1.Model)).ListT.FirstOrDefault().CreationDate);
         }
 
 
         internal static void FirstModifiedDateIsCorrect()
         {
+            IRepository<T> repo = BuildRepository();
+
+            IGenericController<T> controller = BaseControllerTestFactory(typeof(T));
+
+
 
             ListEntity = (ListEntity<T>)((ViewResult)Controller.Index(1)).Model;
             T[] ingrArray1 = ListEntity.ListT.ToArray();
-            Controller.PageSize = 8;
-
-
+            DateTime dateTime = ingrArray1[0].ModifiedDate;
             ViewResult view1 = (ViewResult)Controller.Index(1);
 
-
-            Assert.AreEqual(DateTime.MaxValue.AddYears(-10), ((ListEntity<T>)(view1.Model)).ListT.FirstOrDefault().ModifiedDate);
+            Assert.AreEqual(dateTime, ((ListEntity<T>)(view1.Model)).ListT.FirstOrDefault().ModifiedDate);
         }
 
         internal static void FirstPageIsNotNull()
@@ -206,7 +235,7 @@ namespace LambAndLentil.Test.BasicControllerTests
 
             int count1 = ((ListEntity<T>)(view1.Model)).ListT.Count();
 
-            Assert.AreEqual("ControllerTest2", ((ListEntity<T>)(view1.Model)).ListT.Skip(1).FirstOrDefault().Name);
+            Assert.AreEqual(ingrArray1[0].Name, ((ListEntity<T>)(view1.Model)).ListT.Skip(1).FirstOrDefault().Name);
         }
 
         internal static void ThirdItemNameIsCorrect()
@@ -229,17 +258,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         {
             //TODO: add enough test ingredients to test the second page
         }
-
-        internal static void ReturnIndexWithErrorWhenIDIsNegative()
-        {
-            ViewResult view = Controller.Details(-1) as ViewResult;
-            AlertDecoratorResult adr = (AlertDecoratorResult)view;
-
-            Assert.IsNotNull(view);
-            Assert.AreEqual("No " + item.DisplayName + " was found with that id.", adr.Message);
-            Assert.AreEqual("alert-danger", adr.AlertClass);
-            Assert.AreEqual(UIViewType.Index.ToString(), ((RedirectToRouteResult)adr.InnerResult).RouteValues.Values.ElementAt(0).ToString());
-        }
+         
 
         internal static void ContainsAllView1Count6()
         {
@@ -252,7 +271,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.AreEqual(count, count1);
         }
 
-    
+
 
 
 
@@ -260,9 +279,9 @@ namespace LambAndLentil.Test.BasicControllerTests
         // TODO: refactor and combine with other tests
         internal static void ShowAll()
         {
-            int repoCount = Repo.Count(); 
+            int repoCount = Repo.Count();
 
-            ViewResult view1 = (ViewResult)Controller.Index(1); 
+            ViewResult view1 = (ViewResult)Controller.Index(1);
 
             int count1 = ((ListEntity<Recipe>)view1.Model).ListT.Count();
 
@@ -278,22 +297,22 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.AreEqual(0, count2);
             Assert.AreEqual(repoCount, count);
             Assert.AreEqual("Index", view1.ViewName);
-            Assert.AreEqual("Index", view2.ViewName); 
+            Assert.AreEqual("Index", view2.ViewName);
         }
 
-        [Ignore] 
+        [Ignore]
         internal static void FlagAnPlanFlaggedInAPlan()
         {
             Assert.Fail();
         }
 
-        [Ignore] 
+        [Ignore]
         internal static void FlagAnPlanFlaggedInTwoPlans()
         {
             Assert.Fail();
         }
 
-        [Ignore] 
+        [Ignore]
         internal static void WhenAFlagHasBeenRemovedFromOnePlanStillThereForSecondFlaggedPlan()
         {
             Assert.Fail();
@@ -331,5 +350,19 @@ namespace LambAndLentil.Test.BasicControllerTests
 
             Assert.AreEqual(Controller.PageSize, count1);
         }
+
+
+
+        [Ignore]
+        [TestMethod]
+        public void FlagAnIngredientFlaggedInAPerson() => Assert.Fail();
+
+        [Ignore]
+        [TestMethod]
+        public void FlagAnIngredientFlaggedInTwoPersons() => Assert.Fail();
+
+        [Ignore]
+        [TestMethod]
+        public void WhenAFlagHasBeenRemovedFromOnePersonStillThereForSecondFlaggedPerson() => Assert.Fail();
     }
 }

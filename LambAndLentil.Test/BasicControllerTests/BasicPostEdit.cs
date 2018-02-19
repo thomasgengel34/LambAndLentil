@@ -1,36 +1,30 @@
-﻿using System;
-using System.Linq;
-using System.Security.Principal;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
+using LambAndLentil.Domain.Abstract;
+using LambAndLentil.Domain.Concrete;
 using LambAndLentil.Domain.Entities;
-using LambAndLentil.UI;
+using LambAndLentil.UI.Controllers;
 using LambAndLentil.UI.Infrastructure.Alerts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace LambAndLentil.Test.BasicControllerTests
+namespace  LambAndLentil.Test.BaseControllerTests
 {
     public class BasicPostEdit<T> : BaseControllerTest<T>
-        where T : BaseEntity, IEntity, new() 
-    {
-        public BasicPostEdit()
+        where T : BaseEntity, IEntity, new()
+    { 
+
+        internal static void ReturnIndexWithInValidModelStateWithWarningMessageWhenSaved()
         {
-           T item = new T()
-            {
-                ID = 1,
-                Name = "test ShoppingListControllerTest.CanEditShoppingList",
-                Description = "test ShoppingListControllerTest.CanEditShoppingList"
-            };
-            Repo.Save(item);
-        }
- 
-        public void ReturnIndexWithInValidModelStateWithWarningMessageWhenSaved()
-        {
+            IRepository<T> repo;
+            IGenericController<T> controller;
+            T item;
+            SetUpForTests(out repo, out controller, out item);
+
             T invalidItem = new T()
             {
                 ID = -2
             };
 
-            ActionResult ar = Controller.PostEdit(invalidItem);
+            ActionResult ar = controller.PostEdit(invalidItem);
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             ViewResult view = (ViewResult)adr.InnerResult;
 
@@ -39,35 +33,59 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.AreEqual("Details", view.ViewName);
         }
 
-        
-        public void CanPostEditShoppingList()
-        {  
+
+        internal static void CanPostEdit()
+        {
+            IRepository<T> repo;
+            IGenericController<T> controller;
+            T item;
+            SetUpForTests(out repo, out controller, out item);
             item.Name = "Name has been changed";
-            Repo.Save(item);
+            repo.Save(item);
             ViewResult view1 = (ViewResult)Controller.Edit(item.ID);
 
-            T  returnedItem = Repo.GetById(item.ID);
-             
+            T returnedItem = repo.GetById(item.ID);
+
             Assert.IsNotNull(view1);
             Assert.AreEqual("Name has been changed", returnedItem.Name);
             Assert.AreEqual(item.Description, returnedItem.Description);
             Assert.AreEqual(item.CreationDate, returnedItem.CreationDate);
         }
 
-        public void NotChangeIDInPostEditActionMethod()
+        internal static void NotChangeIDInPostEditActionMethod()
         {
+            IRepository<T> repo;
+            IGenericController<T> controller;
+            T item;
+            SetUpForTests(out repo, out controller, out item);
             int originalID = item.ID;
             item.ID = 7000;
             int initialCount = Repo.Count();
 
-            Controller.PostEdit(item);
-            T returnedItem = Repo.GetById(7000);
-            T originalItem = Repo.GetById(originalID);
-            int newCount = Repo.Count();
+            controller.PostEdit(item);
+            T returnedItem = repo.GetById(7000);
+            T originalItem = repo.GetById(originalID);
+            int newCount = repo.Count();
 
             Assert.AreEqual(originalID, originalItem.ID);
             Assert.AreEqual(item.ID, returnedItem.ID);
             Assert.AreEqual(initialCount + 1, newCount);
         }
+
+        internal static void NotBindNotIdentifiedToBeBoundInEdit()
+        {
+            IRepository<T> repo;
+            IGenericController<T> controller;
+            T item;
+            SetUpForTests(out repo, out controller, out item);
+
+            item.AddedByUser = "Changed";
+            item.ModifiedByUser = "Should Not Be Original";
+            controller.PostEdit((T)item);
+            T returnedT = repo.GetById(item.ID);
+
+            Assert.AreNotEqual("Changed", returnedT.AddedByUser);
+            Assert.AreNotEqual("Should Not Be Original", returnedT.ModifiedByUser);
+        } 
     }
 }

@@ -6,7 +6,7 @@ using LambAndLentil.UI;
 using LambAndLentil.UI.Infrastructure.Alerts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace LambAndLentil.Test.BasicControllerTests
+namespace LambAndLentil.Test.BaseControllerTests
 {
     [TestClass]
     [TestCategory("RecipesController")]

@@ -5,7 +5,7 @@ using LambAndLentil.Domain.Entities;
 using LambAndLentil.UI.Controllers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace LambAndLentil.Test.BasicControllerTests
+namespace LambAndLentil.Test.BaseControllerTests
 {
     [TestClass]
     [TestCategory("RecipesController")]
@@ -28,34 +28,12 @@ namespace LambAndLentil.Test.BasicControllerTests
 
             Controller.PageSize = 3;
         }
-         
-
-        [TestMethod]
-        public void InheritFromBaseController()
-        {
-            // Arrange
-
-
-            // Act 
-            Type baseType = typeof(BaseController<Recipe>);
-            bool isBase = baseType.IsInstanceOfType(Controller);
-
-            // Assert 
-            Assert.AreEqual(isBase, true);
-        }
-
+          
  
 
 
 
-        [TestMethod]
-        public void BePublic()
-        {   
-            Type type = Controller.GetType();
-            bool isPublic = type.IsPublic; 
-
-            Assert.AreEqual(isPublic, true); 
-        }
+    
 
         [TestMethod]
         public void ReturnNonNullIndex()
@@ -124,18 +102,6 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.Fail();
         }
 
-        [TestMethod]
-        public void GetTheClassNameCorrect()
-        {
-            // Arrange
-
-            // Act
-
-
-            // Assert
-            //  Assert.Fail();
-            Assert.AreEqual("LambAndLentil.UI.Controllers.RecipesController", RecipesController_Test_Should.Controller.ToString());
-        }
-        
+       
     }
 }

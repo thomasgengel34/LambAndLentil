@@ -5,7 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 using System.Web.Mvc;
 
-namespace LambAndLentil.Test.BasicControllerTests
+namespace LambAndLentil.Test.BaseControllerTests
 {
     [TestClass]
     [TestCategory("ShoppingListsController")]
@@ -31,43 +31,26 @@ namespace LambAndLentil.Test.BasicControllerTests
         {
             // Arrange 
             ShoppingListsController Controller2 = new ShoppingListsController(Repo);
-
-            // Act  
+              
             ViewResult view1 = (ViewResult)Controller.Edit(int.MaxValue);
             //ShoppingList p1 = (ShoppingList)view1.Model;
             //ViewResult view2 = (ViewResult)Controller.Edit(int.MaxValue - 1);
             //ShoppingList p2 = (ShoppingList)view2.Model;
             //ViewResult view3 = (ViewResult)Controller.Edit(int.MaxValue - 2);
             //ShoppingList p3 = (ShoppingList)view3.Model;
-
-            // Assert 
+             
             Assert.IsNotNull(view1);
 
         }
 
-
-
-        [TestMethod]
-        [TestCategory("Edit")]
-        public void CannotEditNonexistentShoppingList()
-        {
-            // Arrange
-
-            // Act
-            ShoppingList result = (ShoppingList)((ViewResult)Controller.Edit(8)).ViewData.Model;
-            // Assert
-            Assert.IsNull(result);
-        }
-
+         
 
          
 
         [TestMethod]
         [TestCategory("Edit")]
         public void SaveEditedShoppingList()
-        {
-            // Arrange
-             
+        { 
              Controller2 = new ShoppingListsController(Repo);
               Controller3 = new ShoppingListsController(Repo);
 
@@ -95,24 +78,15 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.AreEqual(7777, ShoppingList3.ID);
 
         }
-
-        
-      
-
-
+         
         [Ignore]
         [TestMethod]
         [TestCategory("Edit")]
         public void XxxCannotEditNonexistentShoppingList()
-        {
-            // Arrange
-
-            // Act
+        { 
             ShoppingList result = (ShoppingList)((ViewResult)Controller.Edit(8)).ViewData.Model;
-            // Assert
+          
             Assert.IsNull(result);
-        }
-
-
+        } 
     }
 }

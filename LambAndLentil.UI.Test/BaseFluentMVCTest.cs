@@ -1,7 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using LambAndLentil.Domain.Abstract;
+using LambAndLentil.Domain.Concrete;
 using LambAndLentil.Domain.Entities;
 using LambAndLentil.UI.Controllers;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestStack.FluentMVCTesting;
 
 namespace LambAndLentil.FluentMVC.Test
@@ -15,6 +20,7 @@ namespace LambAndLentil.FluentMVC.Test
 
         public BaseFluentMVCTest(BaseAttachDetachController<T> controllerParameter, IRepository<T> repo)
         {
+            ClassCleanup();
             controller = controllerParameter;
             Repo = repo;
             t = new T() { ID = 7000 };
@@ -28,7 +34,8 @@ namespace LambAndLentil.FluentMVC.Test
 
         public void BaseRenderDetailsDefaultView()
         {
-            controller.WithCallTo(c => c.BaseDetails(1)).ShouldRenderDefaultView();
+            T t2 = new T() { ID = 7000 };
+            controller.WithCallTo(c => c.BaseDetails(7000)).ShouldRenderDefaultView();
         }
 
 
@@ -52,13 +59,30 @@ namespace LambAndLentil.FluentMVC.Test
 
         public void BaseDetachDefaultView()
         {
+            ClassCleanup();
            T parent  = new T() { ID = 1 };
+            IRepository<T> repository = new TestRepository<T>();
             Ingredient childIngredient = new Ingredient() { ID = 2 };
             parent.Ingredients = new List<Ingredient>();
             parent.Ingredients.Add(childIngredient);
-            Repo.Save(parent);
+            repository.Save(parent);
 
             controller.WithCallTo(c => c.Detach(parent, childIngredient)).ShouldRenderDefaultView();
+        }
+
+        [ClassCleanup()]
+        public static void ClassCleanup()
+        {
+            Type type = typeof(T);
+            string className = type.Name.Split('.').Last();
+            string path = @"C:\Dev\TGE\LambAndLentil\LambAndLentil.Test\App_Data\JSON\" + className + @"\";
+
+            IEnumerable<string> files = Directory.EnumerateFiles(path);
+
+            foreach (var file in files)
+            {
+                File.Delete(file);
+            }
         }
 
         public void BaseDetachAllDefaultView()

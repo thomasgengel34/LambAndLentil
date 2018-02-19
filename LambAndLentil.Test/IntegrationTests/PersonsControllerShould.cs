@@ -13,7 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 
-namespace LambAndLentil.Test.BasicControllerTests
+namespace  LambAndLentil.Test.BaseControllerTests
 {
 
     [TestClass]
@@ -146,43 +146,9 @@ namespace LambAndLentil.Test.BasicControllerTests
  
             Assert.AreEqual(0, deletedItem.Count());
         }
-        [Ignore]
-        [TestMethod]
-        [TestCategory("Edit")]
-        public void SaveTheCreationDateBetweenPostedEdits()
-        {
-            // Arrange
-            DateTime CreationDate = new DateTime(2010, 1, 1);
-            Person.Description = "001 Test ";
-            Person.ID = 37;
-            IGenericController<Person> ControllerEdit = new PersonsController(Repo); 
-            IGenericController<Person> ControllerView = new PersonsController(Repo);
-            IGenericController<Person> ControllerDelete = new PersonsController(Repo);
-             
-            ControllerEdit.PostEdit((Person)Person);
-            ViewResult view = (ViewResult)ControllerView.Index();
-            List<Person> ListEntity = (List<Person>)view.Model;
-            var result = (from m in ListEntity
-                          where m.Description == "001 Test "
-                          select m).AsQueryable().FirstOrDefault();
+      
 
-            Person person = Mapper.Map<Person>(result); 
-            DateTime shouldBeSameDate = person.CreationDate;
-             
-            Assert.AreEqual(CreationDate, shouldBeSameDate);
-        }
-
-
-        [TestMethod]
-        [TestCategory("Edit")]
-        public void UpdateTheModificationDateBetweenPostedEdits()
-        {
-            Person.Name = "Test UpdateTheModificationDateBetweenPostedEdits";
-            Person.ID = 6000;
-            Repo.Save((Person)Person);
-            BaseUpdateTheModificationDateBetweenPostedEdits((Person)Person);
-        }
-
+         
         internal Person GetPerson(IRepository<Person> Repo, string description)
         {
             IGenericController<Person> Controller = new PersonsController(Repo);

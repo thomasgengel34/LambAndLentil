@@ -6,7 +6,7 @@ using LambAndLentil.UI;
 using LambAndLentil.UI.Infrastructure.Alerts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace LambAndLentil.Test.BasicControllerTests
+namespace  LambAndLentil.Test.BaseControllerTests
 {
     [TestClass]
     [TestCategory("MenusController")]
@@ -14,16 +14,6 @@ namespace LambAndLentil.Test.BasicControllerTests
     public class MenusController_Detail_Should:MenusController_Test_Should
     {
           
-
-        public MenusController_Detail_Should()
-        { 
-        }
-         
-      
-
-        [TestMethod]
-        public void ReturnDeleteWithActionMethodDeleteWithEmptyResult() => BaseReturnDeleteWithActionMethodDeleteWithEmptyResult(Controller);
-
          
         [TestMethod]
         public void BeSuccessfulWithValidMenuID()

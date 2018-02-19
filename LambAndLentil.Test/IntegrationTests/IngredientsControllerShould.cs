@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using LambAndLentil.Domain.Entities;
-using LambAndLentil.Test.BasicControllerTests;
+using LambAndLentil.Test.BaseControllerTests;
 using LambAndLentil.UI;
 using LambAndLentil.UI.Infrastructure.Alerts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -93,38 +93,8 @@ namespace LambAndLentil.Test.Infrastructure
              
             Assert.AreEqual(CreationDate, ingredient.CreationDate);
         }
-
-        [TestMethod]
-        [TestCategory("Edit")]
-        public void SaveTheCreationDateBetweenPostedEdits()
-        {
-            DateTime CreationDate = new DateTime(2010, 1, 1);
-            Ingredient ingredient = new Ingredient(CreationDate)
-            {
-                ID = int.MaxValue - 200,
-                Name = "test IngredientsControllerShould.SaveTheCreationDateBetweenPostedEdits"
-            };
-            Repo.Save(ingredient);
-            Controller.PostEdit(ingredient);
-            Ingredient returnedIngredient = Repo.GetById(ingredient.ID);
-            DateTime shouldBeSameDate = returnedIngredient.CreationDate;
-
-            Assert.AreEqual(CreationDate, shouldBeSameDate);
-        }
-
-        [TestMethod]
-        [TestCategory("Edit")]
-        public void UpdateTheModificationDateBetweenPostedEdits()
-        {
-            Ingredient ingredient = new Domain.Entities.Ingredient()
-            {
-                ID = 6000,
-                Name = "Test UpdateTheModificationDateBetweenPostedEdits"
-            };
-            Repo.Save(ingredient);
-            BaseUpdateTheModificationDateBetweenPostedEdits(ingredient);
-        }
-
+         
+         
 
         [TestMethod]
         public void NotCreateASecondElementOnEditingOneElement()

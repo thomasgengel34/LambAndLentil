@@ -14,7 +14,7 @@ using System.IO;
 using System.Linq;
 using System.Web.Mvc;
 
-namespace LambAndLentil.Test.BasicControllerTests
+namespace LambAndLentil.Test.BaseControllerTests
 {
     [TestClass]
     [TestCategory("Integration")]
@@ -158,54 +158,8 @@ namespace LambAndLentil.Test.BasicControllerTests
 
             Assert.IsNull(returnedItem);
         }
-
-        [Ignore]
-        [TestMethod]
-        [TestCategory("Edit")]
-        public void SaveTheCreationDateBetweenPostedEdits()
-        {
-            // Arrange
-            DateTime CreationDate = new DateTime(2010, 1, 1);
-            ShoppingList shoppingListVM = new ShoppingList(CreationDate)
-            {
-                Name = "001 Test "
-            };
-
-            JSONRepository<ShoppingList> Repo = new JSONRepository<ShoppingList>(); ;
-            //ShoppingListsController ControllerEdit = new ShoppingListsController(Repo);
-            //ShoppingListsController ControllerView = new ShoppingListsController(Repo);
-            //ShoppingListsController ControllerDelete = new ShoppingListsController(Repo);
-
-            // Act
-            //ControllerEdit.PostEdit(shoppingListVM);
-            //ViewResult view = ControllerView.Index();
-            //ShoppingList ListEntity= (ShoppingList)view.Model;
-            // var result = (from m in ListEntity.ShoppingLists
-            //              where m.Name == "001 Test "
-            //               select m).AsQueryable();
-
-            // ShoppingList shoppingList = result.FirstOrDefault();
-
-            // DateTime shouldBeSameDate = shoppingList.CreationDate;
-
-            // Assert
-            //    Assert.AreEqual(CreationDate, shouldBeSameDate);
-
-        }
-
-        [TestMethod]
-        [TestCategory("Edit")]
-        public void UpdateTheModificationDateBetweenPostedEdits()
-        {
-            ShoppingList shoppingList = new ShoppingList()
-            {
-                ID = 6000,
-                Name = "Test UpdateTheModificationDateBetweenPostedEdits"
-            }; 
-            Repo.Save(shoppingList);
-            BaseUpdateTheModificationDateBetweenPostedEdits(shoppingList);
-        }
-
+         
+         
         internal ShoppingList GetShoppingList(IRepository<ShoppingList> Repo, string description)
         {
 
@@ -245,89 +199,25 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestCategory("Attach-Detach")]
         public void NotDeleteAnIngredientAfterIngredientIsDetachedFromShoppingList() => Assert.Fail();
 
-        [Ignore]
-        [TestMethod]
-        [TestCategory("Attach-Detach")]
-        public void ReturnIndexViewWithWarningMessageWhenDetachingNonExistingIngredientAttachedToANonExistingShoppingList() => Assert.Fail();
-
-        [Ignore]
-        [TestMethod]
-        [TestCategory("Attach-Detach")]
-        public void ReturnIndexViewWithWarningWhenAttachingExistIngredientToNonExistingShoppingList() => Assert.Fail();
-
-        [Ignore]
-        [TestMethod]
-        [TestCategory("Attach-Detach")]
-        public void ReturnIndexViewWithWarningWhenAttachingNonExistIngredientToNonExistingShoppingList() => Assert.Fail();
-
-        [Ignore]
-        [TestMethod]
-        [TestCategory("Attach-Detach")]
-        public void ReturnIndexViewWithWarningWhenDetachingExistingIngredientAttachedToNonExistingShoppingList() => Assert.Fail();
-
-        [Ignore]
-        [TestMethod]
-        [TestCategory("Attach-Detach")]
-        public void ReturnShoppingListEditViewWithSuccessMessageWhenDetachingExistingIngredientFromExistingShoppingList() => Assert.Fail();
-
-        [Ignore]
-        [TestMethod]
-        [TestCategory("Attach-Detach")]
-        public void ReturnShoppingListEditViewWithWarningMessageWhenAttachingNonExistingIngredientToExistingShoppingList()
-        {
-            Assert.Fail();
-        }
-
-        [Ignore]
-        [TestMethod]
-        [TestCategory("Attach-Detach")]
-        public void ReturnShoppingListEditViewWithWarningMessageWhenDetachingNonExistingIngredientAttachedToExistingShoppingList()
-        {
-            Assert.Fail();
-        }
-
-        [Ignore]
-        [TestMethod]
-        [TestCategory("Attach-Detach")]
-        public void ReturnShoppingListIndexViewWithWarningWhenDetachingExistingingredientNotAttachedToAnExistingShoppingList()
-        {
-            Assert.Fail();
-        }
-
+       
         [Ignore]
         [TestMethod]
         public void CreateAPrintableShoppingList()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
+        { 
             Assert.Fail();
         }
 
         [Ignore]
         [TestMethod]
         public void EditAPrintableShoppingList()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
+        { 
             Assert.Fail();
         }
 
         [Ignore]
         [TestMethod]
         public void DisplayAPrintableShoppingList()
-        {
-
-            // Arrange
-
-            // Act
-
-            // Assert
+        { 
             Assert.Fail();
         }
 
@@ -335,60 +225,34 @@ namespace LambAndLentil.Test.BasicControllerTests
         [Ignore]
         [TestMethod]
         public void DeleteAPrintableShoppingList()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
+        { 
             Assert.Fail();
         }
 
         [Ignore]
         [TestMethod]
         public void DownloadAPrintableShoppingList()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
+        { 
             Assert.Fail();
         }
         [Ignore]
         [TestMethod]
         public void CreateACheckableShoppingList()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
+        { 
             Assert.Fail();
         }
 
         [Ignore]
         [TestMethod]
         public void EditACheckableShoppingList()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
+        { 
             Assert.Fail();
         }
 
         [Ignore]
         [TestMethod]
         public void DisplayACheckableShoppingList()
-        {
-
-            // Arrange
-
-            // Act
-
-            // Assert
+        { 
             Assert.Fail();
         }
 
@@ -396,25 +260,14 @@ namespace LambAndLentil.Test.BasicControllerTests
         [Ignore]
         [TestMethod]
         public void DeleteACheckableShoppingList()
-        {
-
-            // Arrange
-
-            // Act
-
-            // Assert
+        { 
             Assert.Fail();
         }
 
         [Ignore]
         [TestMethod]
         public void DownloadACheckableShoppingList()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
+        { 
             Assert.Fail();
         }
     }

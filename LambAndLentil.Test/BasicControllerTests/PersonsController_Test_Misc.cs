@@ -7,7 +7,7 @@ using System;
 using System.Linq;
 using System.Web.Mvc;
 
-namespace LambAndLentil.Test.BasicControllerTests
+namespace  LambAndLentil.Test.BaseControllerTests
 {
     [TestClass]
     [TestCategory("PersonsController")]
@@ -17,12 +17,10 @@ namespace LambAndLentil.Test.BasicControllerTests
        
         [TestMethod]
         public void PostEditPersonsFullName()
-        {
-            // Arrange
+        { 
             Person person = new Person { ID = 1000, FirstName = "Jon", LastName = "Johns", Description = "PostEditPersonsFullName" };
             Repo.Save(person);
-
-            // Act
+             
             person.FirstName = "Reynard";
             person.LastName = "Finkelstein";
             Controller.PostEdit(person);
@@ -97,17 +95,6 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.Fail();
         }
 
-        [TestMethod]
-        public void GetTheClassNameCorrect()
-        {
-            // Arrange
-
-            // Act
-
-
-            // Assert
-            //  Assert.Fail();
-            Assert.AreEqual("LambAndLentil.UI.Controllers.PersonsController", PersonsController_Test_Should.Controller.ToString());
-        } 
+       
     }
 }

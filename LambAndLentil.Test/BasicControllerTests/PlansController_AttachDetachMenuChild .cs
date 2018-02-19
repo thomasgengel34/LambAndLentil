@@ -7,29 +7,12 @@ using LambAndLentil.UI;
 using LambAndLentil.UI.Controllers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace LambAndLentil.Test.BasicControllerTests
+namespace  LambAndLentil.Test.BaseControllerTests
 {
     [TestClass]
     [TestCategory("Attach-Detach")]
     public class PlansController_AttachDetachChild : PlansController_Test_Should
     {
-       
-         [Ignore]
-        [TestMethod]
-        public void SuccessfullyAttachChild()
-        {
-            Assert.Fail();
-        }
-
-
-
-          [Ignore]
-        [TestMethod]
-        public void SuccessfullyDetachFirstMenuChild()
-        {
-            Assert.Fail();
-        }
-
         
         [TestMethod]
         public void SuccessfullyDetachASetOfMenuChildren()
@@ -49,15 +32,7 @@ namespace LambAndLentil.Test.BasicControllerTests
           //  Assert.AreEqual(initialMenuCount - 2, returnedPlan.Menus.Count());
         }
 
-
-        [TestMethod]
-        public void  DetachtheLastMenuChild() => BaseDetachTheLastMenuChild(Repo, Controller, Plan);
-
-      
-
-       
-        [TestMethod]
-        public void  DetachAllMenuChildren() =>   BaseDetachAllMenuChildren(); 
+ 
 
         [Ignore]
         [TestMethod]

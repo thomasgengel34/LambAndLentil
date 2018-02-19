@@ -1,25 +1,15 @@
-﻿using System;
-using System.Linq;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using LambAndLentil.Domain.Entities;
-using LambAndLentil.UI;
 using LambAndLentil.UI.Infrastructure.Alerts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace LambAndLentil.Test.BasicControllerTests
+namespace LambAndLentil.Test.BaseControllerTests
 {
     [TestClass]
     [TestCategory("PlansController")]
     [TestCategory("Details")]
     public class PlansController_Detail_Should:PlansController_Test_Should
-    { 
-        
-
-        public PlansController_Detail_Should()
-        { 
-        }
-          
-         
+    {  
 
         [TestMethod]
         public void BeSuccessfulWithValidPlanID()

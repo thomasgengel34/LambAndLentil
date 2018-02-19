@@ -5,17 +5,14 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 using System.Web.Mvc;
 
-namespace LambAndLentil.Test.BasicControllerTests
+namespace  LambAndLentil.Test.BaseControllerTests
 {
     [TestClass]
     [TestCategory("PlansController")]
     [TestCategory("Delete")]
     public class PlansController_Delete_Should: PlansController_Test_Should
     {
-        public PlansController_Delete_Should()
-        {
-
-        }
+        
         [Ignore]
         [TestMethod]
         public void AllowUserToConfirmDeleteRequestAndCallConfirmDelete()
@@ -46,25 +43,6 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.IsNotNull(result);
             Assert.AreEqual(count - 1, Repo.Count());
         }
-
-        [TestMethod]
-        [TestCategory("Delete")]
-        public void CanDeleteValidPlan()
-        {
-           
-            Plan pVM = new Plan() { ID = 6000, Name = "test CanDeleteValidPlan" };
-            int count = Repo.Count();
-            Repo.Save(pVM);
-            int countPlus = Repo.Count();
-
-            
-            ActionResult result = Controller.DeleteConfirmed(pVM.ID);
-            int countEnding = Repo.Count();
-            AlertDecoratorResult adr = (AlertDecoratorResult)result;
-             
-            Assert.AreEqual("test CanDeleteValidPlan has been deleted", adr.Message);
-            Assert.AreEqual(count, countEnding);
-            Assert.AreEqual(count + 1, countPlus);
-        }
+         
     }
 }

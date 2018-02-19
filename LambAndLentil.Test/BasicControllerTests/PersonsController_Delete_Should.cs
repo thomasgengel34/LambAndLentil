@@ -6,47 +6,13 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 using System.Web.Mvc;
 
-namespace LambAndLentil.Test.BasicControllerTests
+namespace  LambAndLentil.Test.BaseControllerTests
 {
     [TestCategory("PersonsController")]
     [TestCategory("Delete")]
     [TestClass]
     public class PersonsController_Delete_Should : PersonsController_Test_Should
-    {
-        public PersonsController_Delete_Should()
-        {
-
-        }
-        [Ignore]
-        [TestMethod]
-        public void AllowUserToConfirmDeleteRequestAndCallConfirmDelete()
-        {
-            Assert.Fail();
-        }
-
-        [Ignore]
-        [TestMethod]
-        public void ReturnIndexWithWarningWhenIDIsNotFound()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
-            Assert.Fail();
-        }
-
-        [Ignore]
-        [TestMethod]
-        public void ReturnIDetailsWhenIDIstFound()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
-            Assert.Fail();
-        }
+    { 
 
 
          
@@ -68,27 +34,6 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Assert 
             Assert.IsNotNull(result);
         }
-
-        [TestMethod]
-        [TestCategory("Delete")]
-        public void CanDeleteValidPerson()
-        {
-
-            // Arrange  
-            int initialCount = Repo.Count();
-            Person person = new Person("John", "Doe") { ID = 100, Description = "test CanDeleteValidPerson" };
-            Repo.Save(person);
-            int newCount = Repo.Count();
-
-            // Act - delete the person
-            ActionResult result = Controller.DeleteConfirmed(person.ID);
-
-            AlertDecoratorResult adr = (AlertDecoratorResult)result;
-
-            // Assert
-            Assert.AreEqual("John Doe has been deleted", adr.Message);
-            Assert.AreEqual(initialCount, newCount - 1);
-            Assert.AreEqual(initialCount, Repo.Count());
-        }
+         
     }
 }

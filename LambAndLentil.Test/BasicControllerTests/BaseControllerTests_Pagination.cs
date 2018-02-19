@@ -7,7 +7,7 @@ using LambAndLentil.Domain.Entities;
 using LambAndLentil.UI.Controllers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace LambAndLentil.Test.BasicControllerTests
+namespace  LambAndLentil.Test.BaseControllerTests
 {
     internal class BaseControllerTests_Pagination<T> : BaseControllerTest<T>
          where T : BaseEntity, IEntity, new()
@@ -27,8 +27,12 @@ namespace LambAndLentil.Test.BasicControllerTests
 
             SetupRepoAndControllerForAStaticMethod(out repo, out controller);
             var result = (ListEntity<T>)((ViewResult)controller.Index(1)).Model;
-            
-            Assert.AreEqual(result.PagingInfo.ItemsPerPage, result.ListT.Count());
+            int count = result.PagingInfo.ItemsPerPage;
+            if (count>result.PagingInfo.TotalItems)
+            {
+                count = result.PagingInfo.TotalItems;
+            }
+            Assert.AreEqual(count, result.ListT.Count());
             int firstID =  (from r in repo.GetAll()
                                 select r.ID).First();
             int secondID = (from r in repo.GetAll()
@@ -135,8 +139,10 @@ namespace LambAndLentil.Test.BasicControllerTests
             SetupRepoAndControllerForAStaticMethod(out repo, out controller);
             ListEntity<T> resultT = (ListEntity<T>)((ViewResult)controller.Index(2)).Model;
             PagingInfo pageInfoT = resultT.PagingInfo;
-
-            Assert.AreEqual(2, pageInfoT.TotalPages);
+            int totalItems = repo.Count();
+            decimal decimalNumberOfPages = totalItems / ((decimal)resultT.PagingInfo.ItemsPerPage);
+            int integerNumberOfPages = (int)Decimal.Ceiling(decimalNumberOfPages);
+            Assert.AreEqual(integerNumberOfPages , pageInfoT.TotalPages);
         }
 
 

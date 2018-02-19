@@ -5,7 +5,7 @@ using LambAndLentil.UI;
 using LambAndLentil.UI.Infrastructure.Alerts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace LambAndLentil.Test.BasicControllerTests
+namespace  LambAndLentil.Test.BaseControllerTests
 {
     [TestClass]
     [TestCategory("ShoppingListsController")]
@@ -46,23 +46,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Assert 
             Assert.AreEqual("No Shopping List was found with that id.", adr.Message);
         }
- 
+  
          
-
-       
-      
-        [TestMethod]
-        public void DeleteAFoundIngredient()
-        {
-            BaseDeleteAFoundEntity(Controller);
-        }
-
-        // the following are not really testable.  I am keeping them to remind me of that.
-        //[TestMethod]
-        //public void ShoppingListsCtr_DetailsIngredientIDIsNotANumber() { }
-
-        //[TestMethod]
-        //public void ShoppingListsCtr_DetailsIngredientIDIsNotAInteger() { } 
-
     }
 }

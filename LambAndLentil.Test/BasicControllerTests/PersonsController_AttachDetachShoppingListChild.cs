@@ -7,38 +7,13 @@ using LambAndLentil.UI;
 using LambAndLentil.UI.Controllers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace LambAndLentil.Test.BasicControllerTests
+namespace  LambAndLentil.Test.BaseControllerTests
 {
     [TestClass]
     [TestCategory("Attach-Detach")]
     public class PersonsController_AttachDetachShoppingListChild : PersonsController_Test_Should
     {
-
-        [Ignore]
-        [TestMethod]
-        public void SuccessfullyAttachChild()
-        {
-            // Arrange
-            ShoppingList child = new ShoppingList() { ID = 3000, Name = "SuccessfullyAttachChild" };
-            TestRepository<ShoppingList> ShoppingListRepo = new TestRepository<ShoppingList>();
-            ShoppingListRepo.Save(child);
-
-            // Act
-            Controller.Attach(Person, child );
-            ReturnedPerson = Repo.GetById(Person.ID);
-            // Assert
-            //  Assert.AreEqual("Default", ShoppingList.ShoppingLists.Last().Name);
-            Assert.AreEqual("SuccessfullyAttachChild", ReturnedPerson.ShoppingLists.Last().Name);
-        }
-
-           [Ignore]
-        [TestMethod]
-        public void SuccessfullyDetachFirstShoppingListChild()
-        {
-           
-        }
-
-      
+  
         [TestMethod]
         public void SuccessfullyDetachASetOfShoppingListChildren()
         { 
@@ -60,27 +35,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             //Assert.AreEqual(initialShoppingListCount - 2, returnedPerson.ShoppingLists.Count());
             
         }
-
-        [TestMethod]
-        public void  DetachtheLastShoppingListChild() => BaseDetachTheLastShoppingListChild(Repo, Controller, Person);
-
-        [Ignore]
-        [TestMethod]
-        public void SuccessfullyDetachAllShoppingListChildren()
-        { 
-            Assert.Fail();
-        }
-
-        [Ignore]
-        [TestMethod]
-        public void ReturnsDetailWithWarningIfAttachingNullShoppingListChild() { }
-
-        [Ignore]
-        [TestMethod]
-        public void ReturnsDetailWithWarningWithUnknownShoppingListChildID() { }
-
-        [Ignore]
-        [TestMethod]
-        public void ReturnsDetailWhenDetachingWithSuccessWithValidParentandValidIngredientChild() { }
+         
+         
     }
 }

@@ -9,7 +9,7 @@ using System.Linq;
 using System.Security.Principal;
 using System.Web.Mvc;
 
-namespace LambAndLentil.Test.BasicControllerTests
+namespace  LambAndLentil.Test.BaseControllerTests
 {
 
     [TestClass]

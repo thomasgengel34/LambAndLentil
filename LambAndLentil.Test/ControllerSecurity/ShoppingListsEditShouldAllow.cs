@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Reflection;
 using System.Web.Mvc;
 using System.Linq;
-using LambAndLentil.Test.BasicControllerTests;
+using LambAndLentil.Test.BaseControllerTests;
 
 namespace LambAndLentil.Test.ControllerSecurity
 {

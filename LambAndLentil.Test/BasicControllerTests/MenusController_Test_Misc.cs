@@ -2,7 +2,7 @@
 using LambAndLentil.Domain.Entities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace LambAndLentil.Test.BasicControllerTests
+namespace  LambAndLentil.Test.BaseControllerTests
 {
 
     [TestClass]
@@ -51,12 +51,6 @@ namespace LambAndLentil.Test.BasicControllerTests
         public void CorrectMenuPropertiesAreBoundInEdit()
         {
             Assert.Fail();
-        }
-
-        [TestMethod]
-        public void GetTheClassNameCorrect()
-        { 
-            Assert.AreEqual("LambAndLentil.UI.Controllers.MenusController", MenusController_Test_Should.Controller.ToString());
         }
          
       

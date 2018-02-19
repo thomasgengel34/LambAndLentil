@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LambAndLentil.Test.BasicControllerTests
+namespace  LambAndLentil.Test.BaseControllerTests
 {
     public class NonFoodItemsCan
     {
@@ -15,11 +15,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestCategory("NonFood")]
         public void NotAddANonFoodItemToAnIngredient()
         {
-            // Arrange 
-
-            // Act  
-
-            // Assert  
+             
             Assert.Fail();
         }
 
@@ -27,24 +23,14 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestMethod]
         [TestCategory("NonFood")]
         public void  AddANonFoodItemToARecipe()
-        {
-            // Arrange 
-
-            // Act  
-
-            // Assert  
+        { 
             Assert.Fail();
         }
         [Ignore]
         [TestMethod]
         [TestCategory("NonFood")]
         public void  AddANonFoodItemToAMenu()
-        {
-            // Arrange 
-
-            // Act  
-
-            // Assert  
+        { 
             Assert.Fail();
         }
 
@@ -53,11 +39,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestCategory("NonFood")]
         public void   ANonFoodItemToAPlan()
         {
-            // Arrange 
-
-            // Act  
-
-            // Assert  
+             
             Assert.Fail();
         }
 
@@ -66,11 +48,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestCategory("NonFood")]
         public void  AddANonFoodItemToAShoppingList()
         {
-            // Arrange 
-
-            // Act  
-
-            // Assert  
+             
             Assert.Fail();
         }
 

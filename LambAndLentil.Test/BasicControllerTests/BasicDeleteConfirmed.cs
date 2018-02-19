@@ -2,35 +2,43 @@
 using System.Linq;
 using System.Security.Principal;
 using System.Web.Mvc;
+using LambAndLentil.Domain.Abstract;
+using LambAndLentil.Domain.Concrete;
 using LambAndLentil.Domain.Entities;
 using LambAndLentil.UI;
+using LambAndLentil.UI.Controllers;
 using LambAndLentil.UI.Infrastructure.Alerts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace LambAndLentil.Test.BasicControllerTests
+namespace  LambAndLentil.Test.BaseControllerTests
 {
     public class BasicDeleteConfirmed<T> : BaseControllerTest<T>
-        where T : BaseEntity, IEntity, new() 
+        where T : BaseEntity, IEntity, new()
     {
 
-        
+
         public static void ReturnIndexWithActionMethodDeleteConfirmedWithBadID()
         {
             ActionResult ar = Controller.DeleteConfirmed(-1);
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             RedirectToRouteResult rdr = (RedirectToRouteResult)adr.InnerResult;
-
+            T item = new T();
             Assert.AreEqual(UIViewType.Index.ToString(), rdr.RouteValues.Values.ElementAt(0));
             Assert.AreEqual("No " + item.DisplayName + " was found with that id.", adr.Message);
             Assert.AreEqual("alert-danger", adr.AlertClass);
-        }   
+        }
 
-  
+
         public static void ReturnIndexWithConfirmationWhenIDIsFound()
-        {  
+        {
+            T item = new T() { ID = 5450 };
+            IRepository<T> repo = new TestRepository<T>();
+            repo.Save(item);
+            IGenericController<T> controller = BaseControllerTestFactory(typeof(T));
+
             AlertDecoratorResult adr = (AlertDecoratorResult)Controller.DeleteConfirmed(item.ID);
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
-             
+
             Assert.AreEqual(item.Name + " has been deleted", adr.Message);
             Assert.AreEqual("alert-success", adr.AlertClass);
             Assert.AreEqual(1, rtrr.RouteValues.Count, 1);

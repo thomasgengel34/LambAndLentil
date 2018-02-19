@@ -1,13 +1,7 @@
-﻿using System;
-using System.Linq;
-using System.Security.Principal;
-using System.Web.Mvc;
-using LambAndLentil.Domain.Entities;
-using LambAndLentil.UI;
-using LambAndLentil.UI.Controllers;
+﻿using LambAndLentil.Domain.Entities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace LambAndLentil.Test.BasicControllerTests
+namespace LambAndLentil.Test.BaseControllerTests
 {
 
     [TestClass]

@@ -2,7 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using LambAndLentil.Domain.Entities;
 
-namespace LambAndLentil.Test.BasicControllerTests
+namespace  LambAndLentil.Test.BaseControllerTests
 {
 
     [TestClass]
@@ -33,7 +33,7 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.AreEqual("Changed", ReturnedEntity.Name);
         }
 
-       
+
         [TestMethod]
         public void EditID()
         {  // this actually creates a copy.  
@@ -98,18 +98,18 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.AreNotEqual(user, ReturnedIngredient.AddedByUser);
         }
 
-        
+
         [TestMethod]
         public void CannotAlterModifiedByUserByHand()
         {
             // Arrange
             string user = "Abraham Lincoln";
-           
+
             // Act
             Entity.ModifiedByUser = user;
-         
+
             Controller.PostEdit(Entity);
-            Ingredient ReturnedIngredient= Repo.GetById(Entity.ID);
+            Ingredient ReturnedIngredient = Repo.GetById(Entity.ID);
 
             // Assert
             Assert.AreNotEqual(user, ReturnedIngredient.ModifiedByUser);
@@ -129,5 +129,6 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Assert
             Assert.AreNotEqual(dateTime.Year, ReturnedIngredient.ModifiedDate.Year);
         }
+
     }
 }

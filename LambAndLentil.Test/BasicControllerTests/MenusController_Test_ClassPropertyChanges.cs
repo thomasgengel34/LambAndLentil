@@ -6,7 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Web.Mvc;
 
-namespace LambAndLentil.Test.BasicControllerTests
+namespace  LambAndLentil.Test.BaseControllerTests
 {
 
     [TestClass]
@@ -162,72 +162,22 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.AreEqual(initialCount + 1, Entity.Ingredients.Count);
             Assert.AreEqual("ShouldAddIngredientToIngredients", Entity.Ingredients[initialCount].Name);
         }
-
-        [TestMethod]
-        public void ShouldAddIngredientToIngredientsList()
-        {
-            BaseShouldAddIngredientToIngredientsList();
-        }
-
-        [Ignore]
-        [TestMethod]
-        public void ShouldDetachFromIngredients()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
-            Assert.Fail();
-        }
-
-        [Ignore]
-        [TestMethod]
-        public void ShouldAddRecipeToRecipesList()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
-            Assert.Fail();
-        }
-
-        [Ignore]
-        [TestMethod]
-        public void ShouldDetachRecipeFromRecipesList()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
-            Assert.Fail();
-        }
+         
+   
 
        
 
         [Ignore]
         [TestMethod]
         public void ShouldEditMealType()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
+        { 
             Assert.Fail();
         }
 
         [Ignore]
         [TestMethod]
         public void ShouldEditDayOfWeek()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
+        { 
             Assert.Fail();
         }
 
@@ -235,11 +185,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestMethod]
         public void ShouldDiners()
         {
-            // Arrange
-
-            // Act
-
-            // Assert
+            
             Assert.Fail();
         }
     }

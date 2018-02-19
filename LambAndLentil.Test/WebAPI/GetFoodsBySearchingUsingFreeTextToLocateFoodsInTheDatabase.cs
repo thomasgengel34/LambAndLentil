@@ -1,6 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using LambAndLentil.Test.BasicControllerTests;
+using LambAndLentil.Test.BaseControllerTests;
 using System.Threading.Tasks;
 using LambAndLentil.Domain.Entities;
 using System.Collections.Generic;
@@ -156,11 +156,7 @@ namespace LambAndLentil.Test.WebAPI
         [Ignore]
         [TestMethod]
         public void ReturnOnlyFifteenItemsInTheDDLWhenThereAreMoreThanFifteenInTheUSDADb() =>
-            // Arrange
-
-            // Act
-
-            //Assert
+             
             Assert.Fail();
 
         [TestMethod]
@@ -414,11 +410,7 @@ namespace LambAndLentil.Test.WebAPI
         [Ignore]
         [TestMethod]
         public void ReturnTheCorrectErrorMessageWhenItemIsNotFoundOnSearch() =>
-            // Arrange
-
-            // Act
-
-            //Assert
+            
             Assert.Fail();
     }
 }

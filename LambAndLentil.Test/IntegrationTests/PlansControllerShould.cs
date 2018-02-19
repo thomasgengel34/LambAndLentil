@@ -11,7 +11,7 @@ using System.Linq;
 using System.Web.Mvc;
 using System.Collections.Generic;
 
-namespace LambAndLentil.Test.BasicControllerTests
+namespace LambAndLentil.Test.BaseControllerTests
 {
 
     [TestClass]
@@ -159,50 +159,8 @@ namespace LambAndLentil.Test.BasicControllerTests
             //Assert
             Assert.AreEqual(0, deletedItem.Count());
         }
-
-        [Ignore]
-        [TestMethod]
-        [TestCategory("Edit")]
-        public void SaveTheCreationDateBetweenPostedEdits()
-        {
-            // Arrange
-            DateTime CreationDate = new DateTime(2010, 1, 1);
-             Plan Plan = new Plan(CreationDate)
-            {
-                Name = "001 Test "
-            };
-
-
-            IGenericController<Plan> ControllerEdit = new PlansController(Repo);
-            IGenericController<Plan> ControllerView = new PlansController(Repo);
-            IGenericController<Plan> ControllerDelete = new PlansController(Repo);
-
-            // Act
-            ControllerEdit.PostEdit((Plan)Plan);
-            ViewResult view = (ViewResult)ControllerView.Index();
-            List<Plan> ListEntity = (List<Plan>)view.Model;
-            Plan = (from m in ListEntity
-                      where m.Name == "001 Test "
-                      select m).AsQueryable().First();
-
-
-            DateTime shouldBeSameDate = Plan.CreationDate;
-
-            // Assert
-            Assert.AreEqual(CreationDate, shouldBeSameDate);
-
-        }
-
-        
-        [TestMethod]
-        [TestCategory("Edit")]
-        public void UpdateTheModificationDateBetweenPostedEdits()
-        {
-            Plan.Name = "Test UpdateTheModificationDateBetweenPostedEdits";
-            Plan.ID = 6000;
-            Repo.Save(Plan);
-            BaseUpdateTheModificationDateBetweenPostedEdits(Plan);
-        }
+         
+         
 
         [TestMethod]
         [TestCategory("Attach-Detach")]
@@ -239,78 +197,6 @@ namespace LambAndLentil.Test.BasicControllerTests
 
             Assert.AreEqual(1, returnedPlan.Recipes.Count()); 
             Assert.AreEqual(recipe.ID, returnedPlan.Recipes.First().ID);
-        }
-
-        [Ignore]
-        [TestMethod]
-        [TestCategory("Attach-Detach")]
-        public void NotDeleteAnIngredientAfterIngredientIsDetachedFromPlan()
-        {
-            Assert.Fail();
-        }
-
-        [Ignore]
-        [TestMethod]
-        [TestCategory("Attach-Detach")]
-        public void ReturnIndexViewWithWarningMessageWhenDetachingNonExistingIngredientAttachedToANonExistingPlan()
-        {
-            Assert.Fail();
-        }
-
-        [Ignore]
-        [TestMethod]
-        [TestCategory("Attach-Detach")]
-        public void ReturnIndexViewWithWarningWhenAttachingExistIngredientToNonExistingPlan()
-        {
-            Assert.Fail();
-        }
-
-        [Ignore]
-        [TestMethod]
-        [TestCategory("Attach-Detach")]
-        public void ReturnIndexViewWithWarningWhenAttachingNonExistIngredientToNonExistingPlan()
-        {
-            Assert.Fail();
-        }
-
-        [Ignore]
-        [TestMethod]
-        [TestCategory("Attach-Detach")]
-        public void ReturnIndexViewWithWarningWhenDetachingExistingIngredientAttachedToNonExistingPlan()
-        {
-            Assert.Fail();
-        }
-
-        [Ignore]
-        [TestMethod]
-        [TestCategory("Attach-Detach")]
-        public void ReturnPlanEditViewWithSuccessMessageWhenDetachingExistingIngredientFromExistingPlan()
-        {
-            Assert.Fail();
-        }
-
-        [Ignore]
-        [TestMethod]
-        [TestCategory("Attach-Detach")]
-        public void ReturnPlanEditViewWithWarningMessageWhenAttachingNonExistingIngredientToExistingRPlan()
-        {
-            Assert.Fail();
-        }
-
-        [Ignore]
-        [TestMethod]
-        [TestCategory("Attach-Detach")]
-        public void ReturnPlanEditViewWithWarningMessageWhenDetachingNonExistingIngredientAttachedToExistingPlan()
-        {
-            Assert.Fail();
-        }
-
-        [Ignore]
-        [TestMethod]
-        [TestCategory("Attach-Detach")]
-        public void ReturnPlanIndexViewWithWarningWhenDetachingExistingingredientNotAttachedToAnExistingPlan()
-        {
-            Assert.Fail();
         } 
     }
 }

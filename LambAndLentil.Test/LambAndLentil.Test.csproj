@@ -80,6 +80,7 @@
     <Compile Include="BasicControllerTests\BaseControllerDetailsShould.cs" />
     <Compile Include="BasicControllerTests\BaseControllerTest.cs" />
     <Compile Include="BasicControllerTests\BaseControllerTests_Pagination.cs" />
+    <Compile Include="BasicControllerTests\BaseControllerTest_BasicTests.cs" />
     <Compile Include="BasicControllerTests\BasicEdit.cs" />
     <Compile Include="BasicControllerTests\BasicPostEdit.cs" />
     <Compile Include="BasicControllerTests\BasicDelete.cs" />
@@ -89,10 +90,8 @@
     <Compile Include="BasicControllerTests\GroupTests.cs" />
     <Compile Include="BasicControllerTests\HomeControllerTest.cs" />
     <Compile Include="BasicControllerTests\ClassPropertyChanges.cs" />
-    <Compile Include="BasicControllerTests\IngredientsController_GetIngredients_Test.cs" />
     <Compile Include="BasicControllerTests\MenusController_Test_ClassPropertyChanges.cs" />
     <Compile Include="BasicControllerTests\NonFoodItemsCan.cs" />
-    <Compile Include="BasicControllerTests\PersonsController_AttachDetachIngredientChild.cs" />
     <Compile Include="BasicControllerTests\PersonsController_AttachDetachRecipeChild.cs" />
     <Compile Include="BasicControllerTests\PersonsController_AttachDetachPlanChild.cs" />
     <Compile Include="BasicControllerTests\PersonsController_AttachDetachShoppingListChild.cs" />
@@ -100,15 +99,12 @@
     <Compile Include="BasicControllerTests\PersonsController_Test_Misc_ClassPropertyChanges.cs" />
     <Compile Include="BasicControllerTests\PersonsController_Index_Test.cs" />
     <Compile Include="BasicControllerTests\MenusController_Index_Test.cs" />
-    <Compile Include="BasicControllerTests\IngredientsController_Test_Misc.cs" />
     <Compile Include="BasicControllerTests\MenusController_Test_Misc.cs" />
     <Compile Include="BasicControllerTests\PersonsController_Test_Misc.cs" />
     <Compile Include="BasicControllerTests\PlansController_Attach_Should.cs" />
     <Compile Include="BasicControllerTests\PersonsController_Attach_Should.cs" />
-    <Compile Include="BasicControllerTests\MenusController_Attach_Should.cs" />
     <Compile Include="BasicControllerTests\PlansController_Create_Should.cs" />
     <Compile Include="BasicControllerTests\PlansController_DeleteConfirmed_Should.cs" />
-    <Compile Include="BasicControllerTests\PersonsController_DeleteConfirmed_Should.cs" />
     <Compile Include="BasicControllerTests\MenusController_DeleteConfirmed_Should.cs" />
     <Compile Include="BasicControllerTests\PlansController_Delete_Should.cs" />
     <Compile Include="BasicControllerTests\PersonsController_Delete_Should.cs" />
@@ -126,7 +122,6 @@
     <Compile Include="BasicControllerTests\RecipesController_Test_Misc.cs" />
     <Compile Include="BasicControllerTests\PersonsController_AttachDetachMenuChild.cs" />
     <Compile Include="BasicControllerTests\ShoppingListController_AttachDetachMenuChild.cs" />
-    <Compile Include="BasicControllerTests\ShoppingListsController_Attach_Should.cs" />
     <Compile Include="BasicControllerTests\RecipesController_Attach_Should.cs" />
     <Compile Include="BasicControllerTests\RecipesController_Create_Should.cs" />
     <Compile Include="BasicControllerTests\ShoppingListsController_DeleteConfirmed_Should.cs" />
@@ -147,11 +142,9 @@
     <Compile Include="BasicControllerTests\PersonsController_PersonsGenericController_Should.cs" />
     <Compile Include="BasicControllerTests\RecipesController_RecipesGenericController_Should.cs" />
     <Compile Include="BasicControllerTests\IngredientsController_PostEdit_Should.cs" />
-    <Compile Include="BasicControllerTests\IngredientsController_Detail_Should.cs" />
     <Compile Include="BasicControllerTests\PlansControllerTest_FilterShould.cs" />
     <Compile Include="BasicControllerTests\MenusControllerTest_FilterShould.cs" />
     <Compile Include="BasicControllerTests\RecipesControllerTest_FilterShould.cs" />
-    <Compile Include="BasicControllerTests\IngredientsController_Index_Test.cs" />
     <Compile Include="BasicControllerTests\IngredientsController_Test_Should.cs" />
     <Compile Include="BasicControllerTests\ManageControllerTest_Should.cs" />
     <Compile Include="BasicControllerTests\MenusController_Test_Should.cs" />

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web.Mvc;
 using LambAndLentil.BusinessObjects;
 using LambAndLentil.Domain.Entities;
-using LambAndLentil.Test.BasicControllerTests;
+using LambAndLentil.Test.BaseControllerTests;
 using LambAndLentil.UI;
 using LambAndLentil.UI.Controllers;
 using LambAndLentil.UI.Infrastructure.Alerts;

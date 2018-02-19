@@ -17,28 +17,28 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests
         public void RunAttachDetachControllerTests()
         {
             IngredientTestsDealer();
-            //  RecipeTestsDealer();
-            //MenuTestsDealer();
-            //PersonTestsDealer();
-            //PlanTestsDealer();
-            //ShoppingListTestsDealer();
+             RecipeTestsDealer();
+            MenuTestsDealer();
+           PersonTestsDealer();
+             PlanTestsDealer();
+            ShoppingListTestsDealer();
         }
 
 
 
         private void IngredientTestsDealer()
         {
-       //     TestsRunner<IngredientType, IngredientType>();
+            TestsRunner<IngredientType, IngredientType>();
 
            TestsRunner<IngredientType, RecipeType>();
 
-            //TestsRunner<IngredientType, MenuType>();
+            TestsRunner<IngredientType, MenuType>();
 
-            //TestsRunner<IngredientType, PlanType>();
+            TestsRunner<IngredientType, PlanType>();
 
-            //TestsRunner<IngredientType, ShoppingListType>();
+            TestsRunner<IngredientType, ShoppingListType>();
 
-            //TestsRunner<IngredientType, PersonType>();
+            TestsRunner<IngredientType, PersonType>();
 
         }
 
@@ -133,11 +133,11 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests
             bool CanBeChild = parent.CanHaveChild(child);
             if (CanBeChild)
             {
-                //baseAttach.BaseDetailWithSuccessWhenParentIDIsValidAndChildIsValid();
-                //baseAttach.BaseDetailWithSuccessWhenParentIDIsValidAndChildIsValidWhenAttaching();
-                //baseAttach.IndexWithErrorWhenParentIDIsNotForAnExistingIngredient();
-                //baseAttach.BaseReturnsIndexWithWarningWithNullParent();
-                //baseDetach.BaseDetailWithErrorWhenIDisValidAndNoChildrenOnListExistWhenDetachASetOfIngredients();
+                 baseAttach.BaseDetailWithSuccessWhenParentIDIsValidAndChildIsValid();
+                baseAttach.BaseDetailWithSuccessWhenParentIDIsValidAndChildIsValidWhenAttaching();
+                baseAttach.IndexWithErrorWhenParentIDIsNotForAnExistingIngredient();
+                baseAttach.BaseReturnsIndexWithWarningWithNullParent();
+                baseDetach.BaseDetailWithErrorWhenIDisValidAndNoChildrenOnListExistWhenDetachASetOfIngredients();
             }
             else
             {

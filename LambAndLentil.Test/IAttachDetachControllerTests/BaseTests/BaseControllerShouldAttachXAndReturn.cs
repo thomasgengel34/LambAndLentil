@@ -65,22 +65,32 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
         }
 
         internal void BaseReturnsIndexWithWarningWithNullParent()
-        { 
+        { // TODO: expand IngredientTypeTo Other Types
+            TParent tparent = new TParent();
             ActionResult ar = Controller.Attach( null, new IngredientType() );
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
+            RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
+            var routeValues = rtrr.RouteValues.Values;
             string message = adr.Message; 
            
-            Assert.AreEqual(ParentClassName + " was not found", message);
+            Assert.AreEqual(tparent.DisplayName + " was not found", message);
             Assert.AreEqual("alert-warning", adr.AlertClass);
+            Assert.AreEqual(1, routeValues.Count);
+            Assert.AreEqual(UIViewType.Index.ToString(), routeValues.ElementAt(0).ToString());
         }
+          
+
+
+
 
         internal void IndexWithErrorWhenParentIDIsNotForAnExistingIngredient()
         {  // Todo: add logging 
             ActionResult ar = Controller.Attach(null, new IngredientType() );
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             string message = adr.Message;
+            TParent tp = new TParent();
              
-            Assert.AreEqual("Ingredient was not found", message);
+            Assert.AreEqual(tp.DisplayName+" was not found", message);
             Assert.AreEqual("alert-warning", adr.AlertClass);
         }
          
@@ -109,13 +119,14 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
             ActionResult ar = Controller.Attach(Parent, (TChild)Child );
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
+            TChild child = new TChild();
  
             Assert.IsNotNull(ar);
             Assert.AreEqual(1, rtrr.RouteValues.ElementAt(0).Value);
             Assert.AreEqual(UIViewType.Edit.ToString(), rtrr.RouteValues.ElementAt(1).Value.ToString());
             Assert.AreEqual(UIViewType.Details.ToString(), rtrr.RouteValues.ElementAt(2).Value.ToString());
             Assert.AreEqual(3, rtrr.RouteValues.Count);
-            Assert.AreEqual(childName+" was Successfully Attached!", adr.Message);
+            Assert.AreEqual(child.DisplayName+" was Successfully Attached!", adr.Message);
             Assert.AreEqual("alert-success", adr.AlertClass);
         }
 

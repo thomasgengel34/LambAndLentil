@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.IO;
 
-namespace LambAndLentil.Test.BasicControllerTests
+namespace LambAndLentil.Test.BaseControllerTests
 {
     [Ignore]
     [TestCategory("PlansController")] 
@@ -14,23 +14,13 @@ namespace LambAndLentil.Test.BasicControllerTests
 
         [TestMethod]
         public void FindPlansContainingOnionInASet()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
+        { 
             Assert.Fail();
         }
 
         [TestMethod]
         public void FindPlansNotContainingOnionInASet()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
+        { 
             Assert.Fail();
         }
 

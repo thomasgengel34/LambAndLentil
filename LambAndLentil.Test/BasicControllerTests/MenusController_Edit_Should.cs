@@ -7,7 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 using System.Web.Mvc;
 
-namespace LambAndLentil.Test.BasicControllerTests
+namespace  LambAndLentil.Test.BaseControllerTests
 {
     [TestClass]
     public class MenusController_Edit_Should:MenusController_Test_Should
@@ -74,45 +74,8 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.AreEqual(7777, vm3.ID);
 
         }
-
-        //[Ignore]  look into why this is not working
-        [TestMethod]
-        [TestCategory("Edit")]
-        public void CanPostEditMenu()
-        {
-            // Arrange
-            Menu menu = new Menu
-            {
-                ID = 1,
-                Name = "test MenuControllerTest.CanEditMenu",
-                Description = "test MenuControllerTest.CanEditMenu"
-            };
-            Repo.Save(menu);
-
-            // Act 
-            menu.Name = "Name has been changed";
-            Repo.Save(menu);
-
-            ViewResult view1 = (ViewResult)Controller.Edit(1);
-
-            Menu returnedMenuListEntity = Repo.GetById(1);
-             
-            Assert.IsNotNull(view1);
-            Assert.AreEqual("Name has been changed", returnedMenuListEntity.Name);
-            Assert.AreEqual(menu.Description, returnedMenuListEntity.Description);
-            Assert.AreEqual(menu.CreationDate, returnedMenuListEntity.CreationDate);
-        }
-
-
-
-        [TestMethod]
-        [TestCategory("Edit")]
-        public void CannotEditNonexistentMenu()
-        { 
-            Menu result = (Menu)((ViewResult)Controller.Edit(8)).ViewData.Model;
-          
-            Assert.IsNull(result);
-        }
+         
+         
 
         [TestMethod]
         public void CreateReturnsNonNull()

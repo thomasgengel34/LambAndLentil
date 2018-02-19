@@ -6,7 +6,7 @@ using LambAndLentil.Domain.Entities;
 using LambAndLentil.UI;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace LambAndLentil.Test.BasicControllerTests
+namespace  LambAndLentil.Test.BaseControllerTests
 {
 
     [TestClass]

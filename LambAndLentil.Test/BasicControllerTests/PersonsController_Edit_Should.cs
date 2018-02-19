@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 
-namespace LambAndLentil.Test.BasicControllerTests
+namespace  LambAndLentil.Test.BaseControllerTests
 {
     [TestCategory("PersonsController")]
     [TestCategory("Edit")]
@@ -32,8 +32,7 @@ namespace LambAndLentil.Test.BasicControllerTests
         [TestMethod]
         [TestCategory("Edit")]
         public void SaveEditedPersonWithDescriptionChange()
-        {
-            // Arrange 
+        { 
             IGenericController<Person> Controller1 = (IGenericController<Person>)(new PersonsController(Repo));
             IGenericController<Person> Controller2 = (IGenericController<Person>)(new PersonsController(Repo));
             IGenericController<Person> Controller3 = (IGenericController<Person>)(new PersonsController(Repo));
@@ -106,59 +105,9 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.AreEqual(CreationDate, recipe.CreationDate);
         }
 
+         
 
-
-
-        // [Ignore]
-        [TestMethod]
-        [TestCategory("Edit")]
-        public void SaveTheCreationDateBetweenPostedEdits()
-        {
-            // Arrange
-            DateTime CreationDate = new DateTime(2010, 1, 1);
-            Person person = new Person(CreationDate)
-            {
-                FirstName = "test SaveTheCreationDateBetweenPostedEdits",
-                LastName = "",
-                ID = 5000
-            };
-
-            TestRepository<Person> repoPerson = new TestRepository<Person>();
-            IGenericController<Person> ControllerEdit = (IGenericController<Person>)(new PersonsController(Repo));
-            IGenericController<Person> ControllerView = (IGenericController<Person>)(new PersonsController(Repo));
-            IGenericController<Person> ControllerDelete = (IGenericController<Person>)(new PersonsController(Repo));
-
-            // Act
-            ControllerEdit.PostEdit(person);
-            ViewResult view = (ViewResult)ControllerView.Index();
-            List<Person> ListEntity = (List<Person>)(((ListEntity<Person>)view.Model).ListT);
-            person = (from m in ListEntity
-                      where m.ID == 5000
-                      select m).AsQueryable().FirstOrDefault();
-
-            DateTime shouldBeSameDate = person.CreationDate;
-
-            // Assert
-            Assert.AreEqual(CreationDate, shouldBeSameDate);
-
-        }
-
-
-
-
-
-        [TestMethod]
-        [TestCategory("Edit")]
-        public void UpdateTheModificationDateBetweenPostedEdits()
-        {
-            Person person = new  Person()
-            {
-                ID = 6000,
-                Name = "Test UpdateTheModificationDateBetweenPostedEdits"
-            };
-            Repo.Save(person);
-            BaseUpdateTheModificationDateBetweenPostedEdits(person);
-        }
+         
 
 
         [Ignore]   // brought in Ingredient edit methods instead of using this
@@ -209,34 +158,8 @@ namespace LambAndLentil.Test.BasicControllerTests
             // Assert
             Assert.AreEqual("SaveEditedPersonTest ", person3.Name);
         }
-
-        [TestMethod]
-        [TestCategory("Edit")]
-        public void CanPostEditPerson()
-        {
-
-            // Act 
-            Person.FirstName = "Name has been changed";
-            ViewResult view = (ViewResult)Controller.PostEdit((Person)Person);
-
-            Person returnedPersonListEntity = Repo.GetById(Person.ID);
-
-            // Assert 
-            Assert.IsNotNull(view);
-            Assert.AreEqual("Name has been changed", returnedPersonListEntity.FirstName);
-
-        }
-
-
-
-        [TestMethod]
-        [TestCategory("Edit")]
-        public void CannotEditNonexistentPerson()
-        { 
-            Person result = (Person)((ViewResult)Controller.Edit(8)).ViewData.Model;
-          
-            Assert.IsNull(result);
-        }
+         
+         
 
     }
 }

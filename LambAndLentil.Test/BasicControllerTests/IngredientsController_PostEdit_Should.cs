@@ -5,30 +5,16 @@ using System.Web.Mvc;
 using LambAndLentil.UI.Infrastructure.Alerts;
 using LambAndLentil.Domain.Entities;
 
-namespace LambAndLentil.Test.BasicControllerTests
+namespace  LambAndLentil.Test.BaseControllerTests
 {
     [TestClass]
     public class IngredientsController_PostEdit_Should : IngredientsController_Test_Should
-    {
-        private static DateTime CreationDate {get;set;}
-        private static DateTime ModifiedDate {get;set; }
-
-        public IngredientsController_PostEdit_Should()
-        {
-
-            CreationDate = new DateTime(2014, 2, 2);
-            ModifiedDate = new DateTime(2014, 2, 3);
-            Ingredient = new Ingredient { ID = 1000, AddedByUser = "Not Changed", CreationDate = CreationDate, Description = "Original Description", IngredientsList = "This, That, Those", ModifiedByUser = "See No Evil", ModifiedDate =ModifiedDate, Name = "Punkin" };
-            Repo.Save((Ingredient)Ingredient);
-        }
-
-         
-         
-
+    { 
         [TestMethod]
         public void BindCorrectIngredientsBoundInEdit()
         {
-          Ingredient ingredient = new Ingredient { ID = 1000, Name = "Punkin", Description = "Original Description", IngredientsList = "This, That, Those" };
+            DateTime creationDate = DateTime.Now;
+          Ingredient ingredient = new Ingredient(creationDate) { ID = 1000, Name = "Punkin", Description = "Original Description", IngredientsList = "This, That, Those" };
 
             ActionResult ar =  Controller.PostEdit((Ingredient)ingredient);
 
@@ -38,31 +24,17 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.AreEqual(1000, returnedIngredient.ID);
             Assert.AreEqual("Punkin", returnedIngredient.Name);
             Assert.AreEqual("Original Description", returnedIngredient.Description);
-            Assert.AreEqual(CreationDate, returnedIngredient.CreationDate);
+            Assert.AreEqual(creationDate, returnedIngredient.CreationDate);
             Assert.AreEqual("This, That, Those", returnedIngredient.IngredientsList); 
         }
-
-        [TestMethod]
-        public void NotBindIngredientPropertiesNotIdentifiedToBeBoundInEdit()
-        { 
-             
-            Ingredient ingredient = new Ingredient { ID = 1000, AddedByUser = "Not Changed",    ModifiedByUser = "Original"  };
-            Repo.Save(ingredient);
-
-            ingredient.AddedByUser = "Changed";
-            ingredient.ModifiedByUser = "Should Not Be Original";
-            Controller.PostEdit((Ingredient)ingredient);
-             Ingredient returnedIngredient = Repo.GetById(ingredient.ID);
-
-            Assert.AreNotEqual("Changed", returnedIngredient.AddedByUser);
-            Assert.AreNotEqual("Should Not Be Original", returnedIngredient.ModifiedByUser);
-        }
+         
 
         [TestMethod]
         public void ModifiedDateUpDatesInEdit()
-        { 
+        {
+            DateTime ModifiedDate = DateTime.Now;
             Controller.PostEdit((Ingredient)Ingredient);
-            Ingredient returnedIngredient = Repo.GetById(1000);
+            Ingredient returnedIngredient = Repo.GetById(Ingredient.ID);
             
             Assert.AreNotEqual(ModifiedDate, returnedIngredient.ModifiedDate);
         }

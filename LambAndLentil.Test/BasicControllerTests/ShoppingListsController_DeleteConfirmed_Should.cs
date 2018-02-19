@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace LambAndLentil.Test.BasicControllerTests
+namespace LambAndLentil.Test.BaseControllerTests
 {
     [Ignore]
     [TestClass]
@@ -10,34 +10,19 @@ namespace LambAndLentil.Test.BasicControllerTests
     {
         [TestMethod]
         public void ReturnIndexWithWarningWhenIDIsNotFound()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
+        { 
             Assert.Fail();
         }
 
         [TestMethod]
         public void ReturnIndexWithConfirmationWhenIDIsFound()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
+        { 
             Assert.Fail();
         }
 
         [TestMethod]
         public void DetachTheCorrectItemAndNotOtherItemsWhenIDIsFound()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
+        { 
             Assert.Fail();
         }
     }

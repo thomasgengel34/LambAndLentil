@@ -1,7 +1,7 @@
 ﻿using LambAndLentil.Domain.Abstract;
 using LambAndLentil.Domain.Concrete;
 using LambAndLentil.Domain.Entities;
-using LambAndLentil.Test.BasicControllerTests;
+using LambAndLentil.Test.BaseControllerTests;     
 using LambAndLentil.Test.Entities;
 using LambAndLentil.UI.Controllers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -16,9 +16,9 @@ namespace LambAndLentil.Tests.Controllers
 {
     [TestClass]
     public class GroupTests
-    { 
+    {
         [TestMethod]
-        public void RunBasicControllerTests()
+        public void RunBaseControllerTest_BasicTests()
         {
             TestsRunner<IngredientType>();
 
@@ -38,8 +38,8 @@ namespace LambAndLentil.Tests.Controllers
         public static void TestsRunner<T>()
              where T : BaseEntity, IEntity, new()
         {
-            IRepository<T> Repo = new TestRepository<T>(); 
-             
+            IRepository<T> Repo = new TestRepository<T>();
+
 
             // TODO: refactor
             if (typeof(T) == typeof(IngredientType))
@@ -68,12 +68,8 @@ namespace LambAndLentil.Tests.Controllers
                 IGenericController<ShoppingListType> controller = new ShoppingListsController((IRepository<ShoppingListType>)(Repo));
             }
             BaseController_Should.HavePublicIntPageSizeProperty();
-            BaseControllerTest<T>.BaseDetachAllIngredientChildren();
-            BaseControllerTest<T>.BaseShouldCreate();
-            BaseControllerTest<T>.BaseReturnDetailsWhenIDIsFound();
-            BaseControllerTest<T>.IsPublic();
-            BaseControllerTest<T>.InheritsFromBaseControllerCorrectly();
-            BaseControllerTests_Pagination<T>.BaseCanPaginateArrayLengthIsCorrect(); 
+
+            BaseControllerTests_Pagination<T>.BaseCanPaginateArrayLengthIsCorrect();
             BaseControllerTests_Pagination<T>.CanPaginate();
             BaseControllerTests_Pagination<T>.FirstItemNameIsCorrect();
             BaseControllerTests_Pagination<T>.CurrentPageCountCorrect();
@@ -83,10 +79,22 @@ namespace LambAndLentil.Tests.Controllers
             BaseControllerTests_Pagination<T>.TotalPagesCorrect();
             BaseControllerTests_Pagination<T>.CanReturnCorrectPageInfo();
 
+            BaseControllerTest_BasicTests<T>.IsPublic();
+            BaseControllerTest_BasicTests<T>.InheritsFromBaseControllerCorrectly();
+            BaseControllerTest_BasicTests<T>.BaseDetachAllIngredientChildren();
+            BaseControllerTest_BasicTests<T>.BaseShouldCreate();
+            BaseControllerTest_BasicTests<T>.BaseReturnDetailsWhenIDIsFound();
+            BaseControllerTest_BasicTests<T>.CannotEditNonexistentT();
+            BaseControllerTest_BasicTests<T>.GetTheClassNameCorrect();
+            BaseControllerTest_BasicTests<T>.InheritBaseController();
+            BaseControllerTest_BasicTests<T>.InheritBaseAttachDetachController();
+            BaseControllerTest_BasicTests<T>.SaveTheCreationDateBetweenPostedEdits();
+
+            BaseControllerTest_BasicTests<T>.GetTheClassNameCorrect();
+            BaseControllerTest_BasicTests<T>.SaveEditedTWithDescriptionChange();
             BaseControllerTests_Pagination<T>.BaseCanPaginateArrayLengthIsCorrect();
-            ClassPropertyChanges<T>.BaseDetachAllIngredientChildren();
-            ClassPropertyChanges<T>.BaseShouldCreate();
-            ClassPropertyChanges<T>.BaseDetachAllMenuChildren();
+
+
 
             DeleteReturnsIndexWithWarningWhen<T>.DeletingInvalidEntity();
 
@@ -105,12 +113,20 @@ namespace LambAndLentil.Tests.Controllers
             BasicIndex<T>.Index();
             BasicIndex<T>.SecondItemNameIsCorrect();
             BasicIndex<T>.SecondPageIsCorrect();
-             
-            BasicDetails<T>.ReturnIndexWithErrorWhenIDIsNegative(); 
-            BasicDetails<T>.BaseDetachAllIngredientChildren();
 
-            BasicDeleteConfirmed<T>.ReturnIndexWithActionMethodDeleteConfirmedWithBadID(); 
-            BasicDeleteConfirmed<T>.ReturnIndexWithConfirmationWhenIDIsFound(); 
+            BasicDetails<T>.ReturnIndexWithErrorWhenIDIsNegative();
+
+            BasicDeleteConfirmed<T>.ReturnIndexWithActionMethodDeleteConfirmedWithBadID();
+            BasicDeleteConfirmed<T>.ReturnIndexWithConfirmationWhenIDIsFound();
+
+
+            BasicPostEdit<T>.NotBindNotIdentifiedToBeBoundInEdit();
+            BasicPostEdit<T>.CanPostEdit();
+
+            // TODO: add methods
+
+
+
             BaseTest<T>.BaseBeAbleToHaveIngredientsChild();
             BaseTest<T>.BaseBeAbleToHaveMenusChild();
             BaseTest<T>.BaseBeAbleToHavePlansChild();

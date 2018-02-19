@@ -3,35 +3,13 @@ using LambAndLentil.UI.Controllers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 
-namespace LambAndLentil.Test.BasicControllerTests
+namespace  LambAndLentil.Test.BaseControllerTests
 {
 
     [TestClass]
     [TestCategory("RecipesController")]
     public class RecipesController_RecipesGenericController_Should : RecipesController_Test_Should
-    {
-        [TestMethod]
-        public void InheritBaseControllerInRecipe()
-        {
-            // Arrange
-
-            // Act 
-            Type type = Type.GetType("LambAndLentil.UI.Controllers.RecipesController, LambAndLentil.UI", true);
-            // Assert
-            Assert.IsTrue(type.IsSubclassOf(typeof(BaseController<Recipe>)));
-        }
-
-        [TestMethod]
-        public void InheritBaseAttachDetachControllerInRecipe()
-        {
-            // Arrange
-
-            // Act
-            Type type = Type.GetType("LambAndLentil.UI.Controllers.RecipesController, LambAndLentil.UI", true);
-            // Assert
-            Assert.IsTrue(type.IsSubclassOf(typeof(BaseAttachDetachController<Recipe>)));
-        }
-
+    { 
         [TestMethod]
         public void CallRepositoryInRecipe()
         {

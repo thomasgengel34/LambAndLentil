@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using LambAndLentil.Domain.Entities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace LambAndLentil.Test.BasicControllerTests
+namespace  LambAndLentil.Test.BaseControllerTests
 {
     public class ClassPropertyChanges<T>:BaseControllerTest<T>
          where T : BaseEntity, IEntity, new()
@@ -135,8 +135,6 @@ namespace LambAndLentil.Test.BasicControllerTests
             Assert.AreEqual(initialCount + 1, Entity.Ingredients.Count);
             Assert.AreEqual("ShouldAddIngredientToIngredients", Entity.Ingredients[initialCount].Name);
         }
-
-        
-        public void ShouldAddIngredientToIngredientsList() => BaseShouldAddIngredientToIngredientsList();
+         
     }
 }

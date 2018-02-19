@@ -4,7 +4,7 @@ using System.Web.Mvc;
 using LambAndLentil.UI;
 using LambAndLentil.UI.Infrastructure.Alerts;
 
-namespace LambAndLentil.Test.BasicControllerTests
+namespace LambAndLentil.Test.BaseControllerTests
 {
     [TestCategory("PlansController")]
     [TestCategory("Create")]

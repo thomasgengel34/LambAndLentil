@@ -6,20 +6,13 @@ using LambAndLentil.UI;
 using LambAndLentil.UI.Controllers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace LambAndLentil.Test.BasicControllerTests
+namespace  LambAndLentil.Test.BaseControllerTests
 {
     [TestClass]
     [TestCategory("Attach-Detach")]
     public class PersonsController_AttachDetachMenuChild : PersonsController_Test_Should
     {
-
-        [Ignore]
-        [TestMethod]
-        public void SuccessfullyAttachChild()
-        {
-            //IGenericController<Person> DetachController =(IGenericController<Person>)( new PersonsController(Repo));
-            //BaseSuccessfullyDetachChild(Repo, Controller, DetachController, UIControllerType.Persons);
-        }
+         
 
         [Ignore]
         [TestMethod]

@@ -7,7 +7,7 @@ using LambAndLentil.UI;
 using LambAndLentil.UI.Controllers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace LambAndLentil.Test.BasicControllerTests
+namespace  LambAndLentil.Test.BaseControllerTests
 {
     [TestClass]
     [TestCategory("Attach-Detach")]
@@ -39,28 +39,6 @@ namespace LambAndLentil.Test.BasicControllerTests
              
             //Assert.AreEqual(initialRecipeCount - 2, returnedPerson.Recipes.Count());
         }
-
-        [TestMethod]
-        public void SuccessfullyDetachtheLastRecipeChild() => BaseDetachTheLastRecipeChild(Repo, Controller, Person);
-       
-
-        [Ignore]
-        [TestMethod]
-        public void SuccessfullyDetachAllRecipeChildren()
-        { 
-            Assert.Fail();
-        }
-
-        [Ignore]
-        [TestMethod]
-        public void ReturnsDetailWithWarningIfAttachingNullRecipeChild() { }
-
-        [Ignore]
-        [TestMethod]
-        public void ReturnsDetailWithWarningWithUnknownRecipeChildID() { }
-
-        [Ignore]
-        [TestMethod]
-        public void ReturnsDetailWhenDetachingWithSuccessWithValidParentandValidIngredientChild() { }
+           
     }
 }

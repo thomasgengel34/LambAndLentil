@@ -7,7 +7,7 @@ using LambAndLentil.UI;
 using LambAndLentil.UI.Infrastructure.Alerts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace LambAndLentil.Test.BasicControllerTests
+namespace  LambAndLentil.Test.BaseControllerTests
 {
     public class BasicDelete<T> : BaseControllerTest<T>
         where T : BaseEntity, IEntity, new() 
