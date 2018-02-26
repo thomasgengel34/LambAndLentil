@@ -11,45 +11,16 @@ namespace  LambAndLentil.Test.BaseControllerTests
     [TestClass]
     [TestCategory("MenusController")]
     [TestCategory("Details")]
-    public class MenusController_Detail_Should:MenusController_Test_Should
-    {
-          
-         
-        [TestMethod]
-        public void BeSuccessfulWithValidMenuID()
-        {  
-            ActionResult ar = Controller.Details(int.MaxValue);
-            AlertDecoratorResult adr = (AlertDecoratorResult)ar;
-            ViewResult view = (ViewResult)adr.InnerResult;
-             
-            Assert.IsNotNull(ar);
-            Assert.AreEqual("Details", view.ViewName);
-            Assert.IsInstanceOfType(view.Model, typeof(Menu));
-            Assert.AreEqual("Here it is!", adr.Message);
-        }
+    internal class MenusController_Detail_Should:MenusController_Test_Should
+    {   
+        private static void ReturnDetailsViewActionTypeEdit_ValidID()=> Assert.Fail(); 
 
         
-           
-        [Ignore]
-        [TestMethod]
-        public void ReturnDetailsViewActionTypeEdit_ValidID()=> 
-          
-            Assert.Fail(); 
-
-        [Ignore]
-        [TestMethod]
-        public void ReturnDetailsViewActionTypeEdit_InValidID() => 
-            
-            Assert.Fail(); 
-
+        private static void ReturnDetailsViewActionTypeEdit_InValidID() =>  Assert.Fail(); 
          
-
-
-        [TestMethod]
-        [TestCategory("Details")]
-        public void DetailsWorksWithValidRecipeID()
+        private static void DetailsWorksWithValidRecipeID()
         { 
-            ActionResult ar = Controller.Details(ListEntity.ListT.FirstOrDefault().ID);
+            ActionResult ar = controller.Details(ListEntity.ListT.FirstOrDefault().ID);
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             ViewResult view = (ViewResult)adr.InnerResult;
              
@@ -62,10 +33,10 @@ namespace  LambAndLentil.Test.BaseControllerTests
          
         // the following are not really testable.  I am keeping them to remind me of that.
         //[TestMethod]
-        //public void MenusCtr_DetailsMenuIDIsNotANumber() { }
+        //private static  MenusCtr_DetailsMenuIDIsNotANumber() { }
 
         //[TestMethod]
-        //public void MenusCtr_DetailsMenuIDIsNotAInteger() { } 
+        //private static  MenusCtr_DetailsMenuIDIsNotAInteger() { } 
 
     }
 }

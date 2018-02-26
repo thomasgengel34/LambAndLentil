@@ -9,14 +9,14 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace LambAndLentil.Test.JSONTests
 {
     [TestClass]
-    public class JSONRepositoryShouldReturnCountOfThreeForDirectoryWithThreeFiles
+    public class JSONrepositoryShouldReturnCountOfThreeForDirectoryWithThreeFiles
     { 
         static string path = @"../../../\LambAndLentil.Test\App_Data\JSON\Ingredient\";
-        private static TestRepository< Ingredient> Repo { get; set; }
+        private static TestRepository< Ingredient> repo { get; set; }
 
-        public JSONRepositoryShouldReturnCountOfThreeForDirectoryWithThreeFiles()
+        public JSONrepositoryShouldReturnCountOfThreeForDirectoryWithThreeFiles()
         { 
-            Repo = new TestRepository< Ingredient>(); 
+            repo = new TestRepository< Ingredient>(); 
         }
 
 
@@ -25,11 +25,11 @@ namespace LambAndLentil.Test.JSONTests
         { 
             ClassCleanup();
              
-            Repo.Save(new Ingredient() { ID = 1, Name = "Ichi" });
-            Repo.Save(new Ingredient() { ID = 2, Name = "Ni" });
-            Repo.Save(new Ingredient() { ID = 3, Name = "San" }); 
+            repo.Save(new Ingredient() { ID = 1, Name = "Ichi" });
+            repo.Save(new Ingredient() { ID = 2, Name = "Ni" });
+            repo.Save(new Ingredient() { ID = 3, Name = "San" }); 
 
-            int count = Repo.Count();
+            int count = repo.Count();
             int filesInDirectoryCount = Directory.EnumerateFiles(path).Count();
          
             Assert.AreEqual(3, count);

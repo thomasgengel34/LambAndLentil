@@ -8,70 +8,285 @@ using LambAndLentil.Domain.Entities;
 using LambAndLentil.UI.Controllers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestStack.FluentMVCTesting;
+using System.Web.Mvc;
 
 namespace LambAndLentil.FluentMVC.Test
 {
     internal class BaseFluentMVCTest<T>
         where T : BaseEntity, IEntity, new()
     {
-        private BaseAttachDetachController<T> controller;
-        private IRepository<T> Repo;
-        private T t;
+        //    private static IGenericController<T> controller;
+        //    private static IRepository<T> repository;
+        //    private static T t;
 
-        public BaseFluentMVCTest(BaseAttachDetachController<T> controllerParameter, IRepository<T> repo)
+        //   public BaseFluentMVCTest()
+        //    {
+        //        IRepository<T> repository = new TestRepository<T>();
+        //        controller = GetController();
+        //        t = new T() { ID = 7000 };
+        //    }
+
+        internal static IAttachDetachController<T> GetAttachDetachController()
+        {
+            if (typeof(T) == typeof(Ingredient))
+            {
+                return (IAttachDetachController<T>)(new IngredientsController(new TestRepository<Ingredient>()));
+            }
+            else if (typeof(T) == typeof(Recipe))
+            {
+                return (IAttachDetachController<T>)(new RecipesController(new TestRepository<Recipe>()));
+            }
+            else if (typeof(T) == typeof(Menu))
+            {
+                return (IAttachDetachController<T>)(new MenusController(new TestRepository<Menu>()));
+            }
+            else if (typeof(T) == typeof(Plan))
+            {
+                return (IAttachDetachController<T>)(new PlansController(new TestRepository<Plan>()));
+            }
+            else if (typeof(T) == typeof(Person))
+            {
+                return (IAttachDetachController<T>)(new PersonsController(new TestRepository<Person>()));
+            }
+            else if (typeof(T) == typeof(ShoppingList))
+            {
+                return (IAttachDetachController<T>)(new ShoppingListsController(new TestRepository<ShoppingList>()));
+            }
+            else throw new Exception();
+
+
+        }
+
+        internal static void BaseRenderIndexDefaultView()
         {
             ClassCleanup();
-            controller = controllerParameter;
-            Repo = repo;
-            t = new T() { ID = 7000 };
+
+            // TODO: figure out how to refactor this
+            if (typeof(T) == typeof(Ingredient))
+            {
+               IngredientsController controller = new IngredientsController(new TestRepository<Ingredient>());  
+                controller.WithCallTo(c => c.Index(1)).ShouldRenderDefaultView();
+            }
+            if (typeof(T) == typeof(Menu))
+            {
+                MenusController controller = new MenusController(new TestRepository<Menu>());
+                controller.WithCallTo(c => c.Index(1)).ShouldRenderDefaultView();
+            }
+            if (typeof(T) == typeof(Person))
+            {
+                PersonsController controller = new PersonsController(new TestRepository<Person>());
+                controller.WithCallTo(c => c.Index(1)).ShouldRenderDefaultView();
+            }
+            if (typeof(T) == typeof(Plan))
+            {
+                PlansController controller = new PlansController(new TestRepository<Plan>());
+                controller.WithCallTo(c => c.Index(1)).ShouldRenderDefaultView();
+            }
+            if (typeof(T) == typeof(Recipe))
+            {
+                RecipesController controller = new RecipesController(new TestRepository<Recipe>());
+                controller.WithCallTo(c => c.Index(1)).ShouldRenderDefaultView();
+            }
+            if (typeof(T) == typeof(ShoppingList))
+            {
+                ShoppingListsController controller = new ShoppingListsController(new TestRepository<ShoppingList>());
+               controller.WithCallTo(c => c.Index(1)).ShouldRenderDefaultView();
+            }
+ 
         }
 
-        public void BaseRenderIndexDefaultView()
-        {
-            controller.WithCallTo(c => c.BaseIndex(1)).ShouldRenderView(UI.UIViewType.Index.ToString());
-        }
 
-
-        public void BaseRenderDetailsDefaultView()
+        internal static void BaseRenderDetailsDefaultView()
         {
             T t2 = new T() { ID = 7000 };
-            controller.WithCallTo(c => c.BaseDetails(7000)).ShouldRenderDefaultView();
+         
+
+            if (typeof(T) == typeof(Ingredient))
+            {
+                IngredientsController controller = new IngredientsController(new TestRepository<Ingredient>());
+                controller.WithCallTo(c => c.Details(7000)).ShouldRenderDefaultView();
+            }
+            if (typeof(T) == typeof(Menu))
+            {
+                MenusController controller = new MenusController(new TestRepository<Menu>());
+                controller.WithCallTo(c => c.Details(7000)).ShouldRenderDefaultView();
+            }
+            if (typeof(T) == typeof(Person))
+            {
+                PersonsController controller = new PersonsController(new TestRepository<Person>());
+                controller.WithCallTo(c => c.Details(7000)).ShouldRenderDefaultView();
+            }
+            if (typeof(T) == typeof(Plan))
+            {
+                PlansController controller = new PlansController(new TestRepository<Plan>());
+                controller.WithCallTo(c => c.Details(7000)).ShouldRenderDefaultView();
+            }
+            if (typeof(T) == typeof(Recipe))
+            {
+                RecipesController controller = new RecipesController(new TestRepository<Recipe>());
+                controller.WithCallTo(c => c.Details(7000)).ShouldRenderDefaultView();
+            }
+            if (typeof(T) == typeof(ShoppingList))
+            {
+                ShoppingListsController controller = new ShoppingListsController(new TestRepository<ShoppingList>());
+                controller.WithCallTo(c => c.Details(7000)).ShouldRenderDefaultView();
+            }
+
         }
 
 
-        public void BaseRendeDeleteDefaultView()
+        internal static void BaseRendeDeleteDefaultView()
+        { 
+
+            T item = new T() { ID = 7000 }; 
+
+            if (typeof(T) == typeof(Ingredient))
+            {
+                IngredientsController controller = new IngredientsController(new TestRepository<Ingredient>());
+        controller.WithCallTo(c => c.Delete(item.ID)).ShouldRenderDefaultView();
+    }
+            if (typeof(T) == typeof(Menu))
+            {
+                MenusController controller = new MenusController(new TestRepository<Menu>());
+    controller.WithCallTo(c => c.Delete(item.ID)).ShouldRenderDefaultView();
+}
+            if (typeof(T) == typeof(Person))
+            {
+                PersonsController controller = new PersonsController(new TestRepository<Person>());
+controller.WithCallTo(c => c.Delete(item.ID)).ShouldRenderDefaultView();
+            }
+            if (typeof(T) == typeof(Plan))
+            {
+                PlansController controller = new PlansController(new TestRepository<Plan>());
+controller.WithCallTo(c => c.Delete(item.ID)).ShouldRenderDefaultView();
+            }
+            if (typeof(T) == typeof(Recipe))
+            {
+                RecipesController controller = new RecipesController(new TestRepository<Recipe>());
+controller.WithCallTo(c => c.Delete(item.ID)).ShouldRenderDefaultView();
+            }
+            if (typeof(T) == typeof(ShoppingList))
+            {
+                ShoppingListsController controller = new ShoppingListsController(new TestRepository<ShoppingList>());
+controller.WithCallTo(c => c.Delete(item.ID)).ShouldRenderDefaultView();
+            }
+         }
+
+
+        internal static void BaseRendeDeleteConfirmedDefaultView()
         {
-            controller.WithCallTo(c => c.BaseDelete(1)).ShouldRenderDefaultView();
+            T item = new T() { ID = 70001 }; 
+            if (typeof(T) == typeof(Ingredient))
+            {
+                IngredientsController controller = new IngredientsController(new TestRepository<Ingredient>());
+                controller.WithCallTo(c => c.DeleteConfirmed(item.ID)).ShouldRenderDefaultView();
+            }
+            if (typeof(T) == typeof(Menu))
+            {
+                MenusController controller = new MenusController(new TestRepository<Menu>());
+                controller.WithCallTo(c => c.DeleteConfirmed(item.ID)).ShouldRenderDefaultView();
+            }
+            if (typeof(T) == typeof(Person))
+            {
+                PersonsController controller = new PersonsController(new TestRepository<Person>());
+                controller.WithCallTo(c => c.DeleteConfirmed(item.ID)).ShouldRenderDefaultView();
+            }
+            if (typeof(T) == typeof(Plan))
+            {
+                PlansController controller = new PlansController(new TestRepository<Plan>());
+                controller.WithCallTo(c => c.DeleteConfirmed(item.ID)).ShouldRenderDefaultView();
+            }
+            if (typeof(T) == typeof(Recipe))
+            {
+                RecipesController controller = new RecipesController(new TestRepository<Recipe>());
+                controller.WithCallTo(c => c.DeleteConfirmed(item.ID)).ShouldRenderDefaultView();
+            }
+            if (typeof(T) == typeof(ShoppingList))
+            {
+                ShoppingListsController controller = new ShoppingListsController(new TestRepository<ShoppingList>());
+                controller.WithCallTo(c => c.DeleteConfirmed(item.ID)).ShouldRenderDefaultView();
+            }
         }
 
 
-        public void BaseRendeDeleteConfirmedDefaultView()
+        internal static void BaseRendePostEditDefaultView()
         {
-            controller.WithCallTo(c => c.BaseDeleteConfirmed(1)).ShouldRenderDefaultView();
+            T item = new T();
+
+
+            if (typeof(T) == typeof(Ingredient))
+            {
+                IngredientsController controller = new IngredientsController(new TestRepository<Ingredient>());
+                controller.WithCallTo(c => c.PostEdit(item as Ingredient)).ShouldRenderDefaultView();
+            }
+            if (typeof(T) == typeof(Menu))
+            {
+                MenusController controller = new MenusController(new TestRepository<Menu>());
+                controller.WithCallTo(c => c.PostEdit(item as Menu)).ShouldRenderDefaultView();
+            }
+            if (typeof(T) == typeof(Person))
+            {
+                PersonsController controller = new PersonsController(new TestRepository<Person>());
+                controller.WithCallTo(c => c.PostEdit(item as Person)).ShouldRenderDefaultView();
+            }
+            if (typeof(T) == typeof(Plan))
+            {
+                PlansController controller = new PlansController(new TestRepository<Plan>());
+                controller.WithCallTo(c => c.PostEdit(item as Plan)).ShouldRenderDefaultView();
+            }
+            if (typeof(T) == typeof(Recipe))
+            {
+                RecipesController controller = new RecipesController(new TestRepository<Recipe>());
+                controller.WithCallTo(c => c.PostEdit(item as Recipe)).ShouldRenderDefaultView();
+            }
+            if (typeof(T) == typeof(ShoppingList))
+            {
+                ShoppingListsController controller = new ShoppingListsController(new TestRepository<ShoppingList>());
+                controller.WithCallTo(c => c.PostEdit(item as ShoppingList)).ShouldRenderDefaultView(); 
+            }
         }
 
-
-        public void BaseRendePostEditDefaultView()
-        {
-            T t = new T();
-            controller.WithCallTo(c => c.BasePostEdit(t)).ShouldRenderDefaultView();
-        }
-
-        public void BaseDetachDefaultView()
+        internal static void BaseDetachDefaultView()
         {
             ClassCleanup();
-           T parent  = new T() { ID = 1 };
-            IRepository<T> repository = new TestRepository<T>();
-            Ingredient childIngredient = new Ingredient() { ID = 2 };
-            parent.Ingredients = new List<Ingredient>();
-            parent.Ingredients.Add(childIngredient);
-            repository.Save(parent);
-
-            controller.WithCallTo(c => c.Detach(parent, childIngredient)).ShouldRenderDefaultView();
+            T parent = new T() { ID = 1 };
+            Ingredient ingredient= new Ingredient() { ID = 7003 };
+            parent.Ingredients.Add(ingredient);
+             
+            if (typeof(T) == typeof(Ingredient))
+            {
+                IngredientsController controller = new IngredientsController(new TestRepository<Ingredient>());
+                controller.WithCallTo(c => c.Detach(parent, ingredient)).ShouldRenderDefaultView();
+            }
+            if (typeof(T) == typeof(Menu))
+            {
+                MenusController controller = new MenusController(new TestRepository<Menu>());
+                controller.WithCallTo(c => c.Detach(parent, ingredient)).ShouldRenderDefaultView();
+            }
+            if (typeof(T) == typeof(Person))
+            {
+                PersonsController controller = new PersonsController(new TestRepository<Person>());
+                controller.WithCallTo(c => c.Detach(parent, ingredient)).ShouldRenderDefaultView();
+            }
+            if (typeof(T) == typeof(Plan))
+            {
+                PlansController controller = new PlansController(new TestRepository<Plan>());
+                controller.WithCallTo(c => c.Detach(parent, ingredient)).ShouldRenderDefaultView();
+            }
+            if (typeof(T) == typeof(Recipe))
+            {
+                RecipesController controller = new RecipesController(new TestRepository<Recipe>());
+                controller.WithCallTo(c => c.Detach(parent, ingredient)).ShouldRenderDefaultView();
+            }
+            if (typeof(T) == typeof(ShoppingList))
+            {
+                ShoppingListsController controller = new ShoppingListsController(new TestRepository<ShoppingList>());
+                controller.WithCallTo(c => c.Detach(parent, ingredient)).ShouldRenderDefaultView();
+            }
         }
 
         [ClassCleanup()]
-        public static void ClassCleanup()
+        internal static void ClassCleanup()
         {
             Type type = typeof(T);
             string className = type.Name.Split('.').Last();
@@ -85,16 +300,112 @@ namespace LambAndLentil.FluentMVC.Test
             }
         }
 
-        public void BaseDetachAllDefaultView()
-        {
-            IEntity ingredient = new Ingredient() { ID = 4000 };
-            controller.WithCallTo(c => c.DetachAll(t,ingredient)).ShouldRenderDefaultView();
-        }
+        //internal static void BaseDetachAllDefaultView()
+        //{
+        //    IEntity t = new T() { ID = 4000 };
+        //    IEntity ingredient = new Ingredient() { ID = 4000 };
 
-        public void BaseDetachASetOfDefaultView()
+        //    IAttachDetachController<T> controller = GetAttachDetachController();
+
+        //    controller.WithCallTo(c => c.DetachAll(t, ingredient)).ShouldRenderDefaultView();
+        //}
+
+        //    internal static void BaseDetachASetOfDefaultView()
+        //    {
+        //        List<IEntity> selected = new List<IEntity>();
+        //        controller.WithCallTo(c => c.DetachASetOf(t, selected)).ShouldRenderDefaultView();
+        //    }
+        private IGenericController<T> controller;
+        private IRepository<T> repo;
+
+        public BaseFluentMVCTest(IGenericController<T> controller, IRepository<T> repo)
         {
-            List<IEntity> selected = new List<IEntity>();
-            controller.WithCallTo(c => c.DetachASetOf(t, selected)).ShouldRenderDefaultView();
+            this.controller = controller;
+            this.repo = repo;
         }
     }
+
+    [TestClass]
+    public class TryOutFluentMVCTests
+    {
+        private HomeController _controller;
+
+        [TestInitialize]
+        public void Setup()
+        {
+            _controller = new HomeController();
+        }
+
+        [TestMethod]
+        public void MyTestMethod()
+        {
+            _controller.WithCallTo(c => c.Index())
+               .ShouldRenderDefaultView();
+        }
+
+        [TestMethod]
+        public void BaseRenderDetailsDefaultView()
+        {
+            IRepository<Ingredient> repository = new TestRepository<Ingredient>();
+            IngredientsController ic = new IngredientsController(repository);
+            Ingredient t2 = new Ingredient() { ID = 7000 };
+            repository.Save(t2);
+            ic.WithCallTo(c => c.Details(7000)).ShouldRenderDefaultView();
+        }
+
+        internal static void BaseRenderDetailsDefaultView1()
+        {
+            IRepository<Ingredient> repository = new TestRepository<Ingredient>();
+            IngredientsController ic = new IngredientsController(repository);
+            Ingredient t2 = new Ingredient() { ID = 7000 };
+            repository.Save(t2);
+            ic.WithCallTo(c => c.Details(7000)).ShouldRenderDefaultView();
+        }
+
+        [TestMethod]
+        public void SuperTest()
+        {
+            BaseRenderDetailsDefaultView1();
+        }
+
+        internal static void BaseRenderDetailsDefaultView2<T>()
+        {
+            IRepository<Ingredient> repository = new TestRepository<Ingredient>();
+            IngredientsController ic = new IngredientsController(repository);
+            Ingredient t2 = new Ingredient() { ID = 7000 };
+            repository.Save(t2);
+            ic.WithCallTo(c => c.Details(7000)).ShouldRenderDefaultView();
+        }
+
+
+
+    //    [TestMethod]
+    //    public void SuperTest2()
+    //    {
+    //        BaseRenderDetailsDefaultView2<Ingredient>();
+    //    }
+
+    //    internal static void BaseRenderDetailsDefaultView3<T>()
+    //        where T : BaseEntity, IEntity, new()
+    //    {
+    //        IRepository<T> repository = new TestRepository<T>();
+    //        IGenericController<T> ic = BaseFluentMVCTest<T>.GetController();
+    //        T item = new T() { ID = 7000 };
+    //        repository.Save(item);
+    //        if (typeof(T) == typeof(Ingredient))
+    //        {
+    //            IngredientsController ix = new IngredientsController(new TestRepository<Ingredient>());
+    //            ix.WithCallTo(c => c.Index(1)).ShouldRenderDefaultView();
+    //        }
+
+    //    }
+
+
+
+    //    [TestMethod]
+    //    public void SuperTest3()
+    //    {
+    //        BaseRenderDetailsDefaultView3<Ingredient>();
+    //    }
+     }
 }

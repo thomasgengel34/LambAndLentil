@@ -17,11 +17,11 @@ namespace LambAndLentil.Test.IntegrationTests
     [TestClass]
     public class ChangesInIngredientShould
     {
-        static IRepository<Ingredient> Repo;
+        static IRepository<Ingredient> repo;
 
         public ChangesInIngredientShould()
         {
-            Repo = new TestRepository<Ingredient>();
+            repo = new TestRepository<Ingredient>();
         }
 
 
@@ -202,11 +202,11 @@ namespace LambAndLentil.Test.IntegrationTests
         //    menu.Recipes.Save(recipe);
         //    Ingredient ingredient1 = new Ingredient();
         //    recipe.Ingredients.Save(ingredient1);
-        //    IRepository<Menu> repoMenu = new JSONRepository< Menu>(); 
+        //    IRepository<Menu> repoMenu = new JSONrepository< Menu>(); 
         //    repoMenu.Save(menu);
 
         //    //Act
-        //    // Repo.RemoveT(ingredient1); never the correct approach. Keeping it here because this is important.
+        //    // repo.RemoveT(ingredient1); never the correct approach. Keeping it here because this is important.
         //    menu.Recipes.First().Ingredients.Remove(ingredient1);
         //    repoMenu.Save(menu);
         //    Menu retrievedMenu = repoMenu.GetById(menu.ID);
@@ -337,7 +337,7 @@ namespace LambAndLentil.Test.IntegrationTests
 
         //        // Act
         //        ingredient.Name = "Test ChangeShoppingMenuRecipeWhenIngredientIsChanged  Has Been Changed";
-        //        Repo.Save(ingredient);
+        //        repo.Save(ingredient);
         //        //  Get the ingredient child of shoppingList 
         //        ShoppingList returnedShoppingList = JsonConvert.DeserializeObject<ShoppingList>(File.ReadAllText(String.Concat(path, int.MaxValue, ".txt")));
         //        IEnumerable<Menu> returnedMenus = returnedShoppingList.Menus;
@@ -346,7 +346,7 @@ namespace LambAndLentil.Test.IntegrationTests
 
         //        //Assert
         //        Assert.AreEqual(ingredient.Name, returnedIngredient.Name);
-        //        // will need to go into the Repo.Save method and determine if ingredient is a child anywhere,then update it there 
+        //        // will need to go into the repo.Save method and determine if ingredient is a child anywhere,then update it there 
         //    }
         //    catch (Exception)
         //    {

@@ -8,34 +8,37 @@ using System.Threading.Tasks;
 namespace LambAndLentil.Domain.Entities
 {
     [Table("PLAN.Plan")]
-    public class Plan : BaseEntity, IEntity 
+    public class Plan : BaseEntity, IEntity
     {
         public Plan() : base()
         {
-            Plans   = null;
+            Plans = null;
             ShoppingLists = null;
-            Ingredients = new List<Ingredient>(); 
+            Ingredients = new List<Ingredient>();
             ClassName = "Plan";
             DisplayName = "Plan";
+            Ingredients = new List<Ingredient>();
+            Recipes = new List<Recipe>();
+            Menus = new List<Menu>(); 
         }
 
 
         public Plan(DateTime creationDate) : base(creationDate) => CreationDate = creationDate;
-         public List<Ingredient> Ingredients { get; set; }
-        new List<Recipe> Recipes { get; set; }
-        new List<Menu> Menus { get; set; }  
-        new List<Plan> Plans { get; set; } = null;
+        public List<Ingredient> Ingredients { get; set; }
+        public List<Recipe> Recipes { get; set; }
+        public List<Menu> Menus { get; set; }
+        public List<Plan> Plans { get; set; } = null;
         public List<ShoppingList> ShoppingLists { get; set; } = null;
 
 
-        public int ID { get; set; } 
-       
+        public int ID { get; set; }
+
         void AddChildToParent(IEntity parent, IEntity child)
         {
-            parent.Plans.Add( (Plan)child);
+            parent.Plans.Add((Plan)child);
         }
 
-        public override bool  CanHaveChild(IEntity child)
+        public override bool CanHaveChild(IEntity child)
         {
             Type type = child.GetType();
 
@@ -43,7 +46,7 @@ namespace LambAndLentil.Domain.Entities
             {
                 typeof(Ingredient),
                 typeof(Recipe),
-                typeof(Menu) 
+                typeof(Menu)
             };
 
             if (possibleChildren.Contains(type))
@@ -52,7 +55,7 @@ namespace LambAndLentil.Domain.Entities
             }
             return false;
         }
-         
+
 
         public void ParentRemoveAllChildrenOfAType(IEntity parent, IEntity child)
         {
@@ -61,7 +64,7 @@ namespace LambAndLentil.Domain.Entities
 
 
         public IEntity RemoveSelectionFromChildren<TChild>(IEntity parent, List<TChild> selected)
-            where TChild : BaseEntity, IEntity,   new()
+            where TChild : BaseEntity, IEntity, new()
         {
             var setToRemove = new HashSet<TChild>(selected);
             ((IEntity)parent).Plans.RemoveAll(ContainsSelected);
@@ -77,7 +80,7 @@ namespace LambAndLentil.Domain.Entities
 
         }
 
-       public int  GetCountOfChildrenOnParent(IEntity parent)
+        public int GetCountOfChildrenOnParent(IEntity parent)
         {
             try
             {
@@ -92,6 +95,6 @@ namespace LambAndLentil.Domain.Entities
                 throw;
             }
 
-        } 
+        }
     }
 }

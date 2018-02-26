@@ -8,17 +8,17 @@ using LambAndLentil.Domain.Entities;
 namespace  LambAndLentil.Test.BaseControllerTests
 {
     [TestClass]
-    public class IngredientsController_PostEdit_Should : IngredientsController_Test_Should
+   internal class IngredientsController_PostEdit_Should : IngredientsController_Test_Should
     { 
-        [TestMethod]
-        public void BindCorrectIngredientsBoundInEdit()
+         
+        private static void BindCorrectIngredientsBoundInEdit()
         {
             DateTime creationDate = DateTime.Now;
           Ingredient ingredient = new Ingredient(creationDate) { ID = 1000, Name = "Punkin", Description = "Original Description", IngredientsList = "This, That, Those" };
 
-            ActionResult ar =  Controller.PostEdit((Ingredient)ingredient);
+            ActionResult ar =  controller.PostEdit((Ingredient)ingredient);
 
-            Ingredient returnedIngredient = Repo.GetById(ingredient.ID);
+            Ingredient returnedIngredient = repo.GetById(ingredient.ID);
 
             Assert.IsNotNull(returnedIngredient); 
             Assert.AreEqual(1000, returnedIngredient.ID);
@@ -29,29 +29,17 @@ namespace  LambAndLentil.Test.BaseControllerTests
         }
          
 
-        [TestMethod]
-        public void ModifiedDateUpDatesInEdit()
+     
+        private static void  ModifiedDateUpDatesInEdit()
         {
             DateTime ModifiedDate = DateTime.Now;
-            Controller.PostEdit((Ingredient)Ingredient);
-            Ingredient returnedIngredient = Repo.GetById(Ingredient.ID);
+            Ingredient.ModifiedDate = ModifiedDate;
+            controller.PostEdit(Ingredient);
+            Ingredient returnedIngredient = repo.GetById(Ingredient.ID);
             
             Assert.AreNotEqual(ModifiedDate, returnedIngredient.ModifiedDate);
         }
 
-        [Ignore]
-        [TestMethod]
-        public void NotSaveLogicallyInvalidModel() =>
-            
-            Assert.Fail();
-
-        [Ignore]
-        [TestMethod]
-        public void NotSaveModelFlaggedInvalidByDataAnnotation()=>
-          // see https://msdn.microsoft.com/en-us/library/cc668224(v=vs.98).aspx
-           
-            Assert.Fail();
-
-        
+      
     }
 }

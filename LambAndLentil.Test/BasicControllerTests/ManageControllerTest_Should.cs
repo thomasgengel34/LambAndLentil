@@ -7,13 +7,13 @@ namespace LambAndLentil.Tests.Controllers
 {
     [TestClass]
     [TestCategory("ManageController")]
-    public class ManageControllerTest_Should
+    internal class ManageControllerTest_Should
     {
 
         [TestMethod]
-        public void  InheritsFromController()
+        private static void  InheritsFromController()
         { 
-            ManageController testController = new ManageController();
+            var testController = new ManageController();
              
             Type baseType = typeof(IController);
             bool isBase = baseType.IsInstanceOfType(testController);
@@ -22,16 +22,13 @@ namespace LambAndLentil.Tests.Controllers
         }
 
         [TestMethod]
-        public void ManageCtr_IsPublic()
-        {
-            // Arrange
-            ManageController testController = new ManageController();
-
-            // Act
-            Type type = testController.GetType();
+        private static void ManageCtr_IsPublic()
+        { 
+            var controller = new ManageController();
+             
+            Type type =  controller.GetType();
             bool isPublic = type.IsPublic;
-
-            // Assert 
+             
             Assert.AreEqual(isPublic, true);
         } 
     }

@@ -24,12 +24,7 @@ namespace LambAndLentil.Domain.Entities
         public string IngredientsList { get; set; }
         public bool ChildCanBeAttached { get; set; }
 
-
-        public List<Recipe> Recipes { get; set; }
-        public List<Menu> Menus { get; set; }
-        public List<Plan> Plans { get; set; } 
-
-        
+ 
 
         public BaseEntity()
         {
@@ -39,14 +34,7 @@ namespace LambAndLentil.Domain.Entities
             CreationDate = DateTime.Now;
             ModifiedDate = DateTime.Now;
             AddedByUser = WindowsIdentity.GetCurrent().Name;
-            ModifiedByUser = WindowsIdentity.GetCurrent().Name;
-
-
-            Recipes = new List<Recipe>();
-            Menus = new List<Menu>();
-            Plans = new List<Plan>();
-
-          
+            ModifiedByUser = WindowsIdentity.GetCurrent().Name; 
         }
 
         public BaseEntity(DateTime creationDate) : this()

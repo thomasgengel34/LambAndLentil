@@ -8,7 +8,7 @@ namespace LambAndLentil.Test.BaseControllerTests
     [TestCategory("PersonsController")]
     [TestCategory("PostEdit")] 
     [TestClass]
-    public class PersonsController_PostEdit_Should:PersonsController_Test_Should
+    internal class PersonsController_PostEdit_Should:PersonsController_Test_Should
     {
         [Ignore]
         [TestMethod]
@@ -34,13 +34,13 @@ namespace LambAndLentil.Test.BaseControllerTests
                 LastName = "",
                 Description = "test PersonControllerTest.CanEditPerson"
             };
-            Repo.Save(person);
+            repo.Save(person);
              
             person.FirstName = "Name has been changed";
             person.LastName = ""; 
-           ActionResult view1 = Controller.PostEdit(person);
+           ActionResult view1 = controller.PostEdit(person);
 
-            Person returnedPerson = Repo.GetById(person.ID);
+            Person returnedPerson = repo.GetById(person.ID);
              
             Assert.IsNotNull(view1);
             Assert.AreEqual("Name has been changed ", returnedPerson.Name);
@@ -48,22 +48,6 @@ namespace LambAndLentil.Test.BaseControllerTests
             //Assert.AreEqual(person.CreationDate, returnedPersonListEntity.CreationDate);
         }
 
-        [Ignore]
-        [TestMethod]
-        public void NotSaveLogicallyInvalidModel()
-        { 
-            Assert.Fail();
-
-        }
-
-        [Ignore]
-        [TestMethod]
-        public void NotSaveModelFlaggedInvalidByDataAnnotation()
-        {  // see https://msdn.microsoft.com/en-us/library/cc668224(v=vs.98).aspx
-
-            
-            Assert.Fail();
-
-        }
+    
     }
 } 

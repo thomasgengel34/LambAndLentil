@@ -11,11 +11,11 @@ namespace  LambAndLentil.Test.BaseControllerTests
 {
 
     [TestClass]
-    public class PersonsController_Attach_Should : PersonsController_Test_Should
+   internal class PersonsController_Attach_Should : PersonsController_Test_Should
     {
         [Ignore]
         [TestMethod]
-        public void ReturnsErrorWithUnknownRepository() =>
+        public void ReturnsErrorWithUnknownrepository() =>
            
             Assert.Fail();
           
@@ -25,8 +25,8 @@ namespace  LambAndLentil.Test.BaseControllerTests
         [TestCategory("Attach-Detach")]
         public void SuccessfullyDetachFirstIngredientChild()
         {
-            //IGenericController<Person> DetachController = (IGenericController<Person>)(new PersonsController(Repo));
-            //BaseSuccessfullyDetachChild(Repo, Controller, DetachController, UIControllerType.ShoppingLists, 0);
+            //IGenericController<Person> DetachController = (IGenericController<Person>)(new PersonsController(repo));
+            //BaseSuccessfullyDetachChild(repo, Controller, DetachController, UIControllerType.ShoppingLists, 0);
         }
          
     }

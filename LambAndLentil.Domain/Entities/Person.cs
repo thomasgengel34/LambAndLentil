@@ -42,9 +42,9 @@ namespace LambAndLentil.Domain.Entities
         }
 
         public List<Ingredient> Ingredients { get; set; }
-        new List<Recipe> Recipes { get; set; }
-        new List<Menu> Menus { get; set; }  
-        new List<Plan> Plans { get; set; }  
+        public List<Recipe> Recipes { get; set; }
+        public List<Menu> Menus { get; set; }  
+        public List<Plan> Plans { get; set; }  
        public List<ShoppingList> ShoppingLists { get; set; }  
 
         public string LastName { get; set; }

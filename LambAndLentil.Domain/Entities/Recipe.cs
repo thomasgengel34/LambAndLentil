@@ -26,9 +26,9 @@ namespace LambAndLentil.Domain.Entities
         public int ID { get; set; }
 
         public List<Ingredient> Ingredients { get; set; }
-        new List<Recipe> Recipes { get; set; } = null;
-        new List<Menu> Menus { get; set; } = null;
-        new List<Plan> Plans { get; set; } = null;
+        public List<Recipe> Recipes { get; set; } = null;
+        public List<Menu> Menus { get; set; } = null;
+        public List<Plan> Plans { get; set; } = null;
         public List<ShoppingList> ShoppingLists { get; set; } = null;
 
         bool IEntity.CanHaveChild(IEntity child)

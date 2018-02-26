@@ -20,29 +20,23 @@ namespace LambAndLentil.Tests.Controllers
 
         [TestMethod]
         public void NavControllerInheritsFromBaseController()
-        {
-            // Arrange
+        { 
             NavController testController = new NavController();
-
-            // Act 
+             
             Type baseType = typeof(IController);
             bool isBase = baseType.IsInstanceOfType(testController);
-
-            // Assert 
+             
             Assert.AreEqual(isBase, true);
         }
 
         [TestMethod]
         public void NavCtr_IsPublic()
-        {
-            // Arrange
+        { 
             NavController testController = new NavController();
-
-            // Act
+             
             Type type = testController.GetType();
             bool isPublic = type.IsPublic;
-
-            // Assert 
+             
             Assert.AreEqual(isPublic, true);
         } 
     }

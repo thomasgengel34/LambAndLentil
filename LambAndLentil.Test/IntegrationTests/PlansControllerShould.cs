@@ -17,7 +17,7 @@ namespace LambAndLentil.Test.BaseControllerTests
     [TestClass]
     [TestCategory("Integration")]
     [TestCategory("PlansController")]
-    public class PlansControllerShould:BaseControllerTest<Plan>
+    internal class PlansControllerShould:BaseControllerTest<Plan>
     {
         
         static  Plan Plan;
@@ -29,16 +29,16 @@ namespace LambAndLentil.Test.BaseControllerTests
                 ID = 1000,
                 Description = "test PlanControllerShould"
             };
-            Repo.Save((Plan)Plan);
+            repo.Save((Plan)Plan);
 
-            Controller = new PlansController(Repo);
+            controller = new PlansController(repo);
         }
          
         [Ignore]
         [TestMethod]
         public void SaveAValidPlan()
         { 
-            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.PostEdit((Plan)Plan);
+            AlertDecoratorResult adr = (AlertDecoratorResult)controller.PostEdit((Plan)Plan);
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
 
             var routeValues = rtrr.RouteValues.Values;
@@ -57,17 +57,17 @@ namespace LambAndLentil.Test.BaseControllerTests
         public void SaveEditedPlanWithNameChange()
         {
             // Arrange 
-            IGenericController<Plan> Controller1 = new PlansController(Repo);
-            IGenericController<Plan> Controller2 = new PlansController(Repo);
-            IGenericController<Plan> Controller3 = new PlansController(Repo);
-            IGenericController<Plan> Controller4 = new PlansController(Repo);
-            IGenericController<Plan> Controller5 = new PlansController(Repo);
+            IGenericController<Plan> Controller1 = new PlansController(repo);
+            IGenericController<Plan> Controller2 = new PlansController(repo);
+            IGenericController<Plan> Controller3 = new PlansController(repo);
+            IGenericController<Plan> Controller4 = new PlansController(repo);
+            IGenericController<Plan> Controller5 = new PlansController(repo);
             Plan Plan = new Plan
             {
                 Name = "0000 test"
             };
 
-            Repo.Save((Plan)Plan);
+            repo.Save((Plan)Plan);
 
             // Act 
             ActionResult ar1 = Controller1.PostEdit((Plan)Plan);
@@ -101,11 +101,11 @@ namespace LambAndLentil.Test.BaseControllerTests
         public void SaveEditedPlanWithDescriptionChange()
         {
             // Arrange 
-            IGenericController<Plan> Controller1 = new PlansController(Repo);
-            IGenericController<Plan> Controller2 = new PlansController(Repo);
-            IGenericController<Plan> Controller3 = new PlansController(Repo);
-            IGenericController<Plan> Controller4 = new PlansController(Repo);
-            IGenericController<Plan> Controller5 = new PlansController(Repo);
+            IGenericController<Plan> Controller1 = new PlansController(repo);
+            IGenericController<Plan> Controller2 = new PlansController(repo);
+            IGenericController<Plan> Controller3 = new PlansController(repo);
+            IGenericController<Plan> Controller4 = new PlansController(repo);
+            IGenericController<Plan> Controller5 = new PlansController(repo);
              Plan = new Plan
             {
                 Name = "0000 test",
@@ -143,23 +143,7 @@ namespace LambAndLentil.Test.BaseControllerTests
             Assert.AreEqual("SaveEditedPlanWithDescriptionChange Post-test", Plan.Description);
         }
 
-
-        [TestMethod]
-        [TestCategory("DeleteConfirmed")]
-        public void ActuallyDeleteAPlanFromTheDatabase()
-        {
-            // Arrange 
-
-            //Act
-            Controller.DeleteConfirmed(Plan.ID);
-            var deletedItem = (from m in Repo.GetAll()
-                               where m.Description == Plan.Description
-                               select m).AsQueryable();
-
-            //Assert
-            Assert.AreEqual(0, deletedItem.Count());
-        }
-         
+ 
          
 
         [TestMethod]
@@ -169,8 +153,8 @@ namespace LambAndLentil.Test.BaseControllerTests
             Ingredient  ingredient = new Ingredient() { ID = 100 };
          
            
-            Controller.Attach(Plan, ingredient);
-            IEntity returnedPlan = Repo.GetById(Plan.ID);
+            controller.Attach(Plan, ingredient);
+            IEntity returnedPlan = repo.GetById(Plan.ID);
 
           
             Assert.AreEqual(1, returnedPlan.Ingredients.Count()); 
@@ -189,11 +173,11 @@ namespace LambAndLentil.Test.BaseControllerTests
                 ID = 100,
                 Description = "test AttachAnExistingRecipeToAnExistingPlan"
             };
-            Repo.Update(Plan, Plan.ID);
+            repo.Update(Plan, Plan.ID);
             repoRecipe.Save(recipe);
           
-            Controller.Attach(Plan , recipe);
-            Plan returnedPlan = Repo.GetById(Plan.ID); 
+            controller.Attach(Plan , recipe);
+            Plan returnedPlan = repo.GetById(Plan.ID); 
 
             Assert.AreEqual(1, returnedPlan.Recipes.Count()); 
             Assert.AreEqual(recipe.ID, returnedPlan.Recipes.First().ID);

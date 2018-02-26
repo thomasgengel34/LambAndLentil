@@ -11,18 +11,29 @@ namespace  LambAndLentil.Test.BaseControllerTests
 {
     internal class BaseControllerTests_Pagination<T> : BaseControllerTest<T>
          where T : BaseEntity, IEntity, new()
-    {
-        static private IRepository<T> repo;
-        static private IGenericController<T> controller;
+    { 
+        internal static void TestRunner()  
+        {
+            BaseCanPaginateArrayLengthIsCorrect();
+            CanPaginate();
+            FirstItemNameIsCorrect();
+            CurrentPageCountCorrect();
+            ThirdItemIDIsCorrect();
+            ItemsPerPageCorrect();
+            PagingInfoIsCorrect();
+            TotalItemsCorrect();
+            TotalPagesCorrect();
+            CanReturnCorrectPageInfo();
+        }
 
         // currently we only have one page here
-        internal static void SecondPageIsCorrect()
+        private static void SecondPageIsCorrect()
         {
             //TODO: add enough test ingredients to test the second page
         }
 
 
-        internal static void CanPaginate()
+        private static void CanPaginate()
         { 
 
             SetupRepoAndControllerForAStaticMethod(out repo, out controller);
@@ -41,7 +52,7 @@ namespace  LambAndLentil.Test.BaseControllerTests
             Assert.AreEqual(secondID, result.ListT.Skip(2).First().ID);
         }
 
-        internal static void CanReturnCorrectPageInfo()
+        private static void CanReturnCorrectPageInfo()
         {
             SetupRepoAndControllerForAStaticMethod(out repo, out controller);
             int totalItems = repo.Count();
@@ -58,7 +69,7 @@ namespace  LambAndLentil.Test.BaseControllerTests
         }
 
         
-        internal static void BaseCanPaginateArrayLengthIsCorrect()
+        private static void BaseCanPaginateArrayLengthIsCorrect()
         { 
             SetupRepoAndControllerForAStaticMethod(out repo, out controller);
 
@@ -86,7 +97,7 @@ namespace  LambAndLentil.Test.BaseControllerTests
             controller = BaseControllerTestFactory(typeof(T));
         }
 
-        internal static void FirstItemNameIsCorrect()
+        private static void FirstItemNameIsCorrect()
         {
             SetupRepoAndControllerForAStaticMethod(out repo, out controller);
             var result = (ListEntity<T>)((ViewResult)controller.Index(1)).Model;
@@ -96,7 +107,24 @@ namespace  LambAndLentil.Test.BaseControllerTests
             Assert.AreEqual(firstID, ingrArray1[0].ID);
         }
 
-        internal static void ThirdItemNameIsCorrect()
+        private static void FirstPageIsNotNull()
+        {
+            SetupRepoAndControllerForAStaticMethod(out repo, out controller);
+            ListEntity = (ListEntity<T>)((ViewResult)controller.Index(1)).Model;
+            T[] ingrArray1 = ListEntity.ListT.ToArray();
+            controller.PageSize = 8;
+
+            ViewResult view1 = (ViewResult)controller.Index(1);
+
+            int count1 = ((ListEntity<T>)(view1.Model)).ListT.Count();
+
+            Assert.IsNotNull(view1);
+        }
+
+
+     
+
+        private static void ThirdItemIDIsCorrect()
         {
             SetupRepoAndControllerForAStaticMethod(out repo, out controller);
             var result = (ListEntity<T>)((ViewResult)controller.Index(1)).Model;
@@ -106,7 +134,7 @@ namespace  LambAndLentil.Test.BaseControllerTests
             Assert.AreEqual(thirdID, ingrArray1[2].ID);
         }
 
-        internal static void CurrentPageCountCorrect()
+        private static void CurrentPageCountCorrect()
         {
             SetupRepoAndControllerForAStaticMethod(out repo, out controller);
             ListEntity<T> resultT = (ListEntity<T>)((ViewResult)controller.Index(2)).Model;
@@ -115,7 +143,7 @@ namespace  LambAndLentil.Test.BaseControllerTests
             Assert.AreEqual(2, pageInfoT.CurrentPage);
         }
 
-        internal static void ItemsPerPageCorrect()
+        private static void ItemsPerPageCorrect()
         {
             SetupRepoAndControllerForAStaticMethod(out repo, out controller);
             ListEntity<T> resultT = (ListEntity<T>)((ViewResult)controller.Index(2)).Model;
@@ -125,7 +153,7 @@ namespace  LambAndLentil.Test.BaseControllerTests
         }
 
 
-        internal static void TotalItemsCorrect()
+        private static void TotalItemsCorrect()
         {
             SetupRepoAndControllerForAStaticMethod(out repo, out controller);
             ListEntity<T> resultT = (ListEntity<T>)((ViewResult)controller.Index(1)).Model;
@@ -134,7 +162,7 @@ namespace  LambAndLentil.Test.BaseControllerTests
             Assert.AreEqual(count, pageInfoT.TotalItems);
         }
 
-        internal static void TotalPagesCorrect()
+        private static void TotalPagesCorrect()
         {
             SetupRepoAndControllerForAStaticMethod(out repo, out controller);
             ListEntity<T> resultT = (ListEntity<T>)((ViewResult)controller.Index(2)).Model;
@@ -148,7 +176,7 @@ namespace  LambAndLentil.Test.BaseControllerTests
 
 
         // TODO: refactor and combine with other tests
-        internal static void CanSendPaginationViewModel()
+        private static void CanSendPaginationViewModel()
         {
             SetupRepoAndControllerForAStaticMethod(out repo, out controller);
             ListEntity<T> resultT = (ListEntity<T>)((ViewResult)controller.Index(2)).Model;
@@ -159,5 +187,75 @@ namespace  LambAndLentil.Test.BaseControllerTests
             Assert.AreEqual(7, pageInfoT.TotalItems);
             Assert.AreEqual(1, pageInfoT.TotalPages);
         }
+
+       private static void BaseCanSendPaginationViewModel()
+        {
+            int count = repo.Count();
+
+            ListEntity<T> resultT1 = (ListEntity<T>)((ViewResult)controller.Index(1)).Model;
+            ListEntity<T> resultT2 = (ListEntity<T>)((ViewResult)controller.Index(2)).Model;
+            int repoCount = repo.Count();
+            int resultT1Count = resultT1.ListT.Count();
+            int resultT2Count = resultT2.ListT.Count();
+            PagingInfo pageInfoT = resultT1.PagingInfo;
+
+            Assert.AreEqual(1, pageInfoT.CurrentPage);
+            Assert.AreEqual(8, pageInfoT.ItemsPerPage);
+            Assert.AreEqual(count, resultT1.ListT.Count());
+            Assert.AreEqual(0, resultT2.ListT.Count());
+            Assert.AreEqual(1, pageInfoT.TotalPages);
+        }
+         
+
+        private static void  PagingInfoIsCorrect()
+        {
+            SetupRepoAndControllerForAStaticMethod(out repo, out controller);
+            int repoCount = repo.Count();
+
+            int totalItems = ((ListEntity<T>)((ViewResult)controller.Index()).Model).PagingInfo.TotalItems;
+            int currentPage = ((ListEntity<T>)((ViewResult)controller.Index()).Model).PagingInfo.CurrentPage;
+            int itemsPerPage = ((ListEntity<T>)((ViewResult)controller.Index()).Model).PagingInfo.ItemsPerPage;
+            int totalPages = ((ListEntity<T>)((ViewResult)controller.Index()).Model).PagingInfo.TotalPages;
+
+            Assert.AreEqual(repoCount, totalItems);
+            Assert.AreEqual(1, currentPage);
+            Assert.AreEqual(8, itemsPerPage);
+            Assert.AreEqual(1, totalPages);
+        }
+
+        private static void BaseCanSendPaginationViewModel_TotalItemsCorrect()
+        {
+            int count = repo.Count();
+
+            ListEntity<T> result = (ListEntity<T>)((ViewResult)controller.Index(1)).Model;
+            PagingInfo pageInfoT = result.PagingInfo;
+
+            Assert.AreEqual(count, result.ListT.Count());
+        }
+
+        private void BaseShouldAddRecipeToList(IRepository<Ingredient> repo, Ingredient entity, Ingredient returnedEntity, IngredientsController controller) => throw new NotImplementedException();
+
+
+
+       private static void BaseFirstPageIsCorrect()
+        {
+            int repoCount = repo.Count();
+            ListEntity<T> ilListEntity = new ListEntity<T>();
+            controller.PageSize = 8;
+
+            ViewResult view1 = (ViewResult)controller.Index(1);
+            int count1 = ((ListEntity<T>)(view1.Model)).ListT.Count();
+
+            Assert.IsNotNull(view1);
+            Assert.AreEqual(repoCount, count1);
+            Assert.AreEqual("Index", view1.ViewName);
+
+            Assert.AreEqual(typeof(T).ToString() + " ControllerTest1", ((ListEntity<T>)(view1.Model)).ListT.FirstOrDefault().Name);
+            Assert.AreEqual(typeof(T).ToString() + " ControllerTest2", ((ListEntity<T>)(view1.Model)).ListT.Skip(1).FirstOrDefault().Name);
+            Assert.AreEqual(typeof(T).ToString() + " ControllerTest3", ((ListEntity<T>)(view1.Model)).ListT.Skip(2).FirstOrDefault().Name);
+        }
+
+
+      
     }
 }

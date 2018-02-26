@@ -15,7 +15,7 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
         where TParent : BaseEntity, IEntity, new()
         where TChild : BaseEntity, IEntity, new()
     {
-        internal static IGenericController<TParent> Controller { get; set; }
+        internal static  IGenericController<TParent> controller;
        protected internal static IEntity Parent { get; set; }
         internal static IEntity Child { get; set; }
         internal static IRepository<TParent> ParentRepo = new TestRepository<TParent>();
@@ -25,9 +25,9 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
         internal static PropertyInfo ChildProperty { get; private set; } 
 
         public BaseTest()
-        {
+        { 
             ParentClassName = typeof(TParent).ToString().Split('.').Last();
-            Controller = ControllerFactory();
+            controller = ControllerFactory();
             ChildProperty = ChildPropertyFactory();
             Parent = new TParent()
             {
@@ -50,28 +50,36 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
 
         }
 
-     internal IGenericController<TParent> ControllerFactory()
+        internal static void SetUpForTests(out IRepository<TParent> repo, out IGenericController<TParent> controller, out TParent item)
         {
+            repo = new TestRepository<TParent>();
+            controller =  ControllerFactory();
+            item = new TParent { ID = 1000, AddedByUser = "Not Changed", ModifiedByUser = "Original" };
+            repo.Save(item);
+        }
+
+        internal static IGenericController<TParent> ControllerFactory()
+        {   
             switch (ParentClassName)
             {
                 case "Ingredient":
-                    Controller = new IngredientsController(new TestRepository<Ingredient>()) as IGenericController<TParent>;
-                    return Controller;
+                    controller = new IngredientsController(new TestRepository<Ingredient>()) as IGenericController<TParent>;
+                    return controller;
                 case "Recipe":
-                    Controller = new RecipesController(new TestRepository<Recipe>()) as IGenericController<TParent>;
-                    return Controller;
+                    controller = new RecipesController(new TestRepository<Recipe>()) as IGenericController<TParent>;
+                    return controller;
                 case "Menu":
-                    Controller = new MenusController(new TestRepository<Menu>()) as IGenericController<TParent>;
-                    return Controller;
+                    controller = new MenusController(new TestRepository<Menu>()) as IGenericController<TParent>;
+                    return controller;
                 case "Plan":
-                    Controller = new PlansController(new TestRepository<Plan>()) as IGenericController<TParent>;
-                    return Controller;
+                    controller = new PlansController(new TestRepository<Plan>()) as IGenericController<TParent>;
+                    return controller;
                 case "ShoppingList":
-                    Controller = new ShoppingListsController(new TestRepository<ShoppingList>()) as IGenericController<TParent>;
-                    return Controller;
+                    controller = new ShoppingListsController(new TestRepository<ShoppingList>()) as IGenericController<TParent>;
+                    return controller;
                 case "Person":
-                    Controller = new PersonsController(new TestRepository<Person>()) as IGenericController<TParent>;
-                    return Controller;
+                    controller = new PersonsController(new TestRepository<Person>()) as IGenericController<TParent>;
+                    return controller;
                 default:
                     throw new NotImplementedException();
             }

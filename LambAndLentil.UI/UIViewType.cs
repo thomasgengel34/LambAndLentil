@@ -9,7 +9,7 @@ namespace LambAndLentil.UI
     {
         About,
         BaseIndex,
-        BasePostEdit,
+        PostEdit,
         Create,
         Index, 
         Delete,
@@ -18,8 +18,7 @@ namespace LambAndLentil.UI
         Edit,
         Error,
         // List,
-        Lockout,
-        PostEdit,
+        Lockout, 
         _Alerts,
         _IngredientsDetail,
         _IngredientTable,

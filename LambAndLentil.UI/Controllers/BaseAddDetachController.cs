@@ -26,11 +26,11 @@ namespace LambAndLentil.UI.Controllers
         int IGenericController<T>.PageSize { get; set; }
 
 
-        ActionResult IGenericController<T>.Index(int? page) => BaseIndex(page);
+        ActionResult IGenericController<T>.Index(int? page) =>  Index(page);
 
 
         // GET: Recipes/Details/5
-        ActionResult IGenericController<T>.Details(int id) => BaseDetails(id);
+        ActionResult IGenericController<T>.Details(int id) => Details(id);
 
 
         // GET: Ingredients/Create 
@@ -46,18 +46,18 @@ namespace LambAndLentil.UI.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ActionName("PostEdit")]
-        ActionResult IGenericController<T>.PostEdit([Bind(Include = "ID, Name, Description, CreationDate,  ModifiedDate,  AddedByUser, ModifiedByUser, IngredientsList")]  T t) => BasePostEdit(t);
+        ActionResult IGenericController<T>.PostEdit([Bind(Include = "ID, Name, Description, CreationDate,  ModifiedDate,  AddedByUser, ModifiedByUser, IngredientsList")]  T t) => PostEdit(t);
 
 
         // GET: Recipes/Delete/5
         [ActionName("Delete")]
-        ActionResult IGenericController<T>.Delete(int id) => BaseDelete(id);
+        ActionResult IGenericController<T>.Delete(int id) => Delete(id);
 
 
         // POST: Ingredients/Delete/5
         [HttpPost, ActionName("DeleteConfirmed")]
         [ValidateAntiForgeryToken]
-        ActionResult IGenericController<T>.DeleteConfirmed(int id) => BaseDeleteConfirmed(id);
+        ActionResult IGenericController<T>.DeleteConfirmed(int id) => DeleteConfirmed(id);
 
 
         void IGenericController<T>.AddIngredientToIngredientsList(int id, string addedIngredient) => BaseAddIngredientToIngredientsList(id, addedIngredient);
@@ -132,7 +132,7 @@ namespace LambAndLentil.UI.Controllers
         }
 
         private bool CheckParentForAttachedChild(IEntity parent, IEntity child)
-        {
+        {  // TODO: refactor to eliminate if statements
             bool isChildAttached = false;
             Type childType = child.GetType();
             if (childType == typeof(Ingredient))

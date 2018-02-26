@@ -10,15 +10,15 @@ using System.Web.Mvc;
 namespace  LambAndLentil.Test.BaseControllerTests
 {
     [TestClass]
-    public class MenusController_Edit_Should:MenusController_Test_Should
+   internal class MenusController_Edit_Should:MenusController_Test_Should
     { 
         [Ignore]
         [TestMethod]
-        public void CorrectMenusAreBoundInEdit() => Assert.Fail();
+        private static void  CorrectMenusAreBoundInEdit() => Assert.Fail();
 
         [TestMethod]
         [TestCategory("Edit")]
-        public void CanEditMenu()
+        private static void CanEditMenu()
         { 
             Menu menu = new Menu
             {
@@ -26,11 +26,11 @@ namespace  LambAndLentil.Test.BaseControllerTests
                 Name = "test MenuControllerTest.CanEditMenu",
                 Description = "test MenuControllerTest.CanEditMenu"
             };
-            Repo.Save(menu);
+            repo.Save(menu);
              
             menu.Name = "Name has been changed";
-            Repo.Save(menu);
-           AlertDecoratorResult adr =  (AlertDecoratorResult)Controller.Edit(1);
+            repo.Save(menu);
+           AlertDecoratorResult adr =  (AlertDecoratorResult)controller.Edit(1);
             ViewResult vr = (ViewResult)adr.InnerResult;
             Menu returnedMenu = (Menu)vr.Model;
              
@@ -40,12 +40,11 @@ namespace  LambAndLentil.Test.BaseControllerTests
 
         [TestMethod]
         [TestCategory("Edit")]
-        public void SaveEditedMenu()
-        {
-            // Arrange
-            IGenericController<Menu> indexController = new MenusController(Repo);
-            IGenericController<Menu> Controller2 = new MenusController(Repo);
-            IGenericController<Menu> Controller3 = new MenusController(Repo);
+        private static void  SaveEditedMenu()
+        { 
+            IGenericController<Menu> indexController = new MenusController(repo);
+            IGenericController<Menu> Controller2 = new MenusController(repo);
+            IGenericController<Menu> Controller3 = new MenusController(repo);
 
 
             Menu vm = new Menu
@@ -54,9 +53,8 @@ namespace  LambAndLentil.Test.BaseControllerTests
                 ID = int.MaxValue - 100,
                 Description = "test MenusControllerShould.SaveEditedMenu"
             };
-
-            // Act 
-            ActionResult ar1 = Controller.PostEdit(vm);
+             
+            ActionResult ar1 = controller.PostEdit(vm);
 
 
             // now edit it
@@ -68,21 +66,11 @@ namespace  LambAndLentil.Test.BaseControllerTests
             Menu vm3 = (from m in ListEntity2.ListT
                         where m.Name == "0000 test Edited"
                         select m).AsQueryable().FirstOrDefault();
-
-            // Assert
-            Assert.AreEqual("0000 test Edited", vm3.Name);
-            Assert.AreEqual(7777, vm3.ID);
-
-        }
-         
-         
-
-        [TestMethod]
-        public void CreateReturnsNonNull()
-        { 
-            ViewResult result = Controller.Create() as ViewResult;
              
-            Assert.IsNotNull(result);
+            Assert.AreEqual("0000 test Edited", vm3.Name);
+            Assert.AreEqual(7777, vm3.ID); 
         }
+         
+        
     }
 }

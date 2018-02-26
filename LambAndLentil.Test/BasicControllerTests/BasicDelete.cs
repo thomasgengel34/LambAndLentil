@@ -9,19 +9,17 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace  LambAndLentil.Test.BaseControllerTests
 {
-    public class BasicDelete<T> : BaseControllerTest<T>
+    internal  class BasicDelete<T> : BaseControllerTest<T>
         where T : BaseEntity, IEntity, new() 
     {
-        public void ReturnIndexWithWarningWhenIDIsNotFound()
+        private static void ReturnIndexWithWarningWhenIDIsNotFound()
         {
-            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.Delete(400);
-            RedirectToRouteResult rdr = (RedirectToRouteResult)adr.InnerResult;
-
+            AlertDecoratorResult adr = (AlertDecoratorResult)controller.Delete(400);
+            RedirectToRouteResult rdr = (RedirectToRouteResult)adr.InnerResult; 
 
             Assert.AreEqual(UIViewType.Index.ToString(), rdr.RouteValues.Values.ElementAt(0));
             Assert.AreEqual(item.DisplayName+" was not found", adr.Message);
-            Assert.AreEqual("alert-warning", adr.AlertClass);
-
+            Assert.AreEqual("alert-warning", adr.AlertClass); 
         }
     }
 }

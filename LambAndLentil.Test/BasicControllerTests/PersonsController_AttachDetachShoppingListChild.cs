@@ -11,7 +11,7 @@ namespace  LambAndLentil.Test.BaseControllerTests
 {
     [TestClass]
     [TestCategory("Attach-Detach")]
-    public class PersonsController_AttachDetachShoppingListChild : PersonsController_Test_Should
+   internal class PersonsController_AttachDetachShoppingListChild : PersonsController_Test_Should
     {
   
         [TestMethod]
@@ -22,14 +22,14 @@ namespace  LambAndLentil.Test.BaseControllerTests
             //Person.ShoppingLists.Add(new ShoppingList { ID = 4006, Name = "Cayenne Pepper" });
             //Person.ShoppingLists.Add(new ShoppingList { ID = 4007, Name = "Cheese" });
             //Person.ShoppingLists.Add(new ShoppingList { ID = 4008, Name = "Chopped Green Pepper" });
-            //Repo.Save((Person)Person);
+            //repo.Save((Person)Person);
             //int initialShoppingListCount = Person.ShoppingLists.Count();
 
             //// Act
             //var setToSelect = new HashSet<int> { 4006, 4008 };
             //List<IEntity> selected = Person.ShoppingLists.Where(t => setToSelect.Contains(t.ID)).ToList();
-            //Controller.DetachASetOf(Person, selected);
-            //Person returnedPerson = Repo.GetById(Person.ID);
+            //controller.DetachASetOf(Person, selected);
+            //Person returnedPerson = repo.GetById(Person.ID);
 
             //// Assert
             //Assert.AreEqual(initialShoppingListCount - 2, returnedPerson.ShoppingLists.Count());

@@ -9,14 +9,14 @@ namespace  LambAndLentil.Test.BaseControllerTests
 
     [TestClass]
     [TestCategory("ShoppingListsController")]
-    public class ShoppingListsController_Test_Should : BaseControllerTest<ShoppingList>
+  public  class ShoppingListsController_Test_Should : BaseControllerTest<ShoppingList>
     { 
         internal static ShoppingList ShoppingList { get; set; }
         internal static ShoppingList ReturnedShoppingList { get; set; }
 
         public ShoppingListsController_Test_Should()
         {
-            Controller = new ShoppingListsController(Repo)
+            controller = new ShoppingListsController(repo)
             {
                 PageSize = 3
             };
@@ -31,7 +31,7 @@ namespace  LambAndLentil.Test.BaseControllerTests
                 Menus = new List<Menu>(),
                 Plans = new List<Plan>(),
             };
-            Repo.Save(ShoppingList);
+            repo.Save(ShoppingList);
         } 
     }
 }

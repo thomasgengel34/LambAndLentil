@@ -11,16 +11,16 @@ using ShoppingListType = LambAndLentil.Domain.Entities.ShoppingList;
 namespace LambAndLentil.Test.IAttachDetachControllerTests
 {
     [TestClass]
-    public class GroupTests
+    public class TwoGenericParametersGroupTests
     {
         [TestMethod]
         public void RunAttachDetachControllerTests()
         {
             IngredientTestsDealer();
-             RecipeTestsDealer();
+            RecipeTestsDealer();
             MenuTestsDealer();
-           PersonTestsDealer();
-             PlanTestsDealer();
+            PersonTestsDealer();
+            PlanTestsDealer();
             ShoppingListTestsDealer();
         }
 
@@ -30,7 +30,7 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests
         {
             TestsRunner<IngredientType, IngredientType>();
 
-           TestsRunner<IngredientType, RecipeType>();
+            TestsRunner<IngredientType, RecipeType>();
 
             TestsRunner<IngredientType, MenuType>();
 
@@ -122,8 +122,8 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests
              where TParent : BaseEntity, IEntity, new()
         where TChild : BaseEntity, IEntity, new()
         {
-            BaseControllerShouldAttachXAndReturn<TParent, TChild> baseAttach = new BaseControllerShouldAttachXAndReturn<TParent, TChild>();
 
+            // TODO: convert methods to static and add to the list below
             BaseControllerShouldDetachXAndReturn<TParent, TChild> baseDetach = new BaseControllerShouldDetachXAndReturn<TParent, TChild>();
 
             AttachAnXToAYEntity<TParent, TChild> attachAnXToAYEntity = new AttachAnXToAYEntity<TParent, TChild>();
@@ -131,25 +131,15 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests
             TParent parent = new TParent();
             TChild child = new TChild();
             bool CanBeChild = parent.CanHaveChild(child);
-            if (CanBeChild)
-            {
-                 baseAttach.BaseDetailWithSuccessWhenParentIDIsValidAndChildIsValid();
-                baseAttach.BaseDetailWithSuccessWhenParentIDIsValidAndChildIsValidWhenAttaching();
-                baseAttach.IndexWithErrorWhenParentIDIsNotForAnExistingIngredient();
-                baseAttach.BaseReturnsIndexWithWarningWithNullParent();
-                baseDetach.BaseDetailWithErrorWhenIDisValidAndNoChildrenOnListExistWhenDetachASetOfIngredients();
-            }
-            else
-            {
-                //baseAttach.BaseDetailWithErrorWhenParentIDIsValidAndChildIsNotValid();
-                //baseAttach.BaseDetailWithErrorWhenParentIDIsValidAndChildIsValidWhenAttachingUnattachableChild();
-
-                //baseDetach.BaseDetailWithErrorWhenParentIDIsValidAndChildIsValidWhenDetachingUnattachableChild();
-
-                
-            }
+           
+                BaseControllerShouldAttachXAndReturn<TParent, TChild>.DetailWithErrorWhenParentIDIsValidAndChildIsNotValid();
+                BaseControllerShouldAttachXAndReturn<TParent, TChild>.DetailWithSuccessWhenParentIDIsValidAndChildIsValidWhenAttaching();
+                BaseControllerShouldAttachXAndReturn<TParent, TChild>.IndexWithErrorWhenParentIDIsNotForAnExistingIngredient();
+                BaseControllerShouldAttachXAndReturn<TParent, TChild>.IndexWithWarningWithNullParent();
+                BaseControllerShouldAttachXAndReturn<TParent, TChild>.DetailWithErrorWhenParentIDIsValidAndChildIsValidWhenAttachingUnattachableChild(); 
+             
             AttachAnXToAYEntity<TParent, TChild>.AttachAChildToAParent<TParent, TChild>();
-          
+
 
             // TODO: add more
 

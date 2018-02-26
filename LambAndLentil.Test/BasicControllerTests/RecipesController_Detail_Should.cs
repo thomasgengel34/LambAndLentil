@@ -11,19 +11,14 @@ namespace LambAndLentil.Test.BaseControllerTests
     [TestClass]
     [TestCategory("RecipesController")]
     [TestCategory("Details")]
-    public class RecipesController_Detail_Should:RecipesController_Test_Should
+    internal class RecipesController_Detail_Should:RecipesController_Test_Should
     { 
-        public RecipesController_Detail_Should() => Recipe = new Recipe();
-         
-
- 
-         
-         
+        public RecipesController_Detail_Should() => Recipe = new Recipe(); 
 
         [TestMethod]
         public void BeSuccessfulWithValidIngredientID()
         {  
-            ActionResult ar = Controller.Details(int.MaxValue);
+            ActionResult ar = controller.Details(int.MaxValue);
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             ViewResult view = (ViewResult)adr.InnerResult;
 
@@ -62,11 +57,8 @@ namespace LambAndLentil.Test.BaseControllerTests
         [TestMethod]
         [TestCategory("Details")]
         public void ReturnDetailsWithSuccessWithValidRecipeID()
-        {
-             
-
-            
-            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.Details(int.MaxValue);
+        { 
+            AlertDecoratorResult adr = (AlertDecoratorResult)controller.Details(int.MaxValue);
             ViewResult view = (ViewResult)adr.InnerResult;
           
             Assert.IsNotNull(view);

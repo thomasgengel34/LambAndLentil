@@ -12,6 +12,7 @@ using PlanType = LambAndLentil.Domain.Entities.Plan;
 using RecipeType = LambAndLentil.Domain.Entities.Recipe;
 using ShoppingListType = LambAndLentil.Domain.Entities.ShoppingList;
 using LambAndLentil.UI;
+using LambAndLentil.UI.Controllers;
 
 namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
 {
@@ -19,34 +20,41 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
          where TParent : BaseEntity, IEntity, new()
          where TChild : BaseEntity, IEntity, new()
     {
+
+        IRepository<TParent> repo;
+        IGenericController<TParent> controller;
+        TParent item;
+
+
         internal static void AttachAChildToAParent<Parent, Child>()
             where Parent : BaseEntity, IEntity, new()
         where Child : BaseEntity, IEntity, new()
         {
+            SetUpForTests(out repo, out controller,out item );
             Parent parent = new Parent() { ID = 3000, Description = "test Attach " };
             IRepository<Parent> localRepo = new TestRepository<Parent>();
             localRepo.Save(parent);
             Child child = new Child { ID = 3300 };
-            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.Attach(parent, child);
+            AlertDecoratorResult adr = (AlertDecoratorResult)controller.Attach(parent, child);
             Parent returnedParent = localRepo.GetById(parent.ID) as Parent;
             if (parent.CanHaveChild(child))
             {
-                if (typeof(Child) == typeof(IngredientType)) 
+                if (typeof(Child) == typeof(IngredientType))
                 {
                     Assert.AreEqual(1, returnedParent.Ingredients.Count());
                 }
-                if (typeof(Child) == typeof(MenuType)) 
+                if (typeof(Child) == typeof(MenuType))
                 {
                     Assert.AreEqual(1, returnedParent.Menus.Count());
                 }
-                if (typeof(Child) == typeof(PlanType)) 
+                if (typeof(Child) == typeof(PlanType))
                 {
                     Assert.AreEqual(1, returnedParent.Plans.Count());
                 }
-                if (typeof(Child) == typeof(RecipeType)) 
+                if (typeof(Child) == typeof(RecipeType))
                 {
                     Assert.AreEqual(1, returnedParent.Recipes.Count());
-                } 
+                }
                 Assert.AreEqual("test Attach ", parent.Description);
                 // TODO: alert class etc
             }
@@ -54,21 +62,24 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
             {
                 RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
                 var routeValues = rtrr.RouteValues.Values;
-                if (typeof(Child) == typeof(IngredientType))
+                if (parent.CanHaveChild(child))
                 {
-                    Assert.AreEqual(0, returnedParent.Ingredients.Count());
-                }
-                if (typeof(Child) == typeof(MenuType))
-                {
-                    Assert.AreEqual(0, returnedParent.Menus.Count());
-                }
-                if (typeof(Child) == typeof(PlanType))
-                {
-                    Assert.AreEqual(0, returnedParent.Plans.Count());
-                }
-                if (typeof(Child) == typeof(RecipeType))
-                {
-                    Assert.AreEqual(0, returnedParent.Recipes.Count());
+                    if (typeof(Child) == typeof(IngredientType))
+                    {
+                        Assert.AreEqual(0, returnedParent.Ingredients.Count());
+                    }
+                    if (typeof(Child) == typeof(MenuType))
+                    {
+                        Assert.AreEqual(0, returnedParent.Menus.Count());
+                    }
+                    if (typeof(Child) == typeof(PlanType))
+                    {
+                        Assert.AreEqual(0, returnedParent.Plans.Count());
+                    }
+                    if (typeof(Child) == typeof(RecipeType))
+                    {
+                        Assert.AreEqual(0, returnedParent.Recipes.Count());
+                    }
                 }
 
                 Assert.AreEqual("alert-warning", adr.AlertClass);

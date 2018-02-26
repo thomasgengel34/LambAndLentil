@@ -8,17 +8,17 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace LambAndLentil.Test.JSONTests
 {
     [TestClass]
-    public class JSONRepositoryGetByIDShould
+    public class JSONrepositoryGetByIDShould
     {
        // public static MapperConfiguration AutoMapperConfig { get; set; }
-        static string path = @"../../../\LambAndLentil.Test\App_Data\JSON\TestJSONRepositoryGetByID\";
+        static string path = @"../../../\LambAndLentil.Test\App_Data\JSON\TestJSONrepositoryGetByID\";
 
-        private static TestRepository<Ingredient> Repo { get; set; }
+        private static TestRepository<Ingredient> repo { get; set; }
 
 
-        public JSONRepositoryGetByIDShould()
+        public JSONrepositoryGetByIDShould()
         { 
-            Repo = new TestRepository<Ingredient>();
+            repo = new TestRepository<Ingredient>();
             Directory.CreateDirectory(path);
         }
        
@@ -31,9 +31,9 @@ namespace LambAndLentil.Test.JSONTests
                 Name = "test ReturnCorrectEntityForAValidIngredientID Name",
                 Description = "test ReturnCorrectEntityForAValidIngredientID Description"
             };
-            Repo.Save(ingredient);
+            repo.Save(ingredient);
              
-            Ingredient returnedListEntity = Repo.GetById(ingredient.ID);
+            Ingredient returnedListEntity = repo.GetById(ingredient.ID);
 
             //Assert
             Assert.AreEqual(ingredient.ID, returnedListEntity.ID);

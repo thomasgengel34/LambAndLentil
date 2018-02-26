@@ -20,7 +20,7 @@ namespace LambAndLentil.Test.BaseControllerTests
                Description = "Description has changed" 
         };
 
-            Repo.Save(Entity);
+            repo.Save(Entity);
         }
 
         [TestMethod]
@@ -28,8 +28,8 @@ namespace LambAndLentil.Test.BaseControllerTests
         { 
             Entity.FirstName = "Changed";
              
-            Controller.PostEdit(Entity);
-            ReturnedEntity = Repo.GetById(1000); 
+            controller.PostEdit(Entity);
+            ReturnedEntity = repo.GetById(1000); 
 
             Assert.AreEqual("Changed Created", ReturnedEntity.Name);
             // Name should always be fed from and equal to FullName
@@ -44,8 +44,8 @@ namespace LambAndLentil.Test.BaseControllerTests
         { 
             Entity.LastName = "Altered";
              
-            Controller.PostEdit(Entity);
-            ReturnedEntity = Repo.GetById(1000);
+            controller.PostEdit(Entity);
+            ReturnedEntity = repo.GetById(1000);
              
             Assert.AreEqual("Newly Altered", ReturnedEntity.Name);
             // Name should always be fed from and equal to FullName
@@ -61,8 +61,8 @@ namespace LambAndLentil.Test.BaseControllerTests
             Entity.FirstName = "Changed";
             Entity.LastName = "Altered";
              
-            Controller.PostEdit(Entity);
-            ReturnedEntity = Repo.GetById(1000);
+            controller.PostEdit(Entity);
+            ReturnedEntity = repo.GetById(1000);
              
             Assert.AreEqual("Changed Altered", ReturnedEntity.Name);
             // Name should always be fed from and equal to FullName
@@ -77,8 +77,8 @@ namespace LambAndLentil.Test.BaseControllerTests
         { 
             Entity.Name = "Changed";
              
-            Controller.PostEdit(Entity);
-            ReturnedEntity = Repo.GetById(1000);
+            controller.PostEdit(Entity);
+            ReturnedEntity = repo.GetById(1000);
              
             Assert.AreEqual("Changed", ReturnedEntity.Name);
             // Name should always be fed from and equal to FullName
@@ -92,8 +92,8 @@ namespace LambAndLentil.Test.BaseControllerTests
         { 
             Entity.FullName = "Changed";
              
-            Controller.PostEdit(Entity);
-            ReturnedEntity = Repo.GetById(1000);
+            controller.PostEdit(Entity);
+            ReturnedEntity = repo.GetById(1000);
              
             Assert.AreEqual("Changed", ReturnedEntity.Name);
             // Name should always be fed from and equal to FullName

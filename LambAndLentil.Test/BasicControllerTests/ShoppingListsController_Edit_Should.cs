@@ -10,14 +10,11 @@ namespace LambAndLentil.Test.BaseControllerTests
     [TestClass]
     [TestCategory("ShoppingListsController")]
 
-    public class ShoppingListsController_Edit_Should:ShoppingListsController_Test_Should
+    internal class ShoppingListsController_Edit_Should:ShoppingListsController_Test_Should
     {
        private static IGenericController<ShoppingList>  Controller2, Controller3; 
 
-        public ShoppingListsController_Edit_Should():base()
-        {
-
-        }
+     
 
         [Ignore]
         [TestMethod]
@@ -30,13 +27,13 @@ namespace LambAndLentil.Test.BaseControllerTests
         public void CanEditShoppingList()
         {
             // Arrange 
-            ShoppingListsController Controller2 = new ShoppingListsController(Repo);
+            ShoppingListsController Controller2 = new ShoppingListsController(repo);
               
-            ViewResult view1 = (ViewResult)Controller.Edit(int.MaxValue);
+            ViewResult view1 = (ViewResult)controller.Edit(int.MaxValue);
             //ShoppingList p1 = (ShoppingList)view1.Model;
-            //ViewResult view2 = (ViewResult)Controller.Edit(int.MaxValue - 1);
+            //ViewResult view2 = (ViewResult)controller.Edit(int.MaxValue - 1);
             //ShoppingList p2 = (ShoppingList)view2.Model;
-            //ViewResult view3 = (ViewResult)Controller.Edit(int.MaxValue - 2);
+            //ViewResult view3 = (ViewResult)controller.Edit(int.MaxValue - 2);
             //ShoppingList p3 = (ShoppingList)view3.Model;
              
             Assert.IsNotNull(view1);
@@ -51,8 +48,8 @@ namespace LambAndLentil.Test.BaseControllerTests
         [TestCategory("Edit")]
         public void SaveEditedShoppingList()
         { 
-             Controller2 = new ShoppingListsController(Repo);
-              Controller3 = new ShoppingListsController(Repo);
+             Controller2 = new ShoppingListsController(repo);
+              Controller3 = new ShoppingListsController(repo);
 
 
             ShoppingList.Name = "0000 test";
@@ -60,7 +57,7 @@ namespace LambAndLentil.Test.BaseControllerTests
             ShoppingList.Description = "test ShoppingListsControllerShould.SaveEditedShoppingList"; 
 
             // Act 
-            ActionResult ar1 = Controller.PostEdit((ShoppingList)ShoppingList);
+            ActionResult ar1 = controller.PostEdit((ShoppingList)ShoppingList);
 
 
             // now edit it
@@ -84,7 +81,7 @@ namespace LambAndLentil.Test.BaseControllerTests
         [TestCategory("Edit")]
         public void XxxCannotEditNonexistentShoppingList()
         { 
-            ShoppingList result = (ShoppingList)((ViewResult)Controller.Edit(8)).ViewData.Model;
+            ShoppingList result = (ShoppingList)((ViewResult)controller.Edit(8)).ViewData.Model;
           
             Assert.IsNull(result);
         } 

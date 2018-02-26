@@ -9,7 +9,7 @@ namespace LambAndLentil.Test.BaseControllerTests
 {
     [TestClass]
     [TestCategory("RecipesController")]
-    public class RecipesController_Test_Misc:RecipesController_Test_Should
+   internal class RecipesController_Test_Misc:RecipesController_Test_Should
     {
         public RecipesController_Test_Misc()
         {
@@ -23,32 +23,13 @@ namespace LambAndLentil.Test.BaseControllerTests
 
             foreach (Recipe recipe in ListEntity.ListT)
             {
-                Repo.Save(recipe);
+                repo.Save(recipe);
             }
 
-            Controller.PageSize = 3;
+            controller.PageSize = 3;
         }
           
- 
-
-
-
-    
-
-        [TestMethod]
-        public void ReturnNonNullIndex()
-        { 
-            ViewResult result = Controller.Index(1) as ViewResult;
-            ViewResult result1 = Controller.Index(2) as ViewResult; 
-
-            Assert.IsNotNull(result);
-            Assert.IsNotNull(result1);
-
-        }
-
-        
-       
-
+  
          [Ignore]
         [TestMethod]
         public void ReturnShortClassNameInErrorMessages()
@@ -63,21 +44,7 @@ namespace LambAndLentil.Test.BaseControllerTests
             Assert.Fail();
         }
 
-      
-
-         [Ignore]
-        [TestMethod]
-        public void FlagAnIngredientFlaggedInAPerson()
-        {
-            Assert.Fail();
-        }
-
-       [Ignore]
-        [TestMethod]
-        public void FlagAnIngredientFlaggedInTwoPersons()
-        {
-            Assert.Fail();
-        }
+        
 
          [Ignore]
         [TestMethod]

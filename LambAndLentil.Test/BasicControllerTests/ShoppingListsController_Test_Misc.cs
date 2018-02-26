@@ -1,9 +1,6 @@
-﻿using System;
-using System.Linq;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using LambAndLentil.Domain.Entities;
 using LambAndLentil.UI;
-using LambAndLentil.UI.Controllers;
 using LambAndLentil.UI.Infrastructure.Alerts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -12,7 +9,7 @@ namespace LambAndLentil.Test.BaseControllerTests
 
     [TestClass]
     [TestCategory("ShoppingListsController")]
-    public class ShoppingListsController_Test_Misc : ShoppingListsController_Test_Should
+   internal class ShoppingListsController_Test_Misc : ShoppingListsController_Test_Should
     { 
        
         [TestMethod]
@@ -21,13 +18,13 @@ namespace LambAndLentil.Test.BaseControllerTests
         {   // does not actually detach, just sets up to remove it.
             // TODO: verify "Are you sure you want to delete this?" message shows up.
             // Arrange
-            int count = Repo.Count();
+            int count = repo.Count();
              
-            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.Delete(int.MaxValue);
+            AlertDecoratorResult adr = (AlertDecoratorResult)controller.Delete(int.MaxValue);
             ViewResult view = (ViewResult)adr.InnerResult;
 
             string viewName = view.ViewName;
-            int newCount = Repo.Count();
+            int newCount = repo.Count();
             string message = adr.Message;
 
             // Assert
@@ -42,13 +39,12 @@ namespace LambAndLentil.Test.BaseControllerTests
         [TestMethod]
         [TestCategory("Detach")]
         public void DetachConfirmed()
-        {
-            // Arrange
-            int count = Repo.Count();
+        { 
+            int count = repo.Count();
 
             // Act
-            ActionResult result = Controller.DeleteConfirmed(int.MaxValue) as ActionResult;
-            int newCount = Repo.Count();
+            ActionResult result = controller.DeleteConfirmed(int.MaxValue) as ActionResult;
+            int newCount = repo.Count();
             // TODO: improve this test when I do some route tests to return a more exact result
             //RedirectToRouteResult x = new RedirectToRouteResult("default",new  RouteValueDictionary { new Route( { Controller = "ShoppingLists", Action = "Index" } } );
             //TODO: check message
@@ -64,10 +60,10 @@ namespace LambAndLentil.Test.BaseControllerTests
         {
             // Arrange - create an shoppingList
             ShoppingList shoppingListEntity = new ShoppingList { ID = 2, Name = "Test2" };
-            Repo.Save(shoppingListEntity);
+            repo.Save(shoppingListEntity);
 
             // Act - delete the shoppingList Entity
-            ActionResult result = Controller.DeleteConfirmed(shoppingListEntity.ID);
+            ActionResult result = controller.DeleteConfirmed(shoppingListEntity.ID);
 
             AlertDecoratorResult adr = (AlertDecoratorResult)result;
 
@@ -77,29 +73,8 @@ namespace LambAndLentil.Test.BaseControllerTests
 
             Assert.AreEqual("Test2 has been deleted", adr.Message);
         }
-
-
-        [TestMethod]
-        public void CreateReturnsNonNull()
-        { 
-            ViewResult result = Controller.Create() as ViewResult;
-             
-            Assert.IsNotNull(result);
-        }
-
-        [Ignore]
-        [TestMethod]
-        public void FlagAnIngredientFlaggedInAPerson()
-        {
-            Assert.Fail();
-        }
-
-        [Ignore]
-        [TestMethod]
-        public void FlagAnIngredientFlaggedInTwoPersons()
-        {
-            Assert.Fail();
-        }
+ 
+         
 
         [Ignore]
         [TestMethod]

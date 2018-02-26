@@ -11,7 +11,7 @@ namespace  LambAndLentil.Test.BaseControllerTests
     [TestClass]
     [TestCategory("PersonsController")]
     [TestCategory("Details")]
-    public class PersonsController_Detail_Should:PersonsController_Test_Should
+    internal class PersonsController_Detail_Should:PersonsController_Test_Should
     { 
         
 
@@ -22,7 +22,7 @@ namespace  LambAndLentil.Test.BaseControllerTests
         [TestMethod]
         public void BeSuccessfulWithValidPersonID()
         {  
-            ActionResult ar = Controller.Details(int.MaxValue);
+            ActionResult ar = controller.Details(int.MaxValue);
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             ViewResult view = (ViewResult)adr.InnerResult;
  
@@ -41,7 +41,7 @@ namespace  LambAndLentil.Test.BaseControllerTests
         {
             // I am not sure how I want this to operate.  Wait until UI is set up and see then.
              
-            ViewResult result = Controller.Details(int.MaxValue) as ViewResult;
+            ViewResult result = controller.Details(int.MaxValue) as ViewResult;
              
             Assert.IsNotNull(result);
         }
@@ -51,7 +51,7 @@ namespace  LambAndLentil.Test.BaseControllerTests
         [TestCategory("Details")]
         public void ReturnErrorIfResultIsNotFound_PersonIDIsZeroMessageIsCorrect()
         { 
-            ActionResult ar = Controller.Details(0);
+            ActionResult ar = controller.Details(0);
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
 
              
@@ -81,7 +81,7 @@ namespace  LambAndLentil.Test.BaseControllerTests
               
 
             // Act 
-            ActionResult ar = Controller.Details(int.MaxValue);
+            ActionResult ar = controller.Details(int.MaxValue);
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             ViewResult view = (ViewResult)adr.InnerResult;
 

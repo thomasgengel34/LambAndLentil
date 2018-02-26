@@ -10,33 +10,48 @@ using LambAndLentil.UI.Controllers;
 using LambAndLentil.UI.Infrastructure.Alerts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace  LambAndLentil.Test.BaseControllerTests
+namespace LambAndLentil.Test.BaseControllerTests
 {
-    public class BasicDeleteConfirmed<T> : BaseControllerTest<T>
+    internal class BasicDeleteConfirmed<T> : BaseControllerTest<T>
         where T : BaseEntity, IEntity, new()
-    {
-
-
-        public static void ReturnIndexWithActionMethodDeleteConfirmedWithBadID()
+    { 
+        internal static void TestRunner()  
         {
-            ActionResult ar = Controller.DeleteConfirmed(-1);
+            ReturnIndexWithActionMethodDeleteConfirmedWithBadID();
+            ReturnIndexWithConfirmationWhenIDIsFound();
+            DeleteTheCorrectItemAndNotOtherItemsWhenIDIsFound();
+            DeleteConfirmed();
+        }
+        private static void ReturnIndexWithActionMethodDeleteConfirmedWithBadID()
+        {
+            T item = SetUpItemAndrepo(out controller);
+            item.ID = -1;
+
+            ActionResult ar = controller.DeleteConfirmed(item.ID);
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             RedirectToRouteResult rdr = (RedirectToRouteResult)adr.InnerResult;
-            T item = new T();
+         
             Assert.AreEqual(UIViewType.Index.ToString(), rdr.RouteValues.Values.ElementAt(0));
             Assert.AreEqual("No " + item.DisplayName + " was found with that id.", adr.Message);
             Assert.AreEqual("alert-danger", adr.AlertClass);
         }
 
 
-        public static void ReturnIndexWithConfirmationWhenIDIsFound()
+        private static T SetUpItemAndrepo(out IGenericController<T> controller)
         {
             T item = new T() { ID = 5450 };
-            IRepository<T> repo = new TestRepository<T>();
+            repo = new TestRepository<T>();
             repo.Save(item);
-            IGenericController<T> controller = BaseControllerTestFactory(typeof(T));
+             controller= BaseControllerTestFactory(typeof(T));
+            return item;
+        }
 
-            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.DeleteConfirmed(item.ID);
+
+        private static void ReturnIndexWithConfirmationWhenIDIsFound()
+        {
+            T item = SetUpItemAndrepo(out controller);
+         
+            AlertDecoratorResult adr = (AlertDecoratorResult)controller.DeleteConfirmed(item.ID);
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
 
             Assert.AreEqual(item.Name + " has been deleted", adr.Message);
@@ -45,16 +60,32 @@ namespace  LambAndLentil.Test.BaseControllerTests
             Assert.AreEqual(UIViewType.Index.ToString(), rtrr.RouteValues.Values.ElementAt(0).ToString());
         }
 
-        public void DeleteTheCorrectItemAndNotOtherItemsWhenIDIsFound()
-        {
-            int initialCount = Repo.Count();
 
-            Controller.DeleteConfirmed(int.MaxValue);
-            int finalCount = Repo.Count();
-            object shouldBeNull = Repo.GetById(int.MaxValue);
+        private static void DeleteTheCorrectItemAndNotOtherItemsWhenIDIsFound()
+        {
+            T item = SetUpItemAndrepo(out controller);
+            int initialCount = repo.Count();
+
+            controller.DeleteConfirmed(item.ID);
+            int finalCount = repo.Count();
+            object shouldBeNull = repo.GetById(item.ID);
 
             Assert.AreEqual(initialCount - 1, finalCount);
             Assert.IsNull(shouldBeNull);
+        }
+
+ 
+       private static void DeleteConfirmed()
+        {
+
+            int count = repo.Count();
+
+            ActionResult result = controller.DeleteConfirmed(int.MaxValue) as ActionResult;
+            // improve this test when I do some route tests to return a more exact result
+            //RedirectToRouteResult x = new RedirectToRouteResult("default",new  RouteValueDictionary { new Route( { Controller = " ListEntityTVM", Action = "Index" } } );
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(count - 1, repo.Count());
         }
     }
 }

@@ -25,10 +25,10 @@ namespace  LambAndLentil.Test.BaseControllerTests
 
         public PersonsController_Test_Should()
         {
-            Controller = (IGenericController<Person>)(new PersonsController(Repo)
+            controller = new PersonsController(repo)
             {
                 PageSize = 3
-            });
+            };
 
             Person = new Person()
             {
@@ -48,7 +48,7 @@ namespace  LambAndLentil.Test.BaseControllerTests
                 Weight=150,
                 NoGarlic=false
             };
-            Repo.Save((Person)Person);
+            repo.Save((Person)Person);
         } 
     }
 }

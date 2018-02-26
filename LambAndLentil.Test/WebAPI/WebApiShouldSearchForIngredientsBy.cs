@@ -7,20 +7,17 @@ namespace LambAndLentil.Test.WebAPI
 {
 
     [TestClass]
-    public class WebApiShouldSearchForIngredientsBy: IngredientsController_Test_Should
+    internal class WebApiShouldSearchForIngredientsBy: IngredientsController_Test_Should
     {
-        protected IIngredientsControllerAsync AsyncController   = (IIngredientsControllerAsync)(new IngredientsController(Repo));
+        protected IIngredientsControllerAsync AsyncController   = new IngredientsController(repo);
 
         [TestMethod]
         public async Task BrandedFoodProductsAndFindAtLeast215557Ingredients()
-        {
-            // Arrange
+        { 
             string searchString = "";   
-
-            // Act 
+             
             long count = await AsyncController.GetIngredientCountAsync(searchString);
-
-            //Assert
+             
             Assert.IsTrue(215557<=count);
         }
 
@@ -47,7 +44,7 @@ namespace LambAndLentil.Test.WebAPI
         //    string manufacturer = "ConAgra Foods inc.";
            
         //    // Act 
-        //    long count = await Controller.GetIngredientCountAsync(searchString, "Branded Food Products",long.MaxValue,0, manufacturer);
+        //    long count = await controller.GetIngredientCountAsync(searchString, "Branded Food Products",long.MaxValue,0, manufacturer);
 
         //    //Assert
         //    Assert.IsTrue(83<= count);
@@ -72,36 +69,21 @@ namespace LambAndLentil.Test.WebAPI
 
         //[TestMethod]
         //public void NotByFoodGroupIfDataSourceIsBrandedFoodProduct()
-        //{
-        //    // Arrange
-
-        //    // Act
-
-        //    //Assert
+        //{ 
         //    Assert.Fail();
 
         //}
 
         //[TestMethod]
         //public void BrandedFoodProductsDataSourceAndManufacturer()
-        //{
-        //    // Arrange
-
-        //    // Act
-
-        //    //Assert
+        //{ 
         //    Assert.Fail();
 
         //}
 
         //[TestMethod]
         //public void StandardReferenceAndManufacturer()
-        //{
-        //    // Arrange
-
-        //    // Act
-
-        //    //Assert
+        //{ 
         //    Assert.Fail();
 
         //}
@@ -109,22 +91,13 @@ namespace LambAndLentil.Test.WebAPI
         [Ignore]
         [TestMethod]
         public void UnfilteredAutocomplete() =>
-        // Arrange
-
-        // Act
-
-        //Assert
+        
         Assert.Fail();
 
         [Ignore]
         [TestMethod]
         public void FilteredAutocompleteForBrandedFoodProducts()
-        {
-            // Arrange
-
-            // Act
-
-            //Assert
+        { 
             Assert.Fail();
 
         }
@@ -132,12 +105,7 @@ namespace LambAndLentil.Test.WebAPI
         [Ignore]
         [TestMethod]
         public void FilteredAutocompleteForManufacturer()
-        {
-            // Arrange
-
-            // Act
-
-            //Assert
+        { 
             Assert.Fail();
 
         }
@@ -145,12 +113,7 @@ namespace LambAndLentil.Test.WebAPI
         [Ignore]
         [TestMethod]
         public void FilteredAutocompleteForFoodGroupIfDataSourceIsStandardReference()
-        {
-            // Arrange
-
-            // Act
-
-            //Assert
+        { 
             Assert.Fail();
 
         }
@@ -158,12 +121,7 @@ namespace LambAndLentil.Test.WebAPI
         [Ignore]
         [TestMethod]
         public void FilteredAutocompleteForNotByFoodGroupIfDataSourceIsBrandedFoodProduct()
-        {
-            // Arrange
-
-            // Act
-
-            //Assert
+        { 
             Assert.Fail();
 
         }
@@ -171,12 +129,7 @@ namespace LambAndLentil.Test.WebAPI
         [Ignore]
         [TestMethod]
         public void FilteredAutocompleteForBrandedFoodProductsDataSourceAndManufacturer()
-        {
-            // Arrange
-
-            // Act
-
-            //Assert
+        { 
             Assert.Fail();
 
         }
@@ -184,12 +137,7 @@ namespace LambAndLentil.Test.WebAPI
         [Ignore]
         [TestMethod]
         public void FilteredAutocompleteForStandardReferenceAndManufacturer()
-        {
-            // Arrange
-
-            // Act
-
-            //Assert
+        { 
             Assert.Fail();
 
         }

@@ -14,11 +14,8 @@ namespace LambAndLentil.Test.Infrastructure
     // also using WebApi methods - TODO: something will be needed for additional ingredients, such as user entered
     [TestCategory("Integration")]
     [TestCategory("IngredientsController")]
-    public class IngredientsControllerShould : IngredientsController_Test_Should
-    {
-        public IngredientsControllerShould()
-        {
-        }
+   public class IngredientsControllerShould : IngredientsController_Test_Should
+    { 
          
         [TestMethod]
         [TestCategory("Save")]
@@ -30,7 +27,7 @@ namespace LambAndLentil.Test.Infrastructure
                 Name = "SaveAValidIngredientAndReturnIndexView"
             };
              
-            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.PostEdit(vm);
+            AlertDecoratorResult adr = (AlertDecoratorResult)controller.PostEdit(vm);
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
 
             var routeValues = rtrr.RouteValues.Values;
@@ -51,73 +48,42 @@ namespace LambAndLentil.Test.Infrastructure
                 ID = 5000,
                 Description = "test IngredientsControllerShould.SaveEditedIngredient"
             };
-            Repo.Save(ingredient);
+            repo.Save(ingredient);
 
             ingredient.Name = "0000 test Edited";
-            ActionResult ar = Controller.PostEdit(ingredient);
-            Ingredient returnedIngredient = Repo.GetById(ingredient.ID);
+            ActionResult ar = controller.PostEdit(ingredient);
+            Ingredient returnedIngredient = repo.GetById(ingredient.ID);
 
             Assert.AreEqual("0000 test Edited", returnedIngredient.Name);
         }
 
 
-        [TestMethod]
-        [TestCategory("Edit")]
-        public void ShouldSaveTheCreationDateOnIngredientCreationWithDateTimeParameter()
-        { 
-            DateTime CreationDate = new DateTime(2010, 1, 1);
-             
-            Ingredient ingredient = new Ingredient(CreationDate);
-             
-            Assert.AreEqual(CreationDate, ingredient.CreationDate);
-        }
+     
 
-        [TestMethod]
-        [TestCategory("Edit")]
-        public void SaveTheCreationDateOnIngredientCreationWithNoParameterCtor()
-        { 
-            DateTime CreationDate = DateTime.Now;
-             
-            Ingredient ingredient = new Ingredient();
-             
-            Assert.AreEqual(CreationDate.Date, ingredient.CreationDate.Date);
-        }
-
-        [TestMethod]
-        [TestCategory("Edit")]
-        public void SaveTheCreationDateOnIngredientCreationWithDateTimeParameter()
-        { 
-            DateTime CreationDate = new DateTime(2010, 1, 1);
- 
-            Ingredient ingredient = new Ingredient(CreationDate);
-             
-            Assert.AreEqual(CreationDate, ingredient.CreationDate);
-        }
          
          
 
         [TestMethod]
         public void NotCreateASecondElementOnEditingOneElement()
-        {
-            // Arrange
-            int initialCount = Repo.Count();
+        { 
+            int initialCount = repo.Count();
              
             Ingredient.Name = "Changed";
-            Controller.Edit(Ingredient.ID);
+            controller.Edit(Ingredient.ID);
              
-            Assert.AreEqual(initialCount, Repo.Count());
+            Assert.AreEqual(initialCount, repo.Count());
         }
 
 
         [TestMethod]
         public void NotCreateASecondElementOnPostEditingOneElement()
         { 
-            int initialCount = Repo.Count();
+            int initialCount = repo.Count();
              
             Ingredient.Name = "Changed";
-            Controller.PostEdit((Ingredient)Ingredient);
+            controller.PostEdit((Ingredient)Ingredient);
              
-            Assert.AreEqual(initialCount, Repo.Count());
+            Assert.AreEqual(initialCount, repo.Count());
         }
 
       
@@ -131,8 +97,8 @@ namespace LambAndLentil.Test.Infrastructure
             Ingredient ingredient = new Ingredient() { ID = 4000, Name = "HaveNameBoundInPostEditActionMethod", IngredientsList = "" };
             ingredient.Name = "Changed";
 
-            Controller.PostEdit(ingredient);
-            Ingredient returnedIngredient = Repo.GetById(ingredient.ID);
+            controller.PostEdit(ingredient);
+            Ingredient returnedIngredient = repo.GetById(ingredient.ID);
 
             Assert.AreEqual("Changed", returnedIngredient.Name);
         }
@@ -144,8 +110,8 @@ namespace LambAndLentil.Test.Infrastructure
         {
              Ingredient ingredient = new Ingredient { ID = 123456789, Description = "Changed" };
 
-            Controller.PostEdit((Ingredient)ingredient);
-            Ingredient returnedIngredient = Repo.GetById(ingredient.ID);
+            controller.PostEdit((Ingredient)ingredient);
+            Ingredient returnedIngredient = repo.GetById(ingredient.ID);
 
             Assert.AreEqual(ingredient.Description, returnedIngredient.Description);
         }
@@ -163,8 +129,8 @@ namespace LambAndLentil.Test.Infrastructure
                 new Ingredient { Name = "Changed Up" }
             };
              
-            ActionResult ar = Controller.PostEdit( ingredient);
-            Ingredient returnedIngredient = Repo.GetById(ingredient.ID); 
+            ActionResult ar = controller.PostEdit( ingredient);
+            Ingredient returnedIngredient = repo.GetById(ingredient.ID); 
             
             Assert.AreEqual("Changed", returnedIngredient.Ingredients.First().Name);
             Assert.AreEqual("Changed Up", returnedIngredient.Ingredients.Last().Name);
@@ -177,8 +143,8 @@ namespace LambAndLentil.Test.Infrastructure
             Ingredient ingredient = new Ingredient() { ID = 4000, Name = "HaveIngredientsListBoundInPostEditActionMethod", IngredientsList = "" };
             ingredient.IngredientsList = "Changed";
 
-            Controller.PostEdit(ingredient);
-            Ingredient returnedIngredient = Repo.GetById(ingredient.ID);
+            controller.PostEdit(ingredient);
+            Ingredient returnedIngredient = repo.GetById(ingredient.ID);
 
             Assert.AreEqual("Changed", returnedIngredient.IngredientsList);
         }

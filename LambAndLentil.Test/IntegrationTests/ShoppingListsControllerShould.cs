@@ -27,18 +27,18 @@ namespace LambAndLentil.Test.BaseControllerTests
 
         public ShoppingListsControllerShould()
         {
-            Repo = new TestRepository<ShoppingList>();
-            Controller = new ShoppingListsController(Repo);
-            Controller1 = new ShoppingListsController(Repo);
-            Controller2 = new ShoppingListsController(Repo);
-            Controller3 = new ShoppingListsController(Repo);
-            Controller4 = new ShoppingListsController(Repo);
+            repo = new TestRepository<ShoppingList>();
+            controller = new ShoppingListsController(repo);
+            Controller1 = new ShoppingListsController(repo);
+            Controller2 = new ShoppingListsController(repo);
+            Controller3 = new ShoppingListsController(repo);
+            Controller4 = new ShoppingListsController(repo);
             ShoppingList = new ShoppingList
             {
                 ID = 400,
                 Name = "ShoppingListsControllerShould"
             };
-            Repo.Save((ShoppingList)ShoppingList);
+            repo.Save((ShoppingList)ShoppingList);
         }
 
          
@@ -49,7 +49,7 @@ namespace LambAndLentil.Test.BaseControllerTests
         { 
             ShoppingList.Name = "test";
         
-            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.PostEdit((ShoppingList)ShoppingList);
+            AlertDecoratorResult adr = (AlertDecoratorResult)controller.PostEdit((ShoppingList)ShoppingList);
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
 
             var routeValues = rtrr.RouteValues.Values;
@@ -131,7 +131,7 @@ namespace LambAndLentil.Test.BaseControllerTests
             ShoppingList.Name = "0000 test Edited";
             ShoppingList.Description = "SaveEditedShoppingListWithDescriptionChange Post-test";
 
-            ActionResult ar2 = Controller3.PostEdit((ShoppingList)ShoppingList);
+            ActionResult ar2 = Controller3.PostEdit(ShoppingList);
             ViewResult view2 = (ViewResult)Controller4.Index();
             List<ShoppingList> ListEntity2 = (List<ShoppingList>)view2.Model;
             var result2 = (from m in ListEntity2
@@ -144,30 +144,16 @@ namespace LambAndLentil.Test.BaseControllerTests
             Assert.AreEqual("0000 test Edited", shoppingListVM.Name);
             Assert.AreEqual("SaveEditedShoppingListWithDescriptionChange Post-test", shoppingListVM.Description);
         }
-
-        [TestMethod]
-        [TestCategory("DeleteConfirmed")]
-        public void ActuallyDeleteAShoppingListFromTheDatabase()
-        {  
-            ShoppingList item = new ShoppingList { ID = 1, Description = "test ActuallyDeleteAShoppingListFromTheDatabase" };
-
-            Repo.Save(item);
-             
-            Controller.DeleteConfirmed(item.ID);
-            ShoppingList returnedItem= Repo.GetById(item.ID);
-
-            Assert.IsNull(returnedItem);
-        }
          
          
-        internal ShoppingList GetShoppingList(IRepository<ShoppingList> Repo, string description)
+        internal ShoppingList GetShoppingList(IRepository<ShoppingList> repo, string description)
         {
 
             ShoppingList.ID = int.MaxValue;
             ShoppingList.Description = description;
-            Controller.PostEdit((ShoppingList)ShoppingList);
+            controller.PostEdit((ShoppingList)ShoppingList);
 
-            ShoppingList result = (from m in Repo.GetAll()
+            ShoppingList result = (from m in repo.GetAll()
                                    where m.Description == ShoppingList.Description
                                    select m).AsQueryable().FirstOrDefault();
             return result;
@@ -180,12 +166,12 @@ namespace LambAndLentil.Test.BaseControllerTests
         {
             IRepository<Ingredient> repoIngredient = new TestRepository<Ingredient>();
             ShoppingList shoppingList = new ShoppingList() { ID = 76, Ingredients = new List<Ingredient>() };
-            Repo.Save(shoppingList);
+            repo.Save(shoppingList);
             Ingredient ingredient = new Ingredient { ID = 500 };
             repoIngredient.Save(ingredient);
 
-            Controller.Attach(shoppingList, ingredient);
-            ShoppingList returnedShoppingList = Repo.GetById(shoppingList.ID);
+            controller.Attach(shoppingList, ingredient);
+            ShoppingList returnedShoppingList = repo.GetById(shoppingList.ID);
 
 
             Assert.AreEqual(1, returnedShoppingList.Ingredients.Count());

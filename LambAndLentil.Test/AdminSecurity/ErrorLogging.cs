@@ -5,83 +5,49 @@ namespace LambAndLentil.Test.AdminSecurity
 {
     [Ignore]
     [TestClass]
-    public class ErrorLogging
+    internal  static class ErrorLogging
     {
         [TestMethod]
-        public void UserLockoutDueToUnsuccessfulLoginIsLogged()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
+        private static void UserLockoutDueToUnsuccessfulLoginIsLogged()
+        { 
             Assert.Fail();
 
         }
 
         [TestMethod]
-        public void UserLoginIsLogged()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
+        private static void UserLoginIsLogged()
+        { 
             Assert.Fail();
         }
 
         [TestMethod]
-        public void UserLogoutIsLogged()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
+        private static void UserLogoutIsLogged()
+        { 
             Assert.Fail();
         }
 
         [TestMethod]
-        public void UserServedAServerErrorPageIsLogged()
+        private static void UserServedAServerErrorPageIsLogged()
         {   // either error in the view itself or in the code
-            // Arrange
-
-            // Act
-
-            // Assert
+             
             Assert.Fail();
         }
 
         [TestMethod]
-        public void UnhandledExceptionIsLogged()
-        {  // intended to log a C# exception specifically
-            // Arrange
-
-            // Act
-
-            // Assert
+        private static void UnhandledExceptionIsLogged()
+        {  // intended to log a C# exception specifically 
             Assert.Fail();
         }
 
         [TestMethod]
-        public void StackOverFlowExceptionIsLogged()
-        {  // might indicate someone is playing games
-            // Arrange
-
-            // Act
-
-            // Assert
+        private static void StackOverFlowExceptionIsLogged()
+        {  // might indicate someone is playing games 
             Assert.Fail();
         }
 
         [TestMethod]
-        public void DangerousRouteAttemptedIsLogged()
-        {  // might indicate someone is playing games
-            // Arrange
-
-            // Act
-
-            // Assert
+        private static void DangerousRouteAttemptedIsLogged()
+        {  // might indicate someone is playing games 
             Assert.Fail();
         }
     }

@@ -19,9 +19,9 @@ namespace  LambAndLentil.Test.BaseControllerTests
     [TestClass]
     [TestCategory("Integration")]
     [TestCategory("PersonController")]
-    public class PersonsControllerShould : BaseControllerTest<Person>
+    internal class PersonsControllerShould : BaseControllerTest<Person>
     {
-        static IGenericController<Person> Controller1, Controller2, Controller3, Controller4, Controller5;
+        static IGenericController<Person> Controller,Controller1, Controller2, Controller3, Controller4, Controller5;
         static IPerson Person { get; set; }
 
         public PersonsControllerShould()
@@ -33,14 +33,14 @@ namespace  LambAndLentil.Test.BaseControllerTests
                 Description = "test ControllerShould",
                 ID = 1000
             };
-            Repo = new TestRepository<Person>();
-            Controller = new PersonsController(Repo);
-            Controller1 = (IGenericController<Person>)(new PersonsController(Repo));
-            Controller2 = (IGenericController<Person>)(new PersonsController(Repo));
-            Controller3 = (IGenericController<Person>)(new PersonsController(Repo));
-            Controller4 = (IGenericController<Person>)(new PersonsController(Repo));
-            Controller5 = (IGenericController<Person>)(new PersonsController(Repo));
-            Repo.Save((Person)Person);
+            repo = new TestRepository<Person>();
+            Controller = new PersonsController(repo);
+            Controller1 = new PersonsController(repo);
+            Controller2 = new PersonsController(repo);
+            Controller3 = new PersonsController(repo);
+            Controller4 = new PersonsController(repo);
+            Controller5 = new PersonsController(repo);
+            repo.Save((Person)Person);
         }
 
          
@@ -49,7 +49,7 @@ namespace  LambAndLentil.Test.BaseControllerTests
         [TestMethod]
         public void SaveAValidPerson()
         { 
-            AlertDecoratorResult adr = (AlertDecoratorResult)Controller.PostEdit((Person)Person);
+            AlertDecoratorResult adr = (AlertDecoratorResult)controller.PostEdit((Person)Person);
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
 
             var routeValues = rtrr.RouteValues.Values;
@@ -63,11 +63,7 @@ namespace  LambAndLentil.Test.BaseControllerTests
         [TestMethod]
         [TestCategory("Edit")]
         public void SaveEditedPersonWithNameChange()
-        {
-            // Arrange 
-
-
-            // Act 
+        { 
             ActionResult ar1 = Controller1.PostEdit((Person)Person);
             ViewResult view1 = (ViewResult)Controller2.Index();
             List<Person> ListEntity = (List<Person>)view1.Model;
@@ -131,35 +127,21 @@ namespace  LambAndLentil.Test.BaseControllerTests
         }
 
 
-        [TestMethod]
-        [TestCategory("DeleteConfirmed")]
-        public void ActuallyDeleteAPersonFromTheDatabase()
-        { 
-            Person.FirstName = "Test.ActuallyDeleteAPersonfromDB";
-            Person.LastName = "";
-            Repo.Save((Person)Person);
-             
-            Controller.DeleteConfirmed(Person.ID);
-            var deletedItem = (from m in Repo.GetAll()
-                               where m.Description == Person.Name
-                               select m).AsQueryable();
- 
-            Assert.AreEqual(0, deletedItem.Count());
-        }
+     
       
 
          
-        internal Person GetPerson(IRepository<Person> Repo, string description)
+        internal Person GetPerson(IRepository<Person> repo, string description)
         {
-            IGenericController<Person> Controller = new PersonsController(Repo);
+            IGenericController<Person> Controller = new PersonsController(repo);
             IPerson Person = new Person
             {
                 Description = description,
                 ID = int.MaxValue
             };
-            Controller.PostEdit((Person)Person);
+            controller.PostEdit((Person)Person);
 
-            Person = ((from m in Repo.GetAll()
+            Person = ((from m in repo.GetAll()
                               where m.Description == description
                               select m).AsQueryable()).FirstOrDefault();
             return ((Person)Person);

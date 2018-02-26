@@ -8,7 +8,7 @@ namespace  LambAndLentil.Test.BaseControllerTests
 
     [TestClass]
     [TestCategory("MenusController")]
-    public class MenusController_Test_Should : BaseControllerTest<Menu>
+    internal class MenusController_Test_Should : BaseControllerTest<Menu>
     { 
         
         internal static IMenu Menu { get; set; }
@@ -16,7 +16,7 @@ namespace  LambAndLentil.Test.BaseControllerTests
 
         public MenusController_Test_Should()
         {
-            Controller = new MenusController(Repo)
+            controller = new MenusController(repo)
             { 
                 PageSize = 3 
             };
@@ -30,7 +30,7 @@ namespace  LambAndLentil.Test.BaseControllerTests
             Diners=4,
             Ingredients=new List<Ingredient>(),
             Recipes= new List<Recipe>()};
-            Repo.Save((Menu)Menu);
+            repo.Save((Menu)Menu);
         }
     }
 }

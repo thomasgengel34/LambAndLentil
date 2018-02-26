@@ -11,13 +11,12 @@ namespace LambAndLentil.Domain.Entities
     {
         public ShoppingList() : base()
         {
-            List<Ingredient> Ingredients = new List<Ingredient>(); 
-                List<Recipe> Recipes = new List<Recipe>(); 
-                List<Menu> Menus = new List<Menu>();
-                List<Plan> Plans = new List<Plan>();
-                List<ShoppingList> ShoppingLists = new List<ShoppingList>(); 
-            ClassName =  "ShoppingList";
-            DisplayName =  "Shopping List";
+            Ingredients = new List<Ingredient>();
+            Recipes = new List<Recipe>();
+            Menus = new List<Menu>();
+            Plans = new List<Plan>();
+            ClassName = "ShoppingList";
+            DisplayName = "Shopping List";
         }
 
         public ShoppingList(DateTime creationDate) : base(creationDate)
@@ -33,9 +32,9 @@ namespace LambAndLentil.Domain.Entities
         public int ID { get; set; }
 
         public List<Ingredient> Ingredients { get; set; }
-        new List<Recipe> Recipes { get; set; }
-        new List<Menu> Menus { get; set; }
-        new List<Plan> Plans { get; set; }
+        public List<Recipe> Recipes { get; set; }
+        public List<Menu> Menus { get; set; }
+        public List<Plan> Plans { get; set; }
         public List<ShoppingList> ShoppingLists { get; set; } = null;
 
         bool IEntity.CanHaveChild(IEntity child)

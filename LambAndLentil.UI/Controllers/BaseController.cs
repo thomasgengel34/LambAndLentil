@@ -26,7 +26,7 @@ namespace LambAndLentil.UI.Controllers
 
 
         //  TODO: filter   
-        public ActionResult BaseIndex(int? page = 1)
+        public ActionResult  Index(int? page = 1)
         { 
             int pageInt = page ?? 1;
             ListEntity<T> model = new ListEntity<T>
@@ -39,7 +39,7 @@ namespace LambAndLentil.UI.Controllers
 
 
 
-        public ActionResult BaseDetails(int id)
+        public ActionResult  Details(int id)
         {
             T item = Repo.GetById(id);
             if (item == null)
@@ -86,7 +86,7 @@ namespace LambAndLentil.UI.Controllers
 
 
 
-        public ActionResult BasePostEdit(T entity)
+        public ActionResult PostEdit(T entity)
         {
             T item = entity;
             bool isValid = IsModelValid(entity);
@@ -103,7 +103,7 @@ namespace LambAndLentil.UI.Controllers
 
         private ActionResult HandleSavedOrModified(T entity) => RedirectToAction(UIViewType.Index.ToString()).WithSuccess(string.Format($"{entity.Name} has been saved or modified"));
 
-        public ActionResult BaseDelete(int id = 1)
+        public ActionResult Delete(int id = 1)
         {
             T item = Repo.GetById(id);
             if (item == null)
@@ -116,7 +116,7 @@ namespace LambAndLentil.UI.Controllers
             }
         }
 
-        public ActionResult BaseDeleteConfirmed(int id = 1)
+        public ActionResult DeleteConfirmed(int id = 1)
         {
             T item = Repo.GetById(id);
             if (item == null)

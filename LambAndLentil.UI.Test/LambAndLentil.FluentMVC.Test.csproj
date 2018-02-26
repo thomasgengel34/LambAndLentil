@@ -78,14 +78,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseFluentMVCTest.cs" />
-    <Compile Include="PersonsControllerShould .cs" />
-    <Compile Include="RecipesControllerShould.cs" />
-    <Compile Include="ShoppingListsControllerShould.cs" />
-    <Compile Include="PlansControllerShould.cs" />
-    <Compile Include="MenusControllerShould.cs" />
-    <Compile Include="IngredientsControllerShould.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="HomeControllerShould.cs" />
+    <Compile Include="BaseFluentMVCTest_Runner.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -95,6 +90,10 @@
     <ProjectReference Include="..\LambAndLentil.Domain\LambAndLentil.Domain.csproj">
       <Project>{011B34BE-4A36-4772-B2AF-DC1600948477}</Project>
       <Name>LambAndLentil.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LambAndLentil.Test\LambAndLentil.Test.csproj">
+      <Project>{a3348c9c-2cf1-438f-a378-0629fb23521a}</Project>
+      <Name>LambAndLentil.Test</Name>
     </ProjectReference>
     <ProjectReference Include="..\LambAndLentil.UI\LambAndLentil.UI.csproj">
       <Project>{19290d3b-eb39-4496-a03d-48cd2efd56aa}</Project>

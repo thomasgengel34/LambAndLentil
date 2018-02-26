@@ -13,35 +13,47 @@ namespace LambAndLentil.Test.BaseControllerTests
     internal class BaseControllerDetailsShould<T> : BaseControllerTest<T>
          where T : BaseEntity, IEntity, new()
     {
-        internal static void ReturnDeleteConfirmedWithActionMethodDeleteConfirmedWithFoundResult()
+
+        internal static void TestRunner()  
         {
-            ClassCleanup();
-            IRepository<T> repo = new TestRepository<T>();
-            IGenericController<T> controller = BaseControllerTestFactory(typeof(T));
-           
-            T item = new T() { ID = 1000000 };
-            repo.Save(item);
-            int count = repo.Count();
-
-            ActionResult ar = controller.DeleteConfirmed(item.ID);
-            T returnedItem = repo.GetById(item.ID);
-
-            Assert.AreEqual(count - 1, repo.Count());
-            Assert.IsNull(returnedItem);
-            // TODO: flesh out rest of test
-
+            ReturnDeleteConfirmedWithActionMethodDeleteConfirmedWithFoundResult();
+            BeSuccessfulWithValidIngredientID();
         }
 
-
-        internal static void BeSuccessfulWithValidIngredientID()
+        private static void ReturnDeleteConfirmedWithActionMethodDeleteConfirmedWithFoundResult()
         {
             ClassCleanup();
             IRepository<T> repo = new TestRepository<T>();
             IGenericController<T> controller = BaseControllerTestFactory(typeof(T));
-            T sut = new T { ID = 60000 }; // sut = system.under.test 
+
+            T item = new T() { ID = 1000000, Name = "This is a test" };
+            repo.Save(item);
+            int beginningCount = repo.Count();
+
+            ActionResult ar = controller.DeleteConfirmed(item.ID);
+            AlertDecoratorResult adr = (AlertDecoratorResult)ar;
+            RedirectToRouteResult rdr = (RedirectToRouteResult)adr.InnerResult;
+
+            T returnedItem = repo.GetById(item.ID);
+
+            Assert.AreEqual(1, rdr.RouteValues.Count);
+            Assert.IsNull(returnedItem);
+            Assert.AreEqual(beginningCount - 1, repo.Count());
+            Assert.AreEqual($"{item.Name} has been deleted", adr.Message); 
+            Assert.AreEqual(UIViewType.Index.ToString(), rdr.RouteValues.ElementAt(0).Value.ToString()); 
+            Assert.AreEqual("alert-success", adr.AlertClass);
+        }  // RedirectToAction(UIViewType.Index.ToString()).WithSuccess(string.Format($"{item.Name} has been deleted"));
+
+
+        private static void BeSuccessfulWithValidIngredientID()
+        {
+            ClassCleanup();
+            IRepository<T> repo = new TestRepository<T>();
+            IGenericController<T> controller = BaseControllerTestFactory(typeof(T));
+            T sut = new T { ID = 1000001 }; // sut = system.under.test 
             repo.Save(sut);
 
-          
+
             ActionResult ar = controller.Details(sut.ID);
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
 

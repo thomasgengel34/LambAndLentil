@@ -7,106 +7,106 @@ namespace LambAndLentil.Test.Controllers
 {
     [Ignore]
     [TestClass]
-    public class IngredientsControllerTest_FilterShould
+    internal class IngredientsControllerTest_FilterShould
     {
 
         [TestMethod]
-        public void FindIngredientsContainingOnionInASet()
+        private static void FindIngredientsContainingOnionInASet()
         { 
             Assert.Fail();
         }
 
         [TestMethod]
-        public void FindIngredientsNotContainingOnionInASet()
+        private static void FindIngredientsNotContainingOnionInASet()
         { 
             Assert.Fail();
         }
 
         [TestMethod]
-        public void FindIngredientsAddedBeforeACertainDate()
+        private static void FindIngredientsAddedBeforeACertainDate()
         { 
             Assert.Fail();
         }
 
         [TestMethod]
-        public void FindIngredientsAddedOnACertainDate()
+        private static void FindIngredientsAddedOnACertainDate()
         { 
             Assert.Fail();
         }
 
         [TestMethod]
-        public void FindIngredientsAddedAfterACertainDate()
+        private static void FindIngredientsAddedAfterACertainDate()
         { 
             Assert.Fail();
         }
 
         [TestMethod]
-        public void FindIngredientsAddedInADateRange()
+        private static void FindIngredientsAddedInADateRange()
         { 
             Assert.Fail();
         }
 
         [TestMethod]
-        public void FindIngredientsAddedOutsideADateRange()
+        private static void FindIngredientsAddedOutsideADateRange()
         { 
             Assert.Fail();
         }
 
         [TestMethod]
-        public void FindIngredientsAddedByOneUser()
+        private static void FindIngredientsAddedByOneUser()
         { 
             Assert.Fail();
         }
 
         [TestMethod]
-        public void FindIngredientsNotAddedByOneUser()
+        private static void FindIngredientsNotAddedByOneUser()
         { 
             Assert.Fail();
         }
 
         [TestMethod]
-        public void FindIngredientsAddedByASetOfUsers()
+        private static void FindIngredientsAddedByASetOfUsers()
         { 
             Assert.Fail();
         }
 
         [TestMethod]
-        public void FindIngredientsNotAddedByASetOfUsers()
+        private static void FindIngredientsNotAddedByASetOfUsers()
         { 
             Assert.Fail();
         }
 
         [TestMethod]
-        public void FindIngredientsAddedByAUserContainingOnion()
+        private static void FindIngredientsAddedByAUserContainingOnion()
         { 
             Assert.Fail();
         }
 
         [TestMethod]
-        public void FindIngredientsAddedByAUserContainingNotOnion()
+        private static void FindIngredientsAddedByAUserContainingNotOnion()
         { 
             Assert.Fail();
         }
 
         [TestMethod]
-        public void FindIngredientsNotAddedByAUserContainingOnion()
+        private static void FindIngredientsNotAddedByAUserContainingOnion()
         { 
             Assert.Fail();
         }
 
         [TestMethod]
-        public void FindIngredientsNotAddedByAUserNotContainingOnion()
+        private static void FindIngredientsNotAddedByAUserNotContainingOnion()
         { 
             Assert.Fail();
         }
 
-        public void FindIngredientsNotAddedByAUserNotContainingOnionAddedByACertainDate()
+        private static  void FindIngredientsNotAddedByAUserNotContainingOnionAddedByACertainDate()
         { 
             Assert.Fail();
         }
 
         [ClassCleanup()]
-        public static void ClassCleanup()
+        private static  void ClassCleanup()
         {
             string path = @"C:\Dev\TGE\LambAndLentil\LambAndLentil.Test\App_Data\JSON\Ingredient\";
 

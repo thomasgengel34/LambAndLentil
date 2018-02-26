@@ -14,12 +14,12 @@ namespace  LambAndLentil.Test.BaseControllerTests
     [TestCategory("PersonsController")]
     [TestCategory("Edit")]
     [TestClass]
-    public class PersonsController_Edit_Should : PersonsController_Test_Should
+    internal class PersonsController_Edit_Should : PersonsController_Test_Should
     {
         public PersonsController_Edit_Should()
         {
             Person Person = new Person();
-            Repo.Save(Person);
+            repo.Save(Person);
         }
 
         [Ignore]
@@ -33,11 +33,11 @@ namespace  LambAndLentil.Test.BaseControllerTests
         [TestCategory("Edit")]
         public void SaveEditedPersonWithDescriptionChange()
         { 
-            IGenericController<Person> Controller1 = (IGenericController<Person>)(new PersonsController(Repo));
-            IGenericController<Person> Controller2 = (IGenericController<Person>)(new PersonsController(Repo));
-            IGenericController<Person> Controller3 = (IGenericController<Person>)(new PersonsController(Repo));
-            IGenericController<Person> Controller4 = (IGenericController<Person>)(new PersonsController(Repo));
-            IGenericController<Person> Controller5 = (IGenericController<Person>)(new PersonsController(Repo));
+            IGenericController<Person> Controller1 = (IGenericController<Person>)(new PersonsController(repo));
+            IGenericController<Person> Controller2 = (IGenericController<Person>)(new PersonsController(repo));
+            IGenericController<Person> Controller3 = (IGenericController<Person>)(new PersonsController(repo));
+            IGenericController<Person> Controller4 = (IGenericController<Person>)(new PersonsController(repo));
+            IGenericController<Person> Controller5 = (IGenericController<Person>)(new PersonsController(repo));
             IPerson person = new Person
             {
                 FirstName = "0000 test",
@@ -76,39 +76,21 @@ namespace  LambAndLentil.Test.BaseControllerTests
             Assert.AreEqual("SaveEditedPersonWithDescriptionChange Post-test", recipe2.Description);
         }
 
-        [TestMethod]
-        [TestCategory("Edit")]
-        public void SaveTheCreationDateOnPersonCreationWithNoParameterCtor()
-        {
-            // Arrange
-            DateTime CreationDate = DateTime.Now;
-
-            // Act
-            Person recipe = new Person();
-
-            // Assert
-            Assert.AreEqual(CreationDate.Date, recipe.CreationDate.Date);
-        }
+       
 
 
         [TestMethod]
         [TestCategory("Edit")]
         public void SaveTheCreationDateOnPersonCreationWithDateTimeParameter()
-        {
-            // Arrange
+        { 
             DateTime CreationDate = new DateTime(2010, 1, 1);
-
-            // Act
+ 
             Person recipe = new Person(CreationDate);
-
-            // Assert
+ 
             Assert.AreEqual(CreationDate, recipe.CreationDate);
         }
 
-         
-
-         
-
+          
 
         [Ignore]   // brought in Ingredient edit methods instead of using this
         [TestMethod]
@@ -116,11 +98,11 @@ namespace  LambAndLentil.Test.BaseControllerTests
         public void EditPerson()
         {
             // Arrange
-            IGenericController<Person> Controller2 = (IGenericController<Person>)(new PersonsController(Repo));
+            IGenericController<Person> Controller2 = (IGenericController<Person>)(new PersonsController(repo));
             Person pVM = new Person("Kermit", "Frog") { ID = 1492, Description = "test CanEditPerson" };
 
             // Act  
-            ViewResult view1 = (ViewResult)Controller.Edit(1492);
+            ViewResult view1 = (ViewResult)controller.Edit(1492);
             Person p1 = (Person)view1.Model;
             ViewResult view2 = (ViewResult)Controller2.Edit(2);
             Person p2 = (Person)view2.Model;
@@ -139,13 +121,10 @@ namespace  LambAndLentil.Test.BaseControllerTests
         [TestMethod]
         [TestCategory("Edit")]
         public void SaveEditedPerson()
-        {
-            // Arrange 
-            IGenericController<Person> Controller2 = (IGenericController<Person>)(new PersonsController(Repo));
-            IGenericController<Person> Controller3 = (IGenericController<Person>)(new PersonsController(Repo));
-
-
-            // Act  
+        { 
+            IGenericController<Person> Controller2 = new PersonsController(repo);
+            IGenericController<Person> Controller3 = new PersonsController(repo);
+             
             Person.FirstName = "SaveEditedPersonTest";
             Person.LastName = "";
             ActionResult ar2 = Controller2.PostEdit((Person)Person);
@@ -154,12 +133,9 @@ namespace  LambAndLentil.Test.BaseControllerTests
             Person person3 = (from m in ListEntity2.ListT
                               where m.ID == Person.ID
                               select m).AsQueryable().FirstOrDefault();
-
-            // Assert
+             
             Assert.AreEqual("SaveEditedPersonTest ", person3.Name);
         }
-         
-         
-
+          
     }
 }

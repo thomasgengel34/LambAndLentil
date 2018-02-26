@@ -12,7 +12,7 @@ namespace  LambAndLentil.Test.BaseControllerTests
 {
     [TestClass]
     [TestCategory("RecipesController")]
-    public class RecipesController_Test_Should : BaseControllerTest<Recipe>
+    internal class RecipesController_Test_Should : BaseControllerTest<Recipe>
     {
          
         protected static Recipe Recipe { get; set; }
@@ -22,7 +22,7 @@ namespace  LambAndLentil.Test.BaseControllerTests
         {
 
             ListEntity = new ListEntity<Recipe>();
-            Controller = new RecipesController(Repo)
+            controller = new RecipesController(repo)
             {
                 PageSize = 3
             };
@@ -42,7 +42,7 @@ namespace  LambAndLentil.Test.BaseControllerTests
                     new Ingredient{ID=4002, Name="Pepper"}
                 }
             };
-            Repo.Save(Recipe);
+            repo.Save(Recipe);
         } 
     }
 }

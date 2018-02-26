@@ -11,15 +11,11 @@ namespace  LambAndLentil.Test.BaseControllerTests
     [TestCategory("ShoppingListsController")]
     [TestCategory("Details")]
     public class ShoppingListsController_Detail_Should:ShoppingListsController_Test_Should
-    { 
-       
-         
-         
-
+    {  
         [TestMethod]
         public void BeSuccessfulWithValidIngredientID()
         {  
-            ActionResult ar = Controller.Details(int.MaxValue);
+            ActionResult ar = controller.Details(int.MaxValue);
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             ViewResult view = (ViewResult)adr.InnerResult;
 
@@ -35,18 +31,12 @@ namespace  LambAndLentil.Test.BaseControllerTests
         [TestMethod]
         [TestCategory("Details")]
         public void ReturnErrorIfResultIsNotFound_IngredientIDIsZeroMessageIsCorrect()
-        {
-            // Arrange
-
-
-            // Act
-            ActionResult ar = Controller.Details(0);
+        { 
+            ActionResult ar = controller.Details(0);
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
 
             // Assert 
             Assert.AreEqual("No Shopping List was found with that id.", adr.Message);
-        }
-  
-         
+        } 
     }
 }

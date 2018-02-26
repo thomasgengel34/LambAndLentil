@@ -11,12 +11,12 @@ namespace LambAndLentil.Test.JSONTests
 {
 
     [TestClass]
-    public class JSONRepositoryShould
+    public class JSONrepositoryShould
     {
         public static MapperConfiguration AutoMapperConfig { get; set; }
        // static string path = @"../../../\LambAndLentil.Test\App_Data\JSON\TestReturnCountOfThreeForDirectoryWithThreeFiles\";
          
-        public JSONRepositoryShould()
+        public JSONrepositoryShould()
         {
         //    AutoMapperConfigForTests.InitializeMap();
         }
@@ -25,8 +25,8 @@ namespace LambAndLentil.Test.JSONTests
         public void SaveOneIngredient()
         {
             
-            IRepository< Ingredient> Repo = new TestRepository< Ingredient>();
-            //IngredientsController<Ingredient,Ingredient> Controller = new IngredientsController<Ingredient,Ingredient>(Repo);
+            IRepository< Ingredient> repo = new TestRepository< Ingredient>();
+            //IngredientsController<Ingredient,Ingredient> Controller = new IngredientsController<Ingredient,Ingredient>(repo);
             Ingredient ingredient = new Ingredient
             {
                 ID = int.MaxValue,
@@ -34,9 +34,9 @@ namespace LambAndLentil.Test.JSONTests
             };
 
             
-            Repo.Save(ingredient);
+            repo.Save(ingredient);
 
-            Ingredient returnedIngredient = Repo.GetById(ingredient.ID);
+            Ingredient returnedIngredient = repo.GetById(ingredient.ID);
 
           
             Assert.AreEqual(ingredient.ID, returnedIngredient.ID);
@@ -60,7 +60,7 @@ namespace LambAndLentil.Test.JSONTests
         public void SaveOneMenu()
         {
             
-            IRepository<Menu> Repo = new TestRepository<Menu>();
+            IRepository<Menu> repo = new TestRepository<Menu>();
             Menu menu = new Menu
             {
                 ID = 1405,
@@ -71,7 +71,7 @@ namespace LambAndLentil.Test.JSONTests
             string file = "";
             
 
-            Repo.Save(menu);
+            repo.Save(menu);
             file = @"../../../\LambAndLentil.Test\App_Data\JSON\Menu\" + menu.ID + ".txt";
             StreamReader sr = new StreamReader(file);
             string theFile = "";
@@ -82,7 +82,7 @@ namespace LambAndLentil.Test.JSONTests
             }
             sr.Close();
 
-            Menu returnedMenu = Repo.GetById(menu.ID);
+            Menu returnedMenu = repo.GetById(menu.ID);
 
           
             Assert.IsNotNull(returnedMenu);
@@ -94,7 +94,7 @@ namespace LambAndLentil.Test.JSONTests
         public void SaveOneShoppingList()
         {
             
-            IRepository<ShoppingList> Repo = new TestRepository<ShoppingList>();
+            IRepository<ShoppingList> repo = new TestRepository<ShoppingList>();
             ShoppingList plan = new ShoppingList
             {
                 ID = 1405,
@@ -105,7 +105,7 @@ namespace LambAndLentil.Test.JSONTests
             string file = "";
             
 
-            Repo.Save(plan);
+            repo.Save(plan);
             file = @"../../../\LambAndLentil.Test\App_Data\JSON\ShoppingList\" + plan.ID + ".txt";
             StreamReader sr = new StreamReader(file);
             string theFile = "";
@@ -115,7 +115,7 @@ namespace LambAndLentil.Test.JSONTests
                 theFile += input;
             }
             sr.Close();
-            ShoppingList returnedShoppingList = Repo.GetById(plan.ID);
+            ShoppingList returnedShoppingList = repo.GetById(plan.ID);
 
           
             Assert.IsNotNull(returnedShoppingList);
@@ -127,7 +127,7 @@ namespace LambAndLentil.Test.JSONTests
         public void SaveOnePerson()
         {
             
-            IRepository<Person> Repo = new TestRepository<Person>();
+            IRepository<Person> repo = new TestRepository<Person>();
             Person person = new Person
             {
                 ID = 1405,
@@ -139,7 +139,7 @@ namespace LambAndLentil.Test.JSONTests
             string file = "";
             
 
-            Repo.Save(person);
+            repo.Save(person);
             file = @"../../../\LambAndLentil.Test\App_Data\JSON\Person\" + person.ID + ".txt";
             StreamReader sr = new StreamReader(file);
             string theFile = "";
@@ -150,7 +150,7 @@ namespace LambAndLentil.Test.JSONTests
             }
             sr.Close();
 
-            Person returnedPerson = Repo.GetById(person.ID);
+            Person returnedPerson = repo.GetById(person.ID);
 
           
             Assert.IsNotNull(returnedPerson);
@@ -161,7 +161,7 @@ namespace LambAndLentil.Test.JSONTests
         public void ReturnZeroCountForEmptyDirectory()
         {
             
-            IRepository<TestReturnZeroCountForEmptyDirectoryVM> Repo = new TestRepository<TestReturnZeroCountForEmptyDirectoryVM>();
+            IRepository<TestReturnZeroCountForEmptyDirectoryVM> repo = new TestRepository<TestReturnZeroCountForEmptyDirectoryVM>();
            string path = @"../../../\LambAndLentil.Test\App_Data\JSON\TestReturnZeroCountForEmptyDirectory\";
          
             try
@@ -169,7 +169,7 @@ namespace LambAndLentil.Test.JSONTests
                 Directory.CreateDirectory(path);
 
                 
-                int count = Repo.Count();
+                int count = repo.Count();
 
               
                 Assert.AreEqual(0, count);

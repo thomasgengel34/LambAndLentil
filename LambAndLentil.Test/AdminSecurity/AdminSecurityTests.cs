@@ -8,165 +8,80 @@ namespace LambAndLentil.Test.AdminSecurity
 {
     [Ignore]
     [TestClass]
-    public class AdminSecurityTests
+   internal   class AdminSecurityTests
     {
         static AccountController Controller;
 
-        public AdminSecurityTests() => Controller = new AccountController();
+         AdminSecurityTests() => Controller = new AccountController();
 
 
         [TestMethod]
-        public void CanLogInWithValidCredentials()
-        {
-            // Arrange
-
-
-
-            // Act
+        private static void CanLogInWithValidCredentials()
+        { 
             ActionResult ar = Controller.Login("user");
-
-            // Assert
+             
             Assert.Fail();   // need to finish writing this
 
         }
 
         [TestMethod]
-        public void CannotLogInWithInvalidCredentials()
-        {
-            // Arrange
-          
-
-
-            // Act
-
-
-            // Assert   
+        private static void CannotLogInWithInvalidCredentials()
+        { 
             Assert.Fail();   // need to finish writing this
         }
 
         [TestMethod]
-        public void AuthorizedUserCanSeeUnRestrictedPage()
-        {
-            // Arrange
-
-
-
-            // Act
-
-
-            // Assert   
+        private static void AuthorizedUserCanSeeUnRestrictedPage()
+        { 
             Assert.Fail();   // need to finish writing this
         }
 
         [TestMethod]
-        public void AuthorizedUserCanSeeRestrictedPage()
+        private static void AuthorizedUserCanSeeRestrictedPage()
         {
-            // Arrange
-
-
-
-            // Act
-
-
-            // Assert   
+             
             Assert.Fail();   // need to finish writing this
         }
 
         [TestMethod]
-        public void UnAuthorizedUserCannotSeeRestrictedPage()
-        {
-            // Arrange
-
-
-
-            // Act
-
-
-            // Assert   
+        private static void UnAuthorizedUserCannotSeeRestrictedPage()
+        { 
             Assert.Fail();   // need to finish writing this
         }
 
         [TestMethod]
-        public void UnAuthorizedUserCanSeeUnRestrictedPage()
-        {
-            // Arrange
-
-
-
-            // Act
-
-
-            // Assert   
+        private static void UnAuthorizedUserCanSeeUnRestrictedPage()
+        { 
             Assert.Fail();   // need to finish writing this
         }
 
         [TestMethod]
-        public void AnonymousUserCanSeeUnRestrictedPage()
-        {
-            // Arrange
-
-
-
-            // Act
-
-
-            // Assert   
+        private static void AnonymousUserCanSeeUnRestrictedPage()
+        { 
             Assert.Fail();   // need to finish writing this
         }
 
         [TestMethod]
-        public void AnonymousUserCannotSeenRestrictedPage()
-        {
-            // Arrange
-
-
-
-            // Act
-
-
-            // Assert   
+        private static void AnonymousUserCannotSeenRestrictedPage()
+        { 
             Assert.Fail();   // need to finish writing this
         }
 
         [TestMethod]
-        public void AnonymousUserCannotSeenAdminPage()
-        {
-            // Arrange
-
-
-
-            // Act
-
-
-            // Assert   
+        private static void AnonymousUserCannotSeenAdminPage()
+        { 
             Assert.Fail();   // need to finish writing this
         }
 
         [TestMethod]
-        public void UnauthorizedUserCannotSeenAdminPage()
-        {
-            // Arrange
-
-
-
-            // Act
-
-
-            // Assert   
+        private static void UnauthorizedUserCannotSeenAdminPage()
+        { 
             Assert.Fail();   // need to finish writing this
         }
 
         [TestMethod]
-        public void AdminCanSeeAdminPage()
-        {
-            // Arrange
-
-
-
-            // Act
-
-
-            // Assert   
+        private static void AdminCanSeeAdminPage()
+        { 
             Assert.Fail();   // need to finish writing this
         }
     }

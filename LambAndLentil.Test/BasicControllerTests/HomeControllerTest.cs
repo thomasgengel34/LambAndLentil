@@ -8,65 +8,51 @@ using LambAndLentil;
 using LambAndLentil.UI.Controllers;
 
 namespace LambAndLentil.Tests.Controllers
-{
-     
-
+{ 
     [TestClass]
     [TestCategory("HomeController")]
-    public class HomeControllerTest
+   internal class HomeControllerTest
     {
 
         [TestMethod]
-        public void InheritsFromBaseController()
-        {
-            // Arrange
+        private static void InheritsFromBaseController()
+        { 
             HomeController testHomeController = new HomeController();
-
-            // Act 
+             
             Type baseType = typeof(IController);
             bool isBase = baseType.IsInstanceOfType(testHomeController);
-
-            // Assert 
+             
             Assert.AreEqual(isBase, true);
         }
 
         [TestMethod]
-        public void  IsPublic()
-        {
-            // Arrange
-            HomeController testHomeController = new HomeController();
-
-            // Act
-            Type type = testHomeController.GetType();
+        private static void  IsPublic()
+        { 
+            HomeController controller = new HomeController();
+             
+            Type type =  controller.GetType();
             bool isPublic = type.IsPublic;
-
-            // Assert 
+ 
             Assert.AreEqual(isPublic, true);
         }
 
         [TestMethod]
-        public void  Index()
-        {
-            // Arrange
-            HomeController Controller = new HomeController();
-
-            // Act
-            ViewResult result = (ViewResult)Controller.Index();
-
-            // Assert
+        private static void  Index()
+        { 
+            HomeController controller = new HomeController();
+ 
+            ViewResult result = (ViewResult)controller.Index();
+             
             Assert.IsNotNull(result);
         }
 
         [TestMethod]
-        public void  About()
-        {
-            // Arrange
-            HomeController Controller = new HomeController();
-
-            // Act
-            ViewResult result = Controller.About() as ViewResult;
-
-            // Assert
+        private static void  About()
+        { 
+            HomeController controller = new HomeController();
+             
+            ViewResult result = controller.About() as ViewResult;
+ 
             Assert.IsNotNull(result); 
         }
     }
