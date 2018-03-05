@@ -10,20 +10,7 @@ namespace LambAndLentil.Test.BaseControllerTests
     [TestClass]
     internal class PersonsController_PostEdit_Should:PersonsController_Test_Should
     {
-        [Ignore]
-        [TestMethod]
-        public void ReturnIndexWithValidModelStateWithSuccessMessageWhenSaved()
-        { 
-            Assert.Fail();
-        }
-        [Ignore]
-        [TestMethod]
-        public void ReturnIndexWithInValidModelStateWithWarningMessageWhenSaved()
-        { 
-            Assert.Fail();
-        }
-
-      
+       
         [TestMethod] 
         public void CanEditPerson2()
         { 

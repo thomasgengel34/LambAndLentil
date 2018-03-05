@@ -13,14 +13,7 @@ namespace  LambAndLentil.Test.BaseControllerTests
     [TestCategory("Attach-Detach")]
     internal class PersonsController_AttachDetachRecipeChild : PersonsController_Test_Should
     {
-        
-        [Ignore]
-        [TestMethod]
-        public void SuccessfullyDetachFirstRecipeChild()
-        { 
-            Assert.Fail();
-        }
-
+         
        
         [TestMethod]
         public void SuccessfullyDetachASetOfRecipeChildren()

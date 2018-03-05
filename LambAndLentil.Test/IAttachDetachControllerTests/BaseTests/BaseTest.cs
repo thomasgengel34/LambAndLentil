@@ -15,7 +15,7 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
         where TParent : BaseEntity, IEntity, new()
         where TChild : BaseEntity, IEntity, new()
     {
-        internal static  IGenericController<TParent> controller;
+         protected internal static  IGenericController<TParent> controller;
        protected internal static IEntity Parent { get; set; }
         internal static IEntity Child { get; set; }
         internal static IRepository<TParent> ParentRepo = new TestRepository<TParent>();

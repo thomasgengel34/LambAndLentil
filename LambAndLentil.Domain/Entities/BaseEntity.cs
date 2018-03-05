@@ -11,10 +11,10 @@ namespace LambAndLentil.Domain.Entities
     {
         [StringLength(50)]
         [Required]
-        public string Name { get; set; }
-
+        public string Name { get; set; } 
         public string ClassName { get; set; }
         public string DisplayName { get; set; }
+
         [DataType(DataType.MultilineText)]
         public string Description { get; set; }
         public DateTime CreationDate { get; set; }
@@ -52,9 +52,7 @@ namespace LambAndLentil.Domain.Entities
 
         public List<T> GetIndexedModel<T>(IRepository<T> repository, int PageSize, int page = 1)
              where T : BaseEntity, IEntity
-        {
-
-
+        { 
             var result = repository.GetAll()
                       .OrderBy(p => p.Name)
                       .Skip((page - 1) * PageSize)

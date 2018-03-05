@@ -10,7 +10,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace LambAndLentil.Test.BaseControllerTests
 {
-    internal class BaseControllerDetailsShould<T> : BaseControllerTest<T>
+    internal class ControllerDetailsShould<T> : BaseControllerTest<T>
          where T : BaseEntity, IEntity, new()
     {
 
@@ -24,7 +24,7 @@ namespace LambAndLentil.Test.BaseControllerTests
         {
             ClassCleanup();
             IRepository<T> repo = new TestRepository<T>();
-            IGenericController<T> controller = BaseControllerTestFactory(typeof(T));
+            IGenericController<T> controller = BaseControllerTestFactory();
 
             T item = new T() { ID = 1000000, Name = "This is a test" };
             repo.Save(item);
@@ -49,7 +49,7 @@ namespace LambAndLentil.Test.BaseControllerTests
         {
             ClassCleanup();
             IRepository<T> repo = new TestRepository<T>();
-            IGenericController<T> controller = BaseControllerTestFactory(typeof(T));
+            IGenericController<T> controller = BaseControllerTestFactory();
             T sut = new T { ID = 1000001 }; // sut = system.under.test 
             repo.Save(sut);
 

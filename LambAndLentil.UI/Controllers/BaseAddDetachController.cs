@@ -14,7 +14,7 @@ namespace LambAndLentil.UI.Controllers
 
     {
         protected string EntityName { get; set; }
-
+        
         public BaseAttachDetachController(IRepository<T> repository) : base(repository)
         {
             Repo = repository;
@@ -78,7 +78,7 @@ namespace LambAndLentil.UI.Controllers
                 return HandleParentCannotAttachChild(parent);
             }
             parent = new ChildAttachment().AddChildToParent(parent, child);
-            Repo.Save((T)parent);
+            Repo.Save((T)parent, Repo.FullPath);
             string childEntity = child.GetType().ToString().Split('.').Last();
             return HandleSuccessfulAttachment(parent.ID, child);
         }
@@ -100,7 +100,7 @@ namespace LambAndLentil.UI.Controllers
             if (actionResult is EmptyResult)
             {
                 parent = new ChildDetachment().DetachAnIndependentChild(parent, child);
-                Repo.Save((T)parent);
+                Repo.Save((T)parent,Repo.FullPath);
                 string childEntity = child.GetType().ToString().Split('.').Last();
                 return HandleSuccessfulDetachment(parent, child);
             }
@@ -237,7 +237,7 @@ namespace LambAndLentil.UI.Controllers
             else
             {
                 parent = new ChildDetachment().DetachSelectionFromChildren(parent, selected);
-                Repo.Save((T)parent);
+                Repo.Save((T)parent, Repo.FullPath);
 
                 return HandleSuccessfulDetachment(parent, child);
             }
@@ -256,7 +256,7 @@ namespace LambAndLentil.UI.Controllers
             if (canHaveChild)
             {
                 parent = new ChildDetachment().DetachAllChildrenOfAType(parent, child);
-                Repo.Save((T)parent);
+                Repo.Save((T)parent, Repo.FullPath);
                 string childName = child.GetType().ToString().Split('.').Last();
                 return HandleAllChildrenSuccessfullyDetached(parent.ID, childName);
             }

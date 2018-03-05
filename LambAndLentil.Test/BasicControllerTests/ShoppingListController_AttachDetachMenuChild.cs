@@ -6,16 +6,7 @@ namespace LambAndLentil.Test.BaseControllerTests
     [TestCategory("Attach-Detach")]
    internal class ShoppingListController_AttachDetachChild : ShoppingListsController_Test_Should
     {
-
-        [Ignore]
-        [TestMethod]
-        public void SuccessfullyDetachFirstMenuChild()
-        {
-            //IGenericController<ShoppingList> DetachController = new ShoppingListsController(repo);
-            //BaseSuccessfullyDetachChild(repo, Controller, DetachController, UIControllerType.ShoppingLists, 0);
-        }
-
-
+         
         [TestMethod]
         public void SuccessfullyDetachASetOfMenuChildren()
         {

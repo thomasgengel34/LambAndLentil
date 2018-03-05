@@ -20,38 +20,54 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
          where TParent : BaseEntity, IEntity, new()
          where TChild : BaseEntity, IEntity, new()
     {
+        private static IRepository<TParent> repo;
+        private static TParent item;
 
-        IRepository<TParent> repo;
-        IGenericController<TParent> controller;
-        TParent item;
+        internal static void TestRunner()
+        {
+            AttachAnIngredientToAParent();
+            AttachAChildToAParent();
+        } 
+
+         private  static void AttachAnIngredientToAParent()
+        {
+            SetUpForTests(out repo, out controller, out item);  
+
+            IngredientType ingredient = new IngredientType { ID = 100};
+
+            ActionResult ar = controller.Attach(item, ingredient);
+            TParent returnedItem = repo.GetById(item.ID);
+
+            Assert.AreEqual(1, returnedItem.Ingredients.Count());
+            Assert.AreEqual(ingredient.ID, returnedItem.Ingredients.First().ID);
+
+        }
 
 
-        internal static void AttachAChildToAParent<Parent, Child>()
-            where Parent : BaseEntity, IEntity, new()
-        where Child : BaseEntity, IEntity, new()
+      private static void AttachAChildToAParent()  
         {
             SetUpForTests(out repo, out controller,out item );
-            Parent parent = new Parent() { ID = 3000, Description = "test Attach " };
-            IRepository<Parent> localRepo = new TestRepository<Parent>();
+            TParent parent = new TParent() { ID = 3000, Description = "test Attach " };
+            IRepository<TParent> localRepo = new TestRepository<TParent>();
             localRepo.Save(parent);
-            Child child = new Child { ID = 3300 };
+            TChild child = new TChild { ID = 3300 };
             AlertDecoratorResult adr = (AlertDecoratorResult)controller.Attach(parent, child);
-            Parent returnedParent = localRepo.GetById(parent.ID) as Parent;
+            TParent returnedParent = localRepo.GetById(parent.ID) as TParent;
             if (parent.CanHaveChild(child))
             {
-                if (typeof(Child) == typeof(IngredientType))
+                if (typeof(TChild) == typeof(IngredientType))
                 {
                     Assert.AreEqual(1, returnedParent.Ingredients.Count());
                 }
-                if (typeof(Child) == typeof(MenuType))
+                if (typeof(TChild) == typeof(MenuType))
                 {
                     Assert.AreEqual(1, returnedParent.Menus.Count());
                 }
-                if (typeof(Child) == typeof(PlanType))
+                if (typeof(TChild) == typeof(PlanType))
                 {
                     Assert.AreEqual(1, returnedParent.Plans.Count());
                 }
-                if (typeof(Child) == typeof(RecipeType))
+                if (typeof(TChild) == typeof(RecipeType))
                 {
                     Assert.AreEqual(1, returnedParent.Recipes.Count());
                 }
@@ -64,19 +80,19 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
                 var routeValues = rtrr.RouteValues.Values;
                 if (parent.CanHaveChild(child))
                 {
-                    if (typeof(Child) == typeof(IngredientType))
+                    if (typeof(TChild) == typeof(IngredientType))
                     {
                         Assert.AreEqual(0, returnedParent.Ingredients.Count());
                     }
-                    if (typeof(Child) == typeof(MenuType))
+                    if (typeof(TChild) == typeof(MenuType))
                     {
                         Assert.AreEqual(0, returnedParent.Menus.Count());
                     }
-                    if (typeof(Child) == typeof(PlanType))
+                    if (typeof(TChild) == typeof(PlanType))
                     {
                         Assert.AreEqual(0, returnedParent.Plans.Count());
                     }
-                    if (typeof(Child) == typeof(RecipeType))
+                    if (typeof(TChild) == typeof(RecipeType))
                     {
                         Assert.AreEqual(0, returnedParent.Recipes.Count());
                     }

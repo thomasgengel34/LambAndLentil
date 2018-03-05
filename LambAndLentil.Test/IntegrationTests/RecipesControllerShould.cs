@@ -41,47 +41,7 @@ namespace IntegrationTests
             Assert.AreEqual(1, routeValues.Count);
             Assert.AreEqual(UIViewType.Index.ToString(), routeValues.ElementAt(0).ToString());
         }
-
-        [TestMethod]
-        [TestCategory("Edit")]
-        public void SaveEditedRecipeWithNameChange()
-        {
-
-            IGenericController<Recipe> Controller2 = new RecipesController(repo);
-            IGenericController<Recipe> Controller3 = new RecipesController(repo);
-            IGenericController<Recipe> Controller4 = new RecipesController(repo);
-
-            Recipe vm = new Recipe
-            {
-                Name = "0000 test",
-                ID = 1000
-            };
-
-            // Act 
-            ActionResult ar1 = controller.PostEdit(vm);
-            ViewResult view1 = (ViewResult)Controller2.Index();
-            List<Recipe> ListEntity = (List<Recipe>)(((ListEntity<Recipe>)view1.Model).ListT);
-            Recipe Recipe = (from m in ListEntity
-                             where m.Name == "0000 test"
-                             select m).AsQueryable().FirstOrDefault();
-
-            // verify initial value:
-            Assert.AreEqual("0000 test", Recipe.Name);
-
-            // now edit it
-            vm.Name = "0000 test Edited";
-            vm.ID = Recipe.ID;
-            ActionResult ar2 = Controller3.PostEdit(vm);
-            ViewResult view2 = (ViewResult)Controller4.Index();
-            List<Recipe> ListEntity2 = (List<Recipe>)(((ListEntity<Recipe>)view2.Model).ListT);
-            Recipe Recipe2 = (from m in ListEntity2
-                              where m.Name == "0000 test Edited"
-                              select m).AsQueryable().First();
-
-            // Assert
-            Assert.AreEqual("0000 test Edited", Recipe2.Name);
-        }
-
+         
          
 
 

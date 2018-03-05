@@ -11,20 +11,20 @@ using System.Security.Principal;
 namespace LambAndLentil.Domain.Concrete
 {
     public class JSONRepository<T> : IRepository<T>
-        where T : BaseEntity, IEntity 
+         where T : BaseEntity, IEntity
     {
-        protected static string FullPath { get; set; }
-        private static string className;
+        private static string className = typeof(T).ToString().Split('.').Last().Split('+').Last();
+        public string FullPath { get; set; } = @" C:\Dev\TGE\LambAndLentil\LambAndLentil.Domain\App_Data\JSON\" + className + "\\";
+        //  internal static string FullPath { get; set; } = "foo";
 
         public JSONRepository()
         {
-            char[] charsToTrim = { 'V', 'M' };
-            className = typeof(T).ToString().Split('.').Last().Split('+').Last().TrimEnd(charsToTrim);
-            // className = Folder;
-
-            FullPath = @" C:\Dev\TGE\LambAndLentil\LambAndLentil.Domain\App_Data\JSON\" + className + "\\";
         }
 
+        public JSONRepository(string path)
+        {
+            FullPath = path;
+        }
 
         public IQueryable Ingredient { get; set; }
         public IQueryable Recipe { get; set; }
@@ -33,7 +33,7 @@ namespace LambAndLentil.Domain.Concrete
         public IQueryable Person { get; set; }
         public IQueryable ShoppingList { get; set; }
 
-        public void Save(T entity)
+        public void Save(T entity, string FullPath)
         {
             entity.ModifiedByUser = WindowsIdentity.GetCurrent().Name;
             using (StreamWriter file = File.CreateText(FullPath + entity.ID + ".txt"))
@@ -43,9 +43,16 @@ namespace LambAndLentil.Domain.Concrete
             }
         }
 
-         
-        public int Count()
+        public void Save(T entity)
         {
+            Save(entity, FullPath);
+        }
+
+        public int Count() => Count(FullPath);
+
+        public int Count(string fullPath)
+        {
+            FullPath = fullPath;
             int fileCount = (from file in Directory.EnumerateFiles(FullPath, "*.txt", SearchOption.AllDirectories)
                              select file).Count();
 
@@ -53,10 +60,16 @@ namespace LambAndLentil.Domain.Concrete
         }
 
 
-      
+
 
         public T GetById(int id)
         {
+            return GetById(id, FullPath);
+        }
+
+        public T GetById(int id, string fullPath)
+        {
+            FullPath = fullPath;  
             IEnumerable<string> availableFiles = Directory.EnumerateFiles(FullPath);
             string path = string.Concat(FullPath, id, ".txt");
             var result = from f in availableFiles
@@ -65,9 +78,9 @@ namespace LambAndLentil.Domain.Concrete
 
             if (result.Count() > 0)
             {
-                   // Menu entity = JsonConvert.DeserializeObject<Menu>(File.ReadAllText(@"C:\Dev\TGE\LambAndLentil\LambAndLentil.Test\App_Data\JSON\Menu\101.txt"));
-                 T entity = JsonConvert.DeserializeObject<T>(File.ReadAllText(path));
-                return  entity as T;
+                // Menu entity = JsonConvert.DeserializeObject<Menu>(File.ReadAllText(@"C:\Dev\TGE\LambAndLentil\LambAndLentil.Test\App_Data\JSON\Menu\101.txt"));
+                T entity = JsonConvert.DeserializeObject<T>(File.ReadAllText(path));
+                return entity as T;
             }
             else
             {
@@ -75,12 +88,35 @@ namespace LambAndLentil.Domain.Concrete
             }
         }
 
-        public IEnumerable<T> Query(Expression<Func<T, bool>> filter) => throw new NotImplementedException();
 
-        public void Remove(T t) => File.Delete(String.Concat(FullPath, t.ID, ".txt")); 
 
-        public void Update(T entity, int? key)
+
+
+
+        public IEnumerable<T> Query(Expression<Func<T, bool>> filter)
         {
+            return Query(filter, FullPath);
+        } 
+
+        public IEnumerable<T> Query(Expression<Func<T, bool>> filter, string fullPath) => throw new NotImplementedException();
+
+
+
+        public void Remove(T t) => Remove(t, FullPath);
+
+        public void Remove(T entity, string fullPath)
+        {
+            FullPath = fullPath;
+            File.Delete(String.Concat(FullPath, entity.ID, ".txt"));
+        }
+ 
+
+
+        public void Update(T entity, int? key) => Update(entity, key, FullPath);
+
+        public void Update(T entity, int? key, string fullPath)
+        {
+            FullPath = fullPath;
             T oldEntity = GetById(entity.ID);
             if (oldEntity != null)
             {
@@ -125,12 +161,16 @@ namespace LambAndLentil.Domain.Concrete
                     entity.Name = person.FullName;
                 }
             }
-            Save(entity);
+            Save(entity, FullPath);
         }
 
+       
+        public IEnumerable<T> GetAll() => GetAll(FullPath);
 
-        public IEnumerable<T> GetAll()
+        public IEnumerable<T> GetAll(string fullPath)
         {
+            FullPath = fullPath;
+
             var result = from file in Directory.EnumerateFiles(FullPath, "*.txt", SearchOption.AllDirectories)
                          select file;
             List<T> list = new List<T>();
@@ -142,5 +182,7 @@ namespace LambAndLentil.Domain.Concrete
             }
             return list;
         }
+
+
     }
 }

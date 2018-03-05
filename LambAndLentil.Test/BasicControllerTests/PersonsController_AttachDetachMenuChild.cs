@@ -12,15 +12,7 @@ namespace  LambAndLentil.Test.BaseControllerTests
     [TestCategory("Attach-Detach")]
    internal class PersonsController_AttachDetachMenuChild : PersonsController_Test_Should
     {
-         
-
-        [Ignore]
-        [TestMethod]
-        public void SuccessfullyDetachFirstMenuChild()
-        {
-            //IGenericController<Person> DetachController = (IGenericController<Person>)(new PersonsController(repo));
-            //BaseSuccessfullyDetachChild(repo, Controller, DetachController, UIControllerType.Persons, 0);
-        }
+          
 
         [TestMethod]
         public void SuccessfullyDetachASetOfMenuChildren()
@@ -42,12 +34,7 @@ namespace  LambAndLentil.Test.BaseControllerTests
 
      
 
-
-        [Ignore]
-        [TestMethod]
-        public void SuccessfullyDetachAllMenuChildren() =>
-            Assert.Fail();
-
+ 
         [Ignore]
         [TestMethod]
         public void ReturnsDetailWithWarningIfAttachingNullMenuChild() { }

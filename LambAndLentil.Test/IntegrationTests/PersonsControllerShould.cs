@@ -58,77 +58,7 @@ namespace  LambAndLentil.Test.BaseControllerTests
             Assert.AreEqual(1, routeValues.Count);
             Assert.AreEqual(UIViewType.Index.ToString(), routeValues.ElementAt(0).ToString());
         }
-
-        [Ignore]
-        [TestMethod]
-        [TestCategory("Edit")]
-        public void SaveEditedPersonWithNameChange()
-        { 
-            ActionResult ar1 = Controller1.PostEdit((Person)Person);
-            ViewResult view1 = (ViewResult)Controller2.Index();
-            List<Person> ListEntity = (List<Person>)view1.Model;
-            Person person = (from m in ListEntity
-                             where m.Name == "0000 test"
-                             select m).AsQueryable().FirstOrDefault();
-
-            // verify initial value:
-            Assert.AreEqual("0000 test", person.Name);
-
-
-            // now edit it
-            Person.LastName = "test Edited";
-            Person.ID = person.ID;
-            ActionResult ar2 = Controller3.PostEdit((Person)Person);
-            ViewResult view2 = (ViewResult)Controller4.Index();
-            List<Person> ListEntity2 = (List<Person>)view2.Model;
-            person = (from m in ListEntity2
-                      where m.Name == "0000 test Edited"
-                      select m).AsQueryable().FirstOrDefault();
-
-            // Assert
-            Assert.AreEqual("0000 test Edited", person.Name);
-        }
-
-        [Ignore]
-        [TestMethod]
-        [TestCategory("Edit")]
-        public void SaveEditedPersonWithDescriptionChange()
-        {
-            // Arrange  
-            Person.Description = "SaveEditedPersonWithDescriptionChange Pre-test";
-            Person.ID = 336;
-
-            // Act 
-            ActionResult ar1 = Controller1.PostEdit((Person)Person);
-            ViewResult view1 = (ViewResult)Controller2.Index();
-            List<Person> ListEntity = (List<Person>)view1.Model;
-            Person person = (from m in ListEntity
-                             where m.Description == "SaveEditedPersonWithDescriptionChange Pre-test"
-                             select m).AsQueryable().FirstOrDefault();
-
-            // verify initial value:
-            Assert.AreEqual("SaveEditedPersonWithDescriptionChange Pre-test", person.Description);
-
-            // now edit it
-            Person.ID = person.ID;
-            Person.Description = "SaveEditedPersonWithDescriptionChange Post-test";
-
-            ActionResult ar2 = Controller3.PostEdit((Person)Person);
-            ViewResult view2 = (ViewResult)Controller4.Index();
-            List<Person> ListEntity2 = (List<Person>)view2.Model;
-            person = (from m in ListEntity2
-                      where m.Description == "SaveEditedPersonWithDescriptionChange Post-test"
-                      select m).AsQueryable().FirstOrDefault();
-
-
-            // Assert
-            Assert.AreEqual("0000 test Edited", person.Name);
-            Assert.AreEqual("SaveEditedPersonWithDescriptionChange Post-test", person.Description);
-        }
-
-
-     
-      
+         
 
          
         internal Person GetPerson(IRepository<Person> repo, string description)

@@ -8,9 +8,9 @@ using WebGrease.Css.Extensions;
 
 namespace LambAndLentil.UI.Controllers
 {
-    public class NavController : Controller
+    public class NavController  : Controller
     {
-        private IRepository repository;
+        private IRepository  repository;
 
         public NavController()
         {
@@ -18,7 +18,7 @@ namespace LambAndLentil.UI.Controllers
         }
 
 
-        public NavController(IRepository repo)
+        public NavController(IRepository  repo)
         {
             repository = repo;
         }

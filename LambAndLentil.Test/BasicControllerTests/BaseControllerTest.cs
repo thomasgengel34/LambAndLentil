@@ -20,14 +20,13 @@ namespace LambAndLentil.Test.BaseControllerTests
         internal List<T> list;
         internal static string className;
          
-         
 
-         internal static void SetUpForTests(out IRepository<T> repo, out IGenericController<T> controller, out T item)
+        public static void SetUpForTests(out IRepository<T> repo, out IGenericController<T> controller, out T item)
         {
             repo = new TestRepository<T>();
-            controller = BaseControllerTestFactory(typeof(T));
+            controller = BaseControllerTestFactory();
             item = new T { ID = 1000, AddedByUser = "Not Changed", ModifiedByUser = "Original" };
-            repo.Save(item);
+            repo.Save(item, repo.FullPath);
         }
         [ClassInitialize]
         private void BaseControllerTestSetup()
@@ -37,9 +36,9 @@ namespace LambAndLentil.Test.BaseControllerTests
             controller.PageSize = 3; 
         }
 
+        internal static IGenericController<T> BaseControllerTestFactory()
+        { 
 
-   internal static IGenericController<T> BaseControllerTestFactory(Type T)
-        {
             if (typeof(T) == typeof(Ingredient))
             {
                 return (IGenericController<T>)(new IngredientsController(new TestRepository<Ingredient>()));
@@ -86,7 +85,7 @@ namespace LambAndLentil.Test.BaseControllerTests
 
             foreach (T item in list)
             {
-                repo.Save(item);
+                repo.Save(item, repo.FullPath);
             }
             return list;
         }

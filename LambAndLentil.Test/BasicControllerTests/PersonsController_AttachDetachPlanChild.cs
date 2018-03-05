@@ -12,13 +12,7 @@ namespace  LambAndLentil.Test.BaseControllerTests
     [TestCategory("Attach-Detach")]
     internal class PersonsController_AttachDetachPlanChild : PersonsController_Test_Should
     { 
-        [Ignore]
-        [TestMethod]
-        public void SuccessfullyDetachFirstPlanChild()
-        { 
-            Assert.Fail();
-        }
-
+       
 
         [TestMethod]
         public void SuccessfullyDetachASetOfMenuChildren()

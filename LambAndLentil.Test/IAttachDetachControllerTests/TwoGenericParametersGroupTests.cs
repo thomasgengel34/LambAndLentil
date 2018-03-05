@@ -126,23 +126,16 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests
             // TODO: convert methods to static and add to the list below
             BaseControllerShouldDetachXAndReturn<TParent, TChild> baseDetach = new BaseControllerShouldDetachXAndReturn<TParent, TChild>();
 
-            AttachAnXToAYEntity<TParent, TChild> attachAnXToAYEntity = new AttachAnXToAYEntity<TParent, TChild>();
 
-            TParent parent = new TParent();
-            TChild child = new TChild();
-            bool CanBeChild = parent.CanHaveChild(child);
-           
-                BaseControllerShouldAttachXAndReturn<TParent, TChild>.DetailWithErrorWhenParentIDIsValidAndChildIsNotValid();
-                BaseControllerShouldAttachXAndReturn<TParent, TChild>.DetailWithSuccessWhenParentIDIsValidAndChildIsValidWhenAttaching();
-                BaseControllerShouldAttachXAndReturn<TParent, TChild>.IndexWithErrorWhenParentIDIsNotForAnExistingIngredient();
-                BaseControllerShouldAttachXAndReturn<TParent, TChild>.IndexWithWarningWithNullParent();
-                BaseControllerShouldAttachXAndReturn<TParent, TChild>.DetailWithErrorWhenParentIDIsValidAndChildIsValidWhenAttachingUnattachableChild(); 
-             
-            AttachAnXToAYEntity<TParent, TChild>.AttachAChildToAParent<TParent, TChild>();
+            AttachAnXToAYEntity<TParent, TChild>.TestRunner();
+            BaseControllerShouldAttachXAndReturn<TParent, TChild>.TestRunner();
+
 
 
             // TODO: add more
 
         }
+
+
     }
 }

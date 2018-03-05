@@ -25,7 +25,7 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
         private static IRepository<TParent> repo;
         private TChild child;
         private string childName;
-        private TParent item;
+        private static TParent item;
 
         public BaseControllerShouldAttachXAndReturn()
         {
@@ -34,10 +34,21 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
             childName = typeof(TChild).ToString().Split('.').Last();
         }
 
+        internal static void TestRunner()
+        {
+            DetailWithErrorWhenParentIDIsValidAndChildIsNotValid();
+            DetailWithErrorWhenParentIDIsValidAndChildIsValidWhenAttachingUnattachableChild();
+            DetailWithSuccessWhenParentIDIsValidAndChildIsValidWhenAttaching();
+            IndexWithErrorWhenParentIDIsNotForAnExistingIngredient();
+            IndexWithWarningWithNullParent();
+
+        }
+
+
 
         internal static void IndexWithWarningWithNullParent()
         { // TODO: expand IngredientTypeTo Other Types
-            TParent tparent = new TParent(){ ID = 9001 };
+            TParent tparent = new TParent() { ID = 9001 };
             TChild tchild = new TChild() { ID = 9000 };
             ActionResult ar = controller.Attach(null, tchild);
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
@@ -128,11 +139,11 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
         }
 
 
-        internal static  void  EditViewWithSuccessMessageWhenDetachingExistingIngredientFromExistingRecipe()
+        internal static void EditViewWithSuccessMessageWhenDetachingExistingIngredientFromExistingRecipe()
         {
-            SetUpForTests(out   repo, out  controller, out   item);
+            SetUpForTests(out repo, out controller, out item);
             IngredientType ingredient = new IngredientType { ID = 700 };
-            
+
 
             AlertDecoratorResult adr = (AlertDecoratorResult)controller.Detach(item, ingredient);
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;

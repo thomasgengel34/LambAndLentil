@@ -337,7 +337,7 @@ controller.WithCallTo(c => c.Delete(item.ID)).ShouldRenderDefaultView();
         }
 
         [TestMethod]
-        public void MyTestMethod()
+        public void RenderDefaultView()
         {
             _controller.WithCallTo(c => c.Index())
                .ShouldRenderDefaultView();
@@ -352,21 +352,7 @@ controller.WithCallTo(c => c.Delete(item.ID)).ShouldRenderDefaultView();
             repository.Save(t2);
             ic.WithCallTo(c => c.Details(7000)).ShouldRenderDefaultView();
         }
-
-        internal static void BaseRenderDetailsDefaultView1()
-        {
-            IRepository<Ingredient> repository = new TestRepository<Ingredient>();
-            IngredientsController ic = new IngredientsController(repository);
-            Ingredient t2 = new Ingredient() { ID = 7000 };
-            repository.Save(t2);
-            ic.WithCallTo(c => c.Details(7000)).ShouldRenderDefaultView();
-        }
-
-        [TestMethod]
-        public void SuperTest()
-        {
-            BaseRenderDetailsDefaultView1();
-        }
+  
 
         internal static void BaseRenderDetailsDefaultView2<T>()
         {

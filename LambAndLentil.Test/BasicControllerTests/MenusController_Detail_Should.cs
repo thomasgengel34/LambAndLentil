@@ -13,10 +13,7 @@ namespace  LambAndLentil.Test.BaseControllerTests
     [TestCategory("Details")]
     internal class MenusController_Detail_Should:MenusController_Test_Should
     {   
-        private static void ReturnDetailsViewActionTypeEdit_ValidID()=> Assert.Fail(); 
-
-        
-        private static void ReturnDetailsViewActionTypeEdit_InValidID() =>  Assert.Fail(); 
+         
          
         private static void DetailsWorksWithValidRecipeID()
         { 

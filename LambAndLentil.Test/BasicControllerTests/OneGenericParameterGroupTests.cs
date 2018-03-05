@@ -1,7 +1,9 @@
-﻿using LambAndLentil.Domain.Abstract;
+﻿using System.Web.Mvc;
+using LambAndLentil.Domain.Abstract;
 using LambAndLentil.Domain.Concrete;
 using LambAndLentil.Domain.Entities;
 using LambAndLentil.Test.BaseControllerTests;
+using LambAndLentil.Test.BasicControllerTests;
 using LambAndLentil.Test.Entities;
 using LambAndLentil.UI.Controllers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -11,26 +13,29 @@ using PersonType = LambAndLentil.Domain.Entities.Person;
 using PlanType = LambAndLentil.Domain.Entities.Plan;
 using RecipeType = LambAndLentil.Domain.Entities.Recipe;
 using ShoppingListType = LambAndLentil.Domain.Entities.ShoppingList;
+using System.Linq;
 
 namespace LambAndLentil.Tests.Controllers
 {
     [TestClass]
     public class OneGenericParameterGroupTests
     {
+      
+
         [TestMethod]
         public void RunOneGenericParameterGroupTests()
         {
             TestsRunner<IngredientType>();
 
-            TestsRunner<RecipeType>();
+            //TestsRunner<RecipeType>();
 
-            TestsRunner<MenuType>();
+            //TestsRunner<MenuType>();
 
-            TestsRunner<PlanType>();
+            //TestsRunner<PlanType>();
 
-            TestsRunner<ShoppingListType>();
+            //TestsRunner<ShoppingListType>();
 
-            TestsRunner<PersonType>();
+            //TestsRunner<PersonType>();
         }
 
 
@@ -67,18 +72,24 @@ namespace LambAndLentil.Tests.Controllers
                 IGenericController<ShoppingListType> controller = new ShoppingListsController((IRepository<ShoppingListType>)(repo));
             }
 
-
-            BaseControllerDetailsShould<T>.TestRunner();
-            BaseController_Should<T>.TestRunner(); 
-            BasicDeleteConfirmed<T>.TestRunner();
-            BasicDetails<T>.TestRunner();
-            BasicIndex<T>.TestRunner();
-            BasicPostEdit<T>.TestRunner();
-            BaseTest<T>.TestRunner();
-            BaseControllerTests_Pagination<T>.TestRunner();
-            BaseControllerTest_BasicTests<T>.TestRunner();
+            ClassProperties<T>.TestRunner();
+            ControllerDetailsShould<T>.TestRunner();
+            Controller_Should<T>.TestRunner();
+            CreateActionMethod<T>.TestRunner();
+            DeleteConfirmed<T>.TestRunner();
+            Details<T>.TestRunner();
+            DetachTheFirstChild<T>.TestRunner();
+            DetachTheLastChild<T>.TestRunner();
+            Index<T>.TestRunner();
+            PostEdit<T>.TestRunner();
+            BeAbleToHaveChildTypeX<T>.TestRunner();
+            Pagination<T>.TestRunner();
+             BasicTests<T>.TestRunner();
             ClassPropertyChanges<T>.TestRunner();
-            DeleteReturnsIndexWithWarningWhen<T>.TestRunner(); 
+            ClassPropertyChanges_Menu<T>.TestRunner();
+            ClassPropertyChanges_Person<T>.TestRunner();
+            DeleteReturnsIndexWithWarningWhen<T>.TestRunner();
+            Flags<T>.TestRunner();
 
             // TODO: add more
 

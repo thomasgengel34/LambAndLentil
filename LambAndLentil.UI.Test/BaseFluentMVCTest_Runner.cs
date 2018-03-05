@@ -33,12 +33,8 @@ namespace LambAndLentil.FluentMVC.Test
 
         public static void TestsRunner<T>()
             where T : BaseEntity, IEntity, new()
-        {
-            IRepository<T> Repo = new TestRepository<T>();
-            IGenericController<T> controller = BaseControllerTest<T>.BaseControllerTestFactory(typeof(T));
-
-            BaseFluentMVCTest<T>.BaseRenderIndexDefaultView();
-
+        { 
+            BaseFluentMVCTest<T>.BaseRenderIndexDefaultView(); 
             BaseFluentMVCTest<T>.BaseRenderDetailsDefaultView();
             BaseFluentMVCTest<T>.BaseRendeDeleteDefaultView();
             BaseFluentMVCTest<T>.BaseRendeDeleteConfirmedDefaultView(); 
