@@ -12,7 +12,7 @@ using LambAndLentil.UI.Controllers;
 using LambAndLentil.UI.Infrastructure.Alerts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace LambAndLentil.Test.BaseControllerTests
+namespace LambAndLentil.Test.BasicTests
 {
     internal class DetachTheFirstChild<T> : BaseControllerTest<T>
         where T : BaseEntity, IEntity, new()

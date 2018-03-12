@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace  LambAndLentil.Test.BaseControllerTests
+namespace  LambAndLentil.Test.BasicTests
 {
     public class NonFoodItemsCan
     {

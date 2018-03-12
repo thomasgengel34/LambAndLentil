@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web.Mvc;
 using LambAndLentil.BusinessObjects;
 using LambAndLentil.Domain.Entities;
-using LambAndLentil.Test.BaseControllerTests;
+using LambAndLentil.Test.BasicTests;
 using LambAndLentil.UI;
 using LambAndLentil.UI.Controllers;
 using LambAndLentil.UI.Infrastructure.Alerts;
@@ -14,25 +14,25 @@ using MenuType = LambAndLentil.Domain.Entities.Menu;
 using PersonType = LambAndLentil.Domain.Entities.Person;
 using PlanType = LambAndLentil.Domain.Entities.Plan;
 using RecipeType = LambAndLentil.Domain.Entities.Recipe;
-using ShoppingListType = LambAndLentil.Domain.Entities.ShoppingList; 
+using ShoppingListType = LambAndLentil.Domain.Entities.ShoppingList;
 
 namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
 {
-   public class BaseControllerShouldDetachXAndReturn<TParent, TChild> : BaseTest<TParent, TChild>
-        where TParent : BaseEntity, IEntity, new()
-        where TChild : BaseEntity, IEntity, new()
-    { 
-       internal TParent parent;
-       internal TChild child;
-       internal TChild child1 { get; set; }
+    public class BaseControllerShouldDetachXAndReturn<TParent, TChild> : BaseTest<TParent, TChild>
+         where TParent : BaseEntity, IEntity, new()
+         where TChild : BaseEntity, IEntity, new()
+    {
+        internal TParent parent;
+        internal TChild child;
+        internal TChild child1 { get; set; }
 
-       internal TChild child2 = new TChild();
-       internal TChild child3 = new TChild();
-       internal TChild child4 = new TChild();
+        internal TChild child2 = new TChild();
+        internal TChild child3 = new TChild();
+        internal TChild child4 = new TChild();
 
-
+        private static TParent item;
         private string parentName = typeof(TParent).ToString().Split('.').Last();
-        private string childName = typeof(TChild).ToString().Split('.').Last();
+        private static string childName = typeof(TChild).ToString().Split('.').Last();
 
         private static List<Ingredient> MyIngredientsList { get; set; }
         private static List<RecipeType> MyRecipesList { get; set; }
@@ -52,7 +52,7 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
         private static RecipeType Recipe5 { get; set; }
         private List<IEntity> MyChildrenList { get; set; }
 
-        public   BaseControllerShouldDetachXAndReturn()
+        internal BaseControllerShouldDetachXAndReturn()
         {
             parent = new TParent() { ID = 1 };
             ParentRepo.Save(parent);
@@ -82,6 +82,16 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
 
             }
 
+        }
+        internal static void TestRunner()
+        {
+            DetailWithErrorWhenParentIDIsValidAndChildIsValidWhenDetachingUnattachableChild();
+            DetailWithSuccessWhenIDisValidAndThereIsOneChildOnListWhenDetachingAndSelectionSetIsSupplied(); 
+            DetailWithSuccessWhenIDisValidAndThereAreThreeChildrenOnListWhenDetachingAll();
+            DetailWithSuccessWhenIDisValidAndAlChildrenOnListExistWhendDetachASetOfIngredients();
+            DetailWithWarningWhenIDisValidAndThereIsOneChildOnListWhenDetachingAndSelectionSetIsNotSupplied();
+            EditWithWarningWhenParentIDIsValidAndChildIsNotValidWhenAttaching();
+            SuccessfullyDetachASetOfMenuChildren();
         }
 
         private void SetUpIngredientsAndMyIngredientsList()
@@ -122,80 +132,83 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
             };
         }
 
-       internal void BaseDetailWithSuccessWhenIDisValidAndThereIsOneChildOnListWhenDetachingAndSelectionSetIsNotSupplied()
+        private static void DetailWithWarningWhenIDisValidAndThereIsOneChildOnListWhenDetachingAndSelectionSetIsNotSupplied()
         {
-            parentWithIngredients.Ingredients.Add(Ingredient1);
-            ParentRepo.Update((TParent)parentWithIngredients, parent.ID);
+            SetUpForTests(out ParentRepo, out controller, out item);
+            item.Ingredients.Add(Ingredient1);
+            ParentRepo.Update(item, item.ID);
 
-            ActionResult ar = controller.DetachASetOf(parent, null);
+            ActionResult ar = controller.DetachASetOf(item, null);
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
 
-            TParent returnedParent = ParentRepo.GetById(parentWithIngredients.ID);
-             
+            TParent returnedParent = ParentRepo.GetById(item.ID);
+
             Assert.IsNotNull(ar);
-            Assert.AreEqual(parent.ID, rtrr.RouteValues.ElementAt(0).Value);
+            Assert.AreEqual(item.ID, rtrr.RouteValues.ElementAt(0).Value);
             Assert.AreEqual(UIViewType.Edit.ToString(), rtrr.RouteValues.ElementAt(1).Value.ToString());
             Assert.AreEqual(UIViewType.Details.ToString(), rtrr.RouteValues.ElementAt(2).Value.ToString());
             Assert.AreEqual(3, rtrr.RouteValues.Count);
-            Assert.AreEqual("All " + childName + "s Were Successfully Detached!", adr.Message);
-        }
+            childName = typeof(TChild).ToString().Split('.').Last();
+            Assert.AreEqual("Nothing was Selected!", adr.Message);
+        }//n(UIViewType.Details.ToString(), new { id, actionMethod = UIViewType.Edit }).WithWarning("Nothing was Selected!");
 
-       internal void BaseDetailWithSuccessWhenIDisValidAndThereIsOneChildOnListWhenDetachingAndSelectionSetIsSupplied()
+        private static void DetailWithSuccessWhenIDisValidAndThereIsOneChildOnListWhenDetachingAndSelectionSetIsSupplied()
         {
-            parentWithIngredients.Ingredients.Add(Ingredient1);
-            ParentRepo.Update((TParent)parentWithIngredients, parent.ID);
-            ParentRepo.Update((TParent)parent, parent.ID);
+            SetUpForTests(out ParentRepo, out controller, out item);
+            IngredientType child = new IngredientType() { ID = 7654321 };
+            item.Ingredients.Add(child);
+            ParentRepo.Update(item, item.ID);
+
             List<IEntity> list = new List<IEntity>() { child };
 
 
-            ActionResult ar = controller.DetachASetOf(parent, list);
+            ActionResult ar = controller.DetachASetOf(item, list);
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
-             
+
             Assert.IsNotNull(ar);
-            Assert.AreEqual(parent.ID, rtrr.RouteValues.ElementAt(0).Value);
+            Assert.AreEqual(item.ID, rtrr.RouteValues.ElementAt(0).Value);
             Assert.AreEqual(UIViewType.Edit.ToString(), rtrr.RouteValues.ElementAt(1).Value.ToString());
             Assert.AreEqual(UIViewType.Details.ToString(), rtrr.RouteValues.ElementAt(2).Value.ToString());
             Assert.AreEqual(3, rtrr.RouteValues.Count);
-            Assert.AreEqual("All " + childName + "s Were Successfully Detached!", adr.Message);
+            Assert.AreEqual("Ingredient was Successfully Detached!", adr.Message);
         }
 
-       internal void BaseDetailWithSuccessWhenIDisValidAndThereAreThreeChildrenOnListWhenDetachingAll()
+        private static void DetailWithSuccessWhenIDisValidAndThereAreThreeChildrenOnListWhenDetachingAll()
         {
             TParent parent = new TParent() { ID = 7000 };
-            ActionResult ar;
-            AlertDecoratorResult adr;
-            RedirectToRouteResult rtrr;
-            int returnedCount = 10000000;   // obviously wrong, to initialize 
-            parent = (TParent)(new ChildAttachment().AddChildToParent(parent, new TChild()));
-            parent = (TParent)(new ChildAttachment().AddChildToParent(parent, new TChild()));
-            parent = (TParent)(new ChildAttachment().AddChildToParent(parent, new TChild()));
-            ParentRepo.Save(parent); 
-            ar = controller.DetachAll(parent, new TChild());
+            TChild child = new TChild();
+            if (parent.CanHaveChild(child))
+            {
+                ActionResult ar;
+                AlertDecoratorResult adr;
+                RedirectToRouteResult rtrr;
+                int returnedCount = 10000000;   // obviously wrong, to initialize 
+                parent = (TParent)(new ChildAttachment().AddChildToParent(parent, new TChild()));
+                parent = (TParent)(new ChildAttachment().AddChildToParent(parent, new TChild()));
+                parent = (TParent)(new ChildAttachment().AddChildToParent(parent, new TChild()));
+                ParentRepo.Save(parent);
+                ar = controller.DetachAll(parent, new TChild());
 
-            TParent returnedParent = ParentRepo.GetById(parent.ID);
-            returnedCount = child.GetCountOfChildrenOnParent(returnedParent);
+                TParent returnedParent = ParentRepo.GetById(parent.ID);
+                returnedCount = child.GetCountOfChildrenOnParent(returnedParent);
 
+                adr = (AlertDecoratorResult)ar;
+                rtrr = (RedirectToRouteResult)adr.InnerResult;
 
-            adr = (AlertDecoratorResult)ar;
-            rtrr = (RedirectToRouteResult)adr.InnerResult;
-
-
-
-            Assert.IsNotNull(ar);
-            Assert.AreEqual(parent.ID, rtrr.RouteValues.ElementAt(0).Value);
-            Assert.AreEqual(UIViewType.Edit.ToString(), rtrr.RouteValues.ElementAt(1).Value.ToString());
-            Assert.AreEqual(UIViewType.Details.ToString(), rtrr.RouteValues.ElementAt(2).Value.ToString());
-            Assert.AreEqual(3, rtrr.RouteValues.Count);
-            Assert.AreEqual("All " + childName + "s Were Successfully Detached!", adr.Message);
-            Assert.AreEqual(0, returnedCount);
+                Assert.IsNotNull(ar);
+                Assert.AreEqual(parent.ID, rtrr.RouteValues.ElementAt(0).Value);
+                Assert.AreEqual(UIViewType.Edit.ToString(), rtrr.RouteValues.ElementAt(1).Value.ToString());
+                Assert.AreEqual(UIViewType.Details.ToString(), rtrr.RouteValues.ElementAt(2).Value.ToString());
+                Assert.AreEqual(3, rtrr.RouteValues.Count);
+                Assert.AreEqual("All " + childName + "s Were Successfully Detached!", adr.Message);
+                Assert.AreEqual(0, returnedCount);
+            }
         }
-       
          
-        internal void BaseDetailWithWarningWhenIDisValidAndTheSelectionSetIsNullOrEmpty() { }
 
-       internal static  void BaseDetailWithSuccessWhenIDisValidAndAlChildrenOnListExistWhendDetachASetOfIngredients()
+        private static void DetailWithSuccessWhenIDisValidAndAlChildrenOnListExistWhendDetachASetOfIngredients()
         {
             TParent tParent = new TParent() { ID = 1492 };
 
@@ -221,17 +234,17 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
             {
                ingredient1,
                ingredient3
-            }; 
-            ActionResult ar = controller.DetachASetOf(tParent , itemsToBeRemoved);
+            };
+            ActionResult ar = controller.DetachASetOf(tParent, itemsToBeRemoved);
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             TParent returnedt = ParentRepo.GetById(tParent.ID);
             int returnedIngredientCount = returnedt.Ingredients.Count();
 
-            Assert.AreEqual(initialIngredientCount-2, returnedIngredientCount);
+            Assert.AreEqual(initialIngredientCount - 2, returnedIngredientCount);
 
             Assert.AreEqual("alert-success", adr.AlertClass);
             Assert.AreEqual("All Ingredients Were Successfully Detached!", adr.Message);
-        } 
+        }
 
         private void CheckIngredientsCount(int correctNumber)
         {
@@ -239,7 +252,7 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
             Assert.AreEqual(correctNumber, ((IEntity)item).Ingredients.Count);
         }
 
-       internal void BaseDetailWithSuccessWhenIDisValidAndNotAllChildrenOnListExistWhenDetachASetOfIngredients()
+        internal void BaseDetailWithSuccessWhenIDisValidAndNotAllChildrenOnListExistWhenDetachASetOfIngredients()
         {
             IngredientType nullIngredient = null;
 
@@ -255,25 +268,14 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
             Assert.AreEqual("alert-success", adr.AlertClass);
             Assert.AreEqual("All Ingredients Were Successfully Detached!", adr.Message);
         }
-        
-       internal void BaseDetailWithErrorWhenIDisValidAndNoChildrenOnListExistWhenDetachASetOfIngredients()
+
+        internal void BaseDetailWithErrorWhenIDisValidAndNoChildrenOnListExistWhenDetachASetOfIngredients()
         {
-            //IngredientType nullIngredient = null; 
-
-            //MyIngredientsList.Clear();
-            //MyIngredientsList.Add(nullIngredient);
-            //ParentRepo.Update(parent, parent.ID);
-
-            //ActionResult ar = controller.DetachASetOf(parent, parent.GetIngredientsSelection(MyIngredientsList));
-            //AlertDecoratorResult adr = (AlertDecoratorResult)ar;
-            //CheckIngredientsCount(5);
-
-            //Assert.AreEqual("alert-success", adr.AlertClass);
-            //Assert.AreEqual(childName+" was Successfully Detached!", adr.Message);
+            Assert.Fail();  // TODO: write test
         }
-        
 
-       internal void BaseDetailWithSuccessWhenIDisValidAndThereAreThreeChildrenOnListWhenDetachASetOfIngredients()
+
+        internal void BaseDetailWithSuccessWhenIDisValidAndThereAreThreeChildrenOnListWhenDetachASetOfIngredients()
         {
             MyIngredientsList.Clear();
             MyIngredientsList.Add(new IngredientType() { ID = 1000 });
@@ -292,28 +294,29 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
             Assert.AreEqual("alert-success", adr.AlertClass);
             Assert.AreEqual("All Ingredients Were Successfully Detached!", adr.Message);
         }
-          
 
-       internal void BaseDetailWithErrorWhenParentIDIsValidAndChildIsValidWhenDetachingUnattachableChild()
+
+        private static void DetailWithErrorWhenParentIDIsValidAndChildIsValidWhenDetachingUnattachableChild()
         {
-            ActionResult ar = controller.Detach(Parent , (TChild)Child);
+            SetUpForTests(out ParentRepo, out controller, out item);
+
+            ActionResult ar = controller.Detach(item, null);
 
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
             RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
 
             Assert.IsNotNull(ar);
-            Assert.AreEqual(Parent.ID, rtrr.RouteValues.ElementAt(0).Value);
+            Assert.AreEqual(item.ID, rtrr.RouteValues.ElementAt(0).Value);
             Assert.AreEqual(UIViewType.Edit.ToString(), rtrr.RouteValues.ElementAt(1).Value.ToString());
             Assert.AreEqual(UIViewType.Details.ToString(), rtrr.RouteValues.ElementAt(2).Value.ToString());
             Assert.AreEqual(3, rtrr.RouteValues.Count);
-            Assert.AreEqual("Element Could not Be Attached - So It Could Not Be Detached!", adr.Message);
+            Assert.AreEqual("Child was not found", adr.Message);
             Assert.AreEqual("alert-warning", adr.AlertClass);
         }
 
 
-         
 
-        internal void BaseEditWithWarningWhenParentIDIsValidAndChildIsNotValidWhenAttaching()
+        private static void EditWithWarningWhenParentIDIsValidAndChildIsNotValidWhenAttaching()
         {
             TParent parent = new TParent() { ID = 7001 };
             ParentRepo.Save(parent);
@@ -321,45 +324,54 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
             ActionResult ar = controller.Detach(parent, ingredient);
 
             AlertDecoratorResult adr = (AlertDecoratorResult)ar;
-            RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
+            RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult; 
 
             Assert.IsNotNull(ar);
             Assert.AreEqual(parent.ID, rtrr.RouteValues.ElementAt(0).Value);
             Assert.AreEqual(UIViewType.Edit, rtrr.RouteValues.ElementAt(1).Value);
             Assert.AreEqual(UIViewType.Details.ToString(), rtrr.RouteValues.ElementAt(2).Value);
             Assert.AreEqual(3, rtrr.RouteValues.Count);
-            Assert.AreEqual(parentName + " was not found", adr.Message);
+            Assert.AreEqual("Child was not found", adr.Message);
             Assert.AreEqual("alert-warning", adr.AlertClass);
         }
-        internal void BaseEditWithWarningWhenParentIDIsValidAndChildIsNotValidWhenDetaching()
+
+        private static void BaseEditWithWarningWhenParentIDIsValidAndChildIsNotValidWhenDetaching()
         {
 
         }
 
 
-        
+
         private static void SuccessfullyDetachASetOfMenuChildren()
-        {
-            //Plan.Menus.Add(new Menu { ID = 4005, Name = "Butter" });
-            //Plan.Menus.Add(new Menu { ID = 4006, Name = "Cayenne Pepper" });
-            //Plan.Menus.Add(new Menu { ID = 4007, Name = "Cheese" });
-            //Plan.Menus.Add(new Menu { ID = 4008, Name = "Chopped Green Pepper" });
-            //repo.Save((Plan)Plan);
-            //int initialMenuCount = Plan.Menus.Count();
+        {  // TODO: move the if upwards
+            TParent parent = new TParent();
+            MenuType menu = new MenuType();
+            if (parent.CanHaveChild(menu))
+            { 
+            SetUpForTests(out ParentRepo, out controller, out item);
+            item.Menus.Add(new MenuType { ID = 4005, Name = "Butter" });
+            item.Menus.Add(new MenuType { ID = 4006, Name = "Cayenne Pepper" });
+            item.Menus.Add(new MenuType { ID = 4007, Name = "Cheese" });
+            item.Menus.Add(new MenuType { ID = 4008, Name = "Chopped Green Pepper" });
+            ParentRepo.Save(item);
+            int initialMenuCount = item.Menus.Count();
 
-            //var setToSelect = new HashSet<int> { 4006, 4008 };
-            //List<Plan> selected = Plan.Menus.Where(t => setToSelect.Contains(t.ID)).ToList();
-            //controller.DetachASetOf(Plan, selected);
-            //Plan returnedPlan = repo.GetById(Plan.ID);
+            var setToSelect = new HashSet<int> { 4006, 4008 };
+            List<MenuType> list = item.Menus.Where(t => setToSelect.Contains(t.ID)).ToList();
+            List<IEntity> selected = new List<IEntity>();
+            selected.AddRange(list);
+            controller.DetachASetOf(item, selected);
+            TParent returnedItem = ParentRepo.GetById(item.ID);
 
-            //  Assert.AreEqual(initialMenuCount - 2, returnedPlan.Menus.Count());
+            Assert.AreEqual(initialMenuCount - 2, returnedItem.Menus.Count());
+            }
         }
 
-         
+
         private static void ReturnsDetailWithWarningIfAttachingNullMenuChild() { }
-         
+
         private static void ReturnsDetailWithWarningWithUnknownMenuChildID() { }
- 
+
         private static void ReturnsDetailWhenDetachingWithSuccessWithValidParentandValidIngredientChild() { }
-    } 
+    }
 }

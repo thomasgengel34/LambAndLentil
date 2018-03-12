@@ -16,12 +16,7 @@ namespace LambAndLentil.Test.IntegrationTests
         /// </summary>
         [TestMethod]
         public void ChangeShoppingListPlanWhenMenuAdded()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
+        { 
             Assert.Fail();
         }
 
@@ -30,12 +25,7 @@ namespace LambAndLentil.Test.IntegrationTests
         /// </summary>
         [TestMethod]
         public void ChangeShoppingListPlanWhenMenuModified()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
+        { 
             Assert.Fail();
         }
 
@@ -44,12 +34,7 @@ namespace LambAndLentil.Test.IntegrationTests
         /// </summary>
         [TestMethod]
         public void ChangeShoppingListPlanWhenMenuRemoved()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
+        { 
             Assert.Fail();
         }
 
@@ -58,12 +43,7 @@ namespace LambAndLentil.Test.IntegrationTests
         /// </summary>
         [TestMethod]
         public void ChangeShoppingListMenuAdded()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
+        { 
             Assert.Fail();
         }
 
@@ -72,12 +52,7 @@ namespace LambAndLentil.Test.IntegrationTests
         /// </summary>
         [TestMethod]
         public void ChangeShoppingListWhenMenuModified()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
+        { 
             Assert.Fail();
         }
 
@@ -86,12 +61,7 @@ namespace LambAndLentil.Test.IntegrationTests
         /// </summary>
         [TestMethod]
         public void ChangeShoppingListWhenMenuRemoved()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
+        { 
             Assert.Fail();
         }
 
@@ -100,12 +70,7 @@ namespace LambAndLentil.Test.IntegrationTests
         /// </summary>
         [TestMethod]
         public void ChangeShoppingListPlanAdded()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
+        { 
             Assert.Fail();
         }
 

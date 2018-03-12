@@ -8,7 +8,7 @@ namespace LambAndLentil.Test.AdminSecurity
 {
     [Ignore]
     [TestClass]
-   internal   class AdminSecurityTests
+   public   class AdminSecurityTests
     {
         static AccountController Controller;
 

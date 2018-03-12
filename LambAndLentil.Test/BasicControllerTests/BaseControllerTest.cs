@@ -8,7 +8,7 @@ using LambAndLentil.Domain.Entities;
 using LambAndLentil.UI.Controllers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace LambAndLentil.Test.BaseControllerTests
+namespace LambAndLentil.Test.BasicTests
 {
    public class BaseControllerTest<T>
       where T : BaseEntity, IEntity,  new()
@@ -32,12 +32,13 @@ namespace LambAndLentil.Test.BaseControllerTests
         private void BaseControllerTestSetup()
         {
             SetUpForTests(out repo, out controller, out item);
-            ListEntity.ListT = SetUprepository(); 
+            ListEntity.ListT = SetUpRepository(); 
             controller.PageSize = 3; 
         }
 
         internal static IGenericController<T> BaseControllerTestFactory()
-        { 
+        {
+            Type type = typeof(T);
 
             if (typeof(T) == typeof(Ingredient))
             {
@@ -68,7 +69,7 @@ namespace LambAndLentil.Test.BaseControllerTests
          
       
 
-        internal List<T> SetUprepository()
+        internal List<T> SetUpRepository()
         { 
              list = new List<T> {
                 new T {ID = int.MaxValue, Name ="ControllerTest1" ,

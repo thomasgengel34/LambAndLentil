@@ -5,14 +5,13 @@ using LambAndLentil.Domain.Entities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using LambAndLentil.FluentMVC.Test;
 using LambAndLentil.UI.Controllers;
-using LambAndLentil.Test.BaseControllerTests;
+ 
 
 namespace LambAndLentil.FluentMVC.Test
 {
     [TestClass]
     public class BaseFluentMVCTest_Runner
-    {
-
+    { 
         [TestMethod]
         public void RunBaseFluentMVCTest_Runner()
         {

@@ -14,7 +14,7 @@ namespace LambAndLentil.UI.Controllers
 
     {
         protected string EntityName { get; set; }
-        
+
         public BaseAttachDetachController(IRepository<T> repository) : base(repository)
         {
             Repo = repository;
@@ -26,7 +26,7 @@ namespace LambAndLentil.UI.Controllers
         int IGenericController<T>.PageSize { get; set; }
 
 
-        ActionResult IGenericController<T>.Index(int? page) =>  Index(page);
+        ActionResult IGenericController<T>.Index(int? page) => Index(page);
 
 
         // GET: Recipes/Details/5
@@ -84,10 +84,10 @@ namespace LambAndLentil.UI.Controllers
         }
 
         private ActionResult HandleNullParent() =>
-              // TODO: log error - this could be a developer problem
+            // TODO: log error - this could be a developer problem
             RedirectToAction(UIViewType.Index.ToString()).WithWarning((new T()).DisplayName + " was not found");
-      
-       
+
+
 
 
         private ActionResult HandleSuccessfulAttachment(int? parentID, IEntity child) =>
@@ -100,7 +100,7 @@ namespace LambAndLentil.UI.Controllers
             if (actionResult is EmptyResult)
             {
                 parent = new ChildDetachment().DetachAnIndependentChild(parent, child);
-                Repo.Save((T)parent,Repo.FullPath);
+                Repo.Save((T)parent, Repo.FullPath);
                 string childEntity = child.GetType().ToString().Split('.').Last();
                 return HandleSuccessfulDetachment(parent, child);
             }
@@ -120,7 +120,7 @@ namespace LambAndLentil.UI.Controllers
             string childName = child.GetType().ToString().Split('.').Last();
 
             bool IsChildAttached = CheckParentForAttachedChild(parent, child);
-            if (IsChildAttached)
+            if (!IsChildAttached)
             {
                 parent = new ChildDetachment().DetachAnIndependentChild(parent, child);
                 return RedirectToAction(UIViewType.Details.ToString(), new { id = parent.ID, actionMethod = UIViewType.Edit }).WithSuccess(child.DisplayName + " was Successfully Detached!");
@@ -178,7 +178,7 @@ namespace LambAndLentil.UI.Controllers
             return isChildAttached;
         }
 
- 
+
         ActionResult GuardAttachAndDetachMethod(IEntity parent, IEntity child)
         {
             if (parent == null)
@@ -195,13 +195,13 @@ namespace LambAndLentil.UI.Controllers
             }
             else return new EmptyResult();
         }
- 
+
         private ActionResult HandleParentCannotAttachChild(IEntity parent) => RedirectToAction(UIViewType.Details.ToString(), new { id = parent.ID, actionMethod = UIViewType.Edit }).WithWarning("Element Could not Be Attached - So It Could Not Be Detached!");
 
         private ActionResult HandleNullChild(int? parentID) =>
             RedirectToAction(UIViewType.Details.ToString(), new { id = parentID, actionMethod = UIViewType.Edit }).WithWarning("Child was not found");
 
-         
+
 
         private ActionResult HandleNullParentID() => RedirectToAction(UIViewType.Index.ToString()).WithWarning(EntityName + " was not found");
 
@@ -238,8 +238,14 @@ namespace LambAndLentil.UI.Controllers
             {
                 parent = new ChildDetachment().DetachSelectionFromChildren(parent, selected);
                 Repo.Save((T)parent, Repo.FullPath);
-
-                return HandleSuccessfulDetachment(parent, child);
+                if (selected.Count == 1)
+                {
+                    return HandleSuccessfulDetachment(parent, child);
+                }
+                else
+                {
+                    return HandleAllChildrenSuccessfullyDetached(parent.ID, childName);
+                } 
             }
         }
 

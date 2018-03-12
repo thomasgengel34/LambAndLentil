@@ -121,21 +121,13 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests
         public static void TestsRunner<TParent, TChild>()
              where TParent : BaseEntity, IEntity, new()
         where TChild : BaseEntity, IEntity, new()
-        {
-
-            // TODO: convert methods to static and add to the list below
-            BaseControllerShouldDetachXAndReturn<TParent, TChild> baseDetach = new BaseControllerShouldDetachXAndReturn<TParent, TChild>();
-
-
-            AttachAnXToAYEntity<TParent, TChild>.TestRunner();
-            BaseControllerShouldAttachXAndReturn<TParent, TChild>.TestRunner();
-
-
+        { 
+            AttachAnXToAYEntity<TParent, TChild>.TestRunner(); 
+            BaseControllerShouldDetachXAndReturn<TParent, TChild>.TestRunner();
+             
 
             // TODO: add more
 
-        }
-
-
+        } 
     }
 }

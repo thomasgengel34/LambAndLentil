@@ -4,7 +4,7 @@ using LambAndLentil.Domain.Entities;
 using LambAndLentil.UI.Controllers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace LambAndLentil.Test.BaseControllerTests
+namespace LambAndLentil.Test.BasicTests
 {
     internal class  Controller_Should<T> : BaseControllerTest<T>
         where T : BaseEntity, IEntity, new()

@@ -363,35 +363,6 @@ controller.WithCallTo(c => c.Delete(item.ID)).ShouldRenderDefaultView();
             ic.WithCallTo(c => c.Details(7000)).ShouldRenderDefaultView();
         }
 
-
-
-    //    [TestMethod]
-    //    public void SuperTest2()
-    //    {
-    //        BaseRenderDetailsDefaultView2<Ingredient>();
-    //    }
-
-    //    internal static void BaseRenderDetailsDefaultView3<T>()
-    //        where T : BaseEntity, IEntity, new()
-    //    {
-    //        IRepository<T> repository = new TestRepository<T>();
-    //        IGenericController<T> ic = BaseFluentMVCTest<T>.GetController();
-    //        T item = new T() { ID = 7000 };
-    //        repository.Save(item);
-    //        if (typeof(T) == typeof(Ingredient))
-    //        {
-    //            IngredientsController ix = new IngredientsController(new TestRepository<Ingredient>());
-    //            ix.WithCallTo(c => c.Index(1)).ShouldRenderDefaultView();
-    //        }
-
-    //    }
-
-
-
-    //    [TestMethod]
-    //    public void SuperTest3()
-    //    {
-    //        BaseRenderDetailsDefaultView3<Ingredient>();
-    //    }
+         
      }
 }

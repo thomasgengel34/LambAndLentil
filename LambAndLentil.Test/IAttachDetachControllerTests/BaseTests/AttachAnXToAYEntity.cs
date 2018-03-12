@@ -27,13 +27,14 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
         {
             AttachAnIngredientToAParent();
             AttachAChildToAParent();
-        } 
+            ReturnRecipeEditViewWithWarningMessageWhenAttachingNonExistingIngredientToExistingRecipe();
+        }
 
-         private  static void AttachAnIngredientToAParent()
+        private static void AttachAnIngredientToAParent()
         {
-            SetUpForTests(out repo, out controller, out item);  
+            SetUpForTests(out repo, out controller, out item);
 
-            IngredientType ingredient = new IngredientType { ID = 100};
+            IngredientType ingredient = new IngredientType { ID = 100 };
 
             ActionResult ar = controller.Attach(item, ingredient);
             TParent returnedItem = repo.GetById(item.ID);
@@ -44,9 +45,9 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
         }
 
 
-      private static void AttachAChildToAParent()  
+        private static void AttachAChildToAParent()
         {
-            SetUpForTests(out repo, out controller,out item );
+            SetUpForTests(out repo, out controller, out item);
             TParent parent = new TParent() { ID = 3000, Description = "test Attach " };
             IRepository<TParent> localRepo = new TestRepository<TParent>();
             localRepo.Save(parent);
@@ -105,6 +106,23 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
                 Assert.AreEqual(UIViewType.Details.ToString(), routeValues.ElementAt(2).ToString());
                 Assert.AreEqual(UIViewType.Edit.ToString(), routeValues.ElementAt(1).ToString());
             }
+        }
+
+        private static void ReturnRecipeEditViewWithWarningMessageWhenAttachingNonExistingIngredientToExistingRecipe()
+        {
+            SetUpForTests(out repo, out controller, out item);
+            IngredientType ingredient = null;
+
+            AlertDecoratorResult adr = (AlertDecoratorResult)controller.Attach(item, ingredient);
+            RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
+            var routeValues = rtrr.RouteValues.Values;
+
+            Assert.AreEqual("alert-warning", adr.AlertClass);
+            Assert.AreEqual("Child was not found", adr.Message);
+            Assert.AreEqual(3, routeValues.Count);
+            Assert.AreEqual(item.ID, routeValues.ElementAt(0));
+            Assert.AreEqual(UIViewType.Details.ToString(), routeValues.ElementAt(2).ToString());
+            Assert.AreEqual(UIViewType.Edit.ToString(), routeValues.ElementAt(1).ToString());
         }
     }
 }

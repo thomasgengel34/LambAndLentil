@@ -10,11 +10,11 @@ namespace LambAndLentil.BusinessObjects
     {
         private IEntity _parent;
 
-        public IEntity DetachAllChildrenOfAType(IEntity parent,IEntity child)
+        public IEntity DetachAllChildrenOfAType(IEntity parent, IEntity child)
         {
             _parent = parent;
 
-            bool parentCanHaveChild =   _parent.CanHaveChild(child);
+            bool parentCanHaveChild = _parent.CanHaveChild(child);
 
             if (parentCanHaveChild)
             {
@@ -66,13 +66,20 @@ namespace LambAndLentil.BusinessObjects
 
             if (childType == typeof(Ingredient))
             {
-                var allIngredientIDs = _parent.Ingredients.Select(a => a.ID);
+                if (_parent.Ingredients.Count > 0)
+                { 
+                    var allIngredientIDs = from c in _parent.Ingredients
+                                           where c != null
+                                           select c.ID;
 
-                var setToDetach = new HashSet<IEntity>(selected).Where(p => p != null).Select(r => r.ID).AsQueryable();
+                    var setToDetach = new HashSet<IEntity>(selected).Where(p => p != null).Select(r => r.ID).AsQueryable();
 
-                var remainingIDs = allIngredientIDs.Except(setToDetach);
-                var remainingChildren = _parent.Ingredients.Where(b => remainingIDs.Contains(b.ID));
-                _parent.Ingredients = remainingChildren.ToList();
+                    var remainingIDs = allIngredientIDs.Except(setToDetach);
+
+                    var remainingChildren = _parent.Ingredients.Where(a => a != null).Where(b => remainingIDs.Contains(b.ID));
+                    _parent.Ingredients = remainingChildren.ToList();
+
+                }
                 parent = _parent;
                 return parent;
             }

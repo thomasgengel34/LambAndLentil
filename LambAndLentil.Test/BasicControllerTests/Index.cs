@@ -9,7 +9,7 @@ using LambAndLentil.UI;
 using LambAndLentil.UI.Controllers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace LambAndLentil.Test.BaseControllerTests
+namespace LambAndLentil.Test.BasicTests
 {
     internal class Index<T> : BaseControllerTest<T>
         where T : BaseEntity, IEntity, new()

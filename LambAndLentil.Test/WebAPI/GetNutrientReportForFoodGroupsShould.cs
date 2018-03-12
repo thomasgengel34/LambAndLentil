@@ -10,17 +10,6 @@ namespace LambAndLentil.Test.WebAPI
  For food groups Dairy and Egg Products (id = 0100) and Poultry Products (id=0500):
 Browser: https://api.nal.usda.gov/ndb/nutrients/?format=json&api_key=DEMO_KEY&nutrients=205&nutrients=204&nutrients=208&nutrients=269&fg=0100&fg=0500
  */
-
-        [Ignore]
-        [TestMethod]
-        public void TestMethod1()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
-            Assert.Fail();
-        }
+  
     }
 }

@@ -3,7 +3,7 @@ using System.Linq;
 using System.Reflection;
 using LambAndLentil.Domain.Concrete;
 using LambAndLentil.Domain.Entities;
-using LambAndLentil.Test.BaseControllerTests;
+using LambAndLentil.Test.BasicTests;
 using LambAndLentil.UI.Controllers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

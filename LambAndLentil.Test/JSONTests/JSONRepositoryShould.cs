@@ -156,7 +156,13 @@ namespace LambAndLentil.Test.JSONTests
             Assert.Fail();
         }
 
-      
+        [Ignore]
+        [TestMethod]
+        public void ReturnsErrorWithUnknownrepository() =>
+
+            Assert.Fail();
+
+
 
         [ClassCleanup()]
         public static void ClassCleanup()

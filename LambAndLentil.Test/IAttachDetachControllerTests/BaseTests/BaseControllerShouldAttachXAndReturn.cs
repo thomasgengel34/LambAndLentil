@@ -14,7 +14,7 @@ using ShoppingListType = LambAndLentil.Domain.Entities.ShoppingList;
 using LambAndLentil.UI.Models;
 using System;
 using LambAndLentil.UI.Controllers;
-using LambAndLentil.Test.BaseControllerTests;
+using LambAndLentil.Test.BasicTests;
 
 namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
 {
@@ -104,9 +104,12 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
             TChild child = new TChild();
             if (Parent.CanHaveChild(child))
             {
+                SetUpForTests(out repo, out controller, out item);
+
                 ActionResult ar = controller.Attach(Parent, (TChild)Child);
                 AlertDecoratorResult adr = (AlertDecoratorResult)ar;
                 RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
+                TParent returnedItem = repo.GetById(item.ID);
 
                 Assert.IsNotNull(ar);
                 Assert.AreEqual(1, rtrr.RouteValues.ElementAt(0).Value);
@@ -115,76 +118,81 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
                 Assert.AreEqual(3, rtrr.RouteValues.Count);
                 Assert.AreEqual(child.DisplayName + " was Successfully Attached!", adr.Message);
                 Assert.AreEqual("alert-success", adr.AlertClass);
+
+                if (child.GetType() == typeof(RecipeType))
+                {
+                    Assert.AreEqual(1, returnedItem.Recipes.Count());
+                    Assert.AreEqual(child.ID, returnedItem.Recipes.First().ID);
+                }
             }
         }
 
 
-
-        internal static void DetailWithErrorWhenParentIDIsValidAndChildIsValidWhenAttachingUnattachableChild()
-        {
-            TChild child = new TChild() { ID = 8000 };
-            if (!Parent.CanHaveChild(child))
+            internal static void DetailWithErrorWhenParentIDIsValidAndChildIsValidWhenAttachingUnattachableChild()
             {
-                ActionResult ar = controller.Attach(Parent, child);
-                AlertDecoratorResult adr = (AlertDecoratorResult)ar;
+                TChild child = new TChild() { ID = 8000 };
+                if (!Parent.CanHaveChild(child))
+                {
+                    ActionResult ar = controller.Attach(Parent, child);
+                    AlertDecoratorResult adr = (AlertDecoratorResult)ar;
+                    RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
+                    Assert.IsNotNull(ar);
+                    Assert.AreEqual(1, rtrr.RouteValues.ElementAt(0).Value);
+                    Assert.AreEqual(UIViewType.Edit.ToString(), rtrr.RouteValues.ElementAt(1).Value.ToString());
+                    Assert.AreEqual(UIViewType.Details.ToString(), rtrr.RouteValues.ElementAt(2).Value.ToString());
+                    Assert.AreEqual(3, rtrr.RouteValues.Count);
+                    Assert.AreEqual("Element Could not Be Attached - So It Could Not Be Detached!", adr.Message);
+                    Assert.AreEqual("alert-warning", adr.AlertClass);
+                }
+            }
+
+
+            internal static void EditViewWithSuccessMessageWhenDetachingExistingIngredientFromExistingRecipe()
+            {
+                SetUpForTests(out repo, out controller, out item);
+                IngredientType ingredient = new IngredientType { ID = 700 };
+
+
+                AlertDecoratorResult adr = (AlertDecoratorResult)controller.Detach(item, ingredient);
                 RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
-                Assert.IsNotNull(ar);
-                Assert.AreEqual(1, rtrr.RouteValues.ElementAt(0).Value);
-                Assert.AreEqual(UIViewType.Edit.ToString(), rtrr.RouteValues.ElementAt(1).Value.ToString());
-                Assert.AreEqual(UIViewType.Details.ToString(), rtrr.RouteValues.ElementAt(2).Value.ToString());
-                Assert.AreEqual(3, rtrr.RouteValues.Count);
-                Assert.AreEqual("Element Could not Be Attached - So It Could Not Be Detached!", adr.Message);
-                Assert.AreEqual("alert-warning", adr.AlertClass);
+                var routeValues = rtrr.RouteValues.Values;
+
+                Assert.AreEqual("alert-success", adr.AlertClass);
+                Assert.AreEqual("Ingredient was Successfully Detached!", adr.Message);
+                Assert.AreEqual(3, routeValues.Count);
+                Assert.AreEqual(UIViewType.Edit.ToString(), routeValues.ElementAt(1).ToString());
+                Assert.AreEqual(UIViewType.Details.ToString(), routeValues.ElementAt(2).ToString());
             }
+
+
+            internal static IGenericController<TParent> BaseControllerTestFactory(Type T)
+            {
+                if (typeof(TParent) == typeof(Ingredient))
+                {
+                    return (IGenericController<TParent>)(new IngredientsController(new TestRepository<Ingredient>()));
+                }
+                else if (typeof(TParent) == typeof(Recipe))
+                {
+                    return (IGenericController<TParent>)(new RecipesController(new TestRepository<Recipe>()));
+                }
+                else if (typeof(TParent) == typeof(Menu))
+                {
+                    return (IGenericController<TParent>)(new MenusController(new TestRepository<Menu>()));
+                }
+                else if (typeof(TParent) == typeof(Plan))
+                {
+                    return (IGenericController<TParent>)(new PlansController(new TestRepository<Plan>()));
+                }
+                else if (typeof(TParent) == typeof(Person))
+                {
+                    return (IGenericController<TParent>)(new PersonsController(new TestRepository<Person>()));
+                }
+                else if (typeof(TParent) == typeof(ShoppingList))
+                {
+                    return (IGenericController<TParent>)(new ShoppingListsController(new TestRepository<ShoppingList>()));
+                }
+                else throw new Exception();
+            }
+
         }
-
-
-        internal static void EditViewWithSuccessMessageWhenDetachingExistingIngredientFromExistingRecipe()
-        {
-            SetUpForTests(out repo, out controller, out item);
-            IngredientType ingredient = new IngredientType { ID = 700 };
-
-
-            AlertDecoratorResult adr = (AlertDecoratorResult)controller.Detach(item, ingredient);
-            RedirectToRouteResult rtrr = (RedirectToRouteResult)adr.InnerResult;
-            var routeValues = rtrr.RouteValues.Values;
-
-            Assert.AreEqual("alert-success", adr.AlertClass);
-            Assert.AreEqual("Ingredient was Successfully Detached!", adr.Message);
-            Assert.AreEqual(3, routeValues.Count);
-            Assert.AreEqual(UIViewType.Edit.ToString(), routeValues.ElementAt(1).ToString());
-            Assert.AreEqual(UIViewType.Details.ToString(), routeValues.ElementAt(2).ToString());
-        }
-
-
-        internal static IGenericController<TParent> BaseControllerTestFactory(Type T)
-        {
-            if (typeof(TParent) == typeof(Ingredient))
-            {
-                return (IGenericController<TParent>)(new IngredientsController(new TestRepository<Ingredient>()));
-            }
-            else if (typeof(TParent) == typeof(Recipe))
-            {
-                return (IGenericController<TParent>)(new RecipesController(new TestRepository<Recipe>()));
-            }
-            else if (typeof(TParent) == typeof(Menu))
-            {
-                return (IGenericController<TParent>)(new MenusController(new TestRepository<Menu>()));
-            }
-            else if (typeof(TParent) == typeof(Plan))
-            {
-                return (IGenericController<TParent>)(new PlansController(new TestRepository<Plan>()));
-            }
-            else if (typeof(TParent) == typeof(Person))
-            {
-                return (IGenericController<TParent>)(new PersonsController(new TestRepository<Person>()));
-            }
-            else if (typeof(TParent) == typeof(ShoppingList))
-            {
-                return (IGenericController<TParent>)(new ShoppingListsController(new TestRepository<ShoppingList>()));
-            }
-            else throw new Exception();
-        }
-
     }
-}

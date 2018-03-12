@@ -6,7 +6,7 @@ using System.Linq;
 namespace LambAndLentil.Domain.Entities
 {
     [Table("MENU.Menu")]
-    public class Menu : BaseEntity, IMenu
+    public class Menu : BaseEntity, IEntity //IMenu
 
     {
 

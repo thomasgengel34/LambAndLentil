@@ -10,25 +10,27 @@ using LambAndLentil.UI.Controllers;
 using LambAndLentil.UI.Infrastructure.Alerts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace LambAndLentil.Test.BaseControllerTests
+namespace LambAndLentil.Test.BasicTests
 {
-    internal class  PostEdit<T> : BaseControllerTest<T>
+    internal class PostEdit<T> : BaseControllerTest<T>
         where T : BaseEntity, IEntity, new()
     {
+
 
         internal static void TestRunner()
         {
             BindDescription();
             BindIngredients();
             BindIngredientsList();
-            BindName();
-            CanPostEdit(); 
+            CanPostEdit();
+            ChangeName();
             ModifiedDateUpDatesInEdit();
             NotBindNotIdentifiedToBeBoundInEdit();
             NotCreateASecondElementOnPostEditingOneElement();
             NotChangeIDInPostEditActionMethod();
             ReturnIndexWithInValidModelStateWithWarningMessageWhenSaved();
-            SaveAValidItemAndReturnIndexView();  
+            SaveAValidItemAndReturnIndexView();
+           // SaveEditedPersonWithCorrectName();  TODO: fix
         }
 
         private static void ReturnIndexWithInValidModelStateWithWarningMessageWhenSaved()
@@ -50,14 +52,11 @@ namespace LambAndLentil.Test.BaseControllerTests
             Assert.AreEqual("Something is wrong with the data!", adr.Message);
             Assert.AreEqual("alert-danger", adr.AlertClass);
             Assert.AreEqual("Details", view.ViewName);
-        }   
+        }
 
 
         private static void CanPostEdit()
-        {
-            IRepository<T> repo;
-            IGenericController<T> controller;
-            T item;
+        { 
             SetUpForTests(out repo, out controller, out item);
             item.Name = "Name has been changed";
             repo.Save(item);
@@ -67,15 +66,16 @@ namespace LambAndLentil.Test.BaseControllerTests
 
             Assert.IsNotNull(view1);
             Assert.AreEqual("Name has been changed", returnedItem.Name);
+            Assert.AreEqual(item.ID, returnedItem.ID);
             Assert.AreEqual(item.Description, returnedItem.Description);
             Assert.AreEqual(item.CreationDate, returnedItem.CreationDate);
         }
 
+
+
+
         private static void NotChangeIDInPostEditActionMethod()
         {
-            IRepository<T> repo;
-            IGenericController<T> controller;
-            T item;
             SetUpForTests(out repo, out controller, out item);
             int originalID = item.ID;
             item.ID = 7000;
@@ -135,7 +135,7 @@ namespace LambAndLentil.Test.BaseControllerTests
         }
 
 
-        private static void BindName()
+        private static void ChangeName()
         {
             item.Name = "Changed";
 
@@ -144,6 +144,7 @@ namespace LambAndLentil.Test.BaseControllerTests
 
             Assert.AreEqual("Changed", returnedItem.Name);
         }
+
 
 
         private static void NotCreateASecondElementOnPostEditingOneElement()
@@ -180,17 +181,51 @@ namespace LambAndLentil.Test.BaseControllerTests
         }
 
         private static void BindIngredientsList()
-        { 
-           item.IngredientsList = "This, That, Those";
+        {
+            item.IngredientsList = "This, That, Those";
             repo.Save(item);
 
             ActionResult ar = controller.PostEdit(item);
 
             T returnedItem = repo.GetById(item.ID);
 
-            Assert.IsNotNull(returnedItem); 
+            Assert.IsNotNull(returnedItem);
             Assert.AreEqual(item.IngredientsList, returnedItem.IngredientsList);
         }
+
+        private static void SaveEditedPersonWithCorrectName()
+        {
+            SetUpForTests(out repo, out controller, out item);
+            if (item.GetType() == typeof(Person))
+            {
+                Person person = new Person() { ID = 8900,
+                    FirstName = "SaveEditedPersonTest",
+                    LastName = ""
+                };
+                 
+                ActionResult ar  = controller.PostEdit(person as T);
+                ViewResult view = (ViewResult)ar ;
+                ListEntity<Person> listEntity  = (ListEntity<Person>)view.Model;
+                Person returnedPerson = repo.GetById(person.ID) as Person;
+
+                Assert.AreEqual("SaveEditedPersonTest ", returnedPerson.Name);
+            } 
+        }
+
+        private static void SaveAllPropertiesInBaseEntity()
+        {
+            SetUpForTests(out repo, out controller, out item);
+            controller.PostEdit(item);
+            T returneditem = repo.GetById(item.ID);
+
+            Assert.AreEqual(returneditem.Name, item.Name);
+            Assert.AreEqual(returneditem.Description, item.Description);
+            Assert.AreEqual(returneditem.CreationDate.Day, item.CreationDate.Day);
+            Assert.AreEqual(returneditem.ModifiedDate.Day, item.ModifiedDate.Day);
+            Assert.AreEqual(returneditem.AddedByUser, item.AddedByUser);
+            Assert.AreEqual(returneditem.ModifiedByUser, item.ModifiedByUser);
+        }
+
 
         //TODO: write 
         private static void ReturnIndexWithValidModelStateWithSuccessMessageWhenSaved() =>
@@ -202,6 +237,10 @@ namespace LambAndLentil.Test.BaseControllerTests
         //TODO: write 
         private static void NotSaveModelFlaggedInvalidByDataAnnotation() => Assert.Fail();
         // see https://msdn.microsoft.com/en-us/library/cc668224(v=vs.98).aspx
+
+        //TODO: write 
+        private static void CannotPostEditNonExistingItem() => Assert.Fail();
+
 
     }
 }

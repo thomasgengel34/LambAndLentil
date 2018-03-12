@@ -7,7 +7,7 @@ namespace LambAndLentil.Domain.Entities
 {
 
     [Table("RECIPE.Recipe")]
-    public class Recipe : BaseEntity, IRecipe
+    public class Recipe : BaseEntity, IEntity
     {
         public Recipe() : base()
         {
@@ -19,10 +19,10 @@ namespace LambAndLentil.Domain.Entities
         public Recipe(DateTime creationDate) : base(creationDate) => CreationDate = creationDate;
 
 
-        public decimal Servings { get; set; }
-        public MealType MealType { get; set; }
-        public int? Calories { get; set; }
-        public short? CalsFromFat { get; set; } 
+        public decimal Servings { get; set; } = 0;
+        public MealType MealType { get; set; } = MealType.Breakfast;
+        public int? Calories { get; set; } = 0;
+        public int? CalsFromFat { get; set; } = 0;
         public int ID { get; set; }
 
         public List<Ingredient> Ingredients { get; set; }

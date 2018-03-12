@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Reflection;
 using System.Web.Mvc;
 using System.Linq;
-using LambAndLentil.Test.BaseControllerTests;
+using LambAndLentil.Test.BasicTests;
 
 namespace LambAndLentil.Test.ControllerSecurity
 {
@@ -12,7 +12,7 @@ namespace LambAndLentil.Test.ControllerSecurity
     [TestCategory("ShoppingListsController")]
     [TestCategory("Edit")]
     [TestClass]
-  internal class ShoppingListsEditShouldAllow:ShoppingListsController_Test_Should
+  internal class ShoppingListsEditShouldAllow
     {
         //  Anon no    Auth yes Admin yes
 

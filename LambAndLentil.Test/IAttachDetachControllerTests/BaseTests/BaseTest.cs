@@ -59,7 +59,8 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
         }
 
         internal static IGenericController<TParent> ControllerFactory()
-        {   
+        {
+            ParentClassName = typeof(TParent).ToString().Split('.').Last();
             switch (ParentClassName)
             {
                 case "Ingredient":
@@ -81,7 +82,7 @@ namespace LambAndLentil.Test.IAttachDetachControllerTests.BaseTests
                     controller = new PersonsController(new TestRepository<Person>()) as IGenericController<TParent>;
                     return controller;
                 default:
-                    throw new NotImplementedException();
+                    throw new Exception("No such class");
             }
         }
 

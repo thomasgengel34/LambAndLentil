@@ -5,7 +5,7 @@ namespace LambAndLentil.Test.AdminSecurity
 {
     [Ignore]
     [TestClass]
-    internal  static class ErrorLogging
+   public  static class ErrorLogging
     {
         [TestMethod]
         private static void UserLockoutDueToUnsuccessfulLoginIsLogged()

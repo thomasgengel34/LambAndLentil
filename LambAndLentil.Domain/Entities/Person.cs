@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace LambAndLentil.Domain.Entities
 {
     [Table("PERSON.Person")]
-    public class Person : BaseEntity, IPerson
+    public class Person : BaseEntity, IEntity
     {
 
         public Person() : base()
@@ -123,10 +123,7 @@ namespace LambAndLentil.Domain.Entities
             catch (Exception)
             {
                 throw;
-            }
-
-        }
-
-         
+            } 
+        } 
     }
 }

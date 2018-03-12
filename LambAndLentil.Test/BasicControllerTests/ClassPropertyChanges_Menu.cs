@@ -5,10 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using LambAndLentil.Domain.Entities;
-using LambAndLentil.Test.BaseControllerTests;
+using LambAndLentil.Test.BasicTests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace LambAndLentil.Test.BasicControllerTests
+namespace LambAndLentil.Test.BasicTests
 { 
     }
 internal class ClassPropertyChanges_Menu<T> : BaseControllerTest<T>

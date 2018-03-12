@@ -1,6 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using LambAndLentil.Test.BaseControllerTests;
+using LambAndLentil.Test.BasicTests;
 using System.Threading.Tasks;
 using LambAndLentil.Domain.Entities;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using LambAndLentil.UI.Controllers;
 namespace LambAndLentil.Test.WebAPI
 {  [Ignore]  // TODO: build an interface; need a test fake as the actual database changes. 
     [TestClass]
-   internal class GetFoodsBySearchingUsingFreeTextToLocateFoodsInTheDatabase : IngredientsController_Test_Should
+   internal class GetFoodsBySearchingUsingFreeTextToLocateFoodsInTheDatabase : IngredientsControllerShould
     {
          IIngredientsControllerAsync  AsyncController = (IIngredientsControllerAsync)(new IngredientsController(repo));
 

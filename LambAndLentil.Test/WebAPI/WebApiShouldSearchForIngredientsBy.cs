@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using LambAndLentil.Test.BaseControllerTests;
+using LambAndLentil.Test.BasicTests;
 using LambAndLentil.UI.Controllers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -7,7 +7,7 @@ namespace LambAndLentil.Test.WebAPI
 {
 
     [TestClass]
-    internal class WebApiShouldSearchForIngredientsBy: IngredientsController_Test_Should
+    internal class WebApiShouldSearchForIngredientsBy: IngredientsControllerShould
     {
         protected IIngredientsControllerAsync AsyncController   = new IngredientsController(repo);
 

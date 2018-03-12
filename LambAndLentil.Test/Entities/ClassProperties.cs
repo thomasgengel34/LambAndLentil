@@ -3,7 +3,7 @@ using System.Linq;
 using System.Reflection;
 using LambAndLentil.Domain.Concrete;
 using LambAndLentil.Domain.Entities;
-using LambAndLentil.Test.BaseControllerTests;
+using LambAndLentil.Test.BasicTests;
 using LambAndLentil.UI.Controllers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -17,7 +17,8 @@ namespace LambAndLentil.Test.Entities
         {
             HaveBaseEntityPropertiesOnCreation();
             HaveClassPropertiesOnCreation();
-            HaveCorrectDefaultsInConstructor(); 
+            HaveCorrectDefaultsInConstructor();
+            HaveEntitiesAndListInitializedOnConstruction();
             InheritFromBaseEntity();
             // TODO: write more tests - some are specified below
         }
@@ -82,8 +83,8 @@ namespace LambAndLentil.Test.Entities
 
                 Assert.AreEqual(0, recipe.Servings);
                 Assert.AreEqual(recipe.MealType, MealType.Breakfast);
-                Assert.IsNull(recipe.Calories);
-                Assert.IsNull(recipe.CalsFromFat);
+                Assert.AreEqual(0,recipe.Calories);
+                Assert.AreEqual(0,recipe.CalsFromFat);
             }
             if (typeof(T) == typeof(Person))
             {
@@ -103,6 +104,13 @@ namespace LambAndLentil.Test.Entities
                 Assert.AreEqual(new DateTime(2017, 06, 26), shoppingList.Date);
                 Assert.IsNull(shoppingList.Author);
             }
+        }
+
+        private static void HaveEntitiesAndListInitializedOnConstruction()
+        {
+            ListEntity<T> listEntity = new ListEntity<T>();
+
+            Assert.IsNotNull(listEntity.ListT);
         }
 
         private static void RequireIngredientChildrenToHaveUniqueIDs()

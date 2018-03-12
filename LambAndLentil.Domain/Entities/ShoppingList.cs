@@ -17,6 +17,7 @@ namespace LambAndLentil.Domain.Entities
             Plans = new List<Plan>();
             ClassName = "ShoppingList";
             DisplayName = "Shopping List";
+            Author = "Anonymous";
         }
 
         public ShoppingList(DateTime creationDate) : base(creationDate)

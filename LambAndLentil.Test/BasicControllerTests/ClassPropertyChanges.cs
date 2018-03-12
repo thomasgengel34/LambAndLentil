@@ -7,7 +7,7 @@ using LambAndLentil.Domain.Entities;
 using LambAndLentil.UI.Controllers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace LambAndLentil.Test.BaseControllerTests
+namespace LambAndLentil.Test.BasicTests
 {
     internal class ClassPropertyChanges<T> : BaseControllerTest<T>
          where T : BaseEntity, IEntity, new()
@@ -22,8 +22,8 @@ namespace LambAndLentil.Test.BaseControllerTests
             CannotAlterModifiedDateByHand();
             DoesNotEditAddedByUser();
             DoesNotEditCreationDate();
-
             ShouldAddIngredientToIngredients();
+            ShouldAddIngredientToIngredientsList();
             ShouldEditDescription();
             ShouldEditIngredientsList();
             ShouldEditName();
@@ -35,7 +35,7 @@ namespace LambAndLentil.Test.BaseControllerTests
             ClassCleanup();
         }
 
-        private static void SetUpItemAndrepo(out T item, out IRepository<T> repo)
+        private static void SetUpItemAndRepo(out T item, out IRepository<T> repo)
         {
             repo = new TestRepository<T>();
             T itemToRemove = repo.GetById(1000);
@@ -53,7 +53,7 @@ namespace LambAndLentil.Test.BaseControllerTests
 
         internal static void ShouldEditName()
         {
-            SetUpItemAndrepo(out item, out repo);
+            SetUpItemAndRepo(out item, out repo);
             item.Name = "Name is changed";
             controller.PostEdit(item);
             returnedItem = repo.GetById(item.ID);
@@ -64,7 +64,7 @@ namespace LambAndLentil.Test.BaseControllerTests
 
         internal static void Copy()
         {
-            SetUpItemAndrepo(out item, out repo);
+            SetUpItemAndRepo(out item, out repo);
             item.ID = 42;
             controller.PostEdit(item);
             returnedItem = repo.GetById(42);
@@ -77,7 +77,7 @@ namespace LambAndLentil.Test.BaseControllerTests
 
         internal static void ShouldEditDescription()
         {
-            SetUpItemAndrepo(out item, out repo);
+            SetUpItemAndRepo(out item, out repo);
 
             item.Description = "changed";
             IGenericController<T> controller = BaseControllerTestFactory();
@@ -92,7 +92,7 @@ namespace LambAndLentil.Test.BaseControllerTests
 
         internal static void DoesNotEditCreationDate()
         {
-            SetUpItemAndrepo(out item, out repo);
+            SetUpItemAndRepo(out item, out repo);
             DateTime dateTime = new DateTime(1776, 7, 4);
 
             item.CreationDate = dateTime;
@@ -105,7 +105,7 @@ namespace LambAndLentil.Test.BaseControllerTests
 
         internal static void DoesNotEditAddedByUser()
         {
-            SetUpItemAndrepo(out item, out repo);
+            SetUpItemAndRepo(out item, out repo);
             string user = "Abraham Lincoln";
 
             item.AddedByUser = user;
@@ -119,7 +119,7 @@ namespace LambAndLentil.Test.BaseControllerTests
 
         internal static void CannotAlterModifiedByUserByHand()
         {
-            SetUpItemAndrepo(out item, out repo);
+            SetUpItemAndRepo(out item, out repo);
             string user = "Abraham Lincoln";
 
             item.ModifiedByUser = user;
@@ -133,7 +133,7 @@ namespace LambAndLentil.Test.BaseControllerTests
 
         internal static void CannotAlterModifiedDateByHand()
         {
-            SetUpItemAndrepo(out item, out repo);
+            SetUpItemAndRepo(out item, out repo);
             DateTime dateTime = new DateTime(1776, 7, 4);
             item.ModifiedDate = dateTime;
 
@@ -146,7 +146,7 @@ namespace LambAndLentil.Test.BaseControllerTests
 
         internal static void ShouldEditUserGeneratedIngredientsList()
         {
-            SetUpItemAndrepo(out item, out repo);
+            SetUpItemAndRepo(out item, out repo);
             item.IngredientsList = "Edited";
 
             controller.PostEdit(item);
@@ -164,7 +164,7 @@ namespace LambAndLentil.Test.BaseControllerTests
 
         internal static void ShouldAddIngredientToIngredients()
         {
-            SetUpItemAndrepo(out item, out repo);
+            SetUpItemAndRepo(out item, out repo);
             int initialCount = item.Ingredients.Count;
 
             item.Ingredients.Add(new Ingredient() { ID = 134, Name = "ShouldAddIngredientToIngredients" });
@@ -179,7 +179,7 @@ namespace LambAndLentil.Test.BaseControllerTests
 
         internal static void ShouldEditIngredientsList()
         {
-            SetUpItemAndrepo(out item, out repo);
+            SetUpItemAndRepo(out item, out repo);
             item.IngredientsList = "Edited";
 
             controller.PostEdit(item);
@@ -190,7 +190,7 @@ namespace LambAndLentil.Test.BaseControllerTests
 
         internal static void SaveTheCreationDateOnCreationWithNoParameterCtor()
         {
-            SetUpItemAndrepo(out item, out repo);
+            SetUpItemAndRepo(out item, out repo);
             DateTime CreationDate = DateTime.Now;
 
             T newItem = new T() { ID = 2000 };
@@ -248,6 +248,21 @@ namespace LambAndLentil.Test.BaseControllerTests
         }
 
 
+
+        private static void ShouldAddIngredientToIngredientsList()
+        {
+            SetUpForTests(out repo, out controller, out item);
+
+            string addedIngredient = "added ingredient";
+            controller.AddIngredientToIngredientsList(item.ID, addedIngredient);
+            T returnedItem = repo.GetById(item.ID);
+
+            string listWithAddedIngredient = String.Concat(item.IngredientsList, ", ", addedIngredient);
+            Assert.AreEqual(listWithAddedIngredient, returnedItem.IngredientsList);
+        }
+
+
+
         private static void ShouldEditMealType()
         {
             Assert.Fail();
@@ -291,6 +306,11 @@ namespace LambAndLentil.Test.BaseControllerTests
         }
 
         public void CanEditNoGarlic()
+        {
+            Assert.Fail();
+        }
+
+        private static void CorrectlyChangeIngredientMeasurementInARecipe()
         {
             Assert.Fail();
         }

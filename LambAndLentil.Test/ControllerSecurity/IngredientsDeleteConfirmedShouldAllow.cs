@@ -15,34 +15,19 @@ namespace LambAndLentil.Test.ControllerSecurity
 
         [TestMethod]
         public void NoAccessToAnonymousUser()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
+        { 
             Assert.Fail();
         }
 
         [TestMethod]
         public void  AccessToAuthorizedUser()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
+        { 
             Assert.Fail();
         }
 
         [TestMethod]
         public void  AccessToAdmin()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
+        { 
             Assert.Fail();
         }
     }
